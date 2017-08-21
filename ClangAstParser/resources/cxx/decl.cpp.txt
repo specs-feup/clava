@@ -1,0 +1,62 @@
+#include <vector>
+#include <string>
+int nullGlobal = 0;
+int nullGlobal2 = 0 + 1;
+
+class A {
+   void defaultInitDecl(int * a = nullptr);
+   void defaultInitImpl(int * a);
+   void defaultInitImpl(int * a, int * b = nullptr);
+};
+
+void A::defaultInitDecl(int * a) {
+}
+
+void A::defaultInitImpl(int * a = nullptr) {
+}
+
+void A::defaultInitImpl(int * a = nullptr, int * b) {
+}
+
+
+void foo1(int a);
+
+void foo1(int a = 2);
+
+void foo1(int a) {
+}
+
+
+std::vector<std::string> foo() {
+   std::vector<std::string> aString;
+   
+   return aString;
+}
+
+
+std::string const& fooRef(std::string const& aString) {
+   
+   return aString;
+}
+
+static int a;
+
+int main() {
+   int a;
+   int b;
+   int c = 0;
+   int d;
+   /** Full comment*/
+   int const e = 2;
+   int const f = 3;
+   std::vector<int> v1;
+   std::vector<int> v2;
+   {
+      int aa;
+      int bb;
+   }
+   auto fooResult = foo();
+   auto fooRefResult = fooRef("Hello");
+   
+   return 0;
+}

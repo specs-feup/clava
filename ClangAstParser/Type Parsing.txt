@@ -1,0 +1,6 @@
+Parsed 1862 out of 3152 (59%)
+Parsed 1929 out of 3152 (61%) (after enum)
+Parsed 1635 out of 2485 (66%) (only parsing first type)
+Parsed 1797 out of 3152 (57%) (parsing all types again)
+Parsed 2275 out of 3274 (69%) (parsing functions, templates and typenames)
+Parsed 1840 out of 2647 (70%) (after excluding implicit casts and adding structs and unions)

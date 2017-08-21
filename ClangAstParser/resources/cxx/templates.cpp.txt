@@ -1,0 +1,32 @@
+#include "templates.h"
+#include <iostream>
+#include <list>
+
+struct MAtom {
+   int a;
+};
+
+std::list<struct MAtom>::iterator it_atom1;
+template <typename t = float>
+inline t Distance2(t const a[3], t const b[3]) {
+   
+   return (a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]) + (a[2] - b[2]) * (a[2] - b[2]);
+}
+
+// TODO: Add support for code in the page http://en.cppreference.com/w/cpp/language/function_template
+/*
+template<typename T>
+void f(T s)
+{
+std::cout << s << '\n';
+}
+
+template void f<double>(double); // instantiates f<double>(double)
+template void f<>(char); // instantiates f<char>(char), template argument deduced
+template void f(int); // instantiates f<int>(int), template argument deduced
+*/
+
+int main() {
+   
+   return 0;
+}

@@ -1,0 +1,49 @@
+aspectdef test
+
+	// has previous value
+	call SetNumThreads('parallel', '42');
+
+	// no previous value
+	call SetNumThreads('parallel for', 'var');
+	
+	// can't set
+	call SetNumThreads('for', 'xxx');
+	
+	
+	println('-----------------------------------');
+	
+	// has previous value
+	call SetProcBind('parallel', 'spread');
+
+	// no previous value
+	call SetProcBind('parallel for', 'close');
+	
+	// can't set
+	call SetProcBind('for', 'xxx');
+end
+
+aspectdef SetNumThreads
+	input kind, num end
+	
+	println(kind);
+	
+	select omp{kind} end
+	apply
+        println("num_threads:" + $omp.numThreads);
+		exec setNumThreads(num);
+        println("num_threads:" + $omp.numThreads);
+	end
+end
+
+aspectdef SetProcBind
+	input kind, proc end
+	
+	println(kind);
+	
+	select omp{kind} end
+	apply
+        println("proc_bind:" + $omp.procBind);
+		exec setProcBind(proc);
+        println("proc_bind:" + $omp.procBind);
+	end
+end

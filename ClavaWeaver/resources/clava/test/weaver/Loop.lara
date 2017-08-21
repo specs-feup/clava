@@ -1,0 +1,12 @@
+aspectdef Loop
+
+	select loop end
+	apply
+		println("loop control var: " + $loop.controlVar);
+		println("is innermost? " + $loop.isInnermost);
+		println("is outermost? " + $loop.isOutermost);
+		println("nested level: " + $loop.nestedLevel + "\n");
+		//println("Loop inc:" + $loop.incrementValue);
+	end
+
+end

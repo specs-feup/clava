@@ -1,0 +1,70 @@
+import clava.ClavaAspects;
+
+var Clava = {};
+
+/**
+ * Enables/disables library SpecsLogger for printing.
+ * <p>
+ * By default, is disabled.
+ */
+Clava.useSpecsLogger = false;
+
+/**
+ * Returns the standard being used for compilation.
+ */
+Clava.getStandard = function() {
+	call standardResult:ClavaStandard();
+	
+	return standardResult.standard;
+}
+
+Clava.rebuild = function() {
+	call Rebuild();
+}; 
+
+Clava.getBaseFolder = function() {
+	call baseFolderResult:ClavaBaseFolder();
+	
+	return baseFolderResult.baseFolder;
+}; 
+
+Clava.addFile = function($file) {
+	if(!$file.instanceOf('file')) {
+		println("Clava.addFile: Input must be a 'file' join point, it is a '" + $file.joinPointType + "'");
+		return;
+	}
+	call ClavaAddFile($file);
+}; 
+
+Clava.cLinkageBegin = %{
+#ifdef __cplusplus
+extern "C" {
+#endif
+}%;
+
+Clava.cLinkageEnd = %{
+#ifdef __cplusplus
+}
+#endif
+}%;
+
+/**
+ * Launches a Clava weaving session.
+ */
+Clava.runClava = function(args) {
+
+	// If string, separate arguments
+	if(typeof args  === "string") {
+		args = ArgumentsParser.newCommandLine().parse(args);
+	}
+
+	return ClavaWeaverLauncher.execute(args);
+}
+
+Clava.pushAst = function() {
+	call PushAst();
+}
+
+Clava.popAst = function() {
+	call PopAst();
+}

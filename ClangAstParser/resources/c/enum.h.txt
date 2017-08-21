@@ -1,0 +1,48 @@
+#ifndef _ENUM_H_
+#define _ENUM_H_
+
+/*
+* Typedef
+*/
+// Simple typedef
+typedef unsigned int footype;
+//typedef long long footype;
+// Typedef with other typedef
+typedef footype footype2;
+/*
+* Enums
+*/
+// Simple enum
+
+enum simple_enum {
+   ENUM1,
+   ENUM2,
+   ENUM3,
+};
+
+// Enum with initialization
+
+enum simple_enum_with_init {
+   ENUM_INIT_1 = 20,
+   ENUM_INIT_2 = -3,
+};
+
+// Enum with typedef
+
+enum enum_with_typedef {
+   ENUM_WITH_TYPEDEF_1,
+   ENUM_WITH_TYPEDEF_2,
+   ENUM_WITH_TYPEDEF_3,
+   ENUM_WITH_TYPEDEF_4,
+};
+
+typedef enum enum_with_typedef enum_with_typedef;
+// Enum without name in the declaration
+
+enum logical {
+   false,
+   true,
+};
+
+typedef enum logical logical;
+#endif

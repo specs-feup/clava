@@ -1,0 +1,19 @@
+parallel
+num_threads:4
+num_threads:42
+parallel for
+num_threads:
+num_threads:var
+for
+num_threads:
+num_threads:
+-----------------------------------
+parallel
+proc_bind:
+proc_bind:spread
+parallel for
+proc_bind:master
+proc_bind:close
+for
+proc_bind:
+proc_bind:

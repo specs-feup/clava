@@ -1,0 +1,53 @@
+/**
+ * ASPECTS 
+ */
+aspectdef Rebuild
+	select program end
+	apply
+		$program.exec rebuild();
+	end
+end
+
+aspectdef ClavaStandard
+	output standard end
+	
+	select program end
+	apply
+		standard = $program.standard;
+		return;
+	end
+end
+
+aspectdef ClavaBaseFolder
+	output baseFolder end
+	
+	select program end
+	apply
+		baseFolder = $program.baseFolder;
+		return;
+	end
+end
+
+aspectdef ClavaAddFile
+	input $file end
+
+	select program end
+	apply
+		$program.exec addFile($file);
+	end
+
+end
+
+aspectdef PushAst
+	select program end
+	apply
+		$program.exec push();
+	end
+end
+
+aspectdef PopAst
+	select program end
+	apply
+		$program.exec pop();
+	end
+end

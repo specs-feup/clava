@@ -1,0 +1,23 @@
+import lara.code.Timer;
+import clava.Clava;
+import clava.ClavaJoinPoints;
+
+aspectdef TimerTest
+	
+	// Disable SpecsLogger, in order to be able to compile weaved code without the project
+	Clava.useSpecsLogger = false;
+
+	// Instrument call to 'Calculate'
+	var timer = new Timer();
+
+	select stmt.call end
+	apply
+		timer.time($call, "Time:");
+	end
+	
+	select file end
+	apply
+		println($file.code);
+	end
+
+end

@@ -1,0 +1,10 @@
+
+int main() {
+   char a = 'a';
+   char16_t b = u'\U00008C93';
+   char16_t c = u'\U00008C93';
+   char n = '\n';
+   char n2 = 10;
+   
+   return 0;
+}

@@ -1,0 +1,10 @@
+kind: parallel
+num_threads:4
+proc_bind:master
+has shared:false
+nowait legal:false
+kind: for
+num_threads:
+proc_bind:
+has shared:true
+nowait legal:true

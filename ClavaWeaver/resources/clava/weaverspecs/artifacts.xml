@@ -1,0 +1,308 @@
+<?xml version="1.0"?>
+<!-- When changing the joinpoint model, do not forget to update the Clava 
+	document. https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
+<artifacts>
+
+	<!-- Global Joinpoint -->
+	<!-- These properties are shared by all joinpoints -->
+	<global>
+		<attribute name="root" type="joinpoint"
+			tooltip="Returns the 'program' joinpoint" />
+		<attribute name="parent" type="joinpoint" />
+		<attribute name="ancestor" type="joinpoint"
+			tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
+			<parameter name="type" type="String" />
+		</attribute>
+		<attribute name="chainAncestor" type="joinpoint"
+			tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
+			<parameter name="type" type="String" />
+		</attribute>
+		<attribute name="astParent" type="joinpoint" />
+		<attribute name="astAncestor" type="joinpoint"
+			tooltip="Looks for an ancestor AST name, walking back on the AST">
+			<parameter name="type" type="String" />
+		</attribute>
+		<attribute name="contains" type="Boolean">
+			<parameter name="jp" type="joinpoint" />
+		</attribute>
+		<attribute name="hasParent" type="boolean" />
+		<attribute name="line" type="Integer" />
+		<attribute name="location" type="String" />
+		<attribute name="astId" type="String" />
+		<attribute name="ast" type="String" />
+		<attribute name="code" type="String" />
+		<attribute name="joinpointType" type="String" />
+		<attribute name="type" type="joinpoint" />
+		<attribute name="astNumChildren" type="Integer" />
+		<attribute name="astName" type="String" />
+		<attribute name="astChild" type="joinpoint">
+			<parameter name="index" type="Integer" />
+		</attribute>
+		<attribute name="chain" type="String[]" />
+		<attribute name="javaFields" type="String[]" />
+		<attribute name="javaValue" type="Object">
+			<parameter name="fieldName" type="String" />
+		</attribute>
+		<attribute name="javaFieldType" type="String">
+			<parameter name="fieldName" type="String" />
+		</attribute>
+		<attribute name="isInsideLoopHeader" type="Boolean"/>
+		<attribute name="setUserField" type="Object">
+			<parameter name="fieldName" type="String" />
+			<parameter name="value" type="Object" />	
+		</attribute>
+		<attribute name="getUserField" type="Object">
+			<parameter name="fieldName" type="String" />	
+		</attribute>
+		<attribute name="parentRegion" type="joinpoint" />
+		<attribute name="currentRegion" type="joinpoint" />
+	</global>
+
+
+
+
+
+
+	<!-- PROGRAM -->
+	<artifact class="program" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="standard" type="String" tooltip="The name of the standard (e.g., c99, c++11)"/>
+		<attribute name="stdFlag" type="String" tooltip="The flag of the standard (e.g., -std=c++11)" />
+		<attribute name="defaultFlags" type="String[]" />
+		<attribute name="userFlags" type="String[]" />
+		<attribute name="includeFolders" type="String[]" />
+		<attribute name="baseFolder" type="String" />
+	</artifact>
+
+
+	<!-- FILE -->
+	<artifact class="file" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="hasMain" type="Boolean" />
+		<!-- <attribute name="filename" type="String"/> -->
+		<attribute name="path" type="String" />
+		<attribute name="filepath" type="String" />
+		<attribute name="isCxx" type="Boolean" />
+	</artifact>
+
+	<!-- RECORD -->
+	<artifact class="record" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="kind" type="String" />
+		<!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
+		<attribute name="fields" type="joinpoint[]" />
+	</artifact>
+
+
+	<!-- DECLARATION -->
+	<artifact class="namedDecl" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="isPublic" type="Boolean" />
+	</artifact>
+
+
+	<!-- LOOP -->
+	<artifact class="loop" default="kind">
+		<attribute name="kind" type="{for,while}" />
+		<attribute name="isInnermost" type="Boolean" />
+		<attribute name="isOutermost" type="Boolean" />
+		<attribute name="nestedLevel" type="Integer" />
+		<attribute name="controlVar" type="String" />
+		<attribute name="rank" type="String" />
+		<attribute name="isParallel" type="Boolean" />
+		<attribute name="iterations" type="Integer" />
+	</artifact>
+
+
+	<!-- SCOPE -->
+	<artifact class="scope">
+		<attribute name="numStatements" type="Integer" />
+	</artifact>
+
+
+	<!-- EXPRESSION -->
+	<artifact class="expression">
+		<!-- If this expression represents a declared variable, returns the name 
+			of the variable -->
+		<!-- <attribute name="refname" type="String"/> -->
+		<!-- If this expression represents a declared variable, returns a joinpoint 
+			representing the declaration of the variable -->
+		<attribute name="vardecl" type="joinpoint" />
+		<attribute name="use" type="{read,write,readwrite}" />
+	</artifact>
+
+	<!-- CALL -->
+	<artifact class="call" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="numArgs" type="Integer" />
+		<attribute name="memberNames" type="String[]" />
+		<attribute name="decl" type="joinpoint" />
+		<attribute name="argList" type="String[]"/>
+		<attribute name="returnType" type="joinpoint"/>
+	</artifact>
+
+
+	<!-- VARDECL -->
+	<artifact class="vardecl" default="name">
+		<attribute name="hasInit" type="Boolean" />
+	</artifact>
+
+	<!-- VARREF -->
+	<artifact class="varref" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="kind" type="String" />
+		<attribute name="useExpr" type="joinpoint"
+			tooltip="expression where this reference is used" />
+	</artifact>
+
+	<!-- FUNCTION -->
+	<artifact class="function" default="name">
+		<attribute name="name" type="String" />
+		<attribute name="hasDefinition" type="Boolean" />
+		<attribute name="functionType" type="joinpoint" />
+		<attribute name="declaration" type="String">
+			<parameter name="withReturnType" type="Boolean" />
+		</attribute>
+		<attribute name="body" type="joinpoint" />
+		<attribute name="paramNames" type="String[]"/>
+		<attribute name="params" type="joinpoint[]"/>
+		<attribute name="id" type="String"/>
+	</artifact>
+
+
+	<!-- IF -->
+	<artifact class="if">
+		<attribute name="cond" type="joinpoint" />
+		<attribute name="condDecl" type="joinpoint" />
+		<attribute name="then" type="joinpoint" />
+		<attribute name="else" type="joinpoint" />
+	</artifact>
+
+
+	<!-- STATEMENT -->
+	<artifact class="statement">
+		<attribute name="isFirst" type="Boolean" />
+		<attribute name="isLast" type="Boolean" />
+		<!-- <attribute name="stmts" type="joinpoint[]"/> -->
+	</artifact>
+
+
+	<!-- PRAGMA -->
+	<artifact class="pragma">
+		<attribute name="name" type="String" />
+		<attribute name="target" type="joinpoint" />
+		<attribute name="content" type="String" />
+	</artifact>
+
+
+	<!-- MARKER -->
+	<artifact class="marker" default="id">
+		<attribute name="id" type="String" />
+		<attribute name="contents" type="joinpoint"
+			tooltip="A scope, associated with this marker" />
+	</artifact>
+
+	<!-- BINARY OPERATOR -->
+	<artifact class="binaryOp">
+		<attribute name="kind" type="String" />
+		<attribute name="left" type="joinpoint" />
+		<attribute name="right" type="joinpoint" />
+		<attribute name="isAssignment" type="Boolean" />
+	</artifact>
+
+
+	<!-- UNARY OPERATOR -->
+	<artifact class="unaryOp">
+		<attribute name="kind" type="String" />
+		<attribute name="operand" type="joinpoint" />
+		<attribute name="isPointerDeref" type="Boolean" />
+	</artifact>
+
+	<!-- CAST -->
+	<artifact class="cast">
+		<attribute name="isImplicitCast" type="Boolean" />
+		<attribute name="fromType" type="joinpoint" />
+		<attribute name="toType" type="joinpoint" />
+	</artifact>
+
+	<!-- ARRAY ACCESS -->
+	<artifact class="arrayAccess">
+		<attribute name="arrayVar" type="joinpoint"
+			tooltip="varref to the variable of the array access" />
+	</artifact>
+
+
+	<!-- MEMBER ACCESS -->
+	<artifact class="memberAccess">
+		<attribute name="name" type="String" />
+		<attribute name="memberChain" type="String[]" />
+		<attribute name="base" type="joinpoint"
+			tooltip="expression of the base of this member access" />
+	</artifact>
+
+
+	<!-- COMMENT -->
+	<artifact class="comment">
+		<attribute name="text" type="String" />
+	</artifact>
+
+	<!-- TYPES -->
+
+	<!-- TYPE -->
+	<artifact class="type">
+		<attribute name="kind" type="String" />
+		<attribute name="isArray" type="Boolean" />
+		<attribute name="isPointer" type="Boolean" />
+		<attribute name="arraySize" type="Integer" />
+		<attribute name="elementType" type="joinpoint" />
+		<attribute name="hasTemplateArgs" type="Boolean" />
+		<attribute name="templateArgs" type="String[]" />
+		<attribute name="hasSugar" type="Boolean" />
+		<attribute name="desugar" type="joinpoint" />
+		<attribute name="isBuiltin" type="Boolean" />
+		<attribute name="constant" type="Boolean" />
+	</artifact>
+
+
+
+	<!-- ENUMTYPE -->
+	<artifact class="enumType">
+		<attribute name="integerType" type="joinpoint" />
+	</artifact>
+
+
+	<!-- TEMPLATE SPECIALIZATION TYPE -->
+	<artifact class="templateSpecializationType">
+		<attribute name="templateName" type="String" />
+		<attribute name="numArgs" type="Integer" />
+		<attribute name="args" type="String[]" />
+		<attribute name="firstArgType" type="type" />
+	</artifact>
+
+	<!-- TEMPLATE SPECIALIZATION TYPE -->
+	<artifact class="functionType">
+		<attribute name="returnType" type="joinpoint" />
+		<attribute name="paramTypes" type="joinpoint[]" />
+	</artifact>
+
+
+	<!-- TAGTYPE -->
+	<artifact class="tagType">
+		<attribute name="name" type="String" />
+	</artifact>
+
+
+	<!-- OMP -->
+	<artifact class="omp" default="kind">
+		<attribute name="kind" type="String" />
+		<attribute name="numThreads" type="String" />
+		<attribute name="procBind" type="String" />
+		<attribute name="hasClause" type="Boolean">
+			<parameter name="clauseName" type="String" />
+		</attribute>
+		<attribute name="isClauseLegal" type="Boolean">
+			<parameter name="clauseName" type="String" />
+		</attribute>
+	</artifact>
+
+</artifacts>

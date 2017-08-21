@@ -1,0 +1,76 @@
+aspectdef InsertsJp
+
+	
+	$bDecl = AstFactory.varDecl("b", AstFactory.integerLiteral(10));
+	$cDecl = AstFactory.varDecl("c", AstFactory.integerLiteral(20));
+
+	select function{"fooStmtBeforeAfter"}.stmt end
+	apply
+		$stmt.exec insertBefore($bDecl);
+		$stmt.exec insertAfter($cDecl);
+	end
+	
+	select function{"fooStmtReplace"}.stmt end
+	apply
+		$stmt.exec replaceWith($bDecl);
+	end
+
+	select function{"fooBodyBeforeAfter"}.body end
+	apply
+		$body.exec insertBefore($bDecl);
+		$body.exec insertAfter($cDecl);
+	end
+	
+	select function{"fooBodyReplace"}.body end
+	apply
+		$body.exec replaceWith($bDecl);
+	end
+	
+	select function{"fooBodyEmptyBeforeAfter"}.body end
+	apply
+		$body.exec insertBefore($bDecl);
+		$body.exec insertAfter($cDecl);
+	end
+	
+	select function{"fooBodyEmptyReplace"}.body end
+	apply
+		$body.exec replaceWith($bDecl);
+	end
+	
+	select function{"fooCallBeforeAfter"}.stmt.call end
+	apply
+		$call.exec insertBefore($bDecl);
+		$call.exec insertAfter($cDecl);
+	end
+	
+
+	$double2 = AstFactory.doubleLiteral("2.0");
+	$double3 = AstFactory.doubleLiteral("3.0");
+	$doubleType = AstFactory.builtinType("double");
+	$powCall = AstFactory.call("pow", $doubleType, $double2, $double3);
+	
+	select function{"fooCallReplace"}.stmt.call end
+	apply
+		$call.exec replaceWith($powCall);
+	end
+	
+	select function{"fooBeforeAfter"} end
+	apply
+		$function.exec insertBefore($bDecl);
+		$function.exec insertAfter($cDecl);
+	end
+	
+	$dDecl = AstFactory.varDecl("d", AstFactory.integerLiteral(30));
+	select function{"fooReplace"} end
+	apply
+		$function.exec replaceWith($dDecl);
+	end
+	
+	
+	
+	// Output code
+	select file end
+	apply
+		println($file.code);
+	end
+end

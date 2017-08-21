@@ -1,0 +1,58 @@
+import lara.code.EnergyBase;
+import lara.code.Logger;
+import lara.util.IdGenerator;
+import lara.util.PrintOnce;
+
+Energy.prototype.measure = function($start, prefix, $end){
+	//Check for valid joinpoints and additional conditions
+
+	if(!this._measureValidate($start, $end, 'function')){
+		return;
+	}
+
+	
+	$end = $end === undefined ? $start : $end;
+
+	// Message about dependency
+	PrintOnce.message("Weaved code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
+
+	var logger = new Logger(false, this.filename);
+
+	// Build prefix
+	if(prefix === undefined) {
+		prefix = "";
+	}
+
+	
+	// Add include
+	$file = $start.ancestor("file");
+	if($file === undefined) {
+		println("Could not find the corresponding file of the given joinpoint: " + $jp);
+		return;
+	}
+	$file.addInclude("rapl.h", false);
+	var energyVar = IdGenerator.next("clava_energy_output_");
+
+
+
+	var codeBefore = _energy_rapl_start();
+	var codeAfter = _energy_rapl_end(energyVar);
+	$start.insert("before", codeBefore);
+	
+	logger.append(prefix).appendDouble(energyVar);
+	if (this.printUnit) {
+        logger.append(this.getPrintUnit());
+    }
+	logger.log($end);
+	$end.insert("after",codeAfter);
+
+}
+
+
+codedef _energy_rapl_start()%{
+rapl_monitor_start();
+}%end
+
+codedef _energy_rapl_end(energyVar)%{
+double [[energyVar]] = rapl_monitor_report();
+}%end

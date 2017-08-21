@@ -1,0 +1,12 @@
+aspectdef ClavaSandbox
+
+	select function end
+	apply
+		exec clone('new_' + $function.name);
+	end
+	
+	select file end
+	apply
+		println($file.code);
+	end
+end

@@ -1,0 +1,17 @@
+aspectdef Actions
+
+	select function.stmt.vardecl end
+	apply
+		if($vardecl.type.code === "double") {
+			$vardecl.exec setType(Types.float());
+		} else if($vardecl.type.code === "int") {
+			$vardecl.exec setType(Types.builtin("unsigned int"));
+		}
+	end
+	
+	
+	select file end
+	apply 
+		println($file.code);
+	end
+end

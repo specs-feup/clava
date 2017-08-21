@@ -1,0 +1,19 @@
+aspectdef Expression
+
+	// MemberAccess chains
+	select expr end
+	apply
+		if($expr.instanceOf("memberAccess")) {
+			println("MemberChain:" + $expr.memberChain);
+		}
+	end
+
+	// Obtain corresponding declaration for each varref
+	select varref end
+	apply
+		println("VARREF LOC:" + $varref.location);
+		var vardecl = $varref.vardecl;
+		println("HAS DECL:" + vardecl);	
+	end
+
+end

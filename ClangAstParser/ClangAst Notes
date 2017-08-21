@@ -1,0 +1,31 @@
+--------
+Built-in Includes
+--------
+
+Clang provides a set of built-in includes. After building Clang, you can find them in the folder "[buildFolder]\lib\clang\X.X.X\include".
+
+
+--------
+libc / libc++
+--------
+
+Usually it is expected that the system provides its own headers for libc/libc++.
+
+However, for some systems this is more cumbersome (e.g., Windows), and we can build a zip file with such headers for convenience. 
+
+When creating the includes zip for ClangAst, collect header files from a Clang installation, using the command:
+
+	clang -E -x c++ - -v < /dev/null
+
+Example of collected folders with includes:
+
+ C:\msys64\mingw64\include\c++\6.3.0
+ C:\msys64\mingw64\include\c++\6.3.0\x86_64-w64-mingw32
+ C:\msys64\mingw64\include\c++\6.3.0\backward
+ C:\msys64\mingw64\bin\..\lib\clang\3.9.1\include
+ C:\msys64\mingw64\x86_64-w64-mingw32\include
+ C:\msys64\mingw64\include (last folder is usually other libraries includes, can be ignored)
+
+ You might need to get omp.h from gcc include folder:
+ 
+ C:\msys64\mingw64\lib\gcc\x86_64-w64-mingw32\6.3.0\include

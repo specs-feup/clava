@@ -1,0 +1,10 @@
+aspectdef AddGlobal
+
+	select file end
+	apply
+		var type = AstFactory.builtinType("int");
+		exec addGlobal('num_threads', type, "16");
+		println($file.code);
+		println("---------------");
+	end
+end

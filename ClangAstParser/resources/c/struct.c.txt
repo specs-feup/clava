@@ -1,0 +1,53 @@
+
+struct struct_test {
+   int struct_field_1;
+   char struct_field_2;
+};
+
+
+struct struct_test_with_var {
+   int struct_field_1;
+   char struct_field_2;
+};
+
+struct struct_test_with_var struct_test_var;
+
+struct struct_test_with_typedef {
+   int struct_field_1;
+   char struct_field_2;
+};
+
+typedef struct struct_test_with_typedef custom_struct;
+
+struct anon_struct_c_17 {
+   int struct_field_1;
+   char struct_field_2;
+};
+
+struct anon_struct_c_17 struct_anon_var;
+struct anon_struct_c_17 struct_anon_var_2;
+
+union union_test {
+   int union_field_1;
+   char union_field_2;
+};
+
+
+struct struct_without_definition;
+
+
+struct struct_without_definition {
+   int struct_field_1;
+   char struct_field_2;
+};
+
+
+union anon_struct_c_34 {
+   int union_field_1;
+   char union_field_2;
+};
+
+union anon_struct_c_34 union_anon_var;
+
+int main() {
+}

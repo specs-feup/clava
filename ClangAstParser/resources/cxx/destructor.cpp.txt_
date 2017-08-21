@@ -1,0 +1,97 @@
+#include <string>
+#include <iostream>
+
+class Empty {
+   ~Empty() noexcept;
+};
+
+
+class ExplicitSeparate {
+   
+   
+   public:
+   ~ExplicitSeparate() noexcept;
+};
+
+ExplicitSeparate::~ExplicitSeparate() noexcept {
+}
+
+
+class PublicEmpty {
+   
+   
+   public:
+   ~PublicEmpty() noexcept;
+};
+
+
+class EmptyDefault {
+   ~EmptyDefault() noexcept = default;
+};
+
+
+class Int {
+   int x;
+   ~Int() noexcept;
+};
+
+
+class IntDefault {
+   int x;
+   ~IntDefault() noexcept = default;
+};
+
+
+class Complicated {
+   std::string str;
+   ~Complicated() throw() = default;
+};
+
+
+class ComplicatedExplicit {
+   std::string str;
+   ~ComplicatedExplicit() noexcept;
+};
+
+ComplicatedExplicit::~ComplicatedExplicit() throw() {
+}
+
+
+class Custom {
+   ~Custom() noexcept {
+      std::cout << "delete" << std::endl;
+   }
+};
+
+
+class Custom2 {
+   ~Custom2() noexcept {
+      throw "abc";
+   }
+};
+
+
+class Deleted {
+   ~Deleted() noexcept = delete;
+};
+
+
+class Virtual {
+   
+   
+   public:
+   virtual ~Virtual() noexcept = 0;
+};
+
+
+class Virtual2 {
+   
+   
+   public:
+   virtual ~Virtual2() noexcept;
+};
+
+/*
+class Override : public Virtual {
+~Override() override {}
+};*/

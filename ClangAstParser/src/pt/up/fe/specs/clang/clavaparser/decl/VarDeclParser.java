@@ -1,0 +1,71 @@
+/**
+ * Copyright 2016 SPeCS.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License. under the License.
+ */
+
+package pt.up.fe.specs.clang.clavaparser.decl;
+
+import java.util.List;
+
+import com.google.common.base.Preconditions;
+
+import pt.up.fe.specs.clang.ast.ClangNode;
+import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
+import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
+
+public class VarDeclParser extends AClangNodeParser<VarDecl> {
+
+    public VarDeclParser(ClangConverterTable converter) {
+        super(converter);
+    }
+
+    @Override
+    public VarDecl parse(ClangNode node, StringParser parser) {
+        // Examples:
+        // col:9 foo 'footype':'unsigned int' cinit
+        // line:62:10 used d 'double' cinit
+        // col:21 used travelTimes 'std::vector<float>':'class std::vector<float, class std::allocator<float> >' nrvo
+        // callinit
+
+        DeclData declData = parser.apply(ClangDataParsers::parseDecl);
+
+        String varName = parser.apply(StringParsers::parseWord);
+        Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
+
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl);
+
+        List<ClavaNode> children = parseChildren(node);
+
+        boolean hasInit = varDeclData.getInitKind() != InitializationStyle.NO_INIT;
+        if (hasInit) {
+            checkNumChildren(children, 1);
+        } else {
+            Preconditions.checkArgument(children.isEmpty());
+        }
+
+        Expr initExpr = hasInit ? toExpr(children.get(0)) : null;
+
+        return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, info(node), initExpr);
+    }
+
+}

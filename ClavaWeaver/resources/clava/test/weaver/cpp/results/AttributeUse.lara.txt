@@ -1,0 +1,19 @@
+VARREF:
+a->read
+a->read
+b->read
+b->read
+b->read
+b->read
+a->read
+c->read
+d->read
+d->write
+ARRAY ACCESS:
+a[0][0][0]->readwrite
+a[b[0]][b[1]][b[2]]->write
+b[0]->read
+b[1]->read
+b[2]->read
+b[a[0][0][0]]->read
+a[0][0][0]->read

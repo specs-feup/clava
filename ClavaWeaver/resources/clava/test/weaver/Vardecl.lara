@@ -1,0 +1,8 @@
+aspectdef Vardecl
+
+	select vardecl end
+	apply
+		println("vardecl " + $vardecl.name);
+	end
+
+end

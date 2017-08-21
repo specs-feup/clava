@@ -1,0 +1,44 @@
+loop control var: a
+is innermost? false
+is outermost? true
+nested level: 0
+
+loop control var: b
+is innermost? false
+is outermost? false
+nested level: 1
+
+loop control var: c
+is innermost? true
+is outermost? false
+nested level: 2
+
+loop control var: undefined
+is innermost? true
+is outermost? true
+nested level: 0
+
+loop control var: i
+is innermost? true
+is outermost? true
+nested level: 0
+
+loop control var: j
+is innermost? true
+is outermost? true
+nested level: 0
+
+loop control var: i
+is innermost? true
+is outermost? true
+nested level: 0
+
+loop control var: i
+is innermost? true
+is outermost? true
+nested level: 0
+
+loop control var: undefined
+is innermost? true
+is outermost? true
+nested level: 0

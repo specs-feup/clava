@@ -1,0 +1,32 @@
+int foo(int ne);
+//cloned from foo
+int new_foo(int ne);
+int foo(int ne) {
+   
+   return ne + 2;
+}
+//cloned from foo
+int new_foo(int ne) {
+   
+   return ne + 2;
+}
+int bar(int ne, int u) {
+   
+   return 0;
+}
+//cloned from bar
+int new_bar(int ne, int u) {
+   
+   return 0;
+}
+int main() {
+   foo(4);
+   
+   return 0;
+}
+//cloned from main
+int new_main() {
+   foo(4);
+   
+   return 0;
+}

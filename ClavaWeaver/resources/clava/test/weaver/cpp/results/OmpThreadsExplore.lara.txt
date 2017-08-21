@@ -1,0 +1,32 @@
+File omp_threads_explore.cpp
+#include <omp.h>
+#include <vector>
+#include <fstream>
+#include <iostream>
+
+int main() {
+   int a = 0;
+   	std::ofstream omp_thread_measure_loop1;
+   	omp_thread_measure_loop1.open("omp_thread_measure_loop1.txt", std::ofstream::out | std::fstream::trunc);
+   	omp_thread_measure_loop1 << "threads,a" << std::endl;
+   	for(int omp_thread_measure = 1; omp_thread_measure <= 3; omp_thread_measure+=1)
+   #pragma lara marker loop1
+   {
+      
+      std::cout << "[OpenMP_Measure] Setting number of threads to " << omp_thread_measure << std::endl;
+      omp_set_num_threads(omp_thread_measure);
+      omp_thread_measure_loop1 << omp_thread_measure;
+      	
+      #pragma omp parallel for reduction(min : a, i)
+      for(int i = 0; i < 10; i++) {
+         a += i;
+      }
+      
+      omp_thread_measure_loop1 << "," << a;
+      omp_thread_measure_loop1 << std::endl;
+      	
+   }
+   	omp_thread_measure_loop1.close();
+   	std::cout << "[OpenMP_Measure] File 'omp_thread_measure_loop1.txt' written" << std::endl;
+}
+

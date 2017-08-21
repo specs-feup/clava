@@ -1,0 +1,20 @@
+OMP:omp
+OMP CONTENT:parallel
+OMP TARGET:{
+   #pragma omp for shared(i)
+   for(int i = 0; i < 10; i++) {
+      a += i;
+   }
+}
+
+OMP:omp
+OMP CONTENT:for shared(i)
+OMP TARGET:for(int i = 0; i < 10; i++) {
+   a += i;
+}
+
+OMP:omp
+OMP CONTENT:parallel for schedule(monotonic:static, 1)
+OMP TARGET:for(int i = 0; i < 1000; i++) {
+   a += bar();
+}

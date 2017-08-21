@@ -1,0 +1,60 @@
+#include <iostream>
+class TestClass {
+   void foobar();
+};
+void TestClass::foobar() {
+   
+   return;
+}
+int foo(int ne);
+//cloned from foo
+
+int new_foo(int ne);
+
+int foo(int ne = 0) {
+   
+   return ne + 2;
+}
+
+//cloned from foo
+
+int new_foo(int ne = 0) {
+   
+   return ne + 2;
+}
+
+
+int bar(int ne = 0) try {
+   
+   return ne + 2;
+}
+catch (std::exception const& e) {
+   
+   return 0;
+}
+
+//cloned from bar
+
+int new_bar(int ne = 0) try {
+   
+   return ne + 2;
+}
+catch (std::exception const& e) {
+   
+   return 0;
+}
+
+
+int main() {
+   std::cout << foo(4) << std::endl;
+   
+   return 0;
+}
+
+//cloned from main
+
+int new_main() {
+   std::cout << foo(4) << std::endl;
+   
+   return 0;
+}

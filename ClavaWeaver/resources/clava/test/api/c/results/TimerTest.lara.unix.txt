@@ -1,0 +1,33 @@
+#define _POSIX_C_SOURCE 199309L
+#include <time.h>
+#include <stdio.h>
+
+double bar() {
+   
+   return 1.0;
+}
+
+
+double foo() {
+   double a = 0;
+   for(int i = 0; i < 1000; i++) {
+      struct timespec clava_timing_start_0, clava_timing_end_0;
+      clock_gettime(CLOCK_MONOTONIC, &clava_timing_start_0);
+      a += bar();
+      clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_0);
+      double clava_timing_duration_0 = ((clava_timing_end_0.tv_sec + ((double) clava_timing_end_0.tv_nsec / 1000000000)) - (clava_timing_start_0.tv_sec + ((double) clava_timing_start_0.tv_nsec / 1000000000))) * (1000);
+      printf("Time:%fms\n", clava_timing_duration_0);
+   }
+   
+   return a;
+}
+
+
+int main() {
+   struct timespec clava_timing_start_1, clava_timing_end_1;
+   clock_gettime(CLOCK_MONOTONIC, &clava_timing_start_1);
+   foo();
+   clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_1);
+   double clava_timing_duration_1 = ((clava_timing_end_1.tv_sec + ((double) clava_timing_end_1.tv_nsec / 1000000000)) - (clava_timing_start_1.tv_sec + ((double) clava_timing_start_1.tv_nsec / 1000000000))) * (1000);
+   printf("Time:%fms\n", clava_timing_duration_1);
+}

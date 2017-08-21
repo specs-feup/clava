@@ -1,0 +1,6 @@
+int main() {
+   float aDouble = 0.0;
+   unsigned int anInt = 0;
+   
+   return 0;
+}

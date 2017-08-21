@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<!-- When changing the joinpoint model, do not forget to update the Clava 
+	document. https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
+<actions>
+
+	<!-- GENERIC ACTIONS FOR ALL JOINPOINTS -->
+
+	<!-- Replaces the current node with the given node -->
+	<action name="replaceWith" return="joinpoint">
+		<parameter name="node" type="joinpoint" />
+	</action>
+
+	<!-- Inserts node before the given node -->
+	<action name="insertBefore" return="joinpoint">
+		<parameter name="node" type="joinpoint" />
+	</action>
+
+	<!-- Overload which accepts String -->
+	<action name="insertBefore" return="joinpoint">
+		<parameter name="node" type="String" />
+	</action>
+
+	<!-- Inserts node after the given node -->
+	<action name="insertAfter" return="joinpoint">
+		<parameter name="node" type="joinpoint" />
+	</action>
+
+	<!-- Overload which accepts String -->
+	<action name="insertAfter" return="joinpoint">
+		<parameter name="code" type="String" />
+	</action>
+
+
+	<!-- Removes node associated to the joinpoint from the AST -->
+	<action name="detach" />
+
+	<!-- Sets the the of a node, if it has a type -->
+	<action name="setType">
+		<parameter name="type" type="joinpoint" />
+	</action>
+
+
+
+
+
+	<!-- PROGRAM -->
+
+	<!-- Internally generates the code for the current program and rebuilds 
+		the AST -->
+	<action name="rebuild" class="program" />
+
+	<action name="addFile" class="program">
+		<parameter name="file" type="file" />
+	</action>
+	
+	<action name="push" class="program" />
+	
+	<action name="pop" class="program" />
+
+	<!-- FILE -->
+
+	<!-- Adds an include to the file -->
+	<action name="addInclude" class="file">
+		<parameter name="name" type="string" />
+		<parameter name="isAngled" type="boolean" />
+	</action>
+
+	<!-- Overload which sets 'isAngled' to false -->
+	<action name="addInclude" class="file">
+		<parameter name="name" type="string" />
+	</action>
+
+	<!-- Overload which acepts a joinpoint -->
+	<action name="addIncludeJp" class="file">
+		<parameter name="jp" type="joinpoint" />
+	</action>
+
+	<action name="addGlobal" class="file">
+		<parameter name="name" type="String" />
+		<parameter name="type" type="joinpoint" />
+		<parameter name="initValue" type="String" />
+	</action>
+
+	<!-- Adds a message that will be communicated to the user after weaving 
+		ends -->
+	<action name="messageToUser">
+		<parameter name="message" type="String" />
+	</action>
+
+	<!-- CALL -->
+	<!-- Changes the name of the call -->
+	<action name="setName" class="call">
+		<parameter name="name" type="string" />
+	</action>
+	
+	<action name="wrap" class="call" tooltip="Wraps this call with a possibly new wrapping function">
+		<parameter name="name" type="string" />
+	</action>
+	
+	
+	
+	
+	<action name="insertBegin" class="file" tooltip="Adds the node in the join point to the start of the file">
+		<parameter name="node" type="joinpoint" />
+	</action>
+	<action name="insertBegin" class="file" tooltip="Adds the String as a Decl to the end of the file">
+		<parameter name="code" type="String" />
+	</action>
+
+	<action name="insertEnd" class="file" tooltip="Adds the node in the join point to the end of the file">
+		<parameter name="node" type="joinpoint" />
+	</action>
+	<action name="insertEnd" class="file" tooltip="Adds the String as a Decl to the end of the file">
+		<parameter name="code" type="String" />
+	</action>
+	
+	<action name="addFunction" class="file" return="joinpoint" tooltip="Adds a function to the file that returns void and has no parameters">
+		<parameter name="name" type="String" />
+<!-- 		<parameter name="returnType" type="joinpoint" />
+		<parameter name="parameters" type="joinpoint[]" />  -->
+	</action>
+
+	<!-- SCOPE -->
+
+	<action name="insertBegin" class="scope" return="joinpoint">
+		<parameter name="node" type="joinpoint" />
+	</action>
+	<action name="insertBegin" class="scope" return="joinpoint">
+		<parameter name="code" type="String" />
+	</action>
+
+	<action name="insertEnd" class="scope" return="joinpoint">
+		<parameter name="node" type="joinpoint" />
+	</action>
+
+	<action name="insertEnd" class="scope" return="joinpoint">
+		<parameter name="code" type="string" />
+	</action>
+
+	<!-- FUNCTON -->
+	<action name="clone" class="function">
+		<parameter name="newName" type="String" />
+	</action>
+
+	<action name="clear" class="scope"
+		tooltip="Clears the contents of this scope (untested)" />
+
+	<action name="insertReturn" class="function" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)">
+		<parameter name="code" type="joinpoint" />
+	</action>
+
+	<action name="insertReturn" class="function" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)">
+		<parameter name="code" type="String" />
+	</action>
+	
+	
+
+	<!-- LOOP -->
+	<action name="changeKind" class="loop">
+		<parameter name="kind" type="String" />
+	</action>
+
+	<!-- OMP -->
+	<action name="setNumThreads" class="omp" tooltip="Sets the value of the num_threads clause of an OpenMP pragma">
+		<parameter name="newExpr" type="String" />
+	</action>
+		<action name="setProcBind" class="omp" tooltip="Sets the value of the proc_bind clause of an OpenMP pragma">
+		<parameter name="newBind" type="String" />
+	</action>
+</actions>

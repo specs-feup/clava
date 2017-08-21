@@ -1,0 +1,90 @@
+/**** File 'wrap.h' ****/
+
+#ifndef _WRAP_H_
+#define _WRAP_H_
+
+
+int foo(int a);
+
+void voidFoo(int * a);
+#endif
+
+/**** End File ****/
+
+/**** File 'wrap.c' ****/
+
+#include "wrap.h"
+#include <stdio.h>
+#include "clava_weaver_wrappers.h"
+
+int foo(int a) {
+   
+   return a + 1;
+}
+
+
+int fooNoDecl(int a) {
+   
+   return a + 10;
+}
+
+
+void voidFoo(int * a) {
+   (*a)++;
+}
+
+
+int main() {
+   wrap_foo(10);
+   fooNoDecl(20);
+   int a = 100;
+   wrap_voidFoo(&a);
+   wrap_printf("Hello");
+}
+
+/**** End File ****/
+
+/**** File 'clava_weaver_wrappers.h' ****/
+
+#ifndef _CLAVA_WEAVER_WRAPPERS_H_
+#define _CLAVA_WEAVER_WRAPPERS_H_
+
+
+int wrap_foo(int a);
+
+void wrap_voidFoo(int * a);
+
+int wrap_printf(char const * A, ...);
+#endif
+
+/**** End File ****/
+
+/**** File 'clava_weaver_wrappers.c' ****/
+
+#include "wrap.h"
+#include <stdio.h>
+#include "clava_weaver_wrappers.h"
+
+int wrap_foo(int a) {
+   int result;
+   result = foo(a);
+   
+   return result;
+}
+
+
+void wrap_voidFoo(int * a) {
+   voidFoo(a);
+}
+
+
+int wrap_printf(char const * A, ...) {
+   int result;
+   // Before call
+   result = printf(A);
+   
+   return result;
+}
+
+/**** End File ****/
+

@@ -1,0 +1,5 @@
+
+int main() {
+   auto fooResult = foo();
+   auto& fooRefResult = fooRef("Hello");
+}

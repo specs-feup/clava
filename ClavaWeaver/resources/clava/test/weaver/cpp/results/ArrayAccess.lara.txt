@@ -1,0 +1,10 @@
+a[b[a[0]]]->write
+b[a[0]]->read
+a[0]->read
+a[0]->read
+a2[b2[1][1]][a2[1][2]]->write
+b2[1][1]->read
+a2[1][2]->read
+b2[0][0]->read
+a3[b3[3][4][5]][2][3]->write
+b3[3][4][5]->read

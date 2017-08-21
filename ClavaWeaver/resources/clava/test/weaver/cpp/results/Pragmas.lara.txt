@@ -1,0 +1,28 @@
+Code:
+#pragma functionPragma
+
+int main() {
+   int a;
+   #pragma statementPragma
+   a = 0;
+   #pragma scopePragma
+   {
+      a = a + a;
+   }
+   #pragma lara marker foo
+   // Before scope - foo
+   {
+      // Scope start - foo
+      #pragma lara marker bar
+      // Before scope - bar
+      {
+         // Scope start - bar
+         int a = 0;
+         // Scope end - bar
+      }
+      // After scope - bar
+      // Scope end - foo
+   }
+   // After scope - foo
+}
+default marker attribute "id" is working: foo

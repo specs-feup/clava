@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<!-- 
+	When changing the joinpoint model, do not forget to update the Clava document.
+	
+	https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout
+ -->
+<joinpoints root_class="program">
+	
+	<!-- EMPTY -->
+	<!-- Utility joinpoint, to represent empty nodes when directly accessing the tree -->
+	<joinpoint class="empty"/>
+	
+	<!-- PROGRAM -->
+	<!-- Represents the complete program and is the topmost joinpoint in the hierarchy.  -->
+	<joinpoint class="program">
+		<select class="file"/>
+	</joinpoint>
+	
+	<!-- FILE-->
+	<joinpoint class="file">
+		<select alias="stmt"			class="statement"/>
+		<select alias="childStmt"		class="statement"/>
+		<select 						class="function"/>
+		<select 						class="record"/>
+		<select 						class="struct"/>
+		<select 						class="class"/>
+		<select							class="pragma"/>
+		<select							class="marker"/>		
+		<select 						class="vardecl"/>
+		<select 						class="comment"/>
+	</joinpoint>
+	
+	
+	<!-- RECORD -->
+	<joinpoint class="record">
+		<select alias="field"	class="namedDecl"/>		
+	</joinpoint>
+	
+	
+	<!-- STRUCT -->
+	<joinpoint class="struct" extends="record">
+<!--		<select alias="field"	class="namedDecl"/> -->
+	</joinpoint>
+
+
+	<!--  CLASS -->
+	<joinpoint class="class" extends="record">
+	</joinpoint>	
+	
+	<!-- PRAGMA -->
+	<joinpoint class="pragma">
+	</joinpoint>
+	
+	
+	<!-- MARKER -->
+	<joinpoint class="marker" extends="pragma">
+		<!-- <select alias="contents"			class="scope"/>  -->
+	</joinpoint>
+	
+	<!-- OMP PRAGMA -->
+	<joinpoint class="omp" extends="pragma">
+	</joinpoint>
+	
+	
+	<!-- DECL -->
+	<joinpoint class="decl"/>
+	
+	<!-- NAMED DECL -->
+	<joinpoint class="namedDecl" extends="decl"/>
+	
+	
+	<!-- VAR DECLARATION -->
+ 	<joinpoint class="vardecl" extends="namedDecl">
+ 		<select alias="init"			class="expression"/>
+ 	</joinpoint>  		
+	
+	<!--  FUNCTION PARAMETER -->
+	<joinpoint class="param" extends="vardecl">
+	</joinpoint>
+
+
+	<!-- FUNCTION -->
+	<joinpoint class="function">
+		<!--  <select 						class="body"/>   -->
+	 	<select alias="body" 			class="scope"/>
+		<select 						class="param"/>
+	</joinpoint>
+		
+			
+
+		
+		
+	<!-- SCOPE-->
+	<joinpoint class="scope">
+		<select alias="stmt"			class="statement"/> 
+		<select alias="childStmt"		class="statement"/>
+		
+		<select							class="scope"/>
+		<select							class="if"/>
+		<select							class="loop"/>
+		<select							class="pragma"/>
+		<select							class="marker"/>	
+		<select							class="omp"/>	
+		<select 						class="comment"/>
+	</joinpoint>
+	
+	<!-- BODY -->
+	<!-- <joinpoint class="body" extends="scope">
+	</joinpoint>  -->
+	
+	
+	<!-- STATEMENT -->
+	<joinpoint class="statement">
+		<select alias="expr"			class="expression"/>
+		<select alias="childExpr"		class="expression"/>
+		<select 						class="call"/>
+ 		<select alias="stmtCall"		class="call"/>
+ 		<select							class="arrayAccess"/>
+ 		<select 						class="vardecl"/>
+		<select 						class="varref"/>
+		<select							class="binaryOp"/>
+		<select							class="unaryOp"/>
+	</joinpoint>
+	
+
+	<!-- LOOP -->
+	<joinpoint class="loop" extends="statement">
+		<select alias="init"			class="statement"/>	
+		<select alias="cond"			class="statement"/>
+		<select alias="step"			class="statement"/>
+		<select alias="body" 			class="scope"/> 
+		<!-- <select 			 			class="body"/>  -->
+	</joinpoint>
+	
+	
+	<!-- CALL -->	
+	<joinpoint class="call" 	extends="expression">
+		<select alias="callee"		class="expression"/>
+		<select alias="arg"			class="expression"/>
+	</joinpoint>
+
+	 
+	<!-- IF -->
+	<joinpoint class="if" extends="statement">
+		<select alias="cond"			class="expression"/>
+		<select alias="condDecl"		class="vardecl"/>
+		<select alias="then"			class="scope"/>	
+		<select alias="else"			class="scope"/>	
+		<select	alias="body"			class="scope"/>
+		<!-- <select 			 			class="body"/> -->
+	</joinpoint>
+
+
+	<!-- BINARY OPERATOR -->	
+	<joinpoint class="binaryOp" 	extends="expression">
+		<select alias="left"			class="expression"/>
+		<select alias="right"			class="expression"/>
+	</joinpoint>
+	
+	<joinpoint class="unaryOp" 	extends="expression">
+		<select alias="operand"			class="expression"/>
+	</joinpoint>		
+	
+	
+	<!-- EXPRESSION -->
+	<joinpoint class="expression">
+			<select class="vardecl"/>
+	</joinpoint>
+
+	<!-- VAR REFERENCE -->
+	<joinpoint class="varref"	extends="expression" tooltip="A reference to a variable">
+	</joinpoint>
+
+	<!-- CAST -->
+	<joinpoint class="cast" extends="expression"/>	
+
+
+	<!-- ArrayAccess -->
+	<joinpoint class="arrayAccess" extends="expression"/>	
+
+	<!-- MemberAccess -->
+	<joinpoint class="memberAccess" extends="expression"/>	
+
+
+	<!-- COMMENT -->
+	<joinpoint class="comment"/>
+
+	<!--  TYPE -->
+	<joinpoint class="type">
+	</joinpoint>
+
+		
+	<!--  ENUM TYPE -->
+	<joinpoint class="enumType" extends="type">
+	</joinpoint>
+	
+	
+	<!--  TEMPLATE SPECIALIZATION TYPE -->
+	<joinpoint class="templateSpecializationType" extends="type">
+	</joinpoint>	
+	
+
+	<!--  FUNCTION TYPE -->
+	<joinpoint class="functionType" extends="type">
+	</joinpoint>	
+	
+	<!--  TAG TYPE -->
+	<joinpoint class="tagType" extends="type">
+	</joinpoint>	
+	 	
+</joinpoints>

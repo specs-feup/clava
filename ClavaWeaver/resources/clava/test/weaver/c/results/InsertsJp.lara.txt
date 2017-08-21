@@ -1,0 +1,60 @@
+#include <math.h>
+
+void fooStmtBeforeAfter() {
+   int b = 10;
+   int a = 0;
+   int c = 20;
+}
+
+
+void fooStmtReplace() {
+   int b = 10;
+}
+
+
+void fooBodyBeforeAfter() {
+   int b = 10;
+   int a = 0;
+   int c = 20;
+}
+
+
+void fooBodyReplace() {
+   int b = 10;
+}
+
+
+void fooBodyEmptyBeforeAfter() {
+   int b = 10;
+   int c = 20;
+}
+
+
+void fooBodyEmptyReplace() {
+   int b = 10;
+}
+
+
+void fooCallBeforeAfter() {
+   int b = 10;
+   double a = sqrt(10.0);
+   int c = 20;
+}
+
+
+void fooCallReplace() {
+   double a = pow(2.0, 3.0);
+}
+
+int b = 10;
+
+void fooBeforeAfter() {
+}
+
+int c = 20;
+int d = 30;
+
+int main() {
+   
+   return 0;
+}

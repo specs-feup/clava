@@ -1,0 +1,161 @@
+/**
+ * Copyright 2016 SPeCS.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License. under the License.
+ */
+
+package pt.up.fe.specs.clava.ast.decl;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+
+import com.google.common.base.Preconditions;
+
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.comment.InlineComment;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCollections;
+
+/**
+ * Represents a variable declaration or definition.
+ * 
+ * @author JoaoBispo
+ *
+ */
+public class VarDecl extends DeclaratorDecl {
+
+    private final VarDeclData data;
+
+    public VarDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info, Expr initExpr) {
+        this(data, varName, type, declData, info, SpecsCollections.ofNullable(initExpr));
+    }
+
+    protected VarDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info,
+            Collection<? extends ClavaNode> children) {
+
+        super(varName, type, declData, info, children);
+
+        this.data = data;
+    }
+
+    @Override
+    protected ClavaNode copyPrivate() {
+        return new VarDecl(data, getDeclName(), getType(), getDeclData(), getInfo(), Collections.emptyList());
+    }
+
+    @Override
+    public String getCode() {
+        StringBuilder code = new StringBuilder();
+
+        StorageClass storageClass = getVarDeclData().getStorageClass();
+        if (storageClass != StorageClass.NONE) {
+            code.append(getVarDeclData().getStorageClass().getString()).append(" ");
+        }
+
+        code.append(getType().getCode(getDeclName()));
+        code.append(getInitializationCode());
+        return code.toString();
+    }
+
+    /**
+     * 
+     * @return the code of the variable declaration, possibly with initialization, but without the type nor a comma (;)
+     *         at the end
+     */
+    @Override
+    public String getTypelessCode() {
+        return getDeclName() + getInitializationCode();
+    }
+
+    public String getInitializationCode() {
+        // Write code according to type of declaration
+        switch (data.getInitKind()) {
+        case CINIT:
+            return cinitCode();
+        case NO_INIT:
+            return "";
+        case CALL_INIT:
+            return callInitCode();
+        default:
+            throw new RuntimeException("Case not defined:" + data.getInitKind());
+        }
+    }
+
+    public Optional<Expr> getInit() {
+        if (!hasChildren()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(getChild(Expr.class, 0));
+    }
+
+    /**
+     * Example: footype foo = <child_code>;
+     * 
+     * @return
+     */
+    private String cinitCode() {
+        return " = " + getChild(0).getCode();
+    }
+
+    private String callInitCode() {
+        Preconditions.checkArgument(getNumChildren() == 1, "Expected one child");
+        ClavaNode init = getChild(0);
+
+        // If CXXConstructorExpr, use args code only
+        if (init instanceof CXXConstructExpr) {
+            return ((CXXConstructExpr) init).getArgsCode();
+        }
+
+        // If expression, just return the code
+        Preconditions.checkArgument(init instanceof Expr,
+                "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
+
+        return "(" + init.getCode() + ")";
+
+    }
+
+    public VarDeclData getVarDeclData() {
+        return data;
+    }
+
+    @Override
+    public String toContentString() {
+        return super.toContentString() + ", " + data;
+    }
+
+    @Override
+    public void associateComment(InlineComment inlineComment) {
+        super.associateComment(inlineComment);
+
+        // If parent is a DeclStmt, move comment 'upward'
+        if (!hasParent()) {
+            return;
+        }
+
+        ClavaNode parent = getParent();
+        if (!(parent instanceof DeclStmt)) {
+            return;
+        }
+
+        removeInlineComments().stream()
+                .forEach(parent::associateComment);
+
+    }
+
+}

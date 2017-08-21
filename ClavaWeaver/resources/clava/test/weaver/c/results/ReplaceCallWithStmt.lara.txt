@@ -1,0 +1,7 @@
+
+int main() {
+   float * aFloatPointer;
+   int fooResult = foo();
+   float * fooPointerResult = fooPointer(aFloatPointer);
+   aType fooTypedefResult = fooTypedef();
+}

@@ -1,0 +1,41 @@
+
+var ClavaJoinPoints = {};
+
+
+ClavaJoinPoints.builtinType = function(code) {
+	return AstFactory.builtinType(code);
+}
+
+
+ClavaJoinPoints.exprLiteral = function(code, type) {
+	var typeofType = typeof type;
+
+	if(type === undefined) {
+		return AstFactory.exprLiteral(code);
+	}
+	
+	if(typeofType === "string") {
+		type = ClavaJoinPoints.builtinType(type);
+	}
+	
+
+	
+	return AstFactory.exprLiteral(code, type);
+
+}; 
+
+
+ClavaJoinPoints.varDecl = function(varName, init) {
+	return AstFactory.varDecl(varName, init);
+}
+
+ClavaJoinPoints.varDeclNoInit = function(varName, type) {
+	return AstFactory.varDeclNoInit(varName, type);
+}
+
+ClavaJoinPoints.typeLiteral = function(typeString) {
+	return AstFactory.typeLiteral(typeString);
+}
+
+
+

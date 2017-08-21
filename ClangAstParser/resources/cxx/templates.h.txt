@@ -1,0 +1,5 @@
+#ifndef _TEMPLATES_H_
+#define _TEMPLATES_H_
+
+
+#endif

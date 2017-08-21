@@ -1,0 +1,12 @@
+aspectdef test
+
+    select omp end
+    apply
+        println("kind: " + $omp.kind);
+        println("num_threads:" + $omp.numThreads);
+        println("proc_bind:" + $omp.procBind);
+        println("has shared:" + $omp.hasClause("shared"));
+        println("nowait legal:" + $omp.isClauseLegal("nowait"));
+    end
+
+end

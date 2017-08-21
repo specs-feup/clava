@@ -1,0 +1,14 @@
+aspectdef ArrayAccess
+
+/*
+	select body.stmt end
+	apply
+		println("STMT:" + $stmt.code);
+	end
+	*/
+	select stmt.arrayAccess end
+	apply
+		println($arrayAccess.code + "->" + $arrayAccess.use);
+	end
+
+end
