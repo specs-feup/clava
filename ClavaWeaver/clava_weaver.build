@@ -1,0 +1,7 @@
+https://github.com/specs-feup/lara-framework
+https://github.com/specs-feup/specs-java-libs
+https://github.com/specs-feup/specs-lara
+https://github.com/specs-feup/clava
+--build
+--project ClavaWeaver
+--main pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher
