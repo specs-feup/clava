@@ -46,3 +46,20 @@ PerformanceTests/sdvbs-disparity.txt
 ### ignore media formats
 *.mp4
 *.wmv
+
+
+# C/C++ Dependencies
+deps/*/*/*
+
+# Build
+**/build/*
+**/build-*/*
+**/cmake-build*/*
+
+
+# Idea IDEs
+**/.idea/misc.xml
+**/.idea/*.iml
+
+# deploy credentials
+*.creds
