@@ -46,7 +46,7 @@ where <aspect.lara> is the LARA aspect you want to execute, and <source_folder> 
 
 There are more command-line options available, which can be consulted by running:
 
-	`java -jar Clava.jar --help`
+	java -jar Clava.jar --help
 
 
 		
@@ -54,7 +54,7 @@ There are more command-line options available, which can be consulted by running
 
 To pass a configuration file, use the flag -c:
 
-	`java -jar Clava.jar -c <config.clava>`
+	java -jar Clava.jar -c <config.clava>
 
 where <config.clava> is the configuration file created with the GUI.
 
