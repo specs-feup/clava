@@ -752,7 +752,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public static CxxWeaver getCxxWeaver() {
-        return (CxxWeaver) getWeaverStatic();
+        return (CxxWeaver) getThreadLocalWeaver();
     }
 
     @Override
