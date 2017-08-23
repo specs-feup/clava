@@ -39,14 +39,14 @@ There are two main modes in command line, either passing all arguments (LARA fil
 
 ### Manually:
 
-	`java -jar Clava.jar <aspect.lara> -p <source_folder>`
+	java -jar Clava.jar <aspect.lara> -p <source_folder>
 
 where <aspect.lara> is the LARA aspect you want to execute, and <source_folder> is the folder where the source code is.
 
 
 There are more command-line options available, which can be consulted by running:
 
-		`java -jar Clava.jar --help`
+	`java -jar Clava.jar --help`
 
 
 		
