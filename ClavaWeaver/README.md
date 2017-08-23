@@ -1,10 +1,10 @@
 
 ## Building Clava
 
-Using [eclipse-build](http://specs.fe.up.pt/tools/eclipse-build.jar), copy the file clava_weaver.build to a folder and run the following command:
+Using [eclipse-build](http://specs.fe.up.pt/tools/eclipse-build.jar), copy the file eclipse.build to a folder and run the following command:
 
 ```
-  java -jar eclipse-build.jar --config clava_weaver.build
+  java -jar eclipse-build.jar --config eclipse.build
 ```
 
 This should create the file ClavaWeaver.jar. 
