@@ -130,7 +130,8 @@ public class DeclRefExpr extends Expr {
         }
 
         String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
-
+        // System.out.println("ASCENDANTS:"
+        // + this.getAscendantsStream().map(node -> node.getNodeName()).collect(Collectors.joining(" -> ")));
         Optional<ClavaNode> declTry = getApp().getNodeTry(varDeclId);
 
         // If not present, probably declaration is outside of parsed files

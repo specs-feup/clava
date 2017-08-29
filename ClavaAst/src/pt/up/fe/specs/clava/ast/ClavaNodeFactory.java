@@ -740,8 +740,16 @@ public class ClavaNodeFactory {
         return new DeclStmt(info, recordDecl, varDecls);
     }
 
+    public static DeclStmt declStmtWithoutSemicolon(ClavaNodeInfo info, NamedDecl decl) {
+        return new DeclStmt(false, info, decl);
+    }
+
     public static ExprStmt exprStmt(Expr expr) {
         return new ExprStmt(expr.getInfo(), expr);
+    }
+
+    public static ExprStmt exprStmtWithoutSemicolon(Expr expr) {
+        return new ExprStmt(false, expr.getInfo(), expr);
     }
 
     public static ExprStmt exprStmtAssign(Expr lhs, Expr rhs, Type returnType) {

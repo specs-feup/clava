@@ -29,17 +29,25 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
  */
 public class ExprStmt extends Stmt {
 
+    private final boolean hasSemicolon;
+
     public ExprStmt(ClavaNodeInfo info, Expr expr) {
-        this(info, Arrays.asList(expr));
+        this(true, info, Arrays.asList(expr));
     }
 
-    private ExprStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    public ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Expr expr) {
+        this(hasSemicolon, info, Arrays.asList(expr));
+    }
+
+    private ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
+
+        this.hasSemicolon = hasSemicolon;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new ExprStmt(getInfo(), Collections.emptyList());
+        return new ExprStmt(hasSemicolon, getInfo(), Collections.emptyList());
     }
 
     public Expr getExpr() {
@@ -48,7 +56,8 @@ public class ExprStmt extends Stmt {
 
     @Override
     public String getCode() {
-        return getExpr().getCode() + ";";
+        String suffix = hasSemicolon ? ";" : "";
+        return getExpr().getCode() + suffix;
     }
 
 }

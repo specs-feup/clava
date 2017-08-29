@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -36,9 +37,14 @@ public class DeclStmt extends Stmt {
     }
 
     private final DeclStmtType type;
+    private final boolean hasSemicolon;
 
     public DeclStmt(ClavaNodeInfo info, RecordDecl recordDecl, List<VarDecl> varDecls) {
-        this(DeclStmtType.RECORD_DECL, info, SpecsCollections.concat(recordDecl, varDecls));
+        this(DeclStmtType.RECORD_DECL, true, info, SpecsCollections.concat(recordDecl, varDecls));
+    }
+
+    public DeclStmt(boolean hasSemicolon, ClavaNodeInfo info, NamedDecl decl) {
+        this(DeclStmtType.DECL_LIST, false, info, Arrays.asList(decl));
     }
 
     public DeclStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
@@ -46,13 +52,28 @@ public class DeclStmt extends Stmt {
         // Answer: No, they are not always VarDecl, they can also be a RecordDecl as the first child
 
         // Check if the children greater than one are always VarDecl
-        this(DeclStmtType.DECL_LIST, info, decls);
+        this(DeclStmtType.DECL_LIST, true, info, decls);
     }
 
-    private DeclStmt(DeclStmtType type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    private DeclStmt(DeclStmtType type, boolean hasSemicolon, ClavaNodeInfo info,
+            Collection<? extends ClavaNode> children) {
+
         super(info, children);
 
+        // Check RECORD_DECL and semicolon
+        if (type == DeclStmtType.RECORD_DECL) {
+            Preconditions.checkArgument(hasSemicolon,
+                    "DeclStmtType '" + DeclStmtType.RECORD_DECL + "' requires semicolon");
+        }
+
+        // Check number of children and semicolon
+        if (!hasSemicolon) {
+            Preconditions.checkArgument(children.size() == 1,
+                    "No-semicolon support only when only one child is present");
+        }
+
         this.type = type;
+        this.hasSemicolon = hasSemicolon;
 
         // If any of the children have associated comments, "move" them up to this statement
         children.stream()
@@ -114,6 +135,10 @@ public class DeclStmt extends Stmt {
     }
 
     public String getCodeDeclList() {
+        // If no semicolon, can only have one decl
+        if (!hasSemicolon) {
+            return getChildren(NamedDecl.class).get(0).getCode();
+        }
 
         // All elements are VarDecls
         List<NamedDecl> decls = getChildren(NamedDecl.class);

@@ -46,7 +46,6 @@ public class ImplicitCastExpr extends CastExpr {
             List<? extends ClavaNode> children) {
 
         super(castKind, exprData, info, children);
-
     }
 
     @Override
