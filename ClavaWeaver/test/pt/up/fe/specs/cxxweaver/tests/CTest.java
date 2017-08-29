@@ -85,4 +85,9 @@ public class CTest {
     public void testWrap() {
         newTester().test("Wrap.lara", "wrap.c", "wrap.h");
     }
+
+    @Test
+    public void testVarrefInWhile() {
+        newTester().test("VarrefInWhile.lara", "varref_in_while.c");
+    }
 }
