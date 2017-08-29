@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -50,10 +51,12 @@ public class WhileStmtParser extends AClangNodeParser<WhileStmt> {
         }
 
         ClavaNode condition = declCondition != null ? declCondition : children.get(1);
+        Stmt conditionStmt = toConditionStmt(condition);
 
         CompoundStmt thenStmt = toCompoundStmt(children.get(2));
 
-        return ClavaNodeFactory.whileStmt(node.getInfo(), condition, thenStmt);
+        // return ClavaNodeFactory.whileStmt(node.getInfo(), condition, thenStmt);
+        return ClavaNodeFactory.whileStmt(node.getInfo(), conditionStmt, thenStmt);
     }
 
 }

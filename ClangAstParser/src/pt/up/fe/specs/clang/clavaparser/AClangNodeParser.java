@@ -230,6 +230,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         return ClangNodeParser.toStmt(node);
     }
 
+    protected Stmt toConditionStmt(ClavaNode node) {
+        return ClangNodeParser.toConditionStmt(node);
+    }
+
     public List<Stmt> toStmt(List<? extends ClavaNode> nodes) {
         return nodes.stream()
                 .map(ClangNodeParser::toStmt)

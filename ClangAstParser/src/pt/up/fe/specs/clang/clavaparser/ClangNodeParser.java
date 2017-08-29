@@ -21,8 +21,10 @@ import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -91,5 +93,28 @@ public interface ClangNodeParser<T extends ClavaNode> {
         }
 
         return ClavaParserUtils.cast(node, Stmt.class, ClavaNodeFactory::dummyStmt);
+    }
+
+    /**
+     * Casts the given node to a Stmt that does not uses semicolon. If not possible, throws an exception.
+     * 
+     * @param node
+     * @return
+     */
+    static Stmt toConditionStmt(ClavaNode node) {
+
+        if (node instanceof Stmt) {
+            return (Stmt) node;
+        }
+
+        if (node instanceof Expr) {
+            return ClavaNodeFactory.exprStmtWithoutSemicolon((Expr) node);
+        }
+
+        if (node instanceof NamedDecl) {
+            return ClavaNodeFactory.declStmtWithoutSemicolon(ClavaNodeInfo.undefinedInfo(), (NamedDecl) node);
+        }
+
+        throw new RuntimeException("Case not implemented yet:" + node.getClass());
     }
 }
