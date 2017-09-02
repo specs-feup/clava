@@ -1,4 +1,5 @@
 import clava.Clava;
+import lara.Io;
 
 aspectdef ClavaTest
 
@@ -26,7 +27,7 @@ aspectdef ClavaTest
 	apply
 		println("Pushed AST:\n" + $program.code);
 	end
-	
+			
 	Clava.popAst();
 	
 	select program end

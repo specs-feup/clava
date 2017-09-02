@@ -537,25 +537,7 @@ public class CxxWeaver extends ACxxWeaver {
             // Terminate weaver execution with final steps required and writing output files
             File codeFolder = SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
 
-            // Get files and contents to write
-            Map<File, String> files = getApp().getCode(baseFolder, codeFolder);
-
-            // Add empty files
-            // addEmptyFiles(files, codeFolder);
-
-            // Write files that have changed
-            for (Entry<File, String> entry : files.entrySet()) {
-                File destinationFile = entry.getKey();
-                String code = entry.getValue();
-
-                // If file already exists, and is the same as the file that we are about to write, skip
-                if (destinationFile.isFile() && areEqual(destinationFile, code)) {
-                    continue;
-                }
-
-                SpecsLogs.msgInfo("Changes in file '" + destinationFile + "'");
-                SpecsIo.write(destinationFile, code);
-            }
+            writeCode(codeFolder);
 
         }
 
@@ -589,6 +571,25 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         return true;
+    }
+
+    public void writeCode(File outputFolder) {
+        // Get files and contents to write
+        Map<File, String> files = getApp().getCode(baseFolder, outputFolder);
+
+        // Write files that have changed
+        for (Entry<File, String> entry : files.entrySet()) {
+            File destinationFile = entry.getKey();
+            String code = entry.getValue();
+
+            // If file already exists, and is the same as the file that we are about to write, skip
+            if (destinationFile.isFile() && areEqual(destinationFile, code)) {
+                continue;
+            }
+
+            SpecsLogs.msgInfo("Changes in file '" + destinationFile + "'");
+            SpecsIo.write(destinationFile, code);
+        }
     }
 
     private static boolean areEqual(File expected, String actual) {
@@ -701,7 +702,7 @@ public class CxxWeaver extends ACxxWeaver {
     public List<Class<?>> getImportableClasses() {
         return Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
                 CsvField.class, ProgressCounter.class, ClavaPlatforms.class, ClavaWeaverLauncher.class,
-                ArgumentsParser.class);
+                ArgumentsParser.class, CxxWeaverApi.class);
     }
 
     @Override
