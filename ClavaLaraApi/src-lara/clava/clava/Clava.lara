@@ -1,4 +1,6 @@
+import lara.Io;
 import clava.ClavaAspects;
+
 
 var Clava = {};
 
@@ -90,11 +92,23 @@ Clava.findJp = function($jp) {
 		return undefined;
 	}
 	
-	var $newJp = LowLevelApi.findJp($file.filepath, $jp.astId);
+	var $newJp = CxxWeaverApi.findJp($file.filepath, $jp.astId);
 	if($newJp === null) {
 		info("Could not find the given '" + $jp + "' in the current AST", "Clava.findJp");
 		return undefined;
 	}
 	
 	return $newJp;
+}
+
+
+/**
+ * Writes the code of the current AST to the given folder.
+ */
+Clava.writeCode = function(outputFoldername) {
+	var outputFolder = Io.mkdir(outputFoldername);
+	
+	CxxWeaverApi.writeCode(outputFolder);
+	
+	return outputFolder;
 }
