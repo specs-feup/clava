@@ -63,4 +63,9 @@ public class CxxApiTest {
     public void testTimer() {
         newTester().test("TimerTest.lara", "timer_test.cpp");
     }
+
+    @Test
+    public void testClavaFindJp() {
+        newTester().test("ClavaFindJpTest.lara", "clava_find_jptest.cpp");
+    }
 }

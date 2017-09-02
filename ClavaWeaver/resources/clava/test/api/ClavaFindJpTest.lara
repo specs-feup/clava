@@ -1,0 +1,36 @@
+import clava.Clava;
+
+aspectdef ClavaTest
+
+	var $aLoop = undefined;
+
+	// Get a join point
+	select loop end
+	apply 
+		$aLoop = $loop;
+	end
+
+	// Push AST
+	Clava.pushAst();
+	
+	// Find equivalent join point
+	var $eqLoop = Clava.findJp($aLoop);
+	if($eqLoop === undefined) {
+		println("Could not find loop");
+		return;
+	}
+	
+	$eqLoop.insertBefore("// Pushed AST");
+	
+	select program end
+	apply
+		println("Pushed AST:\n" + $program.code);
+	end
+	
+	Clava.popAst();
+	
+	select program end
+	apply
+		println("Original AST:\n" + $program.code);
+	end
+end

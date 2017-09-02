@@ -13,10 +13,17 @@
 
 package pt.up.fe.specs.clava.weaver.importable;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
+import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class LowLevelApi {
@@ -62,4 +69,29 @@ public class LowLevelApi {
         return null;
     }
 
+    public static ClavaNode getNode(ACxxWeaverJoinPoint joinpoint) {
+        return joinpoint.getNode();
+    }
+
+    public static ACxxWeaverJoinPoint findJp(String filepath, String astId) {
+        // Get AST at the top of the stack
+        App topAst = CxxWeaver.getCxxWeaver().getApp();
+
+        File originalFilepath = new File(filepath);
+        TranslationUnit tu = topAst.getTranslationUnits().stream()
+                .filter(node -> node.getFile().equals(originalFilepath))
+                .findFirst()
+                .orElse(null);
+
+        if (tu == null) {
+            return null;
+        }
+
+        return tu.getDescendantsAndSelfStream()
+                // Filter nodes that do not have an id equal to the given id
+                .filter(node -> node.getExtendedId().map(astId::equals).orElse(false))
+                .findFirst()
+                .map(node -> CxxJoinpoints.create(node, null))
+                .orElse(null);
+    }
 }
