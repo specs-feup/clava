@@ -13,14 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
@@ -74,4 +77,26 @@ public class ArraySubscriptExpr extends Expr {
         return (DeclRefExpr) currentNode;
     }
 
+    public List<Expr> getSubscripts() {
+        return Collections.unmodifiableList(getSubscriptsPrivate());
+    }
+
+    private List<Expr> getSubscriptsPrivate() {
+        Expr subscript = getRhs();
+
+        ClavaNode normalizedLhs = ClavaNodes.normalize(getLhs());
+        if (!(normalizedLhs instanceof ArraySubscriptExpr)) {
+            List<Expr> subscripts = new ArrayList<>();
+            subscripts.add(subscript);
+            return subscripts;
+        }
+
+        // Get the other subscripts
+        List<Expr> subscripts = ((ArraySubscriptExpr) normalizedLhs).getSubscriptsPrivate();
+
+        // Subscripts appear in reverse order, add current to the end of the list
+        subscripts.add(subscript);
+
+        return subscripts;
+    }
 }
