@@ -3,6 +3,8 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.weaver.utils.Converter;
+import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -47,6 +49,51 @@ public abstract class AArrayAccess extends AExpression {
         	throw new AttributeException(get_class(), "arrayVar", e);
         }
     }
+
+    /**
+     * Get value on attribute subscript
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getSubscriptArrayImpl();
+
+    /**
+     * expression of the array access subscript
+     */
+    public Bindings getSubscriptImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getSubscriptArrayImpl();
+        Bindings nativeArray0 = Converter.toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * expression of the array access subscript
+     */
+    public final Object getSubscript() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "subscript", Optional.empty());
+        	}
+        	Bindings result = this.getSubscriptImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "subscript", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "subscript", e);
+        }
+    }
+
+    /**
+     * varref to the variable of the array access
+     * @return 
+     */
+    public abstract List<? extends AVarref> selectArrayVar();
+
+    /**
+     * expression of the array access subscript
+     * @return 
+     */
+    public abstract List<? extends AExpression> selectSubscript();
 
     /**
      * Get value on attribute vardecl
@@ -189,6 +236,12 @@ public abstract class AArrayAccess extends AExpression {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "arrayVar": 
+        		joinPointList = selectArrayVar();
+        		break;
+        	case "subscript": 
+        		joinPointList = selectSubscript();
+        		break;
         	default:
         		joinPointList = this.aExpression.select(selectName);
         		break;
@@ -203,6 +256,7 @@ public abstract class AArrayAccess extends AExpression {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("arrayVar");
+        attributes.add("subscript");
     }
 
     /**
@@ -211,6 +265,8 @@ public abstract class AArrayAccess extends AExpression {
     @Override
     protected final void fillWithSelects(List<String> selects) {
         this.aExpression.fillWithSelects(selects);
+        selects.add("arrayVar");
+        selects.add("subscript");
     }
 
     /**
@@ -247,6 +303,7 @@ public abstract class AArrayAccess extends AExpression {
      */
     protected enum ArrayAccessAttributes {
         ARRAYVAR("arrayVar"),
+        SUBSCRIPT("subscript"),
         VARDECL("vardecl"),
         USE("use"),
         PARENT("parent"),

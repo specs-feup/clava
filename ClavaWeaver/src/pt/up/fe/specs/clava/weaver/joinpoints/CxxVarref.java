@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.Optional;
+
+import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -54,6 +57,18 @@ public class CxxVarref extends AVarref {
     @Override
     public AJoinPoint getUseExprImpl() {
         return CxxJoinpoints.create(refExpr.getUseExpr(), this);
+    }
+
+    @Override
+    public AJoinPoint getVardeclImpl() {
+
+        Optional<DeclaratorDecl> varDecl = refExpr.getVariableDeclaration();
+
+        if (!varDecl.isPresent()) {
+            return null;
+        }
+
+        return CxxJoinpoints.create(varDecl.get(), null);
     }
 
 }

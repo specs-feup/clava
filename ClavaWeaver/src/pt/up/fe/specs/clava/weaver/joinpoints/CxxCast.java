@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 
 public class CxxCast extends ACast {
@@ -59,6 +60,11 @@ public class CxxCast extends ACast {
     @Override
     public AJoinPoint getToTypeImpl() {
         return CxxJoinpoints.create(cast.getCastType(), this);
+    }
+
+    @Override
+    public AJoinPoint getVardeclImpl() {
+        return ((AExpression) CxxJoinpoints.create(cast.getSubExpr(), this)).getVardeclImpl();
     }
 
 }

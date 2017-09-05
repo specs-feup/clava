@@ -9987,6 +9987,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "expression of the array access subscript",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "subscript"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10284,6 +10293,18 @@
                               "type": "joinpoint",
                               "name": "currentRegion"
                            }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "varref",
+                  "alias": "arrayVar",
+                  "tooltip": "varref to the variable of the array access"
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "subscript",
+                  "tooltip": "expression of the array access subscript"
                },
                {
                   "type": "select",

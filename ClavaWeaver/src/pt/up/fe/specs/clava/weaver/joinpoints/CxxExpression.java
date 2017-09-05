@@ -16,18 +16,16 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AExpressionUseEnum;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxExpression extends AExpression {
 
@@ -64,17 +62,38 @@ public class CxxExpression extends AExpression {
 
     @Override
     public AJoinPoint getVardeclImpl() {
+        SpecsLogs.msgInfo("attribute 'vardecl' not implemented yet for joinpoint " + getJoinPointType());
+        return null;
+        /*
+        // DeclRefExpr declRefExpr = toDeclRefExpr(expr);
+        // if (declRefExpr == null) {
+        // return null;
+        // }
         if (!(expr instanceof DeclRefExpr)) {
             return null;
         }
-
+        
         Optional<DeclaratorDecl> varDecl = ((DeclRefExpr) expr).getVariableDeclaration();
-
+        // Optional<DeclaratorDecl> varDecl = declRefExpr.getVariableDeclaration();
+        
         if (!varDecl.isPresent()) {
             return null;
         }
-
+        
         return CxxJoinpoints.create(varDecl.get(), null);
+        */
+    }
+
+    private DeclRefExpr toDeclRefExpr(ClavaNode node) {
+        if (node instanceof DeclRefExpr) {
+            return (DeclRefExpr) node;
+        }
+
+        if (node.getNumChildren() == 1) {
+            return toDeclRefExpr(node.getChild(0));
+        }
+
+        return null;
     }
 
     @Override

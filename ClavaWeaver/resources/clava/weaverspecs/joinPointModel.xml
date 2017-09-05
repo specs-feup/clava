@@ -176,7 +176,10 @@
 
 
 	<!-- ArrayAccess -->
-	<joinpoint class="arrayAccess" extends="expression"/>	
+	<joinpoint class="arrayAccess" extends="expression">	
+		<select alias="arrayVar" class="varref" tooltip="varref to the variable of the array access"/>
+		<select alias="subscript" class="expression" tooltip="expression of the array access subscript"/>
+	</joinpoint>
 
 	<!-- MemberAccess -->
 	<joinpoint class="memberAccess" extends="expression"/>	

@@ -229,6 +229,8 @@
 	<artifact class="arrayAccess">
 		<attribute name="arrayVar" type="joinpoint"
 			tooltip="varref to the variable of the array access" />
+		<attribute name="subscript" type="joinpoint[]"
+			tooltip="expression of the array access subscript" />	
 	</artifact>
 
 
