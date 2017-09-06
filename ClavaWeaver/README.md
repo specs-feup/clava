@@ -9,7 +9,7 @@ This should create the file ClavaWeaver.jar.
 
 ## Downloading Clava
 
-Clava can be downloaded from the link specs.fe.up.pt/tools/clava.jar.
+Clava can be downloaded from this [link](http://specs.fe.up.pt/tools/clava.jar).
 
 
 
