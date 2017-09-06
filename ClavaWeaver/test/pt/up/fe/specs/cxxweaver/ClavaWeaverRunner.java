@@ -40,7 +40,7 @@ public class ClavaWeaverRunner {
     @Test
     public void testConfigFile() {
         File configFile = new File(
-                "C:\\Users\\JoaoBispo\\Desktop\\shared\\antarex\\libVC-integration-examples\\example1\\example1.clava");
+                "C:\\Users\\JoaoBispo\\Desktop\\shared\\clava-tests\\Tests\\2017-09_lara_resource\\resource_example.clava");
 
         ClavaWeaverLauncher.main(new String[] { "--config", configFile.getAbsolutePath() });
     }
