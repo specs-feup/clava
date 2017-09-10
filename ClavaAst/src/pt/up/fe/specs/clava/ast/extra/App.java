@@ -168,9 +168,9 @@ public class App extends ClavaNode {
         }
     }
 
-    private static List<File> getAllSourcefiles(List<File> sources) {
-        return getAllSourcefiles(sources, false);
-    }
+    // private static List<File> getAllSourcefiles(List<File> sources) {
+    // return getAllSourcefiles(sources, false);
+    // }
 
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
 
@@ -252,6 +252,10 @@ public class App extends ClavaNode {
         }
 
         return files;
+    }
+
+    public String getRelativePath(File baseInputFolder, TranslationUnit tUnit) {
+        return getRelativePath(tUnit.getFile(), baseInputFolder);
     }
 
     private String getRelativePath(File baseFile, File baseInputFolder) {
