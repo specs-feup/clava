@@ -5229,6 +5229,7 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "the name of the file",
                   "children": [
                            {
                               "type": "String",
@@ -5237,6 +5238,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this file contains a 'main' method",
                   "children": [
                            {
                               "type": "Boolean",
@@ -5245,6 +5247,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the folder of the source file",
                   "children": [
                            {
                               "type": "String",
@@ -5253,6 +5256,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file",
                   "children": [
                            {
                               "type": "String",
@@ -5261,6 +5265,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the path to the file rellative to the program base folder",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "relativePath"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this file is considered a C++ file",
                   "children": [
                            {
                               "type": "Boolean",
@@ -7912,6 +7926,14 @@
                            {
                               "type": "joinpoint",
                               "name": "functionType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "declarationJp"
                            }]
                },
                {

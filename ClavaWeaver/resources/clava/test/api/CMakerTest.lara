@@ -1,0 +1,16 @@
+import lara.Io;
+import lara.cmake.CMaker;
+
+aspectdef CMakerTest
+
+	var cmaker = new CMaker("testapp");
+
+	var outputFolder = "cmakerTestSrc/";
+	
+	select file end
+	apply
+		println("Adding:" + $file.relativePath);
+		cmaker.sources.addSource($file.relativePath);
+	end
+
+end
