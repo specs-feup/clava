@@ -160,6 +160,24 @@ public abstract class Expr extends ClavaNode implements Typable {
         return ClavaNodes.use(this);
     }
 
+    /**
+     * 
+     * @return true if the expression is used inside a function call
+     */
+    public boolean isFunctionArgument() {
+        CallExpr functionCall = getAncestorTry(CallExpr.class).orElse(null);
+
+        if (functionCall == null) {
+            return false;
+        }
+
+        return functionCall.getArgs().stream()
+                .flatMap(ClavaNode::getDescendantsAndSelfStream)
+                .filter(descendant -> descendant == this)
+                .findFirst().isPresent();
+
+    }
+
     // public String getTypeCode() {
     // // Not sure if we should use the same method as the one used for declarations
     // return ClavaNodeUtils.getTypeCode(getType().get(0));
