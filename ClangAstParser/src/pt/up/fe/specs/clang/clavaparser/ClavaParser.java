@@ -456,16 +456,25 @@ public class ClavaParser implements AutoCloseable {
     private void parseDelayedTypes() {
         TransformQueue<ClavaNode> queue = new TransformQueue<>("Delayed Types Parsing");
 
+        // System.out.println("TABLE BEFORE:" + converter.getOriginalTypes());
+
         // Go over all original types and find DelayedParsing nodes
         for (Type type : converter.getOriginalTypes().values()) {
+
             type.getDescendantsStream()
                     .filter(node -> node instanceof DelayedParsing)
                     .forEach(delayedParsing -> queue.replace(delayedParsing,
                             converter.parse(((DelayedParsing) delayedParsing).getClangNode())));
         }
+        //
+        // for (NodeTransform<ClavaNode> transform : queue.getTransforms()) {
+        // System.out.println("TRANSFORMS:" + transform.getOperands());
+        // }
 
         // System.out.println("QUEUE:" + queue);
         queue.apply();
+
+        // System.out.println("TABLE AFTER:" + converter.getOriginalTypes());
 
     }
 

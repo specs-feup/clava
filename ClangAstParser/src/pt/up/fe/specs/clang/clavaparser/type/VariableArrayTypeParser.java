@@ -55,7 +55,14 @@ public class VariableArrayTypeParser extends AClangNodeParser<Type> {
         System.out.println("---");*/
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
         ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType);
+
+        // String location = parser.apply(ClangGenericParsers::parseLocation);
+        // System.out.println("LOCATION:" + location);
+
+        // if (!parser.isEmpty()) {
+        // System.out.println("PARSER:" + parser);
         // parser.clear();
+        // }
 
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 2);
