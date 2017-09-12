@@ -2413,6 +2413,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -4800,6 +4809,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -6281,6 +6299,32 @@
                   "children": [
                            {
                               "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setContent"
+                           },
+                           {
+                              "type": "String",
+                              "name": "content",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               "name": "insert"
                            },
                            {
@@ -7300,10 +7344,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "DEPRECATED: use 'setKind' instead",
                   "children": [
                            {
                               "type": "void",
                               "name": "changeKind"
+                           },
+                           {
+                              "type": "String",
+                              "name": "kind",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the kind of the loop",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setKind"
                            },
                            {
                               "type": "String",
@@ -10034,6 +10093,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12046,6 +12114,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12526,6 +12603,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12967,6 +13053,15 @@
                            {
                               "type": "[read| write| readwrite]",
                               "name": "use"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
                            }]
                },
                {
@@ -13426,6 +13521,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this varref represents a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionCall"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13438,6 +13542,15 @@
                            {
                               "type": "[read| write| readwrite]",
                               "name": "use"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
                            }]
                },
                {
@@ -14182,6 +14295,32 @@
                   "children": [
                            {
                               "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setContent"
+                           },
+                           {
+                              "type": "String",
+                              "name": "content",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               "name": "insert"
                            },
                            {
@@ -14379,6 +14518,15 @@
                            {
                               "type": "[read| write| readwrite]",
                               "name": "use"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
                            }]
                },
                {
@@ -15170,6 +15318,32 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setContent"
+                           },
+                           {
+                              "type": "String",
+                              "name": "content",
+                              "defaultValue": ""
                            }]
                },
                {

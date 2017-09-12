@@ -251,7 +251,7 @@ public abstract class ALoop extends AStatement {
     public abstract List<? extends AScope> selectBody();
 
     /**
-     * 
+     * DEPRECATED: use 'setKind' instead
      * @param kind 
      */
     public void changeKindImpl(String kind) {
@@ -259,7 +259,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * DEPRECATED: use 'setKind' instead
      * @param kind 
      */
     public final void changeKind(String kind) {
@@ -273,6 +273,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "changeKind", e);
+        }
+    }
+
+    /**
+     * Sets the kind of the loop
+     * @param kind 
+     */
+    public void setKindImpl(String kind) {
+        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
+    }
+
+    /**
+     * Sets the kind of the loop
+     * @param kind 
+     */
+    public final void setKind(String kind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), kind);
+        	}
+        	this.setKindImpl(kind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), kind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setKind", e);
         }
     }
 
@@ -543,6 +569,7 @@ public abstract class ALoop extends AStatement {
     protected final void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
         actions.add("void changeKind(String)");
+        actions.add("void setKind(String)");
     }
 
     /**

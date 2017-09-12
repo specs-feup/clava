@@ -308,7 +308,7 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void changeKindImpl(String kind) {
+    public void setKindImpl(String kind) {
         ALoopKindEnum loopKind = SpecsEnums.valueOf(ALoopKindEnum.class, kind.toUpperCase());
 
         if (loopKind == null) {
@@ -324,6 +324,11 @@ public class CxxLoop extends ALoop {
             throw new RuntimeException("Not implemented: " + loopKind);
         }
 
+    }
+
+    @Override
+    public void changeKindImpl(String kind) {
+        setKindImpl(kind);
     }
 
     private void convertToWhile() {
@@ -344,4 +349,5 @@ public class CxxLoop extends ALoop {
         throw new RuntimeException("Case not implemented:" + loop.getClass());
 
     }
+
 }

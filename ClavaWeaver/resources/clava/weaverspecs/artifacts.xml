@@ -130,6 +130,8 @@
 			representing the declaration of the variable -->
 		<attribute name="vardecl" type="joinpoint" />
 		<attribute name="use" type="{read,write,readwrite}" />
+		<attribute name="isFunctionArgument" type="Boolean" 
+			tooltip="true if the expression is part of an argument of a function call"/>
 	</artifact>
 
 	<!-- CALL -->
@@ -154,6 +156,8 @@
 		<attribute name="kind" type="String" />
 		<attribute name="useExpr" type="joinpoint"
 			tooltip="expression where this reference is used" />
+		<attribute name="isFunctionCall" type="Boolean" 
+			tooltip="true if this varref represents a function call" />
 	</artifact>
 
 	<!-- FUNCTION -->

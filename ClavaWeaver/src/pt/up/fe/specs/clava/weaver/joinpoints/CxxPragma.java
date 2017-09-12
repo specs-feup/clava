@@ -55,4 +55,14 @@ public class CxxPragma extends APragma {
         return pragma.getContent();
     }
 
+    @Override
+    public void setContentImpl(String content) {
+        pragma.setContent(content);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        pragma.setName(name);
+    }
+
 }

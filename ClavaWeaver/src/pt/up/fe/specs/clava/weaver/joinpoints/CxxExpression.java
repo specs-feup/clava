@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -84,17 +83,19 @@ public class CxxExpression extends AExpression {
         */
     }
 
+    /*
     private DeclRefExpr toDeclRefExpr(ClavaNode node) {
         if (node instanceof DeclRefExpr) {
             return (DeclRefExpr) node;
         }
-
+    
         if (node.getNumChildren() == 1) {
             return toDeclRefExpr(node.getChild(0));
         }
-
+    
         return null;
     }
+    */
 
     @Override
     public String getUseImpl() {
@@ -119,6 +120,11 @@ public class CxxExpression extends AExpression {
         }
 
         return Arrays.asList(vardecl);
+    }
+
+    @Override
+    public Boolean getIsFunctionArgumentImpl() {
+        return expr.isFunctionArgument();
     }
 
 }
