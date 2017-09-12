@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.importable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -48,6 +49,8 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
 import pt.up.fe.specs.clava.ast.type.ReferenceType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data.ArraySizeType;
+import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -67,13 +70,14 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
+import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class AstFactory {
 
     /**
      * Creates a joinpoint representing a variable declaration with the given name and initialization.
-     * 
+     *
      * @param varName
      * @param joinpoint
      * @return
@@ -112,7 +116,7 @@ public class AstFactory {
 
     /**
      * Creates a joinpoint representing a variable declaration with the given name and initialization.
-     * 
+     *
      * @param varName
      * @param joinpoint
      * @return
@@ -238,7 +242,7 @@ public class AstFactory {
 
     /**
      * Creates a joinpoint representing an empty translation unit.
-     * 
+     *
      * @param varName
      * @param joinpoint
      * @return
@@ -283,4 +287,29 @@ public class AstFactory {
     // public static AJoinPoint whileLoop() {
     // ClavaNodeFactory.whileStmt(info, condition, thenStmt)
     // }
+
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, List<Integer> dims) {
+        return constArrayType(ClavaNodeFactory.literalType(typeCode), dims);
+    }
+
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, List<Integer> dims) {
+
+        Preconditions.checkNotNull(dims);
+        Preconditions.checkArgument(dims.size() > 0);
+
+        Type inType = null;
+
+        ListIterator<Integer> li = dims.listIterator(dims.size());
+        while (li.hasPrevious()) {
+
+            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList());
+            TypeData typeData = new TypeData(outType.getCode());
+            ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+
+            inType = outType;
+            outType = ClavaNodeFactory.constantArrayType(li.previous(), arrayTypeData, typeData, info, inType);
+        }
+
+        return CxxJoinpoints.create(outType, null);
+    }
 }
