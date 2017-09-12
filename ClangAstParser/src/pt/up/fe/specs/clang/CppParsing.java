@@ -103,11 +103,27 @@ public class CppParsing {
     }
 
     public static boolean isExprNodeName(String nodeName) {
+        /*
+        if (nodeName.endsWith("Type")) {
+            return false;
+        }
+        
+        return true;
+        */
+
         if (nodeName.endsWith("Expr")) {
             return true;
         }
 
         if (nodeName.endsWith("Operator")) {
+            return true;
+        }
+
+        if (nodeName.endsWith("Literal")) {
+            return true;
+        }
+
+        if (nodeName.equals("ExprWithCleanups")) {
             return true;
         }
 
