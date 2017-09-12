@@ -22,7 +22,9 @@ import pt.up.fe.specs.clava.ast.pragma.Pragma;
 
 public class LaraMarkerPragma extends Pragma {
 
-    private final String markerId;
+    private static final String LARA_MARKER_PREFIX = "lara marker ";
+
+    private String markerId;
 
     public LaraMarkerPragma(String markerId, ClavaNodeInfo info) {
         this(markerId, info, Collections.emptyList());
@@ -41,7 +43,18 @@ public class LaraMarkerPragma extends Pragma {
 
     @Override
     public String getFullContent() {
-        return "lara marker " + markerId;
+        return LARA_MARKER_PREFIX + markerId;
+    }
+
+    @Override
+    public void setFullContent(String fullContent) {
+        String newContent = fullContent;
+
+        if (newContent.startsWith(LARA_MARKER_PREFIX)) {
+            newContent = newContent.substring(LARA_MARKER_PREFIX.length());
+        }
+
+        this.markerId = newContent;
     }
 
     public String getMarkerId() {

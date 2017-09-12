@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.pragma;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +25,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class GenericPragma extends Pragma {
 
-    private final List<String> content;
+    private List<String> content;
 
     public GenericPragma(List<String> content, ClavaNodeInfo info) {
         this(content, info, Collections.emptyList());
@@ -37,7 +39,7 @@ public class GenericPragma extends Pragma {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new GenericPragma(content, getInfo(), Collections.emptyList());
+        return new GenericPragma(new ArrayList<>(content), getInfo(), Collections.emptyList());
     }
 
     @Override
@@ -48,6 +50,11 @@ public class GenericPragma extends Pragma {
     @Override
     public String getFullContent() {
         return content.stream().collect(Collectors.joining(" "));
+    }
+
+    @Override
+    public void setFullContent(String fullContent) {
+        this.content = Arrays.asList(fullContent);
     }
 
 }
