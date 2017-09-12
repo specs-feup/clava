@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class OmpPragma extends Pragma {
 
@@ -52,5 +53,10 @@ public abstract class OmpPragma extends Pragma {
      */
     public void setClause(OmpClauseKind numThreads, OmpClause clause) {
 
+    }
+
+    @Override
+    public void setFullContent(String fullContent) {
+        SpecsLogs.msgWarn("Pragma.setFullContent is not supported for OmpPragma, please use the setters");
     }
 }

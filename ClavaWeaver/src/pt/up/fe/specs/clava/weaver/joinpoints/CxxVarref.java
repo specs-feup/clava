@@ -71,4 +71,9 @@ public class CxxVarref extends AVarref {
         return CxxJoinpoints.create(varDecl.get(), null);
     }
 
+    @Override
+    public Boolean getIsFunctionCallImpl() {
+        return refExpr.isFunctionCall();
+    }
+
 }

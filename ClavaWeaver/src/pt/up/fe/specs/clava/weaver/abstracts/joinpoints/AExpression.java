@@ -69,6 +69,29 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * true if the expression is part of an argument of a function call
+     */
+    public abstract Boolean getIsFunctionArgumentImpl();
+
+    /**
+     * true if the expression is part of an argument of a function call
+     */
+    public final Object getIsFunctionArgument() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionArgument", Optional.empty());
+        	}
+        	Boolean result = this.getIsFunctionArgumentImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionArgument", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isFunctionArgument", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select vardecls
      * @return 
      */
@@ -99,6 +122,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         super.fillWithAttributes(attributes);
         attributes.add("vardecl");
         attributes.add("use");
+        attributes.add("isFunctionArgument");
     }
 
     /**
@@ -132,6 +156,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     protected enum ExpressionAttributes {
         VARDECL("vardecl"),
         USE("use"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

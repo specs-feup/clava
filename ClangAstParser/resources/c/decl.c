@@ -16,6 +16,8 @@ aType fooTypedef() {
 
 void * polybench_alloc_data(unsigned long long n, int elt_size);
 
+void vlatypes(int ni, int a[3][ni]) {}
+
 int main() {
 	float* aFloatPointer;
 	

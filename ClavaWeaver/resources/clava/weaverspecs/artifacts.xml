@@ -77,12 +77,13 @@
 
 	<!-- FILE -->
 	<artifact class="file" default="name">
-		<attribute name="name" type="String" />
-		<attribute name="hasMain" type="Boolean" />
+		<attribute name="name" type="String" tooltip="the name of the file"/>
+		<attribute name="hasMain" type="Boolean" tooltip="true if this file contains a 'main' method"/>
 		<!-- <attribute name="filename" type="String"/> -->
-		<attribute name="path" type="String" />
-		<attribute name="filepath" type="String" />
-		<attribute name="isCxx" type="Boolean" />
+		<attribute name="path" type="String" tooltip="the folder of the source file"/>
+		<attribute name="filepath" type="String" tooltip="the complete path to the file"/>
+		<attribute name="relativePath" type="String" tooltip="the path to the file rellative to the program base folder"/>
+		<attribute name="isCxx" type="Boolean" tooltip="true if this file is considered a C++ file"/>
 	</artifact>
 
 	<!-- RECORD -->
@@ -129,6 +130,8 @@
 			representing the declaration of the variable -->
 		<attribute name="vardecl" type="joinpoint" />
 		<attribute name="use" type="{read,write,readwrite}" />
+		<attribute name="isFunctionArgument" type="Boolean" 
+			tooltip="true if the expression is part of an argument of a function call"/>
 	</artifact>
 
 	<!-- CALL -->
@@ -153,6 +156,8 @@
 		<attribute name="kind" type="String" />
 		<attribute name="useExpr" type="joinpoint"
 			tooltip="expression where this reference is used" />
+		<attribute name="isFunctionCall" type="Boolean" 
+			tooltip="true if this varref represents a function call" />
 	</artifact>
 
 	<!-- FUNCTION -->
@@ -160,6 +165,7 @@
 		<attribute name="name" type="String" />
 		<attribute name="hasDefinition" type="Boolean" />
 		<attribute name="functionType" type="joinpoint" />
+		<attribute name="declarationJp" type="joinpoint" />
 		<attribute name="declaration" type="String">
 			<parameter name="withReturnType" type="Boolean" />
 		</attribute>

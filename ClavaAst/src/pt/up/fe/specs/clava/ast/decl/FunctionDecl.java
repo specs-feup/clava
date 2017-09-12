@@ -103,6 +103,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
         this.functionDeclData = functionDeclData;
         this.declaration = Lazy.newInstance(this::findDeclaration);
+
     }
 
     protected void checkDefinition(Stmt definition) {

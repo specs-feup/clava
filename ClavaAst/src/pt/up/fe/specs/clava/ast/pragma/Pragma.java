@@ -72,6 +72,8 @@ public abstract class Pragma extends ClavaNode {
      */
     public abstract String getFullContent();
 
+    public abstract void setFullContent(String fullContent);
+
     /**
      * Default implementation prefixes getFullContent() with '#pragma'
      */
@@ -90,6 +92,14 @@ public abstract class Pragma extends ClavaNode {
      */
     public String getName() {
         return new StringParser(getFullContent()).apply(StringParsers::parseWord);
+    }
+
+    public void setName(String name) {
+        setFullContent(name + " " + getContent());
+    }
+
+    public void setContent(String content) {
+        setFullContent(getName() + " " + content);
     }
 
     public String getContent() {

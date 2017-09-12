@@ -20,14 +20,12 @@ import java.util.Arrays;
 public abstract class AFile extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * the name of the file
      */
     public abstract String getNameImpl();
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * the name of the file
      */
     public final Object getName() {
         try {
@@ -45,14 +43,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute hasMain
-     * @return the attribute's value
+     * true if this file contains a 'main' method
      */
     public abstract Boolean getHasMainImpl();
 
     /**
-     * Get value on attribute hasMain
-     * @return the attribute's value
+     * true if this file contains a 'main' method
      */
     public final Object getHasMain() {
         try {
@@ -70,14 +66,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute path
-     * @return the attribute's value
+     * the folder of the source file
      */
     public abstract String getPathImpl();
 
     /**
-     * Get value on attribute path
-     * @return the attribute's value
+     * the folder of the source file
      */
     public final Object getPath() {
         try {
@@ -95,14 +89,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute filepath
-     * @return the attribute's value
+     * the complete path to the file
      */
     public abstract String getFilepathImpl();
 
     /**
-     * Get value on attribute filepath
-     * @return the attribute's value
+     * the complete path to the file
      */
     public final Object getFilepath() {
         try {
@@ -120,14 +112,35 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute isCxx
-     * @return the attribute's value
+     * the path to the file rellative to the program base folder
+     */
+    public abstract String getRelativePathImpl();
+
+    /**
+     * the path to the file rellative to the program base folder
+     */
+    public final Object getRelativePath() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "relativePath", Optional.empty());
+        	}
+        	String result = this.getRelativePathImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "relativePath", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "relativePath", e);
+        }
+    }
+
+    /**
+     * true if this file is considered a C++ file
      */
     public abstract Boolean getIsCxxImpl();
 
     /**
-     * Get value on attribute isCxx
-     * @return the attribute's value
+     * true if this file is considered a C++ file
      */
     public final Object getIsCxx() {
         try {
@@ -499,6 +512,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("hasMain");
         attributes.add("path");
         attributes.add("filepath");
+        attributes.add("relativePath");
         attributes.add("isCxx");
     }
 
@@ -553,6 +567,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         HASMAIN("hasMain"),
         PATH("path"),
         FILEPATH("filepath"),
+        RELATIVEPATH("relativePath"),
         ISCXX("isCxx"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),

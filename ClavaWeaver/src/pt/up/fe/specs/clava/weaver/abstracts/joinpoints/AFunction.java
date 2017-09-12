@@ -97,6 +97,31 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute declarationJp
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint getDeclarationJpImpl();
+
+    /**
+     * Get value on attribute declarationJp
+     * @return the attribute's value
+     */
+    public final Object getDeclarationJp() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declarationJp", Optional.empty());
+        	}
+        	AJoinPoint result = this.getDeclarationJpImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "declarationJp", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "declarationJp", e);
+        }
+    }
+
+    /**
      * 
      * @param withReturnType
      * @return 
@@ -362,6 +387,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         attributes.add("name");
         attributes.add("hasDefinition");
         attributes.add("functionType");
+        attributes.add("declarationJp");
         attributes.add("declaration");
         attributes.add("body");
         attributes.add("paramNames");
@@ -405,6 +431,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         NAME("name"),
         HASDEFINITION("hasDefinition"),
         FUNCTIONTYPE("functionType"),
+        DECLARATIONJP("declarationJp"),
         DECLARATION("declaration"),
         BODY("body"),
         PARAMNAMES("paramNames"),

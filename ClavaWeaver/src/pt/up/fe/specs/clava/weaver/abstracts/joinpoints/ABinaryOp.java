@@ -156,6 +156,15 @@ public abstract class ABinaryOp extends AExpression {
     }
 
     /**
+     * Get value on attribute isFunctionArgument
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsFunctionArgumentImpl() {
+        return this.aExpression.getIsFunctionArgumentImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select vardecls
      * @return 
      */
@@ -352,6 +361,7 @@ public abstract class ABinaryOp extends AExpression {
         ISASSIGNMENT("isAssignment"),
         VARDECL("vardecl"),
         USE("use"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

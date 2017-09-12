@@ -209,15 +209,20 @@ public class CxxWeaver extends ACxxWeaver {
 
         if (app == null) {
             // Verify if weaving is disabled
-            if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-                throw new RuntimeException(
-                        "'Disable weaving' option is set, cannot use AST-related code (e.g., 'select')");
+            if (args != null && args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+                SpecsLogs.msgInfo("'Disable weaving' option is set, cannot use AST-related code (e.g., 'select')");
+                return null;
             }
 
-            throw new RuntimeException("No parsed tree available");
+            SpecsLogs.msgInfo("No parsed tree available");
+            return null;
         }
 
         return app;
+    }
+
+    public File getBaseSourceFolder() {
+        return baseFolder;
     }
 
     public CxxProgram getAppJp() {

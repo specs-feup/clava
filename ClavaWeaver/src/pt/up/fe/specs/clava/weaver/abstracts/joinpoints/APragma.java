@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -95,6 +96,58 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
 
     /**
      * 
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
+     * 
+     * @param content 
+     */
+    public void setContentImpl(String content) {
+        throw new UnsupportedOperationException(get_class()+": Action setContent not implemented ");
+    }
+
+    /**
+     * 
+     * @param content 
+     */
+    public final void setContent(String content) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setContent", this, Optional.empty(), content);
+        	}
+        	this.setContentImpl(content);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setContent", this, Optional.empty(), content);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setContent", e);
+        }
+    }
+
+    /**
+     * 
      */
     @Override
     public List<? extends JoinPoint> select(String selectName) {
@@ -132,6 +185,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
+        actions.add("void setName(String)");
+        actions.add("void setContent(String)");
     }
 
     /**

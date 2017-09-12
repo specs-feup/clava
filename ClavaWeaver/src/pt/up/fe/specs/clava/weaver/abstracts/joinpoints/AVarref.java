@@ -99,6 +99,29 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * true if this varref represents a function call
+     */
+    public abstract Boolean getIsFunctionCallImpl();
+
+    /**
+     * true if this varref represents a function call
+     */
+    public final Object getIsFunctionCall() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isFunctionCall", Optional.empty());
+        	}
+        	Boolean result = this.getIsFunctionCallImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionCall", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isFunctionCall", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -114,6 +137,15 @@ public abstract class AVarref extends AExpression {
     @Override
     public String getUseImpl() {
         return this.aExpression.getUseImpl();
+    }
+
+    /**
+     * Get value on attribute isFunctionArgument
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsFunctionArgumentImpl() {
+        return this.aExpression.getIsFunctionArgumentImpl();
     }
 
     /**
@@ -255,6 +287,7 @@ public abstract class AVarref extends AExpression {
         attributes.add("name");
         attributes.add("kind");
         attributes.add("useExpr");
+        attributes.add("isFunctionCall");
     }
 
     /**
@@ -301,8 +334,10 @@ public abstract class AVarref extends AExpression {
         NAME("name"),
         KIND("kind"),
         USEEXPR("useExpr"),
+        ISFUNCTIONCALL("isFunctionCall"),
         VARDECL("vardecl"),
         USE("use"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

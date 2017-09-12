@@ -270,4 +270,11 @@ public class CxxFunction extends AFunction {
     public String getIdImpl() {
         return declarationImpl(false);
     }
+
+    @Override
+    public AJoinPoint getDeclarationJpImpl() {
+        return function.getDeclaration()
+                .map(node -> CxxJoinpoints.create(node, null))
+                .orElse(null);
+    }
 }

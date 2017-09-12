@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
@@ -221,6 +222,13 @@ public class CxxFile extends AFile {
     @Override
     public String getFilepathImpl() {
         return getPathImpl() + getNameImpl();
+    }
+
+    @Override
+    public String getRelativePathImpl() {
+        CxxWeaver weaver = getWeaverEngine();
+
+        return weaver.getApp().getRelativePath(weaver.getBaseSourceFolder(), tunit);
     }
 
     @Override

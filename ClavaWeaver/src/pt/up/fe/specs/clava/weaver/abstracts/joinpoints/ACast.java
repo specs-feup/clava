@@ -119,6 +119,15 @@ public abstract class ACast extends AExpression {
     }
 
     /**
+     * Get value on attribute isFunctionArgument
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsFunctionArgumentImpl() {
+        return this.aExpression.getIsFunctionArgumentImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select vardecls
      * @return 
      */
@@ -305,6 +314,7 @@ public abstract class ACast extends AExpression {
         TOTYPE("toType"),
         VARDECL("vardecl"),
         USE("use"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

@@ -173,6 +173,24 @@ public abstract class AMarker extends APragma {
 
     /**
      * 
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aPragma.setNameImpl(name);
+    }
+
+    /**
+     * 
+     * @param content 
+     */
+    @Override
+    public void setContentImpl(String content) {
+        this.aPragma.setContentImpl(content);
+    }
+
+    /**
+     * 
      * @param position 
      * @param code 
      */

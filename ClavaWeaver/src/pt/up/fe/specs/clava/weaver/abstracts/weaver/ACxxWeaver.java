@@ -21,7 +21,7 @@ public abstract class ACxxWeaver extends WeaverEngine {
      */
     @Override
     public final List<String> getActions() {
-        String[] weaverActions= {"replaceWith", "insertBefore", "insertBefore", "insertAfter", "insertAfter", "detach", "setType", "rebuild", "addFile", "push", "pop", "addInclude", "addInclude", "addIncludeJp", "addGlobal", "messageToUser", "setName", "wrap", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addFunction", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "clone", "clear", "insertReturn", "insertReturn", "changeKind", "setNumThreads", "setProcBind"};
+        String[] weaverActions= {"replaceWith", "insertBefore", "insertBefore", "insertAfter", "insertAfter", "detach", "setType", "rebuild", "addFile", "push", "pop", "addInclude", "addInclude", "addIncludeJp", "addGlobal", "messageToUser", "setName", "wrap", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addFunction", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "clone", "clear", "insertReturn", "insertReturn", "changeKind", "setKind", "setNumThreads", "setProcBind", "setName", "setContent"};
         return Arrays.asList(weaverActions);
     }
 
