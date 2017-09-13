@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -155,12 +156,17 @@ public abstract class FunctionType extends Type {
 
     @Override
     public String getCode(String name) {
+        if (name != null) {
+            SpecsLogs.msgWarn(
+                    ".getCode() for FunctionType using name, check if ok since we do not have information about parameters names");
+        }
+
         StringBuilder code = new StringBuilder();
 
         code.append(getReturnType().getCode(name));
 
         String paramsCode = getParamTypes().stream()
-                .map(type -> type.getCode(name))
+                .map(type -> type.getCode())
                 .collect(Collectors.joining(", ", " (", ")"));
 
         code.append(paramsCode);
