@@ -102,6 +102,9 @@ public interface StreamKeys {
     DataKey<Map<String, ExceptionSpecifierInfo>> FUNCTION_PROTOTYPE_EXCEPTION = KeyFactory
             .generic("stderr_function_prototype_exception", new HashMap<>());
 
+    DataKey<Map<String, String>> TYPEDEF_DECL_SOURCE = KeyFactory.generic("stderr_typedef_decl_source",
+            new HashMap<String, String>());
+
     // DataKey<Map<String, String>> CXX_METHOD_DECL_DECLARATION =
     // KeyFactory.generic("stderr_cxx_method_decl_declaration",
     // SpecsCollections.<String, String> newHashMap())
@@ -135,6 +138,7 @@ public interface StreamKeys {
             .addKey(PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG)
             .addKey(OFFSET_OF_INFO)
             .addKey(FUNCTION_PROTOTYPE_EXCEPTION)
+            .addKey(TYPEDEF_DECL_SOURCE)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

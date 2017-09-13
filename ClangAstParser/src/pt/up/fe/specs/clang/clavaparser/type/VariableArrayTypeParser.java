@@ -37,6 +37,7 @@ public class VariableArrayTypeParser extends AClangNodeParser<Type> {
 
     @Override
     protected Type parse(ClangNode node, StringParser parser) {
+
         // Examples:
         //
         // 'double [ni + 0][nj + 0]' variably_modified
@@ -48,7 +49,7 @@ public class VariableArrayTypeParser extends AClangNodeParser<Type> {
         while (n != null) {
             System.out.println("[" + i + "] " + n.getLocation() + ": " + n.getCode());
             System.out.println("CHILDREN: " + n.getChildren());
-
+        
             i++;
             n = n.getParent();
         }
@@ -82,14 +83,14 @@ public class VariableArrayTypeParser extends AClangNodeParser<Type> {
 
         return ClavaNodeFactory.variableArrayType(arrayTypeData, typeData, node.getInfo(), elementType, sizeExpr);
         /*
-
+        
         Integer constant = parser.apply(ClangGenericParsers::parseInt);
-
+        
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 1);
-
+        
         Type elementType = toType(children.get(0));
-
+        
         return ClavaNodeFactory.constantArrayType(constant, typeData, node.getInfo(), elementType);
         */
     }

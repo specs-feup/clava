@@ -130,4 +130,8 @@ public class CppParsing {
         return false;
 
     }
+
+    public static boolean isTypeNodeName(String nodeName) {
+        return nodeName.endsWith("Type");
+    }
 }

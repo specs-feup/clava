@@ -195,6 +195,10 @@ public class StreamParser {
                 SnippetParser.newInstance(ExceptionSpecifierInfo.getStreamParserHeader(), new HashMap<>(),
                         ExceptionSpecifierInfo::streamParser));
 
+        snippetsMap.put(StreamKeys.TYPEDEF_DECL_SOURCE,
+                SnippetParser.newInstance("<TypedefDecl Source>", new HashMap<String, String>(),
+                        StreamParser::collectString));
+
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
         // StdErrParser::collectString));

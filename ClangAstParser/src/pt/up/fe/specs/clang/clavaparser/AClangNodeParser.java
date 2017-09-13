@@ -21,8 +21,10 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
+import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
@@ -382,5 +384,22 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                 .map(attrClang -> templateArgParser.parse(attrClang))
                 // Collect
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ClavaNode parseChild(ClangNode node, boolean isTypeParser) {
+        // If parsing an expression during type parsing phase, delay parsing
+        if (isTypeParser && CppParsing.isExprNodeName(node.getName())) {
+            return new DelayedParsingExpr(node);
+        }
+
+        // If parsing a type during AST nodes parsing phase, use types table
+        if (!isTypeParser && CppParsing.isTypeNodeName(node.getName())) {
+            Type type = getOriginalTypes().get(node.getExtendedId());
+            Preconditions.checkNotNull(type, "Cound not find type with id '" + node.getExtendedId() + "'");
+            return type;
+        }
+
+        return getConverter().parse(node);
     }
 }

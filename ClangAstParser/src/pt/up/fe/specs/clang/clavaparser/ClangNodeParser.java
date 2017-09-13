@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
-import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -54,13 +52,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
                 .collect(Collectors.toList());
     }
 
-    default ClavaNode parseChild(ClangNode node, boolean isTypeParser) {
-        if (isTypeParser && CppParsing.isExprNodeName(node.getName())) {
-            return new DelayedParsingExpr(node);
-        }
-
-        return getConverter().parse(node);
-    }
+    ClavaNode parseChild(ClangNode node, boolean isTypeParser);
 
     default <P extends ClavaNode> List<P> parseChildren(List<ClangNode> children, ClangNodeParser<P> parser) {
         return children.stream()

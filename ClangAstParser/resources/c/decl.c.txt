@@ -24,6 +24,7 @@ void * polybench_alloc_data(unsigned long long n, int elt_size);
 void vlatypes(int ni, int a[3][ni]) {
 }
 
+typedef void(*function_prt_with_vla) (int ni,int nj,double tmp[ni + 0][nj + 0]);
 
 int main() {
    float * aFloatPointer;
