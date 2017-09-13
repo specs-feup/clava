@@ -223,6 +223,31 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute weavingFolder
+     * @return the attribute's value
+     */
+    public abstract String getWeavingFolderImpl();
+
+    /**
+     * Get value on attribute weavingFolder
+     * @return the attribute's value
+     */
+    public final Object getWeavingFolder() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "weavingFolder", Optional.empty());
+        	}
+        	String result = this.getWeavingFolderImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "weavingFolder", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "weavingFolder", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select files
      * @return 
      */
@@ -356,6 +381,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         attributes.add("userFlags");
         attributes.add("includeFolders");
         attributes.add("baseFolder");
+        attributes.add("weavingFolder");
     }
 
     /**
@@ -398,6 +424,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         USERFLAGS("userFlags"),
         INCLUDEFOLDERS("includeFolders"),
         BASEFOLDER("baseFolder"),
+        WEAVINGFOLDER("weavingFolder"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

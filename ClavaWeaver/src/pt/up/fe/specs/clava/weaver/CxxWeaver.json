@@ -2916,6 +2916,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "weavingFolder"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String[]",
                               "name": "attributes"
                            }]

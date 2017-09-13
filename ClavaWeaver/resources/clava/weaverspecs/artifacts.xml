@@ -72,6 +72,7 @@
 		<attribute name="userFlags" type="String[]" />
 		<attribute name="includeFolders" type="String[]" />
 		<attribute name="baseFolder" type="String" />
+		<attribute name="weavingFolder" type="String" />
 	</artifact>
 
 

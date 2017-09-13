@@ -155,4 +155,9 @@ public class CxxProgram extends AProgram {
     public void popImpl() {
         weaver.popAst();
     }
+
+    @Override
+    public String getWeavingFolderImpl() {
+        return weaver.getWeavingFolder().getAbsolutePath();
+    }
 }

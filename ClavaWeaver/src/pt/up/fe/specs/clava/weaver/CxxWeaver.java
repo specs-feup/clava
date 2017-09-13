@@ -534,6 +534,10 @@ public class CxxWeaver extends ACxxWeaver {
         return baseFolder.getName();
     }
 
+    public File getWeavingFolder() {
+        return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
+    }
+
     /**
      * Closes the weaver to the specified output directory location, if the weaver generates new file(s)
      *
@@ -548,9 +552,9 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             // Terminate weaver execution with final steps required and writing output files
-            File codeFolder = SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
+            // File codeFolder = SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
 
-            writeCode(codeFolder);
+            writeCode(getWeavingFolder());
 
         }
 
