@@ -36,6 +36,7 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.utils.IncludeManager;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.utilities.StringLines;
 
@@ -55,6 +56,8 @@ public class TranslationUnit extends ClavaNode {
 
     private final IncludeManager includes;
 
+    private final Lazy<Boolean> isCxxUnit;
+
     public TranslationUnit(String filename, String relativePath, Collection<Decl> declarations) {
         super(createInfo(new ArrayList<>(declarations), relativePath + filename), declarations);
 
@@ -67,6 +70,8 @@ public class TranslationUnit extends ClavaNode {
                 .collect(Collectors.toList());
 
         includes = new IncludeManager(includesList, this);
+
+        this.isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
     }
 
     public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
@@ -190,6 +195,10 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public boolean isCXXUnit() {
+        return isCxxUnit.get();
+    }
+
+    private boolean testIsCXXUnit() {
         // 1) Check if file has CXX extension.
         // Cannot test for C extensions because you can have C++ code inside .c files, for instance.
         if (CXX_EXTENSIONS.contains(SpecsIo.getExtension(filename))) {
