@@ -307,6 +307,62 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Generates a clone of the provided function on a new file (with a weaver-generated name).
+     * @param newName 
+     */
+    public String cloneOnFileImpl(String newName) {
+        throw new UnsupportedOperationException(get_class()+": Action cloneOnFile not implemented ");
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with a weaver-generated name).
+     * @param newName 
+     */
+    public final String cloneOnFile(String newName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName);
+        	}
+        	String result = this.cloneOnFileImpl(newName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "cloneOnFile", e);
+        }
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with the provided name).
+     * @param newName 
+     * @param fileName 
+     */
+    public String cloneOnFileImpl(String newName, String fileName) {
+        throw new UnsupportedOperationException(get_class()+": Action cloneOnFile not implemented ");
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with the provided name).
+     * @param newName 
+     * @param fileName 
+     */
+    public final String cloneOnFile(String newName, String fileName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
+        	}
+        	String result = this.cloneOnFileImpl(newName, fileName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "cloneOnFile", e);
+        }
+    }
+
+    /**
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)
      * @param code 
      */
@@ -412,6 +468,8 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void clone(String)");
+        actions.add("String cloneOnFile(String)");
+        actions.add("String cloneOnFile(String, String)");
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
     }

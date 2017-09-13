@@ -8348,6 +8348,39 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Generates a clone of the provided function on a new file (with a weaver-generated name).",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "cloneOnFile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newName",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Generates a clone of the provided function on a new file (with the provided name).",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "cloneOnFile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "fileName",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)",
                   "children": [
                            {
