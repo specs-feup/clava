@@ -340,4 +340,8 @@ public class App extends ClavaNode {
     public GlobalManager getGlobalManager() {
         return globalManager;
     }
+
+    public void addFile(TranslationUnit tu) {
+        addChild(tu);
+    }
 }

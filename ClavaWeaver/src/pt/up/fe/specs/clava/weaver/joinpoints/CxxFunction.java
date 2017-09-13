@@ -13,18 +13,25 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
@@ -36,6 +43,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
@@ -157,8 +165,15 @@ public class CxxFunction extends AFunction {
         return (CxxScope) CxxJoinpoints.create(function.getBody().get(), this);
     }
 
+    // TODO check if the new name clashes with other symbol?
     @Override
     public void cloneImpl(String newName) {
+
+        /* make clone and insert after the function of this join point */
+        makeCloneAndInsert(newName, function);
+    }
+
+    private void makeCloneAndInsert(String newName, ClavaNode reference) {
 
         if (function instanceof CXXMethodDecl) {
 
@@ -167,7 +182,32 @@ public class CxxFunction extends AFunction {
             return;
         }
 
-        // TODO check if the new name clashes with other symbol?
+        FunctionDecl newFunc = makeNewFuncDecl(newName);
+
+        if (reference instanceof FunctionDecl) {
+
+            NodeInsertUtils.insertAfter(function, newFunc);
+
+        } else if (reference instanceof TranslationUnit) {
+
+            ((TranslationUnit) reference).addChild(newFunc);
+
+        } else {
+            throw new IllegalArgumentException(
+                    "The node (" + reference + ") needs to be either a FuncDecl or a TranslationUnit.");
+        }
+
+        // change the ids of stuff
+        newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
+    }
+
+    /**
+     * Make a new {@link FunctionDecl} based on the node of this join point and the provided name.
+     *
+     * @param newName
+     * @return
+     */
+    private FunctionDecl makeNewFuncDecl(String newName) {
 
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
@@ -182,23 +222,92 @@ public class CxxFunction extends AFunction {
                 ClavaNodeInfo.undefinedInfo(), // check
                 definition);
 
-        // add a prototype at the location of the original prototype
+        return newFunc;
+    }
 
-        // add the clone after the original
+    @Override
+    public String cloneOnFileImpl(String newName) {
 
-        NodeInsertUtils.insertAfter(function, newFunc);
+        boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
+        String extension = isCxx ? ".cpp" : ".c";
 
-        InlineComment comment = ClavaNodeFactory.inlineComment("cloned from " + function.getDeclName(), false,
-                ClavaNodeInfo.undefinedInfo());
-        // file.addChild(origIndex + 1, comment);
-        NodeInsertUtils.insertAfter(function, comment);
+        String prefix = newName;
 
-        // change the ids of stuff
-        newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
+        String fileName = prefix + extension;
+
+        return cloneOnFileImpl(newName, fileName);
+    }
+
+    @Override
+    // TODO: copy header file inclusion
+    public String cloneOnFileImpl(String newName, String fileName) {
+
+        if (function.hasBody()) {
+            /* if this is a definition, add the clone to the correct file */
+
+            App app = getRootImpl().getNode();
+
+            Optional<TranslationUnit> file = app.getFile(fileName);
+
+            if (!file.isPresent()) {
+
+                String path = getRootImpl().getBaseFolderImpl();
+                TranslationUnit tu = ClavaNodeFactory.translationUnit(fileName, path,
+                        Collections.emptyList());
+
+                app.addFile(tu);
+
+                file = Optional.of(tu);
+            }
+
+            makeCloneAndInsert(newName, file.get());
+
+            /* copy headers from the current file to the file with the clone */
+            List<IncludeDecl> allIncludes = getWrapperIncludesFromFile(file.get());
+            allIncludes.stream().forEach(file.get()::addInclude);
+
+        } else {
+            /*otherwise, add the clone to the original place in order to be included where needed */
+
+            makeCloneAndInsert(newName, function);
+        }
+
+        return fileName;
+    }
+
+    /**
+     * XXX: copied from CallWrap
+     */
+    private List<IncludeDecl> getWrapperIncludesFromFile(TranslationUnit newTu) {
+
+        List<IncludeDecl> includes = new ArrayList<>();
+
+        TranslationUnit callFile = function.getAncestor(TranslationUnit.class);
+
+        for (IncludeDecl includeDecl : callFile.getIncludes().getIncludes()) {
+            Include include = includeDecl.getInclude();
+
+            // If angled include, does not need modification
+            if (include.isAngled()) {
+                // May not work if we add directly an IncludeDecl that is already part of a translation unit
+                includes.add((IncludeDecl) includeDecl.copy());
+                continue;
+            }
+
+            // For each include which is not an angled include, calculate relative path
+
+            // Get relative path to include the file in this file
+            File includeFile = new File(callFile.getFilepath(), include.getInclude());
+            String relativePath = SpecsIo.getRelativePath(includeFile, newTu.getFile());
+            includes.add(new IncludeDecl(relativePath, false));
+        }
+
+        return includes;
     }
 
     @Override
     public String[] getParamNamesArrayImpl() {
+
         return function.getParameters()
                 .stream()
                 .map(ParmVarDecl::getCode)

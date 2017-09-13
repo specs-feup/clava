@@ -54,6 +54,7 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.csv.CsvField;
 import pt.up.fe.specs.util.csv.CsvWriter;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
@@ -181,6 +182,8 @@ public class CxxWeaver extends ACxxWeaver {
 
     private Set<String> messagesToUser;
 
+    private AccumulatorMap<String> accMap;
+
     public CxxWeaver() {
         // Weaver configuration
         args = null;
@@ -201,6 +204,8 @@ public class CxxWeaver extends ACxxWeaver {
         // Set, in order to filter repeated messages
         // Linked, to preserve order
         messagesToUser = null;
+
+        accMap = null;
     }
 
     public App getApp() {
@@ -261,6 +266,9 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
+
+        accMap = new AccumulatorMap<>();
+
         // Logger.getLogger(LoggingUtils.INFO_TAG).setLevel(Level.WARNING);
         //
         // Logger.getLogger(LoggingUtils.INFO_TAG).setUseParentHandlers(false);
@@ -784,5 +792,10 @@ public class CxxWeaver extends ACxxWeaver {
         // Discard app and user values
         apps.pop();
         userValuesStack.pop();
+    }
+
+    public Integer nextId(String prefix) {
+
+        return accMap.add(prefix);
     }
 }
