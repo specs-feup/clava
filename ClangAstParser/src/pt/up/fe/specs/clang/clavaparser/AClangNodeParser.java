@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.clavaparser;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -253,17 +254,20 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     protected void checkChildrenBetween(List<ClavaNode> children, int min, int max) {
         Preconditions.checkArgument(children.size() >= min && children.size() <= max,
-                "Expected between " + min + " and " + max + " children, found " + children.size(), ":\n" + children);
+                "Expected between " + min + " and " + max + " children, found " + children.size(), ":\n%s", children);
     }
 
     protected void checkNumChildren(List<?> children, int expectedSize) {
+
         Preconditions.checkArgument(children.size() == expectedSize,
                 "Expected size '%s'', found %s:\n%s", expectedSize, children.size(), children);
     }
 
     protected void checkAtLeast(List<ClavaNode> children, int minimumSize) {
-        Preconditions.checkArgument(children.size() >= minimumSize,
-                "Expected at least '" + minimumSize + "' children, found " + children.size() + ":\n" + children);
+        Supplier<String> message = () -> "Expected at least '" + minimumSize + "' children, found " + children.size()
+                + ":\n" + children;
+
+        Preconditions.checkArgument(children.size() >= minimumSize, message);
     }
 
     protected <K extends Type> K getFirstType(List<Type> type, Class<K> typeClass) {
