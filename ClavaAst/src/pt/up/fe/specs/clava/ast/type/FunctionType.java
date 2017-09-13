@@ -156,7 +156,8 @@ public abstract class FunctionType extends Type {
 
     @Override
     public String getCode(String name) {
-        if (name != null) {
+        // A name (*) means that it has been called from PointerType with null name
+        if (name != null && !name.isEmpty() && !name.equals("(*)")) {
             SpecsLogs.msgWarn(
                     ".getCode() for FunctionType using name, check if ok since we do not have information about parameters names");
         }
