@@ -51,3 +51,13 @@ aspectdef PopAst
 		$program.exec pop();
 	end
 end
+
+aspectdef ClavaWeavingFolder
+	output weavingFolder end
+	
+	select program end
+	apply
+		weavingFolder = $program.weavingFolder;
+		return;
+	end
+end

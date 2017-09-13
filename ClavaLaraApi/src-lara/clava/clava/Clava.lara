@@ -30,6 +30,12 @@ Clava.getBaseFolder = function() {
 	return baseFolderResult.baseFolder;
 }; 
 
+Clava.getWeavingFolder = function() {
+	call weavingFolderResult:ClavaWeavingFolder();
+	
+	return weavingFolderResult.weavingFolder;
+}; 
+
 Clava.addFile = function($file) {
 	if(!$file.instanceOf('file')) {
 		println("Clava.addFile: Input must be a 'file' join point, it is a '" + $file.joinPointType + "'");
