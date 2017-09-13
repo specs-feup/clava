@@ -327,10 +327,9 @@ public class ClavaNodeFactory {
         return new LinkageSpecDecl(linkageType, declData, info, declarations);
     }
 
-    public static TypedefDecl typedefDecl(boolean isModulePrivate, String name, Type type, DeclData declData,
-            ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-        return new TypedefDecl(isModulePrivate, name, type, declData, info, children);
+    public static TypedefDecl typedefDecl(String typedefSource, boolean isModulePrivate, String name, Type type,
+            DeclData declData, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+        return new TypedefDecl(typedefSource, isModulePrivate, name, type, declData, info, children);
     }
 
     public static VarDecl varDecl(String varName, Type type) {

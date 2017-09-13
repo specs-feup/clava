@@ -42,7 +42,8 @@ public class PointerType extends Type {
 
         // Special case for pointers to arrays
         // http://eli.thegreenplace.net/2010/01/11/pointers-to-arrays-in-c
-        if (pointeeType instanceof ParenType) {
+        if (PointerType.isPointerToParenType(this)) {
+            // if (pointeeType instanceof ParenType) {
             String parsedName = name != null ? name : "";
             return ((ParenType) pointeeType).getInnerType().getCode("(*" + parsedName + ")");
             // return pointeeType.getCode("*" + name);
@@ -60,6 +61,16 @@ public class PointerType extends Type {
 
     public Type getPointeeType() {
         return getChild(Type.class, 0);
+    }
+
+    public static boolean isPointerToParenType(Type type) {
+        if (!(type instanceof PointerType)) {
+            return false;
+        }
+
+        PointerType pointerType = (PointerType) type;
+
+        return pointerType.getPointeeType() instanceof ParenType;
     }
 
 }

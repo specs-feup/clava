@@ -19,8 +19,8 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.TypedefType;
 
 /**
  * Declaration of a typedef-name via the 'typedef' type specifier.
@@ -30,41 +30,53 @@ import pt.up.fe.specs.clava.ast.type.TypedefType;
  */
 public class TypedefDecl extends TypedefNameDecl {
 
+    private final String typedefSource;
     private final boolean isModulePrivate;
 
-    public TypedefDecl(boolean isModulePrivate, String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    public TypedefDecl(String typedefSource, boolean isModulePrivate, String declName, Type type, DeclData declData,
+            ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(declName, type, declData, info, children);
 
+        this.typedefSource = typedefSource;
         this.isModulePrivate = isModulePrivate;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TypedefDecl(isModulePrivate, getDeclName(), getType(), getDeclData(), getInfo(),
+        return new TypedefDecl(typedefSource, isModulePrivate, getDeclName(), getType(), getDeclData(), getInfo(),
                 Collections.emptyList());
     }
 
     @Override
     public String getCode() {
-        String typeCode = getType().getCode();
-        // String typeCode = getCodeForType();
-        // System.out.println("TYPEDEF DECL CODE OLD:" + getType().getCode());
-        // System.out.println("TYPEDEF DECL CODE NEW:" + typeCode);
-        return "typedef " + typeCode + " " + getTypelessCode();
-        // return "typedef " + getType().getCode() + " " + getTypelessCode();
-    }
-
-    private String getCodeForType() {
         Type type = getType();
 
+        // If pointer to ParenType, there can be complicated situations such
+        // as having function pointer with VLAs that need the name of parameters,
+        // which are not available for function types in Clang
+        if (PointerType.isPointerToParenType(type)) {
+            // return "typedef " + type.getCode(getTypelessCode());
+            return typedefSource;
+        }
+
+        String typeCode = type.getCode();
+
+        return "typedef " + typeCode + " " + getTypelessCode();
+
+    }
+
+    /*
+    private String getCodeForType() {
+        Type type = getType();
+    
         if (type instanceof TypedefType) {
             return ((TypedefType) type).getTypeClass().getCode();
         }
-
+    
         return type.getCode();
     }
-
+    */
     @Override
     public String getTypelessCode() {
         return getDeclName();
