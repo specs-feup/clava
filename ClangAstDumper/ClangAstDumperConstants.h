@@ -38,4 +38,6 @@ static const std::string DUMP_OFFSET_OF_INFO = "<OFFSET_OF_INFO>";
 // Exception information from FunctionProtoType
 static const std::string FUNCTION_PROTO_TYPE_EXCEPTION = "<FUNCTION_PROTO_TYPE_EXCEPTION>";
 
+static const std::string TYPEDEF_DECL_SOURCE = "<TypedefDecl Source>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

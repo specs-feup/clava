@@ -262,4 +262,16 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
 
 }
 
+void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
+    if(dumpDecl(D)) {
+        return;
+    }
+
+    log("TypedefDecl", D);
+
+    // Dump typedef source
+    llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";
+    llvm::errs() << getId(D) << "\n";
+    llvm::errs() << loc2str(D->getLocStart(), D->getLocEnd()) << "\n";
+}
 

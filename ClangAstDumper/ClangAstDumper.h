@@ -79,6 +79,7 @@ public:
     void VisitNamespaceAliasDecl(const NamespaceAliasDecl *D);
     void VisitFieldDecl(const FieldDecl *D);
     void VisitParmVarDecl(const ParmVarDecl *D);
+    void VisitTypedefDecl(const TypedefDecl *D);
 
 
 
