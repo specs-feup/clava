@@ -7,7 +7,6 @@ void TestClass::foobar() {
    return;
 }
 int foo(int ne);
-//cloned from foo
 
 int new_foo(int ne);
 
@@ -16,7 +15,6 @@ int foo(int ne = 0) {
    return ne + 2;
 }
 
-//cloned from foo
 
 int new_foo(int ne = 0) {
    
@@ -33,7 +31,6 @@ catch (std::exception const& e) {
    return 0;
 }
 
-//cloned from bar
 
 int new_bar(int ne = 0) try {
    
@@ -51,7 +48,6 @@ int main() {
    return 0;
 }
 
-//cloned from main
 
 int new_main() {
    std::cout << foo(4) << std::endl;
