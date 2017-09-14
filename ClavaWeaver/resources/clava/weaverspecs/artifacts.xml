@@ -83,8 +83,10 @@
 		<!-- <attribute name="filename" type="String"/> -->
 		<attribute name="path" type="String" tooltip="the folder of the source file"/>
 		<attribute name="filepath" type="String" tooltip="the complete path to the file"/>
-		<attribute name="relativePath" type="String" tooltip="the path to the file rellative to the program base folder"/>
+		<attribute name="relativeFilepath" type="String" tooltip="the path to the file relative to the program base folder"/>
+		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file relative to the program base folder"/>
 		<attribute name="isCxx" type="Boolean" tooltip="true if this file is considered a C++ file"/>
+		<attribute name="isHeader" type="Boolean" tooltip="true if this file is considered a header file"/>
 	</artifact>
 
 	<!-- RECORD -->

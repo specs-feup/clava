@@ -5291,11 +5291,20 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "the path to the file rellative to the program base folder",
+                  "tooltip": "the path to the file relative to the program base folder",
                   "children": [
                            {
                               "type": "String",
-                              "name": "relativePath"
+                              "name": "relativeFilepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the path to the folder of the source file relative to the program base folder",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "relativeFolderpath"
                            }]
                },
                {
@@ -5305,6 +5314,15 @@
                            {
                               "type": "Boolean",
                               "name": "isCxx"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this file is considered a header file",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isHeader"
                            }]
                },
                {

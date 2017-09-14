@@ -225,7 +225,21 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public String getRelativePathImpl() {
+    public String getRelativeFolderpathImpl() {
+        CxxWeaver weaver = getWeaverEngine();
+
+        String path = weaver.getApp().getRelativeFolderPath(weaver.getBaseSourceFolder(), tunit);
+
+        if (path.isEmpty()) {
+            return "./";
+        }
+
+        return path;
+
+    }
+
+    @Override
+    public String getRelativeFilepathImpl() {
         CxxWeaver weaver = getWeaverEngine();
 
         return weaver.getApp().getRelativePath(weaver.getBaseSourceFolder(), tunit);
@@ -317,4 +331,10 @@ public class CxxFile extends AFile {
 
         return function;
     }
+
+    @Override
+    public Boolean getIsHeaderImpl() {
+        return tunit.isHeaderFile();
+    }
+
 }

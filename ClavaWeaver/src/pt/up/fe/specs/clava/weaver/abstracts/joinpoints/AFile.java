@@ -112,25 +112,48 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * the path to the file rellative to the program base folder
+     * the path to the file relative to the program base folder
      */
-    public abstract String getRelativePathImpl();
+    public abstract String getRelativeFilepathImpl();
 
     /**
-     * the path to the file rellative to the program base folder
+     * the path to the file relative to the program base folder
      */
-    public final Object getRelativePath() {
+    public final Object getRelativeFilepath() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "relativePath", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "relativeFilepath", Optional.empty());
         	}
-        	String result = this.getRelativePathImpl();
+        	String result = this.getRelativeFilepathImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "relativePath", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "relativeFilepath", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "relativePath", e);
+        	throw new AttributeException(get_class(), "relativeFilepath", e);
+        }
+    }
+
+    /**
+     * the path to the folder of the source file relative to the program base folder
+     */
+    public abstract String getRelativeFolderpathImpl();
+
+    /**
+     * the path to the folder of the source file relative to the program base folder
+     */
+    public final Object getRelativeFolderpath() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "relativeFolderpath", Optional.empty());
+        	}
+        	String result = this.getRelativeFolderpathImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "relativeFolderpath", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "relativeFolderpath", e);
         }
     }
 
@@ -154,6 +177,29 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCxx", e);
+        }
+    }
+
+    /**
+     * true if this file is considered a header file
+     */
+    public abstract Boolean getIsHeaderImpl();
+
+    /**
+     * true if this file is considered a header file
+     */
+    public final Object getIsHeader() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isHeader", Optional.empty());
+        	}
+        	Boolean result = this.getIsHeaderImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isHeader", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isHeader", e);
         }
     }
 
@@ -512,8 +558,10 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("hasMain");
         attributes.add("path");
         attributes.add("filepath");
-        attributes.add("relativePath");
+        attributes.add("relativeFilepath");
+        attributes.add("relativeFolderpath");
         attributes.add("isCxx");
+        attributes.add("isHeader");
     }
 
     /**
@@ -567,8 +615,10 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         HASMAIN("hasMain"),
         PATH("path"),
         FILEPATH("filepath"),
-        RELATIVEPATH("relativePath"),
+        RELATIVEFILEPATH("relativeFilepath"),
+        RELATIVEFOLDERPATH("relativeFolderpath"),
         ISCXX("isCxx"),
+        ISHEADER("isHeader"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
