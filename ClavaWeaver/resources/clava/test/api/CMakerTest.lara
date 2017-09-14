@@ -10,29 +10,16 @@ aspectdef CMakerTest
 		.addCxxFlags("-O3", "-std=c++11")
 		.addLibs("stdc++");
 
-	var outputFolder = "cmakerTestSrc/";
-
-
 	select file end
 	apply
-	
-		//var sourceFile = Io.getPath(Clava.getWeavingFolder(), $file.relativeFilepath);
-		//cmaker.sources.addSource(sourceFile);
 		cmaker.sources.addSource($file.relativeFilepath);
-
 		
 		if($file.isHeader) {
-			//var headerFolder = Io.getPath(Clava.getWeavingFolder(), $file.relativeFolderpath);
-			//cmaker.addIncludeFolder(headerFolder);
 			cmaker.addIncludeFolder($file.relativeFolderpath);
 		}
 	end
-
-	// Writing the build file
-	//var cmakeFile = Io.getPath(Clava.getWeavingFolder(), "CMakeLists.txt");
-	//Io.writeFile(cmakeFile, cmaker.getCode());
 	
-	// Write code
+	// Write AST code
 	Clava.writeCode(Clava.getWeavingFolder());
 	
 	// Build
@@ -41,3 +28,7 @@ aspectdef CMakerTest
 
 	println("Created executable: " + executable);
 end
+
+	// Writing the build file
+	//var cmakeFile = Io.getPath(Clava.getWeavingFolder(), "CMakeLists.txt");
+	//Io.writeFile(cmakeFile, cmaker.getCode());
