@@ -258,6 +258,10 @@ public class App extends ClavaNode {
         return getRelativePath(tUnit.getFile(), baseInputFolder);
     }
 
+    public String getRelativeFolderPath(File baseInputFolder, TranslationUnit tUnit) {
+        return getRelativePath(tUnit.getFile().getParentFile(), baseInputFolder);
+    }
+
     private String getRelativePath(File baseFile, File baseInputFolder) {
         String relativePath = SpecsIo.getRelativePath(baseFile, baseInputFolder);
 
