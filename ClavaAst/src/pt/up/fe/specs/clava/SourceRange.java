@@ -14,10 +14,15 @@
 package pt.up.fe.specs.clava;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.utilities.LineStream;
 
 public class SourceRange {
     private static boolean COMMAND_APPEARED = false;
@@ -307,5 +312,45 @@ public class SourceRange {
         return Optional.empty();
     }
     */
+
+    public Optional<String> getSource() {
+        if (!isValid()) {
+            return Optional.empty();
+        }
+
+        List<String> sourceLines = new ArrayList<>();
+        try (LineStream lines = LineStream.newInstance(getStartFile())) {
+
+            int currentLineNumber = 0;
+            String currentLine = null;
+            // Find first line of source code
+            while (lines.hasNextLine() && currentLineNumber != getStartLine()) {
+                currentLine = lines.nextLine();
+                currentLineNumber++;
+            }
+
+            // Add lines until end line is found
+            while (lines.hasNextLine() && currentLineNumber <= getEndLine()) {
+                sourceLines.add(currentLine);
+                currentLine = lines.nextLine();
+                currentLineNumber++;
+            }
+        }
+
+        if (sourceLines.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // Adjust columns
+        // First adjust end, in case it is the same line
+        int lastLineIndex = sourceLines.size() - 1;
+        String adjustedEnd = sourceLines.get(lastLineIndex).substring(0, getEndCol());
+        sourceLines.set(lastLineIndex, adjustedEnd);
+
+        String adjustedStart = sourceLines.get(0).substring(getStartCol() - 1);
+        sourceLines.set(0, adjustedStart);
+
+        return Optional.of(sourceLines.stream().collect(Collectors.joining("\n")));
+    }
 
 }

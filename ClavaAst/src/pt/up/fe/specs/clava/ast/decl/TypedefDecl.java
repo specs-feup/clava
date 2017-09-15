@@ -56,8 +56,8 @@ public class TypedefDecl extends TypedefNameDecl {
         // as having function pointer with VLAs that need the name of parameters,
         // which are not available for function types in Clang
         if (PointerType.isPointerToParenType(type)) {
-            // return "typedef " + type.getCode(getTypelessCode());
-            return typedefSource;
+            return getLocation().getSource()
+                    .orElseThrow(() -> new RuntimeException("Could not find source for location " + getLocation()));
         }
 
         String typeCode = type.getCode();
