@@ -6,6 +6,7 @@ aspectdef CMakerTest
 
 	var cmaker = new CMaker("testapp")
 		.setMinimumVersion("3.0.2")
+		.setGenerator("MinGW Makefiles")
 		.setMakeCommand("mingw32-make")
 		.addCxxFlags("-O3", "-std=c++11")
 		.addLibs("stdc++");
@@ -24,7 +25,7 @@ aspectdef CMakerTest
 	
 	// Build
 	var buildFolder = Io.getPath(Clava.getWeavingFolder(), "build");
-	var executable = cmaker.build(Clava.getWeavingFolder(), buildFolder, '-G "MinGW Makefiles"');
+	var executable = cmaker.build(Clava.getWeavingFolder(), buildFolder);
 
 	println("Created executable: " + executable);
 end

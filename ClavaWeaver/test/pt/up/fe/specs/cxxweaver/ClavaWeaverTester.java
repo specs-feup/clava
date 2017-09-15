@@ -245,10 +245,7 @@ public class ClavaWeaverTester {
         }
         // Delete CWeaver folder
         File workFolder = ClavaWeaverTester.getWorkFolder();
-        if (workFolder.isDirectory()) {
-            SpecsIo.deleteFolderContents(workFolder, true);
-            SpecsIo.delete(workFolder);
-        }
+        SpecsIo.deleteFolder(workFolder);
 
         // Delete weaver files
         ClangAstParser.getTempFiles().stream()

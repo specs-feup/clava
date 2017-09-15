@@ -3,7 +3,7 @@ import clava.Clava;
 import clava.ClavaJoinPoints;
 
 aspectdef TimerTest
-	
+
 	// Disable SpecsLogger, in order to be able to compile weaved code without the project
 	Clava.useSpecsLogger = false;
 
