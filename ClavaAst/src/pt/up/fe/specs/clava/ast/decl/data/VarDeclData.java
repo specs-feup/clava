@@ -35,7 +35,7 @@ public class VarDeclData {
     private final boolean isModulePrivate;
     private final boolean isNrvo;
 
-    private final InitializationStyle initKind;
+    private InitializationStyle initKind;
 
     public VarDeclData() {
         this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT);
@@ -49,6 +49,10 @@ public class VarDeclData {
         this.isModulePrivate = isModulePrivate;
         this.isNrvo = isNrvo;
         this.initKind = initKind;
+    }
+
+    public VarDeclData copy() {
+        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind);
     }
 
     @Override
@@ -66,6 +70,10 @@ public class VarDeclData {
 
     public InitializationStyle getInitKind() {
         return initKind;
+    }
+
+    public void setInitKind(InitializationStyle initKind) {
+        this.initKind = initKind;
     }
 
     public boolean isNrvo() {

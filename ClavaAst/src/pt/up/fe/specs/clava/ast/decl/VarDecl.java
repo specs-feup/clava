@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
@@ -55,7 +56,7 @@ public class VarDecl extends DeclaratorDecl {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new VarDecl(data, getDeclName(), getType(), getDeclData(), getInfo(), Collections.emptyList());
+        return new VarDecl(data.copy(), getDeclName(), getType(), getDeclData(), getInfo(), Collections.emptyList());
     }
 
     @Override
@@ -94,6 +95,10 @@ public class VarDecl extends DeclaratorDecl {
         default:
             throw new RuntimeException("Case not defined:" + data.getInitKind());
         }
+    }
+
+    public boolean hasInit() {
+        return hasChildren();
     }
 
     public Optional<Expr> getInit() {
@@ -156,6 +161,18 @@ public class VarDecl extends DeclaratorDecl {
         removeInlineComments().stream()
                 .forEach(parent::associateComment);
 
+    }
+
+    public void setInit(Expr expression) {
+        // If has init, just replace expression
+        if (hasInit()) {
+            setChild(0, expression);
+            return;
+        }
+
+        // No init, add child and set initialization method
+        addChild(expression);
+        data.setInitKind(InitializationStyle.CINIT);
     }
 
 }
