@@ -54,7 +54,7 @@
 	
 	<!-- MARKER -->
 	<joinpoint class="marker" extends="pragma">
-		<!-- <select alias="contents"			class="scope"/>  -->
+		<select alias="contents"			class="scope"/>
 	</joinpoint>
 	
 	<!-- OMP PRAGMA -->

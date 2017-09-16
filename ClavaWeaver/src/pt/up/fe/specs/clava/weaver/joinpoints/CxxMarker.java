@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
@@ -22,7 +23,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -54,7 +54,7 @@ public class CxxMarker extends AMarker {
     }
 
     @Override
-    public AJoinPoint getContentsImpl() {
+    public AScope getContentsImpl() {
         List<? extends AScope> result = CxxSelects.select(AScope.class, SpecsCollections.toList(marker.getTarget()),
                 false, this, node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
 
@@ -62,9 +62,11 @@ public class CxxMarker extends AMarker {
 
         return result.get(0);
     }
-    /*
+
     @Override
     public List<? extends AScope> selectContents() {
+        return Arrays.asList(getContentsImpl());
+        /*
         List<? extends AScope> result = CxxSelects.select(AScope.class, SpecsCollections.toList(marker.getTarget()),
                 false,
                 node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope(),
@@ -72,8 +74,9 @@ public class CxxMarker extends AMarker {
         // if (!result.isEmpty()) {
         // System.out.println("RESULT:" + result.get(0).getNode().getCode());
         // }
-    
+        
         return result;
+        */
     }
-    */
+
 }

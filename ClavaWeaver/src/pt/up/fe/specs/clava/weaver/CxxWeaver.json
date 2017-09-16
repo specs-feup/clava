@@ -3398,6 +3398,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "init"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "name"
                            }]
@@ -3698,6 +3706,32 @@
                   "type": "select",
                   "clazz": "expression",
                   "alias": "init"
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInit"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "init",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "init",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",
@@ -6498,6 +6532,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "init"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "name"
                            }]
@@ -6798,6 +6840,32 @@
                   "type": "select",
                   "clazz": "expression",
                   "alias": "init"
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInit"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "init",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "init",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",
@@ -15378,6 +15446,11 @@
                               "type": "joinpoint",
                               "name": "currentRegion"
                            }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "scope",
+                  "alias": "contents"
                },
                {
                   "type": "action",

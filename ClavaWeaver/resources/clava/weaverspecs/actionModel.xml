@@ -190,4 +190,13 @@
 		<parameter name="content" type="String" />
 	</action>
 	
+	<!-- VARDECL -->
+	<action name="setInit" class="vardecl">
+		<parameter name="init" type="joinpoint" />
+	</action>
+	
+	<action name="setInit" class="vardecl">
+		<parameter name="init" type="String" />
+	</action>
+	
 </actions>

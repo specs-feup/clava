@@ -150,7 +150,8 @@
 
 	<!-- VARDECL -->
 	<artifact class="vardecl" default="name">
-		<attribute name="hasInit" type="Boolean" />
+		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
+		<attribute name="init" type="joinpoint" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
 	</artifact>
 
 	<!-- VARREF -->

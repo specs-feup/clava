@@ -34,6 +34,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Get value on attribute init
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getInitImpl() {
+        return this.aVardecl.getInitImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -129,6 +138,24 @@ public abstract class AParam extends AVardecl {
     @Override
     public void messageToUserImpl(String message) {
         this.aVardecl.messageToUserImpl(message);
+    }
+
+    /**
+     * 
+     * @param init 
+     */
+    @Override
+    public void setInitImpl(AJoinPoint init) {
+        this.aVardecl.setInitImpl(init);
+    }
+
+    /**
+     * 
+     * @param init 
+     */
+    @Override
+    public void setInitImpl(String init) {
+        this.aVardecl.setInitImpl(init);
     }
 
     /**
@@ -231,6 +258,7 @@ public abstract class AParam extends AVardecl {
      */
     protected enum ParamAttributes {
         HASINIT("hasInit"),
+        INIT("init"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

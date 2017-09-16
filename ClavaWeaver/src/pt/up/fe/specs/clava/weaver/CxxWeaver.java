@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.joptions.panels.editor.components.DevUtils;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -169,7 +170,7 @@ public class CxxWeaver extends ACxxWeaver {
     // private Map<ClavaNode, Map<String, Object>> userValues = null;
     private Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
 
-    private File outputDir = null;
+    // private File outputDir = null;
     private List<File> sources = null;
     private List<String> userFlags = null;
     // private CxxJoinpoints jpFactory = null;
@@ -191,7 +192,7 @@ public class CxxWeaver extends ACxxWeaver {
         apps = new ArrayDeque<>();
         userValuesStack = new ArrayDeque<>();
 
-        outputDir = null;
+        // outputDir = null;
         sources = null;
         userFlags = null;
 
@@ -291,7 +292,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Weaver arguments
         this.sources = sources;
-        this.outputDir = outputDir;
+        // this.outputDir = outputDir;
         this.args = args;
 
         // Initialize list of options for parser
@@ -535,7 +536,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public File getWeavingFolder() {
-        return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
+        // return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
+        return SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
     }
 
     /**

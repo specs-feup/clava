@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -52,10 +53,87 @@ public abstract class AVardecl extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute init
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint getInitImpl();
+
+    /**
+     * Get value on attribute init
+     * @return the attribute's value
+     */
+    public final Object getInit() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
+        	}
+        	AJoinPoint result = this.getInitImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "init", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
     public abstract List<? extends AExpression> selectInit();
+
+    /**
+     * 
+     * @param init 
+     */
+    public void setInitImpl(AJoinPoint init) {
+        throw new UnsupportedOperationException(get_class()+": Action setInit not implemented ");
+    }
+
+    /**
+     * 
+     * @param init 
+     */
+    public final void setInit(AJoinPoint init) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), init);
+        	}
+        	this.setInitImpl(init);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), init);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
+
+    /**
+     * 
+     * @param init 
+     */
+    public void setInitImpl(String init) {
+        throw new UnsupportedOperationException(get_class()+": Action setInit not implemented ");
+    }
+
+    /**
+     * 
+     * @param init 
+     */
+    public final void setInit(String init) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), init);
+        	}
+        	this.setInitImpl(init);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), init);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
 
     /**
      * Get value on attribute name
@@ -206,6 +284,7 @@ public abstract class AVardecl extends ANamedDecl {
     protected void fillWithAttributes(List<String> attributes) {
         this.aNamedDecl.fillWithAttributes(attributes);
         attributes.add("hasInit");
+        attributes.add("init");
     }
 
     /**
@@ -223,6 +302,8 @@ public abstract class AVardecl extends ANamedDecl {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aNamedDecl.fillWithActions(actions);
+        actions.add("void setInit(joinpoint)");
+        actions.add("void setInit(String)");
     }
 
     /**
@@ -251,6 +332,7 @@ public abstract class AVardecl extends ANamedDecl {
      */
     protected enum VardeclAttributes {
         HASINIT("hasInit"),
+        INIT("init"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

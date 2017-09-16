@@ -74,6 +74,12 @@ public abstract class AMarker extends APragma {
     }
 
     /**
+     * Method used by the lara interpreter to select contentss
+     * @return 
+     */
+    public abstract List<? extends AScope> selectContents();
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -232,6 +238,9 @@ public abstract class AMarker extends APragma {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "contents": 
+        		joinPointList = selectContents();
+        		break;
         	default:
         		joinPointList = this.aPragma.select(selectName);
         		break;
@@ -255,6 +264,7 @@ public abstract class AMarker extends APragma {
     @Override
     protected final void fillWithSelects(List<String> selects) {
         this.aPragma.fillWithSelects(selects);
+        selects.add("contents");
     }
 
     /**
