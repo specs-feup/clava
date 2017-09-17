@@ -58,9 +58,10 @@ public class CxxMarker extends AMarker {
         List<? extends AScope> result = CxxSelects.select(AScope.class, SpecsCollections.toList(marker.getTarget()),
                 false, this, node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
 
-        Preconditions.checkArgument(result.isEmpty(),
-                "Could not find the 'scope' associated with the marker '" + marker.getCode() + "'");
-        Preconditions.checkArgument(result.size() != 1, "Expected just one scope, but found more than one");
+        Preconditions.checkArgument(!result.isEmpty(),
+                "Could not find the 'scope' associated with the marker '" + marker.getCode() + "'. Pragma target is: "
+                        + marker.getTarget());
+        Preconditions.checkArgument(result.size() == 1, "Expected just one scope, but found more than one");
 
         return result.get(0);
     }
