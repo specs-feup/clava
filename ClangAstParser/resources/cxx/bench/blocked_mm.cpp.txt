@@ -4,27 +4,27 @@
 using namespace std;
 typedef double FLOAT;
 
-static void NaiveMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, const int n) {
+static void NaiveMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, int const n) {
    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) for(int k = 0; k < n; k++) C[i * n + j] += A[i * n + k] * B[k * n + j];
 }
 
 
-static void BlockedMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, const int n) { // add "search(dependent)" at the end of this pragma if you want to search the variables dependently
+static void BlockedMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, int const n) { // add "search(dependent)" at the end of this pragma if you want to search the variables dependently
    #pragma isat marker M1_begin
-   const int blk_i = 64;
-   const int blk_j = 64;
-   const int blk_k = 64;
+   int const blk_i = 64;
+   int const blk_j = 64;
+   int const blk_k = 64;
    for(int i = 0; i < n; i += blk_i) for(int j = 0; j < n; j += blk_j) for(int k = 0; k < n; k += blk_k) for(int ii = i; ii < (((i + blk_i) < (n)) ? (i + blk_i) : (n)); ii++) for(int jj = j; jj < (((j + blk_j) < (n)) ? (j + blk_j) : (n)); jj++) for(int kk = k; kk < (((k + blk_k) < (n)) ? (k + blk_k) : (n)); kk++) C[ii * n + jj] = C[ii * n + jj] + A[ii * n + kk] * B[kk * n + jj];
    #pragma isat marker M1_end
 }
 
 
-static void Initialize(FLOAT * X, const int n, const FLOAT v) {
+static void Initialize(FLOAT * X, int const n, FLOAT const v) {
    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) X[i * n + j] = v;
 }
 
 
-static FLOAT Sum(FLOAT * X, const int n) {
+static FLOAT Sum(FLOAT * X, int const n) {
    FLOAT s = 0;
    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) s += X[i * n + j];
    
@@ -34,13 +34,10 @@ static FLOAT Sum(FLOAT * X, const int n) {
 
 int main(int argc, char ** argv) {
    FLOAT * A = new FLOAT[1000 * 1000];
+   FLOAT * B = new FLOAT[1000 * 1000];
    //FLOAT* C_naive = new FLOAT[N * N];
    //assert(C_naive);
-   (void) ((!!(A)) || (_assert("A", "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClangAstParser\\temp-clang-ast\\blocked_mm.cpp", 61) , 0));
-   FLOAT * B = new FLOAT[1000 * 1000];
-   (void) ((!!(B)) || (_assert("B", "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClangAstParser\\temp-clang-ast\\blocked_mm.cpp", 64) , 0));
    FLOAT * C_blocked = new FLOAT[1000 * 1000];
-   (void) ((!!(C_blocked)) || (_assert("C_blocked", "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClangAstParser\\temp-clang-ast\\blocked_mm.cpp", 70) , 0));
    Initialize(A, 1000, 1);
    Initialize(B, 1000, 2);
    //Initialize(C_naive, N, 0);
@@ -48,7 +45,7 @@ int main(int argc, char ** argv) {
    #pragma isat marker M2_begin
    BlockedMatrixMultiply(A, B, C_blocked, 1000);
    #pragma isat marker M2_end
-   const FLOAT s_blocked = Sum(C_blocked, 1000);
+   FLOAT const s_blocked = Sum(C_blocked, 1000);
    //NaiveMatrixMultiply(A, B, C_naive, N);
    //const FLOAT s_naive = Sum(C_naive, N);
    //cout << "Sum-naive = " << s_naive << endl;

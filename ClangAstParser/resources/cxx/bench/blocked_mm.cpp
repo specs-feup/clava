@@ -58,16 +58,13 @@ static FLOAT Sum(FLOAT* X, const int n)
 int main(int argc, char** argv)
 {
     FLOAT* A = new FLOAT[N * N];
-    assert(A);
 
     FLOAT* B = new FLOAT[N * N];
-    assert(B);
 
     //FLOAT* C_naive = new FLOAT[N * N];
     //assert(C_naive);
 
     FLOAT* C_blocked = new FLOAT[N * N];
-    assert(C_blocked);
     
     Initialize(A, N, 1);
     Initialize(B, N, 2);
