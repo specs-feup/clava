@@ -21,6 +21,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.Comment;
+import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -57,12 +58,47 @@ public abstract class Pragma extends ClavaNode {
         for (int i = indexOfPragma + 1; i < parent.getNumChildren(); i++) {
             ClavaNode sibling = parent.getChild(i);
 
-            if (!(sibling instanceof Comment) && !(sibling instanceof Pragma)) {
-                return Optional.of(sibling);
+            // Ignore comments and pragmas
+            if (sibling instanceof Comment || sibling instanceof Pragma) {
+                continue;
             }
+
+            // Treat literal statements manually
+            if (sibling instanceof LiteralStmt) {
+                if (isCommentOrPragma(sibling.getCode())) {
+                    continue;
+                }
+            }
+
+            return Optional.of(sibling);
+
+            // if (!(sibling instanceof Comment) && !(sibling instanceof Pragma)) {
+            // return Optional.of(sibling);
+            // }
         }
 
         return Optional.empty();
+    }
+
+    private boolean isCommentOrPragma(String code) {
+        // Trim
+        String currentCode = code.trim();
+
+        // Check inline comment
+        if (currentCode.startsWith("//")) {
+            return true;
+        }
+
+        // TODO: Multiline not implemented (yet?)
+        if (currentCode.startsWith("/*")) {
+            throw new RuntimeException("Testing of literal code for multiline comments not finished yet");
+        }
+
+        if (currentCode.startsWith("#pragma")) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
