@@ -19,13 +19,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents a set of qualifiers for a type.
@@ -59,9 +58,7 @@ public class QualType extends Type {
 
     @Override
     public String getCode(String name) {
-        String type = getQualifiedType().getCode(name);
 
-        // System.out.println("QUAL:" + getExtendedId());
         // If not a top-level qualifier, has to be put after the type, but before the name
         if (hasParent()) {
 
@@ -72,33 +69,16 @@ public class QualType extends Type {
             ClavaNode parent = getParent();
 
             boolean allowedTypes = parent instanceof PointerType || parent instanceof ReferenceType;
-            // boolean allowedTypes = parent instanceof PointerType || parent instanceof ArrayType;
 
             if (hasQualTypeAncestor && !allowedTypes) {
-                // System.out.println("QUAL: " + getExtendedId());
-                // System.out.println("NOT ALLOWED:" + parent.getNodeName());
-                return type;
+                return getQualifiedType().getCode(name);
             }
-
-            // System.out.println("QUALTYPE");
-            // System.out.println("PARENT:" + getParent().getNodeName());
-            // System.out.println("QUALIFIED:" + getQualifiedType().getNodeName());
-
-            // return getCode(type, name);
-            /*
-            if (name != null) {
-                int index = type.indexOf(name);
-                Preconditions.checkArgument(index != -1);
-                return type.substring(0, index) + qualifier + " " + type.substring(index);
-            }
-            System.out.println("NOT TOP:" + type + " " + qualifier);
-            return type + " " + qualifier;
-            */
         }
 
-        return getCode(type, name);
         // Types in C++ should be read right-to-left. However, top-level qualifiers can be written on the left-side
         // http://stackoverflow.com/questions/19415674/what-does-const-mean-in-c
+        return getCodePrivate(name);
+
         // System.out.println("TOP:" + qualifier + " " + type);
         // return qualifier + " " + type;
 
@@ -109,15 +89,17 @@ public class QualType extends Type {
         // return qualifier + " " + getQualifiedType().getCode(nameString);
     }
 
-    private String getCode(String type, String name) {
-
+    private String getCodePrivate(String name) {
+        String type = getQualifiedType().getCode(name);
         String qualifiersCode = ClavaCode.getQualifiersCode(qualifiers);
-        // Type child = getQualifiedType();
 
+        // Case where qualifier has to come after the type but before the name taken care previously (we think)
         if (name != null) {
-            int index = type.indexOf(name);
-            Preconditions.checkArgument(index != -1);
-            return type.substring(0, index) + qualifiersCode + " " + type.substring(index);
+            if (hasParent()) {
+                SpecsLogs.msgWarn("Qualtype has parent, check if this case is ok");
+            }
+
+            return qualifiersCode + " " + type;
         }
 
         return type + " " + qualifiersCode;

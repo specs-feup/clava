@@ -189,7 +189,6 @@ public class FunctionDecl extends DeclaratorDecl {
         code.append(returnType).append(" ").append(getTypelessCode()).append(getCodeBody());
         */
         code.append(getCodeBody());
-
         return code.toString();
     }
 
