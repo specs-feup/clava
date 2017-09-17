@@ -13,9 +13,6 @@
 
 package pt.up.fe.specs.clang.clavaparser.expr;
 
-import java.util.Optional;
-
-import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
@@ -48,13 +45,13 @@ public class IntegerLiteralParser extends AClangNodeParser<IntegerLiteral> {
         String literal = parser.apply(StringParsers::parseWord);
 
         // TODO: finish implementations
-        getSourceLiteral(node);
+        // getSourceLiteral(node);
 
         return ClavaNodeFactory.integerLiteral(literal, exprData, info(node));
     }
 
-    private Optional<String> getSourceLiteral(ClangNode node) {
-        return CppParsing.getLiteralFromSource(node, getConverter().getFileService(), string -> string);
-    }
+    // private Optional<String> getSourceLiteral(ClangNode node) {
+    // return CppParsing.getLiteralFromSource(node, getConverter().getFileService(), string -> string);
+    // }
 
 }
