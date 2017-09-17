@@ -26,6 +26,7 @@ aspectdef Pragmas
 	select marker{'foo'} end
 	apply
 		println('default marker attribute "id" is working: ' + $marker.id);
+		println('marker contents: ' + $marker.contents.code);
 	end
 	
 end

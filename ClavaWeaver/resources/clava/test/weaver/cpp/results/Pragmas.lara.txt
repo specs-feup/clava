@@ -26,3 +26,15 @@ int main() {
    // After scope - foo
 }
 default marker attribute "id" is working: foo
+marker contents: {
+   // Scope start - foo
+   #pragma lara marker bar
+   // Before scope - bar
+   {
+      // Scope start - bar
+      int a = 0;
+      // Scope end - bar
+   }
+   // After scope - bar
+   // Scope end - foo
+}
