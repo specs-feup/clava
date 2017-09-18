@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     FLOAT* B = new FLOAT[N * N];
 
     //FLOAT* C_naive = new FLOAT[N * N];
-    //assert(C_naive);
+	//assert(C_naive);
 
     FLOAT* C_blocked = new FLOAT[N * N];
     

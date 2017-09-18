@@ -49,8 +49,8 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -183,6 +183,7 @@ public class TextParser {
     private static Iterator<ClavaNode> getIterator(TranslationUnit tu) {
         Iterator<ClavaNode> iterator = tu.getDescendantsStream()
                 .filter(node -> node instanceof Stmt || node instanceof Decl)
+                .filter(node -> tu.getLocation().getFilepath().equals(node.getLocation().getFilepath()))
                 .iterator();
         return iterator;
     }
