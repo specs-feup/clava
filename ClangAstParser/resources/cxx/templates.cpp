@@ -10,8 +10,6 @@ struct MAtom {
 
 std::list<MAtom>::iterator it_atom1;
 
-
-
 template <typename t = float>
 inline t Distance2(const t a[3], const t b[3])
 {
@@ -20,7 +18,17 @@ inline t Distance2(const t a[3], const t b[3])
 				 (a[2] - b[2]) * (a[2] - b[2]);
 }
 
+// TODO: TypeParser not supporting some nodes
+/*
+template <template <typename> class m>
+struct Monad {
+    template <typename a>
+    static m<a> mreturn(const a&);
 
+    template <typename a, typename b>
+    static m<b> mbind(const m<a>&, m<b>(*)(const a&));
+};
+*/
 
 // TODO: Add support for code in the page http://en.cppreference.com/w/cpp/language/function_template
 /*
