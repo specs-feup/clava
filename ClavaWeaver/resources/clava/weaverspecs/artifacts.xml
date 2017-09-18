@@ -230,7 +230,7 @@
 
 	<!-- CAST -->
 	<artifact class="cast">
-		<attribute name="isImplicitCast" type="Boolean" />
+		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use global attribute hasImplicitCast and implicitCast instead"/>
 		<attribute name="fromType" type="joinpoint" />
 		<attribute name="toType" type="joinpoint" />
 	</artifact>

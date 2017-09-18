@@ -16,6 +16,15 @@ aspectdef ParentRegion
 		printMessage($varref, $currentRegion, $parentRegion);
 	end
 	
+
+	select function end
+	apply
+		var $currentRegion = $function.currentRegion;
+		var $parentRegion = $function.parentRegion;
+		
+		printMessage($function, $currentRegion, $parentRegion);
+	end
+	
 end
 
 var printMessage = function($jp, $currentRegion, $parentRegion) {

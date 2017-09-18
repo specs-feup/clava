@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
@@ -109,6 +110,11 @@ public class CxxAttributes {
             }
 
             return Optional.of(currentNode);
+        }
+
+        // Check if function parameter
+        if (node instanceof ParmVarDecl) {
+            return Optional.of(((ParmVarDecl) node).getFunctionDecl());
         }
 
         // Get CompoundStmt

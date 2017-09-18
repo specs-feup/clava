@@ -1,4 +1,5 @@
 vardecl 'z' is in region 'file' at line 1 and does not have a parentRegion
+param 'fooParam' is in region 'function' at line 7, parentRegion is a 'file' at line 1
 vardecl 'a' is in region 'function' at line 8, parentRegion is a 'file' at line 1
 vardecl 'i' is in region 'loop' at line 10, parentRegion is a 'function' at line 7
 vardecl 'insideScope' is in region 'scope' at line 20, parentRegion is a 'loop' at line 10
@@ -8,3 +9,6 @@ varref 'a' is in region 'loop' at line 11, parentRegion is a 'function' at line 
 varref 'a' is in region 'if' at line 14, parentRegion is a 'loop' at line 10
 varref 'a' is in region 'if' at line 16, parentRegion is a 'loop' at line 10
 varref 'a' is in region 'function' at line 24, parentRegion is a 'file' at line 1
+function 'bar' is in region 'file' at line 3 and does not have a parentRegion
+function 'foo' is in region 'file' at line 7 and does not have a parentRegion
+function 'main' is in region 'file' at line 27 and does not have a parentRegion
