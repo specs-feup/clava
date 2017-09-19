@@ -126,8 +126,8 @@ public class App extends ClavaNode {
         StringBuilder code = new StringBuilder();
 
         for (TranslationUnit tu : getTranslationUnits()) {
-            String basepath = baseFolder != null ? SpecsIo.getRelativePath(new File(tu.getFilepath()), baseFolder)
-                    : tu.getFilepath();
+            String basepath = baseFolder != null ? SpecsIo.getRelativePath(new File(tu.getFolderpath()), baseFolder)
+                    : tu.getFolderpath();
 
             code.append("/**** File '" + basepath + tu.getFilename() + "' ****/" + ln() + ln());
             code.append(tu.getCode());
@@ -203,7 +203,7 @@ public class App extends ClavaNode {
         // and using a path relative to the topFile
 
         for (TranslationUnit tUnit : getTranslationUnits()) {
-            String relativePath = getRelativePath(new File(tUnit.getFilepath()), baseInputFolder);
+            String relativePath = getRelativePath(new File(tUnit.getFolderpath()), baseInputFolder);
 
             // Build destination path
             File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));

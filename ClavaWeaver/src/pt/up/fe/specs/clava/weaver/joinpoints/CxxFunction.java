@@ -297,7 +297,7 @@ public class CxxFunction extends AFunction {
             // For each include which is not an angled include, calculate relative path
 
             // Get relative path to include the file in this file
-            File includeFile = new File(callFile.getFilepath(), include.getInclude());
+            File includeFile = new File(callFile.getFolderpath(), include.getInclude());
             String relativePath = SpecsIo.getRelativePath(includeFile, newTu.getFile());
             includes.add(new IncludeDecl(relativePath, false));
         }

@@ -180,8 +180,12 @@ public class TranslationUnit extends ClavaNode {
         return filename;
     }
 
-    public String getFilepath() {
+    public String getFolderpath() {
         return path;
+    }
+
+    public String getFilepath() {
+        return getLocation().getFilepath();
     }
 
     public File getFile() {

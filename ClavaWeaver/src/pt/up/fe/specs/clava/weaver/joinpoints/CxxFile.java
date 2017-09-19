@@ -194,7 +194,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String getPathImpl() {
-        return tunit.getFilepath();
+        return tunit.getFolderpath();
         /*
         String filename = tunit.getFilename();
         String path = tunit.getFilepath();

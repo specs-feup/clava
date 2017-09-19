@@ -13,6 +13,17 @@ inline t Distance2(t const a[3], t const b[3]) {
    return (a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]) + (a[2] - b[2]) * (a[2] - b[2]);
 }
 
+// TODO: TypeParser not supporting some nodes
+/*
+template <template <typename> class m>
+struct Monad {
+template <typename a>
+static m<a> mreturn(const a&);
+
+template <typename a, typename b>
+static m<b> mbind(const m<a>&, m<b>(*)(const a&));
+};
+*/
 // TODO: Add support for code in the page http://en.cppreference.com/w/cpp/language/function_template
 /*
 template<typename T>

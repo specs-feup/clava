@@ -181,11 +181,38 @@ public class TextParser {
     }
 
     private static Iterator<ClavaNode> getIterator(TranslationUnit tu) {
+        String tuFilepath = tu.getLocation().getFilepath();
+
         Iterator<ClavaNode> iterator = tu.getDescendantsStream()
                 .filter(node -> node instanceof Stmt || node instanceof Decl)
-                .filter(node -> tu.getLocation().getFilepath().equals(node.getLocation().getFilepath()))
+                .filter(node -> tuFilepath.equals(node.getLocation().getFilepath()))
                 .iterator();
         return iterator;
+    }
+
+    /*
+    private static boolean iteratorFilter(ClavaNode node, String tuFilepath) {
+        String nodeFilepath = node.getLocation().getFilepath();
+    
+        // If no filepath, consider node
+        if (nodeFilepath == null) {
+            return true;
+        }
+    
+        if (!tuFilepath.equals(nodeFilepath)) {
+            System.out.println("DIFF:");
+            System.out.println("TU:" + tuFilepath);
+            System.out.println("NODE:" + nodeFilepath);
+            System.out.println("NODE AST:" + node);
+        }
+    
+        return tuFilepath.equals(nodeFilepath);
+    
+    }
+    */
+    private static boolean temp(ClavaNode node) {
+        System.out.println("Node filepath: " + node.getLocation());
+        return true;
     }
 
     private static void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
