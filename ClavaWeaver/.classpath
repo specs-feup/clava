@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=CxxWeaver&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonsLangPlus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/AntarexClavaApi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LaraExtraApi"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

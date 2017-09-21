@@ -1,0 +1,6 @@
+Original expression: a - (b - c)
+Simplified  expression: a-b+c
+Original expression: a - (b - c)^2
+Simplified  expression: a-b^2+2*b*c-c^2
+Original expression: a - (b - c), with a=2
+Simplified  expression: 2-b+c

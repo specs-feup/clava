@@ -50,6 +50,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.lang.SpecsPlatforms;
+import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -157,8 +158,19 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
+        CLAVA_LARA_API.addAll(LaraExtraApis.getApis());
         CLAVA_LARA_API.addAll(ClavaLaraApis.getApis());
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
+    }
+
+    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = new ArrayList<>();
+    static {
+        CLAVA_IMPORTABLE_CLASSES.addAll(LaraExtraApis.getImportableClasses());
+        CLAVA_IMPORTABLE_CLASSES.addAll(
+                Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
+                        CsvField.class, ProgressCounter.class, ClavaPlatforms.class, ClavaWeaverLauncher.class,
+                        ArgumentsParser.class, CxxWeaverApi.class));
+
     }
 
     // Weaver configuration
@@ -719,9 +731,8 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public List<Class<?>> getImportableClasses() {
-        return Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
-                CsvField.class, ProgressCounter.class, ClavaPlatforms.class, ClavaWeaverLauncher.class,
-                ArgumentsParser.class, CxxWeaverApi.class);
+        return CLAVA_IMPORTABLE_CLASSES;
+
     }
 
     @Override

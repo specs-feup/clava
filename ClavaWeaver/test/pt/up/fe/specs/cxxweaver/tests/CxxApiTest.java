@@ -73,4 +73,9 @@ public class CxxApiTest {
     public void testCMaker() {
         newTester().test("CMakerTest.lara", "cmaker_test.cpp", "cmaker_test.h");
     }
+
+    @Test
+    public void testMathExtra() {
+        newTester().test("MathExtraTest.lara", "math_extra_test.cpp");
+    }
 }

@@ -1,0 +1,14 @@
+import lara.MathExtra;
+
+aspectdef MathExtraTest
+
+	println("Original expression: a - (b - c)");
+	println("Simplified  expression: " + MathExtra.simplify("a - (b - c)"));
+	println("Original expression: a - (b - c)^2");
+	println("Simplified  expression: " + MathExtra.simplify("a - (b - c)^2"));
+	
+	var constants = {};
+	constants["a"] = 2;
+	println("Original expression: a - (b - c), with a=2");
+	println("Simplified  expression: " + MathExtra.simplify("a - (b - c)", constants));
+end
