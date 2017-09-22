@@ -15,12 +15,10 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
@@ -173,9 +171,15 @@ public class CxxCall extends ACall {
 
     @Override
     public AJoinPoint getDeclImpl() {
-        Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
+        return call.getDeclaration().map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
+        // Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
+        //
+        // return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
+    }
 
-        return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
+    @Override
+    public AJoinPoint getDefinitionImpl() {
+        return call.getDefinition().map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override

@@ -1,0 +1,8 @@
+vardecl a
+vardecl b
+Call 'functionWithDeclaration' declaration:6
+Call 'functionWithDeclaration' definition:8
+Call 'functionWithoutDeclaration' definition:12
+Call 'functionWithoutDefinition' declaration:16
+Call 'functionWithDefinitionAfterCall' declaration:18
+Call 'functionWithDefinitionAfterCall' definition:27

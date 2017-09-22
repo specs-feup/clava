@@ -28,14 +28,12 @@ public abstract class AVardecl extends ANamedDecl {
         this.aNamedDecl = aNamedDecl;
     }
     /**
-     * Get value on attribute hasInit
-     * @return the attribute's value
+     * true, if vardecl has an initialization value
      */
     public abstract Boolean getHasInitImpl();
 
     /**
-     * Get value on attribute hasInit
-     * @return the attribute's value
+     * true, if vardecl has an initialization value
      */
     public final Object getHasInit() {
         try {
@@ -53,14 +51,12 @@ public abstract class AVardecl extends ANamedDecl {
     }
 
     /**
-     * Get value on attribute init
-     * @return the attribute's value
+     * If vardecl has an initialization value, returns an expression with that value
      */
     public abstract AJoinPoint getInitImpl();
 
     /**
-     * Get value on attribute init
-     * @return the attribute's value
+     * If vardecl has an initialization value, returns an expression with that value
      */
     public final Object getInit() {
         try {

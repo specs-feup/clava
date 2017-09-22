@@ -114,14 +114,12 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Get value on attribute decl
-     * @return the attribute's value
+     * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
      */
     public abstract AJoinPoint getDeclImpl();
 
     /**
-     * Get value on attribute decl
-     * @return the attribute's value
+     * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
      */
     public final Object getDecl() {
         try {
@@ -135,6 +133,29 @@ public abstract class ACall extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
+        }
+    }
+
+    /**
+     * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
+     */
+    public abstract AJoinPoint getDefinitionImpl();
+
+    /**
+     * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
+     */
+    public final Object getDefinition() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
+        	}
+        	AJoinPoint result = this.getDefinitionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "definition", e);
         }
     }
 
@@ -435,6 +456,7 @@ public abstract class ACall extends AExpression {
         attributes.add("numArgs");
         attributes.add("memberNames");
         attributes.add("decl");
+        attributes.add("definition");
         attributes.add("argList");
         attributes.add("returnType");
     }
@@ -488,6 +510,7 @@ public abstract class ACall extends AExpression {
         NUMARGS("numArgs"),
         MEMBERNAMES("memberNames"),
         DECL("decl"),
+        DEFINITION("definition"),
         ARGLIST("argList"),
         RETURNTYPE("returnType"),
         VARDECL("vardecl"),

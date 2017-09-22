@@ -3388,6 +3388,7 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "true, if vardecl has an initialization value",
                   "children": [
                            {
                               "type": "Boolean",
@@ -3396,6 +3397,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "If vardecl has an initialization value, returns an expression with that value",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4811,6 +4813,7 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "[DEPRECATED] Use global attribute hasImplicitCast and implicitCast instead",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6522,6 +6525,7 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "true, if vardecl has an initialization value",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6530,6 +6534,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "If vardecl has an initialization value, returns an expression with that value",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14609,10 +14614,20 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found",
                   "children": [
                            {
                               "type": "joinpoint",
                               "name": "decl"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "definition"
                            }]
                },
                {

@@ -26,14 +26,12 @@ public abstract class ACast extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * Get value on attribute isImplicitCast
-     * @return the attribute's value
+     * [DEPRECATED] Use global attribute hasImplicitCast and implicitCast instead
      */
     public abstract Boolean getIsImplicitCastImpl();
 
     /**
-     * Get value on attribute isImplicitCast
-     * @return the attribute's value
+     * [DEPRECATED] Use global attribute hasImplicitCast and implicitCast instead
      */
     public final Object getIsImplicitCast() {
         try {

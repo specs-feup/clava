@@ -4,5 +4,17 @@ aspectdef Vardecl
 	apply
 		println("vardecl " + $vardecl.name);
 	end
+	
+	select call end
+	apply
+		if($call.decl !== undefined) {
+			println("Call '" + $call.name + "' declaration:" + $call.decl.line);
+		}
+
+		if($call.definition !== undefined) {
+			println("Call '" + $call.name + "' definition:" + $call.definition.line);
+		}
+
+	end
 
 end
