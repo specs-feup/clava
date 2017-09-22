@@ -17,13 +17,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents a function call.
@@ -97,6 +101,76 @@ public class CallExpr extends Expr {
         return getCallee().getFirstDescendantsAndSelf(DeclRefExpr.class).orElseThrow(
                 () -> new RuntimeException(
                         "Expected callee tree to have at least one DeclRefExpr:\n" + getCallee()));
+    }
+
+    /**
+     * 
+     * @return the declaration of this function call, if present
+     */
+    public Optional<FunctionDecl> getDeclaration() {
+
+        // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+        //
+        // if (!varDecl.isPresent()) {
+        // return Optional.empty();
+        // }
+        //
+        // DeclaratorDecl declarator = varDecl.get();
+        // if (!(declarator instanceof FunctionDecl)) {
+        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+        // return Optional.empty();
+        // }
+
+        Optional<FunctionDecl> functionDecl = getFunctionDecl();
+
+        if (!functionDecl.isPresent()) {
+            return Optional.empty();
+        }
+
+        // If no body, return immediately
+        if (!functionDecl.get().hasBody()) {
+            return functionDecl;
+        }
+
+        // Search for the declaration
+        return getApp().getFunctionDeclaration(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
+    }
+
+    private Optional<FunctionDecl> getFunctionDecl() {
+
+        Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+
+        if (!varDecl.isPresent()) {
+            return Optional.empty();
+        }
+
+        DeclaratorDecl declarator = varDecl.get();
+        if (!(declarator instanceof FunctionDecl)) {
+            SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+            return Optional.empty();
+        }
+
+        return Optional.of((FunctionDecl) declarator);
+    }
+
+    /**
+     * 
+     * @return the definition of this function call, if present
+     */
+    public Optional<FunctionDecl> getDefinition() {
+        Optional<FunctionDecl> functionDecl = getFunctionDecl();
+
+        if (!functionDecl.isPresent()) {
+            return Optional.empty();
+        }
+
+        // If has body, return immediately
+        if (functionDecl.get().hasBody()) {
+            return functionDecl;
+        }
+
+        // Search for the definition
+        return getApp().getFunctionDefinition(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
     }
 
     public String getCalleeName() {

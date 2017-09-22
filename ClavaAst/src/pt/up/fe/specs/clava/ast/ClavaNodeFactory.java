@@ -426,6 +426,13 @@ public class ClavaNodeFactory {
         return new FunctionDecl(functionName, inputs, functionType, functionDeclData, declData, info, definition);
     }
 
+    public static FunctionDecl dummyFunctionDecl(String functionName) {
+        return new FunctionDecl(functionName, Collections.emptyList(),
+                dummyType("dummy function type", ClavaNodeInfo.undefinedInfo(), Collections.emptyList()),
+                new FunctionDeclData(), new DeclData(), ClavaNodeInfo.undefinedInfo(),
+                null);
+    }
+
     public static ParmVarDecl parmVarDecl(String varName, Type type) {
         return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), null, null);
     }

@@ -36,7 +36,9 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
+import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.GlobalManager;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -82,10 +84,14 @@ public class App extends ClavaNode {
         return PERMITTED_EXTENSIONS;
     }
 
+    private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
+
     private List<File> sources;
 
     private GlobalManager globalManager;
-    private Map<String, ClavaNode> nodesCache;
+    private final Map<String, ClavaNode> nodesCache;
+    private final Map<String, FunctionDecl> functionDeclarationCache;
+    private final Map<String, FunctionDecl> functionDefinitionCache;
     // Can be used to store information that should be accessible through the application
     private DataStore appData;
 
@@ -95,6 +101,8 @@ public class App extends ClavaNode {
         sources = Collections.emptyList();
         globalManager = new GlobalManager();
         nodesCache = new HashMap<>();
+        functionDeclarationCache = new HashMap<>();
+        functionDefinitionCache = new HashMap<>();
         appData = DataStore.newInstance("Clava App Data");
         // System.out.println("SETTING STANDARD:" + appData.get(ClavaOptions.STANDARD));
         CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
@@ -301,6 +309,49 @@ public class App extends ClavaNode {
         return askedNode;
     }
 
+    public Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType) {
+        return getFunctionDeclaration(declName, functionType, functionDeclarationCache, false);
+    }
+
+    public Optional<FunctionDecl> getFunctionDefinition(String declName, FunctionType functionType) {
+        return getFunctionDeclaration(declName, functionType, functionDefinitionCache, true);
+    }
+
+    private Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType,
+            Map<String, FunctionDecl> cache, boolean hasBody) {
+
+        // Check if node was already asked
+        FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
+        if (cachedNode != null) {
+            // Check if no function is available
+            if (cachedNode == NO_FUNCTION_FOUND) {
+                return Optional.empty();
+            }
+
+            return Optional.of(cachedNode);
+        }
+
+        Optional<FunctionDecl> functionDeclaration = getDescendantsStream()
+                .filter(FunctionDecl.class::isInstance)
+                .map(FunctionDecl.class::cast)
+                // Check hasBody flag
+                .filter(fdecl -> fdecl.hasBody() == hasBody)
+                // Filter by name
+                .filter(fdecl -> fdecl.getDeclName().equals(declName))
+                // Filter by type
+                .filter(fdecl -> fdecl.getFunctionType().getCode().equals(functionType.getCode()))
+                .findFirst();
+
+        // Store return in cache
+        cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(NO_FUNCTION_FOUND));
+
+        return functionDeclaration;
+    }
+
+    private static String getFunctionId(String declName, FunctionType functionType) {
+        return functionType.getCode(declName);
+    }
+
     /**
      * @deprecated use the version that has a namespace as argument
      * @param declName
@@ -348,4 +399,5 @@ public class App extends ClavaNode {
     public void addFile(TranslationUnit tu) {
         addChild(tu);
     }
+
 }
