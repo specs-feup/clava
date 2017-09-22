@@ -170,16 +170,16 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AJoinPoint getDeclImpl() {
-        return call.getDeclaration().map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
+    public CxxFunction getDeclarationImpl() {
+        return call.getDeclaration().map(decl -> (CxxFunction) CxxJoinpoints.create(decl, this)).orElse(null);
         // Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
         //
         // return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override
-    public AJoinPoint getDefinitionImpl() {
-        return call.getDefinition().map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
+    public CxxFunction getDefinitionImpl() {
+        return call.getDefinition().map(decl -> (CxxFunction) CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override

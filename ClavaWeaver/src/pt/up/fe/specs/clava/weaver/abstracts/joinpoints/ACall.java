@@ -116,23 +116,23 @@ public abstract class ACall extends AExpression {
     /**
      * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
      */
-    public abstract AJoinPoint getDeclImpl();
+    public abstract AJoinPoint getDeclarationImpl();
 
     /**
      * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
      */
-    public final Object getDecl() {
+    public final Object getDeclaration() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
         	}
-        	AJoinPoint result = this.getDeclImpl();
+        	AJoinPoint result = this.getDeclarationImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "decl", e);
+        	throw new AttributeException(get_class(), "declaration", e);
         }
     }
 
@@ -455,7 +455,7 @@ public abstract class ACall extends AExpression {
         attributes.add("name");
         attributes.add("numArgs");
         attributes.add("memberNames");
-        attributes.add("decl");
+        attributes.add("declaration");
         attributes.add("definition");
         attributes.add("argList");
         attributes.add("returnType");
@@ -509,7 +509,7 @@ public abstract class ACall extends AExpression {
         NAME("name"),
         NUMARGS("numArgs"),
         MEMBERNAMES("memberNames"),
-        DECL("decl"),
+        DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),
         RETURNTYPE("returnType"),

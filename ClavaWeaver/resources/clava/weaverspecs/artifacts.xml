@@ -142,7 +142,7 @@
 		<attribute name="name" type="String" />
 		<attribute name="numArgs" type="Integer" />
 		<attribute name="memberNames" type="String[]" />
-		<attribute name="decl" type="joinpoint"
+		<attribute name="declaration" type="joinpoint"
 			tooltip="a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found"/>
 		<attribute name="definition" type="joinpoint" 
 			tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found"/>

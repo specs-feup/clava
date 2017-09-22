@@ -7,8 +7,8 @@ aspectdef Vardecl
 	
 	select call end
 	apply
-		if($call.decl !== undefined) {
-			println("Call '" + $call.name + "' declaration:" + $call.decl.line);
+		if($call.declaration !== undefined) {
+			println("Call '" + $call.name + "' declaration:" + $call.declaration.line);
 		}
 
 		if($call.definition !== undefined) {

@@ -49,9 +49,9 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -133,10 +133,13 @@ public class CallWrap {
      */
     private void createUserIncludeWrapper(String name) {
         // Get declaration of function call
-        FunctionDecl functionDecl = (FunctionDecl) cxxCall.getDeclImpl().getNode();
+        // FunctionDecl functionDecl = (FunctionDecl) cxxCall.getDeclImpl().getNode();
 
         // Get include file of declaration
-        FunctionDecl declaration = functionDecl.getDeclaration().get();
+        // FunctionDecl declaration = functionDecl.getDeclaration().get();
+
+        // Get declaration of function call
+        FunctionDecl declaration = cxxCall.getDeclarationImpl().getNode();
 
         // Get include file
         TranslationUnit includeFile = declaration.getAncestor(TranslationUnit.class);
@@ -214,27 +217,48 @@ public class CallWrap {
 
     private CallWrapType getWrapType() {
         // Get declaration of function call
-        AJoinPoint functionDeclJp = cxxCall.getDeclImpl();
+        CxxFunction functionDeclJp = cxxCall.getDeclarationImpl();
+        CxxFunction functionDefJp = cxxCall.getDefinitionImpl();
+        // AJoinPoint functionDeclJp = cxxCall.getDeclImpl();
 
         // If no declaration join point is found, this probably means that the call is from
         // a system header. Currently we cannot know a system include from a function call,
         // using another strategy where we copy all includes in the file of the current call to
         // the wrappers implementation file.
+
         if (functionDeclJp == null) {
-            return CallWrapType.SYSTEM_INCLUDE;
+            // If no declaration nor definition, this most likely indicates a system header function
+            if (functionDefJp == null) {
+                return CallWrapType.SYSTEM_INCLUDE;
+            }
+            // If no declaration but definition is present, this most likely indicates that the function is defined in
+            // the
+            // file of the function call
+            else {
+                FunctionDecl funcDef = functionDefJp.getNode();
+                SpecsLogs.msgLib("Could not find declaration of function '" + funcDef.getDeclName() + "' at "
+                        + funcDef.getLocation());
+                return CallWrapType.NO_INCLUDE;
+            }
         }
 
-        FunctionDecl functionDecl = (FunctionDecl) functionDeclJp.getNode();
-        Optional<FunctionDecl> declarationTry = functionDecl.getDeclaration();
+        FunctionDecl functionDecl = functionDeclJp.getNode();
+        // Optional<FunctionDecl> declarationTry = functionDecl.getDeclaration();
 
-        if (!declarationTry.isPresent()) {
-            SpecsLogs.msgLib("Could not find declaration of function '" + functionDecl.getDeclName() + "' at "
-                    + functionDecl.getLocation());
-            return CallWrapType.NO_INCLUDE;
-        }
+        // if (!declarationTry.isPresent()) {
+
+        // If no declaration but definition is present, this most likely indicates that the function is defined in the
+        // file of the function call
+        // if(functionDeclJp==null&&functionDefJp!=null)
+        // {
+        // SpecsLogs.msgLib("Could not find declaration of function '" + functionDecl.getDeclName() + "' at "
+        // + functionDecl.getLocation());
+        // return CallWrapType.NO_INCLUDE;
+        // }
 
         // Get include file of declaration
-        FunctionDecl declaration = declarationTry.get();
+        // FunctionDecl declaration = declarationTry.get();
+        FunctionDecl declaration = functionDeclJp.getNode();
         TranslationUnit includeFile = declaration.getAncestor(TranslationUnit.class);
 
         if (!includeFile.isHeaderFile()) {

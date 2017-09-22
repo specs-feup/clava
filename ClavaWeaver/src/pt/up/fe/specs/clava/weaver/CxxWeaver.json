@@ -14618,7 +14618,7 @@
                   "children": [
                            {
                               "type": "joinpoint",
-                              "name": "decl"
+                              "name": "declaration"
                            }]
                },
                {
