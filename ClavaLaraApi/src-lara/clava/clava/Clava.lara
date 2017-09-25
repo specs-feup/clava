@@ -58,6 +58,8 @@ Clava.cLinkageEnd = %{
 
 /**
  * Launches a Clava weaving session.
+ * @param {(string|Array)} args - The arguments to pass to the weaver, as if it was launched from the command-line
+ * @return {Boolean} true if the weaver execution without problems, false otherwise
  */
 Clava.runClava = function(args) {
 
