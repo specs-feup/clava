@@ -78,4 +78,9 @@ public class CxxApiTest {
     public void testMathExtra() {
         newTester().test("MathExtraTest.lara", "math_extra_test.cpp");
     }
+
+    @Test
+    public void testWeaverLauncher() {
+        newTester().test("WeaverLauncherTest.lara", "weaver_launcher_test.cpp");
+    }
 }

@@ -25,14 +25,21 @@ import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 public class ClavaWeaverRunner {
 
     @Test
-    public void test() {
+    public void testDse() {
         File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\antarex\\dse-exploration");
         // String argsString = " ..\\lara-dse\\Larad.lara -av \"('../lara-dse', 'nussinov/kernel_nussinov.c', 10)\" -bt
         // compiler=llvm,algo=sa,language=c,target=host-intel -i
         // \"../lara-dse/compilers;../lara-dse/algorithms;../lara-dse/targets;../lara-dse;../lara-dse/larai/includes/scripts;../lara-dse/larai/includes/java\"
         // -t ../lara-dse/larai/resources/tools.xml -b 2 -nw";
-        String argsString = " ..\\lara-dse\\Larad.lara -av \"('../lara-dse', 'DSP_autocor_c/DSP_autocor_c.c', 10)\" -bt compiler=llvm,algo=sa,language=c,target=host-intel -i \"../lara-dse/compilers;../lara-dse/algorithms;../lara-dse/targets;../lara-dse;../lara-dse/larai/includes/scripts;../lara-dse/larai/includes/java\" -t ../lara-dse/larai/resources/tools.xml -b 2  -nw";
+        // String argsString = " ..\\lara-dse\\Larad.lara -av \"('../lara-dse', 'DSP_autocor_c/DSP_autocor_c.c', 10)\"
+        // -bt compiler=llvm,algo=sa,language=c,target=host-intel -i
+        // \"../lara-dse/compilers;../lara-dse/algorithms;../lara-dse/targets;../lara-dse;../lara-dse/larai/includes/scripts;../lara-dse/larai/includes/java\"
+        // -t ../lara-dse/larai/resources/tools.xml -b 2 -nw";
+        // String argsString = " ..\\lara-dse\\LaradLauncher.lara -av \"('../lara-dse', 'DSP_autocor_c/DSP_autocor_c.c',
+        // 'llvm')\" -nw -nci -b 2";
+        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av \"{laradFoldername:'../lara-dse', sourceFile:'DSP_autocor_c/DSP_autocor_c.c', compiler:'llvm', nsteps:1000, language:'c', target:'host-intel', algo:'sa', metric:'performance', seqlen:32, nexec:30, nr:-1, clean:1, passes:'', percent:2, append:''}\" -nw -nci -b 2";
         List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
+
         SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);
 
     }
