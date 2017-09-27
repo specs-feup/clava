@@ -62,7 +62,7 @@ Clava.cLinkageEnd = %{
  * @return {Boolean} true if the weaver execution without problems, false otherwise
  */
 Clava.runClava = function(args) {
-
+	
 	// If string, separate arguments
 	if(typeof args  === "string") {
 		args = ArgumentsParser.newCommandLine().parse(args);

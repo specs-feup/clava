@@ -1,0 +1,29 @@
+import weaver.util.WeaverDataStore;
+
+/**
+ * DataStore used in Clava.
+ * @constructor
+ */
+function ClavaDataStore(data) {
+    // Parent constructor
+    WeaverDataStore.call(this, data, Java.type("pt.up.fe.specs.clava.weaver.CxxWeaver").getWeaverDefinition());
+	
+	// Add alias
+	this.addAlias("Disable Clava Info", "disable_info");
+}
+// Inheritance
+ClavaDataStore.prototype = Object.create(WeaverDataStore.prototype);
+
+
+/*** PRIVATE OVERRIDABLE FUNCTIONS ***/
+
+
+/**
+ * Wraps a Java DataStore around a Lara DataStore.
+ */
+ClavaDataStore.prototype._dataStoreWrapper = function(javaDataStore) {
+	return new ClavaDataStore(javaDataStore, this.definition);
+}
+
+
+/*** NEW WEAVER_DATA_STORE FUNCTIONS ***/

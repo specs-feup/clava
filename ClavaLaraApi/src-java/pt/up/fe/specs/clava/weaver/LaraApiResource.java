@@ -20,6 +20,12 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  *
  */
 public enum LaraApiResource implements LaraResourceProvider {
+
+    // Clava utils
+    CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
+
+    // Static objects
+
     CLAVA("Clava.lara"),
     CLAVA_ASPECTS("ClavaAspects.lara"),
     CLAVA_JOIN_POINTS("ClavaJoinPoints.lara");
