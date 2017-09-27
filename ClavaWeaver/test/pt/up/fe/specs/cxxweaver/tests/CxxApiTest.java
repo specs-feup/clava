@@ -83,4 +83,9 @@ public class CxxApiTest {
     public void testWeaverLauncher() {
         newTester().test("WeaverLauncherTest.lara", "weaver_launcher_test.cpp");
     }
+
+    @Test
+    public void testClavaDataStore() {
+        newTester().test("ClavaDataStoreTest.lara", "clava_data_store_test.cpp");
+    }
 }

@@ -1,0 +1,16 @@
+import lara.util.DataStore;
+import clava.util.ClavaDataStore;
+import weaver.WeaverOptions;
+
+aspectdef DataStoreTest
+	
+	
+	var dataStore = new ClavaDataStore(WeaverOptions.getData());
+	println("GET:" + dataStore.get("javascript"));
+	println("TYPE:" + dataStore.getType("javascript"));
+	dataStore.put("javascript", false);
+	println("GET AFTER PUT:" + dataStore.get("javascript"));
+	dataStore.put("javascript", true);
+	println("Keys:" + dataStore.getKeys());
+	println("Disable info:" + dataStore.get("disable_info"));
+end
