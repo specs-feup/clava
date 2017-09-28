@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SpecsUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraUtils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ClavaAst"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

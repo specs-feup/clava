@@ -13,8 +13,10 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.util.Arrays;
 import java.util.List;
 
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 
 public class ClavaLaraApis {
@@ -22,8 +24,14 @@ public class ClavaLaraApis {
     private static final List<ResourceProvider> CLAVA_LARA_API = ResourceProvider
             .getResourcesFromEnum(LaraCoreApiResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
 
+    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class);
+
     public static List<ResourceProvider> getApis() {
         return CLAVA_LARA_API;
+    }
+
+    public static List<Class<?>> getImportableClasses() {
+        return CLAVA_IMPORTABLE_CLASSES;
     }
 
 }
