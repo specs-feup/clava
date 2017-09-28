@@ -169,6 +169,7 @@ public class CxxWeaver extends ACxxWeaver {
     private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = new ArrayList<>();
     static {
         CLAVA_IMPORTABLE_CLASSES.addAll(LaraExtraApis.getImportableClasses());
+        CLAVA_IMPORTABLE_CLASSES.addAll(ClavaLaraApis.getImportableClasses());
         CLAVA_IMPORTABLE_CLASSES.addAll(
                 Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
                         CsvField.class, ProgressCounter.class, ClavaPlatforms.class, ClavaWeaverLauncher.class,
