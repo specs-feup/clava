@@ -113,7 +113,7 @@ public class CxxWeaver extends ACxxWeaver {
     static {
         WEAVER_OPTIONS = new HashMap<>();
         WEAVER_OPTIONS.put(ClavaOptions.STANDARD.getName(),
-                WeaverOptionBuilder.build("s", "standard", OptionArguments.ONE_ARG, "C/C++ standard",
+                WeaverOptionBuilder.build("std", "standard", OptionArguments.ONE_ARG, "C/C++ standard",
                         "What C/C++ standard should be used. Currently supported standards: "
                                 + Standard.getEnumHelper().getAvailableOptions(),
                         ClavaOptions.STANDARD));
