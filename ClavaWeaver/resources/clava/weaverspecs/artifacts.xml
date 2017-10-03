@@ -215,6 +215,11 @@
 			tooltip="A scope, associated with this marker" />
 	</artifact>
 
+	<!-- TAG -->
+	<artifact class="tag" default="id">
+		<attribute name="id" type="String" tooltip="The ID of the pragma"/>
+	</artifact>
+
 	<!-- BINARY OPERATOR -->
 	<artifact class="binaryOp">
 		<attribute name="kind" type="String" />

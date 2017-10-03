@@ -87,6 +87,12 @@ public abstract class AScope extends ACxxWeaverJoinPoint {
     public abstract List<? extends AMarker> selectMarker();
 
     /**
+     * Method used by the lara interpreter to select tags
+     * @return 
+     */
+    public abstract List<? extends ATag> selectTag();
+
+    /**
      * Method used by the lara interpreter to select omps
      * @return 
      */
@@ -258,6 +264,9 @@ public abstract class AScope extends ACxxWeaverJoinPoint {
         	case "marker": 
         		joinPointList = selectMarker();
         		break;
+        	case "tag": 
+        		joinPointList = selectTag();
+        		break;
         	case "omp": 
         		joinPointList = selectOmp();
         		break;
@@ -293,6 +302,7 @@ public abstract class AScope extends ACxxWeaverJoinPoint {
         selects.add("loop");
         selects.add("pragma");
         selects.add("marker");
+        selects.add("tag");
         selects.add("omp");
         selects.add("comment");
     }

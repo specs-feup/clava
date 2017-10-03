@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
+import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -47,6 +48,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
@@ -169,6 +171,11 @@ public class CxxFile extends AFile {
     }
 
     @Override
+    public List<? extends ATag> selectTag() {
+        return CxxSelects.select(ATag.class, tunit.getChildren(), true, this, LaraTagPragma.class);
+    }
+
+    @Override
     public List<? extends ARecord> selectRecord() {
         return CxxSelects.select(ARecord.class, tunit.getChildren(), true, this, RecordDecl.class);
     }
@@ -201,7 +208,7 @@ public class CxxFile extends AFile {
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-        
+
         return path;
         */
     }
@@ -272,7 +279,7 @@ public class CxxFile extends AFile {
         LiteralExpr literalExpr = ClavaNodeFactory.literalExpr(initValue,
                 ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
 
-        tunit.getApp().getGlobalManager().addGlobal(tunit, name, (Type) typeNode, literalExpr);
+        tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
 
     }
 
