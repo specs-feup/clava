@@ -7083,6 +7083,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "initValue"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The expression of the last value of the control variable (e.g. 'length' in 'i < length;')",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "endValue"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",

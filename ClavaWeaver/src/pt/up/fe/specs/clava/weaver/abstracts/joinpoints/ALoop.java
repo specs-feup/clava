@@ -227,6 +227,52 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     */
+    public abstract String getInitValueImpl();
+
+    /**
+     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     */
+    public final Object getInitValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initValue", Optional.empty());
+        	}
+        	String result = this.getInitValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "initValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "initValue", e);
+        }
+    }
+
+    /**
+     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+     */
+    public abstract String getEndValueImpl();
+
+    /**
+     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+     */
+    public final Object getEndValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endValue", Optional.empty());
+        	}
+        	String result = this.getEndValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "endValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "endValue", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -626,6 +672,8 @@ public abstract class ALoop extends AStatement {
         attributes.add("rank");
         attributes.add("isParallel");
         attributes.add("iterations");
+        attributes.add("initValue");
+        attributes.add("endValue");
     }
 
     /**
@@ -686,6 +734,8 @@ public abstract class ALoop extends AStatement {
         RANK("rank"),
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
+        INITVALUE("initValue"),
+        ENDVALUE("endValue"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
