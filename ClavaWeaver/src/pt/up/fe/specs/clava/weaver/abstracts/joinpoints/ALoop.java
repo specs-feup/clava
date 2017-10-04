@@ -303,6 +303,84 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public void setInitImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setInit not implemented ");
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public final void setInit(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), initCode);
+        	}
+        	this.setInitImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'.
+     * @param condCode 
+     */
+    public void setCondImpl(String condCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setCond not implemented ");
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'.
+     * @param condCode 
+     */
+    public final void setCond(String condCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCond", this, Optional.empty(), condCode);
+        	}
+        	this.setCondImpl(condCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCond", this, Optional.empty(), condCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCond", e);
+        }
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'.
+     * @param stepCode 
+     */
+    public void setStepImpl(String stepCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setStep not implemented ");
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'.
+     * @param stepCode 
+     */
+    public final void setStep(String stepCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setStep", this, Optional.empty(), stepCode);
+        	}
+        	this.setStepImpl(stepCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setStep", this, Optional.empty(), stepCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setStep", e);
+        }
+    }
+
+    /**
      * Get value on attribute isFirst
      * @return the attribute's value
      */
@@ -570,6 +648,9 @@ public abstract class ALoop extends AStatement {
         this.aStatement.fillWithActions(actions);
         actions.add("void changeKind(String)");
         actions.add("void setKind(String)");
+        actions.add("void setInit(String)");
+        actions.add("void setCond(String)");
+        actions.add("void setStep(String)");
     }
 
     /**

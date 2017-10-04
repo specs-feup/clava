@@ -7476,6 +7476,48 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the init statement of the loop. Works with loops of kind 'for'.",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "initCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the conditional statement of the loop. Works with loops of kind 'for'.",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCond"
+                           },
+                           {
+                              "type": "String",
+                              "name": "condCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the step statement of the loop. Works with loops of kind 'for'.",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setStep"
+                           },
+                           {
+                              "type": "String",
+                              "name": "stepCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",

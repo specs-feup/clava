@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
+import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
@@ -100,17 +101,17 @@ public class CxxLoop extends ALoop {
         if (!(loop instanceof ForStmt)) {
             return 0;
         }
-    
+
         ForStmt forLoop = (ForStmt) loop;
-    
+
         Stmt inc = forLoop.getInc().orElse(null);
         if (inc == null) {
             return 0;
         }
-    
+
         // TODO: Regular expression for <VAR_NAME>++; / <VAR_NAME>--;
         System.out.println("INC CODE:" + inc);
-    
+
         return 0;
     }
     */
@@ -284,16 +285,16 @@ public class CxxLoop extends ALoop {
         /*
         // Map<String, Consumer<? extends Object>> defMap = new HashMap<>();
         // defMap.put("qq", obj -> consumerString(obj));
-        
+
         // Check if loop is annotated with pragma "parallel"
         List<Pragma> pragmas = ClavaNodes.getPragmas(getNode());
-        
+
         boolean result = pragmas.stream()
                 .filter(pragma -> pragma.getName().equals("clava"))
                 .filter(clavaPragma -> clavaPragma.getContent().equals("parallel"))
                 .findFirst()
                 .isPresent();
-        
+
         return result;
         */
     }
@@ -350,4 +351,39 @@ public class CxxLoop extends ALoop {
 
     }
 
+    @Override
+    public void setInitImpl(String initCode) {
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+
+        ((ForStmt) loop).setInit(literalStmt);
+    }
+
+    @Override
+    public void setCondImpl(String condCode) {
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(condCode + ";");
+
+        ((ForStmt) loop).setCond(literalStmt);
+    }
+
+    @Override
+    public void setStepImpl(String stepCode) {
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(stepCode);
+
+        ((ForStmt) loop).setInc(literalStmt);
+    }
 }
