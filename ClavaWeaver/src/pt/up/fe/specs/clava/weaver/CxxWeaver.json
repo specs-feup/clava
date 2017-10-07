@@ -2864,6 +2864,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if the program was compiled with a C++ standard",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCxx"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "The name of the standard (e.g., c99, c++11)",
                   "children": [
                            {

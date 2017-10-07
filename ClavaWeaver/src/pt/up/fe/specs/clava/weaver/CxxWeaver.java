@@ -708,7 +708,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public Optional<String> getName() {
-        return Optional.of("Clava v1.2.1");
+        return Optional.of("Clava v1.2.2");
     }
 
     public DataStore getConfig() {

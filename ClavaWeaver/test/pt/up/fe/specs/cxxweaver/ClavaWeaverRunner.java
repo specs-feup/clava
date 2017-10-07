@@ -37,7 +37,8 @@ public class ClavaWeaverRunner {
         // -t ../lara-dse/larai/resources/tools.xml -b 2 -nw";
         // String argsString = " ..\\lara-dse\\LaradLauncher.lara -av \"('../lara-dse', 'DSP_autocor_c/DSP_autocor_c.c',
         // 'llvm')\" -nw -nci -b 2";
-        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av \"{laradFoldername:'../lara-dse/', sourceFile:'DSP_autocor_c/DSP_autocor_c.c', compiler:'llvm', nsteps:10, language:'c', target:'host-intel', algo:'sa', metric:'performance', seqlen:32, nexec:30, nr:-1, clean:1, passes:'', percent:2, append:'', metrics:['performance', 'size']}\" -nw  -b 2"; // -nci
+        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av \"{laradFoldername:'../lara-dse/', sourceFile:'DSP_autocor_c/DSP_autocor_c.c', compiler:'llvm', nsteps:10, language:'c', target:'host-intel', algo:'sa', metric:'performance', seqlen:32, nexec:30, nr:-1, clean:1, passes:'', percent:2, append:'', metrics:['performance'], alreadyInstrumented:false}\" -nw  -b 2"; // --stack
+        // -nci
         List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
 
         SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);
@@ -50,6 +51,19 @@ public class ClavaWeaverRunner {
                 "C:\\Users\\JoaoBispo\\Desktop\\shared\\clava-tests\\Tests\\2017-09_lara_resource\\resource_example.clava");
 
         ClavaWeaverLauncher.main(new String[] { "--config", configFile.getAbsolutePath() });
+    }
+
+    @Test
+    public void testLat() {
+        File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\AntarexIT4I\\Probability");
+
+        // String argsString = " LatDse.lara -nw -b 2"; // --stack
+        String argsString = "-c LatDse.clava"; // --stack
+        // -nci
+        List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
+
+        SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);
+
     }
 
 }

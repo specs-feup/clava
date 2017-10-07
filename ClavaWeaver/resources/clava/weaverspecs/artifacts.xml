@@ -66,6 +66,7 @@
 	<!-- PROGRAM -->
 	<artifact class="program" default="name">
 		<attribute name="name" type="String" />
+		<attribute name="isCxx" type="Boolean" tooltip="true if the program was compiled with a C++ standard"/>
 		<attribute name="standard" type="String" tooltip="The name of the standard (e.g., c99, c++11)"/>
 		<attribute name="stdFlag" type="String" tooltip="The flag of the standard (e.g., -std=c++11)" />
 		<attribute name="defaultFlags" type="String[]" />

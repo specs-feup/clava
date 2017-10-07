@@ -47,6 +47,29 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * true if the program was compiled with a C++ standard
+     */
+    public abstract Boolean getIsCxxImpl();
+
+    /**
+     * true if the program was compiled with a C++ standard
+     */
+    public final Object getIsCxx() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCxx", Optional.empty());
+        	}
+        	Boolean result = this.getIsCxxImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCxx", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCxx", e);
+        }
+    }
+
+    /**
      * The name of the standard (e.g., c99, c++11)
      */
     public abstract String getStandardImpl();
@@ -375,6 +398,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("name");
+        attributes.add("isCxx");
         attributes.add("standard");
         attributes.add("stdFlag");
         attributes.add("defaultFlags");
@@ -418,6 +442,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     protected enum ProgramAttributes {
         NAME("name"),
+        ISCXX("isCxx"),
         STANDARD("standard"),
         STDFLAG("stdFlag"),
         DEFAULTFLAGS("defaultFlags"),

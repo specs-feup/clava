@@ -161,7 +161,7 @@
 		<select alias="operand"			class="expression"/>
 	</joinpoint>		
 	
-	
+
 	<!-- EXPRESSION -->
 	<joinpoint class="expression">
 			<select class="vardecl"/>

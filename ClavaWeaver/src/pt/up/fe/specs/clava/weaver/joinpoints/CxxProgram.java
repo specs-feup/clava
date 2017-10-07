@@ -160,4 +160,10 @@ public class CxxProgram extends AProgram {
     public String getWeavingFolderImpl() {
         return weaver.getWeavingFolder().getAbsolutePath();
     }
+
+    @Override
+    public Boolean getIsCxxImpl() {
+        return weaver.getConfig().get(ClavaOptions.STANDARD).isCxx();
+    }
+
 }
