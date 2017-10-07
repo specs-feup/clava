@@ -20,6 +20,12 @@ Clava.getStandard = function() {
 	return standardResult.standard;
 }
 
+Clava.isCxx = function() {	
+	call standardResult:ClavaIsCxx();
+	
+	return standardResult.isCxx;
+}
+
 Clava.rebuild = function() {
 	call Rebuild();
 }; 
