@@ -43,9 +43,14 @@ public interface ClangNodeParser<T extends ClavaNode> {
     }
 
     default List<ClavaNode> parseChildren(Stream<ClangNode> stream) {
-        // Check if inside a Type parser
-        boolean isTypeParser = getClass().getSimpleName().endsWith("TypeParser");
+        return parseChildren(stream, getClass().getSimpleName());
+    }
 
+    default List<ClavaNode> parseChildren(Stream<ClangNode> stream, String parentNodeName) {
+        // Check if inside a Type parser
+        boolean isTypeParser = parentNodeName.endsWith("TypeParser");
+        // boolean isTypeParser = getClass().getSimpleName().endsWith("TypeParser");
+        // System.out.println("IS TYPE PARSER:" + isTypeParser);
         return stream.map(child -> parseChild(child, isTypeParser))
                 // Remove full comment nodes
                 .filter(clavaNode -> !(clavaNode instanceof FullComment))

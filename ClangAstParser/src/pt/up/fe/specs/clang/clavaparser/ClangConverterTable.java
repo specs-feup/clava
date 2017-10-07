@@ -27,6 +27,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
+import pt.up.fe.specs.clang.clavaparser.extra.UndefinedParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -120,12 +121,15 @@ public class ClangConverterTable implements AutoCloseable {
 
         // If map does not have a conversor, stop
         if (!converter.containsKey(clangNode.getName())) {
-            List<ClavaNode> children = clangNode.getChildrenStream()
-                    .map(child -> parse(child))
-                    .collect(Collectors.toList());
+            UndefinedParser undefinedParser = new UndefinedParser(this);
+            return undefinedParser.parse(clangNode);
 
-            return ClavaNodeFactory.undefined(clangNode.getName(), clangNode.getDescription(), clangNode.getInfo(),
-                    children);
+            // List<ClavaNode> children = clangNode.getChildrenStream()
+            // .map(child -> parse(child))
+            // .collect(Collectors.toList());
+            //
+            // return ClavaNodeFactory.undefined(clangNode.getName(), clangNode.getDescription(), clangNode.getInfo(),
+            // children);
 
         }
 

@@ -393,6 +393,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     @Override
     public ClavaNode parseChild(ClangNode node, boolean isTypeParser) {
         // If parsing an expression during type parsing phase, delay parsing
+        // if (isTypeParser && node.getName().equals("ParenExpr")) {
+        // System.out.println("IS DELAYED? " + CppParsing.isExprNodeName(node.getName()));
+        // }
+
         if (isTypeParser && CppParsing.isExprNodeName(node.getName())) {
             return new DelayedParsingExpr(node);
         }

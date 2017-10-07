@@ -36,7 +36,7 @@ public class TypedefTypeParser extends AClangNodeParser<TypedefType> {
 
     @Override
     public TypedefType parse(ClangNode node, StringParser parser) {
-
+        // System.out.println("TYPEPARSER:" + node.getLocation());
         // Examples:
         //
         // 'string' sugar
@@ -49,8 +49,10 @@ public class TypedefTypeParser extends AClangNodeParser<TypedefType> {
 
         parser.apply(ClangGenericParsers::clear);
 
-        List<ClavaNode> children = parseChildren(node);
+        // System.out.println("TYPEDEF TYPE CHILDREN:" + node.getChildren());
 
+        List<ClavaNode> children = parseChildren(node);
+        // System.out.println("TYPEPARSER END CHILD PARSING");
         checkNumChildren(children, 2);
 
         // First child is information about a declaration node
