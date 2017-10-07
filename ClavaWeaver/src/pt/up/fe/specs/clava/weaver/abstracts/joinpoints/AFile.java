@@ -252,6 +252,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     public abstract List<? extends AMarker> selectMarker();
 
     /**
+     * Method used by the lara interpreter to select tags
+     * @return 
+     */
+    public abstract List<? extends ATag> selectTag();
+
+    /**
      * Method used by the lara interpreter to select vardecls
      * @return 
      */
@@ -535,6 +541,9 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	case "marker": 
         		joinPointList = selectMarker();
         		break;
+        	case "tag": 
+        		joinPointList = selectTag();
+        		break;
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
@@ -578,6 +587,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         selects.add("class");
         selects.add("pragma");
         selects.add("marker");
+        selects.add("tag");
         selects.add("vardecl");
         selects.add("comment");
     }

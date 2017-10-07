@@ -227,6 +227,52 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     */
+    public abstract String getInitValueImpl();
+
+    /**
+     * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+     */
+    public final Object getInitValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initValue", Optional.empty());
+        	}
+        	String result = this.getInitValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "initValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "initValue", e);
+        }
+    }
+
+    /**
+     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+     */
+    public abstract String getEndValueImpl();
+
+    /**
+     * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+     */
+    public final Object getEndValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endValue", Optional.empty());
+        	}
+        	String result = this.getEndValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "endValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "endValue", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -299,6 +345,84 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setKind", e);
+        }
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public void setInitImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setInit not implemented ");
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public final void setInit(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), initCode);
+        	}
+        	this.setInitImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInit", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'.
+     * @param condCode 
+     */
+    public void setCondImpl(String condCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setCond not implemented ");
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'.
+     * @param condCode 
+     */
+    public final void setCond(String condCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCond", this, Optional.empty(), condCode);
+        	}
+        	this.setCondImpl(condCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCond", this, Optional.empty(), condCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCond", e);
+        }
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'.
+     * @param stepCode 
+     */
+    public void setStepImpl(String stepCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setStep not implemented ");
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'.
+     * @param stepCode 
+     */
+    public final void setStep(String stepCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setStep", this, Optional.empty(), stepCode);
+        	}
+        	this.setStepImpl(stepCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setStep", this, Optional.empty(), stepCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setStep", e);
         }
     }
 
@@ -548,6 +672,8 @@ public abstract class ALoop extends AStatement {
         attributes.add("rank");
         attributes.add("isParallel");
         attributes.add("iterations");
+        attributes.add("initValue");
+        attributes.add("endValue");
     }
 
     /**
@@ -570,6 +696,9 @@ public abstract class ALoop extends AStatement {
         this.aStatement.fillWithActions(actions);
         actions.add("void changeKind(String)");
         actions.add("void setKind(String)");
+        actions.add("void setInit(String)");
+        actions.add("void setCond(String)");
+        actions.add("void setStep(String)");
     }
 
     /**
@@ -605,6 +734,8 @@ public abstract class ALoop extends AStatement {
         RANK("rank"),
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
+        INITVALUE("initValue"),
+        ENDVALUE("endValue"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

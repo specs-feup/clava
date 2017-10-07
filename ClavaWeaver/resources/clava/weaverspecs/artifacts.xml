@@ -116,6 +116,9 @@
 		<attribute name="rank" type="String" />
 		<attribute name="isParallel" type="Boolean" />
 		<attribute name="iterations" type="Integer" />
+		
+		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')"/>
+		<attribute name="endValue" type="String" tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')"/>
 	</artifact>
 
 
@@ -214,6 +217,11 @@
 		<attribute name="id" type="String" />
 		<attribute name="contents" type="joinpoint"
 			tooltip="A scope, associated with this marker" />
+	</artifact>
+
+	<!-- TAG -->
+	<artifact class="tag" default="id">
+		<attribute name="id" type="String" tooltip="The ID of the pragma"/>
 	</artifact>
 
 	<!-- BINARY OPERATOR -->

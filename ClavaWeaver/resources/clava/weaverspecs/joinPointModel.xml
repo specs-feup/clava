@@ -25,7 +25,8 @@
 		<select 						class="struct"/>
 		<select 						class="class"/>
 		<select							class="pragma"/>
-		<select							class="marker"/>		
+		<select							class="marker"/>
+		<select							class="tag"/>		
 		<select 						class="vardecl"/>
 		<select 						class="comment"/>
 	</joinpoint>
@@ -55,6 +56,10 @@
 	<!-- MARKER -->
 	<joinpoint class="marker" extends="pragma">
 		<select alias="contents"			class="scope"/>
+	</joinpoint>
+	
+	<!-- TAG -->
+	<joinpoint class="tag" extends="pragma" tooltip="A pragma that references a point in the code and sticks to it">
 	</joinpoint>
 	
 	<!-- OMP PRAGMA -->
@@ -99,7 +104,8 @@
 		<select							class="if"/>
 		<select							class="loop"/>
 		<select							class="pragma"/>
-		<select							class="marker"/>	
+		<select							class="marker"/>
+		<select							class="tag"/>	
 		<select							class="omp"/>	
 		<select 						class="comment"/>
 	</joinpoint>

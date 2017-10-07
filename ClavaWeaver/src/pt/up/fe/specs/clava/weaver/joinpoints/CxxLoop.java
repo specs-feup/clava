@@ -16,9 +16,11 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
@@ -29,9 +31,14 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
+import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
@@ -350,4 +357,113 @@ public class CxxLoop extends ALoop {
 
     }
 
+    @Override
+    public void setInitImpl(String initCode) {
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+
+        ((ForStmt) loop).setInit(literalStmt);
+    }
+
+    @Override
+    public void setCondImpl(String condCode) {
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(condCode + ";");
+
+        ((ForStmt) loop).setCond(literalStmt);
+    }
+
+    @Override
+    public void setStepImpl(String stepCode) {
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(stepCode);
+
+        ((ForStmt) loop).setInc(literalStmt);
+    }
+
+    @Override
+    public String getInitValueImpl() {
+
+        if ((loop instanceof ForStmt)) {
+
+            Optional<Stmt> initOpt = ((ForStmt) loop).getInit();
+
+            if (initOpt.isPresent()) {
+
+                Stmt init = initOpt.get();
+
+                ClavaNode child = init.getChild(0);
+
+                if (child instanceof VarDecl) {
+
+                    VarDecl decl = (VarDecl) child;
+
+                    Optional<Expr> declInitOpt = decl.getInit();
+                    if (declInitOpt.isPresent()) {
+
+                        return declInitOpt.get().getCode();
+                    }
+                } else if (child instanceof BinaryOperator) {
+
+                    BinaryOperator binOp = (BinaryOperator) child;
+                    if (binOp.getOp() == BinaryOperatorKind.ASSIGN) {
+
+                        return binOp.getRhs().getCode();
+                    }
+                }
+            }
+        }
+
+        ClavaLog.warning(
+                "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
+        return null;
+    }
+
+    @Override
+    public String getEndValueImpl() {
+
+        Set<BinaryOperatorKind> ops = new HashSet<>();
+        ops.add(BinaryOperatorKind.LE);
+        ops.add(BinaryOperatorKind.LT);
+        ops.add(BinaryOperatorKind.GE);
+        ops.add(BinaryOperatorKind.GT);
+        ops.add(BinaryOperatorKind.NE);
+
+        if ((loop instanceof ForStmt)) {
+
+            Optional<Stmt> condOpt = ((ForStmt) loop).getCond();
+
+            if (condOpt.isPresent()) {
+
+                Stmt cond = condOpt.get();
+
+                ClavaNode child = cond.getChild(0);
+
+                if (child instanceof BinaryOperator) {
+
+                    BinaryOperator binOp = (BinaryOperator) child;
+                    if (ops.contains(binOp.getOp())) {
+
+                        return binOp.getRhs().getCode();
+                    }
+                }
+            }
+        }
+
+        ClavaLog.warning(
+                "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
+        return null;
+    }
 }

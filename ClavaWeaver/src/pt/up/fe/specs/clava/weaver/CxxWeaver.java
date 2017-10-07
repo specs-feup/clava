@@ -510,7 +510,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     private List<String> processSources(List<File> sources) {
         List<String> sourceFiles = SpecsIo.getFiles(sources, App.getExtensionsImplementation());
-        // List<String> sourceFiles = IoUtils.getFiles(sources, App.getPermittedExtensions());
+        // List<String> sourceFiles = SpecsIo.getFiles(sources, App.getPermittedExtensions());
 
         if (!sourceFiles.isEmpty()) {
             return sourceFiles;

@@ -1,11 +1,11 @@
 /**
  * Copyright 2017 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
+import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -43,6 +44,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 
 public class CxxScope extends AScope {
@@ -263,6 +265,11 @@ public class CxxScope extends AScope {
     @Override
     public List<? extends AMarker> selectMarker() {
         return CxxSelects.select(AMarker.class, getStatements(), true, this, LaraMarkerPragma.class);
+    }
+
+    @Override
+    public List<? extends ATag> selectTag() {
+        return CxxSelects.select(ATag.class, getStatements(), true, this, LaraTagPragma.class);
     }
 
     @Override
