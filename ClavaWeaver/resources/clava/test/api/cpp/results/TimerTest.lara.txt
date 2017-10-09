@@ -14,7 +14,7 @@ double foo() {
       a += bar();
       std::chrono::high_resolution_clock::time_point clava_timing_end_0 = std::chrono::high_resolution_clock::now();
       auto clava_timing_duration_0 = std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_end_0 - clava_timing_start_0).count();
-      std::cout << "Time:" << clava_timing_duration_0 << "ms" << "\n";
+      std::cout << "Time:" << clava_timing_duration_0 << "ms" << std::endl;
    }
    
    return a;
@@ -26,5 +26,5 @@ int main() {
    foo();
    std::chrono::high_resolution_clock::time_point clava_timing_end_1 = std::chrono::high_resolution_clock::now();
    auto clava_timing_duration_1 = std::chrono::duration_cast<std::chrono::milliseconds>(clava_timing_end_1 - clava_timing_start_1).count();
-   std::cout << "Time:" << clava_timing_duration_1 << "ms" << "\n";
+   std::cout << "Time:" << clava_timing_duration_1 << "ms" << std::endl;
 }
