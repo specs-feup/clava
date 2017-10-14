@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class UnresolvedLookupExprParser extends AClangNodeParser<UnresolvedLookupExpr> {
 
@@ -48,7 +49,7 @@ public class UnresolvedLookupExprParser extends AClangNodeParser<UnresolvedLooku
         parser.apply(ClangGenericParsers::ensureWord, "ADL)");
         parser.apply(ClangGenericParsers::ensureWord, "=");
 
-        String name = parser.apply(ClangGenericParsers::parseNested, '\'', '\'');
+        String name = parser.apply(StringParsers::parseNested, '\'', '\'');
 
         boolean noDecls = parser.apply(ClangGenericParsers::checkWord, "empty");
         List<String> decls = noDecls ? Collections.emptyList()

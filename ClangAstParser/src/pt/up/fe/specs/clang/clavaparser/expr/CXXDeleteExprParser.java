@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXDeleteExprParser extends AClangNodeParser<CXXDeleteExpr> {
 
@@ -51,7 +52,7 @@ public class CXXDeleteExprParser extends AClangNodeParser<CXXDeleteExpr> {
         parser.apply(string -> ClangGenericParsers.checkWord(string, "Function"));
         Long functionAddress = parser.apply(ClangGenericParsers::parseHex);
 
-        String operator = parser.apply(string -> ClangGenericParsers.parseNested(string, '\'', '\''));
+        String operator = parser.apply(string -> StringParsers.parseNested(string, '\'', '\''));
         Type functionType = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
         Type type2 = getTypesMap().get(node.getExtendedId());

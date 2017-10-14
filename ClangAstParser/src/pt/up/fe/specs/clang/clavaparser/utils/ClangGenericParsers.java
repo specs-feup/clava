@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -61,75 +60,8 @@ public class ClangGenericParsers {
         return new ParserResult<>(new StringSlice(""), string.toString());
     }
 
-    /**
-     * Parses a string inside primes ('), separated by spaces.
-     * <p>
-     * Receives a string starting with "'{element}' ( '{element}')*", returns a list with the elements, without the
-     * primes.
-     * 
-     * @param string
-     * @return
-     */
-    public static ParserResult<String> parseNested(StringSlice string, char begin, char end) {
-        BiPredicate<StringSlice, Integer> endPredicate = (slice, endIndex) -> slice.charAt(endIndex) == end;
-
-        return parseNested(string, begin, end, endPredicate);
-    }
-
-    /**
-     * Parses a string between the given begin and end characters, trims the slice in the end.
-     * 
-     * @param string
-     * @param begin
-     * @param end
-     * @param endPredicate
-     * @return
-     */
-    public static ParserResult<String> parseNested(StringSlice string, char begin, char end,
-            BiPredicate<StringSlice, Integer> endPredicate) {
-
-        // string = string.trim();
-
-        Preconditions.checkArgument(!string.isEmpty());
-
-        if (string.charAt(0) != begin) {
-            return new ParserResult<>(string, "");
-        }
-
-        int counter = 1;
-        int endIndex = 0;
-        while (counter > 0) {
-            endIndex++;
-
-            // If found end char, decrement
-            // if (string.charAt(endIndex) == end) {
-            if (endPredicate.test(string, endIndex)) {
-                counter--;
-                continue;
-            }
-
-            // If found start char, increment
-            if (string.charAt(endIndex) == begin) {
-                counter++;
-                continue;
-            }
-        }
-
-        // Return string without separators
-        String result = string.substring(1, endIndex).toString();
-
-        // Cut string from parser
-        if (endIndex < string.length() - 1) {
-            string = string.substring(endIndex + 1);
-        } else {
-            string = new StringSlice("");
-        }
-
-        return new ParserResult<>(string, result);
-    }
-
     public static ParserResult<String> parseParenthesis(StringSlice string) {
-        return parseNested(string, '(', ')');
+        return StringParsers.parseNested(string, '(', ')');
     }
 
     public static ParserResult<List<Type>> parseClangTypeList(StringSlice string, ClangNode node,
@@ -217,7 +149,7 @@ public class ClangGenericParsers {
         // While string starts with a prime (')
         while (string.startsWith("'")) {
             // Get string between primes
-            ParserResult<String> primeString = parseNested(string, '\'', '\'');
+            ParserResult<String> primeString = StringParsers.parseNested(string, '\'', '\'');
 
             // Update string
             string = primeString.getModifiedString();
@@ -583,7 +515,7 @@ public class ClangGenericParsers {
      */
     public static ParserResult<CastKind> parseCastKind(StringSlice string) {
 
-        ParserResult<String> nestedResult = ClangGenericParsers.parseNested(string, '<', '>',
+        ParserResult<String> nestedResult = StringParsers.parseNested(string, '<', '>',
                 ClangGenericParsers::kindEndPredicate);
 
         string = nestedResult.getModifiedString();
@@ -1052,7 +984,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static ParserResult<String> parsePrimes(StringSlice string) {
-        return parseNested(string, '\'', '\'');
+        return StringParsers.parseNested(string, '\'', '\'');
     }
 
 }

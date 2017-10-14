@@ -58,9 +58,9 @@ import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.parsing.ListParser;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -365,7 +365,7 @@ public class ClangDataParsers {
         StringParser parser = new StringParser(string);
 
         parser.apply(ClangGenericParsers::ensureStringStarts, castName);
-        String typeAsWritten = parser.apply(ClangGenericParsers::parseNested, '<', '>');
+        String typeAsWritten = parser.apply(StringParsers::parseNested, '<', '>');
         CastKind castKind = parser.apply(ClangGenericParsers::parseCastKind);
 
         CXXNamedCastExprData cxxNamedCastExprData = new CXXNamedCastExprData(castName, typeAsWritten, castKind);

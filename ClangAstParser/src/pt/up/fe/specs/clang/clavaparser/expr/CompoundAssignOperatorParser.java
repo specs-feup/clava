@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CompoundAssignOperatorParser extends AClangNodeParser<CompoundAssignOperator> {
 
@@ -46,7 +47,7 @@ public class CompoundAssignOperatorParser extends AClangNodeParser<CompoundAssig
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         // Parse operator kind
-        String compountOperator = parser.apply(string -> ClangGenericParsers.parseNested(string, '\'', '\''));
+        String compountOperator = parser.apply(string -> StringParsers.parseNested(string, '\'', '\''));
         // Check that there is an '=' at the end of the string
         if (!compountOperator.endsWith("=")) {
             throw new RuntimeException("Expected string '" + compountOperator + "' to end with '='");

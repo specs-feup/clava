@@ -21,13 +21,13 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXBindTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXBindTemporaryExprParser extends AClangNodeParser<CXXBindTemporaryExpr> {
 
@@ -41,7 +41,7 @@ public class CXXBindTemporaryExprParser extends AClangNodeParser<CXXBindTemporar
         // 'std::string':'class std::__cxx11::basic_string<char>' (CXXTemporary 0x4992ff8)
 
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
-        String addressString = parser.apply(string -> ClangGenericParsers.parseNested(string, '(', ')'));
+        String addressString = parser.apply(string -> StringParsers.parseNested(string, '(', ')'));
         String temporaryAddress = parseAddress(addressString);
 
         List<ClavaNode> children = parseChildren(node);

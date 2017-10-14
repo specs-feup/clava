@@ -16,10 +16,10 @@ package pt.up.fe.specs.clang.clavaparser.extra;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class OriginalNamespaceParser extends AClangNodeParser<OriginalNamespace> {
 
@@ -29,7 +29,7 @@ public class OriginalNamespaceParser extends AClangNodeParser<OriginalNamespace>
 
     @Override
     protected OriginalNamespace parse(ClangNode node, StringParser parser) {
-        String namespace = parser.apply(string -> ClangGenericParsers.parseNested(string, '\'', '\''));
+        String namespace = parser.apply(string -> StringParsers.parseNested(string, '\'', '\''));
 
         checkNoChildren(node);
 

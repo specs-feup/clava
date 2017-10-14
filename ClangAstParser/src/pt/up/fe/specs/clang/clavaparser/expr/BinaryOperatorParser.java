@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
@@ -31,6 +30,7 @@ import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class BinaryOperatorParser extends AClangNodeParser<BinaryOperator> {
 
@@ -48,7 +48,7 @@ public class BinaryOperatorParser extends AClangNodeParser<BinaryOperator> {
         // 'double (*)(const map<AtomIndex, class Atom>, const vector<class Atom> &, const int)' lvalue '='
 
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
-        String opString = parser.apply(string -> ClangGenericParsers.parseNested(string, '\'', '\''));
+        String opString = parser.apply(string -> StringParsers.parseNested(string, '\'', '\''));
         BinaryOperatorKind op = parseOp(opString);
 
         List<ClavaNode> children = parseChildren(node);
