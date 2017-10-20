@@ -1,6 +1,7 @@
 import lara.Io;
 import clava.ClavaAspects;
-
+import clava.util.ClavaDataStore;
+import weaver.WeaverOptions;
 
 var Clava = {};
 
@@ -68,7 +69,7 @@ Clava.cLinkageEnd = %{
  * @return {Boolean} true if the weaver execution without problems, false otherwise
  */
 Clava.runClava = function(args) {
-	
+
 	// If string, separate arguments
 	if(typeof args  === "string") {
 		args = ArgumentsParser.newCommandLine().parse(args);
@@ -125,4 +126,11 @@ Clava.writeCode = function(outputFoldername) {
 	CxxWeaverApi.writeCode(outputFolder);
 	
 	return outputFolder;
+}
+
+/**
+ * @return DataStore with the data of the current weaver
+ */
+Clava.getData = function() {
+	return new ClavaDataStore(WeaverOptions.getData());
 }
