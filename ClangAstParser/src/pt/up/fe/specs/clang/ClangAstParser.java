@@ -791,6 +791,8 @@ public class ClangAstParser {
             return ClangAstWebResource.CENTOS6_EXE;
         case LINUX:
             return ClangAstWebResource.LINUX_EXE;
+        case MAC_OS:
+            return ClangAstWebResource.MAC_OS_EXE;
         default:
             throw new RuntimeException("Case not defined: '" + platform + "'");
         }

@@ -31,7 +31,8 @@ public enum SupportedPlatform implements StringProvider {
 
     WINDOWS,
     CENTOS6,
-    LINUX;
+    LINUX,
+    MAC_OS;
 
     private static final Lazy<EnumHelper<SupportedPlatform>> HELPER = EnumHelper
             .newLazyHelper(SupportedPlatform.class);
@@ -52,6 +53,11 @@ public enum SupportedPlatform implements StringProvider {
             return CENTOS6;
         }
 
+        // Generic Mac
+        if (SpecsPlatforms.isMac()) {
+            return MAC_OS;
+        }
+
         // Generic Linux (Debian-based)
         if (SpecsPlatforms.isLinux()) {
             return LINUX;
@@ -70,7 +76,7 @@ public enum SupportedPlatform implements StringProvider {
     }
 
     public boolean isLinux() {
-        return this == SupportedPlatform.CENTOS6 || this == LINUX;
+        return this == SupportedPlatform.CENTOS6 || this == MAC_OS || this == LINUX;
     }
 
     public String getName() {
