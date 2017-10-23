@@ -151,4 +151,8 @@ public class CxxTest {
         newTester().test("Wrap.lara", "wrap.cpp", "wrap.h");
     }
 
+    @Test
+    public void testSelectVarDecl() {
+        newTester().test("SelectVardecl.lara", "select_vardecl.cpp");
+    }
 }

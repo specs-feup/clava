@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.List;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
@@ -22,6 +24,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 
 public class CxxCast extends ACast {
 
@@ -65,6 +68,11 @@ public class CxxCast extends ACast {
     @Override
     public AJoinPoint getVardeclImpl() {
         return ((AExpression) CxxJoinpoints.create(cast.getSubExpr(), this)).getVardeclImpl();
+    }
+
+    @Override
+    public List<? extends AVardecl> selectVardecl() {
+        return CxxExpression.selectVarDecl(this);
     }
 
 }

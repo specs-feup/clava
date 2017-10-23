@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 
 public class CxxArrayAccess extends AArrayAccess {
@@ -66,6 +67,11 @@ public class CxxArrayAccess extends AArrayAccess {
     @Override
     public AJoinPoint getVardeclImpl() {
         return ((AExpression) CxxJoinpoints.create(arraySub.getDeclRef(), this)).getVardeclImpl();
+    }
+
+    @Override
+    public List<? extends AVardecl> selectVardecl() {
+        return CxxExpression.selectVarDecl(this);
     }
 
     @Override

@@ -201,6 +201,9 @@ public abstract class AParam extends AVardecl {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "init": 
+        		joinPointList = selectInit();
+        		break;
         	default:
         		joinPointList = this.aVardecl.select(selectName);
         		break;

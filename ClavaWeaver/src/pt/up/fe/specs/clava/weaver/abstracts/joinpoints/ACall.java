@@ -439,6 +439,9 @@ public abstract class ACall extends AExpression {
         	case "arg": 
         		joinPointList = selectArg();
         		break;
+        	case "vardecl": 
+        		joinPointList = selectVardecl();
+        		break;
         	default:
         		joinPointList = this.aExpression.select(selectName);
         		break;

@@ -271,6 +271,9 @@ public abstract class AVarref extends AExpression {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "vardecl": 
+        		joinPointList = selectVardecl();
+        		break;
         	default:
         		joinPointList = this.aExpression.select(selectName);
         		break;

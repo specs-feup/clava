@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.List;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
@@ -20,6 +21,7 @@ import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 
 public class CxxVarref extends AVarref {
@@ -69,6 +71,11 @@ public class CxxVarref extends AVarref {
         }
 
         return CxxJoinpoints.create(varDecl.get(), null);
+    }
+
+    @Override
+    public List<? extends AVardecl> selectVardecl() {
+        return CxxExpression.selectVarDecl(this);
     }
 
     @Override

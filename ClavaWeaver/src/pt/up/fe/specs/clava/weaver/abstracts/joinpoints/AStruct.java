@@ -173,6 +173,9 @@ public abstract class AStruct extends ARecord {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "field": 
+        		joinPointList = selectField();
+        		break;
         	default:
         		joinPointList = this.aRecord.select(selectName);
         		break;

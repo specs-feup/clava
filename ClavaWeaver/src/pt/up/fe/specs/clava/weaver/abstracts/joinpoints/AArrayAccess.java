@@ -251,6 +251,9 @@ public abstract class AArrayAccess extends AExpression {
         	case "subscript": 
         		joinPointList = selectSubscript();
         		break;
+        	case "vardecl": 
+        		joinPointList = selectVardecl();
+        		break;
         	default:
         		joinPointList = this.aExpression.select(selectName);
         		break;

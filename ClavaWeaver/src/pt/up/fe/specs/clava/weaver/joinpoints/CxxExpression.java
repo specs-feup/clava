@@ -24,7 +24,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AExpressionUseEnum;
-import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxExpression extends AExpression {
 
@@ -61,7 +60,9 @@ public class CxxExpression extends AExpression {
 
     @Override
     public AJoinPoint getVardeclImpl() {
-        SpecsLogs.msgInfo("attribute 'vardecl' not implemented yet for joinpoint " + getJoinPointType());
+        // Get more specific join point for current node
+
+        // SpecsLogs.msgInfo("attribute 'vardecl' not implemented yet for joinpoint " + getJoinPointType());
         return null;
         /*
         // DeclRefExpr declRefExpr = toDeclRefExpr(expr);
@@ -112,14 +113,18 @@ public class CxxExpression extends AExpression {
 
     }
 
-    @Override
-    public List<? extends AVardecl> selectVardecl() {
-        AVardecl vardecl = (AVardecl) getVardeclImpl();
+    public static List<? extends AVardecl> selectVarDecl(AExpression expression) {
+        AVardecl vardecl = (AVardecl) expression.getVardeclImpl();
         if (vardecl == null) {
             return Collections.emptyList();
         }
 
         return Arrays.asList(vardecl);
+    }
+
+    @Override
+    public List<? extends AVardecl> selectVardecl() {
+        return selectVarDecl(this);
     }
 
     @Override

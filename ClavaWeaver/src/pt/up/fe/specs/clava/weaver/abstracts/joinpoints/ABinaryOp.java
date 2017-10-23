@@ -293,6 +293,9 @@ public abstract class ABinaryOp extends AExpression {
         	case "right": 
         		joinPointList = selectRight();
         		break;
+        	case "vardecl": 
+        		joinPointList = selectVardecl();
+        		break;
         	default:
         		joinPointList = this.aExpression.select(selectName);
         		break;

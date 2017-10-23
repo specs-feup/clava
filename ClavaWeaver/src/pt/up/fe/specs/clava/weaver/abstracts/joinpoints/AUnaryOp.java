@@ -259,6 +259,9 @@ public abstract class AUnaryOp extends AExpression {
         	case "operand": 
         		joinPointList = selectOperand();
         		break;
+        	case "vardecl": 
+        		joinPointList = selectVardecl();
+        		break;
         	default:
         		joinPointList = this.aExpression.select(selectName);
         		break;

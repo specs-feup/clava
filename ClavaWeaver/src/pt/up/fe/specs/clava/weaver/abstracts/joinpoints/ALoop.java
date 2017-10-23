@@ -651,6 +651,33 @@ public abstract class ALoop extends AStatement {
         	case "body": 
         		joinPointList = selectBody();
         		break;
+        	case "expr": 
+        		joinPointList = selectExpr();
+        		break;
+        	case "childExpr": 
+        		joinPointList = selectChildExpr();
+        		break;
+        	case "call": 
+        		joinPointList = selectCall();
+        		break;
+        	case "stmtCall": 
+        		joinPointList = selectStmtCall();
+        		break;
+        	case "arrayAccess": 
+        		joinPointList = selectArrayAccess();
+        		break;
+        	case "vardecl": 
+        		joinPointList = selectVardecl();
+        		break;
+        	case "varref": 
+        		joinPointList = selectVarref();
+        		break;
+        	case "binaryOp": 
+        		joinPointList = selectBinaryOp();
+        		break;
+        	case "unaryOp": 
+        		joinPointList = selectUnaryOp();
+        		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);
         		break;
