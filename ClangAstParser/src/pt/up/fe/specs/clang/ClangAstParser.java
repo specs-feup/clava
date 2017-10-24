@@ -337,6 +337,8 @@ public class ClangAstParser {
 
         File includesBaseFolder = SpecsIo.mkdir(resourceFolder, "clang_includes");
 
+        // If
+
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
 
@@ -346,9 +348,14 @@ public class ClangAstParser {
 
         // if (useFullIncludes) {
         if (!hasLibC) {
+            // Obtain correct version of libc/c++
+            WebResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
+
             // Write Clang headers
-            ResourceWriteData libcZip = ClangAstWebResource.LIBC_CXX.writeVersioned(resourceFolder,
+            ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
                     ClangAstParser.class);
+            // ResourceWriteData libcZip = ClangAstWebResource.LIBC_CXX_WINDOWS.writeVersioned(resourceFolder,
+            // ClangAstParser.class);
 
             // Unzip file, if new
             if (libcZip.isNewFile()) {
@@ -795,6 +802,18 @@ public class ClangAstParser {
             return ClangAstWebResource.MAC_OS_EXE;
         default:
             throw new RuntimeException("Case not defined: '" + platform + "'");
+        }
+    }
+
+    private static WebResourceProvider getLibCResource(SupportedPlatform platform) {
+
+        switch (platform) {
+        case WINDOWS:
+            return ClangAstWebResource.LIBC_CXX_WINDOWS;
+        case MAC_OS:
+            return ClangAstWebResource.LIBC_CXX_MAC_OS;
+        default:
+            throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
         }
     }
 
