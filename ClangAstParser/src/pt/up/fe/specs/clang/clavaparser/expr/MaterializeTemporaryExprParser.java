@@ -20,15 +20,15 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
-import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class MaterializeTemporaryExprParser extends AClangNodeParser<MaterializeTemporaryExpr> {
 
@@ -46,24 +46,14 @@ public class MaterializeTemporaryExprParser extends AClangNodeParser<Materialize
         // Edge *, class std::allocator<class Edge *> >' xvalue extended by Var 0x49c2d28 '__range' 'class
         // std::__cxx11::list<class Edge *, class std::allocator<class Edge *> > &&'
 
-        Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
-        ValueKind valueKind = parser.apply(ClangGenericParsers::parseValueKind);
+        ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         boolean isExtended = parser.apply(string -> ClangGenericParsers.checkWord(string, "extended")) &&
                 parser.apply(string -> ClangGenericParsers.checkWord(string, "by"));
 
+        BareDeclData extendingDecl = null;
         if (isExtended) {
-
-            // EXTRA
-            // Parent
-            parser.apply(StringParsers::parseWord);
-            // Address
-            parser.apply(ClangGenericParsers::parseHex);
-
-            // Parent Type 1
-            parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
-            // Parent Type 2
-            parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
+            extendingDecl = parser.apply(ClangDataParsers::parseBareDecl);
         }
 
         List<ClavaNode> children = parseChildren(node);
@@ -72,7 +62,7 @@ public class MaterializeTemporaryExprParser extends AClangNodeParser<Materialize
 
         Expr temporaryExpr = toExpr(children.get(0));
 
-        return ClavaNodeFactory.materializeTemporaryExpr(valueKind, type, info(node), temporaryExpr);
+        return ClavaNodeFactory.materializeTemporaryExpr(exprData, extendingDecl, info(node), temporaryExpr);
     }
 
 }

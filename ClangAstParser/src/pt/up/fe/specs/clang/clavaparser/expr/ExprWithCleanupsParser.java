@@ -41,7 +41,7 @@ public class ExprWithCleanupsParser extends AClangNodeParser<ExprWithCleanups> {
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         List<ClavaNode> children = parseChildren(node);
-        System.out.println("CLEAN UP:" + node.getLocation());
+
         checkNumChildren(children, 1);
         Expr subExpr = toExpr(children.get(0));
 

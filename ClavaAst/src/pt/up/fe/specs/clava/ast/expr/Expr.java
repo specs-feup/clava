@@ -35,18 +35,6 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     private ExprData exprData;
 
-    /**
-     * @deprecated Replaced with version that receives ExprData
-     * @param valueKind
-     * @param type
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public Expr(ValueKind valueKind, Type type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(new ExprData(type, valueKind), info, children);
-    }
-
     public Expr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 

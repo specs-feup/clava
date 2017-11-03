@@ -19,8 +19,8 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
  * Represents a prvalue (pure rvalue - does not have identity, can be moved) temporary that is written into memory so
@@ -35,19 +35,24 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public class MaterializeTemporaryExpr extends Expr {
 
-    public MaterializeTemporaryExpr(ValueKind valueKind, Type type, ClavaNodeInfo info, Expr temporaryExpr) {
-        this(valueKind, type, info, Arrays.asList(temporaryExpr));
+    private final BareDeclData extendingDecl;
+
+    public MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
+            Expr temporaryExpr) {
+        this(exprData, extendingDecl, info, Arrays.asList(temporaryExpr));
     }
 
-    private MaterializeTemporaryExpr(ValueKind valueKind, Type type, ClavaNodeInfo info,
+    private MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
 
-        super(valueKind, type, info, children);
+        super(exprData, info, children);
+
+        this.extendingDecl = extendingDecl;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new MaterializeTemporaryExpr(getValueKind(), getType(), getInfo(), Collections.emptyList());
+        return new MaterializeTemporaryExpr(getExprData(), extendingDecl, getInfo(), Collections.emptyList());
     }
 
     @Override

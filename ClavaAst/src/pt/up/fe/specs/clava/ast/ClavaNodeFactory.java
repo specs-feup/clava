@@ -942,10 +942,10 @@ public class ClavaNodeFactory {
         return new CXXConstructExpr(constructorData, exprData, info, args);
     }
 
-    public static MaterializeTemporaryExpr materializeTemporaryExpr(ValueKind valueKind, Type type,
+    public static MaterializeTemporaryExpr materializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl,
             ClavaNodeInfo info, Expr temporaryExpr) {
 
-        return new MaterializeTemporaryExpr(valueKind, type, info, temporaryExpr);
+        return new MaterializeTemporaryExpr(exprData, extendingDecl, info, temporaryExpr);
     }
 
     public static CXXBindTemporaryExpr cXXBindTemporaryExpr(String temporaryAddress, ExprData exprData,
