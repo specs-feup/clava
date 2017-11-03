@@ -22,14 +22,15 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorPosition;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
@@ -69,21 +70,22 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
     @Override
     public UnaryOperator parse(ClangNode node, StringParser parser) {
 
-        Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
-        // If no value kind assume rvalue
-        ValueKind valueKind = parser.apply(ClangGenericParsers::parseValueKind);
-        boolean isPrefix = parser.apply(string -> ClangGenericParsers.checkStringStarts(string, "prefix "));
-        boolean isPostfix = parser.apply(string -> ClangGenericParsers.checkStringStarts(string, "postfix "));
+        ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
+        UnaryOperatorPosition position = parser.apply(ClangGenericParsers::parseEnum,
+                UnaryOperatorPosition.getEnumHelper());
+
+        // boolean isPrefix = parser.apply(string -> ClangGenericParsers.checkStringStarts(string, "prefix "));
+        // boolean isPostfix = parser.apply(string -> ClangGenericParsers.checkStringStarts(string, "postfix "));
 
         // Check prefix and postfix are the complement of one another
-        Preconditions.checkArgument(isPrefix != isPostfix, "Expected 'isPrefix' to be the opposite of 'isPostfix'");
+        // Preconditions.checkArgument(isPrefix != isPostfix, "Expected 'isPrefix' to be the opposite of 'isPostfix'");
         List<String> opcodeList = parser.apply(string -> ClangGenericParsers.parsePrimesSeparatedByString(string, ":"));
         Preconditions.checkArgument(opcodeList.size() == 1, "Expecting a single string with the operator");
 
         // Parse opcode
         String opcodeString = opcodeList.get(0);
 
-        UnaryOperatorKind opcode = parseOpcode(opcodeString, isPrefix);
+        UnaryOperatorKind opcode = parseOpcode(opcodeString, position);
 
         List<ClavaNode> children = parseChildren(node);
 
@@ -92,12 +94,10 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
 
         Expr subExpr = toExpr(children.get(0));
 
-        // Expr subExpr = getConverter().parseAsExpr(node.getChild(0));
-
-        return ClavaNodeFactory.unaryOperator(opcode, isPrefix, valueKind, type, info(node), subExpr);
+        return ClavaNodeFactory.unaryOperator(opcode, position, exprData, info(node), subExpr);
     }
 
-    private static UnaryOperatorKind parseOpcode(String opcodeString, boolean isPrefix) {
+    private static UnaryOperatorKind parseOpcode(String opcodeString, UnaryOperatorPosition position) {
 
         // Check base opcodes
         UnaryOperatorKind baseOpcode = UnaryOperatorParser.BASE_OPCODES.get(opcodeString);
@@ -105,20 +105,25 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
             return baseOpcode;
         }
 
-        // Try prefix
-        if (isPrefix) {
-            UnaryOperatorKind prefixOpcode = UnaryOperatorParser.PREFIX_OPCODES.get(opcodeString);
-            if (prefixOpcode != null) {
-                return prefixOpcode;
-            }
-        } else {
-            UnaryOperatorKind postfixOpcode = UnaryOperatorParser.POSTFIX_OPCODES.get(opcodeString);
-            if (postfixOpcode != null) {
-                return postfixOpcode;
-            }
+        Map<String, UnaryOperatorKind> positionOperators = getPositionOperators(position);
+
+        UnaryOperatorKind opcode = positionOperators.get(opcodeString);
+        if (opcode != null) {
+            return opcode;
         }
 
         throw new RuntimeException("Case not defined:" + opcodeString);
+    }
+
+    private static Map<String, UnaryOperatorKind> getPositionOperators(UnaryOperatorPosition position) {
+        switch (position) {
+        case PREFIX:
+            return UnaryOperatorParser.PREFIX_OPCODES;
+        case POSTFIX:
+            return UnaryOperatorParser.POSTFIX_OPCODES;
+        default:
+            throw new RuntimeException("Case not defined:" + position);
+        }
     }
 
 }
