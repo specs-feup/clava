@@ -3,6 +3,9 @@ import clava.ClavaAspects;
 import clava.util.ClavaDataStore;
 import weaver.WeaverOptions;
 
+/**
+ * @class
+ */
 var Clava = {};
 
 /**
