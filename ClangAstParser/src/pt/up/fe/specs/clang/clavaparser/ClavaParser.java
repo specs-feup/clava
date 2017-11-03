@@ -82,6 +82,7 @@ import pt.up.fe.specs.clang.clavaparser.expr.ExprWithCleanupsParser;
 import pt.up.fe.specs.clang.clavaparser.expr.FloatingLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.GNUNullExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ImplicitCastExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.ImplicitValueInitExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.InitListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.IntegerLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.MaterializeTemporaryExprParser;
@@ -313,6 +314,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("UserDefinedLiteral", UserDefinedLiteralParser::new);
         converter.put("CXXThrowExpr", CXXThrowExprParser::new);
         converter.put("GNUNullExpr", GNUNullExprParser::new);
+        converter.put("ImplicitValueInitExpr", ImplicitValueInitExprParser::new);
 
         /* type */
         converter.put("RecordType", RecordTypeParser::new);

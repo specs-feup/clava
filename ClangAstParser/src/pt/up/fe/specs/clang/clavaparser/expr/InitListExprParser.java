@@ -13,8 +13,12 @@
 
 package pt.up.fe.specs.clang.clavaparser.expr;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
@@ -46,15 +50,44 @@ public class InitListExprParser extends AClangNodeParser<InitListExpr> {
             fieldData = parser.apply(ClangDataParsers::parseBareDecl);
         }
 
-        List<ClavaNode> children = parseChildren(node);
+        List<ClangNode> clangChildren = new ArrayList<>(node.getChildren());
+
+        // Check if first child is an array filler
+        Expr arrayFiller = getArrayFiller(clangChildren);
+
+        List<ClavaNode> children = parseChildren(clangChildren.stream());
 
         List<Expr> initExprs = children.stream()
                 .map(child -> toExpr(child))
                 .collect(Collectors.toList());
         // List<Expr> initExprs = SpecsCollections.cast(children, Expr.class);
 
-        return ClavaNodeFactory.initListExpr(hasInitializedFieldInUnion, fieldData, exprData, node.getInfo(),
-                initExprs);
+        return ClavaNodeFactory.initListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData,
+                node.getInfo(), initExprs);
+    }
+
+    private Expr getArrayFiller(List<ClangNode> children) {
+        if (children.isEmpty()) {
+            return null;
+        }
+
+        ClangNode firstChild = children.get(0);
+
+        String fullName = firstChild.getName() + " " + firstChild.getContentTry().orElse("");
+
+        if (!fullName.equals("array filler")) {
+            return null;
+        }
+
+        // Remove first child
+        children.remove(0);
+
+        Preconditions.checkArgument(firstChild.getNumChildren() == 1,
+                "Expected array filler node to have only one child: %s", firstChild);
+
+        ClangNode expression = firstChild.getChild(0);
+
+        return toExpr(parseChildren(Stream.of(expression)).get(0));
     }
 
 }

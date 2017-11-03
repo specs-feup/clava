@@ -36,7 +36,14 @@ public class CBenchTest {
     @Test
     public void testBt() {
         if (SpecsPlatforms.isLinux()) {
-            new CTester("bench/bt.c").test();
+            new CTester("bench/nas_bt.c").test();
+        }
+    }
+
+    @Test
+    public void testUa() {
+        if (SpecsPlatforms.isLinux()) {
+            new CTester("bench/nas_ua.c").test();
         }
     }
 

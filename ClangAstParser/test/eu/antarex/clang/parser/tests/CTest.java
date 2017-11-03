@@ -72,4 +72,8 @@ public class CTest {
         new CTester("timer_windows.c").test();
     }
 
+    @Test
+    public void testArrayFiller() {
+        new CTester("array_filler.c").test();
+    }
 }
