@@ -61,4 +61,13 @@ public class ExprData {
         return "ValueKind:" + valueKind + "; ObjectKind:" + objectKind + "; Type:" + type.getCode();
     }
 
+    /**
+     * Currently all fields of ExprData are immutable, and returns an instance of itself.
+     * 
+     * @return
+     */
+    // public ExprData copy() {
+    // return this;
+    // }
+
 }

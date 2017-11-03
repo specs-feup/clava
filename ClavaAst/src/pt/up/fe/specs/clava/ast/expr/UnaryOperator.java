@@ -19,8 +19,10 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.providers.StringProvider;
 
 /**
  * Represents a unary expression.
@@ -31,26 +33,33 @@ import pt.up.fe.specs.clava.ast.type.Type;
 public class UnaryOperator extends Expr {
 
     private final UnaryOperatorKind opcode;
-    private final boolean isPrefix;
+    private final UnaryOperatorPosition position;
 
-    public UnaryOperator(UnaryOperatorKind opcode, boolean isPrefix, ValueKind valueKind, Type type, ClavaNodeInfo info,
-            Expr subExpr) {
-        this(opcode, isPrefix, valueKind, type, info, Arrays.asList(subExpr));
+    /**
+     * @param opcode
+     * @param isPrefix
+     * @param valueKind
+     * @param type
+     * @param info
+     * @param subExpr
+     */
+    public UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData exprData,
+            ClavaNodeInfo info, Expr subExpr) {
+        this(opcode, position, exprData, info, Arrays.asList(subExpr));
     }
 
-    private UnaryOperator(UnaryOperatorKind opcode, boolean isPrefix, ValueKind valueKind, Type type,
-            ClavaNodeInfo info,
+    private UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData expr, ClavaNodeInfo info,
             List<? extends Expr> children) {
-        super(valueKind, type, info, children);
+        super(expr, info, children);
 
         this.opcode = opcode;
-        this.isPrefix = isPrefix;
+        this.position = position;
 
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new UnaryOperator(opcode, isPrefix, getValueKind(), getType(), getInfo(), Collections.emptyList());
+        return new UnaryOperator(opcode, position, getExprData(), getInfo(), Collections.emptyList());
     }
 
     @Override
@@ -59,10 +68,13 @@ public class UnaryOperator extends Expr {
 
         // Get code of child
         builder.append(getSubExpr().getCode());
-        if (isPrefix) {
+        switch (position) {
+        case PREFIX:
             builder.insert(0, opcode.op);
-        } else {
+            break;
+        case POSTFIX:
             builder.append(opcode.op);
+            break;
         }
 
         return builder.toString();
@@ -95,10 +107,10 @@ public class UnaryOperator extends Expr {
         NOT("~"),
         // Logical not
         L_NOT("!"),
-        REAL("<unknown_opcode>"),
-        IMAG("<unknown_opcode>"),
-        EXTENSION("<unknown_opcode>"),
-        COAWAIT("<unknown_opcode>");
+        REAL("__real__"),
+        IMAG("__imag__ "),
+        EXTENSION("__extension__"),
+        COAWAIT("co_await");
 
         private final String op;
 
@@ -114,6 +126,23 @@ public class UnaryOperator extends Expr {
             return name().toLowerCase();
         }
 
+    }
+
+    public static enum UnaryOperatorPosition implements StringProvider {
+        PREFIX,
+        POSTFIX;
+
+        private static final Lazy<EnumHelper<UnaryOperatorPosition>> ENUM_HELPER = EnumHelper
+                .newLazyHelper(UnaryOperatorPosition.class);
+
+        public static EnumHelper<UnaryOperatorPosition> getEnumHelper() {
+            return ENUM_HELPER.get();
+        }
+
+        @Override
+        public String getString() {
+            return name().toLowerCase();
+        }
     }
 
 }

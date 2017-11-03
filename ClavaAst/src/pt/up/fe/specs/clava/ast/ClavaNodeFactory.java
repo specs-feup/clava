@@ -118,6 +118,7 @@ import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
@@ -883,10 +884,10 @@ public class ClavaNodeFactory {
      * @param subExpr
      * @return
      */
-    public static UnaryOperator unaryOperator(UnaryOperatorKind opcode, boolean isPrefix, ValueKind valueKind,
-            Type type, ClavaNodeInfo info, Expr subExpr) {
+    public static UnaryOperator unaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position,
+            ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
 
-        return new UnaryOperator(opcode, isPrefix, valueKind, type, info, subExpr);
+        return new UnaryOperator(opcode, position, exprData, info, subExpr);
     }
 
     public static DeclRefExpr declRefExpr(String refName, Type type) {
