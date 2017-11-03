@@ -18,11 +18,10 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultArgExpr;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class CXXDefaultArgExprParser extends AClangNodeParser<CXXDefaultArgExpr> {
@@ -37,12 +36,11 @@ public class CXXDefaultArgExprParser extends AClangNodeParser<CXXDefaultArgExpr>
         // 'const class std::allocator<char>':'const class std::allocator<char>' lvalue
         //
 
-        Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
-        ValueKind valueKind = parser.apply(ClangGenericParsers::parseValueKind);
+        ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         Preconditions.checkArgument(node.getNumChildren() == 0, "Do not expect children");
 
-        return ClavaNodeFactory.cxxDefaultArgExpr(valueKind, type, info(node));
+        return ClavaNodeFactory.cxxDefaultArgExpr(exprData, info(node));
     }
 
 }

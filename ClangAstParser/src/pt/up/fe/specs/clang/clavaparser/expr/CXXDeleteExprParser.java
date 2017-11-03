@@ -15,19 +15,18 @@ package pt.up.fe.specs.clang.clavaparser.expr;
 
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
-import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXDeleteExprParser extends AClangNodeParser<CXXDeleteExpr> {
 
@@ -46,26 +45,22 @@ public class CXXDeleteExprParser extends AClangNodeParser<CXXDeleteExpr> {
         // Is this a forced global delete, i.e. "::delete"?
         // bool GlobalDelete : 1;
 
-        Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
+        ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
+
+        boolean isGlobal = parser.apply(string -> ClangGenericParsers.checkWord(string, "global"));
         boolean isArray = parser.apply(string -> ClangGenericParsers.checkWord(string, "array"));
 
-        parser.apply(string -> ClangGenericParsers.checkWord(string, "Function"));
-        Long functionAddress = parser.apply(ClangGenericParsers::parseHex);
-
-        String operator = parser.apply(string -> StringParsers.parseNested(string, '\'', '\''));
-        Type functionType = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
-
-        Type type2 = getTypesMap().get(node.getExtendedId());
-        Preconditions.checkArgument(type2 != null);
-        // System.out.println("CLASS DELETE EXPR:" + type2.getClass());
+        BareDeclData operatorDelete = null;
+        if (!parser.isEmpty()) {
+            operatorDelete = parser.apply(ClangDataParsers::parseBareDecl);
+        }
 
         List<ClavaNode> children = parseChildren(node);
 
         checkNumChildren(children, 1);
         Expr argument = toExpr(children.get(0));
 
-        return ClavaNodeFactory.cxxDeleteExpr(isArray, functionAddress, operator, functionType, type, node.getInfo(),
-                argument);
+        return ClavaNodeFactory.cxxDeleteExpr(isGlobal, isArray, operatorDelete, exprData, node.getInfo(), argument);
     }
 
 }

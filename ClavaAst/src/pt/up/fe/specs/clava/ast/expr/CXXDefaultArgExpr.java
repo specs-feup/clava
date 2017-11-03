@@ -17,43 +17,22 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXDefaultArgExpr extends Expr {
 
-    public CXXDefaultArgExpr(ValueKind valueKind, Type type, ClavaNodeInfo info) {
-        super(valueKind, type, info, Collections.emptyList());
+    public CXXDefaultArgExpr(ExprData exprData, ClavaNodeInfo info) {
+        super(exprData, info, Collections.emptyList());
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new CXXDefaultArgExpr(getValueKind(), getType(), getInfo());
+        return new CXXDefaultArgExpr(getExprData(), getInfo());
     }
 
     @Override
     public String getCode() {
-
         throw new RuntimeException("Should not generate code");
-        /*        Type type = getExprType();
-        
-        // Do not add qualifiers (e.g., const)
-        if (type instanceof QualTypeOld) {
-            return ((QualTypeOld) type).getUnqualifiedType().getCode();
-        }
-        
-        // Do not add type keywords (e.g., enum, struct...)
-        if (type instanceof SimpleTypeWithKeyword) {
-            return ((SimpleTypeWithKeyword) type).getInnerType().getCode();
-        }
-        
-        return type.getCode();
-        
-        // System.out.println("TOSTRING:" + toString());
-        // System.out.println("TYPE:" + getExprType().toString());
-        // throw new UnsupportedNodeOperationException(this);
-         
-         */
     }
 
 }

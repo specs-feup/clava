@@ -16,10 +16,10 @@ package pt.up.fe.specs.clang.clavaparser.expr;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class CXXDefaultInitExprParser extends AClangNodeParser<CXXDefaultInitExpr> {
@@ -35,11 +35,11 @@ public class CXXDefaultInitExprParser extends AClangNodeParser<CXXDefaultInitExp
         // 'float'
         // 'int'
 
-        Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
+        ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         checkNoChildren(node);
 
-        return ClavaNodeFactory.cxxDefaultInitExpr(type, node.getInfo());
+        return ClavaNodeFactory.cxxDefaultInitExpr(exprData, node.getInfo());
     }
 
 }

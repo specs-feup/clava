@@ -17,22 +17,17 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXDefaultInitExpr extends Expr {
 
-    public CXXDefaultInitExpr(Type type, ClavaNodeInfo info) {
-        this(ValueKind.getDefault(), type, info);
-    }
-
-    private CXXDefaultInitExpr(ValueKind valueKind, Type type, ClavaNodeInfo info) {
-        super(valueKind, type, info, Collections.emptyList());
+    public CXXDefaultInitExpr(ExprData exprData, ClavaNodeInfo info) {
+        super(exprData, info, Collections.emptyList());
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new CXXDefaultInitExpr(getValueKind(), getType(), getInfo());
+        return new CXXDefaultInitExpr(getExprData(), getInfo());
     }
 
 }

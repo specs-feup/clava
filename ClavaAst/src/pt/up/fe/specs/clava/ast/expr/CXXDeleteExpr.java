@@ -19,35 +19,39 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public class CXXDeleteExpr extends Expr {
 
+    private final boolean isGlobal;
     private final boolean isArray;
-    private final Long functionAddress;
-    private final String operator;
-    private final Type functionType;
+    private final BareDeclData operatorDelete;
+    // private final Long functionAddress;
+    // private final String operator;
+    // private final Type functionType;
 
-    public CXXDeleteExpr(boolean isArray, Long functionAddress, String operator, Type functionType,
-            Type type, ClavaNodeInfo info, Expr argument) {
+    public CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete, ExprData exprData,
+            ClavaNodeInfo info, Expr argument) {
 
-        this(isArray, functionAddress, operator, functionType, type, info, Arrays.asList(argument));
+        this(isGlobal, isArray, operatorDelete, exprData, info, Arrays.asList(argument));
     }
 
-    private CXXDeleteExpr(boolean isArray, Long functionAddress, String operator, Type functionType,
-            Type type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(ValueKind.getDefault(), type, info, children);
+    private CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData bareDecl, ExprData exprData,
+            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(exprData, info, children);
 
+        this.isGlobal = isGlobal;
         this.isArray = isArray;
-        this.functionAddress = functionAddress;
-        this.operator = operator;
-        this.functionType = functionType;
+        this.operatorDelete = bareDecl;
+        // this.operator = operator;
+        // this.functionType = functionType;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new CXXDeleteExpr(isArray, functionAddress, operator, functionType, getType(), getInfo(),
+        return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, getExprData(), getInfo(),
                 Collections.emptyList());
     }
 
@@ -58,6 +62,10 @@ public class CXXDeleteExpr extends Expr {
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
+
+        if (isGlobal) {
+            SpecsLogs.msgWarn("Code generation not implemented yet when global is true");
+        }
 
         code.append("delete");
         if (isArray) {

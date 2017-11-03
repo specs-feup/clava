@@ -13,10 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -37,8 +34,6 @@ import pt.up.fe.specs.clava.utils.Typable;
 public abstract class Expr extends ClavaNode implements Typable {
 
     private ExprData exprData;
-    @Deprecated
-    private final List<Type> types;
 
     /**
      * @deprecated Replaced with version that receives ExprData
@@ -56,26 +51,10 @@ public abstract class Expr extends ClavaNode implements Typable {
         super(info, children);
 
         this.exprData = exprData;
-        this.types = exprData.getType() == null ? Collections.emptyList() : Arrays.asList(exprData.getType());
-
     }
 
     @Override
     public Type getType() {
-        /*
-        	if (type == null) {
-        	    return ClavaNodeFactory.nullType(getInfo());
-        
-        //	    getAscendantsStream()
-        //	            .filter(ascendent -> ascendent instanceof Typable)
-        //	            .map(typable -> (Typable) typable)
-        //	            .findFirst()
-        //	            // .orElseThrow(() -> new RuntimeException(""))
-        //	            .orElse(() -> ClavaNodeFactory.literalType("<no type>", getInfo()))
-        //	            .getType();
-        
-        	}
-        */
         return exprData.getType();
     }
 
@@ -84,30 +63,12 @@ public abstract class Expr extends ClavaNode implements Typable {
         this.exprData = new ExprData(type, exprData.getValueKind());
     }
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public List<Type> getTypes() {
-        return types;
-    }
-
     public Optional<Type> getExprTypeTry() {
         return Optional.ofNullable(getType());
     }
 
     public Type getExprType() {
         return getType();
-        /*
-        // return getTypes();
-        
-        if (types.isEmpty()) {
-        throw new RuntimeException("No types defined for class '" + getClass().getName() + "'");
-        }
-        
-        return types.get(0);
-        */
     }
 
     /**

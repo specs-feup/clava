@@ -961,8 +961,8 @@ public class ClavaNodeFactory {
         return new CXXTemporaryObjectExpr(constructorData, exprData, info, args);
     }
 
-    public static CXXDefaultArgExpr cxxDefaultArgExpr(ValueKind valueKind, Type type, ClavaNodeInfo info) {
-        return new CXXDefaultArgExpr(valueKind, type, info);
+    public static CXXDefaultArgExpr cxxDefaultArgExpr(ExprData exprData, ClavaNodeInfo info) {
+        return new CXXDefaultArgExpr(exprData, info);
     }
 
     public static StringLiteral stringLiteral(String string, ExprData exprData, ClavaNodeInfo info) {
@@ -1050,8 +1050,8 @@ public class ClavaNodeFactory {
         return new CharacterLiteral(charValue, exprData, info);
     }
 
-    public static CXXDefaultInitExpr cxxDefaultInitExpr(Type type, ClavaNodeInfo info) {
-        return new CXXDefaultInitExpr(type, info);
+    public static CXXDefaultInitExpr cxxDefaultInitExpr(ExprData exprData, ClavaNodeInfo info) {
+        return new CXXDefaultInitExpr(exprData, info);
     }
 
     public static CXXNullPtrLiteralExpr cxxNullPtrLiteralExpr(Type type, ClavaNodeInfo info) {
@@ -1073,9 +1073,9 @@ public class ClavaNodeFactory {
         return new CompoundAssignOperator(lhsType, resultType, op, exprData, info, lhs, rhs);
     }
 
-    public static CXXDeleteExpr cxxDeleteExpr(boolean isArray, Long functionAddress, String operator,
-            Type functionType, Type type, ClavaNodeInfo info, Expr argument) {
-        return new CXXDeleteExpr(isArray, functionAddress, operator, functionType, type, info, argument);
+    public static CXXDeleteExpr cxxDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete,
+            ExprData exprData, ClavaNodeInfo info, Expr argument) {
+        return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, exprData, info, argument);
     }
 
     public static InitListExpr initListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller,
