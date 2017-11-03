@@ -60,7 +60,7 @@ public:
     std::unique_ptr<PPCallbacks> createPreprocessorCallbacks();
 
     virtual void InclusionDirective(SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName, bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File, StringRef SearchPath, StringRef RelativePath, const Module *Imported);
-
+    virtual void MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args);
 private:
 
     const CompilerInstance &compilerInstance;
@@ -72,6 +72,7 @@ public:
     CallbacksProxy(IncludeDumper &original);
 
     virtual void InclusionDirective(SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName, bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File, StringRef SearchPath, StringRef RelativePath, const Module *Imported);
+    virtual void MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args);
 
 private:
 

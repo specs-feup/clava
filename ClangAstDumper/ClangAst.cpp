@@ -343,6 +343,59 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
     }
 
 
+
+
+    void IncludeDumper::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {
+/*
+        llvm::errs() << "Dumping Macro info:\n";
+        MD.getMacroInfo()->dump();
+        llvm::errs() << "\n";
+        //llvm::errs() << "\nDumping Macro info end\n";
+
+
+        llvm::errs() << "Definition begin:\n";
+        MD.getMacroInfo()->getDefinitionLoc().dump(compilerInstance.getSourceManager());
+        llvm::errs() << "\nDefinition length: " << MD.getMacroInfo()->getDefinitionLength(compilerInstance.getSourceManager()) <<"\n";
+        llvm::errs() << "\n";
+        //llvm::errs() << "\nDefinition begin end\n";
+
+        llvm::errs() << "Expansion begin:\n";
+        Range.getBegin().dump(compilerInstance.getSourceManager());
+        llvm::errs() << "\n";
+
+        */
+
+
+
+/*
+        llvm::errs() << "Is id: " << MacroNameTok.isAnyIdentifier() << "\n";
+        if(MacroNameTok.isAnyIdentifier()) {
+            llvm::errs() << "RAW id: " << MacroNameTok.getRawIdentifier().str() << "\n";
+        }
+        llvm::errs() << "Kind: " << MacroNameTok.getKind() << "\n";
+        */
+ //       llvm::errs() << "ID INFO: " << MacroNameTok. << "\n";
+//       llvm::errs() << "Token begin:\n";
+  //      MacroNameTok.getLocation().dump(compilerInstance.getSourceManager());
+    //    llvm::errs() << "\nToken end\n";
+
+
+        //llvm::errs() << "\nSource begin end\n";
+
+/*
+        llvm::errs() << "Source end:\n";
+        Range.getEnd().dump(compilerInstance.getSourceManager());
+        llvm::errs() << "\nSource end end\n";
+*/
+/*
+        if(MacroNameTok.isLiteral()) {
+            llvm::errs() << "Token literal: " << MacroNameTok.getLiteralData() << "\n";
+        }
+*/
+    }
+
+
+
     /*** CallbacksProxy ***/
 
     CallbacksProxy::CallbacksProxy(IncludeDumper &original) : original(original) {
@@ -353,6 +406,10 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
                                             StringRef SearchPath, StringRef RelativePath, const Module *Imported) {
 												
         original.InclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported);
+    }
+
+    void CallbacksProxy::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {
+        original.MacroExpands(MacroNameTok, MD, Range, Args);
     }
 
 
