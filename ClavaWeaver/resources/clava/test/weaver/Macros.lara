@@ -1,0 +1,10 @@
+aspectdef Macros
+
+	select program end
+	apply
+		println("Code:\n" + $program.code);
+		println("AST:\n" + $program.ast);
+	end
+
+
+end

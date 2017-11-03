@@ -155,4 +155,9 @@ public class CxxTest {
     public void testSelectVarDecl() {
         newTester().test("SelectVardecl.lara", "select_vardecl.cpp");
     }
+
+    @Test
+    public void testMacros() {
+        newTester().setCheckWeavedCodeSyntax(false).test("Macros.lara", "macros.cpp");
+    }
 }

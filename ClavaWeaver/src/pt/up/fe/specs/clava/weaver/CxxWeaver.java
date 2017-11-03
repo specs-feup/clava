@@ -86,6 +86,11 @@ public class CxxWeaver extends ACxxWeaver {
                 true, true);
     }
 
+    public static LanguageSpecification buildLanguageSpecification() {
+        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+                ClavaWeaverResource.ACTIONS, true);
+    }
+
     private static final boolean SHOW_MEMORY_USAGE = true;
 
     private static final String TEMP_WEAVING_FOLDER = "__clava_weaved";
@@ -702,8 +707,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public LanguageSpecification getLanguageSpecification() {
-        return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS, true);
+        return buildLanguageSpecification();
     }
 
     @Override
