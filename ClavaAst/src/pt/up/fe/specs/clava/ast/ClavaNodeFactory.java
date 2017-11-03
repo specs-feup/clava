@@ -115,6 +115,8 @@ import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
+import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
@@ -1014,6 +1016,12 @@ public class ClavaNodeFactory {
     public static CStyleCastExpr cStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
         return new CStyleCastExpr(castKind, exprData, info, subExpr);
+    }
+
+    public static PredefinedExpr predefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
+            Expr subExpr) {
+
+        return new PredefinedExpr(id, exprData, info, subExpr);
     }
 
     public static CXXBoolLiteralExpr cxxBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
