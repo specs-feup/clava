@@ -19,31 +19,30 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXStdInitializerListExpr extends Expr {
 
-    public CXXStdInitializerListExpr(Type type, ClavaNodeInfo info, Expr subExpr) {
-	this(type, info, Arrays.asList(subExpr));
+    public CXXStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+        this(exprData, info, Arrays.asList(subExpr));
     }
 
-    private CXXStdInitializerListExpr(Type type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-	super(ValueKind.getDefault(), type, info, children);
+    private CXXStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(exprData, info, children);
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-	return new CXXStdInitializerListExpr(getType(), getInfo(), Collections.emptyList());
+        return new CXXStdInitializerListExpr(getExprData(), getInfo(), Collections.emptyList());
     }
 
     public Expr getSubExpr() {
-	return getChild(Expr.class, 0);
+        return getChild(Expr.class, 0);
     }
 
     @Override
     public String getCode() {
-	return getSubExpr().getCode();
+        return getSubExpr().getCode();
     }
 
 }

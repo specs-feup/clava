@@ -19,8 +19,8 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents an expression that introduces cleanups to be run at the end of the sub-expression's evaluation. The most
@@ -35,19 +35,19 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public class ExprWithCleanups extends Expr {
 
-    public ExprWithCleanups(ValueKind valueKind, Type type, ClavaNodeInfo info, Expr subExpr) {
-        this(valueKind, type, info, Arrays.asList(subExpr));
+    public ExprWithCleanups(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+        this(exprData, info, Arrays.asList(subExpr));
     }
 
-    private ExprWithCleanups(ValueKind valueKind, Type type, ClavaNodeInfo info,
+    private ExprWithCleanups(ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-        super(valueKind, type, info, children);
+        super(exprData, info, children);
 
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new ExprWithCleanups(getValueKind(), getType(), getInfo(), Collections.emptyList());
+        return new ExprWithCleanups(getExprData(), getInfo(), Collections.emptyList());
     }
 
     @Override

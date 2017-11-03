@@ -18,13 +18,12 @@ import java.util.List;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class ExprWithCleanupsParser extends AClangNodeParser<ExprWithCleanups> {
@@ -39,15 +38,14 @@ public class ExprWithCleanupsParser extends AClangNodeParser<ExprWithCleanups> {
         // 'const std::string':'const class std::__cxx11::basic_string<char>'
         // 'optList *'
 
-        Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
-        ValueKind valueKind = parser.apply(ClangGenericParsers::parseValueKind);
+        ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         List<ClavaNode> children = parseChildren(node);
-
+        System.out.println("CLEAN UP:" + node.getLocation());
         checkNumChildren(children, 1);
         Expr subExpr = toExpr(children.get(0));
 
-        return ClavaNodeFactory.exprWithCleanups(valueKind, type, info(node), subExpr);
+        return ClavaNodeFactory.exprWithCleanups(exprData, info(node), subExpr);
     }
 
 }

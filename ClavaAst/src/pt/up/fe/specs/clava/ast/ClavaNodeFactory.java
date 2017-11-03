@@ -931,9 +931,9 @@ public class ClavaNodeFactory {
         return new DeclRefExpr(qualifier, templateArguments, declData, foundDeclData, exprData, info);
     }
 
-    public static ExprWithCleanups exprWithCleanups(ValueKind valueKind, Type type, ClavaNodeInfo info,
+    public static ExprWithCleanups exprWithCleanups(ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
-        return new ExprWithCleanups(valueKind, type, info, subExpr);
+        return new ExprWithCleanups(exprData, info, subExpr);
     }
 
     public static CXXConstructExpr cxxConstructExpr(CXXConstructExprData constructorData, ExprData exprData,
@@ -1004,8 +1004,8 @@ public class ClavaNodeFactory {
         return new BinaryOperator(op, exprData, info, lhs, rhs);
     }
 
-    public static ParenExpr parenExpr(ValueKind valueKind, Type type, ClavaNodeInfo info, Expr subExpr) {
-        return new ParenExpr(valueKind, type, info, subExpr);
+    public static ParenExpr parenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+        return new ParenExpr(exprData, info, subExpr);
     }
 
     public static ArraySubscriptExpr arraySubscriptExpr(ExprData exprData, ClavaNodeInfo info,
@@ -1054,8 +1054,8 @@ public class ClavaNodeFactory {
         return new CXXDefaultInitExpr(exprData, info);
     }
 
-    public static CXXNullPtrLiteralExpr cxxNullPtrLiteralExpr(Type type, ClavaNodeInfo info) {
-        return new CXXNullPtrLiteralExpr(type, info);
+    public static CXXNullPtrLiteralExpr cxxNullPtrLiteralExpr(ExprData exprData, ClavaNodeInfo info) {
+        return new CXXNullPtrLiteralExpr(exprData, info);
     }
 
     public static CXXThisExpr cxxThisExpr(ExprData exprData, ClavaNodeInfo info) {
@@ -1085,8 +1085,9 @@ public class ClavaNodeFactory {
         return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData, info, initExprs);
     }
 
-    public static CXXStdInitializerListExpr cxxStdInitializerListExpr(Type type, ClavaNodeInfo info, Expr subExpr) {
-        return new CXXStdInitializerListExpr(type, info, subExpr);
+    public static CXXStdInitializerListExpr cxxStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info,
+            Expr subExpr) {
+        return new CXXStdInitializerListExpr(exprData, info, subExpr);
     }
 
     public static UnresolvedLookupExpr unresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls,

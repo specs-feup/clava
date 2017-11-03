@@ -19,8 +19,7 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
  * Represents a parethesized expression.
@@ -30,19 +29,19 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public class ParenExpr extends Expr {
 
-    public ParenExpr(ValueKind valueKind, Type type, ClavaNodeInfo info, Expr subExpr) {
-        this(valueKind, type, info, Arrays.asList(subExpr));
+    public ParenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+        this(exprData, info, Arrays.asList(subExpr));
     }
 
-    private ParenExpr(ValueKind valueKind, Type type, ClavaNodeInfo info,
+    private ParenExpr(ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
 
-        super(valueKind, type, info, children);
+        super(exprData, info, children);
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new ParenExpr(getValueKind(), getType(), getInfo(), Collections.emptyList());
+        return new ParenExpr(getExprData(), getInfo(), Collections.emptyList());
     }
 
     public Expr getSubExpr() {

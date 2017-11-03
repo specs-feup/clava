@@ -28,9 +28,6 @@ public class CXXDeleteExpr extends Expr {
     private final boolean isGlobal;
     private final boolean isArray;
     private final BareDeclData operatorDelete;
-    // private final Long functionAddress;
-    // private final String operator;
-    // private final Type functionType;
 
     public CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete, ExprData exprData,
             ClavaNodeInfo info, Expr argument) {
@@ -45,8 +42,6 @@ public class CXXDeleteExpr extends Expr {
         this.isGlobal = isGlobal;
         this.isArray = isArray;
         this.operatorDelete = bareDecl;
-        // this.operator = operator;
-        // this.functionType = functionType;
     }
 
     @Override
