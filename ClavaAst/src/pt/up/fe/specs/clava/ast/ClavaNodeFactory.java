@@ -106,6 +106,7 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
@@ -862,6 +863,10 @@ public class ClavaNodeFactory {
         return new ImplicitCastExpr(castKind, exprData, info, subExpr);
     }
 
+    public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
+        return new ImplicitValueInitExpr(exprData, info);
+    }
+
     public static IntegerLiteral integerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
 
         return new IntegerLiteral(literal, exprData, info);
@@ -1065,10 +1070,11 @@ public class ClavaNodeFactory {
         return new CXXDeleteExpr(isArray, functionAddress, operator, functionType, type, info, argument);
     }
 
-    public static InitListExpr initListExpr(boolean hasInitializedFieldInUnion, BareDeclData fieldData,
+    public static InitListExpr initListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller,
+            BareDeclData fieldData,
             ExprData exprData, ClavaNodeInfo info, Collection<? extends Expr> initExprs) {
 
-        return new InitListExpr(hasInitializedFieldInUnion, fieldData, exprData, info, initExprs);
+        return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData, info, initExprs);
     }
 
     public static CXXStdInitializerListExpr cxxStdInitializerListExpr(Type type, ClavaNodeInfo info, Expr subExpr) {

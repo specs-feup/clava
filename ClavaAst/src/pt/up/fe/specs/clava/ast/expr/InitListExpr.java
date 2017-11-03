@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * C or C++ initializer list.
@@ -32,20 +33,22 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 public class InitListExpr extends Expr {
 
     private final boolean hasInitializedFieldInUnion;
+    private final Expr arrayFiller;
     private final BareDeclData fieldData;
 
-    public InitListExpr(boolean hasInitializedFieldInUnion, BareDeclData fieldData, ExprData exprData,
+    public InitListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller, BareDeclData fieldData, ExprData exprData,
             ClavaNodeInfo info, Collection<? extends Expr> initExprs) {
 
         super(exprData, info, initExprs);
 
         this.hasInitializedFieldInUnion = hasInitializedFieldInUnion;
+        this.arrayFiller = arrayFiller;
         this.fieldData = fieldData;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new InitListExpr(hasInitializedFieldInUnion, fieldData, getExprData(), getInfo(),
+        return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, getExprData(), getInfo(),
                 Collections.emptyList());
     }
 
@@ -57,9 +60,21 @@ public class InitListExpr extends Expr {
     public String getCode() {
         String list = getInitExprs().stream()
                 .map(expr -> expr.getCode())
-                .collect(Collectors.joining(", ", "{ ", " }"));
+                .collect(Collectors.joining(", "));
 
-        return list;
+        if (arrayFiller != null) {
+            String exprClassName = arrayFiller.getClass().getSimpleName();
+            switch (exprClassName) {
+            case "ImplicitValueInitExpr":
+                list = list + ",";
+                break;
+            default:
+                SpecsLogs.msgWarn("Case not defined:" + exprClassName);
+                break;
+            }
+        }
+        // , "{ ", " }"
+        return "{" + list + " }";
         /*	
         	if (list.length() < 120) {
         	    return list;
