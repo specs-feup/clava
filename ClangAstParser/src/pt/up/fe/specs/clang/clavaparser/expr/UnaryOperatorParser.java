@@ -45,6 +45,7 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
         UnaryOperatorParser.BASE_OPCODES.put("!", UnaryOperatorKind.L_NOT);
         UnaryOperatorParser.BASE_OPCODES.put("+", UnaryOperatorKind.PLUS);
         UnaryOperatorParser.BASE_OPCODES.put("-", UnaryOperatorKind.MINUS);
+
     }
 
     private static final Map<String, UnaryOperatorKind> PREFIX_OPCODES;
@@ -99,12 +100,7 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
 
     private static UnaryOperatorKind parseOpcode(String opcodeString, UnaryOperatorPosition position) {
 
-        // Check base opcodes
-        UnaryOperatorKind baseOpcode = UnaryOperatorParser.BASE_OPCODES.get(opcodeString);
-        if (baseOpcode != null) {
-            return baseOpcode;
-        }
-
+        // Check if prefix/postfix special opcodes
         Map<String, UnaryOperatorKind> positionOperators = getPositionOperators(position);
 
         UnaryOperatorKind opcode = positionOperators.get(opcodeString);
@@ -112,7 +108,19 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
             return opcode;
         }
 
-        throw new RuntimeException("Case not defined:" + opcodeString);
+        // Treat it as a normal operator
+        return UnaryOperatorKind.getEnumHelper().valueOf(opcodeString);
+
+        // // Check base opcodes
+        // if(position == UnaryOperatorPosition.)
+        // UnaryOperatorKind baseOpcode = UnaryOperatorParser.BASE_OPCODES.get(opcodeString);
+        // if (baseOpcode != null) {
+        // return baseOpcode;
+        // }
+        //
+        //
+        //
+        // throw new RuntimeException("Case not defined:" + opcodeString);
     }
 
     private static Map<String, UnaryOperatorKind> getPositionOperators(UnaryOperatorPosition position) {

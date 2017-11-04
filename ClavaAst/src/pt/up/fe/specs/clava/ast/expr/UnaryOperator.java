@@ -93,7 +93,7 @@ public class UnaryOperator extends Expr {
         return super.toContentString() + ", op:" + opcode;
     }
 
-    public static enum UnaryOperatorKind {
+    public static enum UnaryOperatorKind implements StringProvider {
         POST_INC("++"),
         POST_DEC("--"),
         PRE_INC("++"),
@@ -112,6 +112,13 @@ public class UnaryOperator extends Expr {
         EXTENSION("__extension__"),
         COAWAIT("co_await");
 
+        private static final Lazy<EnumHelper<UnaryOperatorKind>> ENUM_HELPER = EnumHelper
+                .newLazyHelper(UnaryOperatorKind.class);
+
+        public static EnumHelper<UnaryOperatorKind> getEnumHelper() {
+            return ENUM_HELPER.get();
+        }
+
         private final String op;
 
         private UnaryOperatorKind(String op) {
@@ -124,6 +131,11 @@ public class UnaryOperator extends Expr {
 
         public String getName() {
             return name().toLowerCase();
+        }
+
+        @Override
+        public String getString() {
+            return op;
         }
 
     }
