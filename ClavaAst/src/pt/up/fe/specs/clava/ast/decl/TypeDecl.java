@@ -29,18 +29,6 @@ import pt.up.fe.specs.clava.ast.type.Type;
 public abstract class TypeDecl extends NamedDecl {
 
     /**
-     * @deprecated
-     * @param declName
-     * @param type
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public TypeDecl(String declName, Type type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(declName, type, info, children);
-    }
-
-    /**
      * @param declName
      * @param type
      * @param declData

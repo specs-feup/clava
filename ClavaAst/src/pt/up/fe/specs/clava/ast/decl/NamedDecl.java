@@ -13,15 +13,10 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -39,32 +34,6 @@ public abstract class NamedDecl extends Decl implements Typable {
 
     private String declName;
     private Type type;
-    @Deprecated
-    private final List<Type> types;
-
-    /**
-     * @deprecated
-     * @param declName
-     * @param types
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public NamedDecl(String declName, List<Type> types, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(declName, types.isEmpty() ? null : types.get(0), info, children);
-    }
-
-    /**
-     * @deprecated replaced with version that receives a DeclData
-     * @param declName
-     * @param type
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public NamedDecl(String declName, Type type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(declName, type, DeclData.empty(), info, children);
-    }
 
     /**
      * @param declName
@@ -86,7 +55,6 @@ public abstract class NamedDecl extends Decl implements Typable {
         this.declName = declName != null && declName.isEmpty() ? null : declName;
         // this.declName = declName;
         this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type;
-        this.types = type == null ? Collections.emptyList() : Arrays.asList(type);
     }
 
     /*
@@ -140,15 +108,6 @@ public abstract class NamedDecl extends Decl implements Typable {
     }
 
     /**
-     * @deprecated replaced by getType()
-     * @return
-     */
-    @Deprecated
-    protected List<Type> getTypes() {
-        return types;
-    }
-
-    /**
      * The code of this decl, without the type declaration.
      * 
      * @return
@@ -173,19 +132,9 @@ public abstract class NamedDecl extends Decl implements Typable {
         this.type = type;
     }
 
-    /**
-     * @deprecated use Type.getCode(String) instead
-     * @return
-     */
-    @Deprecated
-    public String getTypeCode() {
-        return ClavaNodes.getTypeCode(getType().getCode());
-    }
-
     @Override
     public String toContentString() {
-        String typeString = types.stream().map(type -> type.getCode()).collect(Collectors.joining("; "));
-        return super.toContentString() + "declName:" + declName + ", types:" + typeString;
+        return super.toContentString() + "declName:" + declName + ", type:" + getType().getCode();
     }
 
 }

@@ -17,10 +17,10 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class UsingDirectiveDeclParser extends AClangNodeParser<UsingDirectiveDecl> {
@@ -35,8 +35,7 @@ public class UsingDirectiveDeclParser extends AClangNodeParser<UsingDirectiveDec
         //
         // col:17 Namespace 0x34f9488 'std'
 
-        // Remove location
-        parser.apply(ClangGenericParsers::parseLocation);
+        DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         BareDeclData bareDeclData = parser.apply(ClangDataParsers::parseBareDecl);
 
@@ -44,7 +43,7 @@ public class UsingDirectiveDeclParser extends AClangNodeParser<UsingDirectiveDec
 
         checkNoChildren(node);
 
-        return ClavaNodeFactory.usingDirectiveDecl(declName, node.getInfo());
+        return ClavaNodeFactory.usingDirectiveDecl(declName, declData, node.getInfo());
     }
 
 }

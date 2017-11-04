@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
+import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -375,9 +376,9 @@ public class ClavaNodeFactory {
         return new VarDecl(data, varName, type, declData, info, initExpr);
     }
 
-    public static EnumDecl enumDecl(boolean isClass, String name, Type integerType, EnumType type, ClavaNodeInfo info,
-            Collection<? extends EnumConstantDecl> children) {
-        return new EnumDecl(isClass, name, integerType, type, info, children);
+    public static EnumDecl enumDecl(EnumScopeType enumScopeType, String name, boolean isModulePrivate, Type integerType,
+            EnumType type, DeclData declData, ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
+        return new EnumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info, children);
     }
 
     public static EnumConstantDecl enumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
@@ -514,8 +515,8 @@ public class ClavaNodeFactory {
         return new TypeAliasDecl(declName, type, declData, info, aliasedType);
     }
 
-    public static UsingDirectiveDecl usingDirectiveDecl(String declName, ClavaNodeInfo info) {
-        return new UsingDirectiveDecl(declName, info);
+    public static UsingDirectiveDecl usingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
+        return new UsingDirectiveDecl(declName, declData, info);
     }
 
     public static UsingDecl usingDecl(NestedNamedSpecifier qualifier, String declName, DeclData declData,

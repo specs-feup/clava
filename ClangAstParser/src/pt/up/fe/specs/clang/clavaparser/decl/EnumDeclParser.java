@@ -20,11 +20,14 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
+import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -44,11 +47,16 @@ public class EnumDeclParser extends AClangNodeParser<EnumDecl> {
         // line:16:12 class hi_world 'int'
         // line:16:6 hi_world 'short'
 
-        // Drop location
-        parser.apply(ClangGenericParsers::parseLocation);
-        boolean isClass = parser.apply(string -> ClangGenericParsers.checkStringStarts(string, "class "));
+        DeclData declData = parser.apply(ClangDataParsers::parseDecl);
+
+        EnumScopeType enumScopeType = parser.apply(ClangGenericParsers::parseEnum, EnumScopeType.getEnumHelper(),
+                EnumScopeType.NO_SCOPE);
+
+        // boolean isClass = parser.apply(string -> ClangGenericParsers.checkStringStarts(string, "class "));
 
         String name = parser.apply(StringParsers::parseWord);
+
+        boolean isModulePrivate = parser.apply(ClangGenericParsers::checkWord, "__module_private__");
 
         EnumType type = (EnumType) parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
@@ -67,27 +75,8 @@ public class EnumDeclParser extends AClangNodeParser<EnumDecl> {
         Type integerType = getOriginalTypes().get(integerTypeId);
         Preconditions.checkNotNull(integerType, "No type for integer type for enum at " + node.getLocation());
 
-        // Build EnumType
-        // List<EnumType> enumTypes = type.stream()
-        // .map(underT -> ClavaNodeFactory.enumType(name, info, underT))
-        // .collect(Collectors.toList());
-
-        // If underlying type is empty, create empty enum type
-        // if (type.isEmpty()) {
-        // throw new RuntimeException("Expected at least one type");
-        // // enumTypes = Arrays.asList(ClavaNodeFactory.enumType(name, info));
-        // }
-
-        // if (!(type.get(0) instanceof EnumType)) {
-        // throw new RuntimeException("Expected EnumType, found " + type.get(0));
-        // }
-
-        // List<EnumType> enumTypes = Arrays.asList((EnumType) type.get(0));
-        // System.out.println("ENUMTYPE DECL TYPE:" + getTypesMap().get(enumTypes.get(0).getDeclInfo().getDeclId()));
-
-        // System.out.println("DECL TYPE:" + enumTypes.get(0).getDeclInfo().getDeclType());
-
-        return ClavaNodeFactory.enumDecl(isClass, name, integerType, type, info, enumConstants);
+        return ClavaNodeFactory.enumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info,
+                enumConstants);
     }
 
 }

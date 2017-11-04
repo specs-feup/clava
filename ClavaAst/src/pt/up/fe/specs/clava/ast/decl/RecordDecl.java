@@ -23,7 +23,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -45,7 +44,7 @@ public class RecordDecl extends TagDecl {
     protected RecordDecl(RecordDeclData recordDeclData, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
 
-        super(type, declData, info, children);
+        super(recordDeclData.getRecordKind(), recordDeclData.getRecordName(), type, declData, info, children);
 
         this.recordDeclData = recordDeclData;
     }
@@ -59,22 +58,24 @@ public class RecordDecl extends TagDecl {
     public RecordDeclData getRecordDeclData() {
         return recordDeclData;
     }
-
+    /*
     @Override
     public String getDeclName() {
         return recordDeclData.getRecordName();
     }
-
+    */
+    /*
     @Override
     public boolean hasDeclName() {
         return true;
     }
-
+    */
+    /*
     @Override
     public TagKind getTagKind() {
         return recordDeclData.getRecordKind();
     }
-
+    */
     /*
     public void addVarDecl(VarDecl var) {
     if (getTagKind() != TagKind.STRUCT && getTagKind() != TagKind.UNION) {

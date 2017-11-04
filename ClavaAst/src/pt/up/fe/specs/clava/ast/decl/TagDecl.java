@@ -29,6 +29,8 @@ import pt.up.fe.specs.clava.language.TagKind;
  */
 public abstract class TagDecl extends TypeDecl {
 
+    private final TagKind tagKind;
+
     /**
      * @deprecated
      * @param tagKind
@@ -37,19 +39,31 @@ public abstract class TagDecl extends TypeDecl {
      * @param info
      * @param children
      */
-    @Deprecated
-    public TagDecl(TagKind tagKind, String declName, Type type, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declName, type, info, children);
+    // @Deprecated
+    // public TagDecl(TagKind tagKind, String declName, Type type, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(declName, type, info, children);
+    //
+    // }
 
+    /**
+     * 
+     * @param tagKind
+     * @param declName
+     * @param type
+     * @param declData
+     * @param info
+     * @param children
+     */
+    public TagDecl(TagKind tagKind, String declName, Type type, DeclData declData, ClavaNodeInfo info,
+            Collection<? extends ClavaNode> children) {
+        super(declName, type, declData, info, children);
+
+        this.tagKind = tagKind;
     }
 
-    public TagDecl(Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(null, type, declData, info, children);
-
+    public TagKind getTagKind() {
+        return tagKind;
     }
-
-    public abstract TagKind getTagKind();
 
 }

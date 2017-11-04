@@ -22,9 +22,14 @@ import java.util.Set;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.providers.StringProvider;
 
 /**
  * Represents a declaration of a struct, union, class or enum.
@@ -36,22 +41,25 @@ public class EnumDecl extends TagDecl {
 
     private final static Set<String> DEFAULT_TYPES = new HashSet<>(Arrays.asList("int", "unsigned int"));
 
-    private final boolean isClass;
+    private final EnumScopeType enumScopeType;
+    private final boolean isModulePrivate;
     private final Type integerType;
 
-    public EnumDecl(boolean isClass, String tagName, Type integerType, EnumType type, ClavaNodeInfo info,
-            Collection<? extends EnumConstantDecl> children) {
+    public EnumDecl(EnumScopeType enumScopeType, String tagName, boolean isModulePrivate, Type integerType,
+            EnumType type, DeclData declData,
+            ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
 
-        super(TagKind.ENUM, tagName, type, info, children);
+        super(TagKind.ENUM, tagName, type, declData, info, children);
 
-        this.isClass = isClass;
+        this.enumScopeType = enumScopeType;
+        this.isModulePrivate = isModulePrivate;
         this.integerType = integerType;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new EnumDecl(isClass, getDeclName(), getIntegerType(), getEnumType(), getInfo(),
-                Collections.emptyList());
+        return new EnumDecl(enumScopeType, getDeclName(), isModulePrivate, getIntegerType(), getEnumType(),
+                getDeclData(), getInfo(), Collections.emptyList());
     }
 
     public EnumType getEnumType() {
@@ -69,13 +77,26 @@ public class EnumDecl extends TagDecl {
 
     @Override
     public String getCode() {
+        if (isModulePrivate) {
+            SpecsLogs.msgWarn("Code generation not implemented when enum is module private: " + getLocation());
+        }
         StringBuilder builder = new StringBuilder();
 
         builder.append(ln() + "enum ");
 
-        if (isClass) {
+        switch (enumScopeType) {
+        case CLASS:
             builder.append("class ");
+            break;
+        case STRUCT:
+            builder.append("struct ");
+            break;
+        case NO_SCOPE:
+            // Do nothing
         }
+        // if (isClass) {
+        // builder.append("class ");
+        // }
 
         builder.append(getDeclName());
 
@@ -111,6 +132,25 @@ public class EnumDecl extends TagDecl {
 
     public List<EnumConstantDecl> getEnumConstants() {
         return getChildrenOf(EnumConstantDecl.class);
+    }
+
+    public enum EnumScopeType implements StringProvider {
+        CLASS,
+        STRUCT,
+        NO_SCOPE;
+
+        private static final Lazy<EnumHelper<EnumScopeType>> ENUM_HELPER = EnumHelper.newLazyHelper(EnumScopeType.class,
+                NO_SCOPE);
+
+        public static EnumHelper<EnumScopeType> getEnumHelper() {
+            return ENUM_HELPER.get();
+        }
+
+        @Override
+        public String getString() {
+            return name().toLowerCase();
+        }
+
     }
 
 }

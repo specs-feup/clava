@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -28,31 +27,6 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public abstract class ValueDecl extends NamedDecl {
-
-    /**
-     * 
-     * @param type
-     * @param declName
-     * @param info
-     * @param children
-     * @deprecated Use constructor that does not use a list of types
-     */
-    @Deprecated
-    public ValueDecl(String declName, List<Type> type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(declName, type, info, children);
-    }
-
-    /**
-     * @deprecated
-     * @param type
-     * @param declName
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public ValueDecl(String declName, Type type, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(declName, type, info, children);
-    }
 
     public ValueDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
