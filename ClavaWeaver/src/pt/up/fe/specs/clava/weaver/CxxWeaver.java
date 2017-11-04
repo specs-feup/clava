@@ -223,9 +223,10 @@ public class CxxWeaver extends ACxxWeaver {
     public CxxWeaver() {
         // Weaver configuration
         args = null;
-        // app = null;
-        apps = new ArrayDeque<>();
-        userValuesStack = new ArrayDeque<>();
+        apps = null;
+        // apps = new ArrayDeque<>();
+        userValuesStack = null;
+        // userValuesStack = new ArrayDeque<>();
 
         // outputDir = null;
         sources = null;
@@ -302,6 +303,9 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
+
+        apps = new ArrayDeque<>();
+        userValuesStack = new ArrayDeque<>();
 
         accMap = new AccumulatorMap<>();
 
@@ -623,6 +627,9 @@ public class CxxWeaver extends ACxxWeaver {
             ClavaLog.info(" - Messages -");
             messagesToUser.forEach(ClavaLog::info);
         }
+
+        // Remove app from deque
+        popAst();
 
         return true;
     }
