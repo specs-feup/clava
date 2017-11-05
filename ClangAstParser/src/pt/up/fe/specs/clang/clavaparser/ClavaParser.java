@@ -147,6 +147,7 @@ import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.AdaptBoolCasts;
 import pt.up.fe.specs.clang.transforms.AdaptBoolTypes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RecoverStdMacros;
 import pt.up.fe.specs.clang.transforms.RemoveBoolOperatorCalls;
 import pt.up.fe.specs.clang.transforms.RemoveClangComments;
@@ -181,7 +182,8 @@ public class ClavaParser implements AutoCloseable {
             new ReplaceClangLabelStmt(),
             new RemoveDefaultInitializers(),
             new RemoveImplicitConstructors(),
-            new RecoverStdMacros());
+            new RecoverStdMacros(),
+            new MoveImplicitCasts());
     // new CreateOmpPragmas());
     // new RemoveOutOfPlaceInits());
 
