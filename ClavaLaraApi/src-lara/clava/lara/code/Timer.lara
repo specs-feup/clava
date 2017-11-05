@@ -84,12 +84,27 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
     }
     logger.ln();
 
-    // Insert code
-    $start.insertBefore(codeTic);
+	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
+	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
 
-    // 'after' insertions must be done in reverse order		
-    $end.insertAfter($timingResultDecl);
-    $end.insertAfter(codeToc);
+		// Insert code
+		$start.insertBegin(codeTic);
+
+		// 'end' insertions must be done in sequential order		
+		$end.insertEnd(codeToc);
+		$end.insertEnd($timingResultDecl);
+
+
+	} else {
+		// Insert code
+		$start.insertBefore(codeTic);
+
+		// 'after' insertions must be done in reverse order		
+		$end.insertAfter($timingResultDecl);
+		$end.insertAfter(codeToc);
+	}
+	
+
 
 
     // Log time information
@@ -170,12 +185,25 @@ Timer.prototype._time_c = function($start, prefix, $end) {
     }
     logger.ln();
 
-    // Insert code
-    $start.insertBefore(codeBefore);
+	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
+	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
 
-    // 'after' insertions must be done in reverse order		
-    $end.insertAfter($timingResultDecl);
-    $end.insertAfter(codeAfter);
+		// Insert code
+		$start.insertBegin(codeBefore);
+
+		// 'end' insertions must be done in sequential order		
+		$end.insertEnd(codeAfter);
+		$end.insertEnd($timingResultDecl);
+		
+	} else {
+	    // Insert code
+		$start.insertBefore(codeBefore);
+
+		// 'after' insertions must be done in reverse order		
+		$end.insertAfter($timingResultDecl);
+		$end.insertAfter(codeAfter);
+	}
+
 
 
     // Log time information
