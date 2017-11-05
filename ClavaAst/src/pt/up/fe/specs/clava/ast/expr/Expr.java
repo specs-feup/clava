@@ -34,11 +34,13 @@ import pt.up.fe.specs.clava.utils.Typable;
 public abstract class Expr extends ClavaNode implements Typable {
 
     private ExprData exprData;
+    private ImplicitCastExpr implicitCast;
 
     public Expr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
         this.exprData = exprData;
+        this.implicitCast = null;
     }
 
     @Override
@@ -59,35 +61,7 @@ public abstract class Expr extends ClavaNode implements Typable {
         return getType();
     }
 
-    /**
-     * The canonical type of the node.
-     * 
-     * @return
-     */
-    /*
-    public Type getCanonicalType() {
-        if (types.size() < 2) {
-            return getExprType();
-        }
-    
-        return types.get(1);
-    }
-    */
-
-    // public List<Type> getParsedType() {
-    // return parsedType;
-    // }
-
     public ValueKind getValueKind() {
-        /*
-        if (valueKind == null) {
-            // LoggingUtils.msgWarn(
-            // "Node '" + getClass().getSimpleName() + "' does not have ValueKind set, return RVALUE as default");
-            // return ValueKind.R_VALUE;
-            throw new RuntimeException("ValueKind not set");
-        }
-        */
-
         return exprData.getValueKind();
     }
 
@@ -127,8 +101,12 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     }
 
-    // public String getTypeCode() {
-    // // Not sure if we should use the same method as the one used for declarations
-    // return ClavaNodeUtils.getTypeCode(getType().get(0));
-    // }
+    public void setImplicitCast(ImplicitCastExpr implicitCast) {
+        this.implicitCast = implicitCast;
+    }
+
+    public Optional<ImplicitCastExpr> getImplicitCast() {
+        return Optional.ofNullable(implicitCast);
+    }
+
 }
