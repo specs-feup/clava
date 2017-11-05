@@ -311,6 +311,15 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * Get value on attribute implicitCast
+     * @return the attribute's value
+     */
+    @Override
+    public ACast getImplicitCastImpl() {
+        return this.aExpression.getImplicitCastImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select vardecls
      * @return 
      */
@@ -519,6 +528,7 @@ public abstract class ACall extends AExpression {
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
+        IMPLICITCAST("implicitCast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

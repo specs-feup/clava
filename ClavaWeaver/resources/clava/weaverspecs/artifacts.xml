@@ -139,7 +139,8 @@
 		<attribute name="use" type="{read,write,readwrite}" />
 		<attribute name="isFunctionArgument" type="Boolean" 
 			tooltip="true if the expression is part of an argument of a function call"/>
-	</artifact>
+		<attribute name="implicitCast" type="cast" tooltip="returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise"/>
+    </artifact>
 
 	<!-- CALL -->
 	<artifact class="call" default="name">
@@ -242,7 +243,7 @@
 
 	<!-- CAST -->
 	<artifact class="cast">
-		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use global attribute hasImplicitCast and implicitCast instead"/>
+		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use expr.implicitCast instead"/> 
 		<attribute name="fromType" type="joinpoint" />
 		<attribute name="toType" type="joinpoint" />
 	</artifact>

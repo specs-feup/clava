@@ -17,7 +17,6 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
-import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -50,7 +49,8 @@ public class CxxCast extends ACast {
 
     @Override
     public Boolean getIsImplicitCastImpl() {
-        return cast instanceof ImplicitCastExpr;
+        throw new RuntimeException("cast.isImplicitCast deprecated, please use instead expr.implicitCast");
+        // return cast instanceof ImplicitCastExpr;
     }
 
     @Override

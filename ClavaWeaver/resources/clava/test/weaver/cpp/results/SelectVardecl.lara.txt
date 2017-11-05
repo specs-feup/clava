@@ -19,24 +19,11 @@
 
 #4	expr -> j
 	In exractExprVardecl  expr : Joinpoint 'expression'
-	In exractExprVardecl  expr.joinpointType : cast
-	In exractExprVardecl  expr.selects : vardecl
-	In exractExprVardecl  expr.vardecl : Joinpoint 'decl'
-	>>>> vardecl#4	int j
-
-#4	expr -> j
-	In exractExprVardecl  expr : Joinpoint 'expression'
 	In exractExprVardecl  expr.joinpointType : varref
 	In exractExprVardecl  expr.selects : vardecl
 	In exractExprVardecl  expr.vardecl : Joinpoint 'decl'
 	>>>> vardecl#4	int j
 
-#4	expr -> m
-	In exractExprVardecl  expr : Joinpoint 'expression'
-	In exractExprVardecl  expr.joinpointType : cast
-	In exractExprVardecl  expr.selects : vardecl
-	In exractExprVardecl  expr.vardecl : Joinpoint 'decl'
-	>>>> vardecl#4	int m
 
 #4	expr -> m
 	In exractExprVardecl  expr : Joinpoint 'expression'

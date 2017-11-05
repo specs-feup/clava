@@ -19,7 +19,9 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
@@ -130,6 +132,13 @@ public class CxxExpression extends AExpression {
     @Override
     public Boolean getIsFunctionArgumentImpl() {
         return expr.isFunctionArgument();
+    }
+
+    @Override
+    public ACast getImplicitCastImpl() {
+        return expr.getImplicitCast()
+                .map(castExpr -> CxxJoinpoints.create(castExpr, this, ACast.class))
+                .orElse(null);
     }
 
 }

@@ -2422,6 +2422,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -4868,6 +4877,15 @@
                            {
                               "type": "Boolean",
                               "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
                            }]
                },
                {
@@ -10797,6 +10815,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12818,6 +12845,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -13307,6 +13343,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -13757,6 +13802,15 @@
                            {
                               "type": "Boolean",
                               "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
                            }]
                },
                {
@@ -14246,6 +14300,15 @@
                            {
                               "type": "Boolean",
                               "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
                            }]
                },
                {
@@ -15232,6 +15295,15 @@
                            {
                               "type": "Boolean",
                               "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
                            }]
                },
                {

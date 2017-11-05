@@ -92,6 +92,29 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+     */
+    public abstract ACast getImplicitCastImpl();
+
+    /**
+     * returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
+     */
+    public final Object getImplicitCast() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implicitCast", Optional.empty());
+        	}
+        	ACast result = this.getImplicitCastImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "implicitCast", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "implicitCast", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select vardecls
      * @return 
      */
@@ -123,6 +146,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         attributes.add("vardecl");
         attributes.add("use");
         attributes.add("isFunctionArgument");
+        attributes.add("implicitCast");
     }
 
     /**
@@ -157,6 +181,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
+        IMPLICITCAST("implicitCast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

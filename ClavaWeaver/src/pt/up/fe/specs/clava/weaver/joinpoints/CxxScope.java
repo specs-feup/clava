@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -149,9 +147,12 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint insertBeginImpl(AJoinPoint node) {
-        Preconditions.checkArgument(node.getNode() instanceof Stmt,
-                "Expected input of action scope.insertEntry to be a Stmt joinpoint");
-        CxxActions.insertStmt("before", scope, (Stmt) node.getNode(), getWeaverEngine());
+        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+
+        // Preconditions.checkArgument(node.getNode() instanceof Stmt,
+        // "Expected input of action scope.insertEntry to be a Stmt joinpoint");
+
+        CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
 
         return node;
     }
@@ -163,9 +164,11 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint insertEndImpl(AJoinPoint node) {
-        Preconditions.checkArgument(node.getNode() instanceof Stmt,
-                "Expected input of action scope.insertExit to be a Stmt joinpoint");
-        CxxActions.insertStmt("after", scope, (Stmt) node.getNode(), getWeaverEngine());
+        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+
+        // Preconditions.checkArgument(newStmt instanceof Stmt,
+        // "Expected input of action scope.insertEnd to be a Stmt joinpoint, is a " + node.getJoinPointType());
+        CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
         return node;
         /*
         List<? extends AStatement> statements = selectStatements();
