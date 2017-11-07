@@ -628,8 +628,9 @@ public class CxxWeaver extends ACxxWeaver {
             messagesToUser.forEach(ClavaLog::info);
         }
 
-        // Remove app from deque
-        popAst();
+        // Clears app and userValues stack
+        apps = null;
+        userValuesStack = null;
 
         return true;
     }
