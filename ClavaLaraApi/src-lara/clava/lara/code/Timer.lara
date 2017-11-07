@@ -84,6 +84,27 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
     }
     logger.ln();
 
+	
+	// Check if $start is a scope
+	if($start.instanceOf("scope")) {
+		// Insert code
+		$start.insertBegin(codeTic);
+	} else {
+		// Insert code
+		$start.insertBefore(codeTic);
+	}
+	
+	// Check if $end is a scope
+	if($end.instanceOf("scope")) {
+		// 'insertEnd' insertions must be done in sequential order		
+		$end.insertEnd(codeToc);
+		$end.insertEnd($timingResultDecl);
+	} else {
+		// 'insertAfter' insertions must be done in reverse order		
+		$end.insertAfter($timingResultDecl);
+		$end.insertAfter(codeToc);
+	}
+	/*
 	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
 	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
 
@@ -103,7 +124,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 		$end.insertAfter($timingResultDecl);
 		$end.insertAfter(codeToc);
 	}
-	
+	*/
 
 
 
@@ -185,6 +206,26 @@ Timer.prototype._time_c = function($start, prefix, $end) {
     }
     logger.ln();
 
+	// Check if $start is a scope
+	if($start.instanceOf("scope")) {
+		// Insert code
+		$start.insertBegin(codeBefore);
+	} else {
+		// Insert code
+		$start.insertBefore(codeBefore);
+	}
+	
+	// Check if $end is a scope
+	if($end.instanceOf("scope")) {
+		// 'insertEnd' insertions must be done in sequential order		
+		$end.insertEnd(codeAfter);
+		$end.insertEnd($timingResultDecl);
+	} else {
+		// 'insertAfter' insertions must be done in reverse order		
+		$end.insertAfter($timingResultDecl);
+		$end.insertAfter(codeAfter);
+	}
+/*	
 	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
 	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
 
@@ -203,7 +244,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 		$end.insertAfter($timingResultDecl);
 		$end.insertAfter(codeAfter);
 	}
-
+*/
 
 
     // Log time information
