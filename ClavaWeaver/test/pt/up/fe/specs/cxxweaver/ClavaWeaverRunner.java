@@ -71,4 +71,15 @@ public class ClavaWeaverRunner {
 
     }
 
+    @Test
+    public void testCsvScript() {
+        File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\tests\\2017-11-07 CSV in Python");
+
+        String argsString = " .\\extract_k_sequences.lara -av \"{inputFile: 'out.11out2016_speedups.csv'}\" -nw -b 2"; // --stack
+        // -nci
+        List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
+
+        SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);
+    }
+
 }
