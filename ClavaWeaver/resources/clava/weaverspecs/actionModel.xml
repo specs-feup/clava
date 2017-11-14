@@ -34,7 +34,7 @@
 	<!-- Removes node associated to the joinpoint from the AST -->
 	<action name="detach" />
 
-	<!-- Sets the the of a node, if it has a type -->
+	<!-- Sets the type of a node, if it has a type -->
 	<action name="setType">
 		<parameter name="type" type="joinpoint" />
 	</action>

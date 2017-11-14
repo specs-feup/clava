@@ -59,11 +59,15 @@ public class ClavaWeaverRunner {
 
     @Test
     public void testLat() {
-        File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\AntarexIT4I\\Probability");
+        // File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\AntarexIT4I\\Probability");
+        // String argsString = "-c LatDse.clava"; // --stack
+
+        File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\clava-tests\\Tests\\2017-11_matrix_mul");
+        String argsString = "-c MatrixMulMargot.clava"; // --stack
 
         // String argsString = " LatDse.lara -nw -b 2"; // --stack
         // String argsString = "-c LatDse.clava --stack"; // --stack
-        String argsString = "-c LatDse.clava"; // --stack
+
         // -nci
         List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
 
