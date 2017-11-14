@@ -20,6 +20,9 @@ aspectdef test
 	
 	// can't set
 	call SetProcBind('for', 'xxx');
+	
+	// set whole omp pragma to custom value
+	call SetCustomContent('parallel', 'parallel private(i)');
 end
 
 aspectdef SetNumThreads
@@ -45,5 +48,18 @@ aspectdef SetProcBind
         println("proc_bind:" + $omp.procBind);
 		exec setProcBind(proc);
         println("proc_bind:" + $omp.procBind);
+	end
+end
+
+aspectdef SetCustomContent
+	input kind, content end
+	
+	println(kind);
+	
+	select omp{kind} end
+	apply
+        println("content:" + $omp.content);
+		$omp.content = content;
+        println("content:" + $omp.content);
 	end
 end

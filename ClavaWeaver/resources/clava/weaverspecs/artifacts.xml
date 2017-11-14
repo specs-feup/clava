@@ -209,7 +209,7 @@
 	<artifact class="pragma">
 		<attribute name="name" type="String" />
 		<attribute name="target" type="joinpoint" />
-		<attribute name="content" type="String" />
+		<attribute name="content" type="String"/>
 	</artifact>
 
 

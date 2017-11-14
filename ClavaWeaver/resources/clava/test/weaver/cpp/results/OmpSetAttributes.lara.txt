@@ -17,3 +17,6 @@ proc_bind:close
 for
 proc_bind:
 proc_bind:
+parallel
+content:parallel num_threads(42) proc_bind(spread)
+content:parallel private(i)
