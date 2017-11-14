@@ -51,7 +51,7 @@ public abstract class OmpPragma extends Pragma {
      * @param numThreads
      * @param clause
      */
-    public void setClause(OmpClauseKind numThreads, OmpClause clause) {
+    public void setClause(OmpClauseKind kind, OmpClause clause) {
 
     }
 

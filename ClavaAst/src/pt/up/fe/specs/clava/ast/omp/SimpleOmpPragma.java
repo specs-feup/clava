@@ -23,12 +23,25 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  */
 public class SimpleOmpPragma extends OmpPragma {
 
+    private String customContent;
+
     public SimpleOmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
+        this(null, directiveKind, info);
+    }
+
+    private SimpleOmpPragma(String customContent, OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
         super(directiveKind, info);
+
+        this.customContent = null;
     }
 
     @Override
     public String getFullContent() {
+        // Give priority to custom content
+        if (customContent != null) {
+            return customContent;
+        }
+
         StringBuilder fullContent = new StringBuilder();
 
         fullContent.append("omp ");
@@ -39,7 +52,12 @@ public class SimpleOmpPragma extends OmpPragma {
 
     @Override
     protected SimpleOmpPragma copyPrivate() {
-        return new SimpleOmpPragma(getDirectiveKind(), getInfo());
+        return new SimpleOmpPragma(customContent, getDirectiveKind(), getInfo());
+    }
+
+    @Override
+    public void setFullContent(String fullContent) {
+        this.customContent = fullContent;
     }
 
 }

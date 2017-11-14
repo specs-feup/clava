@@ -18,22 +18,27 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class OmpLiteralPragma extends OmpPragma {
 
-    private final String content;
+    private String customContent;
 
     public OmpLiteralPragma(OmpDirectiveKind directiveKind, String content, ClavaNodeInfo info) {
         super(directiveKind, info);
 
-        this.content = content;
+        this.customContent = content;
     }
 
     @Override
     public String getFullContent() {
-        return content;
+        return customContent;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new OmpLiteralPragma(getDirectiveKind(), content, getInfo());
+        return new OmpLiteralPragma(getDirectiveKind(), customContent, getInfo());
+    }
+
+    @Override
+    public void setFullContent(String fullContent) {
+        this.customContent = fullContent;
     }
 
 }
