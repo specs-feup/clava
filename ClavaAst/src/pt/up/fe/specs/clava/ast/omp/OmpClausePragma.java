@@ -19,10 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
@@ -61,7 +58,7 @@ public class OmpClausePragma extends OmpPragma {
         fullContent.append(getDirectiveKind().getString());
         fullContent.append(clauses.values().stream()
                 .map(clauseList -> clauseList.stream().map(clause -> clause.getCode())
-                        .collect(Collectors.joining(" ", " ", "")))
+                        .collect(Collectors.joining(" ")))
                 .collect(Collectors.joining(" ", " ", "")));
 
         return fullContent.toString();
@@ -85,21 +82,23 @@ public class OmpClausePragma extends OmpPragma {
         return Optional.ofNullable(clauses.get(clauseKind));
     }
 
+    /*
     @Override
     public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
         Optional<List<OmpClause>> clausesList = getClause(clauseKind);
         if (clausesList.isPresent()) {
             return clausesList.get();
         }
-
+    
         OmpClause newClause = supplier.get();
-
+    
         Preconditions.checkArgument(clauseKind == newClause.getKind(), "Expected a clause of kind '" + clauseKind
                 + "', but supplier returned a clause of kind '" + newClause.getKind() + "'");
         addClause(clauseKind, newClause);
-
+    
         return getClause(clauseKind).get();
     }
+    */
 
     @Override
     public void addClause(OmpClauseKind kind, OmpClause clause) {

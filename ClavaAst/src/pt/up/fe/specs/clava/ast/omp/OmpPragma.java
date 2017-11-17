@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.ast.omp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
@@ -42,10 +41,10 @@ public abstract class OmpPragma extends Pragma {
     public Optional<List<OmpClause>> getClause(OmpClauseKind clauseKind) {
         return Optional.empty();
     }
-
-    public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
-        throw new RuntimeException("Not implemented yet");
-    }
+    //
+    // public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
+    // throw new RuntimeException("Not implemented yet");
+    // }
 
     public Boolean hasClause(OmpClauseKind clauseKind) {
         return false;
