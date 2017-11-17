@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.omp;
 
 import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpNumThreadsClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause;
@@ -53,48 +56,38 @@ public class OmpClauseParsers {
         OMP_CLAUSE_PARSERS.put(REDUCTION, OmpClauseParsers::parseReduction);
         OMP_CLAUSE_PARSERS.put(NUM_THREADS, OmpClauseParsers::parseNumThreads);
         OMP_CLAUSE_PARSERS.put(PROC_BIND, OmpClauseParsers::parseProcBind);
+        OMP_CLAUSE_PARSERS.put(DEFAULT, OmpClauseParsers::parseDefault);
 
         OMP_CLAUSE_PARSERS.put(PRIVATE, parser -> OmpClauseParsers.parseListClause(parser, PRIVATE));
+        OMP_CLAUSE_PARSERS.put(FIRSTPRIVATE, parser -> OmpClauseParsers.parseListClause(parser, FIRSTPRIVATE));
         OMP_CLAUSE_PARSERS.put(SHARED, parser -> OmpClauseParsers.parseListClause(parser, SHARED));
+        OMP_CLAUSE_PARSERS.put(COPYIN, parser -> OmpClauseParsers.parseListClause(parser, COPYIN));
     }
 
-    public static Optional<Map<OmpClauseKind, OmpClause>> parse(StringParser pragmaParser) {
-        Map<OmpClauseKind, OmpClause> clauses = new LinkedHashMap<>();
+    public static Optional<Map<OmpClauseKind, List<OmpClause>>> parse(StringParser pragmaParser) {
+        Map<OmpClauseKind, List<OmpClause>> clauses = new LinkedHashMap<>();
 
         // Apply rules while there are clauses
         while (!pragmaParser.isEmpty()) {
 
             Optional<OmpClause> parsedClause = pragmaParser.apply(OmpClauseParsers::parseOmpClause);
 
-            parsedClause.ifPresent(clause -> clauses.put(clause.getKind(), clause));
-            /*
-            // Identify kind of clause
-            OmpClauseKind clauseKind = getClauseKind(pragmaParser.getCurrentString());
-            
-            Function<StringParser, OmpClause> clauseParser = OMP_CLAUSE_PARSERS.get(clauseKind);
-            
-            if (clauseParser == null) {
-                ClavaLog.info("Clause not implemented yet: " + clauseKind.getString());
+            // If empty, means that clause is not supported, return empty
+            if (!parsedClause.isPresent()) {
                 return Optional.empty();
             }
-            // Preconditions.checkNotNull(clauseParser, "Clause not implemented yet: " + clauseKind);
-            
-            // Remove unused spaces
-            // without this, the next call will fail to match any OmpClauseKind when parseClauseName is called
-            // we can also hide this trim call in parseClauseName, but we need to make sure every parsing function will
-            // call parseClauseName
-            // pragmaParser.trim();
-            
-            OmpClause clause = clauseParser.apply(pragmaParser);
-            
-            clauses.put(clauseKind, clause);
-            
-            // Remove unused spaces
-            pragmaParser.trim();
-            
-            // If starts with ',' remove
-            pragmaParser.apply(StringParsers::checkCharacter, ',');
-            */
+
+            OmpClause clause = parsedClause.get();
+
+            List<OmpClause> clausesList = clauses.get(clause.getKind());
+            if (clausesList == null) {
+                clausesList = new ArrayList<>();
+                clauses.put(clause.getKind(), clausesList);
+            }
+
+            clausesList.add(clause);
+            // parsedClause.ifPresent(clause -> clauses.put(clause.getKind(), clause));
+
         }
 
         return Optional.of(clauses);
@@ -148,7 +141,7 @@ public class OmpClauseParsers {
 
         String clauseName = indexOfPar == -1 ? currentPragmaPrefix : currentPragmaPrefix.substring(0, indexOfPar);
 
-        return OmpClauseKind.getHelper().valueOf(clauseName.toLowerCase().trim());
+        return getHelper().valueOf(clauseName.toLowerCase().trim());
     }
 
     private static StringParser parseClauseName(OmpClauseKind clauseKind, StringParser clauses) {
@@ -267,5 +260,15 @@ public class OmpClauseParsers {
         ProcBindKind kind = ProcBindKind.getHelper().valueOf(arg);
 
         return new OmpProcBindClause(kind);
+    }
+
+    private static OmpDefaultClause parseDefault(StringParser clauses) {
+
+        StringParser clause = parseClauseName(PROC_BIND, clauses);
+
+        String arg = clause.toString().trim();
+        DefaultKind kind = DefaultKind.getHelper().valueOf(arg);
+
+        return new OmpDefaultClause(kind);
     }
 }
