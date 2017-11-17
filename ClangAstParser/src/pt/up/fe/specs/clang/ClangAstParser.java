@@ -368,20 +368,20 @@ public class ClangAstParser {
                 // Cannot delete zip file, it will be used to check if there is a new file or not
             }
 
-        } else {
-            // Clang built-in includes, to be used in all platforms
-            // Write Clang headers
-            ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
-                    resourceFolder, ClangAstParser.class);
+        }
 
-            // Unzip file, if new
-            if (builtinIncludesZip.isNewFile()) {
-                // Ensure folder is empty
-                SpecsIo.deleteFolderContents(includesBaseFolder);
+        // Clang built-in includes, to be used in all platforms
+        // Write Clang headers
+        ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
+                resourceFolder, ClangAstParser.class);
 
-                SpecsIo.extractZip(builtinIncludesZip.getFile(), includesBaseFolder);
-                // Cannot delete zip file, it will be used to check if there is a new file or not
-            }
+        // Unzip file, if new
+        if (builtinIncludesZip.isNewFile()) {
+            // Ensure folder is empty
+            SpecsIo.deleteFolderContents(includesBaseFolder);
+
+            SpecsIo.extractZip(builtinIncludesZip.getFile(), includesBaseFolder);
+            // Cannot delete zip file, it will be used to check if there is a new file or not
         }
 
         // List<String> includes = new ArrayList<>();

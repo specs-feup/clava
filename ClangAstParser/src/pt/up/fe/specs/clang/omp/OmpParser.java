@@ -18,7 +18,9 @@ import static pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,6 +35,8 @@ import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpLiteralPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.SimpleOmpPragma;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -89,9 +93,19 @@ public class OmpParser implements PragmaParser {
             return specificFunc.apply(pragmaParser);
         }
 
+        // Check if there are clauses to parse
+        boolean hasClauses = !pragmaParser.toString().trim().isEmpty();
+
         // Parse clauses
-        return OmpClauseParsers.parse(pragmaParser)
-                .map(clauses -> (OmpPragma) new OmpClausePragma(ompDirective, clauses, pragma.getInfo()))
+        Optional<Map<OmpClauseKind, List<OmpClause>>> clausesMap = OmpClauseParsers.parse(pragmaParser);
+
+        // If no map and there were clauses to parse, at least one of the clauses could not be parsed. Return a literal
+        // pragma
+        if (hasClauses && !clausesMap.isPresent()) {
+            return new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo());
+        }
+
+        return clausesMap.map(clauses -> (OmpPragma) new OmpClausePragma(ompDirective, clauses, pragma.getInfo()))
                 .orElseGet(() -> new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo()));
 
         // Map<OmpClauseKind, OmpClause> clauses = OmpClauseParsers.parse(pragmaParser);
