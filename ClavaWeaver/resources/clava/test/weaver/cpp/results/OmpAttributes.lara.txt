@@ -4,7 +4,7 @@ proc_bind:master
 has shared:false
 nowait legal:false
 kind: for
-num_threads:
-proc_bind:
+num_threads:undefined
+proc_bind:undefined
 has shared:true
 nowait legal:true

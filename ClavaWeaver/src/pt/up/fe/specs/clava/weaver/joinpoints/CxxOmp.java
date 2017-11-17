@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauses;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
@@ -164,36 +165,61 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setNumThreadsImpl(String newExpr) {
-
+        OmpNumThreadsClause clause = new OmpNumThreadsClause(newExpr);
+        setClause(clause);
+        /*
         OmpDirectiveKind directiveKind = ompPragma.getDirectiveKind();
-
+        
         if (!directiveKind.isClauseLegal(NUM_THREADS)) {
             ClavaLog.info("Can't set '" + NUM_THREADS.getString() + "' value on a " + directiveKind.getString()
                     + " directive.");
             return;
         }
-
+        
         OmpNumThreadsClause clause = new OmpNumThreadsClause(newExpr);
-
+        
         ompPragma.addClause(NUM_THREADS, clause);
+        */
     }
 
     @Override
     public void setProcBindImpl(String newBind) {
+        ProcBindKind kind = ProcBindKind.getHelper().valueOfTry(newBind).orElse(null);
+        if (kind == null) {
+            ClavaLog.info("Can't set '" + newBind + "' as a proc bind value, valid values: "
+                    + ProcBindKind.getHelper().getAvailableOptions());
+            return;
+        }
 
+        setClause(new OmpProcBindClause(kind));
+
+        /*        
         OmpDirectiveKind directiveKind = ompPragma.getDirectiveKind();
-
+        
         if (!directiveKind.isClauseLegal(PROC_BIND)) {
             ClavaLog.info("Can't set '" + PROC_BIND.getString() + "' value on a " + directiveKind.getString()
                     + " directive.");
             return;
         }
-
+        
         ProcBindKind kind = ProcBindKind.getHelper().valueOf(newBind);
-
+        
         OmpProcBindClause clause = new OmpProcBindClause(kind);
-
+        
         ompPragma.addClause(PROC_BIND, clause);
+        */
+    }
+
+    private void setClause(OmpClause clause) {
+        OmpDirectiveKind directiveKind = ompPragma.getDirectiveKind();
+
+        if (!directiveKind.isClauseLegal(clause.getKind())) {
+            ClavaLog.info("Can't set '" + clause.getKind().getString() + "' value on a " + directiveKind.getString()
+                    + " directive.");
+            return;
+        }
+
+        ompPragma.setClause(clause);
     }
 
     @Override
