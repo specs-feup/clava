@@ -90,4 +90,12 @@ public class OmpReductionClause implements OmpClause {
         return builder.toString();
     }
 
+    public ReductionKind getReductionKind() {
+        return reductionKind;
+    }
+
+    public List<String> getVariables() {
+        return variables;
+    }
+
 }

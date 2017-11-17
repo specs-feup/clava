@@ -14,7 +14,9 @@
 package pt.up.fe.specs.clava.ast.omp;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
@@ -37,8 +39,12 @@ public abstract class OmpPragma extends Pragma {
         return directiveKind;
     }
 
-    public Optional<OmpClause> getClause(OmpClauseKind clauseKind) {
+    public Optional<List<OmpClause>> getClause(OmpClauseKind clauseKind) {
         return Optional.empty();
+    }
+
+    public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
+        throw new RuntimeException("Not implemented yet");
     }
 
     public Boolean hasClause(OmpClauseKind clauseKind) {
@@ -51,12 +57,17 @@ public abstract class OmpPragma extends Pragma {
      * @param numThreads
      * @param clause
      */
-    public void setClause(OmpClauseKind kind, OmpClause clause) {
+    public void addClause(OmpClauseKind kind, OmpClause clause) {
 
     }
 
     @Override
     public void setFullContent(String fullContent) {
         SpecsLogs.msgWarn("Pragma.setFullContent is not supported for OmpPragma, please use the setters");
+    }
+
+    public void setClause(OmpClause ompClause) {
+        // Does nothing
+        SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause()");
     }
 }

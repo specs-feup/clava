@@ -13,20 +13,37 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
+import java.util.List;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
+import pt.up.fe.specs.util.SpecsCollections;
 
 public class OmpClauses {
 
     public static Optional<OmpProcBindClause> getProcBind(OmpPragma ompPragma) {
         return ompPragma.getClause(OmpClauseKind.PROC_BIND)
+                .flatMap(OmpClauses::returnFirst)
                 .map(OmpProcBindClause.class::cast);
     }
 
     public static Optional<OmpNumThreadsClause> getNumThreads(OmpPragma ompPragma) {
         return ompPragma.getClause(OmpClauseKind.NUM_THREADS)
+                .flatMap(OmpClauses::returnFirst)
                 .map(OmpNumThreadsClause.class::cast);
+    }
+
+    public static Optional<List<OmpListClause>> getListClause(OmpPragma ompPragma, OmpClauseKind kind) {
+        return ompPragma.getClause(kind)
+                .map(clausesList -> SpecsCollections.cast(clausesList, OmpListClause.class));
+    }
+
+    private static <K> Optional<K> returnFirst(List<K> list) {
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(list.get(0));
     }
 
 }
