@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import org.lara.interpreter.weaver.utils.Converter;
 import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
