@@ -64,7 +64,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     public Bindings getMemberChainImpl() {
         String[] stringArrayImpl0 = getMemberChainArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 

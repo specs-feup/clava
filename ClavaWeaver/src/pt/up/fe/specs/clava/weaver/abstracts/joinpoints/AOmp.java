@@ -3,6 +3,8 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.weaver.utils.Converter;
+import javax.script.Bindings;
 import org.lara.interpreter.exception.ActionException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -98,6 +100,41 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "procBind", e);
+        }
+    }
+
+    /**
+     * Get value on attribute _private
+     * @return the attribute's value
+     */
+    public abstract String[] getPrivateArrayImpl();
+
+    /**
+     * Get value on attribute _private
+     * @return the attribute's value
+     */
+    public Bindings getPrivateImpl() {
+        String[] stringArrayImpl0 = getPrivateArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute _private
+     * @return the attribute's value
+     */
+    public final Object getPrivate() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "private", Optional.empty());
+        	}
+        	Bindings result = this.getPrivateImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "private", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "private", e);
         }
     }
 
@@ -204,6 +241,32 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setProcBind", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a private clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setPrivateImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setPrivate not implemented ");
+    }
+
+    /**
+     * Sets the variables of a private clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setPrivate(String[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), newVariables);
+        	}
+        	this.setPrivateImpl(newVariables);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setPrivate", e);
         }
     }
 
@@ -382,6 +445,7 @@ public abstract class AOmp extends APragma {
         attributes.add("kind");
         attributes.add("numThreads");
         attributes.add("procBind");
+        attributes.add("private");
         attributes.add("hasClause");
         attributes.add("isClauseLegal");
     }
@@ -402,6 +466,7 @@ public abstract class AOmp extends APragma {
         this.aPragma.fillWithActions(actions);
         actions.add("void setNumThreads(String)");
         actions.add("void setProcBind(String)");
+        actions.add("void setPrivate(String[])");
     }
 
     /**
@@ -432,6 +497,7 @@ public abstract class AOmp extends APragma {
         KIND("kind"),
         NUMTHREADS("numThreads"),
         PROCBIND("procBind"),
+        PRIVATE("private"),
         HASCLAUSE("hasClause"),
         ISCLAUSELEGAL("isClauseLegal"),
         NAME("name"),

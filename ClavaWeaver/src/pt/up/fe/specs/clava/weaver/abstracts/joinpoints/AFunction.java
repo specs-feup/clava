@@ -185,7 +185,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      */
     public Bindings getParamNamesImpl() {
         String[] stringArrayImpl0 = getParamNamesArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -220,7 +220,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      */
     public Bindings getParamsImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getParamsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(aJoinPointArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 

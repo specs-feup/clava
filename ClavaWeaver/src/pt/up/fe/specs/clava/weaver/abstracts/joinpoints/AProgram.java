@@ -127,7 +127,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Bindings getDefaultFlagsImpl() {
         String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -162,7 +162,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Bindings getUserFlagsImpl() {
         String[] stringArrayImpl0 = getUserFlagsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -197,7 +197,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      */
     public Bindings getIncludeFoldersImpl() {
         String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 

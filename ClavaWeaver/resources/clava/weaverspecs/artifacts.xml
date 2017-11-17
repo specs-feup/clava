@@ -322,6 +322,7 @@
 		<attribute name="kind" type="String" />
 		<attribute name="numThreads" type="String" />
 		<attribute name="procBind" type="String" />
+		<attribute name="private" type="String[]" />
 		<attribute name="hasClause" type="Boolean">
 			<parameter name="clauseName" type="String" />
 		</attribute>

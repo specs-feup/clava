@@ -82,7 +82,7 @@ public abstract class ARecord extends ACxxWeaverJoinPoint {
      */
     public Bindings getFieldsImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getFieldsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(aJoinPointArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 

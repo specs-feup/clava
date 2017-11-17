@@ -90,7 +90,7 @@ public abstract class ACall extends AExpression {
      */
     public Bindings getMemberNamesImpl() {
         String[] stringArrayImpl0 = getMemberNamesArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -171,7 +171,7 @@ public abstract class ACall extends AExpression {
      */
     public Bindings getArgListImpl() {
         String[] stringArrayImpl0 = getArgListArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 

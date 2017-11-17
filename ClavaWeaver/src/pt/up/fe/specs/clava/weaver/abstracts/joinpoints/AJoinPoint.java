@@ -777,7 +777,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Bindings getChainImpl() {
         String[] stringArrayImpl0 = getChainArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -812,7 +812,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     public Bindings getJavaFieldsImpl() {
         String[] stringArrayImpl0 = getJavaFieldsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 

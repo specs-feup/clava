@@ -64,7 +64,7 @@ public abstract class AFunctionType extends AType {
      */
     public Bindings getParamTypesImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getParamTypesArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(aJoinPointArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 

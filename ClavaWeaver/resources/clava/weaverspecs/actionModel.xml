@@ -189,8 +189,11 @@
 	<action name="setNumThreads" class="omp" tooltip="Sets the value of the num_threads clause of an OpenMP pragma">
 		<parameter name="newExpr" type="String" />
 	</action>
-		<action name="setProcBind" class="omp" tooltip="Sets the value of the proc_bind clause of an OpenMP pragma">
+	<action name="setProcBind" class="omp" tooltip="Sets the value of the proc_bind clause of an OpenMP pragma">
 		<parameter name="newBind" type="String" />
+	</action>
+	<action name="setPrivate" class="omp" tooltip="Sets the variables of a private clause of an OpenMP pragma">
+		<parameter name="newVariables" type="String[]" />
 	</action>
 	
 	<!-- PRAGMA -->

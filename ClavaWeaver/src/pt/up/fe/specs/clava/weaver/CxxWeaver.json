@@ -4831,7 +4831,7 @@
          "children": [
                {
                   "type": "attribute",
-                  "tooltip": "[DEPRECATED] Use global attribute hasImplicitCast and implicitCast instead",
+                  "tooltip": "[DEPRECATED] Use expr.implicitCast instead",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6033,6 +6033,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String[]",
+                              "name": "private"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Boolean",
                               "name": "hasClause"
                            },
@@ -6386,6 +6394,20 @@
                            {
                               "type": "String",
                               "name": "newBind",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the variables of a private clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setPrivate"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "newVariables",
                               "defaultValue": ""
                            }]
                },

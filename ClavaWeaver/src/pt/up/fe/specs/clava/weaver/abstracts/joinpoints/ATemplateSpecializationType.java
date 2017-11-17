@@ -89,7 +89,7 @@ public abstract class ATemplateSpecializationType extends AType {
      */
     public Bindings getArgsImpl() {
         String[] stringArrayImpl0 = getArgsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 

@@ -182,7 +182,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     public Bindings getTemplateArgsImpl() {
         String[] stringArrayImpl0 = getTemplateArgsArrayImpl();
-        Bindings nativeArray0 = Converter.toNativeArray(stringArrayImpl0);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 

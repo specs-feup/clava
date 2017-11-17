@@ -15,12 +15,18 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauses;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpNumThreadsClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
@@ -58,7 +64,7 @@ public class CxxOmp extends AOmp {
     public String getNumThreadsImpl() {
         return OmpClauses.getNumThreads(ompPragma)
                 .map(OmpNumThreadsClause::getExpression)
-                .orElse("");
+                .orElse(null);
 
         /*
         Optional<OmpClause> clause = ompPragma.getClause(NUM_THREADS);
@@ -75,7 +81,7 @@ public class CxxOmp extends AOmp {
 
         return OmpClauses.getProcBind(ompPragma)
                 .map(OmpProcBindClause::getprocBindKindString)
-                .orElse("");
+                .orElse(null);
         /*
         Optional<OmpClause> clause = ompPragma.getClause(PROC_BIND);
         
@@ -169,7 +175,7 @@ public class CxxOmp extends AOmp {
 
         OmpNumThreadsClause clause = new OmpNumThreadsClause(newExpr);
 
-        ompPragma.setClause(NUM_THREADS, clause);
+        ompPragma.addClause(NUM_THREADS, clause);
     }
 
     @Override
@@ -187,6 +193,32 @@ public class CxxOmp extends AOmp {
 
         OmpProcBindClause clause = new OmpProcBindClause(kind);
 
-        ompPragma.setClause(PROC_BIND, clause);
+        ompPragma.addClause(PROC_BIND, clause);
+    }
+
+    @Override
+    public String[] getPrivateArrayImpl() {
+        Optional<List<OmpListClause>> clauses = OmpClauses.getListClause(ompPragma, PRIVATE);
+
+        if (!clauses.isPresent()) {
+            return new String[0];
+        }
+
+        return clauses.get().stream()
+                .flatMap(clauseList -> clauseList.getVariables().stream())
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+
+        // return variables.toArray(new )
+        // .toArray(variableList -> new String[variableList.size()]);
+
+        // return OmpClauses.getProcBind(ompPragma)
+        // .map(OmpProcBindClause::getprocBindKindString)
+        // .orElse("");
+    }
+
+    @Override
+    public void setPrivateImpl(String[] newVariables) {
+        ompPragma.setClause(new OmpListClause(PRIVATE, Arrays.asList(newVariables)));
     }
 }
