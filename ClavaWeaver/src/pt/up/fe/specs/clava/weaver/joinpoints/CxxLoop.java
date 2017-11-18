@@ -281,8 +281,8 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public String getRankImpl() {
-        throw new RuntimeException("Not implemented yet");
+    public Integer[] getRankArrayImpl() {
+        return loop.getRank().toArray(new Integer[0]);
     }
 
     @Override
@@ -465,5 +465,10 @@ public class CxxLoop extends ALoop {
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
+    }
+
+    @Override
+    public String getIdImpl() {
+        return loop.getLoopId();
     }
 }

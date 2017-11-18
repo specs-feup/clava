@@ -109,11 +109,12 @@
 	<!-- LOOP -->
 	<artifact class="loop" default="kind">
 		<attribute name="kind" type="{for,while}" />
+		<attribute name="id" type="String" tooltip="Uniquely identifies the loop inside the program"/>
 		<attribute name="isInnermost" type="Boolean" />
 		<attribute name="isOutermost" type="Boolean" />
 		<attribute name="nestedLevel" type="Integer" />
 		<attribute name="controlVar" type="String" />
-		<attribute name="rank" type="String" />
+		<attribute name="rank" type="Integer[]" />
 		<attribute name="isParallel" type="Boolean" />
 		<attribute name="iterations" type="Integer" />
 		

@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -48,6 +49,29 @@ public abstract class ALoop extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
+        }
+    }
+
+    /**
+     * Uniquely identifies the loop inside the program
+     */
+    public abstract String getIdImpl();
+
+    /**
+     * Uniquely identifies the loop inside the program
+     */
+    public final Object getId() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "id", Optional.empty());
+        	}
+        	String result = this.getIdImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "id", e);
         }
     }
 
@@ -155,7 +179,17 @@ public abstract class ALoop extends AStatement {
      * Get value on attribute rank
      * @return the attribute's value
      */
-    public abstract String getRankImpl();
+    public abstract Integer[] getRankArrayImpl();
+
+    /**
+     * Get value on attribute rank
+     * @return the attribute's value
+     */
+    public Bindings getRankImpl() {
+        Integer[] integerArrayImpl0 = getRankArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(integerArrayImpl0);
+        return nativeArray0;
+    }
 
     /**
      * Get value on attribute rank
@@ -166,7 +200,7 @@ public abstract class ALoop extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rank", Optional.empty());
         	}
-        	String result = this.getRankImpl();
+        	Bindings result = this.getRankImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "rank", Optional.ofNullable(result));
         	}
@@ -692,6 +726,7 @@ public abstract class ALoop extends AStatement {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("kind");
+        attributes.add("id");
         attributes.add("isInnermost");
         attributes.add("isOutermost");
         attributes.add("nestedLevel");
@@ -754,6 +789,7 @@ public abstract class ALoop extends AStatement {
      */
     protected enum LoopAttributes {
         KIND("kind"),
+        ID("id"),
         ISINNERMOST("isInnermost"),
         ISOUTERMOST("isOutermost"),
         NESTEDLEVEL("nestedLevel"),
