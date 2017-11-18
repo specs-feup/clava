@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
@@ -116,8 +117,15 @@ public class OmpClausePragma extends OmpPragma {
 
     @Override
     public void setClause(OmpClause ompClause) {
+        OmpDirectiveKind directiveKind = getDirectiveKind();
+
+        if (!directiveKind.isClauseLegal(ompClause.getKind())) {
+            ClavaLog.info("Can't set '" + ompClause.getKind().getString() + "' value on a " + directiveKind.getString()
+                    + " directive.");
+            return;
+        }
+
         setClause(Arrays.asList(ompClause));
-        // clauses.put(ompClause.getKind(), Arrays.asList(ompClause));
     }
 
     @Override

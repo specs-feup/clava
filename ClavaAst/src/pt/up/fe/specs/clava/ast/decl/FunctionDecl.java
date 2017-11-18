@@ -241,7 +241,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
         code.append(" ").append(getTypelessCode());
 
-        return code.toString();
+        return code.toString().trim();
     }
 
     @Override

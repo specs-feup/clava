@@ -19,18 +19,26 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauses;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 public abstract class OmpPragma extends Pragma {
 
     private final OmpDirectiveKind directiveKind;
+    private final Lazy<OmpClauses> clauses;
 
     protected OmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
 
         super(info, Collections.emptyList());
 
         this.directiveKind = directiveKind;
+        this.clauses = Lazy.newInstance(() -> new OmpClauses(this));
+    }
+
+    public OmpClauses clauses() {
+        return clauses.get();
     }
 
     public OmpDirectiveKind getDirectiveKind() {
