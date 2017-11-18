@@ -27,8 +27,8 @@ import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauses;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpIntegerExpressionClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
-import pt.up.fe.specs.clava.ast.omp.clauses.OmpNumThreadsClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -64,7 +64,7 @@ public class CxxOmp extends AOmp {
     @Override
     public String getNumThreadsImpl() {
         return OmpClauses.getNumThreads(ompPragma)
-                .map(OmpNumThreadsClause::getExpression)
+                .map(OmpIntegerExpressionClause::getExpression)
                 .orElse(null);
 
         /*
@@ -165,8 +165,7 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setNumThreadsImpl(String newExpr) {
-        OmpNumThreadsClause clause = new OmpNumThreadsClause(newExpr);
-        setClause(clause);
+        setClause(OmpClauses.newNumThreads(newExpr));
         /*
         OmpDirectiveKind directiveKind = ompPragma.getDirectiveKind();
         
