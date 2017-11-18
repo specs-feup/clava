@@ -1,6 +1,6 @@
 kind: parallel
-clause kinds:num_threads,proc_bind
-has shared:false
+clause kinds:num_threads,proc_bind,shared,copyin
+has shared:true
 nowait legal:false
 num_threads:4 + 2
 proc_bind:master
@@ -10,8 +10,13 @@ reduction max:
 reduction kinds:
 firstprivate:
 lastprivate:
+shared:a,i
+copyin:a
+schedule kind:undefined
+schedule chunk size:undefined
+schedule modifiers:
 kind: for
-clause kinds:shared,private,collapse,ordered,reduction,firstprivate,lastprivate
+clause kinds:shared,private,collapse,ordered,reduction,firstprivate,lastprivate,schedule
 has shared:true
 nowait legal:true
 num_threads:undefined
@@ -22,3 +27,8 @@ reduction max:i
 reduction kinds:+,max
 firstprivate:a
 lastprivate:i
+shared:i
+copyin:
+schedule kind:static
+schedule chunk size:2
+schedule modifiers:monotonic

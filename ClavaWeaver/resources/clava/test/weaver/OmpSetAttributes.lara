@@ -92,6 +92,9 @@ aspectdef SetForAttributes
 	apply
         println("for content before:" + $omp.content);
 		$omp.lastprivate = ['last_a', 'last_b'];
+		$omp.scheduleKind = 'static';
+		$omp.scheduleChunkSize = 4;
+		$omp.scheduleModifiers = ['monotonic'];
 		println("for content after:" + $omp.content);
 	end
 end

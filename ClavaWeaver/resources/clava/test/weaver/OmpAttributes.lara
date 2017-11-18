@@ -16,6 +16,9 @@ aspectdef test
 		println("lastprivate:" + $omp.lastprivate);
 		println("shared:" + $omp.shared);
 		println("copyin:" + $omp.copyin);
+		println("schedule kind:" + $omp.scheduleKind);
+		println("schedule chunk size:" + $omp.scheduleChunkSize);
+		println("schedule modifiers:" + $omp.scheduleModifiers);
     end
 
 end

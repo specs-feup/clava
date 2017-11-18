@@ -443,6 +443,85 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
+     */
+    public abstract String getScheduleKindImpl();
+
+    /**
+     * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
+     */
+    public final Object getScheduleKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleKind", Optional.empty());
+        	}
+        	String result = this.getScheduleKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleKind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "scheduleKind", e);
+        }
+    }
+
+    /**
+     * An integer expression, or undefined if no 'schedule' clause with chunk size is defined
+     */
+    public abstract String getScheduleChunkSizeImpl();
+
+    /**
+     * An integer expression, or undefined if no 'schedule' clause with chunk size is defined
+     */
+    public final Object getScheduleChunkSize() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleChunkSize", Optional.empty());
+        	}
+        	String result = this.getScheduleChunkSizeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleChunkSize", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "scheduleChunkSize", e);
+        }
+    }
+
+    /**
+     * Get value on attribute scheduleModifiers
+     * @return the attribute's value
+     */
+    public abstract String[] getScheduleModifiersArrayImpl();
+
+    /**
+     * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
+     */
+    public Bindings getScheduleModifiersImpl() {
+        String[] stringArrayImpl0 = getScheduleModifiersArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
+     */
+    public final Object getScheduleModifiers() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleModifiers", Optional.empty());
+        	}
+        	Bindings result = this.getScheduleModifiersImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "scheduleModifiers", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "scheduleModifiers", e);
+        }
+    }
+
+    /**
      * Sets the value of the num_threads clause of an OpenMP pragma
      * @param newExpr 
      */
@@ -679,6 +758,84 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Sets the value of the schedule clause of an OpenMP pragma
+     * @param scheduleKind 
+     */
+    public void setScheduleKindImpl(String scheduleKind) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleKind not implemented ");
+    }
+
+    /**
+     * Sets the value of the schedule clause of an OpenMP pragma
+     * @param scheduleKind 
+     */
+    public final void setScheduleKind(String scheduleKind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleKind", this, Optional.empty(), scheduleKind);
+        	}
+        	this.setScheduleKindImpl(scheduleKind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleKind", this, Optional.empty(), scheduleKind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleKind", e);
+        }
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public void setScheduleChunkSizeImpl(String chunkSize) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public final void setScheduleChunkSize(String chunkSize) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        	this.setScheduleChunkSizeImpl(chunkSize);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleChunkSize", e);
+        }
+    }
+
+    /**
+     * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param modifiers 
+     */
+    public void setScheduleModifiersImpl(String[] modifiers) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleModifiers not implemented ");
+    }
+
+    /**
+     * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param modifiers 
+     */
+    public final void setScheduleModifiers(String[] modifiers) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), modifiers);
+        	}
+        	this.setScheduleModifiersImpl(modifiers);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), modifiers);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleModifiers", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -864,6 +1021,9 @@ public abstract class AOmp extends APragma {
         attributes.add("lastprivate");
         attributes.add("shared");
         attributes.add("copyin");
+        attributes.add("scheduleKind");
+        attributes.add("scheduleChunkSize");
+        attributes.add("scheduleModifiers");
     }
 
     /**
@@ -889,6 +1049,9 @@ public abstract class AOmp extends APragma {
         actions.add("void setLastprivate(String[])");
         actions.add("void setShared(String[])");
         actions.add("void setCopyin(String[])");
+        actions.add("void setScheduleKind(String)");
+        actions.add("void setScheduleChunkSize(String)");
+        actions.add("void setScheduleModifiers(String[])");
     }
 
     /**
@@ -930,6 +1093,9 @@ public abstract class AOmp extends APragma {
         LASTPRIVATE("lastprivate"),
         SHARED("shared"),
         COPYIN("copyin"),
+        SCHEDULEKIND("scheduleKind"),
+        SCHEDULECHUNKSIZE("scheduleChunkSize"),
+        SCHEDULEMODIFIERS("scheduleModifiers"),
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),

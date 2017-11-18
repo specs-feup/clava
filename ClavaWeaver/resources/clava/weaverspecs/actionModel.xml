@@ -214,6 +214,15 @@
 	<action name="setCopyin" class="omp" tooltip="Sets the variables of a copyin clause of an OpenMP pragma">
 		<parameter name="newVariables" type="String[]" />
 	</action>
+	<action name="setScheduleKind" class="omp" tooltip="Sets the value of the schedule clause of an OpenMP pragma">
+		<parameter name="scheduleKind" type="String" />
+	</action>
+	<action name="setScheduleChunkSize" class="omp" tooltip="Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
+		<parameter name="chunkSize" type="String" />
+	</action>
+	<action name="setScheduleModifiers" class="omp" tooltip="Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
+		<parameter name="modifiers" type="String[]" />
+	</action>
 	
 	<!-- PRAGMA -->
 	<action name="setName" class="pragma">

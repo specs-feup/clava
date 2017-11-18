@@ -340,6 +340,9 @@
 		<attribute name="lastprivate" type="String[]" tooltip="The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined"/>
 		<attribute name="shared" type="String[]" tooltip="The variable names of all shared clauses, or empty array if no shared clause is defined"/>
 		<attribute name="copyin" type="String[]" tooltip="The variable names of all copyin clauses, or empty array if no copyin clause is defined"/>
+		<attribute name="scheduleKind" type="String" tooltip="One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined"/>
+		<attribute name="scheduleChunkSize" type="String" tooltip="An integer expression, or undefined if no 'schedule' clause with chunk size is defined"/>
+		<attribute name="scheduleModifiers" type="String[]" tooltip="A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined"/>
 	</artifact>
 
 </artifacts>

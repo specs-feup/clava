@@ -21,7 +21,7 @@ public abstract class ACxxWeaver extends WeaverEngine {
      */
     @Override
     public final List<String> getActions() {
-        String[] weaverActions= {"replaceWith", "insertBefore", "insertBefore", "insertAfter", "insertAfter", "detach", "setType", "rebuild", "addFile", "push", "pop", "addInclude", "addInclude", "addIncludeJp", "addGlobal", "messageToUser", "setName", "wrap", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addFunction", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "clone", "cloneOnFile", "cloneOnFile", "clear", "insertReturn", "insertReturn", "changeKind", "setKind", "setInit", "setCond", "setStep", "setNumThreads", "setProcBind", "setPrivate", "setReduction", "setDefault", "setFirstprivate", "setLastprivate", "setShared", "setCopyin", "setName", "setContent", "setInit", "setInit"};
+        String[] weaverActions= {"replaceWith", "insertBefore", "insertBefore", "insertAfter", "insertAfter", "detach", "setType", "rebuild", "addFile", "push", "pop", "addInclude", "addInclude", "addIncludeJp", "addGlobal", "messageToUser", "setName", "wrap", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addFunction", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "clone", "cloneOnFile", "cloneOnFile", "clear", "insertReturn", "insertReturn", "changeKind", "setKind", "setInit", "setCond", "setStep", "setNumThreads", "setProcBind", "setPrivate", "setReduction", "setDefault", "setFirstprivate", "setLastprivate", "setShared", "setCopyin", "setScheduleKind", "setScheduleChunkSize", "setScheduleModifiers", "setName", "setContent", "setInit", "setInit"};
         return Arrays.asList(weaverActions);
     }
 

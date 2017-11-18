@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.Arrays;
+import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
@@ -21,6 +22,8 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleModifier;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -214,5 +217,40 @@ public class CxxOmp extends AOmp {
     @Override
     public void setCopyinImpl(String[] newVariables) {
         ompPragma.clauses().setCopyin(Arrays.asList(newVariables));
+    }
+
+    @Override
+    public String getScheduleKindImpl() {
+        return ompPragma.clauses().getScheduleKind().map(ScheduleKind::getKey).orElse(null);
+    }
+
+    @Override
+    public void setScheduleKindImpl(String scheduleKindString) {
+        ScheduleKind kind = ScheduleKind.getHelper().valueOfTry(scheduleKindString)
+                .orElseThrow(() -> new RuntimeException("Can't set '" + scheduleKindString
+                        + "' as a schedule kind, valid values: " + ScheduleKind.getHelper().getAvailableOptions()));
+
+        ompPragma.clauses().setScheduleKind(kind);
+    }
+
+    @Override
+    public String getScheduleChunkSizeImpl() {
+        return ompPragma.clauses().getScheduleChunkSize().orElse(null);
+    }
+
+    @Override
+    public void setScheduleChunkSizeImpl(String chunkSize) {
+        ompPragma.clauses().setScheduleChunkSize(chunkSize);
+    }
+
+    @Override
+    public String[] getScheduleModifiersArrayImpl() {
+        return SpecsCollections.toStringArray(ompPragma.clauses().getScheduleModifiers());
+    }
+
+    @Override
+    public void setScheduleModifiersImpl(String[] modifiers) {
+        List<ScheduleModifier> parsedModifiers = ScheduleModifier.getHelper().valueOf(Arrays.asList(modifiers));
+        ompPragma.clauses().setScheduleModifiers(parsedModifiers);
     }
 }
