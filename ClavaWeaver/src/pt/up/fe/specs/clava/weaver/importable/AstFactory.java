@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.omp.OmpParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -44,6 +45,7 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
@@ -311,5 +313,13 @@ public class AstFactory {
         }
 
         return CxxJoinpoints.create(outType, null);
+    }
+
+    public static AJoinPoint omp(String directiveName) {
+        // Get directive
+        OmpDirectiveKind kind = OmpDirectiveKind.getHelper().valueOf(directiveName);
+        return CxxJoinpoints.create(OmpParser.newOmpPragma(kind), null);
+
+        // ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(),
     }
 }

@@ -23,5 +23,19 @@ aspectdef test
 		println("ordered:" + $omp.hasClause('ordered'));
 		println("ordered value:" + $omp.ordered);
     end
-
+	
+	select omp{'for'} end
+	apply
+		$omp.insertAfter(AstFactory.omp('master'));
+		$omp.target.insertAfter(AstFactory.omp('barrier'));
+		println($omp.parent.code);
+	end
+/*
+	select program end
+	apply
+		println($program.ast);
+		println("----------");
+		println($program.code);
+	end
+*/
 end
