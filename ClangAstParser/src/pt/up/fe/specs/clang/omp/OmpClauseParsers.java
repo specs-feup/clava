@@ -245,7 +245,8 @@ public class OmpClauseParsers {
         String scheduleString = commaIndex == -1 ? args : args.substring(0, commaIndex);
         ScheduleKind schedule = ScheduleKind.getHelper().valueOf(scheduleString.trim());
 
-        Integer chunkSize = commaIndex == -1 ? null : Integer.decode(args.substring(commaIndex + 1).trim());
+        String chunkSize = commaIndex == -1 ? null : args.substring(commaIndex + 1).trim();
+        // Integer chunkSize = commaIndex == -1 ? null : Integer.decode(args.substring(commaIndex + 1).trim());
 
         return new OmpScheduleClause(schedule, chunkSize, modifiers);
     }
