@@ -331,7 +331,7 @@ public class OmpClauseParsers {
 
     private static OmpDefaultClause parseDefault(StringParser clauses) {
 
-        StringParser clause = parseClauseName(PROC_BIND, clauses);
+        StringParser clause = parseClauseName(DEFAULT, clauses);
 
         String arg = clause.toString().trim();
         DefaultKind kind = DefaultKind.getHelper().valueOf(arg);
