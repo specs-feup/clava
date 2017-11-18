@@ -33,8 +33,8 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpIntegerExpressionClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
-import pt.up.fe.specs.clava.ast.omp.clauses.OmpNumThreadsClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause;
@@ -54,12 +54,18 @@ public class OmpClauseParsers {
         OMP_CLAUSE_PARSERS = new HashMap<>();
         OMP_CLAUSE_PARSERS.put(SCHEDULE, OmpClauseParsers::parseSchedule);
         OMP_CLAUSE_PARSERS.put(REDUCTION, OmpClauseParsers::parseReduction);
-        OMP_CLAUSE_PARSERS.put(NUM_THREADS, OmpClauseParsers::parseNumThreads);
+        // OMP_CLAUSE_PARSERS.put(NUM_THREADS, OmpClauseParsers::parseNumThreads);
+
         OMP_CLAUSE_PARSERS.put(PROC_BIND, OmpClauseParsers::parseProcBind);
         OMP_CLAUSE_PARSERS.put(DEFAULT, OmpClauseParsers::parseDefault);
 
+        OMP_CLAUSE_PARSERS.put(NUM_THREADS, parser -> OmpClauseParsers.parseInteger(parser, NUM_THREADS, false, false));
+        OMP_CLAUSE_PARSERS.put(COLLAPSE, parser -> OmpClauseParsers.parseInteger(parser, COLLAPSE, false, true));
+        OMP_CLAUSE_PARSERS.put(ORDERED, parser -> OmpClauseParsers.parseInteger(parser, ORDERED, true, true));
+
         OMP_CLAUSE_PARSERS.put(PRIVATE, parser -> OmpClauseParsers.parseListClause(parser, PRIVATE));
         OMP_CLAUSE_PARSERS.put(FIRSTPRIVATE, parser -> OmpClauseParsers.parseListClause(parser, FIRSTPRIVATE));
+        OMP_CLAUSE_PARSERS.put(LASTPRIVATE, parser -> OmpClauseParsers.parseListClause(parser, LASTPRIVATE));
         OMP_CLAUSE_PARSERS.put(SHARED, parser -> OmpClauseParsers.parseListClause(parser, SHARED));
         OMP_CLAUSE_PARSERS.put(COPYIN, parser -> OmpClauseParsers.parseListClause(parser, COPYIN));
     }
@@ -144,9 +150,40 @@ public class OmpClauseParsers {
         return getHelper().valueOf(clauseName.toLowerCase().trim());
     }
 
+    /**
+     * Consumes the clause name and parameters from clauses, returns the contents of the parameters.
+     * 
+     * @param clauseKind
+     * @param clauses
+     * @return the contents of the parameters
+     */
     private static StringParser parseClauseName(OmpClauseKind clauseKind, StringParser clauses) {
+        return parseClauseName(clauseKind, clauses, false);
+    }
+
+    /**
+     * Consumes the clause name and parameters from clauses, if present, returns the contents of the parameters or null
+     * string if there are no parameters.
+     * 
+     * @param clauseKind
+     * @param clauses
+     * @param optionalParams
+     * @return
+     */
+    private static StringParser parseClauseName(OmpClauseKind clauseKind, StringParser clauses,
+            boolean optionalParams) {
+
         int closeParIndex = clauses.getCurrentString().indexOf(')');
-        Preconditions.checkArgument(closeParIndex != -1);
+        boolean hasParameters = closeParIndex != -1;
+        if (!optionalParams) {
+            Preconditions.checkArgument(hasParameters);
+        }
+
+        // If no parameters, just consume the clause name and return empty string
+        if (!hasParameters) {
+            clauses.apply(StringParsers::checkStringStarts, clauseKind.getString());
+            return null;
+        }
 
         String scheduleClauseString = clauses.substring(closeParIndex + 1);
         StringParser clause = new StringParser(scheduleClauseString);
@@ -243,13 +280,29 @@ public class OmpClauseParsers {
         return new OmpReductionClause(reductionKind, variables);
     }
 
+    /*
     private static OmpNumThreadsClause parseNumThreads(StringParser clauses) {
-
+    
         StringParser clause = parseClauseName(NUM_THREADS, clauses);
-
-        String expression = clause.apply(StringParsers::parseWord);
-
+    
+        // String expression = clause.apply(StringParsers::parseWord);
+        String expression = clause.toString();
+    
         return new OmpNumThreadsClause(expression);
+    }
+    */
+
+    private static OmpIntegerExpressionClause parseInteger(StringParser clauses, OmpClauseKind kind,
+            boolean isOptional, boolean isConstantPositive) {
+
+        StringParser clause = parseClauseName(kind, clauses, isOptional);
+
+        // If clause is not empty, parse word
+
+        // Peek if starts with '('
+        String expression = clause != null ? clause.toString() : null;
+
+        return new OmpIntegerExpressionClause(kind, expression, isOptional, isConstantPositive);
     }
 
     private static OmpProcBindClause parseProcBind(StringParser clauses) {
