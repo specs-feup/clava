@@ -199,6 +199,21 @@
 		<parameter name="kind" type="String" />
 		<parameter name="newVariables" type="String[]" />
 	</action>
+	<action name="setDefault" class="omp" tooltip="Sets the value of the default clause of an OpenMP pragma">
+		<parameter name="newDefault" type="String" />
+	</action>
+	<action name="setFirstprivate" class="omp" tooltip="Sets the variables of a firstprivate clause of an OpenMP pragma">
+		<parameter name="newVariables" type="String[]" />
+	</action>
+	<action name="setLastprivate" class="omp" tooltip="Sets the variables of a lastprivate clause of an OpenMP pragma">
+		<parameter name="newVariables" type="String[]" />
+	</action>
+	<action name="setShared" class="omp" tooltip="Sets the variables of a shared clause of an OpenMP pragma">
+		<parameter name="newVariables" type="String[]" />
+	</action>
+	<action name="setCopyin" class="omp" tooltip="Sets the variables of a copyin clause of an OpenMP pragma">
+		<parameter name="newVariables" type="String[]" />
+	</action>
 	
 	<!-- PRAGMA -->
 	<action name="setName" class="pragma">

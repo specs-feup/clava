@@ -334,7 +334,12 @@
 		<attribute name="reduction" type="String[]" tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
 			<parameter name="kind" type="String" />
 		</attribute>	
-
+		<attribute name="reductionKinds" type="String[]" tooltip="The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined"/>
+		<attribute name="default" type="String" tooltip="One of 'shared' or 'none', or undefined if no 'default' clause is defined"/>
+		<attribute name="firstprivate" type="String[]" tooltip="The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined"/>
+		<attribute name="lastprivate" type="String[]" tooltip="The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined"/>
+		<attribute name="shared" type="String[]" tooltip="The variable names of all shared clauses, or empty array if no shared clause is defined"/>
+		<attribute name="copyin" type="String[]" tooltip="The variable names of all copyin clauses, or empty array if no copyin clause is defined"/>
 	</artifact>
 
 </artifacts>

@@ -6091,6 +6091,60 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "reductionKinds"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "One of 'shared' or 'none', or undefined if no 'default' clause is defined",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "default"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "firstprivate"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "lastprivate"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The variable names of all shared clauses, or empty array if no shared clause is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "shared"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The variable names of all copyin clauses, or empty array if no copyin clause is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "copyin"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -6451,6 +6505,76 @@
                               "type": "String",
                               "name": "kind",
                               "defaultValue": ""
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "newVariables",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value of the default clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setDefault"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newDefault",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the variables of a firstprivate clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setFirstprivate"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "newVariables",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the variables of a lastprivate clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setLastprivate"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "newVariables",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the variables of a shared clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setShared"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "newVariables",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the variables of a copyin clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCopyin"
                            },
                            {
                               "type": "String[]",

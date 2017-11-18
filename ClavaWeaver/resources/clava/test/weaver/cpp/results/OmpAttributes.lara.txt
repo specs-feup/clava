@@ -7,12 +7,18 @@ proc_bind:master
 private:
 reduction +:
 reduction max:
+reduction kinds:
+firstprivate:
+lastprivate:
 kind: for
-clause kinds:shared,private,collapse,ordered,reduction
+clause kinds:shared,private,collapse,ordered,reduction,firstprivate,lastprivate
 has shared:true
 nowait legal:true
 num_threads:undefined
 proc_bind:undefined
 private:a
 reduction +:a
-reduction max:
+reduction max:i
+reduction kinds:+,max
+firstprivate:a
+lastprivate:i

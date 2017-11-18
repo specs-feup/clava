@@ -255,6 +255,194 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute reductionKinds
+     * @return the attribute's value
+     */
+    public abstract String[] getReductionKindsArrayImpl();
+
+    /**
+     * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
+     */
+    public Bindings getReductionKindsImpl() {
+        String[] stringArrayImpl0 = getReductionKindsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
+     */
+    public final Object getReductionKinds() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reductionKinds", Optional.empty());
+        	}
+        	Bindings result = this.getReductionKindsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "reductionKinds", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "reductionKinds", e);
+        }
+    }
+
+    /**
+     * One of 'shared' or 'none', or undefined if no 'default' clause is defined
+     */
+    public abstract String getDefaultImpl();
+
+    /**
+     * One of 'shared' or 'none', or undefined if no 'default' clause is defined
+     */
+    public final Object getDefault() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "default", Optional.empty());
+        	}
+        	String result = this.getDefaultImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "default", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "default", e);
+        }
+    }
+
+    /**
+     * Get value on attribute firstprivate
+     * @return the attribute's value
+     */
+    public abstract String[] getFirstprivateArrayImpl();
+
+    /**
+     * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
+     */
+    public Bindings getFirstprivateImpl() {
+        String[] stringArrayImpl0 = getFirstprivateArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
+     */
+    public final Object getFirstprivate() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstprivate", Optional.empty());
+        	}
+        	Bindings result = this.getFirstprivateImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "firstprivate", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "firstprivate", e);
+        }
+    }
+
+    /**
+     * Get value on attribute lastprivate
+     * @return the attribute's value
+     */
+    public abstract String[] getLastprivateArrayImpl();
+
+    /**
+     * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
+     */
+    public Bindings getLastprivateImpl() {
+        String[] stringArrayImpl0 = getLastprivateArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
+     */
+    public final Object getLastprivate() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "lastprivate", Optional.empty());
+        	}
+        	Bindings result = this.getLastprivateImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "lastprivate", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "lastprivate", e);
+        }
+    }
+
+    /**
+     * Get value on attribute shared
+     * @return the attribute's value
+     */
+    public abstract String[] getSharedArrayImpl();
+
+    /**
+     * The variable names of all shared clauses, or empty array if no shared clause is defined
+     */
+    public Bindings getSharedImpl() {
+        String[] stringArrayImpl0 = getSharedArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The variable names of all shared clauses, or empty array if no shared clause is defined
+     */
+    public final Object getShared() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "shared", Optional.empty());
+        	}
+        	Bindings result = this.getSharedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "shared", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "shared", e);
+        }
+    }
+
+    /**
+     * Get value on attribute copyin
+     * @return the attribute's value
+     */
+    public abstract String[] getCopyinArrayImpl();
+
+    /**
+     * The variable names of all copyin clauses, or empty array if no copyin clause is defined
+     */
+    public Bindings getCopyinImpl() {
+        String[] stringArrayImpl0 = getCopyinArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The variable names of all copyin clauses, or empty array if no copyin clause is defined
+     */
+    public final Object getCopyin() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "copyin", Optional.empty());
+        	}
+        	Bindings result = this.getCopyinImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "copyin", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "copyin", e);
+        }
+    }
+
+    /**
      * Sets the value of the num_threads clause of an OpenMP pragma
      * @param newExpr 
      */
@@ -357,6 +545,136 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setReduction", e);
+        }
+    }
+
+    /**
+     * Sets the value of the default clause of an OpenMP pragma
+     * @param newDefault 
+     */
+    public void setDefaultImpl(String newDefault) {
+        throw new UnsupportedOperationException(get_class()+": Action setDefault not implemented ");
+    }
+
+    /**
+     * Sets the value of the default clause of an OpenMP pragma
+     * @param newDefault 
+     */
+    public final void setDefault(String newDefault) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setDefault", this, Optional.empty(), newDefault);
+        	}
+        	this.setDefaultImpl(newDefault);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setDefault", this, Optional.empty(), newDefault);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setDefault", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a firstprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setFirstprivateImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setFirstprivate not implemented ");
+    }
+
+    /**
+     * Sets the variables of a firstprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setFirstprivate(String[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), newVariables);
+        	}
+        	this.setFirstprivateImpl(newVariables);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setFirstprivate", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a lastprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setLastprivateImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setLastprivate not implemented ");
+    }
+
+    /**
+     * Sets the variables of a lastprivate clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setLastprivate(String[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), newVariables);
+        	}
+        	this.setLastprivateImpl(newVariables);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setLastprivate", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a shared clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setSharedImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setShared not implemented ");
+    }
+
+    /**
+     * Sets the variables of a shared clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setShared(String[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), newVariables);
+        	}
+        	this.setSharedImpl(newVariables);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setShared", e);
+        }
+    }
+
+    /**
+     * Sets the variables of a copyin clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public void setCopyinImpl(String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setCopyin not implemented ");
+    }
+
+    /**
+     * Sets the variables of a copyin clause of an OpenMP pragma
+     * @param newVariables 
+     */
+    public final void setCopyin(String[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), newVariables);
+        	}
+        	this.setCopyinImpl(newVariables);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCopyin", e);
         }
     }
 
@@ -540,6 +858,12 @@ public abstract class AOmp extends APragma {
         attributes.add("isClauseLegal");
         attributes.add("clauseKinds");
         attributes.add("reduction");
+        attributes.add("reductionKinds");
+        attributes.add("default");
+        attributes.add("firstprivate");
+        attributes.add("lastprivate");
+        attributes.add("shared");
+        attributes.add("copyin");
     }
 
     /**
@@ -560,6 +884,11 @@ public abstract class AOmp extends APragma {
         actions.add("void setProcBind(String)");
         actions.add("void setPrivate(String[])");
         actions.add("void setReduction(String, String[])");
+        actions.add("void setDefault(String)");
+        actions.add("void setFirstprivate(String[])");
+        actions.add("void setLastprivate(String[])");
+        actions.add("void setShared(String[])");
+        actions.add("void setCopyin(String[])");
     }
 
     /**
@@ -595,6 +924,12 @@ public abstract class AOmp extends APragma {
         ISCLAUSELEGAL("isClauseLegal"),
         CLAUSEKINDS("clauseKinds"),
         REDUCTION("reduction"),
+        REDUCTIONKINDS("reductionKinds"),
+        DEFAULT("default"),
+        FIRSTPRIVATE("firstprivate"),
+        LASTPRIVATE("lastprivate"),
+        SHARED("shared"),
+        COPYIN("copyin"),
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),

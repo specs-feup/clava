@@ -24,7 +24,10 @@ aspectdef test
 	
 	// test setters of directive parallel
 	call SetParallelAttributes();
-	
+	// test setters of directive for
+	call SetForAttributes();
+
+		
 	// set whole omp pragma to custom value. Custom content is not compatible with setting attributes, done after attribute set testing
 	call SetCustomContent('parallel', 'parallel private(i)');
 
@@ -77,6 +80,18 @@ aspectdef SetParallelAttributes
 		var sumReduction = $omp.reduction('+');
 		sumReduction.push('b');
 		$omp.exec setReduction('+', sumReduction);
+		$omp.firstprivate = ['first_a', 'first_b'];
+		$omp.shared = ['shared_a', 'shared_b'];
+		$omp.copyin = ['copyin_a', 'copyin_b'];
 		println("parallel content after:" + $omp.content);
+	end
+end
+aspectdef SetForAttributes
+		
+	select omp{'for'} end
+	apply
+        println("for content before:" + $omp.content);
+		$omp.lastprivate = ['last_a', 'last_b'];
+		println("for content after:" + $omp.content);
 	end
 end

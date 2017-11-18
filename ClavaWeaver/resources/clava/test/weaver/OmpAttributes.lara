@@ -11,6 +11,11 @@ aspectdef test
 		println("private:" + $omp.private);
 		println("reduction +:" + $omp.reduction('+'));
 		println("reduction max:" + $omp.reduction('MAX'));
+		println("reduction kinds:" + $omp.reductionKinds);
+		println("firstprivate:" + $omp.firstprivate);
+		println("lastprivate:" + $omp.lastprivate);
+		println("shared:" + $omp.shared);
+		println("copyin:" + $omp.copyin);
     end
 
 end

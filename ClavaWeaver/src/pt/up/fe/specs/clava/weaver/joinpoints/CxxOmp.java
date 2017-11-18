@@ -14,15 +14,16 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
+import pt.up.fe.specs.util.SpecsCollections;
 
 public class CxxOmp extends AOmp {
 
@@ -130,10 +131,12 @@ public class CxxOmp extends AOmp {
 
     @Override
     public String[] getClauseKindsArrayImpl() {
-        return ompPragma.getClauseKinds().stream()
-                .map(OmpClauseKind::getKey)
-                .collect(Collectors.toList())
-                .toArray(new String[0]);
+        return SpecsCollections.toStringArray(ompPragma.getClauseKinds());
+
+        // return ompPragma.getClauseKinds().stream()
+        // .map(OmpClauseKind::getKey)
+        // .collect(Collectors.toList())
+        // .toArray(new String[0]);
     }
 
     @Override
@@ -145,6 +148,71 @@ public class CxxOmp extends AOmp {
     public void setReductionImpl(String reductionKindString, String[] newVariables) {
         ReductionKind reductionKind = ReductionKind.getHelper().valueOf(reductionKindString.toLowerCase());
 
-        ompPragma.clauses().setReductionImpl(reductionKind, Arrays.asList(newVariables));
+        ompPragma.clauses().setReduction(reductionKind, Arrays.asList(newVariables));
+    }
+
+    @Override
+    public String[] getReductionKindsArrayImpl() {
+        return SpecsCollections.toStringArray(ompPragma.clauses().getReductionKinds());
+        // String[] a = SpecsCollections.toStringArray(ompPragma.clauses().getReductionKinds());
+        // return ompPragma.clauses().getReductionKinds().stream()
+        // .map(ReductionKind::getKey)
+        // .collect(Collectors.toList())
+        // .toArray(new String[0]);
+    }
+
+    @Override
+    public String getDefaultImpl() {
+        return ompPragma.clauses().getDefault()
+                .map(DefaultKind::getKey)
+                .orElse(null);
+    }
+
+    @Override
+    public void setDefaultImpl(String newDefault) {
+        DefaultKind kind = DefaultKind.getHelper().valueOfTry(newDefault)
+                .orElseThrow(() -> new RuntimeException("Can't set '" + newDefault
+                        + "' as a 'default' value, valid values: " + DefaultKind.getHelper().getAvailableOptions()));
+        ompPragma.clauses().setDefault(kind);
+    }
+
+    @Override
+    public String[] getFirstprivateArrayImpl() {
+        return ompPragma.clauses().getFirstprivate().toArray(new String[0]);
+    }
+
+    @Override
+    public void setFirstprivateImpl(String[] newVariables) {
+        ompPragma.clauses().setFirstprivate(Arrays.asList(newVariables));
+    }
+
+    @Override
+    public String[] getLastprivateArrayImpl() {
+        return ompPragma.clauses().getLastprivate().toArray(new String[0]);
+    }
+
+    @Override
+    public void setLastprivateImpl(String[] newVariables) {
+        ompPragma.clauses().setLastprivate(Arrays.asList(newVariables));
+    }
+
+    @Override
+    public String[] getSharedArrayImpl() {
+        return ompPragma.clauses().getShared().toArray(new String[0]);
+    }
+
+    @Override
+    public void setSharedImpl(String[] newVariables) {
+        ompPragma.clauses().setShared(Arrays.asList(newVariables));
+    }
+
+    @Override
+    public String[] getCopyinArrayImpl() {
+        return ompPragma.clauses().getCopyin().toArray(new String[0]);
+    }
+
+    @Override
+    public void setCopyinImpl(String[] newVariables) {
+        ompPragma.clauses().setCopyin(Arrays.asList(newVariables));
     }
 }
