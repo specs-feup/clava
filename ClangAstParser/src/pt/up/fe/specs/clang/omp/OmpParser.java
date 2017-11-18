@@ -18,6 +18,7 @@ import static pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,6 +57,20 @@ public class OmpParser implements PragmaParser {
     static {
         SPECIFIC_OMP_PARSERS = new HashMap<>();
         // SPECIFIC_OMP_PARSERS.put(ATOMIC, value);
+    }
+
+    public static OmpPragma newOmpPragma(OmpDirectiveKind kind) {
+        // Check if already implemented
+        if (UNIMPLEMENTED_OMP_PRAGMA.contains(kind)) {
+            throw new RuntimeException("OpenMP pragma '" + kind + "' is not yet supported");
+        }
+
+        if (SIMPLE_OMP_PRAGMA.contains(kind)) {
+            return new SimpleOmpPragma(kind, ClavaNodeInfo.undefinedInfo());
+        }
+
+        // Return pragma without clauses
+        return new OmpClausePragma(kind, new LinkedHashMap<>(), ClavaNodeInfo.undefinedInfo());
     }
 
     public OmpPragma parse(Pragma pragma) {
