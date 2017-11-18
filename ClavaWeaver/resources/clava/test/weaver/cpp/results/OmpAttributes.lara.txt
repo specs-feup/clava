@@ -1,10 +1,18 @@
 kind: parallel
-num_threads:4
-proc_bind:master
+clause kinds:num_threads,proc_bind
 has shared:false
 nowait legal:false
+num_threads:4 + 2
+proc_bind:master
+private:
+reduction +:
+reduction max:
 kind: for
-num_threads:undefined
-proc_bind:undefined
+clause kinds:shared,private,collapse,ordered,reduction
 has shared:true
 nowait legal:true
+num_threads:undefined
+proc_bind:undefined
+private:a
+reduction +:a
+reduction max:

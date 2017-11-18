@@ -195,6 +195,10 @@
 	<action name="setPrivate" class="omp" tooltip="Sets the variables of a private clause of an OpenMP pragma">
 		<parameter name="newVariables" type="String[]" />
 	</action>
+	<action name="setReduction" class="omp" tooltip="Sets the variables for a given kind of a reduction clause of an OpenMP pragma">
+		<parameter name="kind" type="String" />
+		<parameter name="newVariables" type="String[]" />
+	</action>
 	
 	<!-- PRAGMA -->
 	<action name="setName" class="pragma">

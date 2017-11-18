@@ -28,14 +28,12 @@ public abstract class AOmp extends APragma {
         this.aPragma = aPragma;
     }
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
+     * The kind of the directive
      */
     public abstract String getKindImpl();
 
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
+     * The kind of the directive
      */
     public final Object getKind() {
         try {
@@ -53,14 +51,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute numThreads
-     * @return the attribute's value
+     * An integer expression, or undefined if no 'num_threads' clause is defined
      */
     public abstract String getNumThreadsImpl();
 
     /**
-     * Get value on attribute numThreads
-     * @return the attribute's value
+     * An integer expression, or undefined if no 'num_threads' clause is defined
      */
     public final Object getNumThreads() {
         try {
@@ -78,14 +74,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute procBind
-     * @return the attribute's value
+     * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
     public abstract String getProcBindImpl();
 
     /**
-     * Get value on attribute procBind
-     * @return the attribute's value
+     * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
     public final Object getProcBind() {
         try {
@@ -109,8 +103,7 @@ public abstract class AOmp extends APragma {
     public abstract String[] getPrivateArrayImpl();
 
     /**
-     * Get value on attribute _private
-     * @return the attribute's value
+     * The variable names of all private clauses, or empty array if no private clause is defined
      */
     public Bindings getPrivateImpl() {
         String[] stringArrayImpl0 = getPrivateArrayImpl();
@@ -119,8 +112,7 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute _private
-     * @return the attribute's value
+     * The variable names of all private clauses, or empty array if no private clause is defined
      */
     public final Object getPrivate() {
         try {
@@ -188,6 +180,77 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isClauseLegal", e);
+        }
+    }
+
+    /**
+     * Get value on attribute clauseKinds
+     * @return the attribute's value
+     */
+    public abstract String[] getClauseKindsArrayImpl();
+
+    /**
+     * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
+     */
+    public Bindings getClauseKindsImpl() {
+        String[] stringArrayImpl0 = getClauseKindsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
+     */
+    public final Object getClauseKinds() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "clauseKinds", Optional.empty());
+        	}
+        	Bindings result = this.getClauseKindsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "clauseKinds", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "clauseKinds", e);
+        }
+    }
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public abstract String[] reductionArrayImpl(String kind);
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public Bindings reductionImpl(String kind) {
+        String[] stringArrayImpl0 = reductionArrayImpl(kind);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public final Object reduction(String kind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reduction", Optional.empty(), kind);
+        	}
+        	Bindings result = this.reductionImpl(kind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "reduction", Optional.ofNullable(result), kind);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "reduction", e);
         }
     }
 
@@ -266,6 +329,34 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setPrivate", e);
+        }
+    }
+
+    /**
+     * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
+     * @param kind 
+     * @param newVariables 
+     */
+    public void setReductionImpl(String kind, String[] newVariables) {
+        throw new UnsupportedOperationException(get_class()+": Action setReduction not implemented ");
+    }
+
+    /**
+     * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
+     * @param kind 
+     * @param newVariables 
+     */
+    public final void setReduction(String kind, String[] newVariables) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReduction", this, Optional.empty(), kind, newVariables);
+        	}
+        	this.setReductionImpl(kind, newVariables);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReduction", this, Optional.empty(), kind, newVariables);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReduction", e);
         }
     }
 
@@ -447,6 +538,8 @@ public abstract class AOmp extends APragma {
         attributes.add("private");
         attributes.add("hasClause");
         attributes.add("isClauseLegal");
+        attributes.add("clauseKinds");
+        attributes.add("reduction");
     }
 
     /**
@@ -466,6 +559,7 @@ public abstract class AOmp extends APragma {
         actions.add("void setNumThreads(String)");
         actions.add("void setProcBind(String)");
         actions.add("void setPrivate(String[])");
+        actions.add("void setReduction(String, String[])");
     }
 
     /**
@@ -499,6 +593,8 @@ public abstract class AOmp extends APragma {
         PRIVATE("private"),
         HASCLAUSE("hasClause"),
         ISCLAUSELEGAL("isClauseLegal"),
+        CLAUSEKINDS("clauseKinds"),
+        REDUCTION("reduction"),
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),

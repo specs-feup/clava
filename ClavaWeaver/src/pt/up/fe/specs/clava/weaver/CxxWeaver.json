@@ -6007,6 +6007,7 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "The kind of the directive",
                   "children": [
                            {
                               "type": "String",
@@ -6015,6 +6016,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "An integer expression, or undefined if no 'num_threads' clause is defined",
                   "children": [
                            {
                               "type": "String",
@@ -6023,6 +6025,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined",
                   "children": [
                            {
                               "type": "String",
@@ -6031,6 +6034,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The variable names of all private clauses, or empty array if no private clause is defined",
                   "children": [
                            {
                               "type": "String[]",
@@ -6039,6 +6043,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "True if the directive has at least one clause of the given clause kind, false otherwise",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6051,6 +6056,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "True if it is legal to use the given clause kind in this directive, false otherwise",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6059,6 +6065,28 @@
                            {
                               "type": "String",
                               "name": "clauseName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The names of the kinds of all clauses in the pragma, or empty array if no clause is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "clauseKinds"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The variable names for the given reduction kind, or empty array if no reduction of that kind is defined",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "reduction"
+                           },
+                           {
+                              "type": "String",
+                              "name": "kind"
                            }]
                },
                {
@@ -6404,6 +6432,25 @@
                            {
                               "type": "void",
                               "name": "setPrivate"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "newVariables",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the variables for a given kind of a reduction clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setReduction"
+                           },
+                           {
+                              "type": "String",
+                              "name": "kind",
+                              "defaultValue": ""
                            },
                            {
                               "type": "String[]",

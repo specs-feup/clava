@@ -2,7 +2,7 @@ double foo() {
 
     double a = 0;
     
-    #pragma omp parallel num_threads(4)
+    #pragma omp parallel num_threads(4) reduction(+:a) reduction(max:i)
     {
         #pragma omp for shared(i) private(a)
         for(int i=0; i<10; i++) {

@@ -15,9 +15,9 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -31,6 +31,8 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpIntegerExpressionClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 
@@ -223,13 +225,13 @@ public class CxxOmp extends AOmp {
 
     @Override
     public String[] getPrivateArrayImpl() {
-        Optional<List<OmpListClause>> clauses = OmpClauses.getListClause(ompPragma, PRIVATE);
+        // Optional<List<OmpListClause>> clauses = OmpClauses.getListClause(ompPragma, PRIVATE);
+        //
+        // if (!clauses.isPresent()) {
+        // return new String[0];
+        // }
 
-        if (!clauses.isPresent()) {
-            return new String[0];
-        }
-
-        return clauses.get().stream()
+        return OmpClauses.getListClause(ompPragma, PRIVATE).stream()
                 .flatMap(clauseList -> clauseList.getVariables().stream())
                 .collect(Collectors.toList())
                 .toArray(new String[0]);
@@ -245,5 +247,50 @@ public class CxxOmp extends AOmp {
     @Override
     public void setPrivateImpl(String[] newVariables) {
         ompPragma.setClause(new OmpListClause(PRIVATE, Arrays.asList(newVariables)));
+    }
+
+    @Override
+    public String[] getClauseKindsArrayImpl() {
+        return ompPragma.getClauseKinds().stream()
+                .map(OmpClauseKind::getKey)
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public String[] reductionArrayImpl(String kind) {
+        String parsedKind = kind.toLowerCase();
+
+        return ompPragma.getClause(REDUCTION).stream()
+                .map(OmpReductionClause.class::cast)
+                .filter(reduction -> reduction.getReductionKind().getKey().equals(parsedKind))
+                .flatMap(reduction -> reduction.getVariables().stream())
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public void setReductionImpl(String reductionKindString, String[] newVariables) {
+        System.out.println("Reduction kind:" + reductionKindString);
+        System.out.println("New variables:" + Arrays.toString(newVariables));
+
+        ReductionKind reductionKind = ReductionKind.getHelper().valueOf(reductionKindString.toLowerCase());
+
+        // Get all reduction clauses
+        List<OmpClause> reductionClause = ompPragma.getClause(REDUCTION);
+
+        List<OmpClause> newReductionClause = new ArrayList<>();
+
+        // Store all reductions that are not of the kind to set
+        reductionClause.stream()
+                .map(OmpReductionClause.class::cast)
+                .filter(reduction -> reduction.getReductionKind() != reductionKind)
+                .forEach(newReductionClause::add);
+
+        // Add new reduction
+        newReductionClause.add(new OmpReductionClause(reductionKind, Arrays.asList(newVariables)));
+
+        ompPragma.setClause(newReductionClause);
+
     }
 }

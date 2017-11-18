@@ -319,16 +319,21 @@
 
 	<!-- OMP -->
 	<artifact class="omp" default="kind">
-		<attribute name="kind" type="String" />
-		<attribute name="numThreads" type="String" />
-		<attribute name="procBind" type="String" />
-		<attribute name="private" type="String[]" />
-		<attribute name="hasClause" type="Boolean">
+		<attribute name="kind" type="String" tooltip="The kind of the directive"/>
+		<attribute name="numThreads" type="String" tooltip="An integer expression, or undefined if no 'num_threads' clause is defined"/>
+		<attribute name="procBind" type="String" tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined"/>
+		<attribute name="private" type="String[]" tooltip="The variable names of all private clauses, or empty array if no private clause is defined"/>
+		<attribute name="hasClause" type="Boolean" tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
 			<parameter name="clauseName" type="String" />
 		</attribute>
-		<attribute name="isClauseLegal" type="Boolean">
+		<attribute name="isClauseLegal" type="Boolean" tooltip="True if it is legal to use the given clause kind in this directive, false otherwise">
 			<parameter name="clauseName" type="String" />
 		</attribute>
+		<attribute name="clauseKinds" type="String[]"  tooltip="The names of the kinds of all clauses in the pragma, or empty array if no clause is defined"/>
+		<attribute name="reduction" type="String[]" tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
+			<parameter name="kind" type="String" />
+		</attribute>	
+
 	</artifact>
 
 </artifacts>

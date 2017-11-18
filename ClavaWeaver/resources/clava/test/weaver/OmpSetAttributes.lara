@@ -21,8 +21,12 @@ aspectdef test
 	// can't set
 	call SetProcBind('for', 'xxx');
 	
-	// set whole omp pragma to custom value
+	// test setters of directive parallel
+	call SetParallelAttributes();
+	
+	// set whole omp pragma to custom value. Custom content is not compatible with setting attributes, done after attribute set testing
 	call SetCustomContent('parallel', 'parallel private(i)');
+
 end
 
 aspectdef SetNumThreads
@@ -61,5 +65,17 @@ aspectdef SetCustomContent
         println("content:" + $omp.content);
 		$omp.content = content;
         println("content:" + $omp.content);
+	end
+end
+
+aspectdef SetParallelAttributes
+		
+	select omp{'parallel'} end
+	apply
+        println("parallel content before:" + $omp.content);
+		var sumReduction = $omp.reduction('+');
+		sumReduction.push('b');
+		$omp.exec setReduction('+', sumReduction);
+		println("parallel content after:" + $omp.content);
 	end
 end
