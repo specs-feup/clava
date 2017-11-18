@@ -16,11 +16,14 @@ package pt.up.fe.specs.clava.ast.omp.clauses;
 import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -73,6 +76,22 @@ public class OmpClauses {
         ompPragma.setClause(new OmpListClause(PRIVATE, variables));
     }
 
+    public List<String> getFirstprivate() {
+        return getListClauseVariables(FIRSTPRIVATE);
+    }
+
+    public void setFirstprivate(List<String> variables) {
+        ompPragma.setClause(new OmpListClause(FIRSTPRIVATE, variables));
+    }
+
+    public List<String> getLastprivate() {
+        return getListClauseVariables(LASTPRIVATE);
+    }
+
+    public void setLastprivate(List<String> variables) {
+        ompPragma.setClause(new OmpListClause(LASTPRIVATE, variables));
+    }
+
     public List<String> getReduction(String kindString) {
         ReductionKind kind = ReductionKind.getHelper()
                 .valueOfTry(kindString.toLowerCase())
@@ -97,7 +116,7 @@ public class OmpClauses {
                 .collect(Collectors.toList());
     }
 
-    public void setReductionImpl(ReductionKind kind, List<String> variables) {
+    public void setReduction(ReductionKind kind, List<String> variables) {
 
         // Get all reduction clauses
         List<OmpClause> reductionClause = ompPragma.getClause(REDUCTION);
@@ -114,6 +133,40 @@ public class OmpClauses {
         newReductionClause.add(new OmpReductionClause(kind, variables));
 
         ompPragma.setClause(newReductionClause);
+    }
+
+    public Set<ReductionKind> getReductionKinds() {
+        return ompPragma.getClause(REDUCTION).stream()
+                .map(OmpReductionClause.class::cast)
+                .map(reduction -> reduction.getReductionKind())
+                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+    }
+
+    public Optional<DefaultKind> getDefault() {
+        return ompPragma.getClause(DEFAULT).stream()
+                .findFirst()
+                .map(OmpDefaultClause.class::cast)
+                .map(OmpDefaultClause::getDefaultKind);
+    }
+
+    public void setDefault(DefaultKind kind) {
+        ompPragma.setClause(new OmpDefaultClause(kind));
+    }
+
+    public List<String> getShared() {
+        return getListClauseVariables(SHARED);
+    }
+
+    public void setShared(List<String> variables) {
+        ompPragma.setClause(new OmpListClause(SHARED, variables));
+    }
+
+    public List<String> getCopyin() {
+        return getListClauseVariables(COPYIN);
+    }
+
+    public void setCopyin(List<String> variables) {
+        ompPragma.setClause(new OmpListClause(COPYIN, variables));
     }
 
     // public List<OmpListClause> getListClause(OmpClauseKind kind) {
