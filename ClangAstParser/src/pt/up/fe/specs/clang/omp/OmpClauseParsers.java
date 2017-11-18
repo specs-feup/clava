@@ -173,27 +173,43 @@ public class OmpClauseParsers {
     private static StringParser parseClauseName(OmpClauseKind clauseKind, StringParser clauses,
             boolean optionalParams) {
 
-        int closeParIndex = clauses.getCurrentString().indexOf(')');
-        boolean hasParameters = closeParIndex != -1;
+        StringSlice currentString = clauses.getCurrentString();
+        String clauseKindName = clauseKind.getString();
+
+        boolean hasParameters = hasParameters(currentString, clauseKindName);
+
         if (!optionalParams) {
             Preconditions.checkArgument(hasParameters);
         }
 
         // If no parameters, just consume the clause name and return empty string
         if (!hasParameters) {
-            clauses.apply(StringParsers::checkStringStarts, clauseKind.getString());
+            clauses.apply(StringParsers::checkStringStarts, clauseKindName);
             return null;
         }
 
+        int closeParIndex = clauses.getCurrentString().indexOf(')');
         String scheduleClauseString = clauses.substring(closeParIndex + 1);
         StringParser clause = new StringParser(scheduleClauseString);
 
-        clause.apply(StringParsers::checkStringStarts, clauseKind.getString());
+        clause.apply(StringParsers::checkStringStarts, clauseKindName);
         clause.trim();
         clause.apply(StringParsers::checkStringStarts, "(");
         clause.apply(StringParsers::checkStringEnds, ")");
 
         return clause;
+    }
+
+    private static boolean hasParameters(StringSlice currentString, String clauseKindName) {
+        int openParIndex = currentString.indexOf('(');
+
+        // No opening parenthesis, no parameters
+        if (openParIndex == -1) {
+            return false;
+        }
+
+        // Check if what appears before the parenthesis is the expected word
+        return currentString.substring(0, openParIndex).trim().toString().toLowerCase().equals(clauseKindName);
     }
 
     /**
@@ -258,7 +274,6 @@ public class OmpClauseParsers {
     }
 
     private static OmpReductionClause parseReduction(StringParser clauses) {
-
         StringParser clause = parseClauseName(REDUCTION, clauses);
 
         String args = clause.toString();
@@ -296,7 +311,6 @@ public class OmpClauseParsers {
             boolean isOptional, boolean isConstantPositive) {
 
         StringParser clause = parseClauseName(kind, clauses, isOptional);
-
         // If clause is not empty, parse word
 
         // Peek if starts with '('
