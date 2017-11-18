@@ -15,6 +15,9 @@ copyin:a
 schedule kind:undefined
 schedule chunk size:undefined
 schedule modifiers:
+collapse:undefined
+ordered:false
+ordered value:undefined
 kind: for
 clause kinds:shared,private,collapse,ordered,reduction,firstprivate,lastprivate,schedule
 has shared:true
@@ -32,3 +35,6 @@ copyin:
 schedule kind:static
 schedule chunk size:2
 schedule modifiers:monotonic
+collapse:1
+ordered:true
+ordered value:2 + 1

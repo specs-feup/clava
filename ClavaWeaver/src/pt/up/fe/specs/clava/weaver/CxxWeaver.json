@@ -6172,6 +6172,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "An integer expression, or undefined if no 'collapse' clause is defined",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "collapse"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "An integer expression, or undefined if no 'ordered' clause with a parameter is defined",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "ordered"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -6648,6 +6666,43 @@
                            {
                               "type": "String[]",
                               "name": "modifiers",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value of the collapse clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCollapse"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newExpr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets an ordered clause without parameters in the OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setOrdered"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value of the ordered clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setOrdered"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newExpr",
                               "defaultValue": ""
                            }]
                },

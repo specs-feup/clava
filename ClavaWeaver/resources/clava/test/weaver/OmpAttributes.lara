@@ -19,6 +19,9 @@ aspectdef test
 		println("schedule kind:" + $omp.scheduleKind);
 		println("schedule chunk size:" + $omp.scheduleChunkSize);
 		println("schedule modifiers:" + $omp.scheduleModifiers);
+		println("collapse:" + $omp.collapse);
+		println("ordered:" + $omp.hasClause('ordered'));
+		println("ordered value:" + $omp.ordered);
     end
 
 end

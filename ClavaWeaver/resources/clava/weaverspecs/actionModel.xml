@@ -223,6 +223,13 @@
 	<action name="setScheduleModifiers" class="omp" tooltip="Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
 		<parameter name="modifiers" type="String[]" />
 	</action>
+	<action name="setCollapse" class="omp" tooltip="Sets the value of the collapse clause of an OpenMP pragma">
+		<parameter name="newExpr" type="String" />
+	</action>
+	<action name="setOrdered" class="omp" tooltip="Sets an ordered clause without parameters in the OpenMP pragma"/>
+	<action name="setOrdered" class="omp" tooltip="Sets the value of the ordered clause of an OpenMP pragma">
+		<parameter name="newExpr" type="String" />
+	</action>
 	
 	<!-- PRAGMA -->
 	<action name="setName" class="pragma">

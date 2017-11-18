@@ -253,4 +253,31 @@ public class CxxOmp extends AOmp {
         List<ScheduleModifier> parsedModifiers = ScheduleModifier.getHelper().valueOf(Arrays.asList(modifiers));
         ompPragma.clauses().setScheduleModifiers(parsedModifiers);
     }
+
+    @Override
+    public String getCollapseImpl() {
+        return ompPragma.clauses().getCollapse().orElse(null);
+    }
+
+    @Override
+    public void setCollapseImpl(String newExpr) {
+        ompPragma.clauses().setCollapse(newExpr);
+    }
+
+    @Override
+    public String getOrderedImpl() {
+        return ompPragma.clauses().getOrdered().orElse(null);
+
+    }
+
+    @Override
+    public void setOrderedImpl() {
+        ompPragma.clauses().setOrdered();
+
+    }
+
+    @Override
+    public void setOrderedImpl(String newExpr) {
+        ompPragma.clauses().setOrdered(newExpr);
+    }
 }

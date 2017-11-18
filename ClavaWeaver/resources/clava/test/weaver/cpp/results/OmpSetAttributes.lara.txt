@@ -17,7 +17,7 @@ proc_bind:close
 parallel content before:parallel num_threads(42) reduction(+ : a) reduction(max : i) proc_bind(spread)
 parallel content after:parallel num_threads(42) reduction(max : i) reduction(+ : a, b) proc_bind(spread) firstprivate(first_a, first_b) shared(shared_a, shared_b) copyin(copyin_a, copyin_b)
 for content before:for shared(i) private(a)
-for content after:for shared(i) private(a) lastprivate(last_a, last_b) schedule(monotonic:static, 4)
+for content after:for shared(i) private(a) lastprivate(last_a, last_b) schedule(monotonic:static, 4) collapse(2) ordered
 parallel
 content:parallel num_threads(42) reduction(max : i) reduction(+ : a, b) proc_bind(spread) firstprivate(first_a, first_b) shared(shared_a, shared_b) copyin(copyin_a, copyin_b)
 content:parallel private(i)

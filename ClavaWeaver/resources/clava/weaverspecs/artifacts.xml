@@ -343,6 +343,8 @@
 		<attribute name="scheduleKind" type="String" tooltip="One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined"/>
 		<attribute name="scheduleChunkSize" type="String" tooltip="An integer expression, or undefined if no 'schedule' clause with chunk size is defined"/>
 		<attribute name="scheduleModifiers" type="String[]" tooltip="A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined"/>
+		<attribute name="collapse" type="String" tooltip="An integer expression, or undefined if no 'collapse' clause is defined"/>
+		<attribute name="ordered" type="String" tooltip="An integer expression, or undefined if no 'ordered' clause with a parameter is defined"/>		
 	</artifact>
 
 </artifacts>

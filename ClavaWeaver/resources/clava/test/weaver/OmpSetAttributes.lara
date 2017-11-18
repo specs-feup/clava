@@ -95,6 +95,8 @@ aspectdef SetForAttributes
 		$omp.scheduleKind = 'static';
 		$omp.scheduleChunkSize = 4;
 		$omp.scheduleModifiers = ['monotonic'];
+		$omp.collapse = 2;
+		$omp.exec setOrdered();
 		println("for content after:" + $omp.content);
 	end
 end

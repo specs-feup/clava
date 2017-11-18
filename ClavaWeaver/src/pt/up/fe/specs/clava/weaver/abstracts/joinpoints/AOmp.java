@@ -522,6 +522,52 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * An integer expression, or undefined if no 'collapse' clause is defined
+     */
+    public abstract String getCollapseImpl();
+
+    /**
+     * An integer expression, or undefined if no 'collapse' clause is defined
+     */
+    public final Object getCollapse() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "collapse", Optional.empty());
+        	}
+        	String result = this.getCollapseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "collapse", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "collapse", e);
+        }
+    }
+
+    /**
+     * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
+     */
+    public abstract String getOrderedImpl();
+
+    /**
+     * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
+     */
+    public final Object getOrdered() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "ordered", Optional.empty());
+        	}
+        	String result = this.getOrderedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "ordered", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "ordered", e);
+        }
+    }
+
+    /**
      * Sets the value of the num_threads clause of an OpenMP pragma
      * @param newExpr 
      */
@@ -836,6 +882,82 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Sets the value of the collapse clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public void setCollapseImpl(String newExpr) {
+        throw new UnsupportedOperationException(get_class()+": Action setCollapse not implemented ");
+    }
+
+    /**
+     * Sets the value of the collapse clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public final void setCollapse(String newExpr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
+        	}
+        	this.setCollapseImpl(newExpr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCollapse", this, Optional.empty(), newExpr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCollapse", e);
+        }
+    }
+
+    /**
+     * Sets an ordered clause without parameters in the OpenMP pragma
+     */
+    public void setOrderedImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action setOrdered not implemented ");
+    }
+
+    /**
+     * Sets an ordered clause without parameters in the OpenMP pragma
+     */
+    public final void setOrdered() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty());
+        	}
+        	this.setOrderedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setOrdered", e);
+        }
+    }
+
+    /**
+     * Sets the value of the ordered clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public void setOrderedImpl(String newExpr) {
+        throw new UnsupportedOperationException(get_class()+": Action setOrdered not implemented ");
+    }
+
+    /**
+     * Sets the value of the ordered clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public final void setOrdered(String newExpr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty(), newExpr);
+        	}
+        	this.setOrderedImpl(newExpr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty(), newExpr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setOrdered", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -1024,6 +1146,8 @@ public abstract class AOmp extends APragma {
         attributes.add("scheduleKind");
         attributes.add("scheduleChunkSize");
         attributes.add("scheduleModifiers");
+        attributes.add("collapse");
+        attributes.add("ordered");
     }
 
     /**
@@ -1052,6 +1176,9 @@ public abstract class AOmp extends APragma {
         actions.add("void setScheduleKind(String)");
         actions.add("void setScheduleChunkSize(String)");
         actions.add("void setScheduleModifiers(String[])");
+        actions.add("void setCollapse(String)");
+        actions.add("void setOrdered()");
+        actions.add("void setOrdered(String)");
     }
 
     /**
@@ -1096,6 +1223,8 @@ public abstract class AOmp extends APragma {
         SCHEDULEKIND("scheduleKind"),
         SCHEDULECHUNKSIZE("scheduleChunkSize"),
         SCHEDULEMODIFIERS("scheduleModifiers"),
+        COLLAPSE("collapse"),
+        ORDERED("ordered"),
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
