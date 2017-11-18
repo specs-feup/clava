@@ -6,7 +6,7 @@ aspectdef test
 	// no previous value
 	call SetNumThreads('parallel for', 'var');
 	
-	// can't set
+	// can't set 'num_threads' value on a 'for' directive.
 	call SetNumThreads('for', 'xxx');
 	
 	
@@ -19,7 +19,8 @@ aspectdef test
 	call SetProcBind('parallel for', 'close');
 	
 	// can't set
-	call SetProcBind('for', 'xxx');
+	// update: disabled wrong values, now throws exception
+	//call SetProcBind('for', 'xxx');
 	
 	// test setters of directive parallel
 	call SetParallelAttributes();

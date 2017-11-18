@@ -7123,6 +7123,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Uniquely identifies the loop inside the program",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "id"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -7157,7 +7166,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String",
+                              "type": "Integer[]",
                               "name": "rank"
                            }]
                },

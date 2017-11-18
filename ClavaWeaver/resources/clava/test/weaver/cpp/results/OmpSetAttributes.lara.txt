@@ -14,9 +14,6 @@ proc_bind:spread
 parallel for
 proc_bind:master
 proc_bind:close
-for
-proc_bind:undefined
-proc_bind:undefined
 parallel content before:parallel num_threads(42) reduction(+ : a) reduction(max : i) proc_bind(spread)
 parallel content after:parallel num_threads(42) reduction(max : i) reduction(+ : a, b) proc_bind(spread)
 parallel
