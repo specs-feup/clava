@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.omp.clauses;
 import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,8 @@ import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleModifier;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class OmpClauses {
@@ -167,6 +170,70 @@ public class OmpClauses {
 
     public void setCopyin(List<String> variables) {
         ompPragma.setClause(new OmpListClause(COPYIN, variables));
+    }
+
+    public Optional<ScheduleKind> getScheduleKind() {
+        return ompPragma.getClause(SCHEDULE).stream()
+                .findFirst()
+                .map(OmpScheduleClause.class::cast)
+                .map(OmpScheduleClause::getScheduleKind);
+    }
+
+    /**
+     * If a schedule clause already exists, sets the kind of the existing clause. Otherwise, creates a new clause.
+     * 
+     * @param kind
+     */
+    public void setScheduleKind(ScheduleKind kind) {
+        OmpScheduleClause scheduleClause = ompPragma.getClause(SCHEDULE).stream().findFirst()
+                .map(OmpScheduleClause.class::cast)
+                .orElse(null);
+
+        // If no schedule clause, create and return
+        if (scheduleClause == null) {
+            ompPragma.setClause(new OmpScheduleClause(kind, null, Collections.emptyList()));
+            return;
+        }
+
+        // Clause exists, modify kind
+        scheduleClause.setKind(kind);
+    }
+
+    public Optional<String> getScheduleChunkSize() {
+        return ompPragma.getClause(SCHEDULE).stream()
+                .findFirst()
+                .map(OmpScheduleClause.class::cast)
+                .flatMap(OmpScheduleClause::getChunkSize);
+    }
+
+    public void setScheduleChunkSize(String chunkSize) {
+        // Get existing schedule
+        OmpScheduleClause scheduleClause = ompPragma.getClause(SCHEDULE).stream()
+                .findFirst()
+                .map(OmpScheduleClause.class::cast)
+                .orElseThrow(() -> new RuntimeException(
+                        "Cannot set schedule chunk size because no schedule clause exists yet"));
+
+        scheduleClause.setChunkSize(chunkSize);
+    }
+
+    public List<ScheduleModifier> getScheduleModifiers() {
+        return ompPragma.getClause(SCHEDULE).stream()
+                .findFirst()
+                .map(OmpScheduleClause.class::cast)
+                .map(schedule -> schedule.getModifiers())
+                .orElse(Collections.emptyList());
+    }
+
+    public void setScheduleModifiers(List<ScheduleModifier> modifiers) {
+        // Get existing schedule
+        OmpScheduleClause scheduleClause = ompPragma.getClause(SCHEDULE).stream()
+                .findFirst()
+                .map(OmpScheduleClause.class::cast)
+                .orElseThrow(() -> new RuntimeException(
+                        "Cannot set schedule modifiers because no schedule clause exists yet"));
+
+        scheduleClause.setModifiers(modifiers);
     }
 
     // public List<OmpListClause> getListClause(OmpClauseKind kind) {

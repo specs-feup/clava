@@ -14,9 +14,8 @@
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -69,24 +68,52 @@ public class OmpScheduleClause implements OmpClause {
         }
     }
 
-    private final ScheduleKind schedule;
-    private final Integer chunkSize;
-    private final List<ScheduleModifier> modifiers;
+    private ScheduleKind schedule;
+    private String chunkSize;
+    private List<ScheduleModifier> modifiers;
 
-    public OmpScheduleClause(ScheduleKind schedule, Integer chunkSize, List<ScheduleModifier> modifiers) {
+    public OmpScheduleClause(ScheduleKind schedule, String chunkSize, List<ScheduleModifier> modifiers) {
         this.schedule = schedule;
         this.chunkSize = chunkSize;
         this.modifiers = modifiers;
 
-        if (chunkSize != null) {
-            Preconditions.checkArgument(chunkSize > 0, "Chunck size must be a positive integer");
-        }
+        // if (chunkSize != null) {
+        // Preconditions.checkArgument(chunkSize > 0, "Chunck size must be a positive integer");
+        // }
 
     }
 
     @Override
     public OmpClauseKind getKind() {
         return OmpClauseKind.SCHEDULE;
+    }
+
+    public ScheduleKind getScheduleKind() {
+        return schedule;
+    }
+
+    public Optional<String> getChunkSize() {
+        return Optional.ofNullable(chunkSize);
+    }
+
+    public List<ScheduleModifier> getModifiers() {
+        return modifiers;
+    }
+
+    public void setKind(ScheduleKind schedule) {
+        this.schedule = schedule;
+    }
+
+    public void setChunkSize(String chunkSize) {
+        this.chunkSize = chunkSize;
+    }
+
+    public void setModifiers(List<ScheduleModifier> modifiers) {
+        this.modifiers = modifiers;
+    }
+
+    public static List<ScheduleModifier> parseModifiers(List<String> modifiers) {
+        return ScheduleModifier.getHelper().valueOf(modifiers);
     }
 
     /**
