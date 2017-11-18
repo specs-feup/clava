@@ -27,4 +27,12 @@ public class OmpClauseFactory {
         return new OmpIntegerExpressionClause(NUM_THREADS, expression, false, false);
     }
 
+    public static OmpIntegerExpressionClause collapse(String expression) {
+        return new OmpIntegerExpressionClause(COLLAPSE, expression, false, true);
+    }
+
+    public static OmpIntegerExpressionClause ordered(String expression) {
+        return new OmpIntegerExpressionClause(ORDERED, expression, true, true);
+    }
+
 }

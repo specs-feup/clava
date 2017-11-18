@@ -236,6 +236,33 @@ public class OmpClauses {
         scheduleClause.setModifiers(modifiers);
     }
 
+    public Optional<String> getCollapse() {
+        return ompPragma.getClause(COLLAPSE).stream()
+                .findFirst()
+                .map(OmpIntegerExpressionClause.class::cast)
+                .map(OmpIntegerExpressionClause::getExpression);
+    }
+
+    public void setCollapse(String expression) {
+        ompPragma.setClause(OmpClauseFactory.collapse(expression));
+    }
+
+    public Optional<String> getOrdered() {
+        return ompPragma.getClause(ORDERED).stream()
+                .findFirst()
+                .map(OmpIntegerExpressionClause.class::cast)
+                .filter(OmpIntegerExpressionClause::hasExpression)
+                .map(OmpIntegerExpressionClause::getExpression);
+    }
+
+    public void setOrdered() {
+        ompPragma.setClause(OmpClauseFactory.ordered(null));
+    }
+
+    public void setOrdered(String expression) {
+        ompPragma.setClause(OmpClauseFactory.ordered(expression));
+    }
+
     // public List<OmpListClause> getListClause(OmpClauseKind kind) {
     // return SpecsCollections.cast(ompPragma.getClause(kind), OmpListClause.class);
     // }
