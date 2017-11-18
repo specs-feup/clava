@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +29,10 @@ public class OmpClauses {
                 .map(OmpProcBindClause.class::cast);
     }
 
-    public static Optional<OmpNumThreadsClause> getNumThreads(OmpPragma ompPragma) {
+    public static Optional<OmpIntegerExpressionClause> getNumThreads(OmpPragma ompPragma) {
         return ompPragma.getClause(OmpClauseKind.NUM_THREADS)
                 .flatMap(OmpClauses::returnFirst)
-                .map(OmpNumThreadsClause.class::cast);
+                .map(OmpIntegerExpressionClause.class::cast);
     }
 
     public static Optional<List<OmpListClause>> getListClause(OmpPragma ompPragma, OmpClauseKind kind) {
@@ -44,6 +46,10 @@ public class OmpClauses {
         }
 
         return Optional.of(list.get(0));
+    }
+
+    public static OmpIntegerExpressionClause newNumThreads(String expression) {
+        return new OmpIntegerExpressionClause(NUM_THREADS, expression, false, false);
     }
 
 }
