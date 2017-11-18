@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -59,7 +60,7 @@ public abstract class Pragma extends ClavaNode {
             ClavaNode sibling = parent.getChild(i);
 
             // Ignore comments and pragmas
-            if (sibling instanceof Comment || sibling instanceof Pragma) {
+            if (sibling instanceof Comment || sibling instanceof Pragma || sibling instanceof WrapperStmt) {
                 continue;
             }
 
