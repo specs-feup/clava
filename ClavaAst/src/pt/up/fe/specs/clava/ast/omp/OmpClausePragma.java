@@ -15,10 +15,10 @@ package pt.up.fe.specs.clava.ast.omp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -72,14 +72,16 @@ public class OmpClausePragma extends OmpPragma {
     }
 
     @Override
-    public Optional<List<OmpClause>> getClause(OmpClauseKind clauseKind) {
+    public List<OmpClause> getClause(OmpClauseKind clauseKind) {
         if (customContent != null) {
             SpecsLogs.msgInfo("OpenMP pragma " + getDirectiveKind()
                     + " has custom content set, no clause processing will be done");
-            return Optional.empty();
+            return Collections.emptyList();
         }
 
-        return Optional.ofNullable(clauses.get(clauseKind));
+        List<OmpClause> clausesList = clauses.get(clauseKind);
+
+        return clausesList != null ? clausesList : Collections.emptyList();
     }
 
     /*
@@ -114,7 +116,31 @@ public class OmpClausePragma extends OmpPragma {
 
     @Override
     public void setClause(OmpClause ompClause) {
-        clauses.put(ompClause.getKind(), Arrays.asList(ompClause));
+        setClause(Arrays.asList(ompClause));
+        // clauses.put(ompClause.getKind(), Arrays.asList(ompClause));
+    }
+
+    @Override
+    public void setClause(List<OmpClause> ompClauseList) {
+        // Check all clauses have the same kind
+        OmpClauseKind firstKind = null;
+        for (OmpClause clause : ompClauseList) {
+
+            // If the first, store if for comparison
+            if (firstKind == null) {
+                firstKind = clause.getKind();
+                continue;
+            }
+
+            if (firstKind != clause.getKind()) {
+                SpecsLogs.msgInfo(
+                        "OmpClausePragma.setClause: expected all clauses to have the same kind, but list has kind "
+                                + firstKind + " and kind " + clause.getKind());
+                return;
+            }
+        }
+
+        clauses.put(firstKind, ompClauseList);
     }
 
     @Override
@@ -131,5 +157,10 @@ public class OmpClausePragma extends OmpPragma {
     @Override
     public void setFullContent(String fullContent) {
         this.customContent = fullContent;
+    }
+
+    @Override
+    public List<OmpClauseKind> getClauseKinds() {
+        return new ArrayList<>(clauses.keySet());
     }
 }

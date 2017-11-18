@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.omp;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
@@ -38,9 +37,14 @@ public abstract class OmpPragma extends Pragma {
         return directiveKind;
     }
 
-    public Optional<List<OmpClause>> getClause(OmpClauseKind clauseKind) {
-        return Optional.empty();
+    public List<OmpClause> getClause(OmpClauseKind clauseKind) {
+        return Collections.emptyList();
     }
+
+    public List<OmpClauseKind> getClauseKinds() {
+        return Collections.emptyList();
+    }
+
     //
     // public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
     // throw new RuntimeException("Not implemented yet");
@@ -66,6 +70,11 @@ public abstract class OmpPragma extends Pragma {
     }
 
     public void setClause(OmpClause ompClause) {
+        // Does nothing
+        SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause()");
+    }
+
+    public void setClause(List<OmpClause> clauseList) {
         // Does nothing
         SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause()");
     }

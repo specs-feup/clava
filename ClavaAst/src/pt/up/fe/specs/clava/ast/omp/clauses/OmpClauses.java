@@ -24,29 +24,28 @@ import pt.up.fe.specs.util.SpecsCollections;
 public class OmpClauses {
 
     public static Optional<OmpProcBindClause> getProcBind(OmpPragma ompPragma) {
-        return ompPragma.getClause(OmpClauseKind.PROC_BIND)
-                .flatMap(OmpClauses::returnFirst)
+        return ompPragma.getClause(OmpClauseKind.PROC_BIND).stream()
+                .findFirst()
                 .map(OmpProcBindClause.class::cast);
     }
 
     public static Optional<OmpIntegerExpressionClause> getNumThreads(OmpPragma ompPragma) {
-        return ompPragma.getClause(OmpClauseKind.NUM_THREADS)
-                .flatMap(OmpClauses::returnFirst)
+        return ompPragma.getClause(OmpClauseKind.NUM_THREADS).stream()
+                .findFirst()
                 .map(OmpIntegerExpressionClause.class::cast);
     }
 
-    public static Optional<List<OmpListClause>> getListClause(OmpPragma ompPragma, OmpClauseKind kind) {
-        return ompPragma.getClause(kind)
-                .map(clausesList -> SpecsCollections.cast(clausesList, OmpListClause.class));
+    public static List<OmpListClause> getListClause(OmpPragma ompPragma, OmpClauseKind kind) {
+        return SpecsCollections.cast(ompPragma.getClause(kind), OmpListClause.class);
     }
 
-    private static <K> Optional<K> returnFirst(List<K> list) {
-        if (list.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(list.get(0));
-    }
+    // private static <K> Optional<K> returnFirst(List<K> list) {
+    // if (list.isEmpty()) {
+    // return Optional.empty();
+    // }
+    //
+    // return Optional.of(list.get(0));
+    // }
 
     public static OmpIntegerExpressionClause newNumThreads(String expression) {
         return new OmpIntegerExpressionClause(NUM_THREADS, expression, false, false);
