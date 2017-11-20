@@ -128,6 +128,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(App.class, CxxJoinpoints::programFactory);
         JOINPOINT_FACTORY.put(NullNode.class, CxxEmpty::new);
         JOINPOINT_FACTORY.put(Comment.class, CxxComment::new);
+        // JOINPOINT_FACTORY.put(WrapperStmt.class, CxxJoinpoints::wrapperStmtFactory);
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);
     }
 
@@ -177,6 +178,10 @@ public class CxxJoinpoints {
         CxxWeaver weaver = CxxWeaver.getCxxWeaver();
         return new CxxProgram(weaver.getProgramName(), app, weaver);
     }
+
+    // private static ACxxWeaverJoinPoint wrapperStmtFactory(WrapperStmt wrapperStmt, ACxxWeaverJoinPoint parent) {
+    // return create(wrapperStmt.getWrappedNode(), parent);
+    // }
 
     private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record, ACxxWeaverJoinPoint parent) {
 

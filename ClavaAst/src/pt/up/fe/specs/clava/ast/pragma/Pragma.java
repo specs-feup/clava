@@ -164,4 +164,5 @@ public abstract class Pragma extends ClavaNode {
                 ", kind: " + kind +
                 ", parameters: " + param;
     }
+
 }

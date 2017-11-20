@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 
 public class CxxSelects {
@@ -90,6 +91,12 @@ public class CxxSelects {
         }
 
         if (stmt instanceof LoopStmt || stmt instanceof IfStmt) {
+            return false;
+        }
+
+        // Wrapper statements (which encapsulate pragmas and comments) should be ignored,
+        // comments and pragmas are not statements, should be selected with their respective join points
+        if (stmt instanceof WrapperStmt) {
             return false;
         }
 
