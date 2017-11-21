@@ -22,7 +22,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 
 public class CxxPragma extends APragma {
 
-    private final Pragma pragma;
+    private Pragma pragma;
     private final ACxxWeaverJoinPoint parent;
 
     public CxxPragma(Pragma pragma, ACxxWeaverJoinPoint parent) {
@@ -63,6 +63,10 @@ public class CxxPragma extends APragma {
     @Override
     public void setNameImpl(String name) {
         pragma.setName(name);
+    }
+
+    public void setPragma(Pragma pragma) {
+        this.pragma = pragma;
     }
 
 }

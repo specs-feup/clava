@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public abstract class ANamedDecl extends ADecl {
 
-    private ADecl aDecl;
+    protected ADecl aDecl;
 
     /**
      * 

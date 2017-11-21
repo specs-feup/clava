@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public abstract class AEnumType extends AType {
 
-    private AType aType;
+    protected AType aType;
 
     /**
      * 

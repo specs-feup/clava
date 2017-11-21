@@ -19,7 +19,7 @@ import java.util.Arrays;
  */
 public abstract class ACall extends AExpression {
 
-    private AExpression aExpression;
+    protected AExpression aExpression;
 
     /**
      * 

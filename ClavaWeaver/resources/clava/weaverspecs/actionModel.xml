@@ -186,6 +186,12 @@
 	</action>
 	
 	<!-- OMP -->
+	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">
+		<parameter name="directiveKind" type="String" />
+	</action>
+	<action name="removeClause" class="omp" tooltip="Removes any clause of the given kind from the OpenMP pragma">
+		<parameter name="clauseKind" type="String" />
+	</action>
 	<action name="setNumThreads" class="omp" tooltip="Sets the value of the num_threads clause of an OpenMP pragma">
 		<parameter name="newExpr" type="String" />
 	</action>

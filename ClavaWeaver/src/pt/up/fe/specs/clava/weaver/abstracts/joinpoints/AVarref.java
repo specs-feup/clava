@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public abstract class AVarref extends AExpression {
 
-    private AExpression aExpression;
+    protected AExpression aExpression;
 
     /**
      * 

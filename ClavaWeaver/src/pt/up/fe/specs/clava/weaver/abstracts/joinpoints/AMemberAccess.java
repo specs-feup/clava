@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 public abstract class AMemberAccess extends AExpression {
 
-    private AExpression aExpression;
+    protected AExpression aExpression;
 
     /**
      * 

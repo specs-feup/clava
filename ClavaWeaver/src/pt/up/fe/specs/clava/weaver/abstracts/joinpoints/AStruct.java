@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public abstract class AStruct extends ARecord {
 
-    private ARecord aRecord;
+    protected ARecord aRecord;
 
     /**
      * 

@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public abstract class AClass extends ARecord {
 
-    private ARecord aRecord;
+    protected ARecord aRecord;
 
     /**
      * 

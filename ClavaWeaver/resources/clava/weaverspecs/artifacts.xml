@@ -205,6 +205,13 @@
 		<attribute name="isLast" type="Boolean" />
 		<!-- <attribute name="stmts" type="joinpoint[]"/> -->
 	</artifact>
+	
+	<artifact class="wrapperStmt">
+		<attribute name="kind" type="{comment,pragma}" />
+		<attribute name="content" type="joinpoint" />
+	</artifact>
+	
+	
 
 
 	<!-- PRAGMA -->

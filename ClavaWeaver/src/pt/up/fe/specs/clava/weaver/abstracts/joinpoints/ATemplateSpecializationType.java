@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 public abstract class ATemplateSpecializationType extends AType {
 
-    private AType aType;
+    protected AType aType;
 
     /**
      * 

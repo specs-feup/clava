@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public abstract class AIf extends AStatement {
 
-    private AStatement aStatement;
+    protected AStatement aStatement;
 
     /**
      * 

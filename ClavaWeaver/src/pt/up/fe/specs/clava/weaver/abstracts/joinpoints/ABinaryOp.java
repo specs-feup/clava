@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public abstract class ABinaryOp extends AExpression {
 
-    private AExpression aExpression;
+    protected AExpression aExpression;
 
     /**
      * 

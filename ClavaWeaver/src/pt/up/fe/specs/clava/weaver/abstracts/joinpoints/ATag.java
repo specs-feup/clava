@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public abstract class ATag extends APragma {
 
-    private APragma aPragma;
+    protected APragma aPragma;
 
     /**
      * 

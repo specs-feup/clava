@@ -4402,6 +4402,507 @@
                }]
       },
       {
+         "name": "wrapperStmt",
+         "extends": "statement"      ,
+         "children": [
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "[comment| pragma]",
+                              "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "content"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFirst"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isLast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "attributes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "selects"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "actions"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the 'program' joinpoint",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "ancestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the joinpoint chain",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "chainAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor AST name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "contains"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "jp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "line"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "ast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "code"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "astNumChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astChild"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "chain"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "javaFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "javaValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "javaFieldType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "expr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "childExpr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "arrayAccess",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "vardecl",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "insert"
+                           },
+                           {
+                              "type": "[before| after| replace]",
+                              "name": "position",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "def"
+                           },
+                           {
+                              "type": "String",
+                              "name": "attribute",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "detach"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setType"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "messageToUser"
+                           },
+                           {
+                              "type": "String",
+                              "name": "message",
+                              "defaultValue": ""
+                           }]
+               }]
+      },
+      {
          "name": "empty",
          "extends": "joinpoint"      ,
          "children": [
@@ -6494,6 +6995,34 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setKind"
+                           },
+                           {
+                              "type": "String",
+                              "name": "directiveKind",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes any clause of the given kind from the OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeClause"
+                           },
+                           {
+                              "type": "String",
+                              "name": "clauseKind",
+                              "defaultValue": ""
                            }]
                },
                {

@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public abstract class AParam extends AVardecl {
 
-    private AVardecl aVardecl;
+    protected AVardecl aVardecl;
 
     /**
      * 

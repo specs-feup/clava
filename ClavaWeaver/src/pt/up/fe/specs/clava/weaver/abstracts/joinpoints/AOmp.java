@@ -19,7 +19,7 @@ import java.util.Arrays;
  */
 public abstract class AOmp extends APragma {
 
-    private APragma aPragma;
+    protected APragma aPragma;
 
     /**
      * 
@@ -564,6 +564,58 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ordered", e);
+        }
+    }
+
+    /**
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
+     */
+    public void setKindImpl(String directiveKind) {
+        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
+    }
+
+    /**
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
+     */
+    public final void setKind(String directiveKind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
+        	}
+        	this.setKindImpl(directiveKind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setKind", e);
+        }
+    }
+
+    /**
+     * Removes any clause of the given kind from the OpenMP pragma
+     * @param clauseKind 
+     */
+    public void removeClauseImpl(String clauseKind) {
+        throw new UnsupportedOperationException(get_class()+": Action removeClause not implemented ");
+    }
+
+    /**
+     * Removes any clause of the given kind from the OpenMP pragma
+     * @param clauseKind 
+     */
+    public final void removeClause(String clauseKind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "removeClause", this, Optional.empty(), clauseKind);
+        	}
+        	this.removeClauseImpl(clauseKind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "removeClause", this, Optional.empty(), clauseKind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "removeClause", e);
         }
     }
 
@@ -1164,6 +1216,8 @@ public abstract class AOmp extends APragma {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aPragma.fillWithActions(actions);
+        actions.add("void setKind(String)");
+        actions.add("void removeClause(String)");
         actions.add("void setNumThreads(String)");
         actions.add("void setProcBind(String)");
         actions.add("void setPrivate(String[])");

@@ -9,129 +9,133 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ACast
+ * Auto-Generated class for join point AWrapperStmt
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ACast extends AExpression {
+public abstract class AWrapperStmt extends AStatement {
 
-    protected AExpression aExpression;
+    protected AStatement aStatement;
 
     /**
      * 
      */
-    public ACast(AExpression aExpression){
-        this.aExpression = aExpression;
+    public AWrapperStmt(AStatement aStatement){
+        this.aStatement = aStatement;
     }
     /**
-     * [DEPRECATED] Use expr.implicitCast instead
+     * Get value on attribute kind
+     * @return the attribute's value
      */
-    public abstract Boolean getIsImplicitCastImpl();
+    public abstract String getKindImpl();
 
     /**
-     * [DEPRECATED] Use expr.implicitCast instead
+     * Get value on attribute kind
+     * @return the attribute's value
      */
-    public final Object getIsImplicitCast() {
+    public final Object getKind() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplicitCast", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
         	}
-        	Boolean result = this.getIsImplicitCastImpl();
+        	String result = this.getKindImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isImplicitCast", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isImplicitCast", e);
+        	throw new AttributeException(get_class(), "kind", e);
         }
     }
 
     /**
-     * Get value on attribute fromType
+     * Get value on attribute content
      * @return the attribute's value
      */
-    public abstract AJoinPoint getFromTypeImpl();
+    public abstract AJoinPoint getContentImpl();
 
     /**
-     * Get value on attribute fromType
+     * Get value on attribute content
      * @return the attribute's value
      */
-    public final Object getFromType() {
+    public final Object getContent() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fromType", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "content", Optional.empty());
         	}
-        	AJoinPoint result = this.getFromTypeImpl();
+        	AJoinPoint result = this.getContentImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "fromType", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "content", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "fromType", e);
+        	throw new AttributeException(get_class(), "content", e);
         }
     }
 
     /**
-     * Get value on attribute toType
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getToTypeImpl();
-
-    /**
-     * Get value on attribute toType
-     * @return the attribute's value
-     */
-    public final Object getToType() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "toType", Optional.empty());
-        	}
-        	AJoinPoint result = this.getToTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "toType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "toType", e);
-        }
-    }
-
-    /**
-     * Get value on attribute vardecl
+     * Get value on attribute isFirst
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getVardeclImpl() {
-        return this.aExpression.getVardeclImpl();
+    public Boolean getIsFirstImpl() {
+        return this.aStatement.getIsFirstImpl();
     }
 
     /**
-     * Get value on attribute use
+     * Get value on attribute isLast
      * @return the attribute's value
      */
     @Override
-    public String getUseImpl() {
-        return this.aExpression.getUseImpl();
+    public Boolean getIsLastImpl() {
+        return this.aStatement.getIsLastImpl();
     }
 
     /**
-     * Get value on attribute isFunctionArgument
-     * @return the attribute's value
+     * Method used by the lara interpreter to select exprs
+     * @return 
      */
     @Override
-    public Boolean getIsFunctionArgumentImpl() {
-        return this.aExpression.getIsFunctionArgumentImpl();
+    public List<? extends AExpression> selectExpr() {
+        return this.aStatement.selectExpr();
     }
 
     /**
-     * Get value on attribute implicitCast
-     * @return the attribute's value
+     * Method used by the lara interpreter to select childExprs
+     * @return 
      */
     @Override
-    public ACast getImplicitCastImpl() {
-        return this.aExpression.getImplicitCastImpl();
+    public List<? extends AExpression> selectChildExpr() {
+        return this.aStatement.selectChildExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select calls
+     * @return 
+     */
+    @Override
+    public List<? extends ACall> selectCall() {
+        return this.aStatement.selectCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select stmtCalls
+     * @return 
+     */
+    @Override
+    public List<? extends ACall> selectStmtCall() {
+        return this.aStatement.selectStmtCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select arrayAccesss
+     * @return 
+     */
+    @Override
+    public List<? extends AArrayAccess> selectArrayAccess() {
+        return this.aStatement.selectArrayAccess();
     }
 
     /**
@@ -140,7 +144,34 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
+        return this.aStatement.selectVardecl();
+    }
+
+    /**
+     * Method used by the lara interpreter to select varrefs
+     * @return 
+     */
+    @Override
+    public List<? extends AVarref> selectVarref() {
+        return this.aStatement.selectVarref();
+    }
+
+    /**
+     * Method used by the lara interpreter to select binaryOps
+     * @return 
+     */
+    @Override
+    public List<? extends ABinaryOp> selectBinaryOp() {
+        return this.aStatement.selectBinaryOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select unaryOps
+     * @return 
+     */
+    @Override
+    public List<? extends AUnaryOp> selectUnaryOp() {
+        return this.aStatement.selectUnaryOp();
     }
 
     /**
@@ -149,7 +180,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aStatement.replaceWithImpl(node);
     }
 
     /**
@@ -158,7 +189,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aStatement.insertBeforeImpl(node);
     }
 
     /**
@@ -167,7 +198,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aStatement.insertBeforeImpl(node);
     }
 
     /**
@@ -176,7 +207,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aExpression.insertAfterImpl(node);
+        return this.aStatement.insertAfterImpl(node);
     }
 
     /**
@@ -185,7 +216,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aExpression.insertAfterImpl(code);
+        return this.aStatement.insertAfterImpl(code);
     }
 
     /**
@@ -193,7 +224,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public void detachImpl() {
-        this.aExpression.detachImpl();
+        this.aStatement.detachImpl();
     }
 
     /**
@@ -202,7 +233,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aExpression.setTypeImpl(type);
+        this.aStatement.setTypeImpl(type);
     }
 
     /**
@@ -211,7 +242,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aExpression.messageToUserImpl(message);
+        this.aStatement.messageToUserImpl(message);
     }
 
     /**
@@ -221,7 +252,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aExpression.insertImpl(position, code);
+        this.aStatement.insertImpl(position, code);
     }
 
     /**
@@ -231,7 +262,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public void defImpl(String attribute, Object value) {
-        this.aExpression.defImpl(attribute, value);
+        this.aStatement.defImpl(attribute, value);
     }
 
     /**
@@ -239,15 +270,15 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public String toString() {
-        return this.aExpression.toString();
+        return this.aStatement.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AExpression> getSuper() {
-        return Optional.of(this.aExpression);
+    public Optional<? extends AStatement> getSuper() {
+        return Optional.of(this.aStatement);
     }
 
     /**
@@ -257,11 +288,35 @@ public abstract class ACast extends AExpression {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "expr": 
+        		joinPointList = selectExpr();
+        		break;
+        	case "childExpr": 
+        		joinPointList = selectChildExpr();
+        		break;
+        	case "call": 
+        		joinPointList = selectCall();
+        		break;
+        	case "stmtCall": 
+        		joinPointList = selectStmtCall();
+        		break;
+        	case "arrayAccess": 
+        		joinPointList = selectArrayAccess();
+        		break;
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
+        	case "varref": 
+        		joinPointList = selectVarref();
+        		break;
+        	case "binaryOp": 
+        		joinPointList = selectBinaryOp();
+        		break;
+        	case "unaryOp": 
+        		joinPointList = selectUnaryOp();
+        		break;
         	default:
-        		joinPointList = this.aExpression.select(selectName);
+        		joinPointList = this.aStatement.select(selectName);
         		break;
         }
         return joinPointList;
@@ -272,10 +327,9 @@ public abstract class ACast extends AExpression {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
-        attributes.add("isImplicitCast");
-        attributes.add("fromType");
-        attributes.add("toType");
+        this.aStatement.fillWithAttributes(attributes);
+        attributes.add("kind");
+        attributes.add("content");
     }
 
     /**
@@ -283,7 +337,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
+        this.aStatement.fillWithSelects(selects);
     }
 
     /**
@@ -291,7 +345,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
+        this.aStatement.fillWithActions(actions);
     }
 
     /**
@@ -300,7 +354,7 @@ public abstract class ACast extends AExpression {
      */
     @Override
     public final String get_class() {
-        return "cast";
+        return "wrapperStmt";
     }
 
     /**
@@ -313,19 +367,16 @@ public abstract class ACast extends AExpression {
         if(isInstance) {
         	return true;
         }
-        return this.aExpression.instanceOf(joinpointClass);
+        return this.aStatement.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum CastAttributes {
-        ISIMPLICITCAST("isImplicitCast"),
-        FROMTYPE("fromType"),
-        TOTYPE("toType"),
-        VARDECL("vardecl"),
-        USE("use"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
-        IMPLICITCAST("implicitCast"),
+    protected enum WrapperStmtAttributes {
+        KIND("kind"),
+        CONTENT("content"),
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -358,13 +409,13 @@ public abstract class ACast extends AExpression {
         /**
          * 
          */
-        private CastAttributes(String name){
+        private WrapperStmtAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<CastAttributes> fromString(String name) {
+        public static Optional<WrapperStmtAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -372,7 +423,7 @@ public abstract class ACast extends AExpression {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(CastAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(WrapperStmtAttributes::name).collect(Collectors.toList());
         }
 
         /**

@@ -16,7 +16,9 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.List;
 
+import pt.up.fe.specs.clang.omp.OmpParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
@@ -27,10 +29,11 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleModifier;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class CxxOmp extends AOmp {
 
-    private final OmpPragma ompPragma;
+    private OmpPragma ompPragma;
     private final ACxxWeaverJoinPoint parent;
 
     public CxxOmp(OmpPragma ompPragma, ACxxWeaverJoinPoint parent) {
@@ -279,5 +282,36 @@ public class CxxOmp extends AOmp {
     @Override
     public void setOrderedImpl(String newExpr) {
         ompPragma.clauses().setOrdered(newExpr);
+    }
+
+    @Override
+    public void removeClauseImpl(String clauseKindString) {
+        OmpClauseKind clauseKind = OmpClauseKind.getHelper().valueOfTry(clauseKindString)
+                .orElseThrow(() -> new RuntimeException("Can't remove clause '" + clauseKindString
+                        + "', name is not valid. Valid clause names: "
+                        + OmpClauseKind.getHelper().getAvailableOptions()));
+
+        ompPragma.removeClause(clauseKind);
+    }
+
+    @Override
+    public void setKindImpl(String directiveKindString) {
+        OmpDirectiveKind directiveKind = OmpDirectiveKind.getHelper().valueOfTry(directiveKindString)
+                .orElseThrow(() -> new RuntimeException("Can't set directive kind '" + directiveKindString
+                        + "', name is not valid. Valid directive names: "
+                        + OmpDirectiveKind.getHelper().getAvailableOptions()));
+
+        // Create new pragma based on the previous pragma
+        OmpPragma newOmpPragma = OmpParser.newOmpPragma(directiveKind, ompPragma);
+
+        // Replace previous pragma
+        NodeInsertUtils.replace(ompPragma, newOmpPragma);
+        // replaceWithImpl(CxxJoinpoints.create(newOmpPragma, parent));
+
+        // Update join point pragma
+        this.ompPragma = newOmpPragma;
+
+        // Update parent join point
+        this.aPragma = new CxxPragma(ompPragma, parent);
     }
 }

@@ -19,7 +19,7 @@ import java.util.Arrays;
  */
 public abstract class ALoop extends AStatement {
 
-    private AStatement aStatement;
+    protected AStatement aStatement;
 
     /**
      * 
