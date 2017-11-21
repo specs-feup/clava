@@ -56,7 +56,7 @@
 		</attribute>
 		<attribute name="parentRegion" type="joinpoint" />
 		<attribute name="currentRegion" type="joinpoint" />
-		<!-- <attribute name="pragmas" type="joinpoint[]" />   -->
+		<!--  <attribute name="pragmas" type="joinpoint[]" />  -->
 	</global>
 
 

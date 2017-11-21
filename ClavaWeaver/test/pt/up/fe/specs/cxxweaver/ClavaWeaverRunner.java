@@ -41,7 +41,7 @@ public class ClavaWeaverRunner {
         // sourceFile:'DSP_autocor_c/DSP_autocor_c.c', compiler:'llvm', nsteps:10, language:'c', target:'host-intel',
         // algo:'sa', metric:'performance', seqlen:32, nexec:30, nr:-1, clean:1, passes:'', percent:2, append:'',
         // metrics:['performance'], alreadyInstrumented:false}\" -nw -b 2 -l log.zip -j -nci"; // --stack
-        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av arguments.properties -nw  -b 2 -l log.zip -j -nci"; // --stack
+        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av arguments.properties -nw  -b 2 -l log.zip -j -nci --stack"; // --stack
         // -nci
         List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
 
@@ -62,7 +62,8 @@ public class ClavaWeaverRunner {
         // File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\AntarexIT4I\\Probability");
         // String argsString = "-c LatDse.clava"; // --stack
 
-        File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\clava-tests\\Tests\\2017-11_matrix_mul");
+        File workingDir = new File(
+                "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\specs-lara\\ANTAREX\\AutotunerMatrixMult");
         String argsString = "-c MatrixMulMargot.clava"; // --stack
 
         // String argsString = " LatDse.lara -nw -b 2"; // --stack

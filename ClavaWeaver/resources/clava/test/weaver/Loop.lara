@@ -6,6 +6,7 @@ aspectdef Loop
 		println("is innermost? " + $loop.isInnermost);
 		println("is outermost? " + $loop.isOutermost);
 		println("nested level: " + $loop.nestedLevel + "\n");
+		println("rank: " + $loop.rank + "\n");
 		//println("Loop inc:" + $loop.incrementValue);
 	end
 

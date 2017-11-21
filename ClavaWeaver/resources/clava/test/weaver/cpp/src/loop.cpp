@@ -39,6 +39,21 @@ int main() {
 		i--;
 	}
 	
+	if(i > 10) {
+		for(int a=0; a<10; a++) {
+			for(int b=0; b<10; b++) {
+			}
+		}
+	} else {
+		for(int a=0; a<10; a++) {
+			if(i < 5) {
+				for(int b=0; b<10; b++) {
+				}
+			}
+
+		}
+	}
+	
 	
 	
 	return 0;
