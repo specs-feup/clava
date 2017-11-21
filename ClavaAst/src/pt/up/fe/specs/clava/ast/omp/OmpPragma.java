@@ -79,11 +79,16 @@ public abstract class OmpPragma extends Pragma {
 
     public void setClause(OmpClause ompClause) {
         // Does nothing
-        SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause()");
+        // SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause(OmpClause)");
     }
 
     public void setClause(List<OmpClause> clauseList) {
         // Does nothing
-        SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause()");
+        // SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause(List<OmpClause>)");
+    }
+
+    public void removeClause(OmpClauseKind clauseKind) {
+        // Does nothing
+        // SpecsLogs.msgInfo("Class " + getClass() + " does not support removeClause()");
     }
 }

@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class OmpClausePragma extends OmpPragma {
@@ -125,7 +126,19 @@ public class OmpClausePragma extends OmpPragma {
             return;
         }
 
+        // Special case: OmpClause is a OmpListClause, and the list is empty. In this case, remove the clause
+        if (ompClause instanceof OmpListClause && ((OmpListClause) ompClause).getVariables().isEmpty()) {
+            removeClause(ompClause.getKind());
+            return;
+        }
+
         setClause(Arrays.asList(ompClause));
+    }
+
+    @Override
+    public void removeClause(OmpClauseKind kind) {
+        clauses.remove(kind);
+
     }
 
     @Override
