@@ -19,8 +19,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
@@ -89,23 +92,86 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
     }
 
     private int calculateOwnRank() {
+
+        // Get ancestor node relative to the rank
+        ClavaNode ancestorRankNode = getAncestorRankNode();
+
+        // Create list of rank siblings.
+        List<LoopStmt> rankSiblings = buildRankSiblings(ancestorRankNode);
+
+        // Return index of own node
+        int indexOfLoop = rankSiblings.indexOf(this);
+
+        Preconditions.checkArgument(indexOfLoop != -1, "Could not find itself inside its loop rank siblings");
+
+        // Loop ranks start at 1
+        return indexOfLoop + 1;
+        /*        
         // Calculate own rank
         ClavaNode parentNode = getParent();
         int currentRank = 1;
         for (ClavaNode sibling : parentNode.getChildren()) {
-
+        
             // If found itself, return
             if (sibling == this) {
                 return currentRank;
             }
-
+        
             // If found loop that is not itself, increase rank
             if (sibling instanceof LoopStmt) {
                 currentRank++;
             }
         }
-
+        
         throw new RuntimeException("Could not find itself inside of parent's children");
+        */
+    }
+
+    private List<LoopStmt> buildRankSiblings(ClavaNode ancestorRankNode) {
+        List<LoopStmt> rankSiblings = new ArrayList<>();
+
+        for (ClavaNode child : ancestorRankNode.getChildren()) {
+            buildRankSiblingsPrivate(child, rankSiblings);
+        }
+
+        return rankSiblings;
+    }
+
+    private void buildRankSiblingsPrivate(ClavaNode node, List<LoopStmt> rankSiblings) {
+        // If not a statement, stop looking
+        if (!(node instanceof Stmt)) {
+            return;
+        }
+
+        // If LoopStmt, add to list and stop looking
+        if (node instanceof LoopStmt) {
+            rankSiblings.add((LoopStmt) node);
+            return;
+        }
+
+        // Continue looking in the children of the stmt
+        node.getChildrenStream().forEach(child -> buildRankSiblingsPrivate(child, rankSiblings));
+        /*
+        // If an aggregate statement, continue looking in its children
+        if (node instanceof Stmt && ((Stmt) node).isAggregateStmt()) {
+            node.getChildrenStream().forEach(child -> buildRankSiblingsPrivate(child, rankSiblings));
+            return;
+        }
+        
+        // For all other kinds of nodes, stop looking
+        return;
+        */
+    }
+
+    private ClavaNode getAncestorRankNode() {
+        // Get first ancestor that is a LoopStmt.
+        ClavaNode loopAncestor = getAncestorTry(LoopStmt.class).orElse(null);
+        if (loopAncestor != null) {
+            return loopAncestor;
+        }
+
+        // If no LoopStmt found, use the first Decl ancestor as ancestor node
+        return getAncestor(Decl.class);
     }
 
     /**
