@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.omp;
 
 import static pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,6 +41,7 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -71,6 +73,32 @@ public class OmpParser implements PragmaParser {
 
         // Return pragma without clauses
         return new OmpClausePragma(kind, new LinkedHashMap<>(), ClavaNodeInfo.undefinedInfo());
+    }
+
+    /**
+     * Creates a new OpenMP pragma, based on a previous pragma (e.g., with the same clauses)
+     * 
+     * @param kind
+     * @param basePragma
+     * @return
+     */
+    public static OmpPragma newOmpPragma(OmpDirectiveKind kind, OmpPragma basePragma) {
+        // Create new pragma
+        OmpPragma newPragma = newOmpPragma(kind);
+
+        // Transfer all clauses from base pragma that are valid in the new pragma
+        for (OmpClauseKind clauseKind : basePragma.getClauseKinds()) {
+            // Check if kind is valid
+            if (!kind.isClauseLegal(clauseKind)) {
+                SpecsLogs.msgInfo("Dropping clause '" + clauseKind + "' in conversion from '"
+                        + basePragma.getDirectiveKind() + "' to '" + kind + "'");
+                continue;
+            }
+
+            newPragma.setClause(new ArrayList<>(basePragma.getClause(clauseKind)));
+        }
+
+        return newPragma;
     }
 
     public OmpPragma parse(Pragma pragma) {
