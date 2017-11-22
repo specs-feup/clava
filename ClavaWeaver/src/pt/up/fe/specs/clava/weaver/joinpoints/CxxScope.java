@@ -51,6 +51,7 @@ public class CxxScope extends AScope {
     private final ACxxWeaverJoinPoint parent;
 
     public CxxScope(CompoundStmt scope, ACxxWeaverJoinPoint parent) {
+        super(new CxxStatement(scope, parent));
         // public CxxScope(CompoundStmt scope, ACxxWeaverJoinPoint parent) {
         this.scope = scope;
         this.parent = parent;
