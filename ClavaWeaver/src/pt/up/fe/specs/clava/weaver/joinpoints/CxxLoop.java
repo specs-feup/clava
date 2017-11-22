@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
@@ -471,4 +472,22 @@ public class CxxLoop extends ALoop {
     public String getIdImpl() {
         return loop.getLoopId();
     }
+
+    @Override
+    public void interchangeImpl(ALoop otherLoop) {
+
+        Optional<LoopInterchange> loopInterchange = LoopInterchange.newInstance(loop, (LoopStmt) otherLoop.getNode());
+        if (!loopInterchange.isPresent()) {
+            ClavaLog.info("Could not interchange loops");
+            return;
+        }
+
+        loopInterchange.get().apply();
+    }
+
+    @Override
+    public Boolean isInterchangeableImpl(ALoop otherLoop) {
+        return LoopInterchange.test(loop, (LoopStmt) otherLoop.getNode());
+    }
+
 }

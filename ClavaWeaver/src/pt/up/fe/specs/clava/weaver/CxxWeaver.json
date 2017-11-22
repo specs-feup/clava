@@ -7965,6 +7965,18 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInterchangeable"
+                           },
+                           {
+                              "type": "loop",
+                              "name": "otherLoop"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')",
                   "children": [
                            {
@@ -8413,6 +8425,20 @@
                            {
                               "type": "String",
                               "name": "stepCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Interchanges two for loops, if possible",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "interchange"
+                           },
+                           {
+                              "type": "loop",
+                              "name": "otherLoop",
                               "defaultValue": ""
                            }]
                },
