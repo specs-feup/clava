@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
 
@@ -34,15 +33,15 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
 import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
+import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
@@ -163,14 +162,7 @@ public class CxxLoop extends ALoop {
 
         ForStmt forStmt = (ForStmt) loop;
 
-        Stmt inc = forStmt.getInc().orElse(null);
-        if (inc == null) {
-            return null;
-        }
-
-        List<String> controlVars = inc.getDescendants(DeclRefExpr.class).stream()
-                .filter(d -> d.use() == ExprUse.READWRITE || d.use() == ExprUse.WRITE).map(DeclRefExpr::getRefName)
-                .collect(Collectors.toList());
+        List<String> controlVars = LoopAnalysisUtils.getControlVarNames(forStmt);
 
         if (controlVars.isEmpty()) {
 
@@ -490,4 +482,14 @@ public class CxxLoop extends ALoop {
         return LoopInterchange.test(loop, (LoopStmt) otherLoop.getNode());
     }
 
+    @Override
+    public void tileImpl(String blockSize, ALoop reference) {
+
+        boolean success = LoopTiling.apply(loop, (LoopStmt) reference.getNode(), blockSize.toString());
+
+        if (!success) {
+
+            ClavaLog.info("Could not tile the loop");
+        }
+    }
 }

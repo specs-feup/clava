@@ -7965,6 +7965,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Tests whether the loops are interchangeable. This is a conservative test.",
                   "children": [
                            {
                               "type": "Boolean",
@@ -8430,7 +8431,7 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Interchanges two for loops, if possible",
+                  "tooltip": "Interchanges two for loops, if possible.",
                   "children": [
                            {
                               "type": "void",
@@ -8439,6 +8440,25 @@
                            {
                               "type": "loop",
                               "name": "otherLoop",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Applies loop tiling to target loop.",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "tile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "blockSize",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "loop",
+                              "name": "reference",
                               "defaultValue": ""
                            }]
                },

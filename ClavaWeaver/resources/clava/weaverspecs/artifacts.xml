@@ -118,7 +118,7 @@
 		<attribute name="rank" type="Integer[]" />
 		<attribute name="isParallel" type="Boolean" />
 		<attribute name="iterations" type="Integer" />
-		<attribute name="isInterchangeable" type="Boolean">
+		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
 			<parameter name="otherLoop" type="loop" />	
 		</attribute>
 		
