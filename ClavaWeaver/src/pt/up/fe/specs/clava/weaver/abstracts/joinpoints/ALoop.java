@@ -261,6 +261,33 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * 
+     * @param otherLoop
+     * @return 
+     */
+    public abstract Boolean isInterchangeableImpl(ALoop otherLoop);
+
+    /**
+     * 
+     * @param otherLoop
+     * @return 
+     */
+    public final Object isInterchangeable(ALoop otherLoop) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterchangeable", Optional.empty(), otherLoop);
+        	}
+        	Boolean result = this.isInterchangeableImpl(otherLoop);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInterchangeable", Optional.ofNullable(result), otherLoop);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInterchangeable", e);
+        }
+    }
+
+    /**
      * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
      */
     public abstract String getInitValueImpl();
@@ -457,6 +484,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setStep", e);
+        }
+    }
+
+    /**
+     * Interchanges two for loops, if possible
+     * @param otherLoop 
+     */
+    public void interchangeImpl(ALoop otherLoop) {
+        throw new UnsupportedOperationException(get_class()+": Action interchange not implemented ");
+    }
+
+    /**
+     * Interchanges two for loops, if possible
+     * @param otherLoop 
+     */
+    public final void interchange(ALoop otherLoop) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "interchange", this, Optional.empty(), otherLoop);
+        	}
+        	this.interchangeImpl(otherLoop);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "interchange", this, Optional.empty(), otherLoop);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "interchange", e);
         }
     }
 
@@ -734,6 +787,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("rank");
         attributes.add("isParallel");
         attributes.add("iterations");
+        attributes.add("isInterchangeable");
         attributes.add("initValue");
         attributes.add("endValue");
     }
@@ -761,6 +815,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void setInit(String)");
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
+        actions.add("void interchange(loop)");
     }
 
     /**
@@ -797,6 +852,7 @@ public abstract class ALoop extends AStatement {
         RANK("rank"),
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
+        ISINTERCHANGEABLE("isInterchangeable"),
         INITVALUE("initValue"),
         ENDVALUE("endValue"),
         ISFIRST("isFirst"),

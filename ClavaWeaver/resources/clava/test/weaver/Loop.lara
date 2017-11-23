@@ -9,5 +9,40 @@ aspectdef Loop
 		println("rank: " + $loop.rank + "\n");
 		//println("Loop inc:" + $loop.incrementValue);
 	end
-
+/*	
+	// interchange all pairs of innermost loops and their parent loop
+	select ($l1=loop).($l2=loop) end
+	apply
+		$l1.interchange($l2);
+	end
+	condition
+		$l2.isInnermost
+	end
+	
+	// interchange all pairs of innermost loops and their parent loop
+	// but test if interchangeable first
+	select ($l1=loop).($l2=loop) end
+	apply
+		$l1.interchange($l2);
+	end
+	condition
+		$l2.isInnermost &&
+		$l2.isInterchangeable($1)
+	end
+	
+	// try to interchange two loops which are not in the same nest
+	select loop end
+	apply
+		var $loop1 = $loop;
+	end
+	condition rank == '1' end
+	
+	select loop end
+	apply
+		var $loop2 = $loop;
+	end
+	condition rank == '2' end
+	
+	$loop1.interchange($loop2);
+	/**/
 end
