@@ -64,7 +64,7 @@ public class ClavaWeaverRunner {
 
         File workingDir = new File(
                 "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\specs-lara\\ANTAREX\\AutotunerMatrixMult");
-        String argsString = "-c MatrixMulMargot.clava"; // --stack
+        String argsString = "-c MatrixMulMargot.clava --stack"; // --stack
 
         // String argsString = " LatDse.lara -nw -b 2"; // --stack
         // String argsString = "-c LatDse.clava --stack"; // --stack
