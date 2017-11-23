@@ -70,7 +70,7 @@ public class LoopInterchange {
      * Verify if loops are:<br>
      * <li>for loops
      * <li>nested with each other
-     * <li>well behaved ({@link LoopInterchange#isWellBehaved(ForStmt)}
+     * <li>well behaved ({@link LoopAnalysisUtils#hasHeader(ForStmt)}
      *
      * @param loop1
      *            the first loop
@@ -103,7 +103,7 @@ public class LoopInterchange {
     private static boolean testBehaviour(ForStmt outLoop, ForStmt inLoop) {
 
         /* checks if loops have init, cond and inc */
-        if (!(isWellBehaved(outLoop) && isWellBehaved(inLoop))) {
+        if (!(LoopAnalysisUtils.hasHeader(outLoop) && LoopAnalysisUtils.hasHeader(inLoop))) {
 
             return false;
         }
@@ -132,23 +132,6 @@ public class LoopInterchange {
 
         /* the loops are not nested out -> inner */
         return false;
-    }
-
-    /**
-     * Checks if the for loop has init, cond and inc statements.
-     *
-     * @param forLoop
-     */
-    private static boolean isWellBehaved(ForStmt forLoop) {
-
-        if (!forLoop.getInit().isPresent()
-                || !forLoop.getCond().isPresent()
-                || !forLoop.getInc().isPresent()) {
-
-            return false;
-        }
-
-        return true;
     }
 
     public void apply() {
