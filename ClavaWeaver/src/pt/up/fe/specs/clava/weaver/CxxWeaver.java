@@ -136,6 +136,10 @@ public class CxxWeaver extends ACxxWeaver {
                 "dir1[,dir2]*",
                 "Includes folder for C/C++ headers that should be considered 'system libraries'. System libraries are not processed by Clava and do not appear in the AST.");
 
+        addOneArgOption(ClavaOptions.FLAGS, "fs", "flags",
+                "flags string",
+                "String with flags to pass to the Clang dumper.");
+
         addOneArgOption(CxxWeaverOption.WEAVED_CODE_FOLDERNAME, "of", "output-foldername",
                 "dir",
                 "Sets the name of the weaved code folder (default value: '" + CxxWeaver.getWeavedCodeFoldername()
