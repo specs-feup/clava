@@ -133,6 +133,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         addBooleanOption(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, "cl", "clean", "Clean intermediate files");
 
+        addBooleanOption(CxxWeaverOption.DISABLE_CODE_GENERATION, "ncg", "no-code-gen",
+                "Disables automatic code generation");
+
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_CLAVA_INFO.getName(),
                 WeaverOptionBuilder.build("nci", "no-clava-info",
                         "Disables printing of information about Clava", CxxWeaverOption.DISABLE_CLAVA_INFO));
@@ -598,13 +601,15 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             // Terminate weaver execution with final steps required and writing output files
-            // File codeFolder = SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
 
-            writeCode(getWeavingFolder());
+            // Write output files if code generation is not disabled
+            if (!args.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
+                writeCode(getWeavingFolder());
+            }
 
         }
 
-        // Clean-up phase
+        /// Clean-up phase
 
         // Delete temporary weaving folder, if exists
         SpecsIo.deleteFolder(new File(TEMP_WEAVING_FOLDER));

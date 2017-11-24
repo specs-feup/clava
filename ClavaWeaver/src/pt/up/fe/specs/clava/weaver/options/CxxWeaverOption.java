@@ -43,12 +43,15 @@ public interface CxxWeaverOption {
             .setDefault(() -> FileList.newInstance());
 
     DataKey<Boolean> DISABLE_WEAVING = KeyFactory.bool("Disable Weaving")
-            .setLabel("Disable Weaving (only executes the LARA code, does not parse C/C++ code)");
+            .setLabel("Disable weaving (only executes the LARA code, does not parse C/C++ code)");
+
+    DataKey<Boolean> DISABLE_CODE_GENERATION = KeyFactory.bool("Disable Code Generation")
+            .setLabel("Disable code generation (except sources files that are explictly writen in LARA aspects)");
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WEAVED_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
-                    LIBRARY_INCLUDES, DISABLE_WEAVING)
+                    LIBRARY_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION)
             .build();
 
 }
