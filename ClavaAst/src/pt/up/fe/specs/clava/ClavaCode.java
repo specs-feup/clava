@@ -13,15 +13,28 @@
 
 package pt.up.fe.specs.clava;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ast.type.data.Qualifier;
+import pt.up.fe.specs.util.SpecsIo;
 
 public class ClavaCode {
 
     public static String getQualifiersCode(List<Qualifier> qualifiers) {
         return qualifiers.stream().map(Qualifier::getCode)
                 .collect(Collectors.joining(" "));
+    }
+
+    public static String getRelativePath(File baseFile, File baseInputFolder) {
+        String relativePath = SpecsIo.getRelativePath(baseFile, baseInputFolder);
+    
+        // Avoid writing outside of the destination folder, if relative path has '../', remove them
+        while (relativePath.startsWith("../")) {
+            relativePath = relativePath.substring("../".length());
+        }
+    
+        return relativePath;
     }
 }
