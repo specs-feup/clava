@@ -59,7 +59,7 @@ ClavaDataStore.prototype.getSystemIncludes = function() {
 }
 
 /**
- * @param {string...} flags - A variable number of strings with the extra system includes.
+ * @param {string...} arguments - A variable number of strings with the extra system includes.
  * 
  */
 ClavaDataStore.prototype.setSystemIncludes = function() {
