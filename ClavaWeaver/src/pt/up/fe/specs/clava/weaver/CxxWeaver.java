@@ -254,6 +254,9 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App getApp() {
+        if (apps == null) {
+            return null;
+        }
         // return app;
         App app = apps.peek();
 
