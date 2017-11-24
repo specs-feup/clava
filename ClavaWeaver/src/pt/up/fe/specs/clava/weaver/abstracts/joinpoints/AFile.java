@@ -380,6 +380,32 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     * @param destinationFoldername 
+     */
+    public void writeImpl(String destinationFoldername) {
+        throw new UnsupportedOperationException(get_class()+": Action write not implemented ");
+    }
+
+    /**
+     * 
+     * @param destinationFoldername 
+     */
+    public final void write(String destinationFoldername) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
+        	}
+        	this.writeImpl(destinationFoldername);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.empty(), destinationFoldername);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "write", e);
+        }
+    }
+
+    /**
      * Adds the node in the join point to the start of the file
      * @param node 
      */
@@ -602,6 +628,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void addInclude(string)");
         actions.add("void addIncludeJp(joinpoint)");
         actions.add("void addGlobal(String, joinpoint, String)");
+        actions.add("void write(String)");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");
         actions.add("void insertEnd(joinpoint)");

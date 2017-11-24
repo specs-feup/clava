@@ -81,6 +81,10 @@
 		<parameter name="initValue" type="String" />
 	</action>
 
+	<action name="write" class="file">
+		<parameter name="destinationFoldername" type="String" />
+	</action>
+
 	<!-- Adds a message that will be communicated to the user after weaving 
 		ends -->
 	<action name="messageToUser">

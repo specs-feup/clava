@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -211,7 +212,7 @@ public class App extends ClavaNode {
         // and using a path relative to the topFile
 
         for (TranslationUnit tUnit : getTranslationUnits()) {
-            String relativePath = getRelativePath(new File(tUnit.getFolderpath()), baseInputFolder);
+            String relativePath = ClavaCode.getRelativePath(new File(tUnit.getFolderpath()), baseInputFolder);
 
             // Build destination path
             File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
@@ -232,7 +233,7 @@ public class App extends ClavaNode {
         // System.out.println("GENERATED FILES:" + relativeWeaved);
 
         for (File file : allFiles) {
-            String relativeSource = getRelativePath(file, baseInputFolder);
+            String relativeSource = ClavaCode.getRelativePath(file, baseInputFolder);
             // String relativeSource = IoUtils.getRelativePath(file, baseInputFolder);
 
             if (relativeWeaved.contains(relativeSource)) {
@@ -263,22 +264,11 @@ public class App extends ClavaNode {
     }
 
     public String getRelativePath(File baseInputFolder, TranslationUnit tUnit) {
-        return getRelativePath(tUnit.getFile(), baseInputFolder);
+        return ClavaCode.getRelativePath(tUnit.getFile(), baseInputFolder);
     }
 
     public String getRelativeFolderPath(File baseInputFolder, TranslationUnit tUnit) {
-        return getRelativePath(tUnit.getFile().getParentFile(), baseInputFolder);
-    }
-
-    private String getRelativePath(File baseFile, File baseInputFolder) {
-        String relativePath = SpecsIo.getRelativePath(baseFile, baseInputFolder);
-
-        // Avoid writing outside of the destination folder, if relative path has '../', remove them
-        while (relativePath.startsWith("../")) {
-            relativePath = relativePath.substring("../".length());
-        }
-
-        return relativePath;
+        return ClavaCode.getRelativePath(tUnit.getFile().getParentFile(), baseInputFolder);
     }
 
     public Optional<TranslationUnit> getFile(String filename) {

@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
@@ -271,5 +272,15 @@ public class TranslationUnit extends ClavaNode {
         // Add at the end of the translation unit
         addChild(getNumChildren(), stmt);
 
+    }
+
+    public void write(File baseInputFolder, File destinationFolder) {
+        String relativePath = ClavaCode.getRelativePath(new File(getFolderpath()), baseInputFolder);
+
+        // Build destination path
+        File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
+        File destinationFile = new File(actualDestinationFolder, getFilename());
+
+        SpecsIo.write(destinationFile, getCode());
     }
 }

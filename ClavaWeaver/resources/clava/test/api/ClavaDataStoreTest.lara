@@ -13,4 +13,11 @@ aspectdef DataStoreTest
 	dataStore.put("javascript", true);
 	println("Keys:" + dataStore.getKeys());
 	println("Disable info:" + dataStore.get("disable_info"));
+	println("System includes:" + dataStore.getSystemIncludes());
+	dataStore.setSystemIncludes("extra_system_include");
+	println("System includes after:" + dataStore.getSystemIncludes());
+	println("Flags:" + dataStore.getFlags());
+	var flags = dataStore.getFlags() + " -O3";
+	dataStore.setFlags(flags);
+	println("Flags after:" + dataStore.getFlags());
 end

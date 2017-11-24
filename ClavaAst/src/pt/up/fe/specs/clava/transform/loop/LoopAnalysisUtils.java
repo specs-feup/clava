@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.transform.loop;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -219,37 +220,9 @@ public class LoopAnalysisUtils {
 
     public static List<String> getControlVarNames(ForStmt targetFor) {
 
-        /*
-        if (!hasSimpleInit(targetFor)) {
-        
-            return Optional.empty();
-        }
-        
-        Stmt init = targetFor.getInit().get();
-        
-        // if it is an assignment, get the LHS
-        if (init instanceof ExprStmt) {
-        
-            Expr expr = ((ExprStmt) init).getExpr();
-            BinaryOperator binOp = ((BinaryOperator) expr);
-        
-            return Optional.of(binOp.getLhs().toString());
-        }
-        
-        // if it is a declaration, get the name of the declared variable
-        if (init instanceof DeclStmt) {
-        
-            VarDecl decl = (VarDecl) ((DeclStmt) init).getDecls().get(0);
-        
-            return Optional.of(decl.getDeclName());
-        }
-        
-        throw new RuntimeException("init was neither an ExprStmt nor a DeclStmt");
-        */
-
         Stmt inc = targetFor.getInc().orElse(null);
         if (inc == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<String> controlVars = inc.getDescendants(DeclRefExpr.class).stream()

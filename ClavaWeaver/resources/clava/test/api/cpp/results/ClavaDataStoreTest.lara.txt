@@ -1,0 +1,9 @@
+GET:true
+TYPE:class java.lang.Boolean
+GET AFTER PUT:false
+Keys:aspect,main,argv,workspace,output,include,tools,report,metrics,verbose,log,javascript,debug,stack trace,bundle_tags,C/C++ Standard,Compiler Flags,Weaved code foldername,Disable Clava Info,Check C/CXX Syntax,Clean intermediate files,library includes,Disable Weaving,Disable Code Generation
+Disable info:false
+System includes:[]
+System includes after:[extra_system_include]
+Flags:
+Flags after: -O3

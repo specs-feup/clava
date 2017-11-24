@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -52,6 +54,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxFile extends AFile {
@@ -208,7 +211,7 @@ public class CxxFile extends AFile {
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-
+        
         return path;
         */
     }
@@ -344,4 +347,16 @@ public class CxxFile extends AFile {
         return tunit.isHeaderFile();
     }
 
+    @Override
+    public void writeImpl(String destinationFoldername) {
+        File destinationFolder = SpecsIo.mkdir(destinationFoldername);
+        if (destinationFolder == null) {
+            ClavaLog.info("$file.exec write: Could not obtain destination folder '" + destinationFoldername + "'");
+            return;
+        }
+
+        File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
+
+        tunit.write(baseSourceFolder, destinationFolder);
+    }
 }

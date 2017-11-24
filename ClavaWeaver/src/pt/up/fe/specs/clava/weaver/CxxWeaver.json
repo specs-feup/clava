@@ -6298,6 +6298,19 @@
                },
                {
                   "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "write"
+                           },
+                           {
+                              "type": "String",
+                              "name": "destinationFoldername",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Adds the node in the join point to the start of the file",
                   "children": [
                            {
@@ -9637,7 +9650,7 @@
       },
       {
          "name": "scope",
-         "extends": "joinpoint"      ,
+         "extends": "statement"      ,
          "children": [
                {
                   "type": "attribute",
@@ -9645,6 +9658,22 @@
                            {
                               "type": "Integer",
                               "name": "numStatements"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFirst"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isLast"
                            }]
                },
                {
@@ -9979,6 +10008,51 @@
                {
                   "type": "select",
                   "clazz": "comment",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "expr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "childExpr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "arrayAccess",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "vardecl",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
                   "alias": ""
                },
                {

@@ -123,10 +123,18 @@ public class CxxWeaver extends ACxxWeaver {
                                 + Standard.getEnumHelper().getAvailableOptions(),
                         ClavaOptions.STANDARD));
 
+        addOneArgOption(ClavaOptions.FLAGS, "fs", "flags", "flags string",
+                "String with C/C++ compiler flags");
+
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_WEAVING.getName(), WeaverOptionBuilder.build("nw", "no-weaving",
                 "Disables weaving of source code, only runs the LARA aspect", CxxWeaverOption.DISABLE_WEAVING));
 
         addBooleanOption(CxxWeaverOption.CHECK_SYNTAX, "cs", "check-syntax", "Checks syntax of weaved code");
+
+        addBooleanOption(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, "cl", "clean", "Clean intermediate files");
+
+        addBooleanOption(CxxWeaverOption.DISABLE_CODE_GENERATION, "ncg", "no-code-gen",
+                "Disables automatic code generation");
 
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_CLAVA_INFO.getName(),
                 WeaverOptionBuilder.build("nci", "no-clava-info",
@@ -246,6 +254,9 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App getApp() {
+        if (apps == null) {
+            return null;
+        }
         // return app;
         App app = apps.peek();
 
@@ -593,13 +604,15 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             // Terminate weaver execution with final steps required and writing output files
-            // File codeFolder = SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
 
-            writeCode(getWeavingFolder());
+            // Write output files if code generation is not disabled
+            if (!args.get(CxxWeaverOption.DISABLE_CODE_GENERATION)) {
+                writeCode(getWeavingFolder());
+            }
 
         }
 
-        // Clean-up phase
+        /// Clean-up phase
 
         // Delete temporary weaving folder, if exists
         SpecsIo.deleteFolder(new File(TEMP_WEAVING_FOLDER));

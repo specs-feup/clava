@@ -96,7 +96,7 @@
 		
 		
 	<!-- SCOPE-->
-	<joinpoint class="scope">
+	<joinpoint class="scope" extends="statement">
 		<select alias="stmt"			class="statement"/> 
 		<select alias="childStmt"		class="statement"/>
 		
