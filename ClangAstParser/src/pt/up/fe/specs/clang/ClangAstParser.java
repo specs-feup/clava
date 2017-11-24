@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,13 +36,12 @@ import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
-import pt.up.fe.specs.clang.omp.OMPClauseParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
+import pt.up.fe.specs.clang.utils.ZipResourceManager;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.omp.OMPDirective;
-import pt.up.fe.specs.clava.omp.clause.OMPClause;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -336,17 +334,32 @@ public class ClangAstParser {
         File resourceFolder = getClangResourceFolder();
 
         File includesBaseFolder = SpecsIo.mkdir(resourceFolder, "clang_includes");
+        ZipResourceManager zipManager = new ZipResourceManager(includesBaseFolder);
 
-        // If
+        // Clang built-in includes, to be used in all platforms
+        // Write Clang headers
+        ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
+                resourceFolder, ClangAstParser.class);
 
+        // boolean hasFolderBeenCleared = false;
+
+        zipManager.extract(builtinIncludesZip);
+        /*
+        // Unzip file, if new
+        if (builtinIncludesZip.isNewFile()) {
+            // Ensure folder is empty
+            if (!hasFolderBeenCleared) {
+                hasFolderBeenCleared = true;
+                SpecsIo.deleteFolderContents(includesBaseFolder);
+            }
+        
+            SpecsIo.extractZip(builtinIncludesZip.getFile(), includesBaseFolder);
+            // Cannot delete zip file, it will be used to check if there is a new file or not
+        }
+        */
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
 
-        // Add lib/lic++ on Windows, it is expected that a Linux system has its own headers for libc/libc++
-        // boolean useFullIncludes = false;
-        // boolean useFullIncludes = SpecsPlatforms.isWindows();
-
-        // if (useFullIncludes) {
         if (!hasLibC) {
             // Obtain correct version of libc/c++
             WebResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
@@ -354,34 +367,25 @@ public class ClangAstParser {
             // Write Clang headers
             ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
                     ClangAstParser.class);
-            // ResourceWriteData libcZip = ClangAstWebResource.LIBC_CXX_WINDOWS.writeVersioned(resourceFolder,
-            // ClangAstParser.class);
 
+            zipManager.extract(libcZip);
+
+            /*
             // Unzip file, if new
             if (libcZip.isNewFile()) {
                 // Ensure folder is empty
-                SpecsIo.deleteFolderContents(includesBaseFolder);
-
+                if (!hasFolderBeenCleared) {
+                    hasFolderBeenCleared = true;
+                    // Ensure folder is empty
+                    SpecsIo.deleteFolderContents(includesBaseFolder);
+                }
+            
                 SpecsIo.extractZip(libcZip.getFile(), includesBaseFolder);
-                // IoUtils.extractZip(clangHeadersZip.getFile(), resourceFolder);
-
+            
                 // Cannot delete zip file, it will be used to check if there is a new file or not
             }
+            */
 
-        }
-
-        // Clang built-in includes, to be used in all platforms
-        // Write Clang headers
-        ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
-                resourceFolder, ClangAstParser.class);
-
-        // Unzip file, if new
-        if (builtinIncludesZip.isNewFile()) {
-            // Ensure folder is empty
-            SpecsIo.deleteFolderContents(includesBaseFolder);
-
-            SpecsIo.extractZip(builtinIncludesZip.getFile(), includesBaseFolder);
-            // Cannot delete zip file, it will be used to check if there is a new file or not
         }
 
         // List<String> includes = new ArrayList<>();
@@ -443,60 +447,6 @@ public class ClangAstParser {
         boolean foundInclude = !output.getStdOut().isEmpty();
 
         return foundInclude;
-    }
-
-    private static Map<String, OMPDirective> parseOmpDirectives(String ompContents) {
-
-        Map<String, OMPDirective> ompDirectives = new HashMap<>();
-        OMPClauseParser clauseParser = new OMPClauseParser();
-
-        Iterator<String> ompIterator = StringLines.getLines(ompContents).iterator();
-
-        while (ompIterator.hasNext()) {
-            // Get complete directive
-            // e.g.,
-            // COUNTER=4
-            // 0x45dcbe8->omp parallel shared(travelTimes)
-            String ompDirective = ompIterator.next();
-
-            String[] parts = ompDirective.split("->");
-            Preconditions.checkArgument(parts.length == 2);
-            String id = parts[0];
-            String directiveString = parts[1];
-
-            // Check how many clauses it has
-            // e.g., NUM_CLAUSES->1
-            String numClausesString = ompIterator.next();
-            String[] numClausesParts = numClausesString.split("->");
-            Preconditions.checkArgument(numClausesParts.length == 2);
-            Preconditions.checkArgument(numClausesParts[0].equals("NUM_CLAUSES"));
-
-            int numClauses = Integer.parseInt(numClausesParts[1]);
-
-            // Parse OpenMP clauses
-            List<OMPClause> clauses = new ArrayList<>();
-            for (int i = 0; i < numClauses; i++) {
-                String ompClauseString = ompIterator.next();
-                String[] clauseParts = ompClauseString.split("->");
-                String clauseKind = clauseParts[0];
-                String clauseString = clauseParts[1];
-                clauses.add(clauseParser.convert(clauseKind, clauseString));
-            }
-
-            ompDirectives.put(id, new OMPDirective(directiveString, clauses));
-        }
-
-        /*
-        for (String line : StringLines.getLines(ompContents)) {
-        String[] parts = line.split("->");
-        Preconditions.checkArgument(parts.length == 2);
-        Long id = Long.decode(parts[0]);
-        
-        ompDirectives.put(id, parts[1]);
-        }
-        */
-
-        return ompDirectives;
     }
 
     private static Set<String> parseIsTemporary(String isTemporary) {
