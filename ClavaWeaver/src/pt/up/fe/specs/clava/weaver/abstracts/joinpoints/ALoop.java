@@ -488,7 +488,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Interchanges two for loops, if possible
+     * Interchanges two for loops, if possible.
      * @param otherLoop 
      */
     public void interchangeImpl(ALoop otherLoop) {
@@ -496,7 +496,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Interchanges two for loops, if possible
+     * Interchanges two for loops, if possible.
      * @param otherLoop 
      */
     public final void interchange(ALoop otherLoop) {
@@ -510,6 +510,34 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "interchange", e);
+        }
+    }
+
+    /**
+     * Applies loop tiling to target loop.
+     * @param blockSize 
+     * @param reference 
+     */
+    public void tileImpl(String blockSize, ALoop reference) {
+        throw new UnsupportedOperationException(get_class()+": Action tile not implemented ");
+    }
+
+    /**
+     * Applies loop tiling to target loop.
+     * @param blockSize 
+     * @param reference 
+     */
+    public final void tile(String blockSize, ALoop reference) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference);
+        	}
+        	this.tileImpl(blockSize, reference);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.empty(), blockSize, reference);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "tile", e);
         }
     }
 
@@ -816,6 +844,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
         actions.add("void interchange(loop)");
+        actions.add("void tile(String, loop)");
     }
 
     /**
