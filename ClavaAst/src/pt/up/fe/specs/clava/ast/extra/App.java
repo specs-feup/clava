@@ -93,6 +93,8 @@ public class App extends ClavaNode {
     private final Map<String, ClavaNode> nodesCache;
     private final Map<String, FunctionDecl> functionDeclarationCache;
     private final Map<String, FunctionDecl> functionDefinitionCache;
+    private Map<String, String> idsAlias;
+
     // Can be used to store information that should be accessible through the application
     private DataStore appData;
 
@@ -105,6 +107,7 @@ public class App extends ClavaNode {
         functionDeclarationCache = new HashMap<>();
         functionDefinitionCache = new HashMap<>();
         appData = DataStore.newInstance("Clava App Data");
+        this.idsAlias = Collections.emptyMap();
         // System.out.println("SETTING STANDARD:" + appData.get(ClavaOptions.STANDARD));
         CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
     }
@@ -116,6 +119,10 @@ public class App extends ClavaNode {
 
     public DataStore getAppData() {
         return appData;
+    }
+
+    public void setIdsAlias(Map<String, String> idsAlias) {
+        this.idsAlias = idsAlias;
     }
 
     /**
@@ -283,20 +290,30 @@ public class App extends ClavaNode {
     }
 
     public Optional<ClavaNode> getNodeTry(String id) {
+
+        // Check if id is an alias
+        String normalizedId = normalizeId(id);
+
         // Check if node was already asked
-        ClavaNode cachedNode = nodesCache.get(id);
+        ClavaNode cachedNode = nodesCache.get(normalizedId);
         if (cachedNode != null) {
             return Optional.of(cachedNode);
         }
 
         Optional<ClavaNode> askedNode = getDescendantsAndSelfStream()
                 .filter(node -> node.getId().isPresent())
-                .filter(node -> node.getId().get().getExtendedId().equals(id))
+                .filter(node -> node.getId().get().getExtendedId().equals(normalizedId))
                 .findFirst();
 
-        askedNode.ifPresent(node -> nodesCache.put(id, node));
+        askedNode.ifPresent(node -> nodesCache.put(normalizedId, node));
 
         return askedNode;
+    }
+
+    private String normalizeId(String id) {
+        String unaliasedId = idsAlias.get(id);
+
+        return unaliasedId != null ? unaliasedId : id;
     }
 
     public Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType) {

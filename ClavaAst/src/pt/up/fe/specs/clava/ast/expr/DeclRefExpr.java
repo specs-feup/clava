@@ -124,16 +124,27 @@ public class DeclRefExpr extends Expr {
      * @return can
      */
     public Optional<? extends Decl> getDeclaration() {
+
         Optional<String> idSuffix = getInfo().getIdSuffix();
         if (!idSuffix.isPresent()) {
             throw new RuntimeException("Could not find id suffix in '" + getExtendedId() + "'");
         }
 
         String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
+        // System.out.println("VARDECL ID:" + varDeclId);
+
+        // String idToTest = Long.toHexString(declData.getPointer()) + "_";
+        //
+        // List<ClavaNode> nodes = getAncestor(App.class).getDescendantsStream()
+        // .filter(node -> node.getExtendedId().map(id -> id.startsWith(idToTest)).orElse(false))
+        // .collect(Collectors.toList());
+
+        // System.out.println("NODES:" + nodes);
+
         // System.out.println("ASCENDANTS:"
         // + this.getAscendantsStream().map(node -> node.getNodeName()).collect(Collectors.joining(" -> ")));
         Optional<ClavaNode> declTry = getApp().getNodeTry(varDeclId);
-
+        // System.out.println("NODE: " + declTry);
         // If not present, probably declaration is outside of parsed files
         // (e.g., declaration of a function in a system header, such as printf)
 
@@ -163,6 +174,7 @@ public class DeclRefExpr extends Expr {
 
     public Optional<DeclaratorDecl> getVariableDeclaration() {
         Optional<? extends Decl> declTry = getDeclaration();
+
         if (!declTry.isPresent()) {
             return Optional.empty();
         }
