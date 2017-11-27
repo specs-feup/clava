@@ -15,9 +15,11 @@ package pt.up.fe.specs.clang.clavaparser.extra;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,10 +38,10 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class RootParser extends AClangNodeParser<App> {
@@ -76,10 +78,14 @@ public class RootParser extends AClangNodeParser<App> {
         // Because the parser uses the addresses as ids, it can be problematic if declarations with mismatched addresses
         // appear in the final AST tree.
         //
-        // To solve this, use the location of the node to remove repetitions
+        // To solve this, use the location of the node to remove repetitions,
+        // and create a map between repeated ids and normalized ids
 
-        List<ClangNode> uniqueChildren = SpecsCollections.filter(node.getChildren(),
-                child -> child.getLocation().toString());
+        NormalizedClangNodes normalizedClangNodes = normalizeClangNodes((ClangRootNode) node);
+
+        // System.out.println("REPEATED IDS MAP:\n" + normalizedClangNodes.getRepeatedIdsMap());
+        // List<ClangNode> uniqueChildren = SpecsCollections.filter(node.getChildren(),
+        // child -> child.getLocation().toString());
 
         // return elements.stream()
         // // Add to set. If already in set, will return false and filter the node
@@ -90,7 +96,7 @@ public class RootParser extends AClangNodeParser<App> {
         // // })
         // .collect(Collectors.toList());
 
-        for (ClangNode child : uniqueChildren) {
+        for (ClangNode child : normalizedClangNodes.getUniqueNodes()) {
             // Normalize node source path
             String filepath = child.getLocation().getFilepath();
             if (filepath == null) {
@@ -187,7 +193,48 @@ public class RootParser extends AClangNodeParser<App> {
             tUnits.add(tUnit);
         }
 
-        return ClavaNodeFactory.app(tUnits);
+        // Create App
+
+        App app = ClavaNodeFactory.app(tUnits);
+
+        app.setIdsAlias(normalizedClangNodes.getRepeatedIdsMap());
+
+        return app;
+    }
+
+    private NormalizedClangNodes normalizeClangNodes(ClangRootNode rootNode) {
+        Map<String, String> fileLocationToId = new HashMap<>();
+
+        List<ClangNode> uniqueNodes = new ArrayList<>();
+        Map<String, String> repeatedIdsMap = new HashMap<>();
+
+        rootNode.getChildrenStream().forEach(node -> {
+            // Convert node to a string based on location
+            String locationString = node.getLocation().toString();
+
+            String normalizedId = fileLocationToId.get(locationString);
+
+            // If location is not mapped to a normalized node yet, add to map;
+            if (normalizedId == null) {
+                // fileLocationToId.put(locationString, node.getExtendedIdTry().orElse(DUMMY_ID));
+                fileLocationToId.put(locationString, node.getExtendedId());
+                uniqueNodes.add(node);
+                return;
+            }
+
+            // // Using object comparison, it should be safe since we are using the same static object
+            // if (normalizedId == DUMMY_ID) {
+            // // Most likely a type
+            // SpecsLogs.msgInfo("Repeated node without id: " + node);
+            // SpecsLogs.msgInfo("Location: " + node.getLocation().toString());
+            // SpecsLogs.msgInfo("ID: " + node.getExtendedId());
+            // }
+
+            // Otherwise, map node to already normalized node in the table
+            repeatedIdsMap.put(node.getExtendedId(), normalizedId);
+        });
+
+        return new NormalizedClangNodes(uniqueNodes, repeatedIdsMap);
     }
 
     private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes) {
