@@ -40,6 +40,7 @@ public class DecayedType extends AdjustedType {
         return getChild(Type.class, 0);
     }
 
+    @Override
     public Type getAdjustedType() {
         return getChild(Type.class, 1);
     }

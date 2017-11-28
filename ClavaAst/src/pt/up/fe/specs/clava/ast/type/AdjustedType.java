@@ -36,4 +36,6 @@ public abstract class AdjustedType extends Type {
         super(typeData, info, children);
     }
 
+    public abstract Type getAdjustedType();
+
 }
