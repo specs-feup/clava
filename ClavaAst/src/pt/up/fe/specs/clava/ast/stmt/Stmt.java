@@ -32,6 +32,11 @@ public abstract class Stmt extends ClavaNode {
         super(info, children);
     }
 
+    @Override
+    public Stmt copy() {
+        return (Stmt) super.copy();
+    }
+
     /**
      * Default implementation returns a list with itself. However, in some cases (e.g., CompoundStmt, CapturedStmt), a
      * Stmt can contain several statements.
