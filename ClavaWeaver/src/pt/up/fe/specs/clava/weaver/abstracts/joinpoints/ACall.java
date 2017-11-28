@@ -283,6 +283,30 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * Inlines this call, if possible
+     */
+    public void inlineImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action inline not implemented ");
+    }
+
+    /**
+     * Inlines this call, if possible
+     */
+    public final void inline() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "inline", this, Optional.empty());
+        	}
+        	this.inlineImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "inline", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "inline", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -490,6 +514,7 @@ public abstract class ACall extends AExpression {
         this.aExpression.fillWithActions(actions);
         actions.add("void setName(string)");
         actions.add("void wrap(string)");
+        actions.add("void inline()");
     }
 
     /**

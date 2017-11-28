@@ -101,6 +101,8 @@
 		<parameter name="name" type="string" />
 	</action>
 	
+	<action name="inline" class="call" tooltip="Inlines this call, if possible"/>
+	
 	
 	
 	

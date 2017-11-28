@@ -16609,6 +16609,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Inlines this call, if possible",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "inline"
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",

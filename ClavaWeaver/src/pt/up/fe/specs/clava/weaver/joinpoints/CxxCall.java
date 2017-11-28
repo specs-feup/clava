@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -200,5 +201,11 @@ public class CxxCall extends ACall {
     @Override
     public void wrapImpl(String name) {
         new CallWrap(this).addWrapper(name);
+    }
+
+    @Override
+    public void inlineImpl() {
+        call.getAncestor(App.class).inline(call);
+        // new CallInliner(call).inline();
     }
 }

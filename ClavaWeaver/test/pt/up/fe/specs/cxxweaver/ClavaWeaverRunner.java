@@ -87,4 +87,20 @@ public class ClavaWeaverRunner {
         SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);
     }
 
+    @Test
+    public void testNasBt() {
+
+        File workingDir = new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\clava-tests\\NAS_3.3\\NPB3.3-SER-C");
+        String argsString = "-c BtInline.clava --stack"; // --stack
+
+        // String argsString = " LatDse.lara -nw -b 2"; // --stack
+        // String argsString = "-c LatDse.clava --stack"; // --stack
+
+        // -nci
+        List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
+
+        SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);
+
+    }
+
 }
