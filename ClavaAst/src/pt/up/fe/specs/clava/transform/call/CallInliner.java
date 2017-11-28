@@ -110,28 +110,12 @@ public class CallInliner {
             NodeInsertUtils.delete(callParent);
         }
 
-        // Replace call with compound statement
-        // CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), modifiedStmts);
-        // NodeInsertUtils.replace(call, compoundStmt);
-
-        // System.out.println("RENAMES:" + inlineRenamer.getRenameMap());
-        // System.out.println("STMTS:"
-        // + inlineRenamer.getPrefixStmts().stream().map(Stmt::getCode).collect(Collectors.joining("\n")));
-
         return true;
     }
 
     private Set<String> getUsedNames(CallExpr call) {
         // Get declaration where this call is
         FunctionDecl functionDecl = call.getAncestor(FunctionDecl.class);
-
-        // Collect names of VarDecls (this includes parameters)
-        // SpecsCollections.filter(functionDecl.getDescendantsStream(), VarDecl.class::isInstance);
-        // Set<String> declNames = functionDecl.getDescendantsStream()
-        // .filter(VarDecl.class::isInstance)
-        // .map(VarDecl.class::cast)
-        // .map(VarDecl::getDeclName)
-        // .collect(Collectors.toSet());
 
         Set<String> usedNames = functionDecl.getDescendantsStream()
                 .filter(node -> node instanceof VarDecl || node instanceof DeclRefExpr)
@@ -150,25 +134,5 @@ public class CallInliner {
 
         return usedNames;
     }
-
-    /*
-    private Map<String, String> buildRenameMap(CallExpr call, FunctionDecl functionDecl, List<Stmt> copiedStmts) {
-        Map<String, String> renameMap = new HashMap<>();
-    
-        String calleeName = call.getCalleeName();
-    
-        List<ParmVarDecl> parameters = functionDecl.getParameters();
-        List<Expr> arguments = call.getArgs();
-    
-        // Map declaration names
-        for (int i = 0; i < parameters.size(); i++) {
-            // If no more arguments, just prefix the name of the call
-    
-        }
-    
-        // TODO Auto-generated method stub
-        return null;
-    }
-    */
 
 }
