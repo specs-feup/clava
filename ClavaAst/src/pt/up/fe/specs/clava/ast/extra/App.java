@@ -39,8 +39,11 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.GlobalManager;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -93,7 +96,11 @@ public class App extends ClavaNode {
     private final Map<String, ClavaNode> nodesCache;
     private final Map<String, FunctionDecl> functionDeclarationCache;
     private final Map<String, FunctionDecl> functionDefinitionCache;
-    private Map<String, String> idsAlias;
+
+    private final IdNormalizer idNormalizer;
+    private final CallInliner callInliner;
+    // private Map<String, String> idsAlias;
+    // private Map<String, List<Stmt>> inlineCache;
 
     // Can be used to store information that should be accessible through the application
     private DataStore appData;
@@ -107,7 +114,12 @@ public class App extends ClavaNode {
         functionDeclarationCache = new HashMap<>();
         functionDefinitionCache = new HashMap<>();
         appData = DataStore.newInstance("Clava App Data");
-        this.idsAlias = Collections.emptyMap();
+
+        this.idNormalizer = new IdNormalizer();
+        this.callInliner = new CallInliner(idNormalizer);
+        // this.idsAlias = Collections.emptyMap();
+        // this.inlineCache = new HashMap<>();
+
         // System.out.println("SETTING STANDARD:" + appData.get(ClavaOptions.STANDARD));
         CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
     }
@@ -122,7 +134,8 @@ public class App extends ClavaNode {
     }
 
     public void setIdsAlias(Map<String, String> idsAlias) {
-        this.idsAlias = idsAlias;
+        // this.idsAlias = idsAlias;
+        this.idNormalizer.addAlias(idsAlias);
     }
 
     /**
@@ -292,7 +305,7 @@ public class App extends ClavaNode {
     public Optional<ClavaNode> getNodeTry(String id) {
 
         // Check if id is an alias
-        String normalizedId = normalizeId(id);
+        String normalizedId = idNormalizer.normalize(id);
 
         // Check if node was already asked
         ClavaNode cachedNode = nodesCache.get(normalizedId);
@@ -310,11 +323,11 @@ public class App extends ClavaNode {
         return askedNode;
     }
 
-    private String normalizeId(String id) {
-        String unaliasedId = idsAlias.get(id);
-
-        return unaliasedId != null ? unaliasedId : id;
-    }
+    // private String normalizeId(String id) {
+    // String unaliasedId = idsAlias.get(id);
+    //
+    // return unaliasedId != null ? unaliasedId : id;
+    // }
 
     public Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType) {
         return getFunctionDeclaration(declName, functionType, functionDeclarationCache, false);
@@ -407,4 +420,7 @@ public class App extends ClavaNode {
         addChild(tu);
     }
 
+    public boolean inline(CallExpr callExpr) {
+        return callInliner.inline(callExpr);
+    }
 }

@@ -13,43 +13,162 @@
 
 package pt.up.fe.specs.clava.transform.call;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.util.Preconditions;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class CallInliner {
 
-    private final CallExpr call;
+    private final FunctionExtractorForInlining functionExtractor;
+    // private final CallExpr call;
 
-    public CallInliner(CallExpr call) {
-        this.call = call;
+    public CallInliner() {
+        this(null);
     }
 
-    private void failureMsg(String message) {
+    public CallInliner(IdNormalizer idNormalizer) {
+        // this.call = call;
+        this.functionExtractor = new FunctionExtractorForInlining(idNormalizer);
+    }
+
+    private void failureMsg(CallExpr call, String message) {
         ClavaLog.info(
                 "Could not inline call " + call.getCalleeName() + "@line " + call.getLocation().getStartLine() + ": "
                         + message);
     }
 
-    public boolean inline() {
+    public boolean inline(CallExpr call) {
         System.out.println("TRYING TO INLINE");
+
+        // Check that call is inside a function declaration
+        if (!call.getAncestorTry(FunctionDecl.class).isPresent()) {
+            failureMsg(call, "does not support calls that are not inside function declarations");
+            return false;
+        }
 
         // Get definition
         FunctionDecl functionDecl = call.getDefinition().orElse(null);
         if (functionDecl == null) {
-            failureMsg("could not find source code of function declaration");
+            failureMsg(call, "could not find source code of function declaration");
             return false;
         }
 
         if (!functionDecl.hasBody()) {
-            failureMsg("function declaration does not have a body");
+            failureMsg(call, "function declaration does not have a body");
             return false;
         }
 
-        // Check if nodes are valid
-        CallAnalysis.checkNodes(functionDecl.getBody().get());
+        // Obtain list of statements to inline
+        List<Stmt> functionStmts = functionExtractor.extractFunction(functionDecl).orElse(null);
+        if (functionStmts == null) {
+            failureMsg(call, "could not extract statements from function");
+            return false;
+        }
+
+        // Copy statements, variables will be renamed
+        List<Stmt> copiedStmts = functionStmts.stream()
+                .map(Stmt::copy)
+                .collect(Collectors.toList());
+
+        // Inline calls inside the statements (function extractor guarantees that has no recursive calls)
+        // TODO
+
+        // Collect used names, for checking if any of the renames clashes with already existing names
+        // TODO can be cached also?
+        Set<String> usedNames = getUsedNames(call);
+
+        // Build rename map
+        InlineRenamer inlineRenamer = new InlineRenamer(call, functionDecl, copiedStmts, usedNames);
+        List<Stmt> modifiedStmts = inlineRenamer.apply();
+
+        // Insert all stmts before call
+        Stmt callStmt = call.getAncestor(Stmt.class);
+        modifiedStmts.stream().forEach(stmt -> NodeInsertUtils.insertBefore(callStmt, stmt));
+
+        // If there is a replacement node, use it instead of call; otherwise, just remove it
+        Expr callReplacement = inlineRenamer.getCallReplacement().orElse(null);
+        if (callReplacement != null) {
+            NodeInsertUtils.replace(call, callReplacement);
+        } else {
+            Stmt callParent = call.getAncestor(Stmt.class);
+            // If no replacement node, call must be inside a ExprStmt
+            Preconditions.checkArgument(callParent instanceof ExprStmt,
+                    "Expected parent statement of call to be an ExprStmt, it is a " + callParent.getNodeName());
+
+            NodeInsertUtils.delete(callParent);
+        }
+
+        // Replace call with compound statement
+        // CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), modifiedStmts);
+        // NodeInsertUtils.replace(call, compoundStmt);
+
+        // System.out.println("RENAMES:" + inlineRenamer.getRenameMap());
+        // System.out.println("STMTS:"
+        // + inlineRenamer.getPrefixStmts().stream().map(Stmt::getCode).collect(Collectors.joining("\n")));
 
         return true;
     }
+
+    private Set<String> getUsedNames(CallExpr call) {
+        // Get declaration where this call is
+        FunctionDecl functionDecl = call.getAncestor(FunctionDecl.class);
+
+        // Collect names of VarDecls (this includes parameters)
+        // SpecsCollections.filter(functionDecl.getDescendantsStream(), VarDecl.class::isInstance);
+        // Set<String> declNames = functionDecl.getDescendantsStream()
+        // .filter(VarDecl.class::isInstance)
+        // .map(VarDecl.class::cast)
+        // .map(VarDecl::getDeclName)
+        // .collect(Collectors.toSet());
+
+        Set<String> usedNames = functionDecl.getDescendantsStream()
+                .filter(node -> node instanceof VarDecl || node instanceof DeclRefExpr)
+                .map(node -> {
+                    if (node instanceof VarDecl) {
+                        return ((VarDecl) node).getDeclName();
+                    }
+
+                    if (node instanceof DeclRefExpr) {
+                        return ((DeclRefExpr) node).getRefName();
+                    }
+
+                    throw new RuntimeException("Case not implemented: " + node.getClass());
+                })
+                .collect(Collectors.toSet());
+
+        return usedNames;
+    }
+
+    /*
+    private Map<String, String> buildRenameMap(CallExpr call, FunctionDecl functionDecl, List<Stmt> copiedStmts) {
+        Map<String, String> renameMap = new HashMap<>();
+    
+        String calleeName = call.getCalleeName();
+    
+        List<ParmVarDecl> parameters = functionDecl.getParameters();
+        List<Expr> arguments = call.getArgs();
+    
+        // Map declaration names
+        for (int i = 0; i < parameters.size(); i++) {
+            // If no more arguments, just prefix the name of the call
+    
+        }
+    
+        // TODO Auto-generated method stub
+        return null;
+    }
+    */
 
 }
