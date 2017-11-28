@@ -13,17 +13,21 @@
 
 package pt.up.fe.specs.clava.transform.loop;
 
+import java.util.Collections;
+
+import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class LoopTiling {
@@ -51,20 +55,63 @@ public class LoopTiling {
         ForStmt referenceFor = (ForStmt) referenceLoop;
 
         String controlVarName = LoopAnalysisUtils.getControlVarNames(targetFor).get(0);
-        String blockVarName = controlVarName + "_block"; // TODO: check for varaible name collisions
+        String blockVarName = controlVarName + "_block"; // TODO: check for variable name collisions
 
-        changeTarget(targetFor, blockSize, blockVarName);
+        // test guarantees there is a lower bound
+        Expr oldLowerBound = LoopAnalysisUtils.getLowerBound(targetFor).get();
+
+        // test guarantees there is an upper bound
+        Expr oldUpperBound = LoopAnalysisUtils.getUpperBound(targetFor).get();
+
+        changeTarget(targetFor, blockSize, blockVarName, oldUpperBound);
+        addBlockLoop(targetFor, referenceFor, blockSize, blockVarName, oldLowerBound, oldUpperBound);
     }
 
-    private static void changeTarget(ForStmt targetFor, String blockSize, String blockVarName) {
+    /**
+     *
+     * Note: for now it's based on literal statements, which means that the elements of the statements are not present
+     * in the tree and cannot be iterated through.
+     *
+     * @param targetFor
+     * @param referenceFor
+     * @param blockSize
+     * @param blockVarName
+     * @param oldUpperBound
+     */
+    private static void addBlockLoop(ForStmt targetFor, ForStmt referenceFor, String blockSize, String blockVarName,
+            Expr oldLowerBound, Expr oldUpperBound) {
+
+        // make header parts
+        Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        Stmt cond = ClavaNodeFactory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
+        Stmt inc = ClavaNodeFactory.literalStmt(blockVarName + " += " + blockSize);
+
+        // make for loop
+        CompoundStmt emptyBody = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), Collections.emptyList());
+        ForStmt newFor = ClavaNodeFactory.forStmt(ClavaNodeInfo.undefinedInfo(), init, cond, inc, emptyBody);
+
+        // add loop as parent
+        NodeInsertUtils.replace(referenceFor, newFor, true);
+        newFor.getBody().addChild(referenceFor);
+    }
+
+    private static void changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound) {
 
         changeInit(targetFor, blockVarName);
-        changeCond(targetFor, blockVarName);
+        changeCond(targetFor, blockSize, blockVarName, oldUpperBound);
     }
 
-    private static void changeCond(ForStmt targetFor, String blockVarName) {
+    private static void changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound) {
 
-        throw new NotImplementedException("anything beoynd change init is not done");
+        Type oldUpperBoundType = oldUpperBound.getType();
+        String oldUpperBoundCode = oldUpperBound.getCode();
+        String blockLimit = blockVarName + " + " + blockSize;
+
+        String newLimitCode = "(" + oldUpperBoundCode + " < " + blockLimit + " ? " + oldUpperBoundCode + " : "
+                + blockLimit + ")";
+        Expr newLimit = ClavaNodeFactory.literalExpr(newLimitCode, oldUpperBoundType);
+
+        NodeInsertUtils.replace(oldUpperBound, newLimit);
     }
 
     /**
@@ -76,6 +123,7 @@ public class LoopTiling {
         Stmt init = targetFor.getInit().get();
 
         LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName, ClavaNodeFactory.builtinType("int"));
+
         if (init instanceof ExprStmt) {
 
             Expr expr = ((ExprStmt) init).getExpr();
@@ -113,6 +161,8 @@ public class LoopTiling {
      *
      * 6) referenceLoop is an ancestor of targetLoop or the same loop
      *
+     * 7) no complex control flow inside the loop (break, continue, return and goto)
+     *
      * @param targetLoop
      *            the loop that will be tiled
      * @param referenceLoop
@@ -121,16 +171,19 @@ public class LoopTiling {
      */
     public static boolean test(LoopStmt targetLoop, LoopStmt referenceLoop) {
 
+        // 1
         if (!(targetLoop instanceof ForStmt && referenceLoop instanceof ForStmt)) {
 
             return false;
         }
 
+        // 6
         if (!(targetLoop.isAncestor(referenceLoop) || targetLoop == referenceLoop)) {
 
             return false;
         }
 
+        // 2
         ForStmt targetFor = (ForStmt) targetLoop;
 
         if (!LoopAnalysisUtils.hasHeader(targetFor)) {
@@ -138,11 +191,31 @@ public class LoopTiling {
             return false;
         }
 
+        // test if we can get a control variable
         if (LoopAnalysisUtils.getControlVarNames(targetFor).size() != 1) {
             return false;
         }
 
+        // 3
         if (!LoopAnalysisUtils.hasSimpleInit(targetFor)) {
+
+            return false;
+        }
+
+        // 4
+        if (!LoopAnalysisUtils.hasSimpleCond(targetFor)) {
+
+            return false;
+        }
+
+        // 5
+        if (!LoopAnalysisUtils.hasSimpleInc(targetFor)) {
+
+            return false;
+        }
+
+        // 7
+        if (LoopAnalysisUtils.hasComplexControlFlow(targetFor)) {
 
             return false;
         }
