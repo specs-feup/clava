@@ -78,4 +78,5 @@ public abstract class ArrayType extends Type {
     public boolean isArray() {
         return true;
     }
+
 }

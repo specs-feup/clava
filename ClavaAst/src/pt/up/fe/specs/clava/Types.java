@@ -13,8 +13,11 @@
 
 package pt.up.fe.specs.clava;
 
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
@@ -105,6 +108,75 @@ public class Types {
         }
 
         throw new RuntimeException("Not implemented for type '" + type.getClass().getSimpleName() + "'");
+    }
+
+    // public static Type normalize(Type type) {
+    // if (type instanceof AdjustedType) {
+    // return normalize(((AdjustedType) type).getAdjustedType());
+    // }
+    //
+    // return type;
+    // }
+
+    /**
+     * Number pointer levels of type (including array dimensions)
+     * 
+     * @return
+     */
+    public static int getPointerArity(Type type) {
+        int typeArity = 0;
+        if (type instanceof PointerType || type instanceof ArrayType) {
+            typeArity = 1;
+        }
+
+        Type elementType = getSingleElement(type);
+
+        // If the element is not the same node, continue building arity
+        return elementType == null ? typeArity : typeArity + getPointerArity(elementType);
+
+        // return typeArity + getArity(getSingleElement(type));
+        /*        
+        if (type instanceof AdjustedType) {
+            return 0 + getArity(getSingleElement(type));
+        }
+        
+        if (type instanceof PointerType) {
+            return 1 + getArity(((PointerType) type).getPointeeType());
+        }
+        
+        if (type instanceof ArrayType) {
+            return 1 + getArity(((ArrayType) type).getElementType());
+        }
+        
+        return 0;
+        */
+    }
+
+    public static Type getElement(Type type) {
+        Type elementType = getSingleElement(type);
+
+        // If the element is not the same node, continue searching
+        return elementType == null ? type : getElement(elementType);
+    }
+
+    public static Type getSingleElement(Type type) {
+        if (type instanceof DecayedType) {
+            return ((DecayedType) type).getOriginalType();
+        }
+
+        if (type instanceof AdjustedType) {
+            return ((AdjustedType) type).getAdjustedType();
+        }
+
+        if (type instanceof PointerType) {
+            return ((PointerType) type).getPointeeType();
+        }
+
+        if (type instanceof ArrayType) {
+            return ((ArrayType) type).getElementType();
+        }
+
+        return null;
     }
 
 }
