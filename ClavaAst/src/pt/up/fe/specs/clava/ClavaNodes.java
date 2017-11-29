@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -399,4 +400,8 @@ public class ClavaNodes {
         return type + " ";
     }
 
+    public static BinaryOperator newAssignment(Expr leftHand, Expr rightHand) {
+        return ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(leftHand.getType()),
+                ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
+    }
 }

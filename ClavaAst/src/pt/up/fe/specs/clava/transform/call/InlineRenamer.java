@@ -36,7 +36,6 @@ import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
@@ -91,7 +90,7 @@ public class InlineRenamer {
 
         argumentsRenamers.put(DeclRefExpr.class, this::argumentRename);
         argumentsRenamers.put(ArraySubscriptExpr.class, this::argumentRename);
-        argumentsRenamers.put(Literal.class, this::argumentRenameGeneric);
+        argumentsRenamers.put(Expr.class, this::argumentRenameGeneric);
 
         return argumentsRenamers;
     }
@@ -201,31 +200,61 @@ public class InlineRenamer {
                 .filter(node -> node instanceof VarDecl || node instanceof DeclRefExpr)
                 .forEach(this::applyRenameAction);
 
-        Optional<Stmt> returnReplacement = getReturnReplacement();
+        replaceReturn();
+        // Optional<Stmt> returnReplacement = getReturnReplacement();
 
         // Add return replacement
-        returnReplacement.ifPresent(stmts::add);
+        // returnReplacement.ifPresent(stmts::add);
 
         // Prefix new statements
         return SpecsCollections.concat(prefixStmts, stmts);
     }
 
-    private Optional<Stmt> getReturnReplacement() {
+    private void replaceReturn() {
         // If has a return statement, create temporary name a replace return with assigment to this variable
-        Optional<ReturnStmt> returnStmt = SpecsCollections.reverseStream(stmts)
+        Optional<ReturnStmt> returnStmtTry = SpecsCollections.reverseStream(stmts)
                 .filter(ReturnStmt.class::isInstance)
                 .map(ReturnStmt.class::cast)
                 .findFirst();
 
-        if (!returnStmt.isPresent()) {
-            return Optional.empty();
+        if (!returnStmtTry.isPresent()) {
+            // return Optional.empty();
+            return;
         }
 
-        // Create new name
-        // Assign return expression to that name
-        // Save new name expression in callReplacement
+        ReturnStmt returnStmt = returnStmtTry.get();
 
-        throw new RuntimeException("Not supported yet when function to inline has a return statement");
+        // Remove return from list of statements
+        int returnIndex = SpecsCollections.reverseIndexStream(stmts)
+                .filter(i -> stmts.get(i) == returnStmt)
+                .findFirst()
+                .getAsInt();
+
+        Optional<Expr> retValueTry = returnStmt.getRetValue();
+
+        // If no return value, just remove return
+        if (!retValueTry.isPresent()) {
+            stmts.remove(returnIndex);
+            return;
+            // return Optional.empty();
+        }
+
+        Expr retValue = retValueTry.get();
+
+        // Create new name
+        String returnVarName = getSimpleName(call.getCalleeName(), "return");
+
+        // Create declaration for this new name
+        VarDecl varDecl = ClavaNodeFactory.varDecl(returnVarName, retValue);
+
+        // Replace return with an DeclStmt to the return expression
+        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        stmts.set(returnIndex, declStmt);
+
+        // Save new name expression in callReplacement
+        callReplacement = ClavaNodeFactory.declRefExpr(returnVarName, retValue.getType());
+
+        // throw new RuntimeException("Not supported yet when function to inline has a return statement");
     }
 
     public Optional<Expr> getCallReplacement() {

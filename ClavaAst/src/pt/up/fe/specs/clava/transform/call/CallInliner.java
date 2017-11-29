@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -26,7 +27,6 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class CallInliner {
@@ -97,20 +97,41 @@ public class CallInliner {
         Stmt callStmt = call.getAncestor(Stmt.class);
         modifiedStmts.stream().forEach(stmt -> NodeInsertUtils.insertBefore(callStmt, stmt));
 
-        // If there is a replacement node, use it instead of call; otherwise, just remove it
-        Expr callReplacement = inlineRenamer.getCallReplacement().orElse(null);
-        if (callReplacement != null) {
-            NodeInsertUtils.replace(call, callReplacement);
-        } else {
-            Stmt callParent = call.getAncestor(Stmt.class);
-            // If no replacement node, call must be inside a ExprStmt
-            Preconditions.checkArgument(callParent instanceof ExprStmt,
-                    "Expected parent statement of call to be an ExprStmt, it is a " + callParent.getNodeName());
-
+        // If parent of call is an ExprStmt, call is no longer needed and can be removed
+        ClavaNode callParent = call.getParent();
+        if (callParent instanceof ExprStmt) {
             NodeInsertUtils.delete(callParent);
+            return true;
         }
 
+        // At this point, there must be a replacement expression
+        Expr callReplacement = inlineRenamer.getCallReplacement()
+                .orElseThrow(() -> new RuntimeException(
+                        "Parent of call is not an ExprStmt, expected replacement expression to exist. Call parent:\n"
+                                + callParent));
+
+        // Replace call
+        NodeInsertUtils.replace(call, callReplacement);
         return true;
+        /*        
+        System.out.println("CALL PARENT:" + call.getParent());
+        Expr callReplacement = inlineRenamer.getCallReplacement().orElse(null);
+        if (callReplacement != null) {
+        
+            return true;
+        }
+        
+        // If there is a replacement node, use it instead of call; otherwise, just remove it
+        
+        Stmt callParent = call.getAncestor(Stmt.class);
+        // If no replacement node, call must be inside a ExprStmt
+        Preconditions.checkArgument(callParent instanceof ExprStmt,
+                "Expected parent statement of call to be an ExprStmt, it is a " + callParent.getNodeName());
+        
+        // NodeInsertUtils.delete(callParent);
+        
+        return true;
+        */
     }
 
     private Set<String> getUsedNames(CallExpr call) {
