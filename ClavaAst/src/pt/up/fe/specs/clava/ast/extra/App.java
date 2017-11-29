@@ -71,7 +71,7 @@ public class App extends ClavaNode {
         return standard;
     }
 
-    private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList("c", "cpp"));
+    private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList("c", "cpp", "cl"));
     private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
     private static final Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
             SpecsCollections.concat(EXTENSIONS_IMPLEMENTATION, EXTENSIONS_HEADERS));
