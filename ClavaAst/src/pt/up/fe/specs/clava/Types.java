@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava;
 
+import java.util.Optional;
+
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
@@ -177,6 +179,20 @@ public class Types {
         }
 
         return null;
+    }
+
+    public static <K extends Type> Optional<K> getElement(Type type, Class<K> targetType) {
+        Type elementType = type;
+
+        while (elementType != null) {
+            if (targetType.isInstance(elementType)) {
+                return Optional.of(targetType.cast(elementType));
+            }
+
+            elementType = getSingleElement(elementType);
+        }
+
+        return Optional.empty();
     }
 
 }

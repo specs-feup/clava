@@ -51,6 +51,7 @@ public class CallAnalysis {
         ALLOWED_NODES.add(BinaryOperator.class);
         ALLOWED_NODES.add(UnaryOperator.class);
         ALLOWED_NODES.add(LoopStmt.class);
+        ALLOWED_NODES.add(ReturnStmt.class);
     }
 
     public CallAnalysis() {
@@ -63,8 +64,9 @@ public class CallAnalysis {
                 .collect(Collectors.toSet());
 
         // Check if all nodes are allowed
-        Set<Class<? extends ClavaNode>> unsupportedNodes = nodesInBody.stream()
+        Set<String> unsupportedNodes = nodesInBody.stream()
                 .filter(node -> !ALLOWED_NODES.contains(node))
+                .map(node -> node.getSimpleName())
                 .collect(Collectors.toSet());
 
         if (!unsupportedNodes.isEmpty()) {

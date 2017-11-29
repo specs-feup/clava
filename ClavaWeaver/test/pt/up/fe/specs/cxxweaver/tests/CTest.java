@@ -90,4 +90,9 @@ public class CTest {
     public void testVarrefInWhile() {
         newTester().test("VarrefInWhile.lara", "varref_in_while.c");
     }
+
+    @Test
+    public void testInline() {
+        newTester().test("Inline.lara", "inline.c", "inline_utils.h", "inline_utils.c");
+    }
 }

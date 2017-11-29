@@ -370,6 +370,15 @@ public class ClavaNodeFactory {
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, initExpr.getInfo(), initExpr);
     }*/
 
+    public static VarDecl varDecl(String varName, Expr initExpr) {
+        // Add statement with declaration of variable
+        VarDeclData varDeclData = new VarDeclData();
+        varDeclData.setInitKind(InitializationStyle.CINIT);
+
+        return ClavaNodeFactory.varDecl(varDeclData, varName, initExpr.getType(),
+                new DeclData(), ClavaNodeInfo.undefinedInfo(), initExpr);
+    }
+
     public static VarDecl varDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info,
             Expr initExpr) {
 

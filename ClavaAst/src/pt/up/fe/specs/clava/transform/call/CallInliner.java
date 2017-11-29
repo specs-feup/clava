@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -26,7 +27,6 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class CallInliner {
@@ -50,7 +50,6 @@ public class CallInliner {
     }
 
     public boolean inline(CallExpr call) {
-        System.out.println("TRYING TO INLINE");
 
         // Check that call is inside a function declaration
         if (!call.getAncestorTry(FunctionDecl.class).isPresent()) {
@@ -97,41 +96,46 @@ public class CallInliner {
         Stmt callStmt = call.getAncestor(Stmt.class);
         modifiedStmts.stream().forEach(stmt -> NodeInsertUtils.insertBefore(callStmt, stmt));
 
-        // If there is a replacement node, use it instead of call; otherwise, just remove it
-        Expr callReplacement = inlineRenamer.getCallReplacement().orElse(null);
-        if (callReplacement != null) {
-            NodeInsertUtils.replace(call, callReplacement);
-        } else {
-            Stmt callParent = call.getAncestor(Stmt.class);
-            // If no replacement node, call must be inside a ExprStmt
-            Preconditions.checkArgument(callParent instanceof ExprStmt,
-                    "Expected parent statement of call to be an ExprStmt, it is a " + callParent.getNodeName());
-
+        // If parent of call is an ExprStmt, call is no longer needed and can be removed
+        ClavaNode callParent = call.getParent();
+        if (callParent instanceof ExprStmt) {
             NodeInsertUtils.delete(callParent);
+            return true;
         }
 
-        // Replace call with compound statement
-        // CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), modifiedStmts);
-        // NodeInsertUtils.replace(call, compoundStmt);
+        // At this point, there must be a replacement expression
+        Expr callReplacement = inlineRenamer.getCallReplacement()
+                .orElseThrow(() -> new RuntimeException(
+                        "Parent of call is not an ExprStmt, expected replacement expression to exist. Call parent:\n"
+                                + callParent));
 
-        // System.out.println("RENAMES:" + inlineRenamer.getRenameMap());
-        // System.out.println("STMTS:"
-        // + inlineRenamer.getPrefixStmts().stream().map(Stmt::getCode).collect(Collectors.joining("\n")));
-
+        // Replace call
+        NodeInsertUtils.replace(call, callReplacement);
         return true;
+        /*        
+        System.out.println("CALL PARENT:" + call.getParent());
+        Expr callReplacement = inlineRenamer.getCallReplacement().orElse(null);
+        if (callReplacement != null) {
+        
+            return true;
+        }
+        
+        // If there is a replacement node, use it instead of call; otherwise, just remove it
+        
+        Stmt callParent = call.getAncestor(Stmt.class);
+        // If no replacement node, call must be inside a ExprStmt
+        Preconditions.checkArgument(callParent instanceof ExprStmt,
+                "Expected parent statement of call to be an ExprStmt, it is a " + callParent.getNodeName());
+        
+        // NodeInsertUtils.delete(callParent);
+        
+        return true;
+        */
     }
 
     private Set<String> getUsedNames(CallExpr call) {
         // Get declaration where this call is
         FunctionDecl functionDecl = call.getAncestor(FunctionDecl.class);
-
-        // Collect names of VarDecls (this includes parameters)
-        // SpecsCollections.filter(functionDecl.getDescendantsStream(), VarDecl.class::isInstance);
-        // Set<String> declNames = functionDecl.getDescendantsStream()
-        // .filter(VarDecl.class::isInstance)
-        // .map(VarDecl.class::cast)
-        // .map(VarDecl::getDeclName)
-        // .collect(Collectors.toSet());
 
         Set<String> usedNames = functionDecl.getDescendantsStream()
                 .filter(node -> node instanceof VarDecl || node instanceof DeclRefExpr)
@@ -150,25 +154,5 @@ public class CallInliner {
 
         return usedNames;
     }
-
-    /*
-    private Map<String, String> buildRenameMap(CallExpr call, FunctionDecl functionDecl, List<Stmt> copiedStmts) {
-        Map<String, String> renameMap = new HashMap<>();
-    
-        String calleeName = call.getCalleeName();
-    
-        List<ParmVarDecl> parameters = functionDecl.getParameters();
-        List<Expr> arguments = call.getArgs();
-    
-        // Map declaration names
-        for (int i = 0; i < parameters.size(); i++) {
-            // If no more arguments, just prefix the name of the call
-    
-        }
-    
-        // TODO Auto-generated method stub
-        return null;
-    }
-    */
 
 }
