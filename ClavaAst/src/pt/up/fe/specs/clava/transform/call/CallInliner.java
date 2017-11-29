@@ -50,7 +50,6 @@ public class CallInliner {
     }
 
     public boolean inline(CallExpr call) {
-        System.out.println("TRYING TO INLINE");
 
         // Check that call is inside a function declaration
         if (!call.getAncestorTry(FunctionDecl.class).isPresent()) {
