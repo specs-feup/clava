@@ -1,0 +1,42 @@
+int main() {
+   int * a;
+   *a = 3;
+   // foo_no_return
+   int foo_no_return_a = 0;
+   for(int foo_no_return_i = 0; foo_no_return_i < *a; foo_no_return_i++) {
+      foo_no_return_a += 1;
+   }
+   *a = foo_no_return_a;
+   // foo_no_return (x2)
+   int foo_no_return_a_0 = 0;
+   for(int foo_no_return_i_0 = 0; foo_no_return_i_0 < *a; foo_no_return_i_0++) {
+      foo_no_return_a_0 += 1;
+   }
+   *a = foo_no_return_a_0;
+   int i;
+   double * j;
+   int k[3][2][2];
+   // foo_with_args
+   int foo_with_args_a = i;
+   foo_with_args_a = 10;
+   k[1][0][0] = 20;
+   //foo_with_args2(c[1]);
+   // c[1][0] = 1
+   double array4d[2][3][5][5];
+   // foo_with_array
+   int foo_with_array_size = i;
+   array4d[0][0][0][0] = foo_with_array_size;
+   // foo_with_return
+   //foo_with_return(*a);
+   // foo_with_return with call inside expression
+   int foo_with_return_a = 3;
+   int foo_with_return_return = foo_with_return_a + foo_with_return_a;
+   int returnTest = 2 + foo_with_return_return;
+   // var shadowing
+   int foo_with_var_shadowing_i = 0;
+   {
+      int foo_with_var_shadowing_i = 1;
+   }
+   int foo_with_var_shadowing_return = foo_with_var_shadowing_i;
+   int shadowingResult = foo_with_var_shadowing_return;
+}
