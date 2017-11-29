@@ -400,6 +400,11 @@ public class InlineRenamer {
     }
 
     private void renameVarDecl(String calleeName, VarDecl varDecl) {
+        // If already renamed (variable shadowing), ignore
+        if (renameActions.containsKey(varDecl.getDeclName())) {
+            return;
+        }
+
         // Get new name
         String newName = getSimpleName(calleeName, varDecl.getDeclName());
 
