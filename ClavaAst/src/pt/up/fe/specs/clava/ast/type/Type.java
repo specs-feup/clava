@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -27,7 +27,7 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * The base class of the type hierarchy.
- * 
+ *
  * @author JoaoBispo
  *
  */
@@ -56,7 +56,7 @@ public abstract class Type extends ClavaNode {
     /**
      * Type instances getCode() method receive a String (e.g., with the name of a variable), in case this is code to
      * declare something.
-     * 
+     *
      * <p>
      * Accepts null in case there is no name to use.
      */
@@ -72,7 +72,7 @@ public abstract class Type extends ClavaNode {
     }
 
     public void setStringType(String stringType) {
-        this.data = new TypeData(stringType, data);
+        data = new TypeData(stringType, data);
     }
 
     public String getBareType() {
@@ -86,7 +86,7 @@ public abstract class Type extends ClavaNode {
 
     /**
      * By default returns false.
-     * 
+     *
      * @return true if type is considered anonymous (e.g., anonymous struct)
      */
     public boolean isAnonymous() {
@@ -96,7 +96,7 @@ public abstract class Type extends ClavaNode {
 
     /**
      * Code for a literal constant (e.g., 1u when unsigned)
-     * 
+     *
      * @param constant
      * @return
      */
@@ -106,7 +106,7 @@ public abstract class Type extends ClavaNode {
 
     /**
      * By default, returns empty list.
-     * 
+     *
      * @return
      */
     public List<String> getTemplateArgs() {
@@ -114,8 +114,8 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @return true if there are template arguments, false otherise
      */
     public boolean hasTemplateArgs() {
@@ -140,7 +140,7 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
-     * 
+     *
      * @return true if this type is const-qualified, false otherwise
      */
     public boolean isConst() {
@@ -153,7 +153,7 @@ public abstract class Type extends ClavaNode {
 
     /**
      * Goes down the type tree looking for the given type. If a node has more than one child, descending stops.
-     * 
+     *
      * @param type
      * @return
      */
@@ -175,4 +175,39 @@ public abstract class Type extends ClavaNode {
         SpecsLogs.msgWarn("Could not find type '" + type + "'");
         return Optional.empty();
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = prime;
+        result = prime * result + ((data == null) ? 0 : data.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        /*
+        if (!super.equals(obj)) {
+            return false;
+        }
+        */
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Type other = (Type) obj;
+        if (data == null) {
+            if (other.data != null) {
+                return false;
+            }
+        } else if (!data.equals(other.data)) {
+            return false;
+        }
+        return true;
+    }
+
 }

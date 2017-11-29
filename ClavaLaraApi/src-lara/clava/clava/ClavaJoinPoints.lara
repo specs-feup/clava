@@ -4,6 +4,10 @@
 var ClavaJoinPoints = {};
 
 
+ClavaJoinPoints.equals = function(jp1, jp2) {
+	return jp1.equals(jp2);
+}
+
 ClavaJoinPoints.builtinType = function(code) {
 	return AstFactory.builtinType(code);
 }

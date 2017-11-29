@@ -81,8 +81,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         while (current.getHasParentImpl()) {
             current = current.getParentImpl();
         }
-        
-        
+
+
         return (current instanceof CxxProgram) ? (CxxProgram) current : null;
         */
         // Preconditions.checkArgument(current instanceof CxxProgram,
@@ -175,11 +175,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         ACxxWeaverJoinPoint currentJp = this;
         while (currentJp.getAstParent() != null) {
             ACxxWeaverJoinPoint parentJp = currentJp.getAstParent();
-        
+
             if (parentJp.getJoinpointType().equals(type)) {
                 return parentJp;
             }
-        
+
             currentJp = parentJp;
         }
         */
@@ -335,41 +335,41 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     /*
     @Override
     public String getName() {
-    
+
         String name = GET_NAME.apply(getNodeNormalized());
-    
+
         if (name != null && name.equals(GET_NAME_DEFAULT)) {
             CxxLog.warning("attribute 'name' not implemented for joinpoint '" + getClass().getSimpleName() + "'");
             return null;
         }
-    
+
         return name;
         /*
         // TODO: Add .getName() to ClavaNode, returning an Optional
-    
+
         // ClavaNode node = getNode();
         ClavaNode node = getNodeNormalized();
         if (node instanceof NamedDecl) {
             NamedDecl namedDecl = ((NamedDecl) node);
             return namedDecl.hasDeclName() ? namedDecl.getDeclName() : null;
         }
-    
+
         // if (node instanceof Type) {
         // return node.getNodeName();
         // }
-    
+
         if (node instanceof TagType) {
             return ((TagType) node).getDeclInfo().getDeclName();
         }
-    
+
         if (node instanceof DeclRefExpr) {
             return ((DeclRefExpr) node).getRefName();
         }
-    
+
         if (node instanceof Stmt) {
             return ((Stmt) node).getClass().getSimpleName();
         }
-    
+
         CxxLog.warning("attribute 'name' not implemented for joinpoint '" + getClass().getSimpleName() + "'");
         return null;
         // throw new RuntimeException(
@@ -534,12 +534,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .orElse(null);
         /*
         Optional<? extends ClavaNode> parentRegionTry = CxxAttributes.getParentRegion(getNode());
-        
+
         if (!parentRegionTry.isPresent()) {
             ClavaLog.info("Join point '" + getJoinPointType() + "' does not support parentRegion");
             return null;
         }
-        
+
         return CxxJoinpoints.create(parentRegionTry.get(), this);
         */
         /*
@@ -549,7 +549,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             ClavaLog.info("Join point '" + getJoinPointType() + "' does not support parentRegion");
             return null;
         }
-        
+
         // If already at top region, return that node
         if (currentRegion instanceof TranslationUnit) {
             return CxxJoinpoints.create(currentRegion, this);
@@ -574,5 +574,19 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         return CxxJoinpoints.create(currentRegionTry.get(), this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AJoinPoint)) {
+            return false;
+        }
+
+        return getNode().equals(((AJoinPoint) obj).getNode());
+    }
+
+    @Override
+    public int hashCode() {
+        return getNode().hashCode();
     }
 }
