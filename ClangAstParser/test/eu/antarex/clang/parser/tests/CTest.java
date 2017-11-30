@@ -76,4 +76,9 @@ public class CTest {
     public void testArrayFiller() {
         new CTester("array_filler.c").test();
     }
+
+    @Test
+    public void testGnuStmtExpr() {
+        new CTester("gnu_stmt_expr.c").test();
+    }
 }
