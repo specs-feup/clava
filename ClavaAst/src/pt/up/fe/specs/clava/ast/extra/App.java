@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,7 +44,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.GlobalManager;
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -71,22 +70,34 @@ public class App extends ClavaNode {
         return standard;
     }
 
-    private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList("c", "cpp", "cl"));
-    private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
-    private static final Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
-            SpecsCollections.concat(EXTENSIONS_IMPLEMENTATION, EXTENSIONS_HEADERS));
+    // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList("c", "cpp", "cl"));
+    // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
+    // private static final Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
+    // SpecsCollections.concat(EXTENSIONS_IMPLEMENTATION, EXTENSIONS_HEADERS));
 
-    public static Set<String> getExtensionsHeaders() {
-        return EXTENSIONS_HEADERS;
-    }
+    // public static Set<String> getExtensionsHeaders() {
+    // return EXTENSIONS_HEADERS;
+    // }
 
-    public static Set<String> getExtensionsImplementation() {
-        return EXTENSIONS_IMPLEMENTATION;
-    }
+    // public static Set<String> getExtensionsImplementation() {
+    // return EXTENSIONS_IMPLEMENTATION;
+    // }
 
-    public static Set<String> getPermittedExtensions() {
-        return PERMITTED_EXTENSIONS;
-    }
+    // public static Set<String> getPermittedExtensions() {
+    // return PERMITTED_EXTENSIONS;
+    // }
+
+    // public static SourceType getSourceType(String filepath) {
+    // return
+    // }
+
+    // public static boolean isImplementationFile(String filepath) {
+    // return EXTENSIONS_IMPLEMENTATION.contains(SpecsIo.getExtension(filepath));
+    // }
+    //
+    // public static boolean isHeaderFile(String filepath) {
+    // return EXTENSIONS_HEADERS.contains(SpecsIo.getExtension(filepath));
+    // }
 
     private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
 
@@ -204,21 +215,24 @@ public class App extends ClavaNode {
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
 
         if (includeHeaders) {
-            return SpecsIo.getFiles(sources, PERMITTED_EXTENSIONS).stream()
+            // return SpecsIo.getFiles(sources, PERMITTED_EXTENSIONS).stream()
+            return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions()).stream()
                     .map(filename -> new File(filename))
                     .collect(Collectors.toList());
         }
 
         List<File> allFiles = new ArrayList<>();
 
-        List<File> implementationFiles = SpecsIo.getFiles(sources, EXTENSIONS_IMPLEMENTATION).stream()
+        // List<File> implementationFiles = SpecsIo.getFiles(sources, EXTENSIONS_IMPLEMENTATION).stream()
+        List<File> implementationFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions()).stream()
                 .map(filename -> new File(filename))
                 .collect(Collectors.toList());
 
         allFiles.addAll(implementationFiles);
 
         for (File sourceFolder : sources) {
-            allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, EXTENSIONS_HEADERS));
+            // allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, EXTENSIONS_HEADERS));
+            allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions()));
         }
 
         return allFiles;
