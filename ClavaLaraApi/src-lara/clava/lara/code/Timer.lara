@@ -176,9 +176,10 @@ Timer.prototype._time_c = function($start, prefix, $end) {
         // Add includes
         $file.exec addInclude("time.h", true);
 		
-		// If C99 standard, needs define at the beginning of the file
+		// If C99 or C11 standard, needs define at the beginning of the file
 		// https://stackoverflow.com/questions/42597685/storage-size-of-timespec-isnt-known
-		if(Clava.getStandard() === "c99" && !this.addedDefines.has($file.location)) {
+		var needsDefine = Clava.getStandard() === "c99" || Clava.getStandard() === "c11";
+		if(needsDefine && !this.addedDefines.has($file.location)) {
 			$file.exec insertBegin("#define _POSIX_C_SOURCE 199309L");
 			this.addedDefines.add($file.location);
 		}		
