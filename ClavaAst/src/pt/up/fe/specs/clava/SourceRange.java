@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -65,6 +66,43 @@ public class SourceRange {
     }
 
     public String getFilepath() {
+        // If filepaths are the same, just return on of them
+        if (start.getFilepath().equals(end.getFilepath())) {
+            return start.getFilepath();
+        }
+
+        // Filepaths are different, get source types
+
+        SourceType startType = SourceType.getType(start.getFilepath());
+        SourceType endType = SourceType.getType(end.getFilepath());
+
+        // If one is a header file and the other an implementation file,
+        // give priority to the implementation file. The idea is that
+        // the header file location comes from includes and can be
+        // discarded.
+
+        if (startType != endType) {
+            if (startType == SourceType.IMPLEMENTATION) {
+                return start.getFilepath();
+            }
+
+            if (endType == SourceType.IMPLEMENTATION) {
+                return end.getFilepath();
+            }
+
+            throw new RuntimeException("Case not implemented:" + startType + " and " + endType);
+        }
+
+        SpecsLogs.msgInfo("Two different paths in the location from the same source type, check this case.\nStart:"
+                + start.getFilepath() + "\nEnd:" + end.getFilepath());
+
+        return start.getFilepath();
+        // System.out.println("START FILEPATH:" + start.getFilepath());
+        // System.out.println("END FILEPATH:" + end.getFilepath());
+        // return start.getFilepath();
+    }
+
+    public String getStartFilepath() {
         return start.getFilepath();
     }
 
