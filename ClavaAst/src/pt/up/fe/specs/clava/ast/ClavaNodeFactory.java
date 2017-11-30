@@ -178,6 +178,7 @@ import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.IncompleteArrayType;
+import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
 import pt.up.fe.specs.clava.ast.type.LValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
@@ -695,6 +696,10 @@ public class ClavaNodeFactory {
             ClavaNodeInfo info, Type elementType,
             Expr sizeExpr) {
         return new VariableArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
+    }
+
+    public static InjectedClassNameType injectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
+        return new InjectedClassNameType(declInfo, data, info);
     }
 
     /*
