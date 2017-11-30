@@ -1,0 +1,12 @@
+#ifndef _CLASS_TEMPLATE_H_
+#define _CLASS_TEMPLATE_H_
+
+template <class Type>
+class FastStack {
+   
+   
+   private:
+   Type * data;
+};
+
+#endif

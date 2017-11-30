@@ -152,4 +152,9 @@ public class CxxTest {
         new CxxTester("while.cpp").test();
     }
 
+    @Test
+    public void testClassTemplate() {
+        new CxxTester("class_template.cpp", "class_template.h").test();
+    }
+
 }
