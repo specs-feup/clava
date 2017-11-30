@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -405,6 +406,9 @@ public class ClangAstParser {
         List<String> includes = SpecsIo.getFolders(includesBaseFolder).stream()
                 .map(file -> file.getAbsolutePath())
                 .collect(Collectors.toList());
+
+        // Sort them alphabetically, include order can be important
+        Collections.sort(includes);
 
         return includes;
     }
