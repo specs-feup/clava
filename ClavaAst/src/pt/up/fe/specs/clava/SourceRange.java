@@ -65,8 +65,22 @@ public class SourceRange {
         return end;
     }
 
+    // public String getFilepath() {
+    // return start.getFilepath();
+    // }
+
     public String getFilepath() {
-        // If filepaths are the same, just return on of them
+        // Check start is null
+        if (start.getFilepath() == null) {
+            return null;
+        }
+
+        // Check end is null
+        if (end.getFilepath() == null) {
+            return start.getFilepath();
+        }
+
+        // If filepaths are the same, just return one of them
         if (start.getFilepath().equals(end.getFilepath())) {
             return start.getFilepath();
         }
