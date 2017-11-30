@@ -129,6 +129,7 @@ import pt.up.fe.specs.clang.clavaparser.type.EnumTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.FunctionNoProtoTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.FunctionProtoTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.IncompleteArrayTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.InjectedClassNameTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.LValueReferenceTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ParenTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.PointerTypeParser;
@@ -344,6 +345,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("EnumType", EnumTypeParser::new);
         converter.put("UnaryTransformType", UnaryTransformTypeParser::new);
         converter.put("VariableArrayType", VariableArrayTypeParser::new);
+        converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
 
         /* comment */
         converter.put("ParagraphComment", ParagraphCommentParser::new);
