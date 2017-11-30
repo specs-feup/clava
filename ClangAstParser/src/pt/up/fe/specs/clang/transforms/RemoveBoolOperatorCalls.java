@@ -32,46 +32,46 @@ public class RemoveBoolOperatorCalls implements SimplePostClavaRule {
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
-	// Find MemberCalls
-	if (!(node instanceof CXXMemberCallExpr)) {
-	    return;
-	}
+        // Find MemberCalls
+        if (!(node instanceof CXXMemberCallExpr)) {
+            return;
+        }
 
-	CXXMemberCallExpr memberCall = (CXXMemberCallExpr) node;
+        CXXMemberCallExpr memberCall = (CXXMemberCallExpr) node;
 
-	MemberExpr memberExpr = memberCall.getCallee();
+        MemberExpr memberExpr = memberCall.getCallee();
 
-	// Find operator bool
-	if (!memberExpr.getMemberName().equals("operator bool")) {
-	    return;
-	}
+        // Find operator bool
+        if (!memberExpr.getMemberName().equals("operator bool")) {
+            return;
+        }
 
-	Preconditions.checkArgument(memberCall.getArgs().isEmpty(), "Expected operator to have no arguments");
+        Preconditions.checkArgument(memberCall.getArgs().isEmpty(), "Expected operator to have no arguments");
 
-	// Check if inside condition of while, for or if
-	ClavaNode condition = node.getAscendantsStream()
-		.filter(ascendant -> ascendant instanceof StmtWithCondition)
-		.map(ascendant -> (StmtWithCondition) ascendant)
-		.findFirst()
-		.flatMap(stmt -> stmt.getStmtCondition())
-		.orElse(null);
+        // Check if inside condition of while, for or if
+        ClavaNode condition = node.getAscendantsStream()
+                .filter(ascendant -> ascendant instanceof StmtWithCondition)
+                .map(ascendant -> (StmtWithCondition) ascendant)
+                .findFirst()
+                .flatMap(stmt -> stmt.getStmtCondition())
+                .orElse(null);
 
-	if (condition == null) {
-	    return;
-	}
+        if (condition == null) {
+            return;
+        }
 
-	// Check if node is a child of condition
-	boolean isInsideCondition = node.getAscendantsAndSelfStream()
-		.filter(ascendant -> ascendant == condition)
-		.findFirst().isPresent();
+        // Check if node is a child of condition
+        boolean isInsideCondition = node.getAscendantsAndSelfStream()
+                .filter(ascendant -> ascendant == condition)
+                .findFirst().isPresent();
 
-	if (!isInsideCondition) {
-	    return;
-	}
+        if (!isInsideCondition) {
+            return;
+        }
 
-	// Remove member call to operator bool
+        // Remove member call to operator bool
 
-	queue.replace(node, memberExpr.getBase());
+        queue.replace(node, memberExpr.getBase());
 
     }
 

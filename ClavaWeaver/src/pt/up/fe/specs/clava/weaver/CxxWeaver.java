@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms;
@@ -529,7 +530,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private List<String> processSources(List<File> sources) {
-        List<String> sourceFiles = SpecsIo.getFiles(sources, App.getExtensionsImplementation());
+        List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
+        // List<String> sourceFiles = SpecsIo.getFiles(sources, App.getExtensionsImplementation());
         // List<String> sourceFiles = SpecsIo.getFiles(sources, App.getPermittedExtensions());
 
         if (!sourceFiles.isEmpty()) {
@@ -540,7 +542,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         StringBuilder code = new StringBuilder();
         for (File sourceFolder : sources) {
-            List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, App.getExtensionsHeaders());
+            // List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, App.getExtensionsHeaders());
+            List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions());
 
             // Create source code to call header
             String includeCode = headerFiles.stream()
