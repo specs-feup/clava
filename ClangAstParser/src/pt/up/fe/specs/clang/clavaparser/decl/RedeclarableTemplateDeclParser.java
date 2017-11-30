@@ -25,21 +25,21 @@ import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.FunctionTemplateDecl;
+import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
-public class TemplateDeclParser extends AClangNodeParser<FunctionTemplateDecl> {
+public class RedeclarableTemplateDeclParser extends AClangNodeParser<RedeclarableTemplateDecl> {
 
-    public TemplateDeclParser(ClangConverterTable converter) {
+    public RedeclarableTemplateDeclParser(ClangConverterTable converter) {
         super(converter);
     }
 
     @Override
-    protected FunctionTemplateDecl parse(ClangNode node, StringParser parser) {
+    protected RedeclarableTemplateDecl parse(ClangNode node, StringParser parser) {
         // Examples:
         //
         // line:100:10 Distance2
@@ -73,7 +73,7 @@ public class TemplateDeclParser extends AClangNodeParser<FunctionTemplateDecl> {
         // Preconditions.checkArgument(children.isEmpty(),
         // "Expected children to be empty, its size is " + children.size());
 
-        return ClavaNodeFactory.functionTemplateDecl(declName, specializations, declData, node.getInfo(),
+        return ClavaNodeFactory.redeclarableTemplateDecl(declName, specializations, declData, node.getInfo(),
                 templateParameters, templateDecl);
     }
 
