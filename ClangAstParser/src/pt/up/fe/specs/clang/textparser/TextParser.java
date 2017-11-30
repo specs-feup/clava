@@ -104,22 +104,14 @@ public class TextParser {
 
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
-
             int textStartLine = textElement.getLocation().getStartLine();
 
             // Get node that has a line number greater than the text element
             while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine()) {
 
-                // if (currentNode instanceof CompoundStmt) {
-                // System.out.println("COMPOUND START AND END: " + currentNode.getLocation().getStartLine() + " -> "
-                // + currentNode.getLocation().getEndLine());
-                //
-                // System.out.println("COMMENT: " + textElement.getCode());
-                // System.out.println("COMMENT START LINE:" + textStartLine);
-                // }
-
                 // If no more nodes, stop
                 Optional<ClavaNode> nextNodeTry = next(iterator);
+
                 if (!nextNodeTry.isPresent()) {
                     hasNodes = false;
                     break;
@@ -187,6 +179,7 @@ public class TextParser {
                 .filter(node -> node instanceof Stmt || node instanceof Decl)
                 .filter(node -> tuFilepath.equals(node.getLocation().getFilepath()))
                 .iterator();
+
         return iterator;
     }
 
@@ -210,10 +203,10 @@ public class TextParser {
     
     }
     */
-    private static boolean temp(ClavaNode node) {
-        System.out.println("Node filepath: " + node.getLocation());
-        return true;
-    }
+    // private static boolean temp(ClavaNode node) {
+    // System.out.println("Node filepath: " + node.getLocation());
+    // return true;
+    // }
 
     private static void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
         // If empty, do nothing
@@ -367,7 +360,6 @@ public class TextParser {
         // Probably not, since we are limiting nodes to Decl and Stmt
 
         ClavaNode node = iterator.next();
-
         return Optional.of(node);
 
     }

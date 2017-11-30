@@ -35,4 +35,5 @@ public class TextElements {
     public List<ClavaNode> getStandaloneElements() {
         return standaloneElements;
     }
+
 }
