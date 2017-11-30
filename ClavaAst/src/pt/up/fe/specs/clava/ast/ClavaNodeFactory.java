@@ -87,6 +87,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultArgExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
@@ -120,6 +121,7 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
+import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
@@ -1172,6 +1174,15 @@ public class ClavaNodeFactory {
 
     public static NullExpr nullExpr() {
         return new NullExpr();
+    }
+
+    public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(ExprData exprData, ClavaNodeInfo info,
+            Expr memberExpr) {
+        return new CXXDependentScopeMemberExpr(exprData, info, memberExpr);
+    }
+
+    public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
+        return new StmtExpr(exprData, info, compoundStmt);
     }
 
     /*
