@@ -46,7 +46,7 @@ public class ClangRootNode extends ClangNode {
         // Maps node addresses to the address of the corresponding type
         private final Map<String, String> nodeToTypes;
         // Indicates which nodes have template arguments
-        private final Set<String> hasTemplateArguments;
+        // private final Set<String> hasTemplateArguments;
         // Indicates which nodes are temporary
         private final Set<String> isTemporary;
         // OpenMP directives
@@ -64,7 +64,7 @@ public class ClangRootNode extends ClangNode {
 
         public ClangRootData(DataStore config, ClangIncludes includes, List<ClangNode> clangTypes,
                 Map<String, String> nodeToTypes,
-                Set<String> hasTemplateArguments,
+                // Set<String> hasTemplateArguments,
                 Set<String> isTemporary, Map<String, OMPDirective> ompDirectives,
                 Map<String, String> enumToIntegerType, DataStore stdErr) {
 
@@ -72,7 +72,7 @@ public class ClangRootNode extends ClangNode {
             this.includes = includes;
             this.clangTypes = clangTypes;
             this.nodeToTypes = nodeToTypes;
-            this.hasTemplateArguments = hasTemplateArguments;
+            // this.hasTemplateArguments = hasTemplateArguments;
             this.isTemporary = isTemporary;
             this.ompDirectives = ompDirectives;
             this.enumToIntegerType = enumToIntegerType;
@@ -103,13 +103,13 @@ public class ClangRootNode extends ClangNode {
             return stdErr.get(StreamKeys.DECLREFEXPR_QUALS);
         }
 
-        public Set<String> getTemplateArguments() {
-            return hasTemplateArguments;
-        }
+        // public Set<String> getTemplateArguments() {
+        // return hasTemplateArguments;
+        // }
 
-        public boolean hasTemplateArguments(String id) {
-            return hasTemplateArguments.contains(id);
-        }
+        // public boolean hasTemplateArguments(String id) {
+        // return hasTemplateArguments.contains(id);
+        // }
 
         public boolean isTemporary(String id) {
             return isTemporary.contains(id);

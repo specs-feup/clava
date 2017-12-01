@@ -71,7 +71,8 @@ public class ClangAstParser {
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
     private static final List<String> CLANGAST_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
-            "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
+            // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
+            "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt",
             "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
             "types_with_templates.txt");
 
@@ -220,7 +221,7 @@ public class ClangAstParser {
         ClangIncludes includes = ClangIncludes.newInstance(SpecsIo.existingFile("includes.txt"));
 
         // Get nodes that can have template arguments
-        Set<String> hasTemplateArguments = parseTemplateArguments(SpecsIo.read("template_args.txt"));
+        // Set<String> hasTemplateArguments = parseTemplateArguments(SpecsIo.read("template_args.txt"));
 
         // Get nodes that are temporary
         Set<String> isTemporary = parseIsTemporary(SpecsIo.read("is_temporary.txt"));
@@ -233,7 +234,7 @@ public class ClangAstParser {
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-                hasTemplateArguments, isTemporary, ompDirectives, enumToIntegerType, stderr);
+                isTemporary, ompDirectives, enumToIntegerType, stderr);
 
         return new ClangRootNode(clangRootData, clangDump);
     }
