@@ -34,10 +34,11 @@ public class UnresolvedLookupExpr extends OverloadExpr {
     private final String name;
     private final List<String> decls;
 
-    public UnresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls, ExprData exprData,
+    public UnresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls, String qualifier,
+            ExprData exprData,
             ClavaNodeInfo info) {
 
-        super(exprData, info, Collections.emptyList());
+        super(qualifier, exprData, info, Collections.emptyList());
 
         this.requiresAdl = requiresAdl;
         this.name = name;
@@ -46,18 +47,27 @@ public class UnresolvedLookupExpr extends OverloadExpr {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new UnresolvedLookupExpr(requiresAdl, name, decls, getExprData(), getInfo());
+        return new UnresolvedLookupExpr(requiresAdl, name, decls, getQualifier().orElse(null), getExprData(),
+                getInfo());
     }
 
     @Override
     public String getCode() {
+        StringBuilder code = new StringBuilder();
+
+        // Append qualifier, if present
+        getQualifier().ifPresent(code::append);
+
         // Case operator
         Optional<CXXOperator> operator = CXXOperator.parseTry(name);
         if (operator.isPresent()) {
-            return operator.get().getString();
+            code.append(operator.get().getString());
+            return code.toString();
         }
 
-        return name;
+        code.append(name);
+
+        return code.toString();
     }
 
 }

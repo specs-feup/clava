@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -27,8 +28,17 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public abstract class OverloadExpr extends Expr {
 
-    public OverloadExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    private final String qualifier;
+
+    public OverloadExpr(String qualifier, ExprData exprData, ClavaNodeInfo info,
+            Collection<? extends ClavaNode> children) {
         super(exprData, info, children);
+
+        this.qualifier = qualifier;
+    }
+
+    public Optional<String> getQualifier() {
+        return Optional.ofNullable(qualifier);
     }
 
 }

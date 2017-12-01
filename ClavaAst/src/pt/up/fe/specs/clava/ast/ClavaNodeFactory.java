@@ -121,8 +121,8 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
-import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
+import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
@@ -1130,9 +1130,8 @@ public class ClavaNodeFactory {
     }
 
     public static UnresolvedLookupExpr unresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls,
-            ExprData exprData,
-            ClavaNodeInfo info) {
-        return new UnresolvedLookupExpr(requiresAdl, name, decls, exprData, info);
+            String qualifier, ExprData exprData, ClavaNodeInfo info) {
+        return new UnresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, info);
     }
 
     public static CXXStaticCastExpr cxxStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData,
@@ -1176,9 +1175,9 @@ public class ClavaNodeFactory {
         return new NullExpr();
     }
 
-    public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(ExprData exprData, ClavaNodeInfo info,
-            Expr memberExpr) {
-        return new CXXDependentScopeMemberExpr(exprData, info, memberExpr);
+    public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(boolean isArrow, String memberName,
+            ExprData exprData, ClavaNodeInfo info, Expr memberExpr) {
+        return new CXXDependentScopeMemberExpr(isArrow, memberName, exprData, info, memberExpr);
     }
 
     public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
