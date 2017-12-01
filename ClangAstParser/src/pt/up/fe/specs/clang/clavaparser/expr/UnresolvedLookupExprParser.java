@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -42,6 +43,9 @@ public class UnresolvedLookupExprParser extends AClangNodeParser<UnresolvedLooku
         // '<overloaded function type>' lvalue (ADL) = 'operator+' 0x400ce70 0x3b71110 0x6153d00 0x5fbc770 0x5fbda30
         // 0x6155a00 0x6156660 0x61577c0 0x61144a0 0x61150d0 0x6116400 0x6116e10 0x6117870 0x6118250 0x3bd2f10 0x3bd73b0
 
+        // Get qualifier
+        String qualifier = getStdErr().get(StreamKeys.DECLREFEXPR_QUALS).get(node.getExtendedId());
+
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
         parser.apply(ClangGenericParsers::ensurePrefix, "(");
         // 'double' negative here
@@ -57,7 +61,7 @@ public class UnresolvedLookupExprParser extends AClangNodeParser<UnresolvedLooku
 
         checkNoChildren(node);
 
-        return ClavaNodeFactory.unresolvedLookupExpr(requiresAdl, name, decls, exprData, node.getInfo());
+        return ClavaNodeFactory.unresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, node.getInfo());
     }
 
     private List<String> parseDecls(String decls, String suffix) {
