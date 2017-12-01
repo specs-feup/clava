@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
  * Process Clang nodes to add extra information (e.g., namespace and RecordDecl names to CXXMethodDecl).
@@ -145,13 +146,16 @@ public class ClangAstProcessor {
                 new CXXRecordDeclParser(converter), CXXRecordDecl.class);
 
         // Append namespace and record information at the end of the content
+        TransformQueue<ClangNode> queue = new TransformQueue<>("CxxMethods to Delete");
         for (ClangNode method : methods) {
 
             Optional<String> recordIdTry = getParentId(method);
 
             // Lambdas do not have record
             if (!recordIdTry.isPresent()) {
-                SpecsLogs.msgWarn("No record found, check what should be done here (probably this is a lambda)");
+                queue.delete(method);
+                SpecsLogs.msgInfo("No record found, removing CXXMethod");
+                // SpecsLogs.msgWarn("No record found, check what should be done here (probably this is a lambda)");
                 continue;
             }
 
@@ -178,6 +182,9 @@ public class ClangAstProcessor {
             // System.out.println("METHOD:" + method.getContent());
             // System.out.println("METHOD NEW:" + newContent);
         }
+
+        // Delete nodes
+        queue.apply();
 
     }
 
