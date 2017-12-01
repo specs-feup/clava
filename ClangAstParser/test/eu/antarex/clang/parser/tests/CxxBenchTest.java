@@ -37,4 +37,9 @@ public class CxxBenchTest {
         new CxxTester("bench/blocked_mm.cpp").test();
     }
 
+    @Test
+    public void testFastStack() {
+        new CxxTester("bench/fast_stack.cpp").test();
+    }
+
 }
