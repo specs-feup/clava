@@ -36,4 +36,15 @@ public class CXXMethodDeclData {
     public String getRecordId() {
         return recordId;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        string.append("Namespace: " + namespace);
+        string.append(", Record: " + record);
+        string.append(", Record Id: " + recordId);
+
+        return string.toString();
+    }
 }

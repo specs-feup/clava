@@ -90,4 +90,21 @@ public class FunctionDeclData {
         return getStorageClass() == StorageClass.STATIC;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        string.append("StorageClass: " + storageClass);
+        string.append(", isInline: " + isInline);
+        string.append(", isVirtual: " + isVirtual);
+        string.append(", isModulePrivate: " + isModulePrivate);
+        string.append(", isPure: " + isPure);
+        string.append(", isDelete: " + isDelete);
+        string.append(", ExceptionType: " + exceptionSpecifier);
+        string.append(", exceptionAddress: " + exceptionAddress);
+        string.append(", Template Arguments: " + templateArguments);
+
+        return string.toString();
+    }
+
 }
