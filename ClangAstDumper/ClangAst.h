@@ -32,7 +32,7 @@ public:
 
     static std::ofstream includes;
     static std::ofstream nodetypes;
-    static std::ofstream template_args;
+    //static std::ofstream template_args;
     static std::ofstream is_temporary;
     static std::ofstream omp;
     static std::ofstream enum_integer_type;
@@ -111,7 +111,7 @@ public:
     explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id);
 
     bool VisitOMPExecutableDirective(OMPExecutableDirective * D);
-    bool VisitDeclRefExpr(DeclRefExpr * D);
+    //bool VisitDeclRefExpr(DeclRefExpr * D);
     bool VisitCXXConstructExpr(CXXConstructExpr * D);
     bool VisitExpr(Expr *D);
     bool VisitTypeDecl(TypeDecl *D);

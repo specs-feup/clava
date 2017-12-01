@@ -64,6 +64,12 @@ public:
     void VisitCXXConstructExpr(const CXXConstructExpr *Node);
     void VisitDeclRefExpr(const DeclRefExpr *Node);
     void VisitOffsetOfExpr(const OffsetOfExpr *Node);
+    void VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *Node);
+    void VisitOverloadExpr(const OverloadExpr *Node, bool isTopCall = true);
+    void VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node);
+    void VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node);
+
+
 
     /*
      * DELCS

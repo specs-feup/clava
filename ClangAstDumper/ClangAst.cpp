@@ -83,7 +83,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     }
 
 
-
+/*
     bool PrintNodesTypesRelationsVisitor::VisitDeclRefExpr(DeclRefExpr * D) {
 
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
@@ -104,7 +104,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
         }
         return true;
     }
-
+*/
 
 
     bool PrintNodesTypesRelationsVisitor::VisitCXXConstructExpr(CXXConstructExpr * D) {
@@ -421,7 +421,7 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
 // File instantiations
 std::ofstream DumpResources::includes;
 std::ofstream DumpResources::nodetypes;
-std::ofstream DumpResources::template_args;
+//std::ofstream DumpResources::template_args;
 std::ofstream DumpResources::is_temporary;
 std::ofstream DumpResources::omp;
 std::ofstream DumpResources::enum_integer_type;
@@ -446,7 +446,7 @@ void DumpResources::init() {
     // Clear files
     DumpResources::includes.open("includes.txt", std::ofstream::out | std::fstream::trunc);
     DumpResources::nodetypes.open("nodetypes.txt", std::ofstream::out | std::ofstream::trunc);
-    DumpResources::template_args.open("template_args.txt", std::ofstream::out | std::ofstream::trunc);
+    //DumpResources::template_args.open("template_args.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::is_temporary.open("is_temporary.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::omp.open("omp.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::enum_integer_type.open("enum_integer_type.txt", std::ofstream::out | std::ofstream::trunc);
@@ -457,7 +457,7 @@ void DumpResources::init() {
 void DumpResources::finish() {
     DumpResources::includes.close();
     DumpResources::nodetypes.close();
-    DumpResources::template_args.close();
+    //DumpResources::template_args.close();
     DumpResources::is_temporary.close();
     DumpResources::omp.close();
     DumpResources::enum_integer_type.close();
