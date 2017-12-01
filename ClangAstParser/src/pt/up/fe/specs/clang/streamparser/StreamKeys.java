@@ -23,6 +23,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 
+import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
@@ -105,6 +106,9 @@ public interface StreamKeys {
     DataKey<Map<String, String>> TYPEDEF_DECL_SOURCE = KeyFactory.generic("stderr_typedef_decl_source",
             new HashMap<String, String>());
 
+    DataKey<Map<String, CxxMemberExprInfo>> CXX_MEMBER_EXPR_INFO = KeyFactory.generic("stderr_cxx_member_expr_info",
+            new HashMap<String, CxxMemberExprInfo>());
+
     // DataKey<Map<String, String>> CXX_METHOD_DECL_DECLARATION =
     // KeyFactory.generic("stderr_cxx_method_decl_declaration",
     // SpecsCollections.<String, String> newHashMap())
@@ -139,6 +143,7 @@ public interface StreamKeys {
             .addKey(OFFSET_OF_INFO)
             .addKey(FUNCTION_PROTOTYPE_EXCEPTION)
             .addKey(TYPEDEF_DECL_SOURCE)
+            .addKey(CXX_MEMBER_EXPR_INFO)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

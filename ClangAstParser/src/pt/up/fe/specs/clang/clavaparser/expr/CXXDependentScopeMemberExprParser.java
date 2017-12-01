@@ -19,6 +19,8 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
+import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
@@ -37,12 +39,18 @@ public class CXXDependentScopeMemberExprParser extends AClangNodeParser<CXXDepen
 
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
+        CxxMemberExprInfo memberExprInfo = getStdErr().get(StreamKeys.CXX_MEMBER_EXPR_INFO).get(node.getExtendedId());
+        if (memberExprInfo == null) {
+            System.out.println("ID:" + node.getExtendedId());
+            System.out.println("MAP:" + getStdErr().get(StreamKeys.CXX_MEMBER_EXPR_INFO));
+        }
         List<ClavaNode> children = getConverter().parse(node.getChildren());
         // Not sure if it is always one child
         checkNumChildren(children, 1);
         Expr memberExpr = toExpr(children.get(0));
 
-        return ClavaNodeFactory.cxxDependentScopeMemberExpr(exprData, node.getInfo(), memberExpr);
+        return ClavaNodeFactory.cxxDependentScopeMemberExpr(memberExprInfo.isArrow(), memberExprInfo.getMemberName(),
+                exprData, node.getInfo(), memberExpr);
     }
 
 }

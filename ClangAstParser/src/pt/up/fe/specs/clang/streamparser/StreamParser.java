@@ -29,6 +29,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
@@ -198,6 +199,10 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.TYPEDEF_DECL_SOURCE,
                 SnippetParser.newInstance("<TypedefDecl Source>", new HashMap<String, String>(),
                         StreamParser::collectString));
+
+        snippetsMap.put(StreamKeys.CXX_MEMBER_EXPR_INFO,
+                SnippetParser.newInstance("<CXX Member Expr Info>", new HashMap<String, CxxMemberExprInfo>(),
+                        StreamParser::parseCxxMemberExprInfo));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -543,8 +548,9 @@ public class StreamParser {
         // isBitField
         // hasInClassInitializer
 
-        boolean isBitField = Boolean.parseBoolean(lines.nextLine());
-        boolean hasInClassInitializer = Boolean.parseBoolean(lines.nextLine());
+        boolean isBitField = parseTrueOrFalse(lines.nextLine());
+
+        boolean hasInClassInitializer = parseTrueOrFalse(lines.nextLine());
 
         map.put(key, new FieldDeclInfo(isBitField, hasInClassInitializer));
     }
@@ -558,6 +564,44 @@ public class StreamParser {
         Preconditions.checkArgument(line.startsWith(prefix), "Expected line to start with '" + prefix + "':" + line);
         String integer = line.substring(prefix.length());
         return Integer.parseInt(integer);
+    }
+
+    public static void parseCxxMemberExprInfo(LineStream lines, Map<String, CxxMemberExprInfo> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // isArrow (boolean)
+        // memberName (String)
+
+        // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
+        boolean isArrow = parseOneOrZero(lines.nextLine());
+        String memberName = lines.nextLine();
+
+        map.put(key, new CxxMemberExprInfo(isArrow, memberName));
+    }
+
+    public static boolean parseOneOrZero(String aBoolean) {
+        if (aBoolean.equals("1")) {
+            return true;
+        }
+
+        if (aBoolean.equals("0")) {
+            return false;
+        }
+
+        throw new RuntimeException("Unexpected value: " + aBoolean);
+    }
+
+    public static boolean parseTrueOrFalse(String aBoolean) {
+        if (aBoolean.equals("true")) {
+            return true;
+        }
+
+        if (aBoolean.equals("false")) {
+            return false;
+        }
+
+        throw new RuntimeException("Unexpected value: " + aBoolean);
     }
 
 }
