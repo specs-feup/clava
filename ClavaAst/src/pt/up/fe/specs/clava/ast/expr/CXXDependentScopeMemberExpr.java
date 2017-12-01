@@ -23,18 +23,25 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXDependentScopeMemberExpr extends Expr {
 
-    public CXXDependentScopeMemberExpr(ExprData exprData, ClavaNodeInfo info, Expr memberExpr) {
-        super(exprData, info, Arrays.asList(memberExpr));
+    private final boolean isArrow;
+    private final String memberName;
+
+    public CXXDependentScopeMemberExpr(boolean isArrow, String memberName, ExprData exprData, ClavaNodeInfo info,
+            Expr memberExpr) {
+        this(isArrow, memberName, exprData, info, Arrays.asList(memberExpr));
     }
 
-    protected CXXDependentScopeMemberExpr(ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
+    protected CXXDependentScopeMemberExpr(boolean isArrow, String memberName, ExprData exprData,
+            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(exprData, info, children);
+
+        this.isArrow = isArrow;
+        this.memberName = memberName;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new CXXDependentScopeMemberExpr(getExprData(), getInfo(), Collections.emptyList());
+        return new CXXDependentScopeMemberExpr(isArrow, memberName, getExprData(), getInfo(), Collections.emptyList());
     }
 
     public Expr getMemberExpr() {
@@ -43,7 +50,10 @@ public class CXXDependentScopeMemberExpr extends Expr {
 
     @Override
     public String getCode() {
-        return getMemberExpr().getCode() + "->";
+        String separator = isArrow ? "->" : ".";
+        // String separator = "->";
+
+        return getMemberExpr().getCode() + separator + memberName;
         // System.out.println("CHILD CODE:" + getChild(0).getCode());
         // return super.getCode();
     }
