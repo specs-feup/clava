@@ -29,6 +29,11 @@ public class ClavaWeaverDoc {
         SpecsSystem.programStandardInit();
         File outputFolder = SpecsIo.mkdir("C:\\Users\\joaobispo\\Desktop\\laradoc");
 
+        buildClavaDoc(outputFolder);
+
+    }
+
+    private static void buildClavaDoc(File outputFolder) {
         String laraApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\lara-framework\\LaraApi\\src-lara-base\\";
         String laraiApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\lara-framework\\LARAI\\src-lara";
         String clavaApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClavaLaraApi\\src-lara\\clava\\";
@@ -50,7 +55,6 @@ public class ClavaWeaverDoc {
         // Generate documentation
         LaraDocHtmlGenerator generator = new LaraDocHtmlGenerator(new BasicHtmlGenerator(), outputFolder);
         generator.generateDoc(laraDocTop);
-
     }
 
 }
