@@ -114,11 +114,15 @@ void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
 
     log("CXXConstructExpr", Node);
 
-        const Type* constructorType = Node->getConstructor()->getType().getTypePtr();
-        llvm::errs() << "CONSTRUCTOR_TYPE\n";
-        llvm::errs() << Node << "_" << id << "->" << constructorType << "_" << id << "\n";
-        VisitTypeTop(Node->getConstructor()->getType().getTypePtr());
-
+        const Type* constructorType = Node->getConstructor()->getType().getTypePtrOrNull();
+        if(constructorType != nullptr) {
+            llvm::errs() << "CONSTRUCTOR_TYPE\n";
+            llvm::errs() << Node << "_" << id << "->" << constructorType << "_" << id << "\n";
+            //VisitTypeTop(Node->getConstructor()->getType().getTypePtr());
+            VisitTypeTop(constructorType);
+        } else {
+            llvm::errs() << "CXXConstructExpr " << Node->getConstructor()->getDeclName().getAsString() << " has null type\n";
+        }
 }
 
 void ClangAstDumper::VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExpr *Node) {

@@ -14,6 +14,10 @@ using namespace clang;
  */
 
 bool ClangAstDumper::dumpType(const Type* typeAddr) {
+    if(typeAddr == nullptr) {
+        return true;
+    }
+
     if(seenTypes.count(typeAddr) != 0) {
         return true;
     }
@@ -86,7 +90,14 @@ void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializatio
         if(Arg.getKind() != 1) {
             continue;
         }
-        VisitTypeTop(Arg.getAsType().getTypePtr());
+
+        const Type* argType = Arg.getAsType().getTypePtrOrNull();
+        if(argType != nullptr) {
+            VisitTypeTop(argType);
+        } else {
+            llvm::errs() << "VisitTemplateSpecializationType: arg type is null\n";
+        }
+
     }
 
     // Dump template names
@@ -107,7 +118,13 @@ void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializatio
             continue;
         }
 
-        llvm::errs() << "Template_arg:" << Arg.getAsType().getTypePtr()  << "_" << id << "\n";
+        const Type* argType = Arg.getAsType().getTypePtrOrNull();
+        if(argType != nullptr) {
+            llvm::errs() << "Template_arg:" << argType  << "_" << id << "\n";
+        }  else {
+            llvm::errs() << "VisitTemplateSpecializationType: template arg type is null\n";
+        }
+
     }
     llvm::errs() << "TEMPLATE_ARGUMENT_TYPES_END\n";
 
@@ -116,7 +133,13 @@ void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializatio
 
     // Visit type alias
     if(T->isTypeAlias()) {
-        VisitTypeTop(T->getAliasedType().getTypePtr());
+        const Type* aliasedType = T->getAliasedType().getTypePtrOrNull();
+        if(aliasedType != nullptr) {
+            VisitTypeTop(aliasedType);
+        } else {
+            llvm::errs() << "VisitTemplateSpecializationType: aliased type is null\n";
+        }
+
     }
 
     if(T->isSugared()) {
