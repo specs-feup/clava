@@ -39,7 +39,12 @@ public class CxxBenchTest {
 
     @Test
     public void testFastStack() {
-        new CxxTester("bench/fast_stack.cpp").test();
+        new CxxTester("bench/fast_stack.cpp").showClangDump().test();
+    }
+
+    // @Test
+    public void testSortedId() {
+        new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").test();
     }
 
 }
