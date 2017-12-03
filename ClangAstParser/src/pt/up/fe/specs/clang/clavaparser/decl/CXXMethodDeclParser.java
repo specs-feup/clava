@@ -31,7 +31,6 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
-import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
 
@@ -53,7 +52,9 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
-        String name = parser.apply(StringParsers::parseWord);
+        boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        String name = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
+        // String name = parser.apply(StringParsers::parseWord);
 
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 

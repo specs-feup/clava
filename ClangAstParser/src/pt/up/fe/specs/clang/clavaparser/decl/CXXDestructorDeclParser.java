@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
-import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl> {
 
@@ -50,7 +49,9 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
-        String name = parser.apply(StringParsers::parseWord);
+        boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        String className = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
+        // String name = parser.apply(StringParsers::parseWord);
 
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
@@ -91,7 +92,7 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
 
         checkNumChildren(children.getList(), 0);
 
-        return ClavaNodeFactory.cxxDestructorDecl(methodData, name, type, data.getFunctionDeclData(), declData,
+        return ClavaNodeFactory.cxxDestructorDecl(methodData, className, type, data.getFunctionDeclData(), declData,
                 node.getInfo(), data.getParameters(), data.getDefinition());
     }
 
