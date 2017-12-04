@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
@@ -28,7 +29,7 @@ public class CXXForRangeStmt extends Stmt {
     public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
             Stmt body) {
 
-        this(info, Arrays.asList(range, beginEnd, cond, inc, loopVar, body));
+        this(info, Arrays.asList(range, ClavaNodes.getNodeOrNullStmt(beginEnd), cond, inc, loopVar, body));
     }
 
     private CXXForRangeStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {

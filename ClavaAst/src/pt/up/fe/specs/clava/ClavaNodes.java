@@ -404,4 +404,12 @@ public class ClavaNodes {
         return ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(leftHand.getType()),
                 ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
     }
+
+    public static Stmt getNodeOrNullStmt(Stmt node) {
+        if (node == null) {
+            return ClavaNodeFactory.nullStmt(ClavaNodeInfo.undefinedInfo());
+        }
+
+        return node;
+    }
 }
