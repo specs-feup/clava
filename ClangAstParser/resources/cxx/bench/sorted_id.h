@@ -23,7 +23,7 @@ namespace Routing {
                 this->Sort();
             }
 			
-/*
+
             SortedId(std::vector<std::pair<K, T>> &&data, bool isSorted = false) :
                     data(new std::vector<std::pair<K, T>>(std::move(data))) {
                 this->Sort();
@@ -78,17 +78,17 @@ namespace Routing {
                     std::cout << p << std::endl;
                 }
             }
-*/
+
         private:
             std::unique_ptr<std::vector<std::pair<K, T>>> data;
-/*
+
             void Sort(){
                 std::sort(this->data->begin(), this->data->end(),
                           [](const std::pair<K, T> &first, const std::pair<K, T> &second) -> bool {
                               return first.first < second.first;
                           });
             }
-*/
+
         };
     }
 }

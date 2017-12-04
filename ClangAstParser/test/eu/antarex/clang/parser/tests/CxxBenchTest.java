@@ -42,9 +42,9 @@ public class CxxBenchTest {
         new CxxTester("bench/fast_stack.cpp").showClangDump().test();
     }
 
-    // @Test
+    @Test
     public void testSortedId() {
-        new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").test();
+        new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").showCode().onePass().test();
     }
 
 }
