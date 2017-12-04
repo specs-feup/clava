@@ -11,12 +11,18 @@
 #include <iostream>
 #include <sstream>
 
+#include <assert.h>
+
 using namespace clang;
 
 ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id)  {};
 
 
 void ClangAstDumper::VisitTypeTop(const QualType& T) {
+    if(T.isNull()) {
+        return;
+    }
+
     TypeVisitor::Visit(T.getTypePtr());
     dumpType(T);
 }
@@ -26,6 +32,10 @@ void ClangAstDumper::VisitTypeTop(const Type *T) {
 }
 
 void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
+    if(Node == nullptr) {
+        return;
+    }
+
     ConstStmtVisitor::Visit(Node);
 }
 
@@ -133,3 +143,8 @@ std::string ClangAstDumper::toBoolString(int value) {
 }
 
 
+const Type* getTypePtr(QualType T, std::string source)  {
+    assert(!T.isNull() && "Cannot retrieve a NULL type pointer");
+
+    return T.getTypePtr();
+}

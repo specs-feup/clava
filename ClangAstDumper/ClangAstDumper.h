@@ -93,7 +93,7 @@ public:
     std::string loc2str(SourceLocation locStart, SourceLocation locEnd);
     std::string getId(const void* addr);
     std::string toBoolString(int value);
-
+    const Type* getTypePtr(QualType T, std::string source);
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
