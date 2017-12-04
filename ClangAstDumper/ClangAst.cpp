@@ -128,6 +128,9 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
+            //if(D->getType().isNull()) {
+            //    llvm::errs() << "VisitExpr null type\n";
+            //}
             dumpNodeToType(DumpResources::nodetypes,D, D->getType());
 
         }
@@ -153,7 +156,9 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitTypedefNameDecl(TypedefNameDecl *D) {
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
-
+            //if(D->getUnderlyingType().isNull()) {
+            //    llvm::errs() << "VisitNameDecl null type\n";
+            //}
             dumpNodeToType(DumpResources::nodetypes, D, D->getUnderlyingType());
 
         }
@@ -165,7 +170,9 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitEnumDecl(EnumDecl *D) {
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
-
+            //if(D->getIntegerType().isNull()) {
+            //    llvm::errs() << "VisitEnum null type\n";
+            //}
             dumpNodeToType(DumpResources::enum_integer_type, D,D->getIntegerType(), false);
 
         }
@@ -179,6 +186,9 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
+            //if(D->getType().isNull()) {
+            //    llvm::errs() << "VisitValueDecl null type\n";
+            //}
             dumpNodeToType(DumpResources::nodetypes, D, D->getType());
 
             return true;
@@ -213,7 +223,9 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
 void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void* nodeAddr, const QualType& type, bool checkDuplicates) {
 
-    void* typeAddr = type.getAsOpaquePtr();
+    // Opaque pointer, so that we can obtain the qualifiers
+    void* typeAddr = !type.isNull() ? type.getAsOpaquePtr() : nullptr;
+    //const Type* typeAddr = type.getTypePtrOrNull();
 
     if(checkDuplicates) {
         if(seenNodes.count(nodeAddr) == 0) {
