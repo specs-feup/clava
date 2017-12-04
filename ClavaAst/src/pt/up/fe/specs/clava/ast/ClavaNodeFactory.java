@@ -841,7 +841,7 @@ public class ClavaNodeFactory {
     // return new LiteralStmt(literalCode, info);
     // }
 
-    public static CXXForRangeStmt cxxForRangeStmt(ClavaNodeInfo info, DeclStmt range, DeclStmt beginEnd, Expr cond,
+    public static CXXForRangeStmt cxxForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond,
             Expr inc, DeclStmt loopVar, Stmt body) {
         return new CXXForRangeStmt(info, range, beginEnd, cond, inc, loopVar, body);
     }

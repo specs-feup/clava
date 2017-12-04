@@ -144,7 +144,9 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         if (useReturnType) {
-            code.append(getFunctionType().getReturnType().getCode()).append(" ");
+            // TODO: When mixing templates and lambdas, sometimes types are not available. Find better solution?
+            getFunctionTypeTry().ifPresent(fType -> code.append(fType.getReturnType().getCode()).append(" "));
+            // code.append(getFunctionType().getReturnType().getCode()).append(" ");
         }
 
         // Add namespace if not inside namespace decl
@@ -181,6 +183,10 @@ public class CXXMethodDecl extends FunctionDecl {
     @Override
     public FunctionProtoType getFunctionType() {
         return (FunctionProtoType) super.getFunctionType();
+    }
+
+    public Optional<FunctionProtoType> getFunctionTypeTry() {
+        return Optional.ofNullable((FunctionProtoType) super.getFunctionType());
     }
 
     @Override
