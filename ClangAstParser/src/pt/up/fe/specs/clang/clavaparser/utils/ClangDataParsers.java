@@ -326,7 +326,7 @@ public class ClangDataParsers {
         if (name.isEmpty()) {
             RecordType recordType = (RecordType) typesMap.get(node.getExtendedId());
 
-            if (recordType.isAnonymous()) {
+            if (recordType == null || recordType.isAnonymous()) {
                 name = ClavaParserUtils.createAnonName(node);
             } else {
                 String recordTypeCode = recordType.getCode();

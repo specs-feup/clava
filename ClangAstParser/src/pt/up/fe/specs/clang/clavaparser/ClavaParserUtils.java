@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.clavaparser;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
@@ -80,6 +81,10 @@ public class ClavaParserUtils {
     }
 
     public static String createAnonName(ClangNode node) {
+        if (!node.getLocation().isValid()) {
+            return "anon_" + UUID.randomUUID().toString();
+        }
+
         String sanitizedFilename = node.getLocation().getFilename().replace('.', '_');
         return "anon_" + sanitizedFilename + "_" + node.getLocation().getStartLine();
     }

@@ -55,7 +55,7 @@ public class ClangConverterTable implements AutoCloseable {
     public ClangConverterTable(ClangRootData clangRootData) {
         this.converter = new HashMap<>();
         types = new HashMap<>();
-        originalTypes = new HashMap<>();
+        originalTypes = null;
         this.clangRootData = clangRootData;
         parsedNodes = new HashMap<>();
         fileService = new LineStreamFileService();
@@ -85,7 +85,7 @@ public class ClangConverterTable implements AutoCloseable {
     }
 
     public Map<String, Type> getOriginalTypes() {
-        if (originalTypes.isEmpty()) {
+        if (originalTypes == null) {
             throw new RuntimeException("Original types has not been initialized");
         }
         return originalTypes;

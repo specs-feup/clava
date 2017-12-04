@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDecl> {
 
@@ -54,11 +55,15 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         // col:4 MCSimulation 'void (const std::string, const std::string)'
         // line:304:24 MCSimulation 'void (const std::string, const std::string)' namespace Routing record CSVReader
 
-        System.out.println("CXX CONSTRUCTOR DECL:" + parser);
-
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        if (!emptyName) {
+            if (parser.apply(StringParsers::peekStartsWith, "'")) {
+                System.out.println("CxxConstructorDecl without name that is not well detected yet");
+                emptyName = true;
+            }
+        }
         // String className = emptyName ? null : parser.apply(StringParsers::parseWord);
 
         String className = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);

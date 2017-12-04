@@ -72,7 +72,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
      *
      * <p>
      * 1) If the node is of type Expr, encapsulates the node inside a ExprStmt. <br>
-     * 2) If the node is of type NullNode, returns null<br>
+     * 2) If the node is of type NullNode, returns NullStmt<br>
      * 3) If the node is an Undefined, transforms it into a DummyStmt.
      *
      * @param clavaNode
@@ -85,8 +85,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
         }
 
         if (node instanceof NullNode) {
-            // LoggingUtils.msgWarn("RETURNING NULLNODE");
-            return null;
+            return ClavaNodeFactory.nullStmt(node.getInfo());
         }
 
         return ClavaParserUtils.cast(node, Stmt.class, ClavaNodeFactory::dummyStmt);
