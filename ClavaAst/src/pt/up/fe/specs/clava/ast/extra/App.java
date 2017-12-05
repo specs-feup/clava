@@ -220,39 +220,40 @@ public class App extends ClavaNode {
      * @param destinationFolder
      * @param filesToGenerate
      */
+    /*
     public void write(File baseInputFolder, File destinationFolder, Set<String> filesToGenerate) {
         Map<File, String> codeMap = getCode(baseInputFolder, destinationFolder);
-
-        boolean filterFilesToGenerate = enableCodeGenerationFiltering(codeMap, filesToGenerate);
-
+    
+        boolean filterFilesToGenerate = enableModifiedFilesFilter(codeMap, filesToGenerate);
+    
         for (Entry<File, String> entry : codeMap.entrySet()) {
             if (filterFilesToGenerate) {
                 if (!filesToGenerate.contains(entry.getKey().getName())) {
-
+    
                     continue;
                 }
             }
-
+    
             SpecsIo.write(entry.getKey(), entry.getValue());
         }
     }
-
+    */
     // private static List<File> getAllSourcefiles(List<File> sources) {
     // return getAllSourcefiles(sources, false);
     // }
 
-    private boolean enableCodeGenerationFiltering(Map<File, String> codeMap, Set<String> filesToGenerate) {
+    private boolean enableModifiedFilesFilter(List<File> programFiles, Set<String> modifiedFiles) {
         // If set of files to generate is null, return false
-        if (filesToGenerate == null) {
+        if (modifiedFiles == null) {
             return false;
         }
 
         // Check if all files have different names
         Set<String> filenames = new HashSet<>();
-        for (File file : codeMap.keySet()) {
+        for (File file : programFiles) {
             boolean newElement = filenames.add(file.getName());
             if (!newElement) {
-                SpecsLogs.msgInfo("Cannot use generation of modified code only, found to files with the same name '"
+                SpecsLogs.msgInfo("Cannot use generation of modified files only, found two files with the same name: '"
                         + file.getName() + "'");
                 return false;
             }
@@ -288,8 +289,23 @@ public class App extends ClavaNode {
     }
 
     public Map<File, String> getCode(File baseInputFolder, File destinationFolder) {
+        return getCode(baseInputFolder, destinationFolder, null);
+    }
+
+    /**
+     * 
+     * @param baseInputFolder
+     * @param destinationFolder
+     * @param modifiedFiles
+     *            a set of filenames which is a white-list for files that should be generated from the AST. If null,
+     *            generates all files from the AST
+     * @return
+     */
+    public Map<File, String> getCode(File baseInputFolder, File destinationFolder, Set<String> modifiedFiles) {
 
         Map<File, String> files = new HashMap<>();
+
+        boolean enableModifiedFilesFilter = enableModifiedFilesFilter(getFiles(), modifiedFiles);
 
         // Generate code for each translation unit considering the given destination
         // and using a path relative to the topFile
@@ -301,8 +317,10 @@ public class App extends ClavaNode {
             File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
             File destinationFile = new File(actualDestinationFolder, tUnit.getFilename());
 
-            files.put(destinationFile, tUnit.getCode());
-            // IoUtils.write(destinationFile, tUnit.getCode());
+            String code = getTuCode(tUnit, enableModifiedFilesFilter, modifiedFiles, baseInputFolder);
+
+            files.put(destinationFile, code);
+            // files.put(destinationFile, tUnit.getCode());
         }
 
         List<File> localSources = sources.isEmpty() ? Arrays.asList(baseInputFolder) : sources;
@@ -344,6 +362,41 @@ public class App extends ClavaNode {
         }
 
         return files;
+    }
+
+    private String getTuCode(TranslationUnit tUnit, boolean enableModifiedFilesFilter, Set<String> modifiedFiles,
+            File baseInputFolder) {
+        // If modified files filter is not enable, generate code from the translation unit
+        if (!enableModifiedFilesFilter) {
+            return tUnit.getCode();
+        }
+
+        // If file was modified, generate code from the translation uni
+        if (modifiedFiles.contains(tUnit.getFilename())) {
+            return tUnit.getCode();
+        }
+
+        File originalFile = tUnit.getFile();
+
+        // If the original file does not exist, generate code
+        if (!originalFile.isFile()) {
+            return tUnit.getCode();
+        }
+
+        // Otherwise, return the original file
+        String relativeSource = ClavaCode.getRelativePath(originalFile, baseInputFolder);
+        SpecsLogs.msgInfo("Using original source for file '" + relativeSource + "'");
+        return SpecsIo.read(originalFile);
+    }
+
+    /**
+     * 
+     * @return list of current files in the program
+     */
+    public List<File> getFiles() {
+        return getTranslationUnits().stream()
+                .map(TranslationUnit::getFile)
+                .collect(Collectors.toList());
     }
 
     public String getRelativePath(File baseInputFolder, TranslationUnit tUnit) {
