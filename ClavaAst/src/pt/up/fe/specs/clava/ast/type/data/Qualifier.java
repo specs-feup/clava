@@ -21,7 +21,8 @@ public enum Qualifier {
 
     CONST,
     RESTRICT,
-    VOLATILE;
+    VOLATILE,
+    GLOBAL;
 
     public String getCode() {
         if (this == RESTRICT) {
@@ -29,6 +30,11 @@ public enum Qualifier {
                 return "__restrict__";
             }
         }
+
+        if (this == GLOBAL) {
+            return "__global";
+        }
+
         return name().toLowerCase(Locale.UK);
     }
 }
