@@ -36,6 +36,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.antarex.clava.AntarexClavaLaraApis;
 import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -121,8 +122,12 @@ public class CxxWeaver extends ACxxWeaver {
         // Default flags that are always added
         defaultFlags.addAll(DEFAULT_COMMON_DUMPER_FLAGS);
 
+        SupportedPlatform currentPlatform = SupportedPlatform.getCurrentPlatform();
+
         // If MacOS, always add -ffreestanding
-        // TODO: Waiting for Martin method for detecting when needed
+        if (currentPlatform == SupportedPlatform.MAC_OS) {
+            defaultFlags.add("-ffreestanding");
+        }
 
         return defaultFlags;
     }
