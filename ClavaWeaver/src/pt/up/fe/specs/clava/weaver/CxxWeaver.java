@@ -1,11 +1,9 @@
 package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -19,14 +17,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
-import org.lara.interpreter.joptions.panels.editor.components.DevUtils;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import org.lara.interpreter.weaver.options.OptionArguments;
 import org.lara.interpreter.weaver.options.WeaverOption;
-import org.lara.interpreter.weaver.options.WeaverOptionBuilder;
 import org.lara.language.specification.LanguageSpecification;
-import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
@@ -53,6 +47,7 @@ import pt.up.fe.specs.clava.weaver.importable.Format;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
@@ -83,10 +78,10 @@ import pt.up.fe.specs.util.utilities.StringLines;
 public class CxxWeaver extends ACxxWeaver {
 
     static {
-        DevUtils.addDevProject(
-                new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\specs-lara\\2017 COMLAN\\RangeValueMonitor\\lara"),
-                "COMLAN",
-                true, true);
+        // DevUtils.addDevProject(
+        // new File("C:\\Users\\JoaoBispo\\Desktop\\shared\\specs-lara\\2017 COMLAN\\RangeValueMonitor\\lara"),
+        // "COMLAN",
+        // true, true);
     }
 
     public static LanguageSpecification buildLanguageSpecification() {
@@ -136,71 +131,6 @@ public class CxxWeaver extends ACxxWeaver {
         return DEFAULT_DUMPER_FLAGS;
     }
 
-    private static final Map<String, WeaverOption> WEAVER_OPTIONS;
-    static {
-        WEAVER_OPTIONS = new HashMap<>();
-        WEAVER_OPTIONS.put(ClavaOptions.STANDARD.getName(),
-                WeaverOptionBuilder.build("std", "standard", OptionArguments.ONE_ARG, "C/C++ standard",
-                        "What C/C++ standard should be used. Currently supported standards: "
-                                + Standard.getEnumHelper().getAvailableOptions(),
-                        ClavaOptions.STANDARD));
-
-        addOneArgOption(ClavaOptions.FLAGS, "fs", "flags", "flags string",
-                "String with C/C++ compiler flags");
-
-        WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_WEAVING.getName(), WeaverOptionBuilder.build("nw", "no-weaving",
-                "Disables weaving of source code, only runs the LARA aspect", CxxWeaverOption.DISABLE_WEAVING));
-
-        addBooleanOption(CxxWeaverOption.CHECK_SYNTAX, "cs", "check-syntax", "Checks syntax of weaved code");
-
-        addBooleanOption(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, "cl", "clean", "Clean intermediate files");
-
-        addBooleanOption(CxxWeaverOption.DISABLE_CODE_GENERATION, "ncg", "no-code-gen",
-                "Disables automatic code generation");
-
-        addBooleanOption(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY, "gom", "generate-only-if-modified",
-                "Generate code from AST for a file only if file is modified by a LARA action. Otherwise, the original files is copied");
-
-        WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_CLAVA_INFO.getName(),
-                WeaverOptionBuilder.build("nci", "no-clava-info",
-                        "Disables printing of information about Clava", CxxWeaverOption.DISABLE_CLAVA_INFO));
-
-        addOneArgOption(CxxWeaverOption.HEADER_INCLUDES, "ih", "includes-headers",
-                "dir1[,dir2]*",
-                "Include folders for C/C++ headers. Include files that are used in C/C++ files are processed by Clava and appear in the AST.");
-
-        addOneArgOption(CxxWeaverOption.SYSTEM_INCLUDES, "is", "includes-system",
-                "dir1[,dir2]*",
-                "Include folders for C/C++ headers that should be considered 'system libraries'. System libraries are not processed by Clava and do not appear in the AST.");
-
-        addOneArgOption(CxxWeaverOption.WEAVED_CODE_FOLDERNAME, "of", "output-foldername",
-                "dir",
-                "Sets the name of the weaved code folder (default value: '" + CxxWeaver.getWeavedCodeFoldername()
-                        + "')");
-    }
-
-    private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
-            String description) {
-        WEAVER_OPTIONS.put(key.getName(), WeaverOptionBuilder.build(shortOption, longOption, description, key));
-    }
-
-    private static final void addOneArgOption(DataKey<?> key, String shortOption, String longOption, String argName,
-            String description) {
-
-        WEAVER_OPTIONS.put(key.getName(),
-                WeaverOptionBuilder.build(shortOption, longOption, OptionArguments.ONE_ARG, argName, description, key));
-
-    }
-
-    private static WeaverOption getOption(DataKey<?> key) {
-        WeaverOption option = WEAVER_OPTIONS.get(key.getName());
-        if (option != null) {
-            return option;
-        }
-
-        return WeaverOptionBuilder.build(key);
-    }
-
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
         CLAVA_LARA_API.addAll(LaraExtraApis.getApis());
@@ -240,10 +170,8 @@ public class CxxWeaver extends ACxxWeaver {
     private final ModifiedFilesGear modifiedFilesGear;
 
     // Parsed program state
-    // private App app = null;
-    private Deque<App> apps;
-    // private Map<ClavaNode, Map<String, Object>> userValues = null;
-    private Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
+    // private Deque<App> apps;
+    // private Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
 
     // private File outputDir = null;
     private List<File> sources = null;
@@ -260,7 +188,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     private AccumulatorMap<String> accMap;
 
-    // private ClavaWeaverData weaverData;
+    private ClavaWeaverData weaverData;
 
     public CxxWeaver() {
         // Gears
@@ -268,10 +196,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Weaver configuration
         args = null;
-        apps = null;
-        // apps = new ArrayDeque<>();
-        userValuesStack = null;
-        // userValuesStack = new ArrayDeque<>();
 
         // outputDir = null;
         sources = null;
@@ -289,29 +213,20 @@ public class CxxWeaver extends ACxxWeaver {
 
         accMap = null;
 
-        // weaverData = null;
+        weaverData = null;
 
     }
 
     public App getApp() {
-        if (apps == null) {
-            return null;
-        }
-        // return app;
-        App app = apps.peek();
+        return getAppTry().get();
+    }
 
-        if (app == null) {
-            // Verify if weaving is disabled
-            if (args != null && args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-                SpecsLogs.msgInfo("'Disable weaving' option is set, cannot use AST-related code (e.g., 'select')");
-                return null;
-            }
-
-            SpecsLogs.msgInfo("No parsed tree available");
+    public Optional<App> getAppTry() {
+        if (weaverData == null) {
             return null;
         }
 
-        return app;
+        return weaverData.getAst();
     }
 
     public File getBaseSourceFolder() {
@@ -323,7 +238,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private Map<ClavaNode, Map<String, Object>> getUserValues() {
-        return userValuesStack.peek();
+        return weaverData.getUserValues();
+        // return userValuesStack.peek();
     }
 
     public boolean addMessageToUser(String message) {
@@ -356,10 +272,7 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
         reset();
 
-        // weaverData = new ClavaWeaverData(args);
-
-        apps = new ArrayDeque<>();
-        userValuesStack = new ArrayDeque<>();
+        weaverData = new ClavaWeaverData(args);
 
         accMap = new AccumulatorMap<>();
 
@@ -379,9 +292,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Set weaver in CxxFactory, so that it can have access to a weaver configuration
         // This setting is local to the thread
-
-        // userValues = new HashMap<>();
-        userValuesStack.push(new HashMap<>());
 
         // Weaver arguments
         this.sources = sources;
@@ -436,8 +346,7 @@ public class CxxWeaver extends ACxxWeaver {
             return true;
         }
 
-        // app = createApp(sources, parserOptions);
-        apps.push(createApp(sources, parserOptions));
+        weaverData.pushAst(createApp(sources, parserOptions));
 
         // TODO: Option to dump clang and clava
         SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
@@ -696,12 +605,8 @@ public class CxxWeaver extends ACxxWeaver {
             messagesToUser.forEach(ClavaLog::info);
         }
 
-        // Clears app and userValues stack
-        apps = null;
-        userValuesStack = null;
-
         // Clear weaver data
-        // weaverData = null;
+        weaverData = null;
 
         return true;
     }
@@ -791,7 +696,7 @@ public class CxxWeaver extends ACxxWeaver {
     @Override
     public List<WeaverOption> getOptions() {
         return CxxWeaverOption.STORE_DEFINITION.getKeys().stream()
-                .map(key -> getOption(key))
+                .map(CxxWeaverOptions::getOption)
                 .collect(Collectors.toList());
 
     }
@@ -832,37 +737,23 @@ public class CxxWeaver extends ACxxWeaver {
         System.out.println("TUs Rebuilt:"
                 + rebuiltApp.getTranslationUnits().stream().map(tu -> tu.getFilename())
                         .collect(Collectors.toList()));
-        /*        
-        System.out.println("BASE FOLDER:" + baseFolder);
-        System.out.println("TEMP FOLDER:" + tempFolder);
-        
-        List<String> relativePathsOriginal = getApp().getTranslationUnits().stream()
-                .map(tu -> SpecsIo.getRelativePath(tu.getFile().getAbsoluteFile(), getBaseSourceFolder()))
-                .collect(Collectors.toList());
-        
-        System.out.println("Relative Paths Original:" + relativePathsOriginal);
-        
-        List<String> relativePathsRebuilt = rebuiltApp.getTranslationUnits().stream()
-                .map(tu -> SpecsIo.getRelativePath(tu.getFile().getAbsoluteFile(), tempFolder))
-                .collect(Collectors.toList());
-        
-        System.out.println("Relative Paths Rebuilt:" + relativePathsRebuilt);
-        */
+
         // Base folder is now the temporary folder
         if (update) {
             // Discard current app
-            apps.pop();
+            weaverData.popAst();
+
             // Add rebuilt app
-            apps.push(rebuiltApp);
-            // app = rebuiltApp;
+            weaverData.pushAst(rebuiltApp);
+
             baseFolder = tempFolder;
         }
 
         // Clear user values, all stored nodes are invalid now
         // userValues = new HashMap<>();
         // Discard user values
-        userValuesStack.pop();
-        userValuesStack.push(new HashMap<>());
+        // userValuesStack.pop();
+        // userValuesStack.push(new HashMap<>());
     }
 
     @Override
@@ -935,16 +826,12 @@ public class CxxWeaver extends ACxxWeaver {
     public void pushAst() {
         // Create a copy of app and push it
         App clonedApp = (App) getApp().copy();
-        apps.push(clonedApp);
-
-        // Push new user values
-        userValuesStack.push(new HashMap<>());
+        weaverData.pushAst(clonedApp);
     }
 
     public void popAst() {
         // Discard app and user values
-        apps.pop();
-        userValuesStack.pop();
+        weaverData.popAst();
     }
 
     public Integer nextId(String prefix) {
