@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -202,8 +203,36 @@ public class App extends ClavaNode {
 
     }
 
+    // public void write(File baseInputFolder, File destinationFolder) {
+    // write(baseInputFolder, destinationFolder, null);
+    // }
+
     public void write(File baseInputFolder, File destinationFolder) {
         for (Entry<File, String> entry : getCode(baseInputFolder, destinationFolder).entrySet()) {
+            SpecsIo.write(entry.getKey(), entry.getValue());
+        }
+    }
+
+    /**
+     * TODO: Need map from generated files to original files
+     * 
+     * @param baseInputFolder
+     * @param destinationFolder
+     * @param filesToGenerate
+     */
+    public void write(File baseInputFolder, File destinationFolder, Set<String> filesToGenerate) {
+        Map<File, String> codeMap = getCode(baseInputFolder, destinationFolder);
+
+        boolean filterFilesToGenerate = enableCodeGenerationFiltering(codeMap, filesToGenerate);
+
+        for (Entry<File, String> entry : codeMap.entrySet()) {
+            if (filterFilesToGenerate) {
+                if (!filesToGenerate.contains(entry.getKey().getName())) {
+
+                    continue;
+                }
+            }
+
             SpecsIo.write(entry.getKey(), entry.getValue());
         }
     }
@@ -211,6 +240,26 @@ public class App extends ClavaNode {
     // private static List<File> getAllSourcefiles(List<File> sources) {
     // return getAllSourcefiles(sources, false);
     // }
+
+    private boolean enableCodeGenerationFiltering(Map<File, String> codeMap, Set<String> filesToGenerate) {
+        // If set of files to generate is null, return false
+        if (filesToGenerate == null) {
+            return false;
+        }
+
+        // Check if all files have different names
+        Set<String> filenames = new HashSet<>();
+        for (File file : codeMap.keySet()) {
+            boolean newElement = filenames.add(file.getName());
+            if (!newElement) {
+                SpecsLogs.msgInfo("Cannot use generation of modified code only, found to files with the same name '"
+                        + file.getName() + "'");
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
 
