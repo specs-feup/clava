@@ -455,6 +455,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         List<String> filenames = processSources(sources);
 
+        addFlagsFromFiles(filenames, parserOptions);
+
         // Sort filenames so that select order of files is consistent between OSes
         Collections.sort(filenames);
 
@@ -490,10 +492,21 @@ public class CxxWeaver extends ACxxWeaver {
 
     }
 
+    private void addFlagsFromFiles(List<String> filenames, List<String> parserOptions) {
+        // If all files are .cl files, add flags -x cl
+        long numberOfOpenCLFiles = filenames.stream()
+                .filter(filename -> filename.endsWith(".cl"))
+                .count();
+
+        if (numberOfOpenCLFiles == filenames.size()) {
+            parserOptions.add("-x");
+            parserOptions.add("cl");
+        }
+
+    }
+
     private List<String> processSources(List<File> sources) {
         List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
-        // List<String> sourceFiles = SpecsIo.getFiles(sources, App.getExtensionsImplementation());
-        // List<String> sourceFiles = SpecsIo.getFiles(sources, App.getPermittedExtensions());
 
         if (!sourceFiles.isEmpty()) {
             return sourceFiles;
