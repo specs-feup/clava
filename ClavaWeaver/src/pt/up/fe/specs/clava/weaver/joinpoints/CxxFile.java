@@ -231,7 +231,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String getFilepathImpl() {
-        return getPathImpl() + getNameImpl();
+        return new File(getPathImpl(), getNameImpl()).getPath();
     }
 
     @Override

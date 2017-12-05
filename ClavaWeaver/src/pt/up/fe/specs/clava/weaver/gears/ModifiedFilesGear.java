@@ -20,8 +20,6 @@ import java.util.Set;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.events.data.ActionEvent;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
 
@@ -45,7 +43,7 @@ public class ModifiedFilesGear extends AGear {
         }
 
         File file = new File(fileJp.getFilepathImpl());
-        Preconditions.checkArgument(file.isFile(), "Expected file '" + file + "' to exist");
+        // Preconditions.checkArgument(file.isFile(), "Expected file '" + file + "' to exist");
 
         modifiedFiles.add(file);
     }
