@@ -19,10 +19,13 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
+import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data.AddressSpaceQualifier;
+import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -42,14 +45,20 @@ public class QualTypeParser extends AClangNodeParser<QualType> {
         // 'const char *__restrict' __restrict
 
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
+
+        AddressSpaceQualifier addressSpaceQualifier = parser.apply(ClangGenericParsers::checkEnum,
+                AddressSpaceQualifier.getEnumHelper(), AddressSpaceQualifier.NONE);
+
         List<Qualifier> qualifiers = parser.apply(ClangDataParsers::parseQualifiers);
+
+        QualTypeData qualTypeData = new QualTypeData(addressSpaceQualifier, qualifiers);
 
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 1);
 
         Type qualifiedType = toType(children.get(0));
 
-        return ClavaNodeFactory.qualType(qualifiers, typeData, node.getInfo(), qualifiedType);
+        return ClavaNodeFactory.qualType(qualTypeData, typeData, node.getInfo(), qualifiedType);
     }
 
 }
