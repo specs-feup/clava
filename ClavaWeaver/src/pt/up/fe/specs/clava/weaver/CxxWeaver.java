@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
+import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms;
 import pt.up.fe.specs.clava.weaver.importable.Format;
@@ -152,6 +153,9 @@ public class CxxWeaver extends ACxxWeaver {
         addBooleanOption(CxxWeaverOption.DISABLE_CODE_GENERATION, "ncg", "no-code-gen",
                 "Disables automatic code generation");
 
+        addBooleanOption(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY, "gom", "generate-only-if-modified",
+                "Disables automatic code generation");
+
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_CLAVA_INFO.getName(),
                 WeaverOptionBuilder.build("nci", "no-clava-info",
                         "Disables printing of information about Clava", CxxWeaverOption.DISABLE_CLAVA_INFO));
@@ -227,6 +231,9 @@ public class CxxWeaver extends ACxxWeaver {
     // Weaver configuration
     private DataStore args = null;
 
+    // Gears
+    private final ModifiedFilesGear modifiedFilesGear;
+
     // Parsed program state
     // private App app = null;
     private Deque<App> apps;
@@ -248,7 +255,12 @@ public class CxxWeaver extends ACxxWeaver {
 
     private AccumulatorMap<String> accMap;
 
+    // private ClavaWeaverData weaverData;
+
     public CxxWeaver() {
+        // Gears
+        this.modifiedFilesGear = new ModifiedFilesGear();
+
         // Weaver configuration
         args = null;
         apps = null;
@@ -271,6 +283,9 @@ public class CxxWeaver extends ACxxWeaver {
         messagesToUser = null;
 
         accMap = null;
+
+        // weaverData = null;
+
     }
 
     public App getApp() {
@@ -334,6 +349,9 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
+        reset();
+
+        // weaverData = new ClavaWeaverData(args);
 
         apps = new ArrayDeque<>();
         userValuesStack = new ArrayDeque<>();
@@ -420,6 +438,11 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
 
         return true;
+    }
+
+    private void reset() {
+        // Reset gears
+        modifiedFilesGear.reset();
     }
 
     public List<String> getUserFlags() {
@@ -672,6 +695,9 @@ public class CxxWeaver extends ACxxWeaver {
         apps = null;
         userValuesStack = null;
 
+        // Clear weaver data
+        // weaverData = null;
+
         return true;
     }
 
@@ -742,7 +768,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public List<AGear> getGears() {
-        return null; // i.e., no gears currently being used
+        return Arrays.asList(modifiedFilesGear);
     }
 
     @Override
@@ -782,6 +808,29 @@ public class CxxWeaver extends ACxxWeaver {
         List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         App rebuiltApp = createApp(srcFolders, parserOptions);
 
+        System.out.println("TUs:"
+                + getApp().getTranslationUnits().stream().map(tu -> tu.getFilename())
+                        .collect(Collectors.toList()));
+
+        System.out.println("TUs Rebuilt:"
+                + rebuiltApp.getTranslationUnits().stream().map(tu -> tu.getFilename())
+                        .collect(Collectors.toList()));
+        /*        
+        System.out.println("BASE FOLDER:" + baseFolder);
+        System.out.println("TEMP FOLDER:" + tempFolder);
+        
+        List<String> relativePathsOriginal = getApp().getTranslationUnits().stream()
+                .map(tu -> SpecsIo.getRelativePath(tu.getFile().getAbsoluteFile(), getBaseSourceFolder()))
+                .collect(Collectors.toList());
+        
+        System.out.println("Relative Paths Original:" + relativePathsOriginal);
+        
+        List<String> relativePathsRebuilt = rebuiltApp.getTranslationUnits().stream()
+                .map(tu -> SpecsIo.getRelativePath(tu.getFile().getAbsoluteFile(), tempFolder))
+                .collect(Collectors.toList());
+        
+        System.out.println("Relative Paths Rebuilt:" + relativePathsRebuilt);
+        */
         // Base folder is now the temporary folder
         if (update) {
             // Discard current app
