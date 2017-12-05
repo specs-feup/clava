@@ -13,28 +13,35 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
-import java.util.Locale;
+import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.providers.StringProvider;
 
-import pt.up.fe.specs.clava.ast.extra.App;
+public enum AddressSpaceQualifier implements StringProvider {
 
-public enum Qualifier {
+    NONE,
+    GLOBAL,
+    LOCAL,
+    CONSTANT,
+    PRIVATE;
 
-    CONST,
-    RESTRICT,
-    VOLATILE;
-    // GLOBAL;
+    private static final Lazy<EnumHelper<AddressSpaceQualifier>> ENUM_HELPER = EnumHelper
+            .newLazyHelper(AddressSpaceQualifier.class, NONE);
+
+    public static EnumHelper<AddressSpaceQualifier> getEnumHelper() {
+        return ENUM_HELPER.get();
+    }
 
     public String getCode() {
-        if (this == RESTRICT) {
-            if (App.getCurrentStandard() != null && App.getCurrentStandard().isCxx()) {
-                return "__restrict__";
-            }
+        if (this == NONE) {
+            return "";
         }
 
-        // if (this == GLOBAL) {
-        // return "__global";
-        // }
+        return "__" + name().toLowerCase();
+    }
 
-        return name().toLowerCase(Locale.UK);
+    @Override
+    public String getString() {
+        return getCode();
     }
 }

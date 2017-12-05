@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +23,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
@@ -35,26 +35,27 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  */
 public class QualType extends Type {
 
-    private final List<Qualifier> qualifiers;
+    private final QualTypeData qualTypeData;
+    // private final List<Qualifier> qualifiers;
 
-    public QualType(List<Qualifier> qualifiers, TypeData typeData, ClavaNodeInfo info, Type qualifiedType) {
-        this(qualifiers, typeData, info, Arrays.asList(qualifiedType));
+    public QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info, Type qualifiedType) {
+        this(qualTypeData, typeData, info, Arrays.asList(qualifiedType));
     }
 
-    private QualType(List<Qualifier> qualifiers, TypeData typeData, ClavaNodeInfo info,
+    private QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(typeData, info, children);
 
-        this.qualifiers = new ArrayList<>(qualifiers);
+        this.qualTypeData = qualTypeData;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new QualType(qualifiers, getTypeData(), getInfo(), Collections.emptyList());
+        return new QualType(qualTypeData, getTypeData(), getInfo(), Collections.emptyList());
     }
 
     public List<Qualifier> getQualifiers() {
-        return Collections.unmodifiableList(qualifiers);
+        return qualTypeData.getQualifiers();
     }
 
     @Override
@@ -111,7 +112,12 @@ public class QualType extends Type {
 
     private String getCode(String type, String name) {
 
-        String qualifiersCode = ClavaCode.getQualifiersCode(qualifiers);
+        String addressQualifier = qualTypeData.getAddressSpaceQualifier().getCode();
+        if (!addressQualifier.isEmpty()) {
+            addressQualifier += " ";
+        }
+
+        String qualifiersCode = ClavaCode.getQualifiersCode(getQualifiers());
         // Type child = getQualifiedType();
 
         if (name != null) {
@@ -122,10 +128,10 @@ public class QualType extends Type {
             // return qualifiersCode + " " + type;
             int index = type.lastIndexOf(name);
             Preconditions.checkArgument(index != -1);
-            return type.substring(0, index) + qualifiersCode + " " + type.substring(index);
+            return addressQualifier + type.substring(0, index) + qualifiersCode + " " + type.substring(index);
         }
 
-        return type + " " + qualifiersCode;
+        return addressQualifier + type + " " + qualifiersCode;
 
     }
 
@@ -187,7 +193,7 @@ public class QualType extends Type {
 
     @Override
     public boolean isConst() {
-        if (qualifiers.contains(Qualifier.CONST)) {
+        if (getQualifiers().contains(Qualifier.CONST)) {
             return true;
         }
 

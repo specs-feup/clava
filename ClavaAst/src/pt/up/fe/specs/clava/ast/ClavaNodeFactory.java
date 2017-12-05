@@ -204,7 +204,7 @@ import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.Qualifier;
+import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
@@ -611,10 +611,10 @@ public class ClavaNodeFactory {
         return new TypedefType(declInfo, typeData, info, classType);
     }
 
-    public static QualType qualType(List<Qualifier> qualifiers, TypeData typeData, ClavaNodeInfo info,
+    public static QualType qualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
             Type qualifiedType) {
 
-        return new QualType(qualifiers, typeData, info, qualifiedType);
+        return new QualType(qualTypeData, typeData, info, qualifiedType);
     }
 
     public static PointerType pointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
