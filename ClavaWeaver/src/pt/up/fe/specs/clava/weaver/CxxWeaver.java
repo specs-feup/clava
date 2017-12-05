@@ -109,8 +109,22 @@ public class CxxWeaver extends ACxxWeaver {
         return WEAVED_CODE_FOLDERNAME;
     }
 
-    // private static final List<String> DEFAULT_DUMPER_FLAGS = Arrays.asList("-Wno-unknown-pragmas");
-    private static final List<String> DEFAULT_DUMPER_FLAGS = Arrays.asList();
+    private static final List<String> DEFAULT_COMMON_DUMPER_FLAGS = Arrays.asList("-Wno-unknown-pragmas");
+    // private static final List<String> DEFAULT_DUMPER_FLAGS = Arrays.asList();
+
+    private static final List<String> DEFAULT_DUMPER_FLAGS = buildDefaultDumperFlags();
+
+    private static List<String> buildDefaultDumperFlags() {
+        List<String> defaultFlags = new ArrayList<>();
+
+        // Default flags that are always added
+        defaultFlags.addAll(DEFAULT_COMMON_DUMPER_FLAGS);
+
+        // If MacOS, always add -ffreestanding
+        // TODO: Waiting for Martin method for detecting when needed
+
+        return defaultFlags;
+    }
 
     public static List<String> getDefaultFlags() {
         return DEFAULT_DUMPER_FLAGS;
