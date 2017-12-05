@@ -38,8 +38,12 @@ public interface CxxWeaverOption {
     DataKey<Boolean> CLEAN_INTERMEDIATE_FILES = KeyFactory.bool("Clean intermediate files")
             .setDefault(() -> true);
 
-    DataKey<FileList> LIBRARY_INCLUDES = LaraIKeyFactory.folderList("library includes")
-            .setLabel("Library Includes")
+    DataKey<FileList> HEADER_INCLUDES = LaraIKeyFactory.folderList("header includes")
+            .setLabel("Normal Includes")
+            .setDefault(() -> FileList.newInstance());
+
+    DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
+            .setLabel("System Includes")
             .setDefault(() -> FileList.newInstance());
 
     DataKey<Boolean> DISABLE_WEAVING = KeyFactory.bool("Disable Weaving")
@@ -51,7 +55,7 @@ public interface CxxWeaverOption {
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WEAVED_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
-                    LIBRARY_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION)
+                    HEADER_INCLUDES, SYSTEM_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION)
             .build();
 
 }

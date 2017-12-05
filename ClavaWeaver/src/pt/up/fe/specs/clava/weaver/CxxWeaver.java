@@ -142,9 +142,13 @@ public class CxxWeaver extends ACxxWeaver {
                 WeaverOptionBuilder.build("nci", "no-clava-info",
                         "Disables printing of information about Clava", CxxWeaverOption.DISABLE_CLAVA_INFO));
 
-        addOneArgOption(CxxWeaverOption.LIBRARY_INCLUDES, "is", "includes-system",
+        addOneArgOption(CxxWeaverOption.HEADER_INCLUDES, "ih", "includes-headers",
                 "dir1[,dir2]*",
-                "Includes folder for C/C++ headers that should be considered 'system libraries'. System libraries are not processed by Clava and do not appear in the AST.");
+                "Include folders for C/C++ headers. Include files that are used in C/C++ files are processed by Clava and appear in the AST.");
+
+        addOneArgOption(CxxWeaverOption.SYSTEM_INCLUDES, "is", "includes-system",
+                "dir1[,dir2]*",
+                "Include folders for C/C++ headers that should be considered 'system libraries'. System libraries are not processed by Clava and do not appear in the AST.");
 
         addOneArgOption(CxxWeaverOption.WEAVED_CODE_FOLDERNAME, "of", "output-foldername",
                 "dir",
@@ -355,10 +359,15 @@ public class CxxWeaver extends ACxxWeaver {
 
         parserOptions.addAll(sourceIncludeFolders);
 
-        // Add library folders
-        for (File libFolder : args.get(CxxWeaverOption.LIBRARY_INCLUDES)) {
+        // Add normal include folders
+        for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
+            parserOptions.add("-I" + parseIncludePath(includeFolder));
+        }
+
+        // Add system include folders
+        for (File includeFolder : args.get(CxxWeaverOption.SYSTEM_INCLUDES)) {
             parserOptions.add("-isystem");
-            parserOptions.add(parseIncludePath(libFolder));
+            parserOptions.add(parseIncludePath(includeFolder));
         }
 
         // Add standard
