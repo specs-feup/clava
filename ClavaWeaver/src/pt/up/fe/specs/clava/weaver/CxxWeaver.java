@@ -702,8 +702,10 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public void writeCode(File outputFolder) {
+        Set<String> modifiedFilenames = getModifiedFilenames();
+
         // Get files and contents to write
-        Map<File, String> files = getApp().getCode(baseFolder, outputFolder);
+        Map<File, String> files = getApp().getCode(baseFolder, outputFolder, modifiedFilenames);
 
         // Write files that have changed
         for (Entry<File, String> entry : files.entrySet()) {
@@ -718,6 +720,16 @@ public class CxxWeaver extends ACxxWeaver {
             SpecsLogs.msgInfo("Changes in file '" + destinationFile + "'");
             SpecsIo.write(destinationFile, code);
         }
+    }
+
+    private Set<String> getModifiedFilenames() {
+        // If option is disabled, return null
+        if (!args.get(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY)) {
+            return null;
+        }
+
+        // Option is enabled, get list of filenames to generate from AST
+        return modifiedFilesGear.getModifiedFilenames();
     }
 
     private static boolean areEqual(File expected, String actual) {

@@ -16,12 +16,14 @@ package pt.up.fe.specs.clava.weaver.gears;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.events.data.ActionEvent;
 
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 
 public class ModifiedFilesGear extends AGear {
 
@@ -35,6 +37,12 @@ public class ModifiedFilesGear extends AGear {
     public void onAction(ActionEvent data) {
         // All join points are AJoinPoint instances
         AJoinPoint jp = (AJoinPoint) data.getJoinPoint();
+
+        // If join point 'program', automatically mark all files as modified
+        if (jp instanceof CxxProgram) {
+            ((CxxProgram) jp).getNode().getFiles().stream().forEach(modifiedFiles::add);
+            return;
+        }
 
         // Store file of this join point
         CxxFile fileJp = (CxxFile) jp.ancestorImpl("file");
@@ -50,6 +58,10 @@ public class ModifiedFilesGear extends AGear {
 
     public Set<File> getModifiedFiles() {
         return modifiedFiles;
+    }
+
+    public Set<String> getModifiedFilenames() {
+        return modifiedFiles.stream().map(File::getName).collect(Collectors.toSet());
     }
 
     @Override
