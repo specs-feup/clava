@@ -50,7 +50,7 @@ public interface CxxWeaverOption {
             .setLabel("Disable weaving (only executes the LARA code, does not parse C/C++ code)");
 
     DataKey<Boolean> DISABLE_CODE_GENERATION = KeyFactory.bool("Disable Code Generation")
-            .setLabel("Disable code generation (except sources files that are explictly writen in LARA aspects)");
+            .setLabel("Disable code generation (still possible to generate code explictly from LARA)");
 
     DataKey<Boolean> GENERATE_MODIFIED_CODE_ONLY = KeyFactory.bool("Generate Modified Code Only")
             .setLabel("Generate code from AST only if tree is modified (otherwise copies original file)");

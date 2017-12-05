@@ -159,7 +159,7 @@ public class CxxWeaver extends ACxxWeaver {
                 "Disables automatic code generation");
 
         addBooleanOption(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY, "gom", "generate-only-if-modified",
-                "Disables automatic code generation");
+                "Generate code from AST for a file only if file is modified by a LARA action. Otherwise, the original files is copied");
 
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_CLAVA_INFO.getName(),
                 WeaverOptionBuilder.build("nci", "no-clava-info",
