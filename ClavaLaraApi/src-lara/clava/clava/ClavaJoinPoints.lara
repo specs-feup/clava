@@ -1,3 +1,5 @@
+import clava.Clava;
+
 /**
  * @class
  */
@@ -31,10 +33,10 @@ ClavaJoinPoints.constArrayType = function(type, dims) {
 	
 	if(typeofType === "string") {
 		
-		return AstFactory.constArrayType(type, dims);
+		return AstFactory.constArrayType(type, Clava.getStandard(), dims);
 	} else if(Java.type("pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType").class.isInstance(type)) {
 		
-		return AstFactory.constArrayType(type.getNode(), dims);
+		return AstFactory.constArrayType(type.getNode(), Clava.getStandard(), dims);
 	} else {
 		
 		throw 'ClavaJoinPoints.constArrayType: illegal argument "type", needs to be either a string or a type join point';
