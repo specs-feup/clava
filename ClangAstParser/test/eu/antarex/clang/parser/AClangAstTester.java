@@ -184,6 +184,10 @@ public abstract class AClangAstTester {
         files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "c"),
                 file -> SpecsIo.getCanonicalPath(file)));
 
+        // Add OpenCL sources
+        files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "cl"),
+                file -> SpecsIo.getCanonicalPath(file)));
+
         // Parse files
         ClangRootNode ast = new ClangAstParser(showClangDump).parse(files, compilerOptions);
 
@@ -233,6 +237,12 @@ public abstract class AClangAstTester {
         files2.addAll(
                 SpecsCollections.map(
                         SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "c"),
+                        file -> SpecsIo.getCanonicalPath(file)));
+
+        // OpenCL sources
+        files2.addAll(
+                SpecsCollections.map(
+                        SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "cl"),
                         file -> SpecsIo.getCanonicalPath(file)));
 
         // Parse files
