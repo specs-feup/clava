@@ -18,9 +18,24 @@ public class AttrData {
     private final boolean isInherited;
     private final boolean isImplicit;
 
+    /**
+     * Helper constructor, which sets isInherited and isImplicit to false.
+     */
+    public AttrData() {
+        this(false, false);
+    }
+
     public AttrData(boolean isInherited, boolean isImplicit) {
         this.isInherited = isInherited;
         this.isImplicit = isImplicit;
+    }
+
+    public boolean isInherited() {
+        return isInherited;
+    }
+
+    public boolean isImplicit() {
+        return isImplicit;
     }
 
 }

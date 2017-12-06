@@ -125,9 +125,16 @@ public class SourceRange {
     }
 
     public String getFilename() {
-        Preconditions.checkNotNull(start.getFilepath());
+        return getFilenameTry().get();
+    }
 
-        return new File(start.getFilepath()).getName();
+    public Optional<String> getFilenameTry() {
+        if (start.getFilepath() == null) {
+            return Optional.empty();
+        }
+        // Preconditions.checkNotNull(start.getFilepath());
+
+        return Optional.of(new File(start.getFilepath()).getName());
     }
 
     public File getStartFile() {
@@ -403,6 +410,12 @@ public class SourceRange {
         sourceLines.set(0, adjustedStart);
 
         return Optional.of(sourceLines.stream().collect(Collectors.joining("\n")));
+    }
+
+    public boolean isOpenCL() {
+        return getFilenameTry()
+                .map(filename -> filename.toLowerCase().endsWith(".cl"))
+                .orElse(false);
     }
 
 }
