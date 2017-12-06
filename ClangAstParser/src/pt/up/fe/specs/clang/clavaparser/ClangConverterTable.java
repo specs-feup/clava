@@ -121,7 +121,10 @@ public class ClangConverterTable implements AutoCloseable {
 
         // If map does not have a conversor, stop
         if (!converter.containsKey(clangNode.getName())) {
-            UndefinedParser undefinedParser = new UndefinedParser(this);
+            // Check if it has content
+            boolean hasContent = !clangNode.getContentTry().orElse("").isEmpty();
+
+            UndefinedParser undefinedParser = new UndefinedParser(this, hasContent);
             return undefinedParser.parse(clangNode);
 
             // List<ClavaNode> children = clangNode.getChildrenStream()

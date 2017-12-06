@@ -11,9 +11,11 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.clavaparser;
+package pt.up.fe.specs.clang.clavaparser.attr;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
+import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
+import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;

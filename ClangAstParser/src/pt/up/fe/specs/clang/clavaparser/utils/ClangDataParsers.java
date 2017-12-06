@@ -122,7 +122,7 @@ public class ClangDataParsers {
     }
 
     public static ParserResult<FunctionDeclParserResult> parseFunctionDecl(StringSlice string,
-            ListParser<ClavaNode> children) {
+            ListParser<ClavaNode> children, ClangNode node) {
 
         StringParser parser = new StringParser(string);
 
@@ -146,10 +146,28 @@ public class ClangDataParsers {
         List<ParmVarDecl> params = children.pop(ParmVarDecl.class);
 
         int childrenLeft = children.getList().size();
-        Preconditions.checkArgument(childrenLeft < 2, "Expected only one child or none, got " + childrenLeft);
+
+        // Check if OpenCL file
+        boolean isOpenCL = node.getLocation().isOpenCL();
+
+        int maxNumberChildrenLeft = 1;
+
+        // If not OpenCL, can have an additional child
+        if (isOpenCL) {
+            maxNumberChildrenLeft++;
+        }
+
+        // Preconditions.checkArgument(childrenLeft < 2, "Expected only one child or none, got " + childrenLeft);
+        Preconditions.checkArgument(childrenLeft <= maxNumberChildrenLeft,
+                "Expected children to be at most " + maxNumberChildrenLeft + ", got " + childrenLeft);
 
         // Optionally, there can be a Stmt
         Stmt definition = children.isEmpty() ? null : children.popSingle(ClangNodeParser::toStmt);
+
+        // If OpenCL, can have a kernel attribute
+        if (!children.isEmpty()) {
+            System.out.println("CHILD:" + children.popSingle().getCode());
+        }
 
         FunctionDeclData data = new FunctionDeclData(storageClass, isInline, isVirtual, isModulePrivate, isPure,
                 isDelete, exceptionSpecifier, exceptionAddress, templateArguments);

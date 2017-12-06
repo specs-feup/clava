@@ -27,6 +27,8 @@ import java.util.stream.Stream;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clava.parser.DelayedParsing;
+import pt.up.fe.specs.clang.clavaparser.attr.FinalAttrParser;
+import pt.up.fe.specs.clang.clavaparser.attr.OpenCLKernelAttrParser;
 import pt.up.fe.specs.clang.clavaparser.comment.FullCommentParser;
 import pt.up.fe.specs.clang.clavaparser.comment.InlineCommandCommentParser;
 import pt.up.fe.specs.clang.clavaparser.comment.ParagraphCommentParser;
@@ -363,6 +365,7 @@ public class ClavaParser implements AutoCloseable {
 
         /* attributes */
         converter.put("FinalAttr", FinalAttrParser::new);
+        converter.put("OpenCLKernelAttr", OpenCLKernelAttrParser::new);
 
         return converter;
     }

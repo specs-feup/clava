@@ -11,35 +11,35 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.clavaparser.extra;
-
-import java.util.List;
+package pt.up.fe.specs.clang.clavaparser.attr;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
+import pt.up.fe.specs.clava.ast.attr.data.AttrData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
-public class UndefinedParser extends AClangNodeParser<Undefined> {
+public class OpenCLKernelAttrParser extends AClangNodeParser<OpenCLKernelAttr> {
 
-    public UndefinedParser(ClangConverterTable converter) {
-        super(converter);
-    }
-
-    public UndefinedParser(ClangConverterTable converter, boolean hasContent) {
-        super(converter, hasContent);
+    public OpenCLKernelAttrParser(ClangConverterTable converter) {
+        super(converter, false);
     }
 
     @Override
-    protected Undefined parse(ClangNode node, StringParser parser) {
-        parser.clear();
-        List<ClavaNode> children = parseChildren(node.getChildrenStream(), node.getName() + "Parser");
+    protected OpenCLKernelAttr parse(ClangNode node, StringParser parser) {
 
-        return ClavaNodeFactory.undefined(node.getName(), node.getDescription(), node.getInfo(),
-                children);
+        // Examples:
+        //
+
+        // Never has content?
+
+        AttrData attrData = new AttrData();
+
+        checkNoChildren(node);
+
+        return ClavaNodeFactory.openCLKernelAttr(attrData, node.getInfo());
     }
 
 }
