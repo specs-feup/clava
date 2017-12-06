@@ -204,6 +204,29 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * true if this file is an OpenCL filetype
+     */
+    public abstract Boolean getIsOpenCLImpl();
+
+    /**
+     * true if this file is an OpenCL filetype
+     */
+    public final Object getIsOpenCL() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isOpenCL", Optional.empty());
+        	}
+        	Boolean result = this.getIsOpenCLImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isOpenCL", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isOpenCL", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select stmts
      * @return 
      */
@@ -597,6 +620,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("relativeFolderpath");
         attributes.add("isCxx");
         attributes.add("isHeader");
+        attributes.add("isOpenCL");
     }
 
     /**
@@ -656,6 +680,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         RELATIVEFOLDERPATH("relativeFolderpath"),
         ISCXX("isCxx"),
         ISHEADER("isHeader"),
+        ISOPENCL("isOpenCL"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

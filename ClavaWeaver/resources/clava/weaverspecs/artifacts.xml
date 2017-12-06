@@ -89,6 +89,7 @@
 		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file relative to the program base folder"/>
 		<attribute name="isCxx" type="Boolean" tooltip="true if this file is considered a C++ file"/>
 		<attribute name="isHeader" type="Boolean" tooltip="true if this file is considered a header file"/>
+		<attribute name="isOpenCL" type="Boolean" tooltip="true if this file is an OpenCL filetype"/>
 	</artifact>
 
 	<!-- RECORD -->
@@ -298,6 +299,7 @@
 		<attribute name="desugar" type="joinpoint" />
 		<attribute name="isBuiltin" type="Boolean" />
 		<attribute name="constant" type="Boolean" />
+		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
 	</artifact>
 
 
@@ -328,6 +330,9 @@
 		<attribute name="name" type="String" />
 	</artifact>
 
+
+
+	<!-- OPENMP -->
 
 	<!-- OMP -->
 	<artifact class="omp" default="kind">

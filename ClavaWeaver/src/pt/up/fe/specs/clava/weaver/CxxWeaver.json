@@ -1405,6 +1405,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "If the type encapsulates another type, returns the encapsulated type",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "unwrap"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -1945,6 +1954,15 @@
                            {
                               "type": "Boolean",
                               "name": "constant"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "If the type encapsulates another type, returns the encapsulated type",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "unwrap"
                            }]
                },
                {
@@ -3983,6 +4001,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "If the type encapsulates another type, returns the encapsulated type",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "unwrap"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -5888,6 +5915,15 @@
                            {
                               "type": "Boolean",
                               "name": "isHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this file is an OpenCL filetype",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isOpenCL"
                            }]
                },
                {
@@ -10839,6 +10875,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "If the type encapsulates another type, returns the encapsulated type",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "unwrap"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12340,6 +12385,15 @@
                            {
                               "type": "Boolean",
                               "name": "constant"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "If the type encapsulates another type, returns the encapsulated type",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "unwrap"
                            }]
                },
                {

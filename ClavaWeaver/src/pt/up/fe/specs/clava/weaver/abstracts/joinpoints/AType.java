@@ -305,6 +305,29 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * If the type encapsulates another type, returns the encapsulated type
+     */
+    public abstract AType getUnwrapImpl();
+
+    /**
+     * If the type encapsulates another type, returns the encapsulated type
+     */
+    public final Object getUnwrap() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "unwrap", Optional.empty());
+        	}
+        	AType result = this.getUnwrapImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "unwrap", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "unwrap", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -335,6 +358,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("desugar");
         attributes.add("isBuiltin");
         attributes.add("constant");
+        attributes.add("unwrap");
     }
 
     /**
@@ -376,6 +400,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
+        UNWRAP("unwrap"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

@@ -359,4 +359,9 @@ public class CxxFile extends AFile {
 
         tunit.write(baseSourceFolder, destinationFolder);
     }
+
+    @Override
+    public Boolean getIsOpenCLImpl() {
+        return tunit.isOpenCLFile();
+    }
 }

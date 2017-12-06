@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
+import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
@@ -105,6 +106,17 @@ public class CxxType extends AType {
     @Override
     public Boolean getIsPointerImpl() {
         return type instanceof PointerType;
+    }
+
+    @Override
+    public AType getUnwrapImpl() {
+        Type unwrappedType = Types.getSingleElement(type);
+
+        if (unwrappedType == null) {
+            return null;
+        }
+
+        return (AType) CxxJoinpoints.create(unwrappedType, this);
     }
 
 }

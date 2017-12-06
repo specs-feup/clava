@@ -236,6 +236,15 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Get value on attribute unwrap
+     * @return the attribute's value
+     */
+    @Override
+    public AType getUnwrapImpl() {
+        return this.aType.getUnwrapImpl();
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -424,6 +433,7 @@ public abstract class ATemplateSpecializationType extends AType {
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
+        UNWRAP("unwrap"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
