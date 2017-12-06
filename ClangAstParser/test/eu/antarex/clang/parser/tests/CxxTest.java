@@ -157,4 +157,9 @@ public class CxxTest {
         new CxxTester("class_template.cpp", "class_template.h").test();
     }
 
+    @Test
+    public void testBuiltinTypes() {
+        new CxxTester("builtin_types.cpp").test();
+    }
+
 }

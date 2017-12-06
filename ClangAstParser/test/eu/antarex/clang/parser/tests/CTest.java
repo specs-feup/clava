@@ -81,4 +81,9 @@ public class CTest {
     public void testGnuStmtExpr() {
         new CTester("gnu_stmt_expr.c").test();
     }
+
+    @Test
+    public void testBuiltinTypesCl() {
+        new CTester("builtin_types.cl").addFlags("-x", "cl").test();
+    }
 }
