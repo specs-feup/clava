@@ -24,7 +24,9 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
@@ -176,6 +178,14 @@ public class Types {
 
         if (type instanceof ArrayType) {
             return ((ArrayType) type).getElementType();
+        }
+
+        if (type instanceof QualType) {
+            return ((QualType) type).getQualifiedType();
+        }
+
+        if (type instanceof TypedefType) {
+            return ((TypedefType) type).getTypeClass();
         }
 
         return null;
