@@ -146,4 +146,19 @@ public class TypeData {
         return true;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        string.append("Bare type: ").append(bareType);
+        string.append(", has sugar: ").append(hasSugar);
+        string.append(", is dependent: ").append(isDependent);
+        string.append(", type dependendy: ").append(typeDependency);
+        string.append(", is variably modified: ").append(isVariablyModified);
+        string.append(", contains unexpanded parameter pack: ").append(containsUnexpandedParameterPack);
+        string.append(", is from AST: ").append(isFromAst);
+
+        return string.toString();
+    }
+
 }

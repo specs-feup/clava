@@ -107,4 +107,5 @@ public class PointerType extends Type {
 
         return true;
     }
+
 }

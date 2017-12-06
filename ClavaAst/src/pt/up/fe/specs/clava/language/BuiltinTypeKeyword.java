@@ -17,23 +17,41 @@ import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
+/**
+ * 
+ * @author JoaoBispo
+ *
+ */
 public enum BuiltinTypeKeyword implements StringProvider {
+    // List that can be used as base for keywords:
+    // http://llvm-cs.pcc.me.uk/tools/clang/include/clang/AST/BuiltinTypes.def
+    VOID,
+    BOOL_C99("_Bool"),
+    BOOL_CXX("bool"),
+    CHAR,
     SIGNED,
     UNSIGNED,
-    CHAR,
     WCHAR_T,
     CHAR16_T,
     CHAR32_T,
     INT,
     SHORT,
     LONG,
+    HALF("__fp16"),
     FLOAT,
     DOUBLE,
     LONG_DOUBLE("long double"),
-    BOOL_C99("_Bool"),
-    BOOL_CXX("bool"),
-    NULLPTR("nullptr_t"),
-    VOID;
+    FLOAT16("_Float16"),
+    FLOAT128("__float128"),
+    INT128("__int128"),
+
+    // OpenCL types
+    SAMPLER("sampler_t"),
+    EVENT("event_t"),
+    CLK_EVENT("clk_event_t"),
+    QUEUE("queue_t"),
+    RESERVE_ID("reserve_id_t"),
+    NULLPTR("nullptr_t");
 
     private static final Lazy<EnumHelper<BuiltinTypeKeyword>> HELPER = EnumHelper
             .newLazyHelper(BuiltinTypeKeyword.class);
