@@ -33,7 +33,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -42,7 +41,6 @@ import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
-import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.GlobalManager;
 import pt.up.fe.specs.clava.utils.SourceType;
@@ -60,16 +58,16 @@ public class App extends ClavaNode {
     // This limits the number of App objects to one per thread
     // This is being used because o Qualifier needs to generate different code for restrict
     // depending on the current compilation standard
-    private static final ThreadLocal<Standard> CURRENT_STANDARD = new ThreadLocal<>();
+    // private static final ThreadLocal<Standard> CURRENT_STANDARD = new ThreadLocal<>();
 
-    public static Standard getCurrentStandard() {
-        Standard standard = CURRENT_STANDARD.get();
-        if (standard == null) {
-            SpecsLogs.msgLib("App.getCurrentStandard: App object has not been initialized");
-        }
-
-        return standard;
-    }
+    // public static Standard getCurrentStandard() {
+    // Standard standard = CURRENT_STANDARD.get();
+    // if (standard == null) {
+    // SpecsLogs.msgLib("App.getCurrentStandard: App object has not been initialized");
+    // }
+    //
+    // return standard;
+    // }
 
     // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList("c", "cpp", "cl"));
     // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
@@ -133,7 +131,8 @@ public class App extends ClavaNode {
         // this.inlineCache = new HashMap<>();
 
         // System.out.println("SETTING STANDARD:" + appData.get(ClavaOptions.STANDARD));
-        CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
+
+        // CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
     }
 
     @Override

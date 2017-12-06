@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.decl.data;
 import java.util.Collections;
 import java.util.List;
 
+import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 
 public class FunctionDeclData {
@@ -35,14 +36,16 @@ public class FunctionDeclData {
     private final ExceptionType exceptionSpecifier;
     private final long exceptionAddress;
     private final List<TemplateArgument> templateArguments;
+    private final OpenCLKernelAttr openClKernelAttr;
 
     public FunctionDeclData() {
-        this(StorageClass.NONE, false, false, false, false, false, ExceptionType.NONE, -1, Collections.emptyList());
+        this(StorageClass.NONE, false, false, false, false, false, ExceptionType.NONE, -1, Collections.emptyList(),
+                null);
     }
 
     public FunctionDeclData(StorageClass storageClass, boolean isInline, boolean isVirtual, boolean isModulePrivate,
             boolean isPure, boolean isDelete, ExceptionType exceptionSpecifier, long exceptionAddress,
-            List<TemplateArgument> templateArguments) {
+            List<TemplateArgument> templateArguments, OpenCLKernelAttr openClKernelAttr) {
         this.storageClass = storageClass;
         this.isInline = isInline;
         this.isVirtual = isVirtual;
@@ -52,6 +55,7 @@ public class FunctionDeclData {
         this.exceptionSpecifier = exceptionSpecifier;
         this.exceptionAddress = exceptionAddress;
         this.templateArguments = templateArguments;
+        this.openClKernelAttr = openClKernelAttr;
     }
 
     public StorageClass getStorageClass() {
@@ -88,6 +92,10 @@ public class FunctionDeclData {
 
     public boolean isStatic() {
         return getStorageClass() == StorageClass.STATIC;
+    }
+
+    public boolean hasOpenCLKernelAttr() {
+        return openClKernelAttr != null;
     }
 
     @Override

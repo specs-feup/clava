@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
@@ -117,7 +116,8 @@ public class QualType extends Type {
             addressQualifier += " ";
         }
 
-        String qualifiersCode = ClavaCode.getQualifiersCode(getQualifiers());
+        // String qualifiersCode = ClavaCode.getQualifiersCode(getQualifiers());
+        String qualifiersCode = qualTypeData.getQualifiersCode();
         // Type child = getQualifiedType();
 
         if (name != null) {

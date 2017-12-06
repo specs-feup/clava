@@ -22,19 +22,19 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class ClavaCode {
 
-    public static String getQualifiersCode(List<Qualifier> qualifiers) {
-        return qualifiers.stream().map(Qualifier::getCode)
+    public static String getQualifiersCode(List<Qualifier> qualifiers, boolean isCxx) {
+        return qualifiers.stream().map(qualifier -> qualifier.getCode(isCxx))
                 .collect(Collectors.joining(" "));
     }
 
     public static String getRelativePath(File baseFile, File baseInputFolder) {
         String relativePath = SpecsIo.getRelativePath(baseFile, baseInputFolder);
-    
+
         // Avoid writing outside of the destination folder, if relative path has '../', remove them
         while (relativePath.startsWith("../")) {
             relativePath = relativePath.substring("../".length());
         }
-    
+
         return relativePath;
     }
 }

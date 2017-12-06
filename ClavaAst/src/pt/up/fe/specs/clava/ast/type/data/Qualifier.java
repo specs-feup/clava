@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.type.data;
 
 import java.util.Locale;
 
-import pt.up.fe.specs.clava.ast.extra.App;
-
 public enum Qualifier {
 
     CONST,
@@ -24,9 +22,14 @@ public enum Qualifier {
     VOLATILE;
     // GLOBAL;
 
-    public String getCode() {
+    public String getCode(boolean isCxx) {
         if (this == RESTRICT) {
-            if (App.getCurrentStandard() != null && App.getCurrentStandard().isCxx()) {
+            // if (App.getCurrentStandard() != null && App.getCurrentStandard().isCxx()) {
+            // System.out.println("CURRENT STANDARD:" + App.getCurrentStandard());
+            // System.out.println("IS C++:" + App.getCurrentStandard().isCxx());
+            // return "__restrict__";
+            // }
+            if (isCxx) {
                 return "__restrict__";
             }
         }

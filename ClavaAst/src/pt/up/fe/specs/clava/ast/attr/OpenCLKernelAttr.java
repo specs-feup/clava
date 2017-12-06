@@ -35,4 +35,9 @@ public class OpenCLKernelAttr extends Attr {
         return new OpenCLKernelAttr(getAttrData(), getInfo(), Collections.emptyList());
     }
 
+    @Override
+    public String getCode() {
+        return "__kernel";
+    }
+
 }

@@ -226,6 +226,10 @@ public class FunctionDecl extends DeclaratorDecl {
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
 
+        if (getFunctionDeclData().hasOpenCLKernelAttr()) {
+            code.append("__kernel ");
+        }
+
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");
         }

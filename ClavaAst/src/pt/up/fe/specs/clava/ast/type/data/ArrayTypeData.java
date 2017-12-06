@@ -15,14 +15,19 @@ package pt.up.fe.specs.clava.ast.type.data;
 
 import java.util.List;
 
+import pt.up.fe.specs.clava.ClavaCode;
+import pt.up.fe.specs.clava.language.Standard;
+
 public class ArrayTypeData {
 
     private final ArraySizeType arraySizeType;
     private final List<Qualifier> qualifiers;
+    private final Standard standard;
 
-    public ArrayTypeData(ArraySizeType arraySizeType, List<Qualifier> qualifiers) {
+    public ArrayTypeData(ArraySizeType arraySizeType, List<Qualifier> qualifiers, Standard standard) {
         this.arraySizeType = arraySizeType;
         this.qualifiers = qualifiers;
+        this.standard = standard;
     }
 
     public ArraySizeType getArraySizeType() {
@@ -31,5 +36,9 @@ public class ArrayTypeData {
 
     public List<Qualifier> getQualifiers() {
         return qualifiers;
+    }
+
+    public String getQualifiersCode() {
+        return ClavaCode.getQualifiersCode(qualifiers, standard.isCxx());
     }
 }
