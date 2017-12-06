@@ -199,6 +199,12 @@ public class TranslationUnit extends ClavaNode {
         return HEADER_EXTENSIONS.contains(extension.toLowerCase());
     }
 
+    public boolean isOpenCLFile() {
+        String extension = SpecsIo.getExtension(filename);
+
+        return extension.toLowerCase().equals("cl");
+    }
+
     public boolean isCXXUnit() {
         return isCxxUnit.get();
     }
