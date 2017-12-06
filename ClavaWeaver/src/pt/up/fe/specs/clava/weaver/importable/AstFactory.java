@@ -290,11 +290,11 @@ public class AstFactory {
     // ClavaNodeFactory.whileStmt(info, condition, thenStmt)
     // }
 
-    public static ACxxWeaverJoinPoint constArrayType(String typeCode, List<Integer> dims) {
-        return constArrayType(ClavaNodeFactory.literalType(typeCode), dims);
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, Standard standard, List<Integer> dims) {
+        return constArrayType(ClavaNodeFactory.literalType(typeCode), standard, dims);
     }
 
-    public static ACxxWeaverJoinPoint constArrayType(Type outType, List<Integer> dims) {
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -304,7 +304,7 @@ public class AstFactory {
         ListIterator<Integer> li = dims.listIterator(dims.size());
         while (li.hasPrevious()) {
 
-            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList());
+            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
             TypeData typeData = new TypeData(outType.getCode());
             ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
 
