@@ -32,6 +32,7 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
@@ -45,6 +46,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -409,5 +411,9 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         }
 
         return getConverter().parse(node);
+    }
+
+    protected Standard getStandard() {
+        return getClangRootData().getConfig().get(ClavaOptions.STANDARD);
     }
 }

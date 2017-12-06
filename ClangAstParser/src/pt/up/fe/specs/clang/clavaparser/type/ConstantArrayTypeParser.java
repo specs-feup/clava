@@ -43,7 +43,7 @@ public class ConstantArrayTypeParser extends AClangNodeParser<ConstantArrayType>
 
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
         Integer constant = parser.apply(ClangGenericParsers::parseInt);
-        ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType);
+        ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType, getStandard());
 
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 1);

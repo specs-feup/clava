@@ -25,6 +25,7 @@ import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClavaParserUtils;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attr;
+import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
@@ -56,6 +57,7 @@ import pt.up.fe.specs.clava.ast.type.data.TypeDependency;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -165,12 +167,13 @@ public class ClangDataParsers {
         Stmt definition = children.isEmpty() ? null : children.popSingle(ClangNodeParser::toStmt);
 
         // If OpenCL, can have a kernel attribute
-        if (!children.isEmpty()) {
-            System.out.println("CHILD:" + children.popSingle().getCode());
+        OpenCLKernelAttr openClKernelAttr = null;
+        if (!children.isEmpty() && isOpenCL) {
+            openClKernelAttr = children.popSingle(OpenCLKernelAttr.class::cast);
         }
 
         FunctionDeclData data = new FunctionDeclData(storageClass, isInline, isVirtual, isModulePrivate, isPure,
-                isDelete, exceptionSpecifier, exceptionAddress, templateArguments);
+                isDelete, exceptionSpecifier, exceptionAddress, templateArguments, openClKernelAttr);
 
         FunctionDeclParserResult result = new FunctionDeclParserResult(data, params, definition);
 
@@ -430,7 +433,7 @@ public class ClangDataParsers {
 
     }
 
-    public static ParserResult<ArrayTypeData> parseArrayType(StringSlice string) {
+    public static ParserResult<ArrayTypeData> parseArrayType(StringSlice string, Standard standard) {
         StringParser parser = new StringParser(string);
 
         ArraySizeType sizeType = ArraySizeType.NORMAL;
@@ -443,7 +446,7 @@ public class ClangDataParsers {
 
         List<Qualifier> qualifiers = parser.apply(ClangDataParsers::parseQualifiers);
 
-        ArrayTypeData data = new ArrayTypeData(sizeType, qualifiers);
+        ArrayTypeData data = new ArrayTypeData(sizeType, qualifiers, standard);
 
         return new ParserResult<>(parser.getCurrentString(), data);
     }

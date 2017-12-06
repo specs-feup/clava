@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.type.data.AddressSpaceQualifier;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class QualTypeParser extends AClangNodeParser<QualType> {
@@ -51,7 +52,9 @@ public class QualTypeParser extends AClangNodeParser<QualType> {
 
         List<Qualifier> qualifiers = parser.apply(ClangDataParsers::parseQualifiers);
 
-        QualTypeData qualTypeData = new QualTypeData(addressSpaceQualifier, qualifiers);
+        Standard standard = getStandard();
+
+        QualTypeData qualTypeData = new QualTypeData(addressSpaceQualifier, qualifiers, standard);
 
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 1);

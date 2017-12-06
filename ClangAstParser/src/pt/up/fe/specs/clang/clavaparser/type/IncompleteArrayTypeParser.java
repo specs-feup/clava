@@ -40,7 +40,7 @@ public class IncompleteArrayTypeParser extends AClangNodeParser<IncompleteArrayT
         // 'char *[]'
 
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
-        ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType);
+        ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType, getStandard());
 
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 1);

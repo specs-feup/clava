@@ -55,7 +55,7 @@ public class VariableArrayTypeParser extends AClangNodeParser<Type> {
         }
         System.out.println("---");*/
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
-        ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType);
+        ArrayTypeData arrayTypeData = parser.apply(ClangDataParsers::parseArrayType, getStandard());
 
         // String location = parser.apply(ClangGenericParsers::parseLocation);
         // System.out.println("LOCATION:" + location);
