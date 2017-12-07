@@ -14,6 +14,7 @@
 package pt.up.fe.specs.cxxweaver;
 
 import java.io.File;
+import java.util.function.Predicate;
 
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.lara.doc.LaraDocHtmlGenerator;
@@ -42,7 +43,9 @@ public class ClavaWeaverDoc {
 
         String laraDse = "C:\\Users\\JoaoBispo\\Desktop\\shared\\antarex\\lara-dse\\";
 
-        LaraDocTop laraDocTop = new LaraDocParser(null, CxxWeaver.buildLanguageSpecification())
+        Predicate<File> nameFilter = name -> !name.getName().startsWith("_");
+
+        LaraDocTop laraDocTop = new LaraDocParser(nameFilter, CxxWeaver.buildLanguageSpecification())
                 .addPath("Clava API", new File(laraApi))
                 .addPath("Clava API", new File(laraiApi))
                 .addPath("Clava API", new File(clavaApi))
