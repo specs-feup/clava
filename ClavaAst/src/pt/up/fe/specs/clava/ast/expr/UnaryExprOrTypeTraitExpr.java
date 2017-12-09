@@ -61,7 +61,8 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         this.argType = argType;
 
         if (argType == null) {
-            Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
+            // This can happen when copying nodes
+            // Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
         } else {
             Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
         }

@@ -53,8 +53,10 @@ public enum BuiltinTypeKeyword implements StringProvider {
     RESERVE_ID("reserve_id_t"),
     NULLPTR("nullptr_t");
 
-    private static final Lazy<EnumHelper<BuiltinTypeKeyword>> HELPER = EnumHelper
-            .newLazyHelper(BuiltinTypeKeyword.class);
+    // private static final Lazy<EnumHelper<BuiltinTypeKeyword>> HELPER = EnumHelper
+    // .newLazyHelper(BuiltinTypeKeyword.class);
+    private static final Lazy<EnumHelper<BuiltinTypeKeyword>> HELPER = Lazy.newInstance(
+            () -> new EnumHelper<>(BuiltinTypeKeyword.class).addAlias("half", HALF));
 
     public static EnumHelper<BuiltinTypeKeyword> getHelper() {
         return HELPER.get();
