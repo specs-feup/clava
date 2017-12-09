@@ -139,6 +139,14 @@ public abstract class ANamedDecl extends ADecl {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aDecl.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -264,6 +272,7 @@ public abstract class ANamedDecl extends ADecl {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

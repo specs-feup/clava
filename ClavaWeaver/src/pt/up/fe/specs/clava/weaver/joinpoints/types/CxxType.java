@@ -119,4 +119,10 @@ public class CxxType extends AType {
         return (AType) CxxJoinpoints.create(unwrappedType, this);
     }
 
+    @Override
+    public Boolean getIsTopLevelImpl() {
+        // Type is top-level if it has not parent
+        return !type.hasParent();
+    }
+
 }

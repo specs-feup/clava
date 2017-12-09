@@ -238,6 +238,14 @@ public abstract class AWrapperStmt extends AStatement {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aStatement.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -392,6 +400,7 @@ public abstract class AWrapperStmt extends AStatement {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

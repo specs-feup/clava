@@ -60,6 +60,15 @@ public abstract class ATagType extends AType {
     }
 
     /**
+     * Get value on attribute isTopLevel
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsTopLevelImpl() {
+        return this.aType.getIsTopLevelImpl();
+    }
+
+    /**
      * Get value on attribute isArray
      * @return the attribute's value
      */
@@ -222,6 +231,14 @@ public abstract class ATagType extends AType {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aType.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -331,6 +348,7 @@ public abstract class ATagType extends AType {
     protected enum TagTypeAttributes {
         NAME("name"),
         KIND("kind"),
+        ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
@@ -357,6 +375,7 @@ public abstract class ATagType extends AType {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

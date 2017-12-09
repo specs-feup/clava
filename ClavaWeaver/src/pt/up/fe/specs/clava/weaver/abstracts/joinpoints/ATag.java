@@ -139,6 +139,14 @@ public abstract class ATag extends APragma {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aPragma.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -283,6 +291,7 @@ public abstract class ATag extends APragma {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

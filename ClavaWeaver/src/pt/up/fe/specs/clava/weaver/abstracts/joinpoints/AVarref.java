@@ -230,6 +230,14 @@ public abstract class AVarref extends AExpression {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aExpression.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -366,6 +374,7 @@ public abstract class AVarref extends AExpression {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

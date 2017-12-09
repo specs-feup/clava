@@ -215,6 +215,14 @@ public abstract class AUnaryOp extends AExpression {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aExpression.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -353,6 +361,7 @@ public abstract class AUnaryOp extends AExpression {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

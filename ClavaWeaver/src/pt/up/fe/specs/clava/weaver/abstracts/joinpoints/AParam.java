@@ -133,6 +133,14 @@ public abstract class AParam extends AVardecl {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aVardecl.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -279,6 +287,7 @@ public abstract class AParam extends AVardecl {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

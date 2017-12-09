@@ -118,6 +118,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -416,6 +424,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -560,6 +576,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -869,6 +893,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -995,6 +1027,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -1293,6 +1333,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -1321,6 +1369,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isTopLevel"
                            }]
                },
                {
@@ -1524,6 +1580,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -1816,6 +1880,14 @@
                               "type": "joinpoint",
                               "name": "type",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
                            }]
                },
                {
@@ -1881,6 +1953,14 @@
                   "children": [
                            {
                               "type": "Boolean",
+                              "name": "isTopLevel"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
                               "name": "isArray"
                            }]
                },
@@ -2071,6 +2151,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -2369,6 +2457,14 @@
                               "type": "joinpoint",
                               "name": "type",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
                            }]
                },
                {
@@ -2553,6 +2649,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -2867,6 +2971,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -3062,6 +3174,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -3408,6 +3528,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -3562,6 +3690,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -3897,6 +4033,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -3917,6 +4061,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isTopLevel"
                            }]
                },
                {
@@ -4114,6 +4266,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -4418,6 +4578,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -4570,6 +4738,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -4919,6 +5095,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -5039,6 +5223,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -5343,6 +5535,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -5522,6 +5722,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -5831,6 +6039,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -6032,6 +6248,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -6541,6 +6765,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -6868,6 +7100,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -7436,6 +7676,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -7590,6 +7838,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -7925,6 +8181,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -8165,6 +8429,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -8637,6 +8909,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -8781,6 +9061,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -9090,6 +9378,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -9286,6 +9582,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -9674,6 +9978,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -9818,6 +10130,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -10278,6 +10598,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -10414,6 +10742,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -10763,6 +11099,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -10791,6 +11135,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isTopLevel"
                            }]
                },
                {
@@ -10988,6 +11340,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -11292,6 +11652,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -11446,6 +11814,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -11776,6 +12152,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -11948,6 +12332,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -12269,6 +12661,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -12305,6 +12705,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isTopLevel"
                            }]
                },
                {
@@ -12502,6 +12910,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -12806,6 +13222,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -12950,6 +13374,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -13259,6 +13691,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -13427,6 +13867,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -13801,6 +14249,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -13987,6 +14443,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -14306,6 +14770,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -14491,6 +14963,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -14788,6 +15268,14 @@
                               "type": "joinpoint",
                               "name": "type",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
                            }]
                },
                {
@@ -14954,6 +15442,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -15251,6 +15747,14 @@
                               "type": "joinpoint",
                               "name": "type",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
                            }]
                },
                {
@@ -15452,6 +15956,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -15755,6 +16267,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -15899,6 +16419,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -16229,6 +16757,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -16441,6 +16977,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -16796,6 +17340,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -16957,6 +17509,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -17292,6 +17852,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -17420,6 +17988,14 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
                            }]
                },
                {
@@ -17718,6 +18294,14 @@
                               "type": "joinpoint",
                               "name": "type",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
                            }]
                },
                {
@@ -17866,6 +18450,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "line"
                            }]
@@ -18158,6 +18750,14 @@
                               "type": "joinpoint",
                               "name": "type",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
                            }]
                },
                {

@@ -26,6 +26,7 @@
 			<parameter name="jp" type="joinpoint" />
 		</attribute>
 		<attribute name="hasParent" type="boolean" />
+		<attribute name="hasAstParent" type="boolean" />
 		<attribute name="line" type="Integer" />
 		<attribute name="location" type="String" />
 		<attribute name="astId" type="String" />
@@ -289,6 +290,7 @@
 	<!-- TYPE -->
 	<artifact class="type">
 		<attribute name="kind" type="String" />
+		<attribute name="isTopLevel" type="Boolean" />
 		<attribute name="isArray" type="Boolean" />
 		<attribute name="isPointer" type="Boolean" />
 		<attribute name="arraySize" type="Integer" />

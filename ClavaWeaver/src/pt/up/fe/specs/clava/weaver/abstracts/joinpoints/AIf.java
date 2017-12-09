@@ -318,6 +318,14 @@ public abstract class AIf extends AStatement {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aStatement.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -496,6 +504,7 @@ public abstract class AIf extends AStatement {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

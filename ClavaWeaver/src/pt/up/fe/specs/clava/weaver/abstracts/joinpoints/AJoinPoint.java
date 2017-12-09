@@ -57,6 +57,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("insertAfter(String code)");
         actions.add("detach()");
         actions.add("setType(AJoinPoint type)");
+        actions.add("copy()");
         actions.add("messageToUser(String message)");
     }
 
@@ -247,6 +248,31 @@ public abstract class AJoinPoint extends JoinPoint {
 
     /**
      * 
+     */
+    public AJoinPoint copyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action copy not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public final AJoinPoint copy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "copy", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.copyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "copy", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "copy", e);
+        }
+    }
+
+    /**
+     * 
      * @param message 
      */
     public void messageToUserImpl(String message) {
@@ -285,6 +311,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("astAncestor(String type)");
         attributes.add("contains(AJoinPoint jp)");
         attributes.add("hasParent");
+        attributes.add("hasAstParent");
         attributes.add("line");
         attributes.add("location");
         attributes.add("astId");
@@ -509,6 +536,31 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasParent", e);
+        }
+    }
+
+    /**
+     * Get value on attribute hasAstParent
+     * @return the attribute's value
+     */
+    public abstract Boolean getHasAstParentImpl();
+
+    /**
+     * Get value on attribute hasAstParent
+     * @return the attribute's value
+     */
+    public final Object getHasAstParent() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasAstParent", Optional.empty());
+        	}
+        	Boolean result = this.getHasAstParentImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasAstParent", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasAstParent", e);
         }
     }
 

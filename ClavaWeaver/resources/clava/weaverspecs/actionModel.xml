@@ -39,7 +39,8 @@
 		<parameter name="type" type="joinpoint" />
 	</action>
 
-
+	<!-- Performs a deep copy of the node -->
+	<action name="copy" return="joinpoint"/>
 
 
 

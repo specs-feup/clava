@@ -45,6 +45,31 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute isTopLevel
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsTopLevelImpl();
+
+    /**
+     * Get value on attribute isTopLevel
+     * @return the attribute's value
+     */
+    public final Object getIsTopLevel() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isTopLevel", Optional.empty());
+        	}
+        	Boolean result = this.getIsTopLevelImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isTopLevel", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isTopLevel", e);
+        }
+    }
+
+    /**
      * Get value on attribute isArray
      * @return the attribute's value
      */
@@ -348,6 +373,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("kind");
+        attributes.add("isTopLevel");
         attributes.add("isArray");
         attributes.add("isPointer");
         attributes.add("arraySize");
@@ -390,6 +416,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      */
     protected enum TypeAttributes {
         KIND("kind"),
+        ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
@@ -416,6 +443,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

@@ -213,6 +213,14 @@ public abstract class AVardecl extends ANamedDecl {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aNamedDecl.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -346,6 +354,7 @@ public abstract class AVardecl extends ANamedDecl {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

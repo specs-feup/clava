@@ -123,6 +123,14 @@ public abstract class AStruct extends ARecord {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aRecord.copyImpl();
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -250,6 +258,7 @@ public abstract class AStruct extends ARecord {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
