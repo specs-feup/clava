@@ -19,20 +19,10 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  * @author Joao Bispo
  *
  */
-public enum LaraApiResource implements LaraResourceProvider {
+public enum OpenCLTemplates implements LaraResourceProvider {
 
-    // OpenCL
-    OPENCL_CALL("opencl/OpenCLCall.lara"),
-    OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
-
-    // Clava utils
-    CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
-
-    // Static objects
-
-    CLAVA("Clava.lara"),
-    CLAVA_ASPECTS("ClavaAspects.lara"),
-    CLAVA_JOIN_POINTS("ClavaJoinPoints.lara");
+    CL_INIT("opencl/templates/cl_init.c"),
+    LOAD_FILE("opencl/templates/load_file.c");
 
     private final String resource;
 
@@ -42,7 +32,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     /**
      * @param resource
      */
-    private LaraApiResource(String resource) {
+    private OpenCLTemplates(String resource) {
         this.resource = WEAVER_PACKAGE + getSeparatorChar() + BASE_PACKAGE + resource;
     }
 
