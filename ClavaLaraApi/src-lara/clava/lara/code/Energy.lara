@@ -43,6 +43,7 @@ Energy.prototype.measure = function($start, prefix, $end){
 	if (this.printUnit) {
         logger.append(this.getPrintUnit());
     }
+	logger.ln();
 	logger.log($end);
 	$end.insert("after",codeAfter);
 
