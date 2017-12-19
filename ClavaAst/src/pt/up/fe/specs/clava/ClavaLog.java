@@ -31,6 +31,10 @@ public class ClavaLog extends SpecsLogger {
         super(CLAVA_WEAVER_TAG);
     }
 
+    public static void deprecated(String message) {
+        logger().msgInfo("[DEPRECATED] " + message);
+    }
+
     public static void info(String message) {
         logger().msgInfo(message);
     }

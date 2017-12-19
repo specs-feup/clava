@@ -538,4 +538,45 @@ public class App extends ClavaNode {
     public boolean inline(CallExpr callExpr) {
         return callInliner.inline(callExpr);
     }
+
+    /**
+     * Looks for a node based on the filepath and the id.
+     * 
+     * @param filepath
+     * @param astId
+     * @return
+     */
+    public Optional<ClavaNode> find(String filepath, String astId) {
+
+        File originalFilepath = new File(filepath);
+        TranslationUnit tu = getTranslationUnits().stream()
+                .filter(node -> node.getFile().equals(originalFilepath))
+                .findFirst()
+                .orElse(null);
+
+        if (tu == null) {
+            return Optional.empty();
+        }
+
+        return tu.getDescendantsAndSelfStream()
+                // Filter nodes that do not have an id equal to the given id
+                .filter(node -> node.getExtendedId().map(astId::equals).orElse(false))
+                .findFirst();
+    }
+
+    public Optional<ClavaNode> find(ClavaNode node) {
+
+        // Get translation unit
+        TranslationUnit tu = node.getAncestorTry(TranslationUnit.class).orElse(null);
+        if (tu == null) {
+            return Optional.empty();
+        }
+
+        String id = node.getExtendedId().orElse(null);
+        if (id == null) {
+            return Optional.empty();
+        }
+
+        return find(tu.getFile().getPath(), id);
+    }
 }
