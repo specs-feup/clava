@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
@@ -523,6 +525,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getUserFieldImpl(String fieldName) {
+        ClavaLog.deprecated("attribute 'getUserField' is deprecated, please use 'userField' instead");
+        return userFieldImpl(fieldName);
+        // return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
+    }
+
+    @Override
+    public Object userFieldImpl(String fieldName) {
         return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
     }
 
@@ -530,6 +539,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public Object setUserFieldImpl(String fieldName, Object value) {
         return getWeaverEngine().setUserField(getNodeNormalized(), fieldName, value);
     }
+
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+
+        Object lastPrevious = null;
+        for (Entry<?, ?> entry : fieldNameAndValue.entrySet()) {
+            lastPrevious = setUserField(entry.getKey().toString(), entry.getValue());
+        }
+
+        return lastPrevious;
+    }
+    // @Override
+    // public Object setUserFieldImpl(Object fieldNameAndValue) {
+    // System.out.println("CLASS:" + fieldNameAndValue.getClass());
+    // System.out.println("VALUE:" + fieldNameAndValue);
+    // return super.setUserFieldImpl(fieldNameAndValue);
+    // }
 
     @Override
     public AJoinPoint getParentRegionImpl() {

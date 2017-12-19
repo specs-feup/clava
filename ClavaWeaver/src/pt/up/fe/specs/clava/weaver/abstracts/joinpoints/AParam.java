@@ -1,6 +1,7 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -137,6 +138,25 @@ public abstract class AParam extends AVardecl {
     @Override
     public AJoinPoint copyImpl() {
         return this.aVardecl.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aVardecl.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aVardecl.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -295,8 +315,8 @@ public abstract class AParam extends AVardecl {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");

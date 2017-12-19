@@ -1,6 +1,7 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -127,6 +128,25 @@ public abstract class AClass extends ARecord {
     @Override
     public AJoinPoint copyImpl() {
         return this.aRecord.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aRecord.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aRecord.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -266,8 +286,8 @@ public abstract class AClass extends ARecord {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");

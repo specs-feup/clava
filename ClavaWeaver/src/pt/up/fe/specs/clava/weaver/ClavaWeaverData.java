@@ -17,10 +17,13 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
+import org.suikasoft.XStreamPlus.XStreamUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
@@ -61,12 +64,62 @@ public class ClavaWeaverData {
     }
 
     public void pushAst(App app) {
+        App previousApp = apps.peek();
         apps.push(app);
-        userValuesStack.push(new HashMap<>());
+
+        // Preserve previous user values
+        Map<ClavaNode, Map<String, Object>> userValuesCopy = getUserValuesCopy(app, previousApp,
+                userValuesStack.peek());
+
+        userValuesStack.push(userValuesCopy);
+        // userValuesStack.push(new HashMap<>());
     }
 
     public Map<ClavaNode, Map<String, Object>> getUserValues() {
         return userValuesStack.peek();
+    }
+
+    private Map<ClavaNode, Map<String, Object>> getUserValuesCopy(App app, App previousApp,
+            Map<ClavaNode, Map<String, Object>> userValues) {
+
+        // When there are no user values
+        if (userValues == null || userValues.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        Map<ClavaNode, Map<String, Object>> userValuesCopy = new HashMap<>();
+
+        // For each entry in the table, map the previous node to the current node and copy the object
+        for (Entry<ClavaNode, Map<String, Object>> entry : userValues.entrySet()) {
+            // Get node of the previous tree
+            ClavaNode previousNode = entry.getKey();
+
+            // Get corresponding node of the new tree
+            ClavaNode newNode = getNewNode(app, previousNode);
+            if (newNode == null) {
+                ClavaLog.warning(
+                        "Could not preserve user field for node at location '" + previousNode.getLocation() + "'");
+                continue;
+            }
+
+            // Serialize value
+            Map<String, Object> valueCopy = XStreamUtils.copy(entry.getValue());
+
+            // Add to map
+            userValuesCopy.put(newNode, valueCopy);
+        }
+
+        return userValuesCopy;
+        // return userValuesStack.isEmpty() ? new HashMap<>() : XStreamUtils.copy(userValuesStack.peek());
+    }
+
+    private ClavaNode getNewNode(App app, ClavaNode previousNode) {
+        // Special case: node App
+        if (previousNode instanceof App) {
+            return app;
+        }
+
+        return app.find(previousNode).orElse(null);
     }
 
     public App popAst() {

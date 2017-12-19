@@ -88,4 +88,9 @@ public class CxxApiTest {
     public void testClavaDataStore() {
         newTester().test("ClavaDataStoreTest.lara", "clava_data_store_test.cpp");
     }
+
+    @Test
+    public void testUserValues() {
+        newTester().test("UserValuesTest.lara", "user_values.cpp");
+    }
 }

@@ -30,6 +30,9 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 /**
  * Class with utility methods related with weaver actions.
  * 
+ * TODO: Move methods that require the weaver to a new class that receives the weaver during construction and is
+ * available in the weaver.
+ * 
  * @author JoaoBispo
  *
  */

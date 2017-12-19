@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -42,6 +43,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -91,8 +93,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint getFunctionTypeImpl() {
-        return CxxJoinpoints.create(function.getType(), this);
+    public CxxFunctionType getFunctionTypeImpl() {
+        return (CxxFunctionType) CxxJoinpoints.create(function.getType(), this);
     }
 
     @Override
@@ -385,5 +387,25 @@ public class CxxFunction extends AFunction {
         return function.getDeclaration()
                 .map(node -> CxxJoinpoints.create(node, null))
                 .orElse(null);
+    }
+
+    /**
+     * Setting the type of a Function join point sets the return type
+     */
+    @Override
+    public void setTypeImpl(AJoinPoint type) {
+        // Get new type to set
+        Type newType = (Type) type.getNode();
+
+        FunctionType functionType = function.getFunctionType();
+
+        // Create a copy of the function type, to avoid setting the type on all functions with the same signature
+        FunctionType functionTypeCopy = (FunctionType) functionType.copy();
+
+        // Replace the return type of the function type copy
+        CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
+
+        // Set the function type copy as the type of the function
+        function.setType(functionTypeCopy);
     }
 }

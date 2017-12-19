@@ -235,8 +235,8 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");

@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -147,6 +148,25 @@ public abstract class ANamedDecl extends ADecl {
 
     /**
      * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aDecl.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aDecl.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -280,8 +300,8 @@ public abstract class ANamedDecl extends ADecl {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");

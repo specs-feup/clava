@@ -48,11 +48,16 @@
 			<parameter name="fieldName" type="String" />
 		</attribute>
 		<attribute name="isInsideLoopHeader" type="Boolean"/>
+		 <!--  
 		<attribute name="setUserField" type="Object">
 			<parameter name="fieldName" type="String" />
 			<parameter name="value" type="Object" />	
-		</attribute>
+		</attribute> 
+		  -->
 		<attribute name="getUserField" type="Object">
+			<parameter name="fieldName" type="String" />	
+		</attribute>
+		<attribute name="userField" type="Object">
 			<parameter name="fieldName" type="String" />	
 		</attribute>
 		<attribute name="parentRegion" type="joinpoint" />
@@ -320,7 +325,7 @@
 		<attribute name="firstArgType" type="type" />
 	</artifact>
 
-	<!-- TEMPLATE SPECIALIZATION TYPE -->
+	<!-- FUNCTION TYPE -->
 	<artifact class="functionType">
 		<attribute name="returnType" type="joinpoint" />
 		<attribute name="paramTypes" type="joinpoint[]" />

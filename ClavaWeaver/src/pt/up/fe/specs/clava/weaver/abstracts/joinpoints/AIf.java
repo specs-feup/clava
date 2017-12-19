@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -326,6 +327,25 @@ public abstract class AIf extends AStatement {
 
     /**
      * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aStatement.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -512,8 +532,8 @@ public abstract class AIf extends AStatement {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");

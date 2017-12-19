@@ -42,7 +42,15 @@
 	<!-- Performs a deep copy of the node -->
 	<action name="copy" return="joinpoint"/>
 
-
+	<action name="setUserField" return="Object">
+		<parameter name="fieldName" type="String" />
+		<parameter name="value" type="Object" />	
+	</action>
+	
+	<action name="setUserField" return="Object">
+		<parameter name="fieldNameAndValue" type="Map" />
+		<!--  <parameter name="value" type="Object" /> -->	
+	</action>
 
 	<!-- PROGRAM -->
 
@@ -271,5 +279,13 @@
 	<action name="setInit" class="vardecl">
 		<parameter name="init" type="String" />
 	</action>
+	
+	
+	
+	<!-- FUNCTION TYPE -->
+	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">
+		<parameter name="newType" type="type" />
+	</action>
+	
 	
 </actions>

@@ -743,13 +743,13 @@ public class CxxWeaver extends ACxxWeaver {
         List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         App rebuiltApp = createApp(srcFolders, parserOptions);
 
-        System.out.println("TUs:"
-                + getApp().getTranslationUnits().stream().map(tu -> tu.getFilename())
-                        .collect(Collectors.toList()));
-
-        System.out.println("TUs Rebuilt:"
-                + rebuiltApp.getTranslationUnits().stream().map(tu -> tu.getFilename())
-                        .collect(Collectors.toList()));
+        // System.out.println("TUs:"
+        // + getApp().getTranslationUnits().stream().map(tu -> tu.getFilename())
+        // .collect(Collectors.toList()));
+        //
+        // System.out.println("TUs Rebuilt:"
+        // + rebuiltApp.getTranslationUnits().stream().map(tu -> tu.getFilename())
+        // .collect(Collectors.toList()));
 
         // Base folder is now the temporary folder
         if (update) {

@@ -4,6 +4,8 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -83,6 +85,32 @@ public abstract class AFunctionType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "paramTypes", e);
+        }
+    }
+
+    /**
+     * Sets the return type of the FunctionType
+     * @param newType 
+     */
+    public void setReturnTypeImpl(AType newType) {
+        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
+    }
+
+    /**
+     * Sets the return type of the FunctionType
+     * @param newType 
+     */
+    public final void setReturnType(AType newType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), newType);
+        	}
+        	this.setReturnTypeImpl(newType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), newType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReturnType", e);
         }
     }
 
@@ -275,6 +303,25 @@ public abstract class AFunctionType extends AType {
 
     /**
      * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aType.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aType.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -356,6 +403,7 @@ public abstract class AFunctionType extends AType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
+        actions.add("void setReturnType(type)");
     }
 
     /**
@@ -421,8 +469,8 @@ public abstract class AFunctionType extends AType {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");

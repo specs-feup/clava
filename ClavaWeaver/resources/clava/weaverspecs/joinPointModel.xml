@@ -220,6 +220,7 @@
 	
 	<!--  TAG TYPE -->
 	<joinpoint class="tagType" extends="type">
-	</joinpoint>	
+	</joinpoint>
+		
 	 	
 </joinpoints>

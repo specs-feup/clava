@@ -95,4 +95,9 @@ public class CTest {
     public void testInline() {
         newTester().test("Inline.lara", "inline.c", "inline_utils.h", "inline_utils.c");
     }
+
+    @Test
+    public void testSetType() {
+        newTester().test("SetType.lara", "set_type.c");
+    }
 }

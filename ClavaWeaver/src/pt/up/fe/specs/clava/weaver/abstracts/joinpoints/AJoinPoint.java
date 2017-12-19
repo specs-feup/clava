@@ -6,6 +6,7 @@ import java.util.List;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -58,6 +59,8 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("detach()");
         actions.add("setType(AJoinPoint type)");
         actions.add("copy()");
+        actions.add("setUserField(String fieldName, Object value)");
+        actions.add("setUserField(Map<?, ?> fieldNameAndValue)");
         actions.add("messageToUser(String message)");
     }
 
@@ -273,6 +276,62 @@ public abstract class AJoinPoint extends JoinPoint {
 
     /**
      * 
+     * @param fieldName 
+     * @param value 
+     */
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        throw new UnsupportedOperationException(get_class()+": Action setUserField not implemented ");
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    public final Object setUserField(String fieldName, Object value) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setUserField", this, Optional.empty(), fieldName, value);
+        	}
+        	Object result = this.setUserFieldImpl(fieldName, value);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setUserField", this, Optional.ofNullable(result), fieldName, value);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setUserField", e);
+        }
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        throw new UnsupportedOperationException(get_class()+": Action setUserField not implemented ");
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    public final Object setUserField(Map<?, ?> fieldNameAndValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setUserField", this, Optional.empty(), fieldNameAndValue);
+        	}
+        	Object result = this.setUserFieldImpl(fieldNameAndValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setUserField", this, Optional.ofNullable(result), fieldNameAndValue);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setUserField", e);
+        }
+    }
+
+    /**
+     * 
      * @param message 
      */
     public void messageToUserImpl(String message) {
@@ -327,8 +386,8 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("javaValue(String fieldName)");
         attributes.add("javaFieldType(String fieldName)");
         attributes.add("isInsideLoopHeader");
-        attributes.add("setUserField(String fieldName, Object value)");
         attributes.add("getUserField(String fieldName)");
+        attributes.add("userField(String fieldName)");
         attributes.add("parentRegion");
         attributes.add("currentRegion");
     }
@@ -968,35 +1027,6 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * 
      * @param fieldName
-     * @param value
-     * @return 
-     */
-    public abstract Object setUserFieldImpl(String fieldName, Object value);
-
-    /**
-     * 
-     * @param fieldName
-     * @param value
-     * @return 
-     */
-    public final Object setUserField(String fieldName, Object value) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "setUserField", Optional.empty(), fieldName, value);
-        	}
-        	Object result = this.setUserFieldImpl(fieldName, value);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "setUserField", Optional.ofNullable(result), fieldName, value);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "setUserField", e);
-        }
-    }
-
-    /**
-     * 
-     * @param fieldName
      * @return 
      */
     public abstract Object getUserFieldImpl(String fieldName);
@@ -1018,6 +1048,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getUserField", e);
+        }
+    }
+
+    /**
+     * 
+     * @param fieldName
+     * @return 
+     */
+    public abstract Object userFieldImpl(String fieldName);
+
+    /**
+     * 
+     * @param fieldName
+     * @return 
+     */
+    public final Object userField(String fieldName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "userField", Optional.empty(), fieldName);
+        	}
+        	Object result = this.userFieldImpl(fieldName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "userField", Optional.ofNullable(result), fieldName);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "userField", e);
         }
     }
 

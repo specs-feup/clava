@@ -259,15 +259,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -275,7 +271,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -426,6 +422,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -723,15 +750,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -739,7 +762,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -895,6 +918,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -1168,15 +1222,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -1184,7 +1234,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -1335,6 +1385,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -1721,15 +1802,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -1737,7 +1814,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -1888,6 +1965,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -2298,15 +2406,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -2314,7 +2418,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -2465,6 +2569,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -2796,15 +2931,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -2812,7 +2943,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -2973,6 +3104,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -3321,15 +3483,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -3337,7 +3495,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -3530,6 +3688,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -3837,15 +4026,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -3853,7 +4038,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -4035,6 +4220,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -4413,15 +4629,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -4429,7 +4641,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -4580,6 +4792,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -4885,15 +5128,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -4901,7 +5140,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -5097,6 +5336,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -5370,15 +5640,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -5386,7 +5652,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -5537,6 +5803,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -5869,15 +6166,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -5885,7 +6178,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -6041,6 +6334,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -6395,15 +6719,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -6411,7 +6731,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -6767,6 +7087,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -7247,15 +7598,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -7263,7 +7610,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -7684,6 +8031,37 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -7985,15 +8363,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -8001,7 +8375,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -8183,6 +8557,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -8576,15 +8981,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -8592,7 +8993,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -8917,6 +9318,37 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -9208,15 +9640,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -9224,7 +9652,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -9380,6 +9808,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -9729,15 +10188,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -9745,7 +10200,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -9980,6 +10435,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -10277,15 +10763,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -10293,7 +10775,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -10606,6 +11088,37 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               "name": "messageToUser"
                            },
@@ -10889,15 +11402,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -10905,7 +11414,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -11101,6 +11610,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -11487,15 +12027,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -11503,7 +12039,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -11654,6 +12190,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -11961,15 +12528,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -11977,7 +12540,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -12154,6 +12717,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -12479,15 +13073,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -12495,7 +13085,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -12663,6 +13253,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -13057,15 +13678,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -13073,7 +13690,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -13094,6 +13711,20 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the return type of the FunctionType",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setReturnType"
+                           },
+                           {
+                              "type": "type",
+                              "name": "newType",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -13224,6 +13855,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -13521,15 +14183,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -13537,7 +14195,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -13693,6 +14351,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -14014,15 +14703,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -14030,7 +14715,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -14251,6 +14936,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -14590,15 +15306,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -14606,7 +15318,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -14772,6 +15484,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -15104,15 +15847,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -15120,7 +15859,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -15276,6 +16015,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -15583,15 +16353,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -15599,7 +16365,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -15755,6 +16521,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -16097,15 +16894,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -16113,7 +16906,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -16269,6 +17062,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -16566,15 +17390,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -16582,7 +17402,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -16759,6 +17579,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -17124,15 +17975,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -17140,7 +17987,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -17342,6 +18189,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -17656,15 +18534,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -17672,7 +18546,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -17854,6 +18728,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -18135,15 +19040,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -18151,7 +19052,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -18302,6 +19203,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -18591,15 +19523,11 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "setUserField"
+                              "name": "getUserField"
                            },
                            {
                               "type": "String",
                               "name": "fieldName"
-                           },
-                           {
-                              "type": "Object",
-                              "name": "value"
                            }]
                },
                {
@@ -18607,7 +19535,7 @@
                   "children": [
                            {
                               "type": "Object",
-                              "name": "getUserField"
+                              "name": "userField"
                            },
                            {
                               "type": "String",
@@ -18758,6 +19686,37 @@
                            {
                               "type": "joinpoint",
                               "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
                            }]
                },
                {

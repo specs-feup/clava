@@ -15,10 +15,12 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxFunctionType extends AFunctionType {
 
@@ -53,6 +55,12 @@ public class CxxFunctionType extends AFunctionType {
                 .map(paramType -> CxxJoinpoints.create(paramType, this))
                 .toArray(size -> new AJoinPoint[size]);
 
+    }
+
+    @Override
+    public void setReturnTypeImpl(AType newType) {
+        Type newClavaType = (Type) newType.getNode();
+        CxxActions.replace(type.getReturnType(), newClavaType, getWeaverEngine());
     }
 
 }

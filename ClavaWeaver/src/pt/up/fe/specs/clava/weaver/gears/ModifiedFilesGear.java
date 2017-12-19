@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.gears;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,6 +28,9 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 
 public class ModifiedFilesGear extends AGear {
 
+    // Actions that do not change the AST
+    private static final Set<String> EXCLUDE_SET = new HashSet<>(Arrays.asList("setUserField", "push", "pop"));
+
     private Set<File> modifiedFiles;
 
     public ModifiedFilesGear() {
@@ -35,6 +39,13 @@ public class ModifiedFilesGear extends AGear {
 
     @Override
     public void onAction(ActionEvent data) {
+
+        // Check if action is in exclude set
+        if (EXCLUDE_SET.contains(data.getActionName())) {
+            return;
+        }
+
+        System.out.println("ACTION THAT CHANGES AST:" + data.getActionName());
         // All join points are AJoinPoint instances
         AJoinPoint jp = (AJoinPoint) data.getJoinPoint();
 

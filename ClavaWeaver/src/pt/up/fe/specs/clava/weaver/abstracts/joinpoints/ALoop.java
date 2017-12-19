@@ -6,6 +6,7 @@ import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -712,6 +713,25 @@ public abstract class ALoop extends AStatement {
 
     /**
      * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aStatement.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -917,8 +937,8 @@ public abstract class ALoop extends AStatement {
         CONTAINS("contains"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
