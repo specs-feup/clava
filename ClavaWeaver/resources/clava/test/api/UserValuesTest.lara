@@ -1,0 +1,22 @@
+import clava.Clava;
+
+aspectdef UserValues
+
+	select program end
+	apply
+		$program.setUserField("test", "test string");		
+		// Deprecated get
+		println("User field: " + $program.getUserField("test"));
+
+		
+		$program.userField = {"test": "test string 2"};
+		println("User field: " + $program.userField("test"));
+	end
+	
+	Clava.pushAst();
+
+	select program end
+	apply
+		println("User field after push: " + $program.userField("test"));
+	end
+end

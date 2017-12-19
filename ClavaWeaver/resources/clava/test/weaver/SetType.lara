@@ -1,0 +1,16 @@
+import clava.ClavaJoinPoints;
+
+aspectdef Launcher
+
+    var doubleType = ClavaJoinPoints.builtinType("double");
+    select file.function{"fooType"} end
+    apply
+        $function.type = doubleType;
+    end
+	
+	select program end
+	apply
+		println($program.code);
+	end
+	
+end
