@@ -59,6 +59,13 @@ ClavaDataStore.prototype.getSystemIncludes = function() {
 }
 
 /**
+ * @return {J#java.util.List<String>} A list with the current user includes.
+ */
+ClavaDataStore.prototype.getUserIncludes = function() {
+	return this.get("header includes").getFiles();
+}
+
+/**
  * @param {string...} arguments - A variable number of strings with the extra system includes.
  * 
  */
