@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.suikasoft.XStreamPlus.XStreamUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -103,10 +102,11 @@ public class ClavaWeaverData {
             }
 
             // Serialize value
-            Map<String, Object> valueCopy = XStreamUtils.copy(entry.getValue());
+            // Map<String, Object> valueCopy = XStreamUtils.copy(entry.getValue());
 
             // Add to map
-            userValuesCopy.put(newNode, valueCopy);
+            // userValuesCopy.put(newNode, valueCopy);
+            userValuesCopy.put(newNode, entry.getValue());
         }
 
         return userValuesCopy;

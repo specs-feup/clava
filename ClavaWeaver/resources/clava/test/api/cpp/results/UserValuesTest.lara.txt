@@ -1,3 +1,13 @@
 User field: test string
 User field: test string 2
 User field after push: test string 2
+[
+   Hello,
+   World
+]
+{
+   field1:
+      field1_value,
+   field2:
+      2
+}
