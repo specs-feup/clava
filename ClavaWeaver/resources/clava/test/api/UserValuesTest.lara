@@ -43,6 +43,6 @@ aspectdef UserValues
 	end
 	
 	//println("PROGRAM:" + Clava.getProgram().extraIncludes);
-	println("Standard:" + Clava.getStandard());
+	//println("Standard:" + Clava.getStandard());
 end
 
