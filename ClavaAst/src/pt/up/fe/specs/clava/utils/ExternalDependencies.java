@@ -17,6 +17,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.git.GitRepos;
 
@@ -28,8 +30,10 @@ import pt.up.fe.specs.git.GitRepos;
  */
 public class ExternalDependencies {
 
-    private final Set<File> includes;
-    private final Set<File> sources;
+    // private final Set<File> includes;
+    // private final Set<File> sources;
+    private final Set<Supplier<File>> includes;
+    private final Set<Supplier<File>> sources;
 
     // private List<String> unresolvedRepos;
     // private List<String> unresolvedReposPaths;
@@ -63,37 +67,43 @@ public class ExternalDependencies {
     }
 
     public void addInclude(File file) {
-        includes.add(file);
+        includes.add(() -> file);
     }
 
     public void addIncludeFromGit(String gitRepository, String path) {
-        File baseFolder = gitRepos.getFolder(gitRepository);
+        // File baseFolder = gitRepos.getFolder(gitRepository);
+        //
+        // File includePath = path == null ? baseFolder : new File(baseFolder, path);
 
-        File includePath = path == null ? baseFolder : new File(baseFolder, path);
-
-        includes.add(includePath);
+        includes.add(() -> this.getFolderFromGit(gitRepository, path));
         // unresolvedRepos.add(gitRepository);
         // unresolvedReposPaths.add(path);
     }
 
+    private File getFolderFromGit(String gitRepository, String path) {
+        File baseFolder = gitRepos.getFolder(gitRepository);
+
+        return path == null ? baseFolder : new File(baseFolder, path);
+    }
+
     public void addSource(File file) {
-        sources.add(file);
+        sources.add(() -> file);
     }
 
     public void addSourceFromGit(String gitRepository, String path) {
-        File baseFolder = gitRepos.getFolder(gitRepository);
+        // File baseFolder = gitRepos.getFolder(gitRepository);
+        //
+        // File includePath = path == null ? baseFolder : new File(baseFolder, path);
 
-        File includePath = path == null ? baseFolder : new File(baseFolder, path);
-
-        sources.add(includePath);
+        sources.add(() -> this.getFolderFromGit(gitRepository, path));
     }
 
     public Collection<File> getExtraSources() {
-        return sources;
+        return sources.stream().map(Supplier::get).collect(Collectors.toList());
     }
 
     public Collection<File> getExtraIncludes() {
-        return includes;
+        return includes.stream().map(Supplier::get).collect(Collectors.toList());
     }
 
 }
