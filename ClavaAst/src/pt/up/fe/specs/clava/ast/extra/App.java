@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
+import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
@@ -109,6 +110,8 @@ public class App extends ClavaNode {
 
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
+
+    private ExternalDependencies externalDependencies;
     // private Map<String, String> idsAlias;
     // private Map<String, List<Stmt>> inlineCache;
 
@@ -127,6 +130,8 @@ public class App extends ClavaNode {
 
         this.idNormalizer = new IdNormalizer();
         this.callInliner = new CallInliner(idNormalizer);
+
+        this.externalDependencies = new ExternalDependencies();
         // this.idsAlias = Collections.emptyMap();
         // this.inlineCache = new HashMap<>();
 
@@ -137,11 +142,26 @@ public class App extends ClavaNode {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new App(Collections.emptyList());
+        App appCopy = new App(Collections.emptyList());
+
+        // Copy fields of App DataStore
+        appCopy.appData.addAll(appData);
+
+        appCopy.externalDependencies = externalDependencies.copy();
+        // Fields that might need to be copied:
+        // globalManager
+        // idNormalizer
+        // callInliner
+
+        return appCopy;
     }
 
     public DataStore getAppData() {
         return appData;
+    }
+
+    public ExternalDependencies getExternalDependencies() {
+        return externalDependencies;
     }
 
     public void setIdsAlias(Map<String, String> idsAlias) {

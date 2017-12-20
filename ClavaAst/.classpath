@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/jOptions"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Clava&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry kind="src" path="/tdrcLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GitPlus"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
