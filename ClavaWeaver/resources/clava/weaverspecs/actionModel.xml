@@ -66,20 +66,20 @@
 	
 	<action name="pop" class="program" />
 	
-	<action name="addExtraInclude" class="program">
+	<action name="addExtraInclude" class="program" tooltip="adds a path to an include that the current program depends on">
 		<parameter name="path" type="String" />
 	</action>
 	
-	<action name="addExtraIncludeFromGit" class="program">
+	<action name="addExtraIncludeFromGit" class="program" tooltip="adds a path based on a git repository to an include that the current program depends on">
 		<parameter name="gitRepo" type="String" />
 		<parameter name="path" type="String" />
 	</action>
 
-	<action name="addExtraSource" class="program">
+	<action name="addExtraSource" class="program" tooltip="adds a path to a source that the current program depends on">
 		<parameter name="path" type="String" />
 	</action>
 	
-	<action name="addExtraSourceFromGit" class="program">
+	<action name="addExtraSourceFromGit" class="program" tooltip="adds a path based on a git repository to a source that the current program depends on">
 		<parameter name="gitRepo" type="String" />
 		<parameter name="path" type="String" />
 	</action>

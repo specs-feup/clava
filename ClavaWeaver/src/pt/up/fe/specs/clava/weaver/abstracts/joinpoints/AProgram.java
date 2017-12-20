@@ -276,8 +276,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     public abstract String[] getExtraSourcesArrayImpl();
 
     /**
-     * Get value on attribute extraSources
-     * @return the attribute's value
+     * paths to sources that the current program depends on
      */
     public Bindings getExtraSourcesImpl() {
         String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
@@ -286,8 +285,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute extraSources
-     * @return the attribute's value
+     * paths to sources that the current program depends on
      */
     public final Object getExtraSources() {
         try {
@@ -311,8 +309,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     public abstract String[] getExtraIncludesArrayImpl();
 
     /**
-     * Get value on attribute extraIncludes
-     * @return the attribute's value
+     * paths to includes that the current program depends on
      */
     public Bindings getExtraIncludesImpl() {
         String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
@@ -321,8 +318,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute extraIncludes
-     * @return the attribute's value
+     * paths to includes that the current program depends on
      */
     public final Object getExtraIncludes() {
         try {
@@ -444,7 +440,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path to an include that the current program depends on
      * @param path 
      */
     public void addExtraIncludeImpl(String path) {
@@ -452,7 +448,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path to an include that the current program depends on
      * @param path 
      */
     public final void addExtraInclude(String path) {
@@ -470,7 +466,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path based on a git repository to an include that the current program depends on
      * @param gitRepo 
      * @param path 
      */
@@ -479,7 +475,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path based on a git repository to an include that the current program depends on
      * @param gitRepo 
      * @param path 
      */
@@ -498,7 +494,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path to a source that the current program depends on
      * @param path 
      */
     public void addExtraSourceImpl(String path) {
@@ -506,7 +502,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path to a source that the current program depends on
      * @param path 
      */
     public final void addExtraSource(String path) {
@@ -524,7 +520,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path based on a git repository to a source that the current program depends on
      * @param gitRepo 
      * @param path 
      */
@@ -533,7 +529,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * adds a path based on a git repository to a source that the current program depends on
      * @param gitRepo 
      * @param path 
      */
