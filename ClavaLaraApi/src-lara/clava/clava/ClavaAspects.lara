@@ -71,3 +71,12 @@ aspectdef ClavaWeavingFolder
 		return;
 	end
 end
+
+aspectdef GetProgram
+	output programJp end
+	
+	select program end
+	apply
+		programJp = $program;
+	end
+end

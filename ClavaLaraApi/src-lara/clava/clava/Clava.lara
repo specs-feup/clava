@@ -137,3 +137,11 @@ Clava.writeCode = function(outputFoldername) {
 Clava.getData = function() {
 	return new ClavaDataStore(WeaverOptions.getData());
 }
+
+/**
+ * @return the join point $program.
+ */
+Clava.getProgram = function() {
+	call results : GetProgram();
+	return results.programJp;
+}
