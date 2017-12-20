@@ -1,5 +1,6 @@
 import clava.Clava;
 
+import lara.Compilation;
 import lara.code.EnergyBase;
 import lara.code.Logger;
 import lara.util.IdGenerator;
@@ -19,10 +20,12 @@ Energy.prototype.measure = function($start, prefix, $end){
 	PrintOnce.message("Weaved code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
 
 	// Adds SpecsRapl include
-	Clava.getProgram().addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
+	Compilation.addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
+	//Clava.getProgram().addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
 	
 	// Adds SpecsRapl source
-	Clava.getProgram().addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
+	Compilation.addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
+	//Clava.getProgram().addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
 	
 	var logger = new Logger(false, this.filename);
 

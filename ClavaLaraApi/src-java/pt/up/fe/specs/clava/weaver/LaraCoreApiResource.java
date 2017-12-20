@@ -24,7 +24,10 @@ public enum LaraCoreApiResource implements LaraResourceProvider {
     // Code
     LOGGER("code/Logger.lara"),
     ENERGY("code/Energy.lara"),
-    TIMER("code/Timer.lara");
+    TIMER("code/Timer.lara"),
+
+    // Lara
+    COMPILATION("Compilation.lara");
 
     private final String resource;
 
