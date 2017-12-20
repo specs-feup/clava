@@ -166,4 +166,41 @@ public class CxxProgram extends AProgram {
         return weaver.getConfig().get(ClavaOptions.STANDARD).isCxx();
     }
 
+    @Override
+    public String[] getExtraSourcesArrayImpl() {
+        return app.getExternalDependencies().getExtraSources().stream()
+                .map(File::getAbsolutePath)
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public String[] getExtraIncludesArrayImpl() {
+        return app.getExternalDependencies().getExtraIncludes().stream()
+                .map(File::getAbsolutePath)
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public void addExtraIncludeImpl(String path) {
+        app.getExternalDependencies().addInclude(new File(path));
+    }
+
+    @Override
+    public void addExtraIncludeFromGitImpl(String gitRepository, String path) {
+        app.getExternalDependencies().addIncludeFromGit(gitRepository, path);
+    }
+
+    @Override
+    public void addExtraSourceImpl(String path) {
+        app.getExternalDependencies().addSource(new File(path));
+
+    }
+
+    @Override
+    public void addExtraSourceFromGitImpl(String gitRepository, String path) {
+        app.getExternalDependencies().addSourceFromGit(gitRepository, path);
+
+    }
 }

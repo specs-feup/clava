@@ -29,7 +29,8 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 public class ModifiedFilesGear extends AGear {
 
     // Actions that do not change the AST
-    private static final Set<String> EXCLUDE_SET = new HashSet<>(Arrays.asList("setUserField", "push", "pop"));
+    private static final Set<String> EXCLUDE_SET = new HashSet<>(
+            Arrays.asList("setUserField", "push", "pop", "addExtraInclude", "addExtraIncludeFromGit"));
 
     private Set<File> modifiedFiles;
 
@@ -45,7 +46,7 @@ public class ModifiedFilesGear extends AGear {
             return;
         }
 
-        System.out.println("ACTION THAT CHANGES AST:" + data.getActionName());
+        // System.out.println("ACTION THAT CHANGES AST:" + data.getActionName());
         // All join points are AJoinPoint instances
         AJoinPoint jp = (AJoinPoint) data.getJoinPoint();
 

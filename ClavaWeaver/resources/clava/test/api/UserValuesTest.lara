@@ -41,5 +41,8 @@ aspectdef UserValues
 		println("Array after pop:");
 		printObject($program.userField("anArray"));
 	end
+	
+	//println("PROGRAM:" + Clava.getProgram().extraIncludes);
+	println("Standard:" + Clava.getStandard());
 end
 

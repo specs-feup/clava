@@ -65,6 +65,24 @@
 	<action name="push" class="program" />
 	
 	<action name="pop" class="program" />
+	
+	<action name="addExtraInclude" class="program">
+		<parameter name="path" type="String" />
+	</action>
+	
+	<action name="addExtraIncludeFromGit" class="program">
+		<parameter name="gitRepo" type="String" />
+		<parameter name="path" type="String" />
+	</action>
+
+	<action name="addExtraSource" class="program">
+		<parameter name="path" type="String" />
+	</action>
+	
+	<action name="addExtraSourceFromGit" class="program">
+		<parameter name="gitRepo" type="String" />
+		<parameter name="path" type="String" />
+	</action>
 
 	<!-- FILE -->
 

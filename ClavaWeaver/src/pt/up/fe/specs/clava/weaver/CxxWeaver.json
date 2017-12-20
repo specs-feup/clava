@@ -3235,6 +3235,22 @@
                   "children": [
                            {
                               "type": "String[]",
+                              "name": "extraSources"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "extraIncludes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
                               "name": "attributes"
                            }]
                },
@@ -3558,6 +3574,68 @@
                            {
                               "type": "void",
                               "name": "pop"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addExtraInclude"
+                           },
+                           {
+                              "type": "String",
+                              "name": "path",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addExtraIncludeFromGit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "gitRepo",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "path",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addExtraSource"
+                           },
+                           {
+                              "type": "String",
+                              "name": "path",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addExtraSourceFromGit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "gitRepo",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "path",
+                              "defaultValue": ""
                            }]
                },
                {

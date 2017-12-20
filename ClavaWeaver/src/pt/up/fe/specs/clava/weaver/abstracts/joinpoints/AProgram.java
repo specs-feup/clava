@@ -270,6 +270,76 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute extraSources
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraSourcesArrayImpl();
+
+    /**
+     * Get value on attribute extraSources
+     * @return the attribute's value
+     */
+    public Bindings getExtraSourcesImpl() {
+        String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute extraSources
+     * @return the attribute's value
+     */
+    public final Object getExtraSources() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
+        	}
+        	Bindings result = this.getExtraSourcesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraSources", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraIncludes
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraIncludesArrayImpl();
+
+    /**
+     * Get value on attribute extraIncludes
+     * @return the attribute's value
+     */
+    public Bindings getExtraIncludesImpl() {
+        String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute extraIncludes
+     * @return the attribute's value
+     */
+    public final Object getExtraIncludes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
+        	}
+        	Bindings result = this.getExtraIncludesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraIncludes", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select files
      * @return 
      */
@@ -375,6 +445,114 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
 
     /**
      * 
+     * @param path 
+     */
+    public void addExtraIncludeImpl(String path) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraInclude not implemented ");
+    }
+
+    /**
+     * 
+     * @param path 
+     */
+    public final void addExtraInclude(String path) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraInclude", this, Optional.empty(), path);
+        	}
+        	this.addExtraIncludeImpl(path);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraInclude", this, Optional.empty(), path);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraInclude", e);
+        }
+    }
+
+    /**
+     * 
+     * @param gitRepo 
+     * @param path 
+     */
+    public void addExtraIncludeFromGitImpl(String gitRepo, String path) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraIncludeFromGit not implemented ");
+    }
+
+    /**
+     * 
+     * @param gitRepo 
+     * @param path 
+     */
+    public final void addExtraIncludeFromGit(String gitRepo, String path) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo, path);
+        	}
+        	this.addExtraIncludeFromGitImpl(gitRepo, path);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo, path);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraIncludeFromGit", e);
+        }
+    }
+
+    /**
+     * 
+     * @param path 
+     */
+    public void addExtraSourceImpl(String path) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraSource not implemented ");
+    }
+
+    /**
+     * 
+     * @param path 
+     */
+    public final void addExtraSource(String path) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraSource", this, Optional.empty(), path);
+        	}
+        	this.addExtraSourceImpl(path);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraSource", this, Optional.empty(), path);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraSource", e);
+        }
+    }
+
+    /**
+     * 
+     * @param gitRepo 
+     * @param path 
+     */
+    public void addExtraSourceFromGitImpl(String gitRepo, String path) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraSourceFromGit not implemented ");
+    }
+
+    /**
+     * 
+     * @param gitRepo 
+     * @param path 
+     */
+    public final void addExtraSourceFromGit(String gitRepo, String path) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraSourceFromGit", this, Optional.empty(), gitRepo, path);
+        	}
+        	this.addExtraSourceFromGitImpl(gitRepo, path);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraSourceFromGit", this, Optional.empty(), gitRepo, path);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraSourceFromGit", e);
+        }
+    }
+
+    /**
+     * 
      */
     @Override
     public final List<? extends JoinPoint> select(String selectName) {
@@ -405,6 +583,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         attributes.add("includeFolders");
         attributes.add("baseFolder");
         attributes.add("weavingFolder");
+        attributes.add("extraSources");
+        attributes.add("extraIncludes");
     }
 
     /**
@@ -426,6 +606,10 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         actions.add("void addFile(file)");
         actions.add("void push()");
         actions.add("void pop()");
+        actions.add("void addExtraInclude(String)");
+        actions.add("void addExtraIncludeFromGit(String, String)");
+        actions.add("void addExtraSource(String)");
+        actions.add("void addExtraSourceFromGit(String, String)");
     }
 
     /**
@@ -449,6 +633,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         INCLUDEFOLDERS("includeFolders"),
         BASEFOLDER("baseFolder"),
         WEAVINGFOLDER("weavingFolder"),
+        EXTRASOURCES("extraSources"),
+        EXTRAINCLUDES("extraIncludes"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

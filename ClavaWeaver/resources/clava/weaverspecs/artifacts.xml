@@ -81,6 +81,8 @@
 		<attribute name="includeFolders" type="String[]" />
 		<attribute name="baseFolder" type="String" />
 		<attribute name="weavingFolder" type="String" />
+		<attribute name="extraSources" type="String[]" />
+		<attribute name="extraIncludes" type="String[]" />		
 	</artifact>
 
 
