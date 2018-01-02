@@ -44,6 +44,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Get value on attribute isParam
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsParamImpl() {
+        return this.aVardecl.getIsParamImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -290,6 +299,7 @@ public abstract class AParam extends AVardecl {
     protected enum ParamAttributes {
         HASINIT("hasInit"),
         INIT("init"),
+        ISPARAM("isParam"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

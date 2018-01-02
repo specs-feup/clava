@@ -1,8 +1,12 @@
 vardecl a
+is param? true
 vardecl b
+is param? true
+vardecl a
+is param? false
 Call 'functionWithDeclaration' declaration:6
 Call 'functionWithDeclaration' definition:8
-Call 'functionWithoutDeclaration' definition:12
-Call 'functionWithoutDefinition' declaration:16
-Call 'functionWithDefinitionAfterCall' declaration:18
-Call 'functionWithDefinitionAfterCall' definition:27
+Call 'functionWithoutDeclaration' definition:13
+Call 'functionWithoutDefinition' declaration:17
+Call 'functionWithDefinitionAfterCall' declaration:19
+Call 'functionWithDefinitionAfterCall' definition:28

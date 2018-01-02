@@ -3,6 +3,7 @@ aspectdef Vardecl
 	select vardecl end
 	apply
 		println("vardecl " + $vardecl.name);
+		println("is param? " + $vardecl.isParam);
 	end
 	
 	select call end

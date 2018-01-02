@@ -75,6 +75,29 @@ public abstract class AVardecl extends ANamedDecl {
     }
 
     /**
+     * true, if vardecl is a function parameter
+     */
+    public abstract Boolean getIsParamImpl();
+
+    /**
+     * true, if vardecl is a function parameter
+     */
+    public final Object getIsParam() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isParam", Optional.empty());
+        	}
+        	Boolean result = this.getIsParamImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isParam", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isParam", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -309,6 +332,7 @@ public abstract class AVardecl extends ANamedDecl {
         this.aNamedDecl.fillWithAttributes(attributes);
         attributes.add("hasInit");
         attributes.add("init");
+        attributes.add("isParam");
     }
 
     /**
@@ -357,6 +381,7 @@ public abstract class AVardecl extends ANamedDecl {
     protected enum VardeclAttributes {
         HASINIT("hasInit"),
         INIT("init"),
+        ISPARAM("isParam"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

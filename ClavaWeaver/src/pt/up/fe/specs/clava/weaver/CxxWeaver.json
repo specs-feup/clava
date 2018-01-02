@@ -11522,6 +11522,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if vardecl is a function parameter",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isParam"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -18220,6 +18229,15 @@
                            {
                               "type": "joinpoint",
                               "name": "init"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if vardecl is a function parameter",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isParam"
                            }]
                },
                {
