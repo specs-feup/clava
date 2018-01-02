@@ -35,7 +35,7 @@ list(APPEND llvm3.8_LIBRARIES
 	# Clang libraries, they have circular dependencies, so they are inside a group
 	-Wl,--start-group
         clangAnalysis
-        clangApplyReplacements
+        #clangApplyReplacements
         clangARCMigrate
         clangAST
         clangASTMatchers
@@ -50,8 +50,8 @@ list(APPEND llvm3.8_LIBRARIES
         clangIndex
         clangLex
         clangParse
-        clangQuery
-        clangRename
+        #clangQuery
+        #clangRename
         clangRewrite
         clangRewriteFrontend
         clangSema
@@ -59,16 +59,16 @@ list(APPEND llvm3.8_LIBRARIES
         clangStaticAnalyzerCheckers
         clangStaticAnalyzerCore
         clangStaticAnalyzerFrontend
-        clangTidy
-        clangTidyCERTModule
-        clangTidyCppCoreGuidelinesModule
-        clangTidyGoogleModule
-        clangTidyLLVMModule
-        clangTidyMiscModule
-        clangTidyModernizeModule
-        clangTidyPerformanceModule
-        clangTidyReadabilityModule
-        clangTidyUtils
+        #clangTidy
+        #clangTidyCERTModule
+        #clangTidyCppCoreGuidelinesModule
+        #clangTidyGoogleModule
+        #clangTidyLLVMModule
+        #clangTidyMiscModule
+        #clangTidyModernizeModule
+        #clangTidyPerformanceModule
+        #clangTidyReadabilityModule
+        #clangTidyUtils
         clangTooling
         clangToolingCore
 	-Wl,--end-group
