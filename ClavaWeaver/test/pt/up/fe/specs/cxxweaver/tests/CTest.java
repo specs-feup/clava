@@ -77,8 +77,8 @@ public class CTest {
 
     @Test
     public void testDijkstra() {
-        newTester().setCheckWeavedCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
-        newTester().setCheckWeavedCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
+        newTester().setCheckWovenCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
+        newTester().setCheckWovenCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
     }
 
     @Test

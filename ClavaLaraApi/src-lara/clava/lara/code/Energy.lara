@@ -17,7 +17,7 @@ Energy.prototype.measure = function($start, prefix, $end){
 	$end = $end === undefined ? $start : $end;
 
 	// Message about dependency
-	PrintOnce.message("Weaved code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
+	PrintOnce.message("Woven code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
 
 	// Adds SpecsRapl include
 	Compilation.addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");

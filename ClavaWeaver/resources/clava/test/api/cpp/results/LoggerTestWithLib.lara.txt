@@ -1,4 +1,4 @@
-Weaved code has dependency to project SpecsLogger, which can be found at https://github.com/specs-feup/specs-c-libs
+Woven code has dependency to project SpecsLogger, which can be found at https://github.com/specs-feup/specs-c-libs
 #include "SpecsLogger.h"
 
 double bar() {

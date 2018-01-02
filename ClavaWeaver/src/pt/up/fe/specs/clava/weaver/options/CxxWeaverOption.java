@@ -25,9 +25,9 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 
 public interface CxxWeaverOption {
 
-    DataKey<String> WEAVED_CODE_FOLDERNAME = KeyFactory.string("Weaved code foldername")
-            .setLabel("Name of weaved code folder")
-            .setDefault(() -> CxxWeaver.getWeavedCodeFoldername());
+    DataKey<String> WOVEN_CODE_FOLDERNAME = KeyFactory.string("Weaved code foldername")
+            .setLabel("Name of woven code folder")
+            .setDefault(() -> CxxWeaver.getWovenCodeFoldername());
 
     DataKey<Boolean> DISABLE_CLAVA_INFO = KeyFactory.bool("Disable Clava Info")
             .setLabel("Disable Clava execution information");
@@ -57,7 +57,7 @@ public interface CxxWeaverOption {
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
-            .addKeys(WEAVED_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
+            .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
                     HEADER_INCLUDES, SYSTEM_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION,
                     GENERATE_MODIFIED_CODE_ONLY)
             .build();

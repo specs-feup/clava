@@ -58,8 +58,8 @@ public class CApiTest {
 
     @Test
     public void testEnergy() {
-        // Disable syntax check of weaved code, rapl include is not available
-        newTester().setCheckWeavedCodeSyntax(false)
+        // Disable syntax check of woven code, rapl include is not available
+        newTester().setCheckWovenCodeSyntax(false)
                 .test("EnergyTest.lara", "energy_test.c");
     }
 }

@@ -91,9 +91,9 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final boolean SHOW_MEMORY_USAGE = true;
 
-    private static final String TEMP_WEAVING_FOLDER = "__clava_weaved";
+    private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
-    private static final String WEAVED_CODE_FOLDERNAME = "weaved_code";
+    private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
 
     private static final Set<String> WEAVER_NAMES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("clava")));
     private static final Set<String> LANGUAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx")));
@@ -102,8 +102,8 @@ public class CxxWeaver extends ACxxWeaver {
     // "c", "cpp"));
     // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
 
-    public static String getWeavedCodeFoldername() {
-        return WEAVED_CODE_FOLDERNAME;
+    public static String getWovenCodeFoldername() {
+        return WOVEN_CODE_FOLDERNAME;
     }
 
     private static final List<String> DEFAULT_COMMON_DUMPER_FLAGS = Arrays.asList("-Wno-unknown-pragmas");
@@ -563,8 +563,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public File getWeavingFolder() {
-        // return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
-        return SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), args.get(CxxWeaverOption.WEAVED_CODE_FOLDERNAME));
+        // return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
+        return SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
     }
 
     /**
@@ -576,7 +576,7 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean close() {
         if (!args.get(CxxWeaverOption.DISABLE_WEAVING)) {
             if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
-                SpecsLogs.msgInfo("Checking weaved code syntax...");
+                SpecsLogs.msgInfo("Checking woven code syntax...");
                 rebuildAst(false);
             }
 

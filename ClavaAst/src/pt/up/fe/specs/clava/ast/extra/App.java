@@ -347,16 +347,16 @@ public class App extends ClavaNode {
 
         // System.out.println("All files:" + allFiles);
 
-        Set<String> relativeWeaved = files.keySet().stream()
+        Set<String> relativeWoven = files.keySet().stream()
                 .map(file -> SpecsIo.getRelativePath(file, destinationFolder))
                 .collect(Collectors.toSet());
-        // System.out.println("GENERATED FILES:" + relativeWeaved);
+        // System.out.println("GENERATED FILES:" + relativeWoven);
 
         for (File file : allFiles) {
             String relativeSource = ClavaCode.getRelativePath(file, baseInputFolder);
             // String relativeSource = IoUtils.getRelativePath(file, baseInputFolder);
 
-            if (relativeWeaved.contains(relativeSource)) {
+            if (relativeWoven.contains(relativeSource)) {
                 continue;
             }
 

@@ -42,7 +42,7 @@ public class CxxWeaverOptions {
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_WEAVING.getName(), WeaverOptionBuilder.build("nw", "no-weaving",
                 "Disables weaving of source code, only runs the LARA aspect", CxxWeaverOption.DISABLE_WEAVING));
 
-        addBooleanOption(CxxWeaverOption.CHECK_SYNTAX, "cs", "check-syntax", "Checks syntax of weaved code");
+        addBooleanOption(CxxWeaverOption.CHECK_SYNTAX, "cs", "check-syntax", "Checks syntax of woven code");
 
         addBooleanOption(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, "cl", "clean", "Clean intermediate files");
 
@@ -64,9 +64,9 @@ public class CxxWeaverOptions {
                 "dir1[,dir2]*",
                 "Include folders for C/C++ headers that should be considered 'system libraries'. System libraries are not processed by Clava and do not appear in the AST.");
 
-        addOneArgOption(CxxWeaverOption.WEAVED_CODE_FOLDERNAME, "of", "output-foldername",
+        addOneArgOption(CxxWeaverOption.WOVEN_CODE_FOLDERNAME, "of", "output-foldername",
                 "dir",
-                "Sets the name of the weaved code folder (default value: '" + CxxWeaver.getWeavedCodeFoldername()
+                "Sets the name of the woven code folder (default value: '" + CxxWeaver.getWovenCodeFoldername()
                         + "')");
     }
 

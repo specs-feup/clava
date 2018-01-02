@@ -4,7 +4,7 @@ import clava.ClavaJoinPoints;
 
 aspectdef TimerTest
 
-	// Disable SpecsLogger, in order to be able to compile weaved code without the project
+	// Disable SpecsLogger, in order to be able to compile woven code without the project
 	Clava.useSpecsLogger = false;
 
 	// Instrument call to 'Calculate'

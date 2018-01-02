@@ -318,7 +318,7 @@ public class ClavaTesterLauncher {
     }
 
     /**
-     * Deletes build folders and weaved code folders
+     * Deletes build folders and woven code folders
      * 
      * @param baseFolder
      */
@@ -387,6 +387,10 @@ public class ClavaTesterLauncher {
         }
 
         if (folderName.equals("weaved_code")) {
+            return true;
+        }
+
+        if (folderName.equals("woven_code")) {
             return true;
         }
 

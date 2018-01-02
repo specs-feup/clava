@@ -124,7 +124,7 @@ Logger.prototype._setup_cxx_specslogger = function($file, $function) {
 
 	// Warn user about dependency to SpecsLogger library
 	//Clava.infoProjectDependency("SpecsLogger", "https://github.com/specs-feup/specs-c-libs");
-	PrintOnce.message("Weaved code has dependency to project SpecsLogger, which can be found at https://github.com/specs-feup/specs-c-libs");
+	PrintOnce.message("Woven code has dependency to project SpecsLogger, which can be found at https://github.com/specs-feup/specs-c-libs");
 	
 	var declaredName = this._declareName($function.declaration(true), function(){return IdGenerator.next("clava_logger_");});
 	var loggerName = declaredName.name;

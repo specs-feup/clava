@@ -158,6 +158,6 @@ public class CxxTest {
 
     @Test
     public void testMacros() {
-        newTester().setCheckWeavedCodeSyntax(false).test("Macros.lara", "macros.cpp");
+        newTester().setCheckWovenCodeSyntax(false).test("Macros.lara", "macros.cpp");
     }
 }

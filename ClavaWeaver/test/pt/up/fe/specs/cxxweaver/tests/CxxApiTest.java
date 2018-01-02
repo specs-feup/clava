@@ -47,15 +47,15 @@ public class CxxApiTest {
 
     @Test
     public void testLoggerWithLibrary() {
-        // Disable syntax check of weaved code, SpecsLogger includes are not available
-        newTester().setCheckWeavedCodeSyntax(false)
+        // Disable syntax check of woven code, SpecsLogger includes are not available
+        newTester().setCheckWovenCodeSyntax(false)
                 .test("LoggerTestWithLib.lara", "logger_test.cpp");
     }
 
     @Test
     public void testEnergy() {
-        // Disable syntax check of weaved code, rapl include is not available
-        newTester().setCheckWeavedCodeSyntax(false)
+        // Disable syntax check of woven code, rapl include is not available
+        newTester().setCheckWovenCodeSyntax(false)
                 .test("EnergyTest.lara", "energy_test.cpp");
     }
 

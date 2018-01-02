@@ -47,7 +47,7 @@ public class ClavaWeaverTester {
     private final Standard standard;
     private final String compilerFlags;
 
-    private boolean checkWeavedCodeSyntax;
+    private boolean checkWovenCodeSyntax;
     private String srcPackage;
     private String resultPackage;
     private String resultsFile;
@@ -58,7 +58,7 @@ public class ClavaWeaverTester {
         this.standard = standard;
         this.compilerFlags = compilerFlags;
 
-        this.checkWeavedCodeSyntax = true;
+        this.checkWovenCodeSyntax = true;
         srcPackage = null;
         resultPackage = null;
         resultsFile = null;
@@ -67,11 +67,11 @@ public class ClavaWeaverTester {
 
     /**
      * 
-     * @param checkWeavedCodeSyntax
+     * @param checkWovenCodeSyntax
      * @return the previous value
      */
-    public ClavaWeaverTester setCheckWeavedCodeSyntax(boolean checkWeavedCodeSyntax) {
-        this.checkWeavedCodeSyntax = checkWeavedCodeSyntax;
+    public ClavaWeaverTester setCheckWovenCodeSyntax(boolean checkWovenCodeSyntax) {
+        this.checkWovenCodeSyntax = checkWovenCodeSyntax;
 
         return this;
     }
@@ -193,7 +193,7 @@ public class ClavaWeaverTester {
         // Set CxxWeaver configurations
         data.set(ClavaOptions.STANDARD, standard);
         data.set(ClavaOptions.FLAGS, compilerFlags);
-        data.set(CxxWeaverOption.CHECK_SYNTAX, checkWeavedCodeSyntax);
+        data.set(CxxWeaverOption.CHECK_SYNTAX, checkWovenCodeSyntax);
         data.set(CxxWeaverOption.DISABLE_CLAVA_INFO, false);
 
         if (DEBUG) {
