@@ -49,9 +49,9 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
-        boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
-        String className = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
-        // String name = parser.apply(StringParsers::parseWord);
+        // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        // String className = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
+        String className = parseNamedDeclName(node, parser);
 
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 

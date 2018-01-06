@@ -51,10 +51,15 @@ public class FieldDeclParser extends AClangNodeParser<FieldDecl> {
         // parser.apply(ClangGenericParsers::parseLocation);
         // boolean isReferecend = parser.apply(string -> ClangGenericParsers.checkWord(string, "referenced"));
 
+        String fieldName = parseNamedDeclName(node, parser);
         // boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
-        // System.out.println("NAMED DECL NO NAME:" + getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME));
-        // System.out.println("CURRENT: " + node.getExtendedId());
-        String fieldName = parser.apply(StringParsers::parseWord);
+        // // System.out.println("NAMED DECL NO NAME:" + getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME));
+        // // System.out.println("CURRENT: " + node.getExtendedId());
+        // String fieldName = null;
+        // if (hasName) {
+        // fieldName = parser.apply(StringParsers::parseWord);
+        // }
+
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
         // List<Type> type = parser.apply(string -> ClangParseWorkers.parseClangType(string, node.getLocation()));
         // List<Type> type = parser.apply(ClangGenericParsers::parseClangTypeList, node, getTypesMap());

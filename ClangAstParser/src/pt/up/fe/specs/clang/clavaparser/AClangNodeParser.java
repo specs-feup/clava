@@ -29,6 +29,7 @@ import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -415,5 +416,15 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     protected Standard getStandard() {
         return getClangRootData().getConfig().get(ClavaOptions.STANDARD);
+    }
+
+    protected String parseNamedDeclName(ClangNode node, StringParser parser) {
+        boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+
+        if (hasName) {
+            return parser.apply(StringParsers::parseWord);
+        }
+
+        return null;
     }
 }

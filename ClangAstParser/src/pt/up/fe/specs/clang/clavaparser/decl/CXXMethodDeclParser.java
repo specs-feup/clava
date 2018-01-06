@@ -52,9 +52,9 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
-        boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
-        String name = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
-        // String name = parser.apply(StringParsers::parseWord);
+        // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        // String name = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
+        String name = parseNamedDeclName(node, parser);
 
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
