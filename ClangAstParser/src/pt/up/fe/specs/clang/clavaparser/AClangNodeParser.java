@@ -422,7 +422,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
 
         if (hasName) {
-            return parser.apply(StringParsers::parseWord);
+            // return parser.apply(StringParsers::parseWord);
+            return parser.apply(ClangGenericParsers::parseClassName);
         }
 
         return null;
