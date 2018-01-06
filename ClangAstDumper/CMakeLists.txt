@@ -11,6 +11,9 @@ deps_find_package(llvm3.8 REQUIRED) # LLVM
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -static-libgcc -static-libstdc++")
 
+#Enable debug
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG")
+
 # For Centos
 # Set SYSTEM_PLATFORM in deps_config.cmake
 if(SYSTEM_PLATFORM STREQUAL "Centos")
