@@ -32,7 +32,7 @@ import pt.up.fe.specs.util.SpecsCollections;
 public class RedeclarableTemplateDecl extends TemplateDecl {
 
     public RedeclarableTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-            List<TemplateTypeParmDecl> templateParameters, Decl templateDecl) {
+            List<NamedDecl> templateParameters, Decl templateDecl) {
 
         this(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
     }

@@ -188,6 +188,7 @@ import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
 import pt.up.fe.specs.clava.ast.type.LValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
@@ -547,7 +548,7 @@ public class ClavaNodeFactory {
     }
 
     public static RedeclarableTemplateDecl redeclarableTemplateDecl(String declName, List<Decl> specializations,
-            DeclData declData, ClavaNodeInfo info, List<TemplateTypeParmDecl> templateParameters, Decl templateDecl) {
+            DeclData declData, ClavaNodeInfo info, List<NamedDecl> templateParameters, Decl templateDecl) {
 
         return new RedeclarableTemplateDecl(declName, specializations, declData, info, templateParameters,
                 templateDecl);
@@ -725,6 +726,12 @@ public class ClavaNodeFactory {
 
     public static InjectedClassNameType injectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
         return new InjectedClassNameType(declInfo, data, info);
+    }
+
+    public static PackExpansionType packExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
+            Type pattern) {
+
+        return new PackExpansionType(numExpansions, data, info, pattern);
     }
 
     /*
