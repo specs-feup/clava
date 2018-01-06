@@ -25,8 +25,8 @@ import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
-import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -58,11 +58,13 @@ public class RedeclarableTemplateDeclParser extends AClangNodeParser<Redeclarabl
         // - Template Parameters (1 or more Decls)
         // - Template Decl (always 1)
         // - TemplateDeclSpecialization (NOT IMPLEMENTED)
-
+        // System.out.println("CHILDREN:" + node);
         List<ClavaNode> children = parseChildren(node);
-
-        List<TemplateTypeParmDecl> templateParameters = SpecsCollections.pop(children, TemplateTypeParmDecl.class);
-        Preconditions.checkArgument(templateParameters.size() == numberTemplateParameters);
+        // System.out.println("CHILDREN AFTER PARSING:" + children);
+        List<NamedDecl> templateParameters = SpecsCollections.pop(children, numberTemplateParameters)
+                .cast(NamedDecl.class);
+        // Preconditions.checkArgument(templateParameters.size() == numberTemplateParameters,
+        // "Expected " + numberTemplateParameters + " template parameters, has " + templateParameters.size());
 
         Decl templateDecl = SpecsCollections.popSingle(children, Decl.class);
 

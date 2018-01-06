@@ -143,7 +143,7 @@ public class ClangGenericParsers {
 
         // Check that String starts with a '
         if (!string.startsWith("'")) {
-            throw new RuntimeException("Given string does not start with ':" + string);
+            throw new RuntimeException("Given string does not start with quote ('):" + string);
         }
 
         // return new ParserResult<>(string, elements);

@@ -137,6 +137,7 @@ import pt.up.fe.specs.clang.clavaparser.type.FunctionProtoTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.IncompleteArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.InjectedClassNameTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.LValueReferenceTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.PackExpansionTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ParenTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.PointerTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.QualTypeParser;
@@ -356,6 +357,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("UnaryTransformType", UnaryTransformTypeParser::new);
         converter.put("VariableArrayType", VariableArrayTypeParser::new);
         converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
+        converter.put("PackExpansionType", PackExpansionTypeParser::new);
 
         /* comment */
         converter.put("ParagraphComment", ParagraphCommentParser::new);
