@@ -30,11 +30,24 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
     // Dump location
     dumpSourceRange(extendedId.str(), stmtAddr->getLocStart(), stmtAddr->getLocEnd());
 
+
+
+
     return false;
 }
 
 void ClangAstDumper::VisitStmt(const Stmt *Node) {
     dumpStmt(Node);
+
+//    llvm::errs() << "DUMPING STMT: " << getId(Node) << "\n";
+
+
+    for (const Stmt *SubStmt : Node->children()) {
+        if (SubStmt) {
+            VisitStmtTop(SubStmt);
+        }
+    }
+
 }
 
 
@@ -114,10 +127,13 @@ void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
 
     log("CXXConstructExpr", Node);
 
+//    llvm::errs() << "DUMPING CXX CONST: " << getId(Node) << "\n";
+
         const Type* constructorType = Node->getConstructor()->getType().getTypePtrOrNull();
         if(constructorType != nullptr) {
             llvm::errs() << "CONSTRUCTOR_TYPE\n";
-            llvm::errs() << Node << "_" << id << "->" << constructorType << "_" << id << "\n";
+            llvm::errs() << getId(Node) << "->" << getId(constructorType) << "\n";
+            //llvm::errs() << Node << "_" << id << "->" << constructorType << "_" << id << "\n";
             //VisitTypeTop(Node->getConstructor()->getType().getTypePtr());
             VisitTypeTop(constructorType);
         } else {
@@ -309,6 +325,31 @@ void ClangAstDumper::VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node)
 
     // Call parent in hierarchy
     VisitOverloadExpr(Node, false);
+}
+
+
+
+void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    log("LambdaExpr", Node);
+
+//    llvm::errs() << "LAMBDA EXPR: " << getId(Node) << "\n";
+//    llvm::errs() << "LAMBDA EXPR LAMBDA CLASS: " << getId(Node->getLambdaClass()) << "\n";
+
+    // Visit Decl
+    VisitDeclTop(Node->getLambdaClass());
+
+    // Visit children
+    // children() of LambdaExpr is not const?
+    for (const Stmt *SubStmt : const_cast<LambdaExpr*>(Node)->children()) {
+        if (SubStmt) {
+            VisitStmt(SubStmt);
+        }
+    }
+
 }
 
 

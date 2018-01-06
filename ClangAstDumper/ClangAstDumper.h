@@ -43,7 +43,7 @@ public:
     /*
      * TYPES
      */
-    void VisitType(const Type *T);
+    void VisitType(const Type *T); // Should not be manually called, instead call VisitTypeTop()
     void VisitPointerType(const PointerType *T);
     void VisitTemplateSpecializationType(const TemplateSpecializationType *T);
     void VisitFunctionProtoType(const FunctionProtoType *T);
@@ -54,7 +54,7 @@ public:
     /*
      * STMTS
      */
-    void VisitStmt(const Stmt *T);
+    void VisitStmt(const Stmt *T); // Should not be manually called, instead call VisitStmtTop()
     void VisitDeclStmt(const DeclStmt *Node);
     void VisitCXXForRangeStmt(const CXXForRangeStmt *Node);
     void VisitCompoundStmt(const CompoundStmt *Node);
@@ -68,13 +68,14 @@ public:
     void VisitOverloadExpr(const OverloadExpr *Node, bool isTopCall = true);
     void VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node);
     void VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node);
+    void VisitLambdaExpr(const LambdaExpr *Node);
 
 
 
     /*
      * DELCS
      */
-    void VisitDecl(const Decl *D);
+    void VisitDecl(const Decl *D); // Should not be manually called, instead call VisitDeclTop()
     void VisitVarDecl(const VarDecl *D);
     void VisitCXXMethodDecl(const CXXMethodDecl *D);
     void VisitCXXRecordDecl(const CXXRecordDecl *D);

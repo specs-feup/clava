@@ -50,6 +50,20 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
     // Dump location
     dumpSourceRange(extendedId.str(), declAddr->getLocStart(), declAddr->getLocEnd());
 
+    // If NamedDecl, check if it has name
+    if (const NamedDecl *ND = dyn_cast<NamedDecl>(declAddr)) {
+//        llvm::errs() << "Testing NAMED DECL: " << getId(ND) << "\n";
+
+        // Check if has no decl name, or if decl name is empty
+        if (!ND->getDeclName() || ND->getNameAsString().length() == 0) {
+//            llvm::errs() << "NAMED DECL WITHOUT NAME: " << "\n";
+            llvm::errs() << DUMP_NAMED_DECL_WITHOUT_NAME << "\n";
+            llvm::errs() << getId(ND) << "\n";
+        } else {
+//            llvm::errs() << "NAMED DECL NAME: " << ND->getNameAsString() << "\n";
+        }
+    }
+
     return false;
 }
 
@@ -76,7 +90,7 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 
     log("CXXRecordDecl", D);
 
-
+//    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
     // Visit definition
     if(D->hasDefinition()) {
         VisitDeclTop(D->getDefinition());
@@ -116,17 +130,8 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 
 }
 
+// Method shared by CXXMethodDecl hierarchy
 void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D);
-void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
-    if(dumpDecl(D)) {
-        return;
-    }
-
-    log("CXXMethodDecl", D);
-
-    VisitCXXMethodDeclBody(this, D);
-
-}
 
 void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
     if(D->hasBody()) {
@@ -137,6 +142,18 @@ void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
     llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
     llvm::errs() << dumper->getId(D) << "\n";
     llvm::errs() << dumper->getId(D->getParent()) << "\n";
+}
+
+
+void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
+    if(dumpDecl(D)) {
+        return;
+    }
+
+    log("CXXMethodDecl", D);
+
+    VisitCXXMethodDeclBody(this, D);
+
 }
 
 void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
@@ -168,10 +185,13 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
 
 
     // Store id if it has no name
+    // Replaced with code in dumpDecl()
+    /*
     if(D->getDeclName().getAsString().length() == 0) {
         llvm::errs() << DUMP_NAMED_DECL_WITHOUT_NAME << "\n";
         llvm::errs() << getId(D) << "\n";
     }
+     */
 
 }
 
@@ -239,6 +259,8 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
     }
 
     log("FieldDecl", D);
+
+//    llvm::errs() << "DUMPING FIELD DECL: " << getId(D) << "\n";
 
     // Dump nested namespace prefix
     llvm::errs() << DUMP_FIELD_DECL_INFO << "\n";
