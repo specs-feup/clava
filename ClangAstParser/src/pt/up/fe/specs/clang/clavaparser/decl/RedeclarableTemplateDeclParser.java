@@ -58,9 +58,9 @@ public class RedeclarableTemplateDeclParser extends AClangNodeParser<Redeclarabl
         // - Template Parameters (1 or more Decls)
         // - Template Decl (always 1)
         // - TemplateDeclSpecialization (NOT IMPLEMENTED)
-        // System.out.println("CHILDREN:" + node);
+        System.out.println("CHILDREN:" + node);
         List<ClavaNode> children = parseChildren(node);
-        // System.out.println("CHILDREN AFTER PARSING:" + children);
+        System.out.println("CHILDREN AFTER PARSING:" + children);
         List<NamedDecl> templateParameters = SpecsCollections.pop(children, numberTemplateParameters)
                 .cast(NamedDecl.class);
         // Preconditions.checkArgument(templateParameters.size() == numberTemplateParameters,

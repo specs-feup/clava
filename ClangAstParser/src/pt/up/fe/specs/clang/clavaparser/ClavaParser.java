@@ -95,6 +95,7 @@ import pt.up.fe.specs.clang.clavaparser.expr.MemberExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.OffsetOfExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ParenExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.PredefinedExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.SizeOfPackExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.StmtExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.StringLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.UnaryExprOrTypeTraitExprParser;
@@ -130,6 +131,7 @@ import pt.up.fe.specs.clang.clavaparser.type.BuiltinTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ConstantArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecayedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecltypeTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.DependentSizedArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ElaboratedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.EnumTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.FunctionNoProtoTypeParser;
@@ -331,6 +333,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("PredefinedExpr", PredefinedExprParser::new);
         converter.put("CXXDependentScopeMemberExpr", CXXDependentScopeMemberExprParser::new);
         converter.put("StmtExpr", StmtExprParser::new);
+        converter.put("SizeOfPackExpr", SizeOfPackExprParser::new);
 
         /* type */
         converter.put("RecordType", RecordTypeParser::new);
@@ -358,6 +361,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("VariableArrayType", VariableArrayTypeParser::new);
         converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
         converter.put("PackExpansionType", PackExpansionTypeParser::new);
+        converter.put("DependentSizedArrayType", DependentSizedArrayTypeParser::new);
 
         /* comment */
         converter.put("ParagraphComment", ParagraphCommentParser::new);

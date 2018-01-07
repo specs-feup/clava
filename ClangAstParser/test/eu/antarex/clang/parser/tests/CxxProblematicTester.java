@@ -60,7 +60,7 @@ public class CxxProblematicTester {
 
     @Test
     public void testTemplateExpansionPack() {
-        new CxxTester("problematic/template_expansion_pack.cpp").onePass().test();
+        new CxxTester("problematic/template_expansion_pack.cpp").onePass().showCode().test();
     }
 
 }
