@@ -123,6 +123,7 @@ import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
+import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
@@ -178,6 +179,7 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
+import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.EnumType;
@@ -734,6 +736,13 @@ public class ClavaNodeFactory {
         return new PackExpansionType(numExpansions, data, info, pattern);
     }
 
+    public static DependentSizedArrayType dependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
+            ClavaNodeInfo info,
+            Type elementType, Expr sizeExpr) {
+
+        return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
+    }
+
     /*
     * 'stmt' nodes
     */
@@ -1190,6 +1199,12 @@ public class ClavaNodeFactory {
 
     public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
         return new StmtExpr(exprData, info, compoundStmt);
+    }
+
+    public static SizeOfPackExpr sizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
+            List<TemplateArgument> partialArguments) {
+
+        return new SizeOfPackExpr(packId, packName, exprData, info, partialArguments);
     }
 
     /*

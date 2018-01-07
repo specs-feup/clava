@@ -70,7 +70,6 @@ public class VarDecl extends DeclaratorDecl {
 
         code.append(getType().getCode(getDeclName()));
         code.append(getInitializationCode());
-
         return code.toString();
     }
 
