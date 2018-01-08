@@ -58,9 +58,4 @@ public class CxxProblematicTester {
         new CxxTester("problematic/implicit_reference.cpp").test();
     }
 
-    @Test
-    public void testTemplateExpansionPack() {
-        new CxxTester("problematic/template_expansion_pack.cpp").onePass().showCode().test();
-    }
-
 }

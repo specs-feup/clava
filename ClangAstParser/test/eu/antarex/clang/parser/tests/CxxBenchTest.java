@@ -47,4 +47,9 @@ public class CxxBenchTest {
         new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").showCode().onePass().test();
     }
 
+    @Test
+    public void testTemplateExpansionPack() {
+        new CxxTester("bench/template_expansion_pack.cpp").test();
+    }
+
 }
