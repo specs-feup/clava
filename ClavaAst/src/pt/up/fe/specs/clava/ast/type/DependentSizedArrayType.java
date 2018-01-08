@@ -56,7 +56,7 @@ public class DependentSizedArrayType extends ArrayType {
 
     @Override
     protected String getArrayCode() {
-        return getSizeExpr().map(Expr::getCode).orElse("baba");
+        return getSizeExpr().map(Expr::getCode).orElse("");
     }
 
 }

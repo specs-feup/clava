@@ -68,6 +68,9 @@ public class PackExpansionType extends Type {
 
     @Override
     public String getCode(String name) {
-        return getPattern().map(type -> type.getCode(name)).orElse("") + "...";
+        // According to Clang parser, '...' must immediately precede declared identifier
+        String packName = name == null ? "..." : "... " + name;
+        // return getPattern().map(type -> type.getCode(name)).orElse("") + "...";
+        return getPattern().map(type -> type.getCode(packName)).orElse("");
     }
 }
