@@ -352,4 +352,15 @@ void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
 
 }
 
+void ClangAstDumper::VisitSizeOfPackExpr(const SizeOfPackExpr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
 
+    log("SizeOfPackExpr", Node);
+
+    // Visit pack
+    VisitDeclTop(Node->getPack());
+
+    // Map expr to pack?
+}

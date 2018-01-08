@@ -50,10 +50,12 @@ public:
     void VisitTypedefType(const TypedefType *T);
     void VisitElaboratedType(const ElaboratedType *T);
     void VisitLValueReferenceType(const LValueReferenceType *T);
+    void VisitDependentSizedArrayType(const DependentSizedArrayType *T);
 
-    /*
-     * STMTS
-     */
+
+        /*
+         * STMTS
+         */
     void VisitStmt(const Stmt *T); // Should not be manually called, instead call VisitStmtTop()
     void VisitDeclStmt(const DeclStmt *Node);
     void VisitCXXForRangeStmt(const CXXForRangeStmt *Node);
@@ -69,6 +71,7 @@ public:
     void VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node);
     void VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node);
     void VisitLambdaExpr(const LambdaExpr *Node);
+    void VisitSizeOfPackExpr(const SizeOfPackExpr *Node);
 
 
 

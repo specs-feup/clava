@@ -213,6 +213,19 @@ void ClangAstDumper::VisitLValueReferenceType(const LValueReferenceType *T) {
 }
 
 
+void ClangAstDumper::VisitDependentSizedArrayType(const DependentSizedArrayType *T) {
 
+    if(dumpType(T)) {
+        return;
+    }
+
+    // Element type
+    VisitTypeTop(T->getElementType().getTypePtr());
+
+    // Size expression (can be null)
+    if(T->getSizeExpr()) {
+        VisitStmtTop(T->getSizeExpr());
+    }
+}
 
 
