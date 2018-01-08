@@ -73,5 +73,13 @@ ClavaJoinPoints.typeLiteral = function(typeString) {
 	return AstFactory.typeLiteral(typeString);
 }
 
+/**
+ * @param {string} filename
+ * @param {string} path
+ */
+ClavaJoinPoints.file = function(filename, path) {
+	return AstFactory.file(filename, path);
+}
+
 
 
