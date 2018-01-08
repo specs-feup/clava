@@ -120,6 +120,7 @@ import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
+import pt.up.fe.specs.clava.ast.expr.PackExpansionExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
@@ -1205,6 +1206,10 @@ public class ClavaNodeFactory {
             List<TemplateArgument> partialArguments) {
 
         return new SizeOfPackExpr(packId, packName, exprData, info, partialArguments);
+    }
+
+    public static PackExpansionExpr packExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
+        return new PackExpansionExpr(exprData, info, pattern);
     }
 
     /*
