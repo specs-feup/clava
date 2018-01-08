@@ -11,6 +11,9 @@
  */
 using result_t = std::vector<float>;
  
+ template<typename... Values>
+std::vector<float> get_percentiles(result_t estimated_travel_times, int input, Values...);
+ 
 template<typename... Values>
 std::vector<float> get_percentiles(result_t estimated_travel_times, int input, Values... inputs)
 {
