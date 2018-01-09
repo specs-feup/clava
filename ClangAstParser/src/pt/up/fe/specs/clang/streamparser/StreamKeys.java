@@ -109,6 +109,9 @@ public interface StreamKeys {
     DataKey<Map<String, CxxMemberExprInfo>> CXX_MEMBER_EXPR_INFO = KeyFactory.generic("stderr_cxx_member_expr_info",
             new HashMap<String, CxxMemberExprInfo>());
 
+    DataKey<Map<String, String>> TYPE_AS_WRITTEN = KeyFactory.generic("stderr_type_as_written",
+            new HashMap<String, String>());
+
     // DataKey<Map<String, String>> CXX_METHOD_DECL_DECLARATION =
     // KeyFactory.generic("stderr_cxx_method_decl_declaration",
     // SpecsCollections.<String, String> newHashMap())
@@ -144,6 +147,7 @@ public interface StreamKeys {
             .addKey(FUNCTION_PROTOTYPE_EXCEPTION)
             .addKey(TYPEDEF_DECL_SOURCE)
             .addKey(CXX_MEMBER_EXPR_INFO)
+            .addKey(TYPE_AS_WRITTEN)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

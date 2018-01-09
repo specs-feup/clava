@@ -204,6 +204,10 @@ public class StreamParser {
                 SnippetParser.newInstance("<CXX Member Expr Info>", new HashMap<String, CxxMemberExprInfo>(),
                         StreamParser::parseCxxMemberExprInfo));
 
+        snippetsMap.put(StreamKeys.TYPE_AS_WRITTEN,
+                SnippetParser.newInstance("<Type As Written>", new HashMap<String, String>(),
+                        StreamParser::collectString));
+
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
         // StdErrParser::collectString));
