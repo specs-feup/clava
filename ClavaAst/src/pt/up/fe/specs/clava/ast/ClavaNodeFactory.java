@@ -122,6 +122,7 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.PackExpansionExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.ParenListExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
@@ -1210,6 +1211,10 @@ public class ClavaNodeFactory {
 
     public static PackExpansionExpr packExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
         return new PackExpansionExpr(exprData, info, pattern);
+    }
+
+    public static ParenListExpr parenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
+        return new ParenListExpr(exprData, info, expressions);
     }
 
     /*
