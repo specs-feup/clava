@@ -100,6 +100,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTemporaryObjectExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
@@ -1215,6 +1216,13 @@ public class ClavaNodeFactory {
 
     public static ParenListExpr parenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
         return new ParenListExpr(exprData, info, expressions);
+    }
+
+    public static CXXUnresolvedConstructExpr cxxUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData,
+            ClavaNodeInfo info,
+            List<Expr> arguments) {
+
+        return new CXXUnresolvedConstructExpr(typeAsWritten, exprData, info, arguments);
     }
 
     /*
