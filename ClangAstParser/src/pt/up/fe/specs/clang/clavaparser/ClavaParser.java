@@ -95,6 +95,7 @@ import pt.up.fe.specs.clang.clavaparser.expr.MemberExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.OffsetOfExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.PackExpansionExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ParenExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.ParenListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.PredefinedExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.SizeOfPackExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.StmtExprParser;
@@ -336,6 +337,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("StmtExpr", StmtExprParser::new);
         converter.put("SizeOfPackExpr", SizeOfPackExprParser::new);
         converter.put("PackExpansionExpr", PackExpansionExprParser::new);
+        converter.put("ParenListExpr", ParenListExprParser::new);
 
         /* type */
         converter.put("RecordType", RecordTypeParser::new);
