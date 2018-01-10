@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -163,6 +164,31 @@ public class RecordDecl extends TagDecl {
         code.append("}");
 
         return code.toString();
+    }
+
+    public List<FunctionDecl> getFunction(String functionName) {
+        List<FunctionDecl> functions = new ArrayList<>();
+
+        for (Decl recordField : getRecordFields()) {
+            if (!(recordField instanceof FunctionDecl)) {
+                continue;
+            }
+
+            FunctionDecl functionDecl = (FunctionDecl) recordField;
+            if (!functionDecl.hasDeclName()) {
+                continue;
+            }
+
+            String declName = functionDecl.getDeclName();
+
+            if (!declName.equals(functionName)) {
+                continue;
+            }
+
+            functions.add(functionDecl);
+        }
+
+        return functions;
     }
 
 }

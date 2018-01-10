@@ -79,4 +79,13 @@ public class CXXRecordDecl extends RecordDecl {
         return super.getCode(bases);
     }
 
+    public List<CXXMethodDecl> getMethod(String methodName) {
+        List<FunctionDecl> functions = getFunction(methodName);
+
+        return functions.stream()
+                .filter(CXXMethodDecl.class::isInstance)
+                .map(CXXMethodDecl.class::cast)
+                .collect(Collectors.toList());
+    }
+
 }
