@@ -85,6 +85,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXBindTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultArgExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
@@ -116,6 +117,7 @@ import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
@@ -138,6 +140,7 @@ import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -586,6 +589,15 @@ public class ClavaNodeFactory {
             ClavaNodeInfo info) {
 
         return new NamespaceAliasDecl(nestedPrefix, declInfo, declName, declData, info);
+    }
+
+    public static CXXConversionDecl cxxConversionDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
+            Stmt definition) {
+
+        return new CXXConversionDecl(methodData, declName, functionType, functionDeclData, declData, info, inputs,
+                definition);
+
     }
 
     /*
@@ -1223,6 +1235,12 @@ public class ClavaNodeFactory {
             List<Expr> arguments) {
 
         return new CXXUnresolvedConstructExpr(typeAsWritten, exprData, info, arguments);
+    }
+
+    public static LambdaExpr lambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
+            CXXRecordDecl lambdaClass, CompoundStmt body) {
+
+        return new LambdaExpr(lambdaData, exprData, info, lambdaClass, body);
     }
 
     /*
