@@ -36,6 +36,7 @@ import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -177,7 +178,7 @@ public class StreamParser {
                         StreamParser::parseFieldDeclInfo));
 
         snippetsMap.put(StreamKeys.NAMED_DECL_WITHOUT_NAME,
-                SnippetParser.newInstance("<NamedDecl Without Name>", new HashSet<String>(),
+                SnippetParser.newInstance("<NamedDecl Without Name>", new HashMap<String, String>(),
                         StreamParser::collectString));
 
         snippetsMap.put(StreamKeys.CXX_METHOD_DECL_PARENT,
@@ -207,6 +208,10 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.TYPE_AS_WRITTEN,
                 SnippetParser.newInstance("<Type As Written>", new HashMap<String, String>(),
                         StreamParser::collectString));
+
+        snippetsMap.put(StreamKeys.LAMBDA_EXPR_DATA,
+                SnippetParser.newInstance("<Lambda Expr Data>", new HashMap<String, LambdaExprData>(),
+                        StreamParser::parseLambdaExprData));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -606,6 +611,24 @@ public class StreamParser {
         }
 
         throw new RuntimeException("Unexpected value: " + aBoolean);
+    }
+
+    public static void parseLambdaExprData(LineStream lines, Map<String, LambdaExprData> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // isGenericLambda (boolean)
+        // isMutable (boolean)
+        // hasExplicitParameters (boolean)
+        // hasExplicitResultType (boolean)
+
+        // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
+        boolean isGenericLambda = parseOneOrZero(lines.nextLine());
+        boolean isMutable = parseOneOrZero(lines.nextLine());
+        boolean hasExplicitParameters = parseOneOrZero(lines.nextLine());
+        boolean hasExplicitResultType = parseOneOrZero(lines.nextLine());
+
+        map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType));
     }
 
 }
