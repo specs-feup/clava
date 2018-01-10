@@ -28,7 +28,7 @@ import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.MultiMap;
 

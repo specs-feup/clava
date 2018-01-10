@@ -15,8 +15,10 @@ package pt.up.fe.specs.clang.streamparser;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -36,7 +38,9 @@ import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureKind;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -621,6 +625,8 @@ public class StreamParser {
         // isMutable (boolean)
         // hasExplicitParameters (boolean)
         // hasExplicitResultType (boolean)
+        // captureDefault (LambdaCaptureDefault)
+        // captureKinds (List<LambdaCaptureKind)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
         boolean isGenericLambda = parseOneOrZero(lines.nextLine());
@@ -628,7 +634,15 @@ public class StreamParser {
         boolean hasExplicitParameters = parseOneOrZero(lines.nextLine());
         boolean hasExplicitResultType = parseOneOrZero(lines.nextLine());
 
-        map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType));
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().valueOf(parseInt(lines));
+        int numCaptures = parseInt(lines);
+        List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
+        for (int i = 0; i < numCaptures; i++) {
+            captureKinds.add(LambdaCaptureKind.getHelper().valueOf(parseInt(lines)));
+        }
+
+        map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
+                captureDefault, captureKinds));
     }
 
 }

@@ -23,10 +23,12 @@ import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class LambdaExprParser extends AClangNodeParser<LambdaExpr> {
@@ -47,12 +49,21 @@ public class LambdaExprParser extends AClangNodeParser<LambdaExpr> {
 
         List<ClavaNode> children = parseChildren(node);
 
-        checkNumChildren(children, 2); // Not sure if there can be more than 2
+        // First child should be the lambda class
+        CXXRecordDecl lambdaClass = (CXXRecordDecl) toDecl(SpecsCollections.popSingle(children, CXXRecordDecl.class));
 
-        CXXRecordDecl lambdaClass = (CXXRecordDecl) toDecl(children.get(0));
-        CompoundStmt body = toCompoundStmt(children.get(1));
+        // checkNumChildren(children, 2); // Not sure if there can be more than 2
+
+        // Last child should be the body
+        CompoundStmt body = toCompoundStmt(SpecsCollections.removeLast(children));
+        // System.out.println("CHILDREN:" + children.size());
+
+        // Remaining children should be capture arguments
+        List<Expr> captureArguments = toExpr(children);
+
         // System.out.println("CHILDREN:" + children);
-        return ClavaNodeFactory.lambdaExpr(lambdaExprData, exprData, node.getInfo(), lambdaClass, body);
+        return ClavaNodeFactory.lambdaExpr(lambdaExprData, exprData, node.getInfo(), lambdaClass, captureArguments,
+                body);
     }
 
 }

@@ -22,9 +22,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
-import pt.up.fe.specs.clang.clavaparser.ClavaParserUtils;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.Attr;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -34,7 +32,6 @@ import pt.up.fe.specs.clava.ast.decl.data.ExceptionType;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
-import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
@@ -45,7 +42,6 @@ import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
-import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.ArraySizeType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
@@ -59,9 +55,6 @@ import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
-import pt.up.fe.specs.clava.language.TagKind;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -329,24 +322,27 @@ public class ClangDataParsers {
      * @param children
      * @return
      */
+    /*
     public static ParserResult<RecordDeclData> parseRecordDecl(StringSlice string, ClangNode node,
-            Map<String, Type> typesMap, List<ClavaNode> children) {
+            Map<String, Type> typesMap, DataStore stdErr, List<ClavaNode> children) {
+        System.out.println("RECORD DECL PARSER:" + string);
+        System.out.println("NAME:" + stdErr.get(StreamKeys.NAMED_DECL_WITHOUT_NAME).get(node.getExtendedId()));
         StringParser parser = new StringParser(string);
-
+    
         // Parse kind
         TagKind tagKind = parser.apply(ClangGenericParsers::parseEnum, TagKind.getHelper());
-
+    
         // Parse booleans at the end
         // It is done this way because it can have no name
         // However, there can be an ambiguous case, when there is a type called 'definition' without definition
         boolean isCompleteDefinition = parser.apply(ClangGenericParsers::checkLastString, "definition");
         boolean isModulePrivate = parser.apply(ClangGenericParsers::checkLastString, "__module_private__");
-
+    
         // Remaining of the string is the name, take into account it can be an anonymous name
         String name = parser.apply(StringParsers::parseWord);
         if (name.isEmpty()) {
             RecordType recordType = (RecordType) typesMap.get(node.getExtendedId());
-
+    
             if (recordType == null || recordType.isAnonymous()) {
                 name = ClavaParserUtils.createAnonName(node);
             } else {
@@ -356,16 +352,17 @@ public class ClangDataParsers {
                 }
                 name = recordType.getCode();
             }
-
+    
         }
         // Remove attributes
         List<Attr> attributes = SpecsCollections.pop(children, Attr.class);
-
+    
         RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isModulePrivate, isCompleteDefinition,
                 attributes);
-
+    
         return new ParserResult<>(parser.getCurrentString(), recordDeclData);
     }
+    */
 
     public static ParserResult<RecordBase> parseRecordBase(StringSlice string, Type type) {
         StringParser parser = new StringParser(string);

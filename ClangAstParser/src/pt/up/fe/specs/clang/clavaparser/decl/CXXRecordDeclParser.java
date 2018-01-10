@@ -50,12 +50,14 @@ public class CXXRecordDeclParser extends AClangNodeParser<CXXRecordDecl> {
         //
         // line:104:8 struct compile_config_s definition
         // col:8 implicit struct compile_config_s
-
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         // Parse children, to extract attributes to RecordDeclData
         List<ClavaNode> children = parseChildren(node);
-        RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(), children);
+
+        // RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(),
+        // getStdErr(), children);
+        RecordDeclData recordDeclData = parseRecordDecl(node, children, parser);
 
         // Parse bases
         List<RecordBase> recordBases = Collections.emptyList();

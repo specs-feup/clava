@@ -49,10 +49,7 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
 
         // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
         // String name = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
-        System.out.println("PARSER:" + parser);
-        System.out.println("CONVERSION DECL:" + node.getExtendedId());
         String name = parseNamedDeclName(node, parser);
-        System.out.println("NAME:" + name);
 
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 

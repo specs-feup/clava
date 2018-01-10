@@ -35,8 +35,10 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.attr.Attr;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
+import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -48,6 +50,7 @@ import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -419,9 +422,7 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     }
 
     protected String parseNamedDeclName(ClangNode node, StringParser parser) {
-        System.out.println("DECL NAMES:" + getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME));
         String declName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).get(node.getExtendedId());
-        System.out.println("DECL NAME:" + declName);
         // boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
 
         if (declName != null) {
@@ -430,5 +431,55 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         }
 
         return null;
+    }
+
+    /**
+     * Modifies the given list of children (removes the Attr nodes inside).
+     *
+     * @param string
+     * @param children
+     * @return
+     */
+    public RecordDeclData parseRecordDecl(ClangNode node, List<ClavaNode> children, StringParser parser) {
+        System.out.println("RECORD DECL PARSER:" + parser);
+
+        // Parse kind
+        TagKind tagKind = parser.apply(ClangGenericParsers::parseEnum, TagKind.getHelper());
+
+        // Check name, take into account it can be an anonymous name
+        String name = parseNamedDeclName(node, parser);
+
+        if (name == null) {
+            name = ClavaParserUtils.createAnonName(node);
+        }
+
+        // Parse booleans
+        boolean isModulePrivate = parser.apply(StringParsers::hasWord, "__module_private__");
+        boolean isCompleteDefinition = parser.apply(StringParsers::hasWord, "definition");
+
+        /*
+        if (name.isEmpty()) {
+            RecordType recordType = (RecordType) typesMap.get(node.getExtendedId());
+        
+            if (recordType == null || recordType.isAnonymous()) {
+                name = ClavaParserUtils.createAnonName(node);
+            } else {
+                String recordTypeCode = recordType.getCode();
+                if (recordTypeCode.contains(" ")) {
+                    SpecsLogs.msgWarn("Spaces inside RecordType code, check if ok");
+                }
+                name = recordType.getCode();
+            }
+        
+        }
+        */
+
+        // Remove attributes
+        List<Attr> attributes = SpecsCollections.pop(children, Attr.class);
+
+        RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isModulePrivate, isCompleteDefinition,
+                attributes);
+
+        return recordDeclData;
     }
 }

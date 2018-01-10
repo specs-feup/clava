@@ -158,7 +158,8 @@ public class ClangGenericParsers {
             // If there is not a separator, with a prime following it, return
             if (!string.startsWith(separator + "'")) {
                 // Trim string
-                string = string;
+                // string = string;
+                string = string.trim();
                 return new ParserResult<>(string, elements);
             }
 
@@ -986,39 +987,5 @@ public class ClangGenericParsers {
     public static ParserResult<String> parsePrimes(StringSlice string) {
         return StringParsers.parseNested(string, '\'', '\'');
     }
-
-    /**
-     * Parses a class name.
-     * 
-     * <p>
-     * Class names can have template declarations (e.g., Foo<Type)>.
-     * 
-     * @param string
-     * @return
-     */
-    /*
-    public static ParserResult<String> parseClassName(StringSlice string) {
-        List<String> parsedElements = classNameParser().parse(string.toString());
-        Preconditions.checkArgument(!parsedElements.isEmpty(), "Expected to find a class name: " + string);
-    
-        return StringParsers.parseString(string, parsedElements.get(0));
-        // Preconditions.checkArgument(checkStringStarts(string, parsedElements.get(0)), "Expected string to start with
-        // '"parsedElements.get(0)+"':" + string);
-    
-        // return parseClangType(string, node.getInfo(), node.getExtendedId(), typesMap);
-    }
-    */
-    /**
-     * Argument parser that delimits arguments by spaces (' '), and glues them with double quotes ('<>') and escapes
-     * single characters with backslash ('\').
-     * 
-     * @return
-     */
-    /*
-    private static ArgumentsParser classNameParser() {
-        return new ArgumentsParser(Arrays.asList(" "), Arrays.asList(Gluer.newTag()),
-                Arrays.asList(), true);
-    }
-    */
 
 }
