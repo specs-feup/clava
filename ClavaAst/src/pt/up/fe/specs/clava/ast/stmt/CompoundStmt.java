@@ -61,7 +61,15 @@ public class CompoundStmt extends Stmt {
 
     @Override
     public String getCode() {
+        return getCode(false);
+    }
+
+    public String getCode(boolean inline) {
+
         List<Stmt> statements = getStatements();
+
+        String newLine = inline ? "" : ln();
+        String tab = inline ? " " : getTab();
 
         // If naked, and has only zero or one statements
         if (isNaked && statements.size() < 2) {
@@ -78,15 +86,21 @@ public class CompoundStmt extends Stmt {
 
         // If not the direct child of another CompoundStmt (not a scope), add a space
         boolean hasCompoundStmtParent = getParent() instanceof CompoundStmt;
-        if (hasCompoundStmtParent) {
+        if (hasCompoundStmtParent || inline) {
             // builder.append(ln() + "{");
             builder.append("{");
         } else {
             builder.append(" {");
         }
 
-        builder.append(getInlineCommentsCode());
-        builder.append(ln());
+        String inlineComments = getInlineCommentsCode();
+        builder.append(inlineComments);
+        // builder.append(getInlineCommentsCode());
+
+        // If not inline, or if there are comments, always add new line
+        if (!inline || !inlineComments.isEmpty()) {
+            builder.append(ln());
+        }
 
         for (Stmt stmt : getStatements()) {
 
@@ -94,12 +108,15 @@ public class CompoundStmt extends Stmt {
                     // Add ";" in the end if not present
                     // .map(line -> line.endsWith(";") ? line : line + ";")
                     // Add tab
-                    .map(line -> getTab() + line)
-                    .collect(Collectors.joining(ln(), "", stmt.getInlineCommentsCode() + ln()));
+                    .map(line -> tab + line)
+                    .collect(Collectors.joining(newLine, "", stmt.getInlineCommentsCode() + newLine));
             builder.append(stmtCode);
         }
 
-        builder.append("}" + ln());
+        if (inline) {
+            builder.append(" ");
+        }
+        builder.append("}" + newLine);
         return builder.toString();
     }
 

@@ -140,9 +140,9 @@ import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -1238,9 +1238,9 @@ public class ClavaNodeFactory {
     }
 
     public static LambdaExpr lambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
-            CXXRecordDecl lambdaClass, CompoundStmt body) {
+            CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
 
-        return new LambdaExpr(lambdaData, exprData, info, lambdaClass, body);
+        return new LambdaExpr(lambdaData, exprData, info, lambdaClass, captureArguments, body);
     }
 
     /*

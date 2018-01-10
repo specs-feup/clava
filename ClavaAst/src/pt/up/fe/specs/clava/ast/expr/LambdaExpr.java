@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,17 +26,21 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureKind;
+import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 public class LambdaExpr extends Expr {
 
     private final LambdaExprData lambdaData;
 
     public LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
-            CXXRecordDecl lambdaClass, CompoundStmt body) {
+            CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
 
-        this(lambdaData, exprData, info, Arrays.asList(lambdaClass, body));
+        this(lambdaData, exprData, info, SpecsList.newInstance(ClavaNode.class)
+                .concat(lambdaClass).concat(captureArguments).concat(body));
     }
 
     private LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
@@ -57,7 +61,14 @@ public class LambdaExpr extends Expr {
     }
 
     public CompoundStmt getBody() {
-        return getChild(CompoundStmt.class, 1);
+        return getChild(CompoundStmt.class, getNumChildren() - 1);
+    }
+
+    public List<Expr> getCaptureArguments() {
+        int startIndex = 1;
+        int endIndex = getNumChildren() - 1;
+
+        return SpecsCollections.cast(getChildren().subList(startIndex, endIndex), Expr.class);
     }
 
     public LambdaExprData getLambdaData() {
@@ -66,7 +77,10 @@ public class LambdaExpr extends Expr {
 
     @Override
     public String getCode() {
-        System.out.println("LAMBDA CLASS:\n" + getLambdaClass());
+        // System.out.println("LAMBDA CLASS:\n" + getLambdaClass());
+        System.out.println("LAMBDA DATA:" + lambdaData);
+
+        String captureCode = getCaptureCode();
 
         CXXRecordDecl lambdaClass = getLambdaClass();
         List<CXXMethodDecl> operatorsPar = lambdaClass.getMethod("operator()");
@@ -76,14 +90,57 @@ public class LambdaExpr extends Expr {
 
         StringBuilder code = new StringBuilder();
 
+        // Add capture
+        code.append(captureCode);
+
         // Build parameters
         code.append("(").append(params).append(")");
 
-        code.append(" -> ");
+        code.append(" ");
 
-        code.append(getBody().getCode());
+        if (lambdaData.isHasExplicitResultType()) {
+            code.append("-> ");
+            code.append(operatorPar.getReturnType().getCode()).append(" ");
+        }
+
+        code.append(getBody().getCode(true));
 
         return code.toString();
+    }
+
+    private String getCaptureCode() {
+        StringBuilder capture = new StringBuilder();
+
+        List<String> captureElements = new ArrayList<>();
+
+        // Add default, if present
+        lambdaData.getCaptureDefault().getCode().ifPresent(captureElements::add);
+
+        // Add captures, if present
+        List<Expr> captureArgs = getCaptureArguments();
+        for (int i = 0; i < captureArgs.size(); i++) {
+            LambdaCaptureKind kind = lambdaData.getCaptureKinds().get(i);
+            captureElements.add(kind.getCode(captureArgs.get(i).getCode()));
+        }
+
+        // // Check capture default
+        // switch (lambdaData.getCaptureDefault()) {
+        // case BY_COPY:
+        // captureElements.add("=");
+        // break;
+        // case BY_REF:
+        //
+        //
+        // }
+        // if(lambdaData.getCaptureDefault() == LambdaCaptureDefault.BY_COPY) {
+        // captureElements.add("=")
+        // } else if() {
+
+        // }
+
+        capture.append("[").append(captureElements.stream().collect(Collectors.joining(", "))).append("]");
+
+        return capture.toString();
     }
 
 }

@@ -11,7 +11,9 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr.data;
+package pt.up.fe.specs.clava.ast.expr.data.lambda;
+
+import java.util.List;
 
 public class LambdaExprData {
 
@@ -19,14 +21,18 @@ public class LambdaExprData {
     private final boolean isMutable;
     private final boolean hasExplicitParameters;
     private final boolean hasExplicitResultType;
+    private final LambdaCaptureDefault captureDefault;
+    private final List<LambdaCaptureKind> captureKinds;
 
     public LambdaExprData(boolean isGenericLambda, boolean isMutable, boolean hasExplicitParameters,
-            boolean hasExplicitResultType) {
+            boolean hasExplicitResultType, LambdaCaptureDefault captureDefault, List<LambdaCaptureKind> captureKinds) {
 
         this.isGenericLambda = isGenericLambda;
         this.isMutable = isMutable;
         this.hasExplicitParameters = hasExplicitParameters;
         this.hasExplicitResultType = hasExplicitResultType;
+        this.captureDefault = captureDefault;
+        this.captureKinds = captureKinds;
     }
 
     public boolean isGenericLambda() {
@@ -45,6 +51,14 @@ public class LambdaExprData {
         return hasExplicitResultType;
     }
 
+    public LambdaCaptureDefault getCaptureDefault() {
+        return captureDefault;
+    }
+
+    public List<LambdaCaptureKind> getCaptureKinds() {
+        return captureKinds;
+    }
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
@@ -53,6 +67,8 @@ public class LambdaExprData {
         string.append("isMutable: ").append(isMutable).append("\n");
         string.append("hasExplicitParameters: ").append(hasExplicitParameters).append("\n");
         string.append("hasExplicitResultType: ").append(hasExplicitResultType).append("\n");
+        string.append("captureDefault: ").append(captureDefault).append("\n");
+        string.append("captureKinds: ").append(captureKinds).append("\n");
 
         return string.toString();
     }
