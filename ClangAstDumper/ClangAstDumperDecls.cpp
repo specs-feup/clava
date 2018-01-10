@@ -54,13 +54,11 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
     if (const NamedDecl *ND = dyn_cast<NamedDecl>(declAddr)) {
 //        llvm::errs() << "Testing NAMED DECL: " << getId(ND) << "\n";
 
-        // Check if has no decl name, or if decl name is empty
-        if (!ND->getDeclName() || ND->getNameAsString().length() == 0) {
-//            llvm::errs() << "NAMED DECL WITHOUT NAME: " << "\n";
+        // Check if has decl name, and decl name is not empty
+        if (ND->getDeclName() && ND->getNameAsString().length() > 0) {
             llvm::errs() << DUMP_NAMED_DECL_WITHOUT_NAME << "\n";
             llvm::errs() << getId(ND) << "\n";
-        } else {
-//            llvm::errs() << "NAMED DECL NAME: " << ND->getNameAsString() << "\n";
+            llvm::errs() << ND->getNameAsString() << "\n";
         }
     }
 

@@ -72,7 +72,7 @@ public:
     void VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node);
     void VisitLambdaExpr(const LambdaExpr *Node);
     void VisitSizeOfPackExpr(const SizeOfPackExpr *Node);
-
+    void VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node);
 
 
     /*

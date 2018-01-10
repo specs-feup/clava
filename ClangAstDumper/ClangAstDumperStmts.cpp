@@ -346,10 +346,24 @@ void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
     // children() of LambdaExpr is not const?
     for (const Stmt *SubStmt : const_cast<LambdaExpr*>(Node)->children()) {
         if (SubStmt) {
-            VisitStmt(SubStmt);
+            VisitStmtTop(SubStmt);
         }
     }
 
+    // Dump lambda data
+    llvm::errs() << LAMBDA_EXPR_DATA << "\n";
+    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << Node->isGenericLambda() << "\n";
+    llvm::errs() << Node->isMutable() << "\n";
+    llvm::errs() << Node->hasExplicitParameters() << "\n";
+    llvm::errs() << Node->hasExplicitResultType() << "\n";
+
+    llvm::errs() << "LAMBDA CAPTURES\n";
+    for(auto lambdaCapture : Node->captures()) {
+        llvm::errs() << "CAPTURE KIND: " << lambdaCapture.getCaptureKind ()  << "\n";
+    }
+
+    llvm::errs() << "LAMBDA CAPTURES DEFAULT: " << Node->getCaptureDefault() <<"\n";
 }
 
 void ClangAstDumper::VisitSizeOfPackExpr(const SizeOfPackExpr *Node) {
@@ -363,4 +377,20 @@ void ClangAstDumper::VisitSizeOfPackExpr(const SizeOfPackExpr *Node) {
     VisitDeclTop(Node->getPack());
 
     // Map expr to pack?
+}
+
+void ClangAstDumper::VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    log("CXXUnresolvedConstructExpr", Node);
+
+    // Visit type as written
+    VisitTypeTop(Node->getTypeAsWritten().getTypePtr());
+
+    // Map current address to address of 'type as written'
+    llvm::errs() << TYPE_AS_WRITTEN << "\n";
+    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << getId(Node->getTypeAsWritten().getTypePtr()) << "\n";
 }

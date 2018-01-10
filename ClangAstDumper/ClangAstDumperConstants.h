@@ -42,4 +42,9 @@ static const std::string TYPEDEF_DECL_SOURCE = "<TypedefDecl Source>";
 
 static const std::string CXX_MEMBER_EXPR_INFO = "<CXX Member Expr Info>";
 
+static const std::string TYPE_AS_WRITTEN = "<Type As Written>";
+
+static const std::string LAMBDA_EXPR_DATA = "<Lambda Expr Data>";
+
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H
