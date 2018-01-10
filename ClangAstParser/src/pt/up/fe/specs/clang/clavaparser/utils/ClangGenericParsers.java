@@ -35,8 +35,6 @@ import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelper;
-import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
-import pt.up.fe.specs.util.parsing.arguments.Gluer;
 import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -998,26 +996,29 @@ public class ClangGenericParsers {
      * @param string
      * @return
      */
+    /*
     public static ParserResult<String> parseClassName(StringSlice string) {
         List<String> parsedElements = classNameParser().parse(string.toString());
         Preconditions.checkArgument(!parsedElements.isEmpty(), "Expected to find a class name: " + string);
-
+    
         return StringParsers.parseString(string, parsedElements.get(0));
         // Preconditions.checkArgument(checkStringStarts(string, parsedElements.get(0)), "Expected string to start with
         // '"parsedElements.get(0)+"':" + string);
-
+    
         // return parseClangType(string, node.getInfo(), node.getExtendedId(), typesMap);
     }
-
+    */
     /**
      * Argument parser that delimits arguments by spaces (' '), and glues them with double quotes ('<>') and escapes
      * single characters with backslash ('\').
      * 
      * @return
      */
+    /*
     private static ArgumentsParser classNameParser() {
         return new ArgumentsParser(Arrays.asList(" "), Arrays.asList(Gluer.newTag()),
                 Arrays.asList(), true);
     }
+    */
 
 }

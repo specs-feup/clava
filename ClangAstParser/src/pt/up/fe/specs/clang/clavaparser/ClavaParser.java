@@ -64,6 +64,7 @@ import pt.up.fe.specs.clang.clavaparser.expr.CStyleCastExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXBindTemporaryExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXBoolLiteralExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXConstructExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.CXXConversionDeclParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXDefaultArgExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXDefaultInitExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXDeleteExprParser;
@@ -91,6 +92,7 @@ import pt.up.fe.specs.clang.clavaparser.expr.ImplicitCastExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ImplicitValueInitExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.InitListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.IntegerLiteralParser;
+import pt.up.fe.specs.clang.clavaparser.expr.LambdaExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.MaterializeTemporaryExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.MemberExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.OffsetOfExprParser;
@@ -340,6 +342,8 @@ public class ClavaParser implements AutoCloseable {
         converter.put("PackExpansionExpr", PackExpansionExprParser::new);
         converter.put("ParenListExpr", ParenListExprParser::new);
         converter.put("CXXUnresolvedConstructExpr", CXXUnresolvedConstructExprParser::new);
+        converter.put("LambdaExpr", LambdaExprParser::new);
+        converter.put("CXXConversionDecl", CXXConversionDeclParser::new);
 
         /* type */
         converter.put("RecordType", RecordTypeParser::new);

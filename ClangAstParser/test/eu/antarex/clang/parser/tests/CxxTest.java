@@ -162,4 +162,9 @@ public class CxxTest {
         new CxxTester("builtin_types.cpp").test();
     }
 
+    @Test
+    public void testLambda() {
+        new CxxTester("lambda.cpp").onePass().showCode().test();
+    }
+
 }

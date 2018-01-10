@@ -419,11 +419,14 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     }
 
     protected String parseNamedDeclName(ClangNode node, StringParser parser) {
-        boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        System.out.println("DECL NAMES:" + getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME));
+        String declName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).get(node.getExtendedId());
+        System.out.println("DECL NAME:" + declName);
+        // boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
 
-        if (hasName) {
+        if (declName != null) {
             // return parser.apply(StringParsers::parseWord);
-            return parser.apply(ClangGenericParsers::parseClassName);
+            return parser.apply(StringParsers::parseString, declName);
         }
 
         return null;
