@@ -140,8 +140,10 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     bool PrintNodesTypesRelationsVisitor::VisitTypeDecl(TypeDecl *D) {
 
+
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
+            //llvm::errs() << "Visiting Type Decl: " << D << "\n";
             dumpNodeToType(DumpResources::nodetypes, D, D->getTypeForDecl());
         }
 
@@ -186,6 +188,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
+            //llvm::errs() << "Visiting Value Decl: " << D << "\n";
             //if(D->getType().isNull()) {
             //    llvm::errs() << "VisitValueDecl null type\n";
             //}
@@ -215,6 +218,22 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
         if (!fullLocation.isInSystemHeader()) {
             dumper.VisitStmtTop(D);
             return true;
+        }
+
+        return true;
+    }
+
+    bool PrintNodesTypesRelationsVisitor::VisitLambdaExpr(LambdaExpr *D) {
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+
+        if (!fullLocation.isInSystemHeader()) {
+            // Dump self
+            dumpNodeToType(DumpResources::nodetypes,D, D->getType());
+
+            // Traverse lambda class
+            TraverseCXXRecordDecl(D->getLambdaClass());
+            //TraverseDecl(D->getLambdaClass());
+            //VisitTypeDecl(D->getLambdaClass());
         }
 
         return true;

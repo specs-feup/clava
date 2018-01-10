@@ -357,13 +357,16 @@ void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
     llvm::errs() << Node->isMutable() << "\n";
     llvm::errs() << Node->hasExplicitParameters() << "\n";
     llvm::errs() << Node->hasExplicitResultType() << "\n";
-
-    llvm::errs() << "LAMBDA CAPTURES\n";
+    llvm::errs() << Node->getCaptureDefault() <<"\n";
+    // Number of captures
+    llvm::errs() << Node->capture_size() <<"\n";
+    // Info about each capture
     for(auto lambdaCapture : Node->captures()) {
-        llvm::errs() << "CAPTURE KIND: " << lambdaCapture.getCaptureKind ()  << "\n";
+        // Capture kind
+        llvm::errs()  << lambdaCapture.getCaptureKind ()  << "\n";
     }
 
-    llvm::errs() << "LAMBDA CAPTURES DEFAULT: " << Node->getCaptureDefault() <<"\n";
+
 }
 
 void ClangAstDumper::VisitSizeOfPackExpr(const SizeOfPackExpr *Node) {

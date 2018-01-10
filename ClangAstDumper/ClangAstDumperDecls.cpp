@@ -140,6 +140,10 @@ void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
     llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
     llvm::errs() << dumper->getId(D) << "\n";
     llvm::errs() << dumper->getId(D->getParent()) << "\n";
+
+    // Visit type
+    //llvm::errs() << "Visiting type " << dumper->getId(D->getType().getTypePtr()) << " for node " << dumper->getId(D) << "\n";
+    //dumper->VisitTypeTop(D->getType().getTypePtr());
 }
 
 

@@ -114,6 +114,7 @@ public:
     //bool VisitDeclRefExpr(DeclRefExpr * D);
     bool VisitCXXConstructExpr(CXXConstructExpr * D);
     bool VisitExpr(Expr *D);
+    bool VisitLambdaExpr(LambdaExpr *D);
     bool VisitTypeDecl(TypeDecl *D);
     bool VisitTypedefNameDecl(TypedefNameDecl *D);
     bool VisitEnumDecl(EnumDecl *D);
