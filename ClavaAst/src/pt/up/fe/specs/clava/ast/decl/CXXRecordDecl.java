@@ -79,6 +79,10 @@ public class CXXRecordDecl extends RecordDecl {
         return super.getCode(bases);
     }
 
+    public List<CXXMethodDecl> getMethods() {
+        return getChildrenOf(CXXMethodDecl.class);
+    }
+
     public List<CXXMethodDecl> getMethod(String methodName) {
         List<FunctionDecl> functions = getFunction(methodName);
 
