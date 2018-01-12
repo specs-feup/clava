@@ -46,6 +46,7 @@
 
 	<!--  CLASS -->
 	<joinpoint class="class" extends="record">
+		<select class="method"/>
 	</joinpoint>	
 	
 	<!-- PRAGMA -->
@@ -91,7 +92,9 @@
 		<select 						class="param"/>
 	</joinpoint>
 		
-			
+	<!-- METHOD -->
+	<joinpoint class="method" extends="function" tooltip="C++ function">
+	</joinpoint>			
 
 		
 		

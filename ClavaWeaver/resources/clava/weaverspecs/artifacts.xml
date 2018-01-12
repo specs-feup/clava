@@ -107,6 +107,16 @@
 		<!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
 		<attribute name="fields" type="joinpoint[]" />
 	</artifact>
+	
+	<!-- CLASS -->
+	<artifact class="class" default="name">
+		<attribute name="methods" type="method[]" />	
+	</artifact>
+	
+	<!-- METHOD -->
+	<artifact class="method" default="name">
+		<attribute name="record" type="class" />	
+	</artifact>
 
 
 	<!-- DECLARATION -->

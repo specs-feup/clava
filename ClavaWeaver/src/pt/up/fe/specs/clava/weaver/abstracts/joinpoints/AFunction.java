@@ -417,7 +417,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "body": 
@@ -437,7 +437,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("hasDefinition");
@@ -454,7 +454,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         super.fillWithSelects(selects);
         selects.add("body");
         selects.add("param");
@@ -464,7 +464,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void clone(String)");
         actions.add("String cloneOnFile(String)");
@@ -478,7 +478,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "function";
     }
     /**

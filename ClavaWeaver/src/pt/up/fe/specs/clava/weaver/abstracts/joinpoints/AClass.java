@@ -1,8 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import javax.script.Bindings;
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -24,6 +27,47 @@ public abstract class AClass extends ARecord {
     public AClass(ARecord aRecord){
         this.aRecord = aRecord;
     }
+    /**
+     * Get value on attribute methods
+     * @return the attribute's value
+     */
+    public abstract AMethod[] getMethodsArrayImpl();
+
+    /**
+     * Get value on attribute methods
+     * @return the attribute's value
+     */
+    public Bindings getMethodsImpl() {
+        AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute methods
+     * @return the attribute's value
+     */
+    public final Object getMethods() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "methods", Optional.empty());
+        	}
+        	Bindings result = this.getMethodsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "methods", e);
+        }
+    }
+
+    /**
+     * Method used by the lara interpreter to select methods
+     * @return 
+     */
+    public abstract List<? extends AMethod> selectMethod();
+
     /**
      * Get value on attribute name
      * @return the attribute's value
@@ -201,6 +245,9 @@ public abstract class AClass extends ARecord {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "method": 
+        		joinPointList = selectMethod();
+        		break;
         	case "field": 
         		joinPointList = selectField();
         		break;
@@ -217,6 +264,7 @@ public abstract class AClass extends ARecord {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aRecord.fillWithAttributes(attributes);
+        attributes.add("methods");
     }
 
     /**
@@ -225,6 +273,7 @@ public abstract class AClass extends ARecord {
     @Override
     protected final void fillWithSelects(List<String> selects) {
         this.aRecord.fillWithSelects(selects);
+        selects.add("method");
     }
 
     /**
@@ -260,6 +309,7 @@ public abstract class AClass extends ARecord {
      * 
      */
     protected enum ClassAttributes {
+        METHODS("methods"),
         NAME("name"),
         KIND("kind"),
         FIELDS("fields"),
