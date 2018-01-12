@@ -1,14 +1,15 @@
-/*
+
 class A {
 
 	int x;
 
 	void foo() {
-		auto x5 = [this]() { return this->x; };
+		auto x_1 = [this]() { return this->x; };
 	}
 
 };
-*/
+
+
 int main() {
 	
 	int a, b;
@@ -17,20 +18,26 @@ int main() {
 	auto x2 = [&](int x) { return x + 1; };
 	auto x3 = [](int x) -> int { return x; };
 	auto x4 = [&]() { return [&]() { return 0; }; };
-	auto x6 = [=]() { return 0; };
-	auto x7 = [a, &b]() { return a + b; };
-	auto x8 = [=, &a]() { return 0; };
-	auto x9 = [a]() -> decltype(a + a) { return a + a; };
-	auto x10 = [=]() mutable throw() -> int { return 0; };
-    auto x11 = [] { return 0; };
-    auto x12 = [val = 1] { return val; };
-    //auto x13 = [&val, =] { return val; };
-    int x14 = [] { return 0; }(); // x is 0
-    auto x15 = []{};
-    //auto x16 = [](auto arg1, auto arg2) { return arg1 + arg2; };
+	auto x5 = [=]() { return 0; };
+	auto x6 = [a, &b]() { return a + b; };
+	auto x7 = [=, &a]() { return 0; };
+	auto x8 = [a]() -> decltype(a + a) { return a + a; };
+	auto x9 = [=]() mutable throw() -> int { return 0; }; // exceptions do not appear, discover where this information is
+	auto x9_1 = [=]() mutable noexcept -> int { return 0; }; // exceptions do not appear, discover where this information is
+	auto x10 = [] { return 0; };
+    //auto x11 = [val = 1] { return val; }; // Not doing initialization: [1]
+	int x12 = [] { return 0; }(); // x is 0
+    auto x13 = []{};
+    //auto x14 = [](auto arg1, auto arg2) { return arg1 + arg2; }; // Not supported yet
+	auto x15 = []()  { while(true); };
 
-    //auto x17 = [int y] { return y; };
-    //auto x17_1 = new decltype(x17)(0);
-    //std::cout << x17_1->operator()(); << std::endl;
 
+	//auto x_a = [int y] { return y; }; // C++17
+	//auto xa_1 = new decltype(x_a)(0);
+    //std::cout << xa_1->operator()(); << std::endl;
+	
+	//auto x_ = []() [[maybe_unused]] { while(true); }; // Attribute ignored
+	//auto x_ = [] nothrow -> int { return 0; }; // Not compiling
+    //auto x_ = [&val, =] { return val; }; // Not compiling	
+	//auto x_ = []() [[noreturn]] { while(true); }; // Not compiling. [[deprecated]] also does not work on types
 }

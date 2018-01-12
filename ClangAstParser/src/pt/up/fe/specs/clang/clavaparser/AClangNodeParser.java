@@ -441,14 +441,12 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
      * @return
      */
     public RecordDeclData parseRecordDecl(ClangNode node, List<ClavaNode> children, StringParser parser) {
-        System.out.println("RECORD DECL PARSER:" + parser);
 
         // Parse kind
         TagKind tagKind = parser.apply(ClangGenericParsers::parseEnum, TagKind.getHelper());
 
         // Check name, take into account it can be an anonymous name
         String name = parseNamedDeclName(node, parser);
-
         if (name == null) {
             name = ClavaParserUtils.createAnonName(node);
         }

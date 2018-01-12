@@ -164,7 +164,7 @@ public class CxxTest {
 
     @Test
     public void testLambda() {
-        new CxxTester("lambda.cpp").addFlags("-std=c++14").showCode().onePass().test();
+        new CxxTester("lambda.cpp").addFlags("-std=c++14").test();
     }
 
 }

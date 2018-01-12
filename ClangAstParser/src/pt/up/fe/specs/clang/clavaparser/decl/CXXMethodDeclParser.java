@@ -49,8 +49,6 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
         // line:5:21 used readNextRow 'void (std::istream &)'
         // WriteResultSingle 'void (std::vector<float> &, std::string &&, float)' static namespace Routing record Data
         // PARSER:col:14 AreEqual '_Bool (double, double)' static
-        System.out.println("CXXMETHOD:" + node.getExtendedId());
-        System.out.println("TYPE:" + getTypesMap().get(node.getExtendedId()));
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
