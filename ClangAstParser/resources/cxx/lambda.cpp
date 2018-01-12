@@ -35,9 +35,4 @@ int main() {
 	//auto x_a = [int y] { return y; }; // C++17
 	//auto xa_1 = new decltype(x_a)(0);
     //std::cout << xa_1->operator()(); << std::endl;
-	
-	//auto x_ = []() [[maybe_unused]] { while(true); }; // Attribute ignored
-	//auto x_ = [] nothrow -> int { return 0; }; // Not compiling
-    //auto x_ = [&val, =] { return val; }; // Not compiling	
-	//auto x_ = []() [[noreturn]] { while(true); }; // Not compiling. [[deprecated]] also does not work on types
 }

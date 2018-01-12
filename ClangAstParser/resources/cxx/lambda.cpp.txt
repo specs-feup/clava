@@ -1,0 +1,37 @@
+
+class A {
+   int x;
+   void foo() {
+      auto x_1 = [this]() {  return this->x; };
+   }
+};
+
+
+int main() {
+   int a;
+   int b;
+   auto x1 = []() {  return 0; };
+   auto x2 = [&](int x) {  return x + 1; };
+   auto x3 = [](int x) -> int {  return x; };
+   auto x4 = [&]() {  return [&]() {  return 0; }; };
+   auto x5 = [=]() {  return 0; };
+   auto x6 = [a, &b]() {  return a + b; };
+   auto x7 = [=, &a]() {  return 0; };
+   auto x8 = [a]() -> decltype(a + a) {  return a + a; };
+   auto x9 = [=]() mutable -> int {  return 0; // exceptions do not appear, discover where this information is
+    };
+   auto x9_1 = [=]() mutable -> int {  return 0; // exceptions do not appear, discover where this information is
+    };
+   auto x10 = []() {  return 0; };
+   //auto x11 = [val = 1] { return val; }; // Not doing initialization: [1]
+   int x12 = []() {  return 0; // x is 0
+    }();
+   auto x13 = []()  {
+   }
+   ;
+   //auto x14 = [](auto arg1, auto arg2) { return arg1 + arg2; }; // Not supported yet
+   auto x15 = []() { while(true); };
+   //auto x_a = [int y] { return y; }; // C++17
+   //auto xa_1 = new decltype(x_a)(0);
+   //std::cout << xa_1->operator()(); << std::endl;
+}
