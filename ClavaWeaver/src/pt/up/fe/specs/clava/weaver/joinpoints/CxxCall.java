@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -212,7 +211,9 @@ public class CxxCall extends ACall {
 
     @Override
     public void setArgImpl(int index, String expr) {
-        Expr literalExpr = ClavaNodeFactory.literalExpr(expr, ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
+        // Get arg of equivalent index, to extract type
+        Expr arg = call.getArgs().get(index);
+        Expr literalExpr = ClavaNodeFactory.literalExpr(expr, arg.getExprType());
         setArgImpl(index, (AExpression) CxxJoinpoints.create(literalExpr, null));
     }
 
