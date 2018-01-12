@@ -100,7 +100,8 @@ public class CallExpr extends Expr {
     public Expr setArgument(int index, Expr arg) {
         // Check num args
         int numArgs = getArgs().size();
-        if (index >= 0 && index < numArgs) {
+        boolean validIndex = index >= 0 && index < numArgs;
+        if (!validIndex) {
             throw new RuntimeException(
                     "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
 
