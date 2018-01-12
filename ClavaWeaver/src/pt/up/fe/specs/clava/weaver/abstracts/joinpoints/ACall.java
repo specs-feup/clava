@@ -308,6 +308,62 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public void setArgImpl(int index, String expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArg not implemented ");
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public final void setArg(int index, String expr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
+        	}
+        	this.setArgImpl(index, expr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArg", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public void setArgImpl(Integer index, AExpression expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArg not implemented ");
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public final void setArg(Integer index, AExpression expr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
+        	}
+        	this.setArgImpl(index, expr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArg", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -543,6 +599,8 @@ public abstract class ACall extends AExpression {
         actions.add("void setName(string)");
         actions.add("void wrap(string)");
         actions.add("void inline()");
+        actions.add("void setArg(int, string)");
+        actions.add("void setArg(Integer, expression)");
     }
 
     /**

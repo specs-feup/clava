@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -207,5 +208,24 @@ public class CxxCall extends ACall {
     public void inlineImpl() {
         call.getAncestor(App.class).inline(call);
         // new CallInliner(call).inline();
+    }
+
+    @Override
+    public void setArgImpl(int index, String expr) {
+        Expr literalExpr = ClavaNodeFactory.literalExpr(expr, ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
+        setArgImpl(index, (AExpression) CxxJoinpoints.create(literalExpr, null));
+    }
+
+    @Override
+    public void setArgImpl(Integer index, AExpression expr) {
+        // Check num args
+        // int numArgs = getArgListArrayImpl().length;
+        // if (index >= 0 && index < numArgs) {
+        // SpecsLogs.msgInfo(
+        // "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
+        // return;
+        // }
+
+        call.setArgument(index, (Expr) expr.getNode());
     }
 }

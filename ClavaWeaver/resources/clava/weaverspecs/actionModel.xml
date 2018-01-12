@@ -130,7 +130,15 @@
 	
 	<action name="inline" class="call" tooltip="Inlines this call, if possible"/>
 	
+	<action name="setArg" class="call">
+		<parameter name="index" type="int" />
+		<parameter name="expr" type="string" />
+	</action>
 	
+	<action name="setArg" class="call">
+		<parameter name="index" type="Integer" />
+		<parameter name="expr" type="expression" />
+	</action>
 	
 	
 	<action name="insertBegin" class="file" tooltip="Adds the node in the join point to the start of the file">

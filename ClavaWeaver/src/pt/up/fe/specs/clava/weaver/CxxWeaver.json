@@ -1966,6 +1966,42 @@
                   "children": [
                            {
                               "type": "void",
+                              "name": "setArg"
+                           },
+                           {
+                              "type": "int",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "expr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setArg"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "expression",
+                              "name": "expr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               "name": "setName"
                            },
                            {
