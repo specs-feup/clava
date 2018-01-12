@@ -97,6 +97,19 @@ public class CallExpr extends Expr {
         return SpecsCollections.cast(getChildren().subList(1, getNumChildren()), Expr.class);
     }
 
+    public Expr setArgument(int index, Expr arg) {
+        // Check num args
+        int numArgs = getArgs().size();
+        if (index >= 0 && index < numArgs) {
+            throw new RuntimeException(
+                    "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
+
+        }
+
+        int argIndex = 1 + index;
+        return (Expr) setChild(argIndex, arg);
+    }
+
     public DeclRefExpr getCalleeDeclRef() {
         return getCallee().getFirstDescendantsAndSelf(DeclRefExpr.class).orElseThrow(
                 () -> new RuntimeException(
