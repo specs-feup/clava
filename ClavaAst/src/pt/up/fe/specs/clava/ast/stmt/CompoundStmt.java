@@ -22,6 +22,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -79,7 +80,12 @@ public class CompoundStmt extends Stmt {
             }
             Stmt statement = statements.get(0);
 
-            return " " + statement.getCode() + statement.getInlineCommentsCode();
+            String commentsCode = statement.getInlineCommentsCode();
+            if (inline && !commentsCode.isEmpty()) {
+                commentsCode += ln();
+            }
+
+            return " " + statement.getCode() + commentsCode;
         }
 
         StringBuilder builder = new StringBuilder();
@@ -104,13 +110,25 @@ public class CompoundStmt extends Stmt {
 
         for (Stmt stmt : getStatements()) {
 
+            String inlineComment = stmt.getInlineCommentsCode();
+
             String stmtCode = StringLines.getLines(stmt.getCode()).stream()
                     // Add ";" in the end if not present
                     // .map(line -> line.endsWith(";") ? line : line + ";")
                     // Add tab
                     .map(line -> tab + line)
-                    .collect(Collectors.joining(newLine, "", stmt.getInlineCommentsCode() + newLine));
+                    .collect(Collectors.joining(newLine, "", inlineComment + newLine));
             builder.append(stmtCode);
+
+            if (inline && !inlineComment.isEmpty()) {
+                builder.append(ln());
+            }
+
+            if (inline && (stmt instanceof WrapperStmt)) {
+                if (((WrapperStmt) stmt).getWrappedNode() instanceof InlineComment) {
+                    builder.append(ln());
+                }
+            }
         }
 
         if (inline) {
