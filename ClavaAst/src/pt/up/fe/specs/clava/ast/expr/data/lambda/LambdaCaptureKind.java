@@ -39,6 +39,10 @@ public enum LambdaCaptureKind implements StringProvider {
     public String getCode(String exprCode) {
         switch (this) {
         case THIS:
+            if (exprCode.equals("this")) {
+                return "this";
+            }
+            // Does this happen?
             return "this." + exprCode;
         case BY_COPY:
             return exprCode;

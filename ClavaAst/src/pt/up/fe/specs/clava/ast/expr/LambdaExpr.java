@@ -77,8 +77,9 @@ public class LambdaExpr extends Expr {
 
     @Override
     public String getCode() {
+
         // System.out.println("LAMBDA CLASS:\n" + getLambdaClass());
-        System.out.println("LAMBDA DATA:" + lambdaData);
+        // System.out.println("LAMBDA DATA:" + lambdaData);
 
         String captureCode = getCaptureCode();
 
@@ -87,7 +88,10 @@ public class LambdaExpr extends Expr {
         Preconditions.checkArgument(operatorsPar.size() == 1, "Expected size to be 1, is " + operatorsPar.size());
         CXXMethodDecl operatorPar = operatorsPar.get(0);
         String params = operatorPar.getParameters().stream().map(ClavaNode::getCode).collect(Collectors.joining(", "));
-
+        // System.out.println("LAMBDA METHOD TYPE:" + operatorPar.getFunctionType());
+        // System.out.println("LAMBDA METHOD TYPE DATA:" + operatorPar.getFunctionDeclData());
+        // System.out.println("EXPE: " + operatorPar.getFunctionType().getFunctionProtoTypeData().getSpecifier());
+        // System.out.println("LAMBDA CLASS:" + lambdaClass);
         StringBuilder code = new StringBuilder();
 
         // Add capture
@@ -98,12 +102,18 @@ public class LambdaExpr extends Expr {
 
         code.append(" ");
 
+        if (lambdaData.isMutable()) {
+            code.append("mutable ");
+        }
+
         if (lambdaData.isHasExplicitResultType()) {
             code.append("-> ");
             code.append(operatorPar.getReturnType().getCode()).append(" ");
         }
 
-        code.append(getBody().getCode(true));
+        CompoundStmt body = getBody();
+        boolean inline = body.getStatements().size() == 1;
+        code.append(getBody().getCode(inline));
 
         return code.toString();
     }
