@@ -86,7 +86,13 @@ void ClangAstDumper::dumpSourceRange(std::string id, SourceLocation startLoc, So
 
     if (startPLoc.isInvalid()) {
         llvm::errs() << "<invalid>\n";
+        /*
+        llvm::errs() << "startLoc:\n";
+        startLoc.dump(SM);
+        llvm::errs() << "endLoc:\n";
+        endLoc.dump(SM);
         assert(startLoc == endLoc);
+         */
         return;
     }
 

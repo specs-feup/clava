@@ -105,6 +105,8 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 
         }
 
+        // TODO: CAN ALWAYS CALL THIS, OUTSIDE OF IF?
+
         // Visit constructors
         for (auto ctor : D->ctors()) {
             VisitDeclTop(ctor);
@@ -125,6 +127,84 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 
     }
 
+
+
+    //for (auto &I : D->redecls()) {
+    //for (auto &I : ((clang::Redeclarable<clang::TagDecl>*) D)->redecls()) {
+    /*
+    for (auto &I : ((clang::Decl*) D)->redecls()) {
+        //llvm::errs() << "REDECLARABLE___:" << getId(I) << "\n";
+        VisitDeclTop(I);
+    }
+     */
+
+    /*
+    // Visit constructors
+    for (auto ctor : D->ctors()) {
+        VisitDeclTop(ctor);
+    }
+     */
+
+
+//    llvm::errs() << "LAMBDA CALL OP:" << D->getLambdaCallOperator() << "\n";
+//    llvm::errs() << "LAMBDA CONTEXT DECL:" << D->getLambdaContextDecl() << "\n";
+
+
+
+    /*
+    // Visit bases
+    for (const auto &I : D->bases()) {
+        llvm::errs() << "BASE:" << &I << "\n";
+    }
+
+    // Visit virtual bases
+    for (const auto &I : D->vbases()) {
+        llvm::errs() << "VBASE:" << &I << "\n";
+    }
+
+    // Visit friends
+    for (const auto &I : D->friends()) {
+        llvm::errs() << "FRIEND:" << &I << "\n";
+    }
+    */
+    // Visit captures
+    for (const auto &I : D->captures()) {
+        if(I.capturesVariable()) {
+            VisitDeclTop(I.getCapturedVar());
+        }
+
+        //llvm::errs() << "CAPTURE:" << &I << "\n";
+    }
+
+
+    // Visit canonical decl
+    if(D->getCanonicalDecl()) {
+        VisitDeclTop(D->getCanonicalDecl());
+    }
+
+    // Visit previous decl
+    if(D->getPreviousDecl()) {
+        VisitDeclTop(D->getPreviousDecl());
+        //llvm::errs() << "PREVIUIOS DECL: " << D->getPreviousDecl() << "\n";
+    }
+
+    // Visit most recent decl
+    if(D->getMostRecentDecl()) {
+        VisitDeclTop(D->getMostRecentDecl());
+        //llvm::errs() << "MOST RECENT DECL: " << D->getMostRecentDecl() << "\n";
+    }
+
+    //  Visit member class from which it was instantiated
+    if(D->getInstantiatedFromMemberClass()) {
+        VisitDeclTop(D->getInstantiatedFromMemberClass());
+        //llvm::errs() << "INST MEMBER: " << D->getInstantiatedFromMemberClass() << "\n";
+    }
+
+    //  Visit the record declaration from which this record could be instantiated.
+    if(D->getTemplateInstantiationPattern()) {
+        VisitDeclTop(D->getTemplateInstantiationPattern());
+        //llvm::errs() << "MEMBER CLASS: " << D->getTemplateInstantiationPattern() << "\n";
+    }
 
 }
 
