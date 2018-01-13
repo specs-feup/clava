@@ -160,4 +160,9 @@ public class CxxTest {
     public void testMacros() {
         newTester().setCheckWovenCodeSyntax(false).test("Macros.lara", "macros.cpp");
     }
+
+    @Test
+    public void testCall() {
+        newTester().test("Call.lara", "call.cpp");
+    }
 }
