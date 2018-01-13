@@ -1,5 +1,11 @@
 aspectdef CallTest
 
+	var $firstOp = undefined;
+	select binaryOp end
+	apply
+		$firstOp = $binaryOp;
+	end
+
 	select call{"foo"} end
 	apply
 		println("foo original:" + $call.code);
@@ -8,6 +14,8 @@ aspectdef CallTest
 		println("foo new expr arg:" + $call.code);
 		$call.exec setArg(1, "10");
 		println("foo new string arg:" + $call.code);
+		$call.exec setArg(1, $firstOp);
+		println("foo op arg:" + $call.code);
 	end
 	
 

@@ -3,5 +3,6 @@ int foo(int a, int b) {
 }
 
 int main() {
+	int x = 2 + 3;
 	foo(1, 2);
 }
