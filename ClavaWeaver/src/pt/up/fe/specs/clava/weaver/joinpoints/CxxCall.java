@@ -184,12 +184,13 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public String[] getArgListArrayImpl() {
+    public AExpression[] getArgListArrayImpl() {
         return call.getArgs()
                 .stream()
-                .map(Expr::getCode)
+                // .map(Expr::getCode)
+                .map(arg -> (AExpression) CxxJoinpoints.create(arg, this))
                 .collect(Collectors.toList())
-                .toArray(new String[0]);
+                .toArray(new AExpression[0]);
     }
 
     @Override
@@ -228,5 +229,13 @@ public class CxxCall extends ACall {
         // }
 
         call.setArgument(index, (Expr) expr.getNode());
+    }
+
+    @Override
+    public AExpression argImpl(int index) {
+        call.checkIndex(index);
+        Expr arg = call.getArgs().get(index);
+        return (AExpression) CxxJoinpoints.create(arg, this);
+
     }
 }

@@ -163,15 +163,15 @@ public abstract class ACall extends AExpression {
      * Get value on attribute argList
      * @return the attribute's value
      */
-    public abstract String[] getArgListArrayImpl();
+    public abstract AExpression[] getArgListArrayImpl();
 
     /**
      * Get value on attribute argList
      * @return the attribute's value
      */
     public Bindings getArgListImpl() {
-        String[] stringArrayImpl0 = getArgListArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        AExpression[] aExpressionArrayImpl0 = getArgListArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
         return nativeArray0;
     }
 
@@ -191,6 +191,33 @@ public abstract class ACall extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "argList", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index
+     * @return 
+     */
+    public abstract AExpression argImpl(int index);
+
+    /**
+     * 
+     * @param index
+     * @return 
+     */
+    public final Object arg(int index) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arg", Optional.empty(), index);
+        	}
+        	AExpression result = this.argImpl(index);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "arg", Optional.ofNullable(result), index);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "arg", e);
         }
     }
 
@@ -577,6 +604,7 @@ public abstract class ACall extends AExpression {
         attributes.add("declaration");
         attributes.add("definition");
         attributes.add("argList");
+        attributes.add("arg");
         attributes.add("returnType");
     }
 
@@ -634,6 +662,7 @@ public abstract class ACall extends AExpression {
         DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),
+        ARG("arg"),
         RETURNTYPE("returnType"),
         VARDECL("vardecl"),
         USE("use"),

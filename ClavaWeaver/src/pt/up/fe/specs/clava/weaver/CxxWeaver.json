@@ -1561,7 +1561,19 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
+                              "type": "expression",
+                              "name": "arg"
+                           },
+                           {
+                              "type": "int",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "expression[]",
                               "name": "argList"
                            }]
                },

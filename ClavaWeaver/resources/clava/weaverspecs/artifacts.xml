@@ -175,7 +175,11 @@
 			tooltip="a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found"/>
 		<attribute name="definition" type="joinpoint" 
 			tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found"/>
-		<attribute name="argList" type="String[]"/>
+		<attribute name="argList" type="expression[]"/>
+		<attribute name="arg" type="expression">
+			<parameter name="index" type="int" />	
+		</attribute>
+
 		<attribute name="returnType" type="joinpoint"/>
 	</artifact>
 
