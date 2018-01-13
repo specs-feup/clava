@@ -25,7 +25,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -79,15 +78,17 @@ public class CallExpr extends Expr {
         return getChild(Expr.class, 0);
     }
 
+    /*
     private DeclRefExpr getCalleeInternal() {
         Expr callee = getCallee();
-
+    
         if (!(callee instanceof DeclRefExpr)) {
             throw new UnexpectedChildExpection(CallExpr.class, callee);
         }
-
+    
         return (DeclRefExpr) callee;
     }
+    */
 
     public List<Expr> getArgs() {
         if (getNumChildren() == 1) {
@@ -97,16 +98,23 @@ public class CallExpr extends Expr {
         return SpecsCollections.cast(getChildren().subList(1, getNumChildren()), Expr.class);
     }
 
-    public Expr setArgument(int index, Expr arg) {
-        // Check num args
-        int numArgs = getArgs().size();
+    public int getNumArgs() {
+        return getNumChildren() - 1;
+    }
+
+    public void checkIndex(int index) {
+        int numArgs = getNumArgs();
         boolean validIndex = index >= 0 && index < numArgs;
         if (!validIndex) {
             throw new RuntimeException(
                     "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
 
         }
+    }
 
+    public Expr setArgument(int index, Expr arg) {
+        // Check num args
+        checkIndex(index);
         int argIndex = 1 + index;
         return (Expr) setChild(argIndex, arg);
     }
