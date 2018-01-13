@@ -339,8 +339,8 @@ public abstract class ACall extends AExpression {
      * @param index 
      * @param expr 
      */
-    public void setArgImpl(int index, String expr) {
-        throw new UnsupportedOperationException(get_class()+": Action setArg not implemented ");
+    public void setArgFromStringImpl(int index, String expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArgFromString not implemented ");
     }
 
     /**
@@ -348,17 +348,17 @@ public abstract class ACall extends AExpression {
      * @param index 
      * @param expr 
      */
-    public final void setArg(int index, String expr) {
+    public final void setArgFromString(int index, String expr) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArgFromString", this, Optional.empty(), index, expr);
         	}
-        	this.setArgImpl(index, expr);
+        	this.setArgFromStringImpl(index, expr);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
+        		eventTrigger().triggerAction(Stage.END, "setArgFromString", this, Optional.empty(), index, expr);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setArg", e);
+        	throw new ActionException(get_class(), "setArgFromString", e);
         }
     }
 
@@ -627,7 +627,7 @@ public abstract class ACall extends AExpression {
         actions.add("void setName(string)");
         actions.add("void wrap(string)");
         actions.add("void inline()");
-        actions.add("void setArg(int, string)");
+        actions.add("void setArgFromString(int, string)");
         actions.add("void setArg(Integer, expression)");
     }
 

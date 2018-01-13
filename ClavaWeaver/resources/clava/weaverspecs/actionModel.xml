@@ -130,7 +130,7 @@
 	
 	<action name="inline" class="call" tooltip="Inlines this call, if possible"/>
 	
-	<action name="setArg" class="call">
+	<action name="setArgFromString" class="call">
 		<parameter name="index" type="int" />
 		<parameter name="expr" type="string" />
 	</action>

@@ -12,7 +12,7 @@ aspectdef CallTest
 		var arg1 = $call.arg(1);
 		$call.exec setArg(0, arg1);
 		println("foo new expr arg:" + $call.code);
-		$call.exec setArg(1, "10");
+		$call.exec setArgFromString(1, 10);
 		println("foo new string arg:" + $call.code);
 		$call.exec setArg(1, $firstOp);
 		println("foo op arg:" + $call.code);

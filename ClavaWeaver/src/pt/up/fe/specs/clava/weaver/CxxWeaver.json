@@ -1981,12 +1981,12 @@
                               "name": "setArg"
                            },
                            {
-                              "type": "int",
+                              "type": "Integer",
                               "name": "index",
                               "defaultValue": ""
                            },
                            {
-                              "type": "String",
+                              "type": "expression",
                               "name": "expr",
                               "defaultValue": ""
                            }]
@@ -1996,15 +1996,15 @@
                   "children": [
                            {
                               "type": "void",
-                              "name": "setArg"
+                              "name": "setArgFromString"
                            },
                            {
-                              "type": "Integer",
+                              "type": "int",
                               "name": "index",
                               "defaultValue": ""
                            },
                            {
-                              "type": "expression",
+                              "type": "String",
                               "name": "expr",
                               "defaultValue": ""
                            }]

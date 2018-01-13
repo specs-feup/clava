@@ -211,7 +211,7 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public void setArgImpl(int index, String expr) {
+    public void setArgFromStringImpl(int index, String expr) {
         // Get arg of equivalent index, to extract type
         Expr arg = call.getArgs().get(index);
         Expr literalExpr = ClavaNodeFactory.literalExpr(expr, arg.getExprType());
@@ -237,9 +237,9 @@ public class CxxCall extends ACall {
      * @param index
      * @param expr
      */
-    public void setArgImpl(Integer index, CxxExpression expr) {
-        setArgImpl(index, (AExpression) expr);
-    }
+    // public void setArgImpl(Integer index, CxxExpression expr) {
+    // setArgImpl(index, (AExpression) expr);
+    // }
 
     @Override
     public AExpression argImpl(int index) {
