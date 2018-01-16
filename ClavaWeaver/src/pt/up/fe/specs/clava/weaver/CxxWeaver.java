@@ -95,7 +95,6 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String TEMP_SRC_FOLDER = "__clava_src";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
 
-    private static final Set<String> WEAVER_NAMES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("clava")));
     private static final Set<String> LANGUAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx")));
 
     // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList(
@@ -825,11 +824,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     public static CxxWeaver getCxxWeaver() {
         return (CxxWeaver) getThreadLocalWeaver();
-    }
-
-    @Override
-    public Set<String> getWeaverNames() {
-        return WEAVER_NAMES;
     }
 
     @Override
