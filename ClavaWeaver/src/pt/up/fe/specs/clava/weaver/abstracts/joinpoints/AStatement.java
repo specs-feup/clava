@@ -93,6 +93,12 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     public abstract List<? extends ACall> selectStmtCall();
 
     /**
+     * Method used by the lara interpreter to select memberCalls
+     * @return 
+     */
+    public abstract List<? extends AMemberCall> selectMemberCall();
+
+    /**
      * Method used by the lara interpreter to select arrayAccesss
      * @return 
      */
@@ -141,6 +147,9 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         	case "stmtCall": 
         		joinPointList = selectStmtCall();
         		break;
+        	case "memberCall": 
+        		joinPointList = selectMemberCall();
+        		break;
         	case "arrayAccess": 
         		joinPointList = selectArrayAccess();
         		break;
@@ -183,6 +192,7 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         selects.add("childExpr");
         selects.add("call");
         selects.add("stmtCall");
+        selects.add("memberCall");
         selects.add("arrayAccess");
         selects.add("vardecl");
         selects.add("varref");

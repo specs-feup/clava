@@ -299,6 +299,15 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select memberCalls
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberCall> selectMemberCall() {
+        return this.aStatement.selectMemberCall();
+    }
+
+    /**
      * Method used by the lara interpreter to select arrayAccesss
      * @return 
      */
@@ -525,6 +534,9 @@ public abstract class AScope extends AStatement {
         		break;
         	case "stmtCall": 
         		joinPointList = selectStmtCall();
+        		break;
+        	case "memberCall": 
+        		joinPointList = selectMemberCall();
         		break;
         	case "arrayAccess": 
         		joinPointList = selectArrayAccess();

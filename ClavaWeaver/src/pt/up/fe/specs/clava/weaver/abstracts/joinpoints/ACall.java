@@ -247,6 +247,56 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsMemberAccessImpl();
+
+    /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    public final Object getIsMemberAccess() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isMemberAccess", Optional.empty());
+        	}
+        	Boolean result = this.getIsMemberAccessImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isMemberAccess", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isMemberAccess", e);
+        }
+    }
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    public abstract AMemberAccess getMemberAccessImpl();
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    public final Object getMemberAccess() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberAccess", Optional.empty());
+        	}
+        	AMemberAccess result = this.getMemberAccessImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "memberAccess", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "memberAccess", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select callees
      * @return 
      */
@@ -573,7 +623,7 @@ public abstract class ACall extends AExpression {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "callee": 
@@ -596,7 +646,7 @@ public abstract class ACall extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("numArgs");
@@ -606,13 +656,15 @@ public abstract class ACall extends AExpression {
         attributes.add("argList");
         attributes.add("arg");
         attributes.add("returnType");
+        attributes.add("isMemberAccess");
+        attributes.add("memberAccess");
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aExpression.fillWithSelects(selects);
         selects.add("callee");
         selects.add("arg");
@@ -622,7 +674,7 @@ public abstract class ACall extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
         actions.add("void setName(string)");
         actions.add("void wrap(string)");
@@ -636,7 +688,7 @@ public abstract class ACall extends AExpression {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "call";
     }
 
@@ -645,7 +697,7 @@ public abstract class ACall extends AExpression {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
@@ -664,6 +716,8 @@ public abstract class ACall extends AExpression {
         ARGLIST("argList"),
         ARG("arg"),
         RETURNTYPE("returnType"),
+        ISMEMBERACCESS("isMemberAccess"),
+        MEMBERACCESS("memberAccess"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -46,6 +47,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
@@ -89,6 +91,13 @@ public class CxxFile extends AFile {
     }
 
     @Override
+    public List<? extends AMethod> selectMethod() {
+        return getMethods().stream()
+                .map(function -> CxxJoinpoints.create(function, this, AMethod.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ACxxWeaverJoinPoint getParentImpl() {
         return parent;
     }
@@ -114,6 +123,14 @@ public class CxxFile extends AFile {
                 // FunctionDecl represents C function, C++ methods, constructors and destructors
                 .filter(node -> node instanceof FunctionDecl)
                 .map(function -> (FunctionDecl) function)
+                .collect(Collectors.toList());
+    }
+
+    private List<CXXMethodDecl> getMethods() {
+        return tunit.getDescendantsStream()
+                // FunctionDecl represents C function, C++ methods, constructors and destructors
+                .filter(node -> node instanceof CXXMethodDecl)
+                .map(function -> (CXXMethodDecl) function)
                 .collect(Collectors.toList());
     }
 
@@ -364,4 +381,5 @@ public class CxxFile extends AFile {
     public Boolean getIsOpenCLImpl() {
         return tunit.isOpenCLFile();
     }
+
 }

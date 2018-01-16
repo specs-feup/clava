@@ -179,9 +179,16 @@
 		<attribute name="arg" type="expression">
 			<parameter name="index" type="int" />	
 		</attribute>
-
 		<attribute name="returnType" type="joinpoint"/>
+		<attribute name="isMemberAccess" type="boolean"/>
+		<attribute name="memberAccess" type="memberAccess"/>
 	</artifact>
+	
+	<!-- MEMBER CALL -->	
+	<artifact class="memberCall" default="name">
+		<attribute name="base" type="expression" />
+		<attribute name="rootBase" type="expression" />
+	</artifact>	
 
 
 	<!-- VARDECL -->
@@ -297,7 +304,7 @@
 	<artifact class="memberAccess">
 		<attribute name="name" type="String" />
 		<attribute name="memberChain" type="String[]" />
-		<attribute name="base" type="joinpoint"
+		<attribute name="base" type="expression"
 			tooltip="expression of the base of this member access" />
 	</artifact>
 

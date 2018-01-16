@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -11,89 +10,32 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AMemberAccess
+ * Auto-Generated class for join point AMemberCall
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AMemberAccess extends AExpression {
+public abstract class AMemberCall extends ACall {
 
-    protected AExpression aExpression;
+    protected ACall aCall;
 
     /**
      * 
      */
-    public AMemberAccess(AExpression aExpression){
-        this.aExpression = aExpression;
+    public AMemberCall(ACall aCall){
+        super(aCall);
+        this.aCall = aCall;
     }
     /**
-     * Get value on attribute name
+     * Get value on attribute base
      * @return the attribute's value
-     */
-    public abstract String getNameImpl();
-
-    /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
-        }
-    }
-
-    /**
-     * Get value on attribute memberChain
-     * @return the attribute's value
-     */
-    public abstract String[] getMemberChainArrayImpl();
-
-    /**
-     * Get value on attribute memberChain
-     * @return the attribute's value
-     */
-    public Bindings getMemberChainImpl() {
-        String[] stringArrayImpl0 = getMemberChainArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute memberChain
-     * @return the attribute's value
-     */
-    public final Object getMemberChain() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberChain", Optional.empty());
-        	}
-        	Bindings result = this.getMemberChainImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "memberChain", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "memberChain", e);
-        }
-    }
-
-    /**
-     * expression of the base of this member access
      */
     public abstract AExpression getBaseImpl();
 
     /**
-     * expression of the base of this member access
+     * Get value on attribute base
+     * @return the attribute's value
      */
     public final Object getBase() {
         try {
@@ -111,12 +53,145 @@ public abstract class AMemberAccess extends AExpression {
     }
 
     /**
+     * Get value on attribute rootBase
+     * @return the attribute's value
+     */
+    public abstract AExpression getRootBaseImpl();
+
+    /**
+     * Get value on attribute rootBase
+     * @return the attribute's value
+     */
+    public final Object getRootBase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rootBase", Optional.empty());
+        	}
+        	AExpression result = this.getRootBaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "rootBase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "rootBase", e);
+        }
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aCall.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute numArgs
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNumArgsImpl() {
+        return this.aCall.getNumArgsImpl();
+    }
+
+    /**
+     * Get value on attribute memberNamesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getMemberNamesArrayImpl() {
+        return this.aCall.getMemberNamesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getDeclarationImpl() {
+        return this.aCall.getDeclarationImpl();
+    }
+
+    /**
+     * Get value on attribute definition
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getDefinitionImpl() {
+        return this.aCall.getDefinitionImpl();
+    }
+
+    /**
+     * Get value on attribute argListArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AExpression[] getArgListArrayImpl() {
+        return this.aCall.getArgListArrayImpl();
+    }
+
+    /**
+     * Get value on attribute arg
+     * @return the attribute's value
+     */
+    @Override
+    public AExpression argImpl(int index) {
+        return this.aCall.argImpl(index);
+    }
+
+    /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getReturnTypeImpl() {
+        return this.aCall.getReturnTypeImpl();
+    }
+
+    /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMemberAccessImpl() {
+        return this.aCall.getIsMemberAccessImpl();
+    }
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    @Override
+    public AMemberAccess getMemberAccessImpl() {
+        return this.aCall.getMemberAccessImpl();
+    }
+
+    /**
+     * Method used by the lara interpreter to select callees
+     * @return 
+     */
+    @Override
+    public List<? extends AExpression> selectCallee() {
+        return this.aCall.selectCallee();
+    }
+
+    /**
+     * Method used by the lara interpreter to select args
+     * @return 
+     */
+    @Override
+    public List<? extends AExpression> selectArg() {
+        return this.aCall.selectArg();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint getVardeclImpl() {
-        return this.aExpression.getVardeclImpl();
+        return this.aCall.getVardeclImpl();
     }
 
     /**
@@ -125,7 +200,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public String getUseImpl() {
-        return this.aExpression.getUseImpl();
+        return this.aCall.getUseImpl();
     }
 
     /**
@@ -134,7 +209,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public Boolean getIsFunctionArgumentImpl() {
-        return this.aExpression.getIsFunctionArgumentImpl();
+        return this.aCall.getIsFunctionArgumentImpl();
     }
 
     /**
@@ -143,7 +218,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public ACast getImplicitCastImpl() {
-        return this.aExpression.getImplicitCastImpl();
+        return this.aCall.getImplicitCastImpl();
     }
 
     /**
@@ -152,7 +227,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
+        return this.aCall.selectVardecl();
     }
 
     /**
@@ -161,7 +236,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aCall.replaceWithImpl(node);
     }
 
     /**
@@ -170,7 +245,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aCall.insertBeforeImpl(node);
     }
 
     /**
@@ -179,7 +254,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aCall.insertBeforeImpl(node);
     }
 
     /**
@@ -188,7 +263,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aExpression.insertAfterImpl(node);
+        return this.aCall.insertAfterImpl(node);
     }
 
     /**
@@ -197,7 +272,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aExpression.insertAfterImpl(code);
+        return this.aCall.insertAfterImpl(code);
     }
 
     /**
@@ -205,7 +280,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public void detachImpl() {
-        this.aExpression.detachImpl();
+        this.aCall.detachImpl();
     }
 
     /**
@@ -214,7 +289,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aExpression.setTypeImpl(type);
+        this.aCall.setTypeImpl(type);
     }
 
     /**
@@ -222,7 +297,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aExpression.copyImpl();
+        return this.aCall.copyImpl();
     }
 
     /**
@@ -232,7 +307,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aExpression.setUserFieldImpl(fieldName, value);
+        return this.aCall.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -241,7 +316,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
+        return this.aCall.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -250,7 +325,53 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aExpression.messageToUserImpl(message);
+        this.aCall.messageToUserImpl(message);
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aCall.setNameImpl(name);
+    }
+
+    /**
+     * Wraps this call with a possibly new wrapping function
+     * @param name 
+     */
+    @Override
+    public void wrapImpl(String name) {
+        this.aCall.wrapImpl(name);
+    }
+
+    /**
+     * Inlines this call, if possible
+     */
+    @Override
+    public void inlineImpl() {
+        this.aCall.inlineImpl();
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    @Override
+    public void setArgFromStringImpl(int index, String expr) {
+        this.aCall.setArgFromStringImpl(index, expr);
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    @Override
+    public void setArgImpl(Integer index, AExpression expr) {
+        this.aCall.setArgImpl(index, expr);
     }
 
     /**
@@ -260,7 +381,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aExpression.insertImpl(position, code);
+        this.aCall.insertImpl(position, code);
     }
 
     /**
@@ -270,7 +391,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public void defImpl(String attribute, Object value) {
-        this.aExpression.defImpl(attribute, value);
+        this.aCall.defImpl(attribute, value);
     }
 
     /**
@@ -278,15 +399,15 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public String toString() {
-        return this.aExpression.toString();
+        return this.aCall.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AExpression> getSuper() {
-        return Optional.of(this.aExpression);
+    public Optional<? extends ACall> getSuper() {
+        return Optional.of(this.aCall);
     }
 
     /**
@@ -296,11 +417,17 @@ public abstract class AMemberAccess extends AExpression {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "callee": 
+        		joinPointList = selectCallee();
+        		break;
+        	case "arg": 
+        		joinPointList = selectArg();
+        		break;
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
         	default:
-        		joinPointList = this.aExpression.select(selectName);
+        		joinPointList = this.aCall.select(selectName);
         		break;
         }
         return joinPointList;
@@ -311,10 +438,9 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("memberChain");
+        this.aCall.fillWithAttributes(attributes);
         attributes.add("base");
+        attributes.add("rootBase");
     }
 
     /**
@@ -322,7 +448,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
+        this.aCall.fillWithSelects(selects);
     }
 
     /**
@@ -330,7 +456,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
+        this.aCall.fillWithActions(actions);
     }
 
     /**
@@ -339,7 +465,7 @@ public abstract class AMemberAccess extends AExpression {
      */
     @Override
     public final String get_class() {
-        return "memberAccess";
+        return "memberCall";
     }
 
     /**
@@ -352,15 +478,24 @@ public abstract class AMemberAccess extends AExpression {
         if(isInstance) {
         	return true;
         }
-        return this.aExpression.instanceOf(joinpointClass);
+        return this.aCall.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum MemberAccessAttributes {
-        NAME("name"),
-        MEMBERCHAIN("memberChain"),
+    protected enum MemberCallAttributes {
         BASE("base"),
+        ROOTBASE("rootBase"),
+        NAME("name"),
+        NUMARGS("numArgs"),
+        MEMBERNAMES("memberNames"),
+        DECLARATION("declaration"),
+        DEFINITION("definition"),
+        ARGLIST("argList"),
+        ARG("arg"),
+        RETURNTYPE("returnType"),
+        ISMEMBERACCESS("isMemberAccess"),
+        MEMBERACCESS("memberAccess"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
@@ -398,13 +533,13 @@ public abstract class AMemberAccess extends AExpression {
         /**
          * 
          */
-        private MemberAccessAttributes(String name){
+        private MemberCallAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<MemberAccessAttributes> fromString(String name) {
+        public static Optional<MemberCallAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -412,7 +547,7 @@ public abstract class AMemberAccess extends AExpression {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(MemberAccessAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(MemberCallAttributes::name).collect(Collectors.toList());
         }
 
         /**

@@ -21,6 +21,7 @@
 		<select alias="stmt"			class="statement"/>
 		<select alias="childStmt"		class="statement"/>
 		<select 						class="function"/>
+		<select 						class="method"/>
 		<select 						class="record"/>
 		<select 						class="struct"/>
 		<select 						class="class"/>
@@ -124,6 +125,7 @@
 		<select alias="childExpr"		class="expression"/>
 		<select 						class="call"/>
  		<select alias="stmtCall"		class="call"/>
+ 		<select 						class="memberCall"/>
  		<select							class="arrayAccess"/>
  		<select 						class="vardecl"/>
 		<select 						class="varref"/>
@@ -163,7 +165,10 @@
 		<select alias="callee"		class="expression"/>
 		<select alias="arg"			class="expression"/>
 	</joinpoint>
-
+	
+	<!-- MEMBER CALL -->	
+	<joinpoint class="memberCall" 	extends="call">
+	</joinpoint>
 
 	<!-- BINARY OPERATOR -->	
 	<joinpoint class="binaryOp" 	extends="expression">

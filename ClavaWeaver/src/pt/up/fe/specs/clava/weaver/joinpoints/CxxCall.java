@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
@@ -42,6 +43,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 import pt.up.fe.specs.clava.weaver.actions.CallWrap;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -167,7 +169,7 @@ public class CxxCall extends ACall {
 
     @Override
     public void setNameImpl(String name) {
-        call.setCalleeName(name);
+        call.setCallName(name);
     }
 
     @Override
@@ -246,6 +248,23 @@ public class CxxCall extends ACall {
         call.checkIndex(index);
         Expr arg = call.getArgs().get(index);
         return (AExpression) CxxJoinpoints.create(arg, this);
+
+    }
+
+    @Override
+    public Boolean getIsMemberAccessImpl() {
+        return call instanceof CXXMemberCallExpr;
+    }
+
+    @Override
+    public AMemberAccess getMemberAccessImpl() {
+        if (!(call instanceof CXXMemberCallExpr)) {
+            return null;
+        }
+
+        MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
+
+        return CxxJoinpoints.create(memberExpr, this, AMemberAccess.class);
 
     }
 }

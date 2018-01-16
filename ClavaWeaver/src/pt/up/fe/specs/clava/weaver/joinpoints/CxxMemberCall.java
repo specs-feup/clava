@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 SPeCS.
+ * Copyright 2018 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -13,22 +13,21 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.expr.MemberExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberCall;
 
-public class CxxMemberAccess extends AMemberAccess {
+public class CxxMemberCall extends AMemberCall {
 
-    private final MemberExpr memberExpr;
+    private final CXXMemberCallExpr memberCall;
     private final ACxxWeaverJoinPoint parent;
 
-    public CxxMemberAccess(MemberExpr memberExpr, ACxxWeaverJoinPoint parent) {
-        super(new CxxExpression(memberExpr, parent));
-        this.memberExpr = memberExpr;
+    public CxxMemberCall(CXXMemberCallExpr memberCall, ACxxWeaverJoinPoint parent) {
+        super(new CxxCall(memberCall, parent));
+
+        this.memberCall = memberCall;
         this.parent = parent;
     }
 
@@ -38,22 +37,17 @@ public class CxxMemberAccess extends AMemberAccess {
     }
 
     @Override
-    public ClavaNode getNode() {
-        return memberExpr;
+    public CXXMemberCallExpr getNode() {
+        return memberCall;
     }
 
     @Override
     public AExpression getBaseImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(memberExpr.getBase()), this, AExpression.class);
+        return CxxJoinpoints.create(memberCall.getBase(), this, AExpression.class);
     }
 
     @Override
-    public String getNameImpl() {
-        return memberExpr.getMemberName();
-    }
-
-    @Override
-    public String[] getMemberChainArrayImpl() {
-        return memberExpr.getChain().toArray(new String[0]);
+    public AExpression getRootBaseImpl() {
+        return CxxJoinpoints.create(memberCall.getRootBase(), this, AExpression.class);
     }
 }

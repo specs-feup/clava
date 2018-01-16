@@ -245,6 +245,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     public abstract List<? extends AFunction> selectFunction();
 
     /**
+     * Method used by the lara interpreter to select methods
+     * @return 
+     */
+    public abstract List<? extends AMethod> selectMethod();
+
+    /**
      * Method used by the lara interpreter to select records
      * @return 
      */
@@ -575,6 +581,9 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	case "function": 
         		joinPointList = selectFunction();
         		break;
+        	case "method": 
+        		joinPointList = selectMethod();
+        		break;
         	case "record": 
         		joinPointList = selectRecord();
         		break;
@@ -632,6 +641,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         selects.add("stmt");
         selects.add("childStmt");
         selects.add("function");
+        selects.add("method");
         selects.add("record");
         selects.add("struct");
         selects.add("class");
