@@ -32,7 +32,7 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public class MemberExpr extends Expr {
 
-    private final String memberName;
+    private String memberName;
     private final boolean isArrow;
 
     public MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info, Expr base) {
@@ -57,6 +57,10 @@ public class MemberExpr extends Expr {
 
     public String getMemberName() {
         return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
     public boolean isArrow() {
