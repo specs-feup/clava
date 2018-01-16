@@ -73,6 +73,17 @@ public class CXXMemberCallExpr extends CallExpr {
     }
 
     @Override
+    public void setCallName(String name) {
+        ClavaNode callee = getCallee();
+
+        if (!(callee instanceof MemberExpr)) {
+            throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);
+        }
+
+        ((MemberExpr) callee).setMemberName(name);
+    }
+
+    @Override
     public List<String> getCallMemberNames() {
         List<String> memberNames = new ArrayList<>();
 
@@ -98,4 +109,16 @@ public class CXXMemberCallExpr extends CallExpr {
         throw new CaseNotDefinedException(currentNode.getClass());
     }
 
+    public Expr getBase() {
+        return getCallee().getBase();
+    }
+
+    public Expr getRootBase() {
+        Expr currentExpr = this;
+        while (currentExpr instanceof CXXMemberCallExpr) {
+            currentExpr = ((CXXMemberCallExpr) currentExpr).getBase();
+        }
+
+        return currentExpr;
+    }
 }

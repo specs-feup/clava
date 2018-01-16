@@ -208,7 +208,12 @@ public class CallExpr extends Expr {
         return Arrays.asList(getCalleeName());
     }
 
-    public void setCalleeName(String name) {
+    /**
+     * Sets the name of the call.
+     * 
+     * @param name
+     */
+    public void setCallName(String name) {
         getCalleeDeclRef().setRefName(name);
     }
 }
