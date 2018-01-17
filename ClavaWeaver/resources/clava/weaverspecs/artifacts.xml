@@ -144,8 +144,9 @@
 		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
 			<parameter name="otherLoop" type="loop" />	
 		</attribute>
-		
-		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')"/>
+		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
+			<def/>
+		</attribute>		
 		<attribute name="endValue" type="String" tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')"/>
 	</artifact>
 
@@ -172,7 +173,9 @@
 
 	<!-- CALL -->
 	<artifact class="call" default="name">
-		<attribute name="name" type="String" />
+		<attribute name="name" type="String">
+			<def/>
+		</attribute>		
 		<attribute name="numArgs" type="Integer" />
 		<attribute name="memberNames" type="String[]" />
 		<attribute name="declaration" type="joinpoint"
@@ -254,7 +257,7 @@
 
 	<!-- PRAGMA -->
 	<artifact class="pragma">
-		<attribute name="name" type="String" />
+		<attribute name="name" type="String"/>
 		<attribute name="target" type="joinpoint" />
 		<attribute name="content" type="String"/>
 	</artifact>

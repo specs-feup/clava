@@ -8865,11 +8865,25 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the init statement of the loop. Works with loops of kind 'for'.",
+                  "tooltip": "DEPRECATED: use setInitValue instead.",
                   "children": [
                            {
                               "type": "void",
                               "name": "setInit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "initCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the init statement of the loop. Works with loops of kind 'for'.",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInitValue"
                            },
                            {
                               "type": "String",

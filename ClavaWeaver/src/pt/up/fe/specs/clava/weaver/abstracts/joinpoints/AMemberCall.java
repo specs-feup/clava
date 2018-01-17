@@ -232,6 +232,13 @@ public abstract class AMemberCall extends ACall {
 
     /**
      * 
+     */
+    public void defNameImpl(String value) {
+        this.aCall.defNameImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -429,6 +436,13 @@ public abstract class AMemberCall extends ACall {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }

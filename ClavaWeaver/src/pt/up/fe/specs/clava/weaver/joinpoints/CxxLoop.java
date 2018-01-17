@@ -352,12 +352,29 @@ public class CxxLoop extends ALoop {
 
     @Override
     public void setInitImpl(String initCode) {
+        ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
+        setInitValue(initCode);
+    }
 
+    @Override
+    public void setInitValueImpl(String initCode) {
+        // if (!(loop instanceof ForStmt)) {
+        // return; // TODO: warn user?
+        // }
+        //
+        // LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        //
+        // ((ForStmt) loop).setInit(literalStmt);
+        defInitValueImpl(initCode);
+    }
+
+    @Override
+    public void defInitValueImpl(String value) {
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
 
         ((ForStmt) loop).setInit(literalStmt);
     }

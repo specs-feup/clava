@@ -169,7 +169,12 @@ public class CxxCall extends ACall {
 
     @Override
     public void setNameImpl(String name) {
-        call.setCallName(name);
+        defNameImpl(name);
+    }
+
+    @Override
+    public void defNameImpl(String value) {
+        call.setCallName(value);
     }
 
     @Override

@@ -214,7 +214,11 @@
 		<parameter name="kind" type="String" />
 	</action>
 	
-	<action name="setInit" class="loop" tooltip="Sets the init statement of the loop. Works with loops of kind 'for'.">
+	<action name="setInit" class="loop" tooltip="DEPRECATED: use setInitValue instead.">
+		<parameter name="initCode" type="String"/>
+	</action>
+	
+	<action name="setInitValue" class="loop" tooltip="Sets the init statement of the loop. Works with loops of kind 'for'.">
 		<parameter name="initCode" type="String"/>
 	</action>
 	

@@ -312,6 +312,13 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * 
+     */
+    public void defInitValueImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def initValue with type String not implemented ");
+    }
+
+    /**
      * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
      */
     public abstract String getEndValueImpl();
@@ -411,7 +418,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * DEPRECATED: use setInitValue instead.
      * @param initCode 
      */
     public void setInitImpl(String initCode) {
@@ -419,7 +426,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * DEPRECATED: use setInitValue instead.
      * @param initCode 
      */
     public final void setInit(String initCode) {
@@ -433,6 +440,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public void setInitValueImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setInitValue not implemented ");
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public final void setInitValue(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInitValue", this, Optional.empty(), initCode);
+        	}
+        	this.setInitValueImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInitValue", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInitValue", e);
         }
     }
 
@@ -836,6 +869,13 @@ public abstract class ALoop extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "initValue": {
+        	if(value instanceof String){
+        		this.defInitValueImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -881,6 +921,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void changeKind(String)");
         actions.add("void setKind(String)");
         actions.add("void setInit(String)");
+        actions.add("void setInitValue(String)");
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
         actions.add("void interchange(loop)");

@@ -54,6 +54,13 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
+    }
+
+    /**
      * Get value on attribute numArgs
      * @return the attribute's value
      */
@@ -638,6 +645,13 @@ public abstract class ACall extends AExpression {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
