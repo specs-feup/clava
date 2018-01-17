@@ -277,16 +277,6 @@ public abstract class AVarref extends AExpression {
 
     /**
      * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aExpression.defImpl(attribute, value);
-    }
-
-    /**
-     * 
      */
     @Override
     public String toString() {
@@ -316,6 +306,16 @@ public abstract class AVarref extends AExpression {
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**

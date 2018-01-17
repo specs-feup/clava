@@ -760,16 +760,6 @@ public abstract class ALoop extends AStatement {
 
     /**
      * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aStatement.defImpl(attribute, value);
-    }
-
-    /**
-     * 
      */
     @Override
     public String toString() {
@@ -838,6 +828,16 @@ public abstract class ALoop extends AStatement {
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**

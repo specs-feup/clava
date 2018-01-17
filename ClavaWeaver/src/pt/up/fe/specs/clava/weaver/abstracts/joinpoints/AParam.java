@@ -207,16 +207,6 @@ public abstract class AParam extends AVardecl {
 
     /**
      * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aVardecl.defImpl(attribute, value);
-    }
-
-    /**
-     * 
      */
     @Override
     public String toString() {
@@ -246,6 +236,16 @@ public abstract class AParam extends AVardecl {
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**

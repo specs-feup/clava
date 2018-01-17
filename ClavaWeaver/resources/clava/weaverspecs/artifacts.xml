@@ -120,6 +120,10 @@
 
 
 	<!-- DECLARATION -->
+	<artifact class="decl">
+	</artifact>
+
+	<!-- NAMED DECLARATION -->
 	<artifact class="namedDecl" default="name">
 		<attribute name="name" type="String" />
 		<attribute name="isPublic" type="Boolean" />

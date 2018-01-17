@@ -34,6 +34,16 @@ public abstract class AEmpty extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
     }

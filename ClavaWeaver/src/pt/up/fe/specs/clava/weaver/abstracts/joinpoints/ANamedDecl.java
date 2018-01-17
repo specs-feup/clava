@@ -186,16 +186,6 @@ public abstract class ANamedDecl extends ADecl {
 
     /**
      * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aDecl.defImpl(attribute, value);
-    }
-
-    /**
-     * 
      */
     @Override
     public String toString() {
@@ -222,6 +212,16 @@ public abstract class ANamedDecl extends ADecl {
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**

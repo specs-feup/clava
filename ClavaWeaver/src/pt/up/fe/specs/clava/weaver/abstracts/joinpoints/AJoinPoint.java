@@ -50,6 +50,16 @@ public abstract class AJoinPoint extends JoinPoint {
      * 
      */
     @Override
+    public void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
     protected void fillWithActions(List<String> actions) {
         actions.add("replaceWith(AJoinPoint node)");
         actions.add("insertBefore(AJoinPoint node)");

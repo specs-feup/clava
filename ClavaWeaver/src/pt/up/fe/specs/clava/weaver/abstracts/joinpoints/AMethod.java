@@ -306,16 +306,6 @@ public abstract class AMethod extends AFunction {
 
     /**
      * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aFunction.defImpl(attribute, value);
-    }
-
-    /**
-     * 
      */
     @Override
     public String toString() {
@@ -348,6 +338,16 @@ public abstract class AMethod extends AFunction {
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**

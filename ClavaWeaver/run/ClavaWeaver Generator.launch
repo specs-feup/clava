@@ -8,7 +8,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.lara.interpreter.weaver.generator.commandline.WeaverGenerator"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-w CxxWeaver&#13;&#10;-x ./resources/clava/weaverspecs&#13;&#10;-o ./src&#13;&#10;-p pt.up.fe.specs.clava.weaver&#13;&#10;-n pt.up.fe.specs.clava.ClavaNode&#13;&#10;-j&#13;&#10;-e"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-w CxxWeaver&#13;&#10;-x ./resources/clava/weaverspecs&#13;&#10;-o ./src&#13;&#10;-p pt.up.fe.specs.clava.weaver&#13;&#10;-n pt.up.fe.specs.clava.ClavaNode&#13;&#10;-j&#13;&#10;-e&#13;&#10;-d"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="WeaverGenerator"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:ClavaWeaver}"/>
 </launchConfiguration>
