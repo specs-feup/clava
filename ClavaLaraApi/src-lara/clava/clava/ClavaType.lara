@@ -1,0 +1,32 @@
+/**
+ * @class
+ */
+var ClavaType = {};
+
+/**
+ * NO LONGER NEEDED; TYPE HAS ATTRIBUTE unwrap
+ * Continuosly unwraps the type until if finds a type of the given kind. 
+ *
+ * @param {JP#type} $type - The type to unwrap.
+ * @param {String} typeKind - The type kind we are looking for.
+ * @returns {JP#type} The first type of the given kind that was found.
+ */
+ClavaType.unwrap = function($type, typeKind) {
+	checkDefined($type);
+	checkString(typeKind);
+	
+	var typeKind = $type.kind;
+
+	if(typeKind === typeKind) {
+		return $type;
+	}
+
+	// Try to unwrap type, looking for a builtin
+	var $unwrappedType = $type.unwrap;
+
+	if($unwrappedType !== undefined) {
+		return getBuiltinType($unwrappedType);
+	}
+
+	return undefined;
+}
