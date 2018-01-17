@@ -11,12 +11,11 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.cxxweaver;
+package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
 import java.util.function.Predicate;
 
-import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.lara.doc.LaraDocHtmlGenerator;
 import pt.up.fe.specs.lara.doc.data.LaraDocTop;
 import pt.up.fe.specs.lara.doc.jsdocgen.BasicHtmlGenerator;
@@ -36,8 +35,10 @@ public class ClavaWeaverDoc {
 
     private static void buildClavaDoc(File outputFolder) {
         String laraApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\lara-framework\\LaraApi\\src-lara-base\\";
+        String laraApi2 = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\lara-framework\\LaraApi\\src-lara\\";
         String laraiApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\lara-framework\\LARAI\\src-lara";
-        String clavaApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClavaLaraApi\\src-lara\\clava\\";
+        String clavaLaraApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClavaLaraApi\\src-lara\\clava\\";
+        String clavaApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\clava\\ClavaLaraApi\\src-lara-clava\\clava\\";
 
         String antarexApi = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\specs-lara\\ANTAREX\\AntarexClavaApi\\src-lara\\clava\\";
 
@@ -46,8 +47,10 @@ public class ClavaWeaverDoc {
         Predicate<File> nameFilter = name -> !name.getName().startsWith("_");
 
         LaraDocTop laraDocTop = new LaraDocParser(nameFilter, CxxWeaver.buildLanguageSpecification())
-                .addPath("Clava API", new File(laraApi))
-                .addPath("Clava API", new File(laraiApi))
+                .addPath("LARA API", new File(laraApi))
+                .addPath("LARA API", new File(laraApi2))
+                .addPath("LARA API", new File(laraiApi))
+                .addPath("LARA API", new File(clavaLaraApi))
                 .addPath("Clava API", new File(clavaApi))
                 .addPath("ANTAREX API", new File(antarexApi))
                 // .addPath("Lara DSE", new File(laraDse))
