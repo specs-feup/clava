@@ -509,4 +509,20 @@ public class CxxLoop extends ALoop {
             ClavaLog.info("Could not tile the loop");
         }
     }
+
+    @Override
+    public void defIsParallelImpl(Boolean value) {
+        loop.setParallel(value);
+    }
+
+    @Override
+    public void defIsParallelImpl(String value) {
+        loop.setParallel(Boolean.parseBoolean(value));
+    }
+
+    @Override
+    public void setIsParallelImpl(Boolean isParallel) {
+        defIsParallelImpl(isParallel);
+    }
+
 }

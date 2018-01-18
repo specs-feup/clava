@@ -237,6 +237,20 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * 
+     */
+    public void defIsParallelImpl(Boolean value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def isParallel with type Boolean not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public void defIsParallelImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def isParallel with type String not implemented ");
+    }
+
+    /**
      * Get value on attribute iterations
      * @return the attribute's value
      */
@@ -518,6 +532,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setStep", e);
+        }
+    }
+
+    /**
+     * Sets the attribute 'isParallel' of the loop.
+     * @param isParallel 
+     */
+    public void setIsParallelImpl(Boolean isParallel) {
+        throw new UnsupportedOperationException(get_class()+": Action setIsParallel not implemented ");
+    }
+
+    /**
+     * Sets the attribute 'isParallel' of the loop.
+     * @param isParallel 
+     */
+    public final void setIsParallel(Boolean isParallel) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setIsParallel", this, Optional.empty(), isParallel);
+        	}
+        	this.setIsParallelImpl(isParallel);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setIsParallel", this, Optional.empty(), isParallel);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setIsParallel", e);
         }
     }
 
@@ -869,6 +909,17 @@ public abstract class ALoop extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "isParallel": {
+        	if(value instanceof Boolean){
+        		this.defIsParallelImpl((Boolean)value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defIsParallelImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "initValue": {
         	if(value instanceof String){
         		this.defInitValueImpl((String)value);
@@ -924,6 +975,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void setInitValue(String)");
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
+        actions.add("void setIsParallel(Boolean)");
         actions.add("void interchange(loop)");
         actions.add("void tile(String, loop)");
     }

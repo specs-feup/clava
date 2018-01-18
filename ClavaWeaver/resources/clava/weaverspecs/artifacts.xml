@@ -139,7 +139,10 @@
 		<attribute name="nestedLevel" type="Integer" />
 		<attribute name="controlVar" type="String" />
 		<attribute name="rank" type="Integer[]" />
-		<attribute name="isParallel" type="Boolean" />
+		<attribute name="isParallel" type="Boolean">
+			<def/>
+			<def type="string"/>
+		</attribute>
 		<attribute name="iterations" type="Integer" />
 		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
 			<parameter name="otherLoop" type="loop" />	
@@ -186,7 +189,8 @@
 		<attribute name="arg" type="expression">
 			<parameter name="index" type="int" />	
 		</attribute>
-		<attribute name="returnType" type="joinpoint"/>
+		<attribute name="returnType" type="type" tooltip="the return type of the call"/>
+		<attribute name="functionType" type="type" tooltip="the function type of the call, which includes the return type and the types of the parameters"/>
 		<attribute name="isMemberAccess" type="boolean"/>
 		<attribute name="memberAccess" type="memberAccess"/>
 	</artifact>

@@ -229,27 +229,48 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Get value on attribute returnType
-     * @return the attribute's value
+     * the return type of the call
      */
-    public abstract AJoinPoint getReturnTypeImpl();
+    public abstract AType getReturnTypeImpl();
 
     /**
-     * Get value on attribute returnType
-     * @return the attribute's value
+     * the return type of the call
      */
     public final Object getReturnType() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
         	}
-        	AJoinPoint result = this.getReturnTypeImpl();
+        	AType result = this.getReturnTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
+        }
+    }
+
+    /**
+     * the function type of the call, which includes the return type and the types of the parameters
+     */
+    public abstract AType getFunctionTypeImpl();
+
+    /**
+     * the function type of the call, which includes the return type and the types of the parameters
+     */
+    public final Object getFunctionType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
+        	}
+        	AType result = this.getFunctionTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "functionType", e);
         }
     }
 
@@ -670,6 +691,7 @@ public abstract class ACall extends AExpression {
         attributes.add("argList");
         attributes.add("arg");
         attributes.add("returnType");
+        attributes.add("functionType");
         attributes.add("isMemberAccess");
         attributes.add("memberAccess");
     }
@@ -730,6 +752,7 @@ public abstract class ACall extends AExpression {
         ARGLIST("argList"),
         ARG("arg"),
         RETURNTYPE("returnType"),
+        FUNCTIONTYPE("functionType"),
         ISMEMBERACCESS("isMemberAccess"),
         MEMBERACCESS("memberAccess"),
         VARDECL("vardecl"),

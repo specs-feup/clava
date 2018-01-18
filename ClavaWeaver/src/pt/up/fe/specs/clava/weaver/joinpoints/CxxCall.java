@@ -44,6 +44,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.actions.CallWrap;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -201,9 +202,9 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AJoinPoint getReturnTypeImpl() {
+    public AType getReturnTypeImpl() {
 
-        return CxxJoinpoints.create(call.getType(), this);
+        return (AType) CxxJoinpoints.create(call.getType(), this);
     }
 
     @Override
@@ -270,6 +271,12 @@ public class CxxCall extends ACall {
         MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
 
         return CxxJoinpoints.create(memberExpr, this, AMemberAccess.class);
+
+    }
+
+    @Override
+    public AType getFunctionTypeImpl() {
+        return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
 
     }
 }

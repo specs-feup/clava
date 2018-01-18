@@ -229,6 +229,13 @@
 	<action name="setStep" class="loop" tooltip="Sets the step statement of the loop. Works with loops of kind 'for'.">
 		<parameter name="stepCode" type="String"/>
 	</action>
+
+	<action name="setIsParallel" class="loop" tooltip="Sets the attribute 'isParallel' of the loop.">
+		<parameter name="isParallel" type="Boolean"/>
+	</action>
+
+
+
 	<action name="interchange" class="loop" tooltip="Interchanges two for loops, if possible.">
 		<parameter name="otherLoop" type="loop" />
 	</action>

@@ -1597,6 +1597,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the function type of the call, which includes the return type and the types of the parameters",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "functionType"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "boolean",
@@ -1637,9 +1646,10 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the return type of the call",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "returnType"
                            }]
                },
@@ -8893,6 +8903,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the attribute 'isParallel' of the loop.",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setIsParallel"
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "isParallel",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the kind of the loop",
                   "children": [
                            {
@@ -10243,6 +10267,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the function type of the call, which includes the return type and the types of the parameters",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "functionType"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "boolean",
@@ -10283,9 +10316,10 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the return type of the call",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "returnType"
                            }]
                },

@@ -145,8 +145,17 @@ public abstract class AMemberCall extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getReturnTypeImpl() {
+    public AType getReturnTypeImpl() {
         return this.aCall.getReturnTypeImpl();
+    }
+
+    /**
+     * Get value on attribute functionType
+     * @return the attribute's value
+     */
+    @Override
+    public AType getFunctionTypeImpl() {
+        return this.aCall.getFunctionTypeImpl();
     }
 
     /**
@@ -508,6 +517,7 @@ public abstract class AMemberCall extends ACall {
         ARGLIST("argList"),
         ARG("arg"),
         RETURNTYPE("returnType"),
+        FUNCTIONTYPE("functionType"),
         ISMEMBERACCESS("isMemberAccess"),
         MEMBERACCESS("memberAccess"),
         VARDECL("vardecl"),
