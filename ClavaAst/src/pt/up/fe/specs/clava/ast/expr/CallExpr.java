@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -215,5 +216,21 @@ public class CallExpr extends Expr {
      */
     public void setCallName(String name) {
         getCalleeDeclRef().setRefName(name);
+    }
+
+    public FunctionType getFunctionType() {
+        // First check declaration
+        FunctionType typeFromDecl = getDeclaration().map(FunctionDecl::getFunctionType).orElse(null);
+        if (typeFromDecl != null) {
+            return typeFromDecl;
+        }
+
+        // Check definition
+        FunctionType typeFromDef = getDefinition().map(FunctionDecl::getFunctionType).orElse(null);
+        if (typeFromDef != null) {
+            return typeFromDef;
+        }
+
+        throw new RuntimeException("Could not find the function type for call at " + getLocation());
     }
 }
