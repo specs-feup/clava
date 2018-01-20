@@ -1,0 +1,5 @@
+aspectdef PragmaAttribute
+
+	println("Done");
+
+end

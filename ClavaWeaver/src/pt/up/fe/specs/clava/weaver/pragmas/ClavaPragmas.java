@@ -38,6 +38,11 @@ public class ClavaPragmas {
     private static void processClavaPragma(Pragma clavaPragma) {
         StringParser parser = new StringParser(clavaPragma.getContent());
 
+        if (parser.apply(StringParsers::hasWord, "attribute")) {
+            new AttributeClauseParser(clavaPragma).parse(parser.toString());
+            return;
+        }
+
         // Check if starts with name of joinpoint
         boolean hasJoinpoint = parser.apply(StringParsers::checkStringStarts, "$").isPresent();
         String joinpointName = null;
