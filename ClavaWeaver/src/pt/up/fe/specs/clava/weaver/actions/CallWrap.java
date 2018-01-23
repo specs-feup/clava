@@ -1,11 +1,11 @@
 /**
  * Copyright 2017 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -72,7 +72,7 @@ public class CallWrap {
 
     public CallWrap(CxxCall cxxCall) {
         this.cxxCall = cxxCall;
-        this.app = cxxCall.getRootImpl();
+        app = cxxCall.getRootImpl();
     }
 
     public void addWrapper(String name) {
@@ -96,9 +96,12 @@ public class CallWrap {
                 createUserIncludeWrapper(name);
                 break;
             case NO_INCLUDE:
-                SpecsLogs.msgInfo(
-                        "action 'wrap' is not supported yet when the call refers to a function that has no declaration in a header file: "
-                                + cxxCall.getNode().getLocation());
+                // SpecsLogs.msgInfo(
+                // "action 'wrap' is not supported yet when the call refers to a function that has no declaration in a
+                // header file: "
+                // + cxxCall.getNode().getLocation());
+                createInPlaceWrapper(name);
+                cxxCall.setName(name); // nned to call this here before returning
                 return;
             case DECLARATION_IN_IMPLEMENTATION:
                 SpecsLogs.msgInfo(
@@ -126,8 +129,19 @@ public class CallWrap {
     }
 
     /**
+     * Creates a wrapper below the found implementation of the original function.
+     *
+     * @param name
+     */
+    private void createInPlaceWrapper(String name) {
+
+        FunctionDecl declaration = cxxCall.getDefinitionImpl().getNode();
+        addWrapperFunctionInPlace(name, declaration);
+    }
+
+    /**
      * Creates a wrapper function based on the declaration of the function call.
-     * 
+     *
      * @param name
      * @param cxxCall
      */
@@ -172,6 +186,29 @@ public class CallWrap {
         implTu.addChild(wrapperFunctionDeclImpl);
 
         getHeaderFile().addChild(wrapperFunctionDeclHeader);
+
+        // Save function implementation declaration
+        app.getAppData().get(WRAPPER_CALLS).add(name);
+    }
+
+    private void addWrapperFunctionInPlace(String name, FunctionDecl declaration) {
+
+        FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) declaration.copy();
+        wrapperFunctionDeclImpl.setDeclName(name);
+
+        // Create code that calls previous function
+        List<String> paramNames = wrapperFunctionDeclImpl.getParameters().stream()
+                .map(param -> param.getDeclName())
+                .collect(Collectors.toList());
+
+        List<Stmt> functionCallCode = createFunctionCallCode(paramNames);
+
+        wrapperFunctionDeclImpl.setBody(ClavaNodeFactory.compoundStmt(null, functionCallCode));
+
+        // add to original file
+        TranslationUnit originalFile = declaration.getAncestor(TranslationUnit.class);
+        int indexOfOriginal = declaration.indexOfSelf();
+        originalFile.addChild(indexOfOriginal + 1, wrapperFunctionDeclImpl);
 
         // Save function implementation declaration
         app.getAppData().get(WRAPPER_CALLS).add(name);
