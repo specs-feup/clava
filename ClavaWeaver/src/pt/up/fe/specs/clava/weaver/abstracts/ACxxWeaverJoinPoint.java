@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
 
@@ -624,6 +625,15 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint copyImpl() {
         return CxxJoinpoints.create(getNode().copy(), null);
+    }
+
+    @Override
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return getNode().getChildren().stream()
+                .map(node -> CxxJoinpoints.create(node, this))
+                .collect(Collectors.toList())
+                .toArray(new AJoinPoint[0]);
+
     }
 
 }

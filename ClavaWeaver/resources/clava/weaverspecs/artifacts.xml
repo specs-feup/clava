@@ -35,6 +35,7 @@
 		<attribute name="joinpointType" type="String" />
 		<attribute name="type" type="joinpoint" />
 		<attribute name="astNumChildren" type="Integer" />
+		<attribute name="astChildren" type="joinpoint[]" />
 		<attribute name="astName" type="String" />
 		<attribute name="astChild" type="joinpoint">
 			<parameter name="index" type="Integer" />

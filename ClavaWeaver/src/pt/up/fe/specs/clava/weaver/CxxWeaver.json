@@ -80,6 +80,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -593,6 +601,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -1143,6 +1159,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -1755,6 +1779,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -2374,6 +2406,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -2878,6 +2918,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -3363,6 +3411,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -3830,6 +3886,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -4291,6 +4355,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -4877,6 +4949,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -5372,6 +5452,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -5925,6 +6013,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -6684,6 +6780,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -7356,6 +7460,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -7879,6 +7991,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -8541,6 +8661,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -9256,6 +9384,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -9807,6 +9943,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -10425,6 +10569,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -11070,6 +11222,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -11631,6 +11791,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -12305,6 +12473,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -13085,6 +13261,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -13601,6 +13785,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -14187,6 +14379,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -14792,6 +14992,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -15282,6 +15490,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -15932,6 +16148,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -16473,6 +16697,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -16973,6 +17205,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -17585,6 +17825,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -18189,6 +18437,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -18761,6 +19017,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -19286,6 +19550,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -19800,6 +20072,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {
@@ -20373,6 +20653,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astId"
                            }]
@@ -20871,6 +21159,14 @@
                            {
                               "type": "Integer",
                               "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
                            }]
                },
                {

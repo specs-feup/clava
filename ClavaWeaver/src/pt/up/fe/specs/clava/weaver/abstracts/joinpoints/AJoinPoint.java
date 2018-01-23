@@ -389,6 +389,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("joinpointType");
         attributes.add("type");
         attributes.add("astNumChildren");
+        attributes.add("astChildren");
         attributes.add("astName");
         attributes.add("astChild(Integer index)");
         attributes.add("chain");
@@ -830,6 +831,41 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astNumChildren", e);
+        }
+    }
+
+    /**
+     * Get value on attribute astChildren
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getAstChildrenArrayImpl();
+
+    /**
+     * Get value on attribute astChildren
+     * @return the attribute's value
+     */
+    public Bindings getAstChildrenImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getAstChildrenArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute astChildren
+     * @return the attribute's value
+     */
+    public final Object getAstChildren() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "astChildren", Optional.empty());
+        	}
+        	Bindings result = this.getAstChildrenImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "astChildren", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "astChildren", e);
         }
     }
 
