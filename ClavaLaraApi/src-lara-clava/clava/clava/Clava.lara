@@ -145,3 +145,11 @@ Clava.getProgram = function() {
 	call results : GetProgram();
 	return results.programJp;
 }
+
+/**
+ *
+ * @return {J#List<include>} a list of join points representing available user includes
+ */
+Clava.getAvailableIncludes = function() {	
+	return CxxWeaverApi.getAvailableUserIncludes();
+}
