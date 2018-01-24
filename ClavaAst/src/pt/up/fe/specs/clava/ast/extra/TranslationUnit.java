@@ -52,6 +52,10 @@ public class TranslationUnit extends ClavaNode {
     private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
     private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
 
+    public static Set<String> getHeaderExtensions() {
+        return HEADER_EXTENSIONS;
+    }
+
     private final String filename;
     private final String path;
 

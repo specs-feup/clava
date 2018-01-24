@@ -56,6 +56,11 @@ public class IncludeDecl extends Decl {
         return "\"" + include.getInclude() + "\"";
     }
 
+    /**
+     * TODO: change to getName()
+     * 
+     * @return
+     */
     public Include getInclude() {
         return include;
     }

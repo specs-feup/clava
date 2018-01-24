@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava;
 
 import java.io.File;
 
+import com.google.common.base.Preconditions;
+
 public class Include {
 
     private final File sourceFile;
@@ -23,70 +25,94 @@ public class Include {
     private final boolean isAngled;
 
     public Include(String include, boolean isAngled) {
-	this(null, include, -1, isAngled);
+        this(null, include, -1, isAngled);
     }
 
     public Include(File sourceFile, String include, int line, boolean isAngled) {
-	this.sourceFile = sourceFile;
-	this.include = include;
-	this.line = line;
-	this.isAngled = isAngled;
+        this.sourceFile = sourceFile;
+        this.include = normalizeInclude(include); // Is normalization needed?
+        this.line = line;
+        this.isAngled = isAngled;
+    }
+
+    private static String normalizeInclude(String include) {
+        // Preconditions.checkNotNull(include);
+        if (include == null) {
+            return null;
+        }
+        return include.replace('\\', '/');
     }
 
     public static Include empty() {
-	return new Include(null, null, -1, false);
+        return new Include(null, null, -1, false);
     }
 
     public String getInclude() {
-	return include;
+        return include;
     }
 
     public int getLine() {
-	return line;
+        return line;
     }
 
     public File getSourceFile() {
-	return sourceFile;
+        return sourceFile;
     }
 
     public boolean isAngled() {
-	return isAngled;
+        return isAngled;
     }
 
     public Include setSourceFile(File sourceFile) {
-	return new Include(sourceFile, include, line, isAngled);
+        return new Include(sourceFile, include, line, isAngled);
     }
 
     public Include setInclude(String include) {
-	return new Include(sourceFile, include, line, isAngled);
+        return new Include(sourceFile, include, line, isAngled);
 
     }
 
     public Include setLine(int line) {
-	return new Include(sourceFile, include, line, isAngled);
+        return new Include(sourceFile, include, line, isAngled);
     }
 
     public Include setAngled(boolean isAngled) {
-	return new Include(sourceFile, include, line, isAngled);
+        return new Include(sourceFile, include, line, isAngled);
+    }
+
+    public File getRelativeFolder() {
+        // How many levels there are in the name
+        int numberOfParts = include.split("/").length;
+
+        Preconditions.checkArgument(numberOfParts > 0, "Expected include to have at least 1 part: " + include);
+
+        File currentFolder = getSourceFile().getParentFile();
+
+        // Subtract one, first part is the name of the file
+        for (int i = 0; i < numberOfParts - 1; i++) {
+            currentFolder = currentFolder.getParentFile();
+        }
+
+        return currentFolder;
     }
 
     @Override
     public String toString() {
-	StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-	if (isAngled) {
-	    builder.append("<");
-	}
+        if (isAngled) {
+            builder.append("<");
+        }
 
-	builder.append(include);
+        builder.append(include);
 
-	if (isAngled) {
-	    builder.append(">");
-	}
+        if (isAngled) {
+            builder.append(">");
+        }
 
-	builder.append(":").append(line);
+        builder.append(":").append(line);
 
-	return builder.toString();
+        return builder.toString();
     }
 
 }
