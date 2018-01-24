@@ -101,6 +101,14 @@
 		<attribute name="isOpenCL" type="Boolean" tooltip="true if this file is an OpenCL filetype"/>
 	</artifact>
 
+	<!-- INCLUDE -->
+	<artifact class="include" default="name">
+		<attribute name="name" type="String" tooltip="the name of the include"/>
+		<attribute name="isAngled" type="Boolean" tooltip="true if this is an angled include (i.e., system include)"/>
+		<attribute name="filepath" type="String" tooltip="the complete path to the file"/>
+		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file of the include, relative to the name of the include"/>
+	</artifact>
+
 	<!-- RECORD -->
 	<artifact class="record" default="name">
 		<attribute name="name" type="String" />

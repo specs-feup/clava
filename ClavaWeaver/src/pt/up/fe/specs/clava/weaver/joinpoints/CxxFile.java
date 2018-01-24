@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
@@ -45,6 +46,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
@@ -380,6 +382,11 @@ public class CxxFile extends AFile {
     @Override
     public Boolean getIsOpenCLImpl() {
         return tunit.isOpenCLFile();
+    }
+
+    @Override
+    public List<? extends AInclude> selectInclude() {
+        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, this, IncludeDecl.class);
     }
 
 }

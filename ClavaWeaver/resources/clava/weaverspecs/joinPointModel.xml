@@ -30,9 +30,11 @@
 		<select							class="tag"/>		
 		<select 						class="vardecl"/>
 		<select 						class="comment"/>
+		<select 						class="include"/>		
 	</joinpoint>
 	
-
+	<joinpoint class="include">
+	</joinpoint>
 	
 	<!-- RECORD -->
 	<joinpoint class="record">
