@@ -25,6 +25,10 @@ import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
+import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -396,6 +400,33 @@ public class FunctionDecl extends DeclaratorDecl {
                 // .map(param -> parseTypes(param.getType()) + param.getDeclName())
                 .map(param -> param.getCode())
                 .collect(Collectors.joining(", "));
+    }
+
+    public void setName(String name) {
+        String functionName = getDeclName();
+
+        // Determine scope of change. If static, only change calls inside the file
+        boolean isStatic = getFunctionDeclData().getStorageClass() == StorageClass.STATIC;
+        ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getApp();
+
+        // Find all calls of this function
+        if (root != null) {
+            root.getDescendantsStream()
+                    .filter(node -> node instanceof CallExpr && !(node instanceof CXXMemberCallExpr)
+                            && !(node instanceof CXXOperatorCallExpr))
+                    .map(node -> CallExpr.class.cast(node))
+                    .filter(node -> functionName.equals(node.getCalleeName()))
+                    .forEach(callExpr -> callExpr.setCallName(name));
+        }
+
+        // Change name of itself
+        setDeclName(name);
+
+        // Change name of declaration
+        getDeclaration()
+                .filter(functionDecl -> functionDecl != this)
+                .ifPresent(functionDecl -> functionDecl.setDeclName(name));
+
     }
 
 }
