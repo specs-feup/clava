@@ -24,6 +24,7 @@ public abstract class AMethod extends AFunction {
      * 
      */
     public AMethod(AFunction aFunction){
+        super(aFunction);
         this.aFunction = aFunction;
     }
     /**
@@ -49,15 +50,6 @@ public abstract class AMethod extends AFunction {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
         }
-    }
-
-    /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    @Override
-    public String getNameImpl() {
-        return this.aFunction.getNameImpl();
     }
 
     /**
@@ -148,6 +140,24 @@ public abstract class AMethod extends AFunction {
     @Override
     public List<? extends AParam> selectParam() {
         return this.aFunction.selectParam();
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aFunction.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute isPublic
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPublicImpl() {
+        return this.aFunction.getIsPublicImpl();
     }
 
     /**
@@ -401,7 +411,6 @@ public abstract class AMethod extends AFunction {
      */
     protected enum MethodAttributes {
         RECORD("record"),
-        NAME("name"),
         HASDEFINITION("hasDefinition"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
@@ -410,6 +419,8 @@ public abstract class AMethod extends AFunction {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        NAME("name"),
+        ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

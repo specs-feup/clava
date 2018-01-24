@@ -6633,7 +6633,7 @@
       },
       {
          "name": "function",
-         "extends": "joinpoint"      ,
+         "extends": "namedDecl"      ,
          "children": [
                {
                   "type": "attribute",
@@ -6691,14 +6691,6 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String",
-                              "name": "name"
-                           }]
-               },
-               {
-                  "type": "attribute",
-                  "children": [
-                           {
                               "type": "String[]",
                               "name": "paramNames"
                            }]
@@ -6709,6 +6701,22 @@
                            {
                               "type": "joinpoint[]",
                               "name": "params"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isPublic"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "name"
                            }]
                },
                {
@@ -11644,14 +11652,6 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String",
-                              "name": "name"
-                           }]
-               },
-               {
-                  "type": "attribute",
-                  "children": [
-                           {
                               "type": "String[]",
                               "name": "paramNames"
                            }]
@@ -11662,6 +11662,22 @@
                            {
                               "type": "joinpoint[]",
                               "name": "params"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isPublic"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "name"
                            }]
                },
                {

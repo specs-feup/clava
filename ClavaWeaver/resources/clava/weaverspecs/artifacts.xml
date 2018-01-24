@@ -230,7 +230,7 @@
 
 	<!-- FUNCTION -->
 	<artifact class="function" default="name">
-		<attribute name="name" type="String" />
+		<!--  <attribute name="name" type="String" />  -->
 		<attribute name="hasDefinition" type="Boolean" />
 		<attribute name="functionType" type="joinpoint" />
 		<attribute name="declarationJp" type="joinpoint" />

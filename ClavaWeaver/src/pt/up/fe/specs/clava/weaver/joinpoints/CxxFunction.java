@@ -55,14 +55,15 @@ public class CxxFunction extends AFunction {
     private final ACxxWeaverJoinPoint parent;
 
     public CxxFunction(FunctionDecl function, ACxxWeaverJoinPoint parent) {
+        super(new CxxNamedDecl(function, parent));
         this.function = function;
         this.parent = parent;
     }
 
-    @Override
-    public String getNameImpl() {
-        return function.getDeclName();
-    }
+    // @Override
+    // public String getNameImpl() {
+    // return function.getDeclName();
+    // }
 
     @Override
     public List<? extends AScope> selectBody() {

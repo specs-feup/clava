@@ -90,7 +90,7 @@
 
 
 	<!-- FUNCTION -->
-	<joinpoint class="function">
+	<joinpoint class="function" extends="namedDecl">
 		<!--  <select 						class="body"/>   -->
 	 	<select alias="body" 			class="scope"/>
 		<select 						class="param"/>
