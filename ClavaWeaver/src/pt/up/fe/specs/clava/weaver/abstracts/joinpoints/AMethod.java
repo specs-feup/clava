@@ -125,6 +125,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    @Override
+    public String getStorageClassImpl() {
+        return this.aFunction.getStorageClassImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -158,6 +167,13 @@ public abstract class AMethod extends AFunction {
     @Override
     public Boolean getIsPublicImpl() {
         return this.aFunction.getIsPublicImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        this.aFunction.defNameImpl(value);
     }
 
     /**
@@ -306,6 +322,15 @@ public abstract class AMethod extends AFunction {
 
     /**
      * 
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aFunction.setNameImpl(name);
+    }
+
+    /**
+     * 
      * @param position 
      * @param code 
      */
@@ -356,6 +381,13 @@ public abstract class AMethod extends AFunction {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -419,6 +451,7 @@ public abstract class AMethod extends AFunction {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

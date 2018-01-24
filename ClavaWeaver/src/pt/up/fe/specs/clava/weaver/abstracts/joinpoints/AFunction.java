@@ -252,6 +252,31 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public abstract String getStorageClassImpl();
+
+    /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public final Object getStorageClass() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
+        	}
+        	String result = this.getStorageClassImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "storageClass", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -398,6 +423,32 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * 
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -413,6 +464,13 @@ public abstract class AFunction extends ANamedDecl {
     @Override
     public Boolean getIsPublicImpl() {
         return this.aNamedDecl.getIsPublicImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        this.aNamedDecl.defNameImpl(value);
     }
 
     /**
@@ -565,6 +623,13 @@ public abstract class AFunction extends ANamedDecl {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -583,6 +648,7 @@ public abstract class AFunction extends ANamedDecl {
         attributes.add("paramNames");
         attributes.add("params");
         attributes.add("id");
+        attributes.add("storageClass");
     }
 
     /**
@@ -606,6 +672,7 @@ public abstract class AFunction extends ANamedDecl {
         actions.add("String cloneOnFile(String, String)");
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
+        actions.add("void setName(String)");
     }
 
     /**
@@ -641,6 +708,7 @@ public abstract class AFunction extends ANamedDecl {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

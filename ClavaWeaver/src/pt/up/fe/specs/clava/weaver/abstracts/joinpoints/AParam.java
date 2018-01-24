@@ -53,6 +53,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    @Override
+    public String getStorageClassImpl() {
+        return this.aVardecl.getStorageClassImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -77,6 +86,13 @@ public abstract class AParam extends AVardecl {
     @Override
     public Boolean getIsPublicImpl() {
         return this.aVardecl.getIsPublicImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        this.aVardecl.defNameImpl(value);
     }
 
     /**
@@ -244,6 +260,13 @@ public abstract class AParam extends AVardecl {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -300,6 +323,7 @@ public abstract class AParam extends AVardecl {
         HASINIT("hasInit"),
         INIT("init"),
         ISPARAM("isParam"),
+        STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

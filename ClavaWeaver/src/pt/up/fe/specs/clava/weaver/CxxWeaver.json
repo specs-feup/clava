@@ -6707,6 +6707,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "storageClass"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Boolean",
                               "name": "isPublic"
                            }]
@@ -7096,6 +7104,19 @@
                            {
                               "type": "String",
                               "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
                               "defaultValue": ""
                            }]
                },
@@ -11668,6 +11689,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "storageClass"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Boolean",
                               "name": "isPublic"
                            }]
@@ -12057,6 +12086,19 @@
                            {
                               "type": "String",
                               "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
                               "defaultValue": ""
                            }]
                },
@@ -13701,6 +13743,14 @@
                            {
                               "type": "Boolean",
                               "name": "isParam"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "storageClass"
                            }]
                },
                {
@@ -20518,6 +20568,14 @@
                            {
                               "type": "Boolean",
                               "name": "isParam"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "storageClass"
                            }]
                },
                {

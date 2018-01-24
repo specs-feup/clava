@@ -134,7 +134,9 @@
 
 	<!-- NAMED DECLARATION -->
 	<artifact class="namedDecl" default="name">
-		<attribute name="name" type="String" />
+		<attribute name="name" type="String">
+			<def/>
+		</attribute>
 		<attribute name="isPublic" type="Boolean" />
 	</artifact>
 
@@ -216,6 +218,7 @@
 		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
 		<attribute name="init" type="joinpoint" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
+		<attribute name="storageClass" type="String"/>
 	</artifact>
 
 	<!-- VARREF -->
@@ -241,6 +244,7 @@
 		<attribute name="paramNames" type="String[]"/>
 		<attribute name="params" type="joinpoint[]"/>
 		<attribute name="id" type="String"/>
+		<attribute name="storageClass" type="String"/>
 	</artifact>
 
 

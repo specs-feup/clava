@@ -98,6 +98,31 @@ public abstract class AVardecl extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public abstract String getStorageClassImpl();
+
+    /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public final Object getStorageClass() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
+        	}
+        	String result = this.getStorageClassImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "storageClass", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -171,6 +196,13 @@ public abstract class AVardecl extends ANamedDecl {
     @Override
     public Boolean getIsPublicImpl() {
         return this.aNamedDecl.getIsPublicImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        this.aNamedDecl.defNameImpl(value);
     }
 
     /**
@@ -320,6 +352,13 @@ public abstract class AVardecl extends ANamedDecl {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -333,6 +372,7 @@ public abstract class AVardecl extends ANamedDecl {
         attributes.add("hasInit");
         attributes.add("init");
         attributes.add("isParam");
+        attributes.add("storageClass");
     }
 
     /**
@@ -382,6 +422,7 @@ public abstract class AVardecl extends ANamedDecl {
         HASINIT("hasInit"),
         INIT("init"),
         ISPARAM("isParam"),
+        STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

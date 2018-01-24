@@ -409,4 +409,19 @@ public class CxxFunction extends AFunction {
         // Set the function type copy as the type of the function
         function.setType(functionTypeCopy);
     }
+
+    @Override
+    public void defNameImpl(String value) {
+        function.setName(value);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
+
+    @Override
+    public String getStorageClassImpl() {
+        return function.getFunctionDeclData().getStorageClass().name().toLowerCase();
+    }
 }
