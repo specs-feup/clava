@@ -23,14 +23,20 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public enum SourceType {
 
-    HEADER("h", "hpp"),
-    IMPLEMENTATION("c", "cpp", "cl");
+    HEADER("h", "hpp", "incl"),
+    IMPLEMENTATION("c", "cpp", "cl", "cc");
 
     private final static Set<String> PERMITTED_EXCEPTIONS = new HashSet<>(
             SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
 
+    private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp", "cc"));
+
     public static Set<String> getPermittedExceptions() {
         return PERMITTED_EXCEPTIONS;
+    }
+
+    public static boolean isCxxExtension(String extension) {
+        return CXX_EXTENSIONS.contains(extension.toLowerCase());
     }
 
     private final Set<String> extensions;
@@ -66,6 +72,10 @@ public enum SourceType {
         }
 
         return Optional.empty();
+    }
+
+    public boolean hasExtension(String extension) {
+        return extensions.contains(extension.toLowerCase());
     }
 
 }
