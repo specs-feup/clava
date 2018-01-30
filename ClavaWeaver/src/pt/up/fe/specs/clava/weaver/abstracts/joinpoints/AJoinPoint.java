@@ -392,7 +392,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("astChildren");
         attributes.add("astName");
         attributes.add("astChild(Integer index)");
-        attributes.add("hasNode(Object jp)");
+        attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
         attributes.add("javaFields");
         attributes.add("javaValue(String fieldName)");
@@ -924,24 +924,24 @@ public abstract class AJoinPoint extends JoinPoint {
 
     /**
      * 
-     * @param jp
+     * @param nodeOrJp
      * @return 
      */
-    public abstract Boolean hasNodeImpl(Object jp);
+    public abstract Boolean hasNodeImpl(Object nodeOrJp);
 
     /**
      * 
-     * @param jp
+     * @param nodeOrJp
      * @return 
      */
-    public final Object hasNode(Object jp) {
+    public final Object hasNode(Object nodeOrJp) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasNode", Optional.empty(), jp);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasNode", Optional.empty(), nodeOrJp);
         	}
-        	Boolean result = this.hasNodeImpl(jp);
+        	Boolean result = this.hasNodeImpl(nodeOrJp);
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasNode", Optional.ofNullable(result), jp);
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasNode", Optional.ofNullable(result), nodeOrJp);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {

@@ -40,7 +40,7 @@
 		<attribute name="astChild" type="joinpoint">
 			<parameter name="index" type="Integer" />
 		</attribute>
-		<attribute name="hasNode" type="Boolean">
+		<attribute name="hasNode" type="Boolean" tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
 			<parameter name="nodeOrJp" type="object" />
 		</attribute>
 		<attribute name="chain" type="String[]" />

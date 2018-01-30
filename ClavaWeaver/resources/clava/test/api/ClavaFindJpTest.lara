@@ -1,5 +1,6 @@
 import clava.Clava;
 import lara.Io;
+import clava.ClavaJoinPoints;
 
 aspectdef ClavaTest
 
@@ -34,4 +35,33 @@ aspectdef ClavaTest
 	apply
 		println("Original AST:\n" + $program.code);
 	end
+	
+	
+	//////
+	
+	call JpCreateTest();
+	
+end
+
+aspectdef JpCreateTest
+
+	// New line
+	println("JpCreateTest");
+
+	// Create join point
+	var astNode = undefined;
+	var $loopJp = undefined;
+	select loop end
+	apply
+		$loopJp = $loop;
+		astNode = $loop.node;
+		// Finish after first loop
+	end
+
+	// Check if loop has node
+	println("Has node? " + $loopJp.hasNode(astNode));
+
+	// Create join point
+	var $newLoopJp = ClavaJoinPoints.create(astNode);
+	println("Are JPs equal? " + $newLoopJp.equals($loopJp));
 end
