@@ -5,6 +5,14 @@ import clava.Clava;
  */
 var ClavaJoinPoints = {};
 
+/**
+ * @param {J#ClavaNode} node - A node of the AST.
+ */
+ClavaJoinPoints.create = function(node) {
+	// Check instance
+	checkTrue(Java.type("pt.up.fe.specs.clava.ClavaNode").class.isInstance(node), "ClavaJoinPoints.create::node: Expected input to be a ClavaNode");
+	return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node, null);
+}
 
 ClavaJoinPoints.equals = function(jp1, jp2) {
 	return jp1.equals(jp2);
