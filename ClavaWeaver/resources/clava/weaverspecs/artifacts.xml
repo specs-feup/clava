@@ -40,6 +40,9 @@
 		<attribute name="astChild" type="joinpoint">
 			<parameter name="index" type="Integer" />
 		</attribute>
+		<attribute name="hasNode" type="Boolean">
+			<parameter name="nodeOrJp" type="object" />
+		</attribute>
 		<attribute name="chain" type="String[]" />
 		<attribute name="javaFields" type="String[]" />
 		<attribute name="javaValue" type="Object">

@@ -392,6 +392,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("astChildren");
         attributes.add("astName");
         attributes.add("astChild(Integer index)");
+        attributes.add("hasNode(Object jp)");
         attributes.add("chain");
         attributes.add("javaFields");
         attributes.add("javaValue(String fieldName)");
@@ -918,6 +919,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astChild", e);
+        }
+    }
+
+    /**
+     * 
+     * @param jp
+     * @return 
+     */
+    public abstract Boolean hasNodeImpl(Object jp);
+
+    /**
+     * 
+     * @param jp
+     * @return 
+     */
+    public final Object hasNode(Object jp) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasNode", Optional.empty(), jp);
+        	}
+        	Boolean result = this.hasNodeImpl(jp);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasNode", Optional.ofNullable(result), jp);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasNode", e);
         }
     }
 

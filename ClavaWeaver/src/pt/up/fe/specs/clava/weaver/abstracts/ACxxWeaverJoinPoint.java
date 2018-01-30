@@ -43,6 +43,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     static {
         IGNORE_NODES = new HashSet<>();
         IGNORE_NODES.add(ImplicitCastExpr.class);
+        // IGNORE_NODES.add(ParenExpr.class); // Have not tried it yet
     }
 
     @Override
@@ -634,6 +635,21 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .collect(Collectors.toList())
                 .toArray(new AJoinPoint[0]);
 
+    }
+
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        if (nodeOrJp instanceof AJoinPoint) {
+            return hasNodeImpl(((AJoinPoint) nodeOrJp).getNode());
+        }
+
+        if (nodeOrJp instanceof ClavaNode) {
+            return getNode() == nodeOrJp;
+        }
+
+        ClavaLog.warning("joinpoint attribute 'hasNode': input type '" + nodeOrJp.getClass()
+                + "' not supported, returning false");
+        return false;
     }
 
 }
