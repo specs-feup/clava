@@ -1,0 +1,10 @@
+import clava.util.SingleFile;
+
+/**
+ * @class
+ */
+var ClavaCode = {};
+
+ClavaCode.toSingleFile = function(fileOrBaseFolder, optionalFile) {
+	call SingleFile(fileOrBaseFolder, optionalFile);
+}
