@@ -14,6 +14,9 @@ ClavaJoinPoints.create = function(node) {
 	return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node, null);
 }
 
+/**
+ * @return true, if the two join points are equal, in the sense that the underlying AST nodes are also equal, according to their .equals() method (might return true for different AST nodes).
+ */
 ClavaJoinPoints.equals = function(jp1, jp2) {
 	return jp1.equals(jp2);
 }
