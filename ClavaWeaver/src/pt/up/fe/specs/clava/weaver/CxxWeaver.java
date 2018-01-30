@@ -38,7 +38,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
@@ -870,8 +869,10 @@ public class CxxWeaver extends ACxxWeaver {
             File includeFolder = new File(includeFolderName);
 
             // Get all files from folder
+            // List<File> currentIncludes = SpecsIo.getFilesRecursive(includeFolder,
+            // TranslationUnit.getHeaderExtensions());
             List<File> currentIncludes = SpecsIo.getFilesRecursive(includeFolder,
-                    TranslationUnit.getHeaderExtensions());
+                    SourceType.HEADER.getExtensions());
 
             currentIncludes.stream()
                     // Filter already added includes
