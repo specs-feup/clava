@@ -29,14 +29,20 @@ int fooNoDecl(int a) {
 }
 
 
+int wrap_fooNoDecl(int a) {
+   int result;
+   result = fooNoDecl(a);
+   
+   return result;
+}
+
 void voidFoo(int * a) {
    (*a)++;
 }
 
-
 int main() {
    wrap_foo(10);
-   fooNoDecl(20);
+   wrap_fooNoDecl(20);
    int a = 100;
    wrap_voidFoo(&a);
    wrap_printf("Hello");
