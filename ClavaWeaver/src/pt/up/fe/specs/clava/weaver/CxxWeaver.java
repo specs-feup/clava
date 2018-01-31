@@ -215,6 +215,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         weaverData = null;
 
+        this.setWeaverProfiler(new ClavaMetrics());
     }
 
     public App getApp() {
