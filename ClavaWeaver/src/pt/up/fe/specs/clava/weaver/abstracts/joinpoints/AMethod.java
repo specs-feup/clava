@@ -24,6 +24,7 @@ public abstract class AMethod extends AFunction {
      * 
      */
     public AMethod(AFunction aFunction){
+        super(aFunction);
         this.aFunction = aFunction;
     }
     /**
@@ -49,15 +50,6 @@ public abstract class AMethod extends AFunction {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
         }
-    }
-
-    /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    @Override
-    public String getNameImpl() {
-        return this.aFunction.getNameImpl();
     }
 
     /**
@@ -133,6 +125,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    @Override
+    public String getStorageClassImpl() {
+        return this.aFunction.getStorageClassImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -148,6 +149,31 @@ public abstract class AMethod extends AFunction {
     @Override
     public List<? extends AParam> selectParam() {
         return this.aFunction.selectParam();
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aFunction.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute isPublic
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPublicImpl() {
+        return this.aFunction.getIsPublicImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        this.aFunction.defNameImpl(value);
     }
 
     /**
@@ -296,6 +322,15 @@ public abstract class AMethod extends AFunction {
 
     /**
      * 
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aFunction.setNameImpl(name);
+    }
+
+    /**
+     * 
      * @param position 
      * @param code 
      */
@@ -346,6 +381,13 @@ public abstract class AMethod extends AFunction {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -401,7 +443,6 @@ public abstract class AMethod extends AFunction {
      */
     protected enum MethodAttributes {
         RECORD("record"),
-        NAME("name"),
         HASDEFINITION("hasDefinition"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
@@ -410,6 +451,9 @@ public abstract class AMethod extends AFunction {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        STORAGECLASS("storageClass"),
+        NAME("name"),
+        ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -418,6 +462,7 @@ public abstract class AMethod extends AFunction {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -436,6 +481,7 @@ public abstract class AMethod extends AFunction {
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

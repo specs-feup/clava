@@ -389,8 +389,10 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("joinpointType");
         attributes.add("type");
         attributes.add("astNumChildren");
+        attributes.add("astChildren");
         attributes.add("astName");
         attributes.add("astChild(Integer index)");
+        attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
         attributes.add("javaFields");
         attributes.add("javaValue(String fieldName)");
@@ -834,6 +836,41 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * Get value on attribute astChildren
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getAstChildrenArrayImpl();
+
+    /**
+     * Get value on attribute astChildren
+     * @return the attribute's value
+     */
+    public Bindings getAstChildrenImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getAstChildrenArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute astChildren
+     * @return the attribute's value
+     */
+    public final Object getAstChildren() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "astChildren", Optional.empty());
+        	}
+        	Bindings result = this.getAstChildrenImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "astChildren", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "astChildren", e);
+        }
+    }
+
+    /**
      * Get value on attribute astName
      * @return the attribute's value
      */
@@ -882,6 +919,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astChild", e);
+        }
+    }
+
+    /**
+     * 
+     * @param nodeOrJp
+     * @return 
+     */
+    public abstract Boolean hasNodeImpl(Object nodeOrJp);
+
+    /**
+     * 
+     * @param nodeOrJp
+     * @return 
+     */
+    public final Object hasNode(Object nodeOrJp) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasNode", Optional.empty(), nodeOrJp);
+        	}
+        	Boolean result = this.hasNodeImpl(nodeOrJp);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasNode", Optional.ofNullable(result), nodeOrJp);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasNode", e);
         }
     }
 

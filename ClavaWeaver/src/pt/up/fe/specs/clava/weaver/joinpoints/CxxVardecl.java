@@ -87,4 +87,8 @@ public class CxxVardecl extends AVardecl {
         return false;
     }
 
+    @Override
+    public String getStorageClassImpl() {
+        return varDecl.getVarDeclData().getStorageClass().name().toLowerCase();
+    }
 }

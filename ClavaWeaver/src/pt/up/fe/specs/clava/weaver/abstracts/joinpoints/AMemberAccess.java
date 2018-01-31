@@ -373,6 +373,7 @@ public abstract class AMemberAccess extends AExpression {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -391,6 +392,7 @@ public abstract class AMemberAccess extends AExpression {
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

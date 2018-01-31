@@ -14,9 +14,13 @@
 package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
 
 public class CxxWeaverApi {
 
@@ -76,6 +80,13 @@ public class CxxWeaverApi {
 
     public static void writeCode(File outputFolder) {
         CxxWeaver.getCxxWeaver().writeCode(outputFolder);
+    }
+
+    public static List<AInclude> getAvailableUserIncludes() {
+        return CxxWeaver.getCxxWeaver().getAvailableIncludes().stream()
+                .map(ClavaNodeFactory::include)
+                .map(includeDecl -> (AInclude) CxxJoinpoints.create(includeDecl, null))
+                .collect(Collectors.toList());
     }
 
 }

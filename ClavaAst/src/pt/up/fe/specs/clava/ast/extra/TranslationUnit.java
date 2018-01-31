@@ -18,10 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -36,6 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.utils.IncludeManager;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -49,8 +48,12 @@ import pt.up.fe.specs.util.utilities.StringLines;
  */
 public class TranslationUnit extends ClavaNode {
 
-    private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
-    private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
+    // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
+    // private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
+
+    // public static Set<String> getHeaderExtensions() {
+    // return HEADER_EXTENSIONS;
+    // }
 
     private final String filename;
     private final String path;
@@ -196,7 +199,8 @@ public class TranslationUnit extends ClavaNode {
     public boolean isHeaderFile() {
         String extension = SpecsIo.getExtension(filename);
 
-        return HEADER_EXTENSIONS.contains(extension.toLowerCase());
+        // return HEADER_EXTENSIONS.contains(extension.toLowerCase());
+        return SourceType.HEADER.hasExtension(extension);
     }
 
     public boolean isOpenCLFile() {
@@ -212,7 +216,8 @@ public class TranslationUnit extends ClavaNode {
     private boolean testIsCXXUnit() {
         // 1) Check if file has CXX extension.
         // Cannot test for C extensions because you can have C++ code inside .c files, for instance.
-        if (CXX_EXTENSIONS.contains(SpecsIo.getExtension(filename))) {
+        // if (CXX_EXTENSIONS.contains(SpecsIo.getExtension(filename))) {
+        if (SourceType.isCxxExtension(SpecsIo.getExtension(filename))) {
             return true;
         }
 

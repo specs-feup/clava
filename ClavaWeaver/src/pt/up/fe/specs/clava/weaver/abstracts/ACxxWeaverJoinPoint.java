@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
 
@@ -42,6 +43,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     static {
         IGNORE_NODES = new HashSet<>();
         IGNORE_NODES.add(ImplicitCastExpr.class);
+        // IGNORE_NODES.add(ParenExpr.class); // Have not tried it yet
     }
 
     @Override
@@ -624,6 +626,30 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint copyImpl() {
         return CxxJoinpoints.create(getNode().copy(), null);
+    }
+
+    @Override
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return getNode().getChildren().stream()
+                .map(node -> CxxJoinpoints.create(node, this))
+                .collect(Collectors.toList())
+                .toArray(new AJoinPoint[0]);
+
+    }
+
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        if (nodeOrJp instanceof AJoinPoint) {
+            return hasNodeImpl(((AJoinPoint) nodeOrJp).getNode());
+        }
+
+        if (nodeOrJp instanceof ClavaNode) {
+            return getNode() == nodeOrJp;
+        }
+
+        ClavaLog.warning("joinpoint attribute 'hasNode': input type '" + nodeOrJp.getClass()
+                + "' not supported, returning false");
+        return false;
     }
 
 }

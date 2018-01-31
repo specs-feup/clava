@@ -35,9 +35,13 @@
 		<attribute name="joinpointType" type="String" />
 		<attribute name="type" type="joinpoint" />
 		<attribute name="astNumChildren" type="Integer" />
+		<attribute name="astChildren" type="joinpoint[]" />
 		<attribute name="astName" type="String" />
 		<attribute name="astChild" type="joinpoint">
 			<parameter name="index" type="Integer" />
+		</attribute>
+		<attribute name="hasNode" type="Boolean" tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
+			<parameter name="nodeOrJp" type="object" />
 		</attribute>
 		<attribute name="chain" type="String[]" />
 		<attribute name="javaFields" type="String[]" />
@@ -100,6 +104,14 @@
 		<attribute name="isOpenCL" type="Boolean" tooltip="true if this file is an OpenCL filetype"/>
 	</artifact>
 
+	<!-- INCLUDE -->
+	<artifact class="include" default="name">
+		<attribute name="name" type="String" tooltip="the name of the include"/>
+		<attribute name="isAngled" type="Boolean" tooltip="true if this is an angled include (i.e., system include)"/>
+		<attribute name="filepath" type="String" tooltip="the complete path to the file"/>
+		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file of the include, relative to the name of the include"/>
+	</artifact>
+
 	<!-- RECORD -->
 	<artifact class="record" default="name">
 		<attribute name="name" type="String" />
@@ -125,7 +137,9 @@
 
 	<!-- NAMED DECLARATION -->
 	<artifact class="namedDecl" default="name">
-		<attribute name="name" type="String" />
+		<attribute name="name" type="String">
+			<def/>
+		</attribute>
 		<attribute name="isPublic" type="Boolean" />
 	</artifact>
 
@@ -207,6 +221,7 @@
 		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
 		<attribute name="init" type="joinpoint" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
+		<attribute name="storageClass" type="String"/>
 	</artifact>
 
 	<!-- VARREF -->
@@ -221,7 +236,7 @@
 
 	<!-- FUNCTION -->
 	<artifact class="function" default="name">
-		<attribute name="name" type="String" />
+		<!--  <attribute name="name" type="String" />  -->
 		<attribute name="hasDefinition" type="Boolean" />
 		<attribute name="functionType" type="joinpoint" />
 		<attribute name="declarationJp" type="joinpoint" />
@@ -232,6 +247,7 @@
 		<attribute name="paramNames" type="String[]"/>
 		<attribute name="params" type="joinpoint[]"/>
 		<attribute name="id" type="String"/>
+		<attribute name="storageClass" type="String"/>
 	</artifact>
 
 

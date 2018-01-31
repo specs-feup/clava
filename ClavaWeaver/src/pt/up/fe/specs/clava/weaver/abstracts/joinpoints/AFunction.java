@@ -6,7 +6,7 @@ import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -18,33 +18,17 @@ import java.util.Arrays;
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AFunction extends ACxxWeaverJoinPoint {
+public abstract class AFunction extends ANamedDecl {
+
+    protected ANamedDecl aNamedDecl;
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * 
      */
-    public abstract String getNameImpl();
-
-    /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
-        }
+    public AFunction(ANamedDecl aNamedDecl){
+        super(aNamedDecl);
+        this.aNamedDecl = aNamedDecl;
     }
-
     /**
      * Get value on attribute hasDefinition
      * @return the attribute's value
@@ -268,6 +252,31 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public abstract String getStorageClassImpl();
+
+    /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public final Object getStorageClass() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
+        	}
+        	String result = this.getStorageClassImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "storageClass", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -415,6 +424,181 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
 
     /**
      * 
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aNamedDecl.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute isPublic
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPublicImpl() {
+        return this.aNamedDecl.getIsPublicImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        this.aNamedDecl.defNameImpl(value);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint node) {
+        return this.aNamedDecl.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        return this.aNamedDecl.insertBeforeImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertBeforeImpl(String node) {
+        return this.aNamedDecl.insertBeforeImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        return this.aNamedDecl.insertAfterImpl(node);
+    }
+
+    /**
+     * 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return this.aNamedDecl.insertAfterImpl(code);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void detachImpl() {
+        this.aNamedDecl.detachImpl();
+    }
+
+    /**
+     * 
+     * @param type 
+     */
+    @Override
+    public void setTypeImpl(AJoinPoint type) {
+        this.aNamedDecl.setTypeImpl(type);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aNamedDecl.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
+     * @param message 
+     */
+    @Override
+    public void messageToUserImpl(String message) {
+        this.aNamedDecl.messageToUserImpl(message);
+    }
+
+    /**
+     * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public void insertImpl(String position, String code) {
+        this.aNamedDecl.insertImpl(position, code);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public String toString() {
+        return this.aNamedDecl.toString();
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public Optional<? extends ANamedDecl> getSuper() {
+        return Optional.of(this.aNamedDecl);
+    }
+
+    /**
+     * 
      */
     @Override
     public List<? extends JoinPoint> select(String selectName) {
@@ -427,7 +611,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         		joinPointList = selectParam();
         		break;
         	default:
-        		joinPointList = super.select(selectName);
+        		joinPointList = this.aNamedDecl.select(selectName);
         		break;
         }
         return joinPointList;
@@ -439,6 +623,13 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -448,8 +639,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      */
     @Override
     protected void fillWithAttributes(List<String> attributes) {
-        super.fillWithAttributes(attributes);
-        attributes.add("name");
+        this.aNamedDecl.fillWithAttributes(attributes);
         attributes.add("hasDefinition");
         attributes.add("functionType");
         attributes.add("declarationJp");
@@ -458,6 +648,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         attributes.add("paramNames");
         attributes.add("params");
         attributes.add("id");
+        attributes.add("storageClass");
     }
 
     /**
@@ -465,7 +656,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      */
     @Override
     protected void fillWithSelects(List<String> selects) {
-        super.fillWithSelects(selects);
+        this.aNamedDecl.fillWithSelects(selects);
         selects.add("body");
         selects.add("param");
     }
@@ -475,12 +666,13 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
      */
     @Override
     protected void fillWithActions(List<String> actions) {
-        super.fillWithActions(actions);
+        this.aNamedDecl.fillWithActions(actions);
         actions.add("void clone(String)");
         actions.add("String cloneOnFile(String)");
         actions.add("String cloneOnFile(String, String)");
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
+        actions.add("void setName(String)");
     }
 
     /**
@@ -491,11 +683,23 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
     public String get_class() {
         return "function";
     }
+
+    /**
+     * Defines if this joinpoint is an instanceof a given joinpoint class
+     * @return True if this join point is an instanceof the given class
+     */
+    @Override
+    public boolean instanceOf(String joinpointClass) {
+        boolean isInstance = get_class().equals(joinpointClass);
+        if(isInstance) {
+        	return true;
+        }
+        return this.aNamedDecl.instanceOf(joinpointClass);
+    }
     /**
      * 
      */
     protected enum FunctionAttributes {
-        NAME("name"),
         HASDEFINITION("hasDefinition"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
@@ -504,6 +708,9 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        STORAGECLASS("storageClass"),
+        NAME("name"),
+        ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -512,6 +719,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -530,6 +738,7 @@ public abstract class AFunction extends ACxxWeaverJoinPoint {
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

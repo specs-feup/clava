@@ -299,6 +299,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     public abstract List<? extends AComment> selectComment();
 
     /**
+     * Method used by the lara interpreter to select includes
+     * @return 
+     */
+    public abstract List<? extends AInclude> selectInclude();
+
+    /**
      * 
      * @param name 
      * @param isAngled 
@@ -608,6 +614,9 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	case "comment": 
         		joinPointList = selectComment();
         		break;
+        	case "include": 
+        		joinPointList = selectInclude();
+        		break;
         	default:
         		joinPointList = super.select(selectName);
         		break;
@@ -660,6 +669,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         selects.add("tag");
         selects.add("vardecl");
         selects.add("comment");
+        selects.add("include");
     }
 
     /**
@@ -709,6 +719,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -727,6 +738,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

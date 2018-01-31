@@ -341,6 +341,7 @@ public abstract class AMarker extends APragma {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -359,6 +360,7 @@ public abstract class AMarker extends APragma {
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

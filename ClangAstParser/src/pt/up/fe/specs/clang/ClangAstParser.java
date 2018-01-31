@@ -45,8 +45,8 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.providers.ResourceProvider;
@@ -153,7 +153,7 @@ public class ClangAstParser {
         }
 
         // If there still are arguments left using, pass them after '--'
-        arguments.addAll(SpecsStrings.splitArgs(config.get(ClavaOptions.FLAGS)));
+        arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
 
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 

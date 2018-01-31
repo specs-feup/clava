@@ -52,6 +52,13 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
+    }
+
+    /**
      * Get value on attribute isPublic
      * @return the attribute's value
      */
@@ -220,6 +227,13 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -285,6 +299,7 @@ public abstract class ANamedDecl extends ADecl {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -303,6 +318,7 @@ public abstract class ANamedDecl extends ADecl {
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

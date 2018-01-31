@@ -318,6 +318,11 @@
 	</action>
 	
 	
+	<!-- FUNCTION -->
+	<action name="setName" class="function">
+		<parameter name="name" type="String" />
+	</action>
+	
 	
 	<!-- FUNCTION TYPE -->
 	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">

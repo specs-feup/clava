@@ -56,6 +56,10 @@ public class ClavaWeaverDoc {
                 // .addPath("Lara DSE", new File(laraDse))
                 .buildLaraDoc();
 
+        // LaraDocTop laraDocTop = new LaraDocParser(nameFilter, CxxWeaver.buildLanguageSpecification())
+        // .addPath("LARA DSE", new File(laraDse))
+        // .buildLaraDoc();
+
         System.out.println("LARA DOC TOP:\n" + laraDocTop);
 
         // Generate documentation

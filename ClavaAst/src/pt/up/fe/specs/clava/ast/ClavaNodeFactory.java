@@ -257,6 +257,10 @@ public class ClavaNodeFactory {
         return new IncludeDecl(include, isAngled);
     }
 
+    public static IncludeDecl include(Include include) {
+        return include(include, include.getSourceFile().getAbsolutePath());
+    }
+
     public static IncludeDecl include(Include include, String filepath) {
         return new IncludeDecl(include, ClavaNodeInfo.undefinedInfo(filepath));
     }

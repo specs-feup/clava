@@ -51,3 +51,6 @@ int main() {
 }
 
 /**** End File ****/
+JpCreateTest
+Has node? true
+Are JPs equal? true

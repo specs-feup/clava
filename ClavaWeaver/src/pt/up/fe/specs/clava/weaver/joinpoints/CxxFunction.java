@@ -55,14 +55,15 @@ public class CxxFunction extends AFunction {
     private final ACxxWeaverJoinPoint parent;
 
     public CxxFunction(FunctionDecl function, ACxxWeaverJoinPoint parent) {
+        super(new CxxNamedDecl(function, parent));
         this.function = function;
         this.parent = parent;
     }
 
-    @Override
-    public String getNameImpl() {
-        return function.getDeclName();
-    }
+    // @Override
+    // public String getNameImpl() {
+    // return function.getDeclName();
+    // }
 
     @Override
     public List<? extends AScope> selectBody() {
@@ -407,5 +408,20 @@ public class CxxFunction extends AFunction {
 
         // Set the function type copy as the type of the function
         function.setType(functionTypeCopy);
+    }
+
+    @Override
+    public void defNameImpl(String value) {
+        function.setName(value);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
+
+    @Override
+    public String getStorageClassImpl() {
+        return function.getFunctionDeclData().getStorageClass().name().toLowerCase();
     }
 }

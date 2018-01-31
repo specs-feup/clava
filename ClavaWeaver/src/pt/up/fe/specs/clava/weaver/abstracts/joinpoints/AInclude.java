@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -11,23 +10,21 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point APragma
+ * Auto-Generated class for join point AInclude
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class APragma extends ACxxWeaverJoinPoint {
+public abstract class AInclude extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * the name of the include
      */
     public abstract String getNameImpl();
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
+     * the name of the include
      */
     public final Object getName() {
         try {
@@ -45,104 +42,71 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute target
-     * @return the attribute's value
+     * true if this is an angled include (i.e., system include)
      */
-    public abstract AJoinPoint getTargetImpl();
+    public abstract Boolean getIsAngledImpl();
 
     /**
-     * Get value on attribute target
-     * @return the attribute's value
+     * true if this is an angled include (i.e., system include)
      */
-    public final Object getTarget() {
+    public final Object getIsAngled() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "target", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAngled", Optional.empty());
         	}
-        	AJoinPoint result = this.getTargetImpl();
+        	Boolean result = this.getIsAngledImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "target", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "isAngled", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "target", e);
+        	throw new AttributeException(get_class(), "isAngled", e);
         }
     }
 
     /**
-     * Get value on attribute content
-     * @return the attribute's value
+     * the complete path to the file
      */
-    public abstract String getContentImpl();
+    public abstract String getFilepathImpl();
 
     /**
-     * Get value on attribute content
-     * @return the attribute's value
+     * the complete path to the file
      */
-    public final Object getContent() {
+    public final Object getFilepath() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "content", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "filepath", Optional.empty());
         	}
-        	String result = this.getContentImpl();
+        	String result = this.getFilepathImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "content", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "filepath", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "content", e);
+        	throw new AttributeException(get_class(), "filepath", e);
         }
     }
 
     /**
-     * 
-     * @param name 
+     * the path to the folder of the source file of the include, relative to the name of the include
      */
-    public void setNameImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
-    }
+    public abstract String getRelativeFolderpathImpl();
 
     /**
-     * 
-     * @param name 
+     * the path to the folder of the source file of the include, relative to the name of the include
      */
-    public final void setName(String name) {
+    public final Object getRelativeFolderpath() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "relativeFolderpath", Optional.empty());
         	}
-        	this.setNameImpl(name);
+        	String result = this.getRelativeFolderpathImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        		eventTrigger().triggerAttribute(Stage.END, this, "relativeFolderpath", Optional.ofNullable(result));
         	}
+        	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setName", e);
-        }
-    }
-
-    /**
-     * 
-     * @param content 
-     */
-    public void setContentImpl(String content) {
-        throw new UnsupportedOperationException(get_class()+": Action setContent not implemented ");
-    }
-
-    /**
-     * 
-     * @param content 
-     */
-    public final void setContent(String content) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setContent", this, Optional.empty(), content);
-        	}
-        	this.setContentImpl(content);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setContent", this, Optional.empty(), content);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setContent", e);
+        	throw new AttributeException(get_class(), "relativeFolderpath", e);
         }
     }
 
@@ -150,7 +114,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    public List<? extends JoinPoint> select(String selectName) {
+    public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
@@ -164,7 +128,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    public void defImpl(String attribute, Object value) {
+    public final void defImpl(String attribute, Object value) {
         switch(attribute){
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
@@ -174,18 +138,19 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected void fillWithAttributes(List<String> attributes) {
+    protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("name");
-        attributes.add("target");
-        attributes.add("content");
+        attributes.add("isAngled");
+        attributes.add("filepath");
+        attributes.add("relativeFolderpath");
     }
 
     /**
      * 
      */
     @Override
-    protected void fillWithSelects(List<String> selects) {
+    protected final void fillWithSelects(List<String> selects) {
         super.fillWithSelects(selects);
     }
 
@@ -193,10 +158,8 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected void fillWithActions(List<String> actions) {
+    protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void setName(String)");
-        actions.add("void setContent(String)");
     }
 
     /**
@@ -204,16 +167,17 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
      * @return The join point type
      */
     @Override
-    public String get_class() {
-        return "pragma";
+    public final String get_class() {
+        return "include";
     }
     /**
      * 
      */
-    protected enum PragmaAttributes {
+    protected enum IncludeAttributes {
         NAME("name"),
-        TARGET("target"),
-        CONTENT("content"),
+        ISANGLED("isAngled"),
+        FILEPATH("filepath"),
+        RELATIVEFOLDERPATH("relativeFolderpath"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -249,13 +213,13 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         /**
          * 
          */
-        private PragmaAttributes(String name){
+        private IncludeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<PragmaAttributes> fromString(String name) {
+        public static Optional<IncludeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -263,7 +227,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(PragmaAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(IncludeAttributes::name).collect(Collectors.toList());
         }
 
         /**

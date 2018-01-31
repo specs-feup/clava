@@ -36,6 +36,7 @@ import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
+import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
@@ -845,5 +846,42 @@ public class CxxWeaver extends ACxxWeaver {
     public Integer nextId(String prefix) {
 
         return accMap.add(prefix);
+    }
+
+    public List<Include> getAvailableIncludes() {
+        // Search on sources and normal includes
+
+        List<File> searchPaths = new ArrayList<>();
+        searchPaths.addAll(sources);
+        searchPaths.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
+        // System.out.println("SEARCH PATHS:" + searchPaths);
+        Set<String> includeFolders = searchPaths.stream()
+                // .map(CxxWeaver::parseIncludePath)
+                .map(path -> path.isFile() ? path.getParentFile().getAbsolutePath() : path.getAbsolutePath())
+                .collect(Collectors.toSet());
+
+        // System.out.println("INCLUDE PATHS:" + includeFolders);
+
+        List<Include> includes = new ArrayList<>();
+
+        Set<String> seenIncludes = new HashSet<>();
+        for (String includeFolderName : includeFolders) {
+            File includeFolder = new File(includeFolderName);
+
+            // Get all files from folder
+            // List<File> currentIncludes = SpecsIo.getFilesRecursive(includeFolder,
+            // TranslationUnit.getHeaderExtensions());
+            List<File> currentIncludes = SpecsIo.getFilesRecursive(includeFolder,
+                    SourceType.HEADER.getExtensions());
+
+            currentIncludes.stream()
+                    // Filter already added includes
+                    .filter(path -> seenIncludes.add(SpecsIo.getCanonicalPath(path)))
+                    .map(currentInclude -> new Include(currentInclude,
+                            SpecsIo.getRelativePath(currentInclude, includeFolder), -1, false))
+                    .forEach(include -> includes.add(include));
+        }
+
+        return includes;
     }
 }
