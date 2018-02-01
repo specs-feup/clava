@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
@@ -211,6 +212,12 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     private FunctionDecl findDeclaration() {
+        App app = getAppTry().orElse(null);
+
+        if (app == null) {
+            return null;
+        }
+
         // Find function declarations with the same name and the same signature
         List<FunctionDecl> decls = getApp().getDescendantsStream()
                 .filter(FunctionDecl.class::isInstance)
@@ -407,7 +414,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
         // Determine scope of change. If static, only change calls inside the file
         boolean isStatic = getFunctionDeclData().getStorageClass() == StorageClass.STATIC;
-        ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getApp();
+        ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
 
         // Find all calls of this function
         if (root != null) {

@@ -112,12 +112,21 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public App getApp() {
+        return getAppTry()
+                .orElseThrow(() -> new RuntimeException("Node does not have a parent: " + this));
+    }
+
+    public Optional<App> getAppTry() {
         ClavaNode root = this;
         while (root.hasParent()) {
             root = root.getParent();
         }
 
-        return (App) root;
+        if (!(root instanceof App)) {
+            return Optional.empty();
+        }
+
+        return Optional.of((App) root);
     }
 
     /**
