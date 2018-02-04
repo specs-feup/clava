@@ -30,7 +30,7 @@ public class ClavaMetrics extends BasicWeaverProfiler {
 
     @Override
     protected void buildReport(ReportWriter writer) {
-        System.out.println("REPORT:" + writer);
+        // System.out.println("REPORT:" + writer);
     }
 
     @Override
