@@ -250,18 +250,19 @@ public class CxxFile extends AFile {
 
     @Override
     public String getFilepathImpl() {
-        return new File(getPathImpl(), getNameImpl()).getPath();
+        return tunit.getFile().getPath();
     }
 
     @Override
     public String getRelativeFolderpathImpl() {
         CxxWeaver weaver = getWeaverEngine();
 
-        String path = weaver.getApp().getRelativeFolderPath(weaver.getBaseSourceFolder(), tunit);
-
-        if (path.isEmpty()) {
-            return "./";
+        // If file does not exist yet, return its path
+        if (!tunit.getFile().isFile()) {
+            return tunit.getFolderpath();
         }
+
+        String path = weaver.getApp().getRelativeFolderPath(weaver.getBaseSourceFolder(), tunit);
 
         return path;
 
@@ -270,6 +271,11 @@ public class CxxFile extends AFile {
     @Override
     public String getRelativeFilepathImpl() {
         CxxWeaver weaver = getWeaverEngine();
+
+        // If file does not exist yet, return its path
+        if (!tunit.getFile().isFile()) {
+            return tunit.getFile().getPath();
+        }
 
         return weaver.getApp().getRelativePath(weaver.getBaseSourceFolder(), tunit);
     }
