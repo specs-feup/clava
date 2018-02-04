@@ -34,12 +34,18 @@ Clava.rebuild = function() {
 	call Rebuild();
 }; 
 
+/**
+ * @return {J#java.io.File} The folder of the first input source element, either itself, if a folder, or the parent folder, if it is a file. 
+ */
 Clava.getBaseFolder = function() {
 	call baseFolderResult:ClavaBaseFolder();
 	
 	return baseFolderResult.baseFolder;
 }; 
 
+/**
+ * @return {J#java.io.File} The folder where the code represented by the AST will be written at the end of execution.
+ */
 Clava.getWeavingFolder = function() {
 	call weavingFolderResult:ClavaWeavingFolder();
 	

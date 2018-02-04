@@ -80,15 +80,26 @@ ClavaJoinPoints.varDeclNoInit = function(varName, type) {
 	return AstFactory.varDeclNoInit(varName, type);
 }
 
+/**
+ * Creates a new literal join point 'type'.
+ *
+ * @param {string} typeString The literal code of the type
+ */
 ClavaJoinPoints.typeLiteral = function(typeString) {
 	return AstFactory.typeLiteral(typeString);
 }
 
 /**
- * @param {string} filename
- * @param {string} path
+ * Creates a new join point 'file'.
+ *
+ * @param {string} filename The name of the file
+ * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. 
  */
 ClavaJoinPoints.file = function(filename, path) {
+	if(path === undefined) {
+		path = '';
+	}
+	
 	return AstFactory.file(filename, path);
 }
 
