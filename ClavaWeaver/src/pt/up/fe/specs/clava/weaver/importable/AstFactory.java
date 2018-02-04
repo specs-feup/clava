@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.importable;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -250,6 +251,13 @@ public class AstFactory {
      * @return
      */
     public static AFile file(String filename, String path) {
+        // Test if path is absolute
+        if (new File(path).isAbsolute()) {
+            ClavaLog.warning(
+                    "Cannot use absolute paths for new 'file' join points, replacing '" + path + "' with empty String");
+            path = "";
+        }
+
         return CxxJoinpoints.create(ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList()),
                 null, AFile.class);
     }
