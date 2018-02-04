@@ -27,8 +27,13 @@ public class ClavaCode {
                 .collect(Collectors.joining(" "));
     }
 
-    public static String getRelativePath(File baseFile, File baseInputFolder) {
-        String relativePath = SpecsIo.getRelativePath(baseFile, baseInputFolder);
+    public static String getRelativePath(File sourcePath, File baseInputFolder) {
+        // If base file does not exist yet, just return it
+        if (!sourcePath.exists()) {
+            return sourcePath.getPath();
+        }
+
+        String relativePath = SpecsIo.getRelativePath(sourcePath, baseInputFolder);
 
         // Avoid writing outside of the destination folder, if relative path has '../', remove them
         while (relativePath.startsWith("../")) {
