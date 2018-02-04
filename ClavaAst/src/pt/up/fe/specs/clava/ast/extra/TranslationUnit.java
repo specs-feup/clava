@@ -184,6 +184,10 @@ public class TranslationUnit extends ClavaNode {
         return filename;
     }
 
+    /**
+     * 
+     * @return the path to the folder of this file
+     */
     public String getFolderpath() {
         return path;
     }
@@ -193,6 +197,10 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public File getFile() {
+        if (path.isEmpty()) {
+            return new File(filename);
+        }
+
         return new File(path, filename);
     }
 
@@ -289,9 +297,11 @@ public class TranslationUnit extends ClavaNode {
         String relativePath = ClavaCode.getRelativePath(new File(getFolderpath()), baseInputFolder);
 
         // Build destination path
+        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
+        // System.out.println("RELATIVE PATH:" + relativePath);
         File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
         File destinationFile = new File(actualDestinationFolder, getFilename());
-
+        // System.out.println("DESTINATION FILE:" + destinationFile);
         SpecsIo.write(destinationFile, getCode());
     }
 }
