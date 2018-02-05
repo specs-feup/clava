@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.actions;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,7 +28,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -54,10 +52,9 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
-import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
 public class CallWrap {
 
@@ -66,6 +63,8 @@ public class CallWrap {
 
     private static final String WRAPPER_IMPL_FILENAME_PREFIX = "clava_weaver_wrappers";
     private static final String WRAPPER_H_FILENAME = "clava_weaver_wrappers.h";
+
+    private static final String WRAPPERS_FOLDERNAME = "clava_wrappers";
 
     private final CxxCall cxxCall;
     private final CxxProgram app;
@@ -121,7 +120,10 @@ public class CallWrap {
         }
 
         // Add include
-        cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(getHeaderFile());
+        String includePath = CxxWeaver.getRelativeFilepath(getHeaderFile());
+        cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(includePath, false);
+        // cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(getHeaderFile(),
+        // CxxWeaver.getCxxWeaver().getBaseSourceFolder());
 
         // Set call name
         cxxCall.setName(name);
@@ -161,7 +163,9 @@ public class CallWrap {
         // Get wrapper implementation file
         TranslationUnit implTu = getImplementationFile();
 
-        implTu.addInclude(includeFile);
+        String includePath = CxxWeaver.getRelativeFilepath(includeFile);
+        implTu.addInclude(includePath, false);
+        // implTu.addInclude(includeFile, CxxWeaver.getCxxWeaver().getBaseSourceFolder());
 
         addWrapperFunction(name, declaration);
     }
@@ -321,8 +325,10 @@ public class CallWrap {
                     "Expected header file to not exist yet");
 
             // Create implementation and header file
-            AFile implFile = AstFactory.file(implementationFilename, app.getBaseFolderImpl());
-            AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, app.getBaseFolderImpl());
+            // AFile implFile = AstFactory.file(implementationFilename, app.getBaseFolderImpl());
+            // AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, app.getBaseFolderImpl());
+            AFile implFile = AstFactory.file(implementationFilename, WRAPPERS_FOLDERNAME);
+            AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
 
             app.addFileImpl(headerFile);
             app.addFileImpl(implFile);
@@ -344,32 +350,43 @@ public class CallWrap {
 
     private List<IncludeDecl> getWrapperIncludesFromFile() {
 
-        List<IncludeDecl> includes = new ArrayList<>();
+        // List<IncludeDecl> includes = new ArrayList<>();
 
         // Get wrapper implementation file
-        Lazy<TranslationUnit> implTu = Lazy.newInstance(() -> getImplementationFile());
+        // Lazy<TranslationUnit> implTu = Lazy.newInstance(() -> getImplementationFile());
 
         TranslationUnit callFile = cxxCall.getNode().getAncestor(TranslationUnit.class);
+        return TreeNodeUtils.copy(callFile.getIncludes().getIncludes());
+        // return callFile.getIncludes().getIncludes().stream()
+        // .map(includeDecl -> (IncludeDecl) includeDecl.copy())
+        // .collect(Collectors.toList());
 
+        /*
         for (IncludeDecl includeDecl : callFile.getIncludes().getIncludes()) {
-            Include include = includeDecl.getInclude();
-
-            // If angled include, does not need modification
-            if (include.isAngled()) {
-                // May not work if we add directly an IncludeDecl that is already part of a translation unit
-                includes.add((IncludeDecl) includeDecl.copy());
-                continue;
-            }
-
+            includes.add((IncludeDecl) includeDecl.copy());
+        
+            // Include include = includeDecl.getInclude();
+            //
+            // // If angled include, does not need modification
+            // if (include.isAngled()) {
+            // // May not work if we add directly an IncludeDecl that is already part of a translation unit
+            // includes.add((IncludeDecl) includeDecl.copy());
+            // continue;
+            // }
+        
             // For each include which is not an angled include, calculate relative path
-
-            // Get relative path to include the file in this file
-            File includeFile = new File(callFile.getFolderpath(), include.getInclude());
-            String relativePath = SpecsIo.getRelativePath(includeFile, implTu.get().getFile());
-            includes.add(new IncludeDecl(relativePath, false));
+        
+            // Get relative path to include the header in this file
+            // System.out.println("INCLUDEEE:" + include);
+            // System.out.println("INCLUDEEE FILE:" + include.getRelativeFolder());
+            // File includeFile = new File(callFile.getFolderpath(), include.getInclude());
+            // String relativePath = SpecsIo.getRelativePath(includeFile, implTu.get().getFile());
+            // System.out.println("RELATIVE PATH:" + relativePath);
+            // includes.add(new IncludeDecl(relativePath, false));
         }
-
+        
         return includes;
+        */
     }
 
     private FunctionType getFunctionType() {

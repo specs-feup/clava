@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
@@ -456,6 +457,10 @@ public class CxxWeaver extends ACxxWeaver {
 
         List<String> filenames = processSources(sources);
 
+        // TODO: If option to separe include folders in generation is on, it should return just that folder
+        // List<File> includeFolders = sources;
+
+        // addFlagsFromFiles(includeFolders, filenames, parserOptions);
         addFlagsFromFiles(filenames, parserOptions);
 
         // Sort filenames so that select order of files is consistent between OSes
@@ -493,6 +498,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     }
 
+    // private void addFlagsFromFiles(List<File> includeFolders, List<String> filenames, List<String> parserOptions) {
     private void addFlagsFromFiles(List<String> filenames, List<String> parserOptions) {
         // If all files are .cl files, add flags -x cl
         long numberOfOpenCLFiles = filenames.stream()
@@ -503,6 +509,12 @@ public class CxxWeaver extends ACxxWeaver {
             parserOptions.add("-x");
             parserOptions.add("cl");
         }
+
+        // // Adds sources as include folders
+        // for (File includeFolder : includeFolders) {
+        // // parserOptions.add("-I\"" + source.getAbsolutePath() + "\"");
+        // parserOptions.add("\"-I" + includeFolder.getAbsolutePath() + "\"");
+        // }
 
     }
 
@@ -742,8 +754,19 @@ public class CxxWeaver extends ACxxWeaver {
 
         getApp().write(baseFolder, tempFolder);
 
+        // TODO: When separation of src/include is done, take it into account here
         List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
-        App rebuiltApp = createApp(srcFolders, parserOptions);
+        List<File> includeFolders = srcFolders;
+
+        // Copy current options
+        List<String> rebuildOptions = new ArrayList<>(parserOptions);
+
+        // Add include folders
+        for (File includeFolder : includeFolders) {
+            rebuildOptions.add("\"-I" + includeFolder.getAbsolutePath() + "\"");
+        }
+
+        App rebuiltApp = createApp(srcFolders, rebuildOptions);
 
         // System.out.println("TUs:"
         // + getApp().getTranslationUnits().stream().map(tu -> tu.getFilename())
@@ -884,5 +907,13 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         return includes;
+    }
+
+    public static String getRelativeFilepath(TranslationUnit tunit) {
+        return tunit.getRelativeFilepath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
+    }
+
+    public static String getRelativeFolderpath(TranslationUnit tunit) {
+        return tunit.getRelativeFolderpath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
     }
 }

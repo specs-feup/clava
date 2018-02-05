@@ -25,8 +25,7 @@ import pt.up.fe.specs.util.SpecsCollections;
 public class ClavaMetrics extends BasicWeaverProfiler {
 
     private static final Set<String> ADDITIONAL_INSERT_ACTIONS = SpecsCollections.newHashSet("insertBefore",
-            "insertAfter",
-            "replaceWith", "insertBegin", "insertEnd");
+            "insertAfter", "replaceWith", "insertBegin", "insertEnd");
 
     @Override
     protected void buildReport(ReportWriter writer) {

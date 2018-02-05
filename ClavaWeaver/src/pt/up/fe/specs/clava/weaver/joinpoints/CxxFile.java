@@ -240,7 +240,9 @@ public class CxxFile extends AFile {
         // Get first joinpoint that is a CxxFile
         CxxFile includeFile = CxxJoinpoints.getAncestorandSelf(jp, CxxFile.class).get();
 
-        tunit.addInclude(includeFile.getNode());
+        String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
+        tunit.addInclude(includePath, false);
+        // tunit.addInclude(includeFile.getNode(), getWeaverEngine().getBaseSourceFolder());
 
         // Get relative path to include the file in this file
         // String relativePath = SpecsIo.getRelativePath(includeFile.getTu().getFile(), tunit.getFile());
@@ -255,29 +257,37 @@ public class CxxFile extends AFile {
 
     @Override
     public String getRelativeFolderpathImpl() {
-        CxxWeaver weaver = getWeaverEngine();
-
+        return CxxWeaver.getRelativeFolderpath(tunit);
+        // CxxWeaver weaver = getWeaverEngine();
+        //
+        // return tunit.getRelativeFolderpathImpl(weaver.getBaseSourceFolder());
+        /*
         // If file does not exist yet, return its path
         if (!tunit.getFile().isFile()) {
             return tunit.getFolderpath();
         }
-
+        
         String path = weaver.getApp().getRelativeFolderPath(weaver.getBaseSourceFolder(), tunit);
-
+        
         return path;
-
+        */
     }
 
     @Override
     public String getRelativeFilepathImpl() {
-        CxxWeaver weaver = getWeaverEngine();
+        return CxxWeaver.getRelativeFilepath(tunit);
+        // CxxWeaver weaver = getWeaverEngine();
+        //
+        // return tunit.getRelativeFilepathImpl(weaver.getBaseSourceFolder());
 
+        /*
         // If file does not exist yet, return its path
         if (!tunit.getFile().isFile()) {
             return tunit.getFile().getPath();
         }
-
+        
         return weaver.getApp().getRelativePath(weaver.getBaseSourceFolder(), tunit);
+        */
     }
 
     @Override
@@ -382,7 +392,7 @@ public class CxxFile extends AFile {
 
         File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
 
-        tunit.write(baseSourceFolder, destinationFolder);
+        tunit.write(destinationFolder, baseSourceFolder);
     }
 
     @Override

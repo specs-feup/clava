@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +21,6 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -45,9 +42,9 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
+import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
 public class CxxFunction extends AFunction {
 
@@ -283,29 +280,43 @@ public class CxxFunction extends AFunction {
      */
     private List<IncludeDecl> getWrapperIncludesFromFile(TranslationUnit newTu) {
 
-        List<IncludeDecl> includes = new ArrayList<>();
+        // List<IncludeDecl> includes = new ArrayList<>();
 
         TranslationUnit callFile = function.getAncestor(TranslationUnit.class);
 
-        for (IncludeDecl includeDecl : callFile.getIncludes().getIncludes()) {
-            Include include = includeDecl.getInclude();
+        return TreeNodeUtils.copy(callFile.getIncludes().getIncludes());
+        // List<IncludeDecl> includes = callFile.getIncludes().getIncludes().stream()
+        // .map(includeDecl -> (IncludeDecl) includeDecl.copy())
+        // .collect(Collectors.toList());
 
+        /*
+        for (IncludeDecl includeDecl : callFile.getIncludes().getIncludes()) {
+        //            includes.add((IncludeDecl) includeDecl.copy());
+            
+            Include include = includeDecl.getInclude();
+            
             // If angled include, does not need modification
             if (include.isAngled()) {
                 // May not work if we add directly an IncludeDecl that is already part of a translation unit
                 includes.add((IncludeDecl) includeDecl.copy());
                 continue;
             }
-
+            
             // For each include which is not an angled include, calculate relative path
-
+            
             // Get relative path to include the file in this file
-            File includeFile = new File(callFile.getFolderpath(), include.getInclude());
-            String relativePath = SpecsIo.getRelativePath(includeFile, newTu.getFile());
+            String relativePath = CxxWeaver.getRelativeFilepath(callFile);
+            // callFile.getRelativeFilepathImpl(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
+            // File includeFile = new File(callFile.getFolderpath(), include.getInclude());
+            // String relativePath = SpecsIo.getRelativePath(includeFile, newTu.getFile());
             includes.add(new IncludeDecl(relativePath, false));
+            // System.out.println("OLD PATH:" + relativePath);
+            // System.out.println("NEW PATH:" + relativePath2);
+             
+             
         }
-
-        return includes;
+        */
+        // return includes;
     }
 
     @Override
