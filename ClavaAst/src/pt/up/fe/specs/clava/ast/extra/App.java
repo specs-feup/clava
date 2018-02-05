@@ -186,10 +186,13 @@ public class App extends ClavaNode {
         StringBuilder code = new StringBuilder();
 
         for (TranslationUnit tu : getTranslationUnits()) {
-            String basepath = baseFolder != null ? SpecsIo.getRelativePath(new File(tu.getFolderpath()), baseFolder)
-                    : tu.getFolderpath();
 
-            code.append("/**** File '" + basepath + tu.getFilename() + "' ****/" + ln() + ln());
+            // String basepath = baseFolder != null ? SpecsIo.getRelativePath(new File(tu.getFolderpath()), baseFolder)
+            // : tu.getFolderpath();
+            //
+            // code.append("/**** File '" + basepath + tu.getFilename() + "' ****/" + ln() + ln());
+            code.append("/**** File '" + SpecsIo.normalizePath(tu.getRelativeFilepath(baseFolder)) + "' ****/"
+                    + ln() + ln());
             code.append(tu.getCode());
             code.append(ln() + "/**** End File ****/" + ln() + ln());
         }
@@ -330,7 +333,8 @@ public class App extends ClavaNode {
         // and using a path relative to the topFile
 
         for (TranslationUnit tUnit : getTranslationUnits()) {
-            String relativePath = ClavaCode.getRelativePath(new File(tUnit.getFolderpath()), baseInputFolder);
+            // String relativePath_old = ClavaCode.getRelativePath(new File(tUnit.getFolderpath()), baseInputFolder);
+            String relativePath = tUnit.getRelativeFolderpath(baseInputFolder);
 
             // Build destination path
             File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
@@ -353,8 +357,12 @@ public class App extends ClavaNode {
         // System.out.println("GENERATED FILES:" + relativeWoven);
 
         for (File file : allFiles) {
-            String relativeSource = ClavaCode.getRelativePath(file, baseInputFolder);
-            // String relativeSource = IoUtils.getRelativePath(file, baseInputFolder);
+            // String relativeSource = ClavaCode.getRelativePath(file, baseInputFolder);
+            String relativeSource = SpecsIo.getRelativePath(file, baseInputFolder);
+            String clavaCodeOutput = ClavaCode.getRelativePath(file, baseInputFolder);
+            if (!relativeSource.equals(clavaCodeOutput)) {
+                SpecsLogs.msgWarn("TEMPORARY TEST: expected '" + clavaCodeOutput + "', got '" + relativeSource + "'");
+            }
 
             if (relativeWoven.contains(relativeSource)) {
                 continue;
@@ -403,7 +411,8 @@ public class App extends ClavaNode {
         }
 
         // Otherwise, return the original file
-        String relativeSource = ClavaCode.getRelativePath(originalFile, baseInputFolder);
+        // String relativeSource = ClavaCode.getRelativePath(originalFile, baseInputFolder);
+        String relativeSource = tUnit.getRelativeFilepath(baseInputFolder);
         SpecsLogs.msgInfo("Using original source for file '" + relativeSource + "'");
         return SpecsIo.read(originalFile);
     }
@@ -418,13 +427,13 @@ public class App extends ClavaNode {
                 .collect(Collectors.toList());
     }
 
-    public String getRelativePath(File baseInputFolder, TranslationUnit tUnit) {
-        return ClavaCode.getRelativePath(tUnit.getFile(), baseInputFolder);
-    }
-
-    public String getRelativeFolderPath(File baseInputFolder, TranslationUnit tUnit) {
-        return ClavaCode.getRelativePath(tUnit.getFile().getParentFile(), baseInputFolder);
-    }
+    // public String getRelativePath(File baseInputFolder, TranslationUnit tUnit) {
+    // return ClavaCode.getRelativePath(tUnit.getFile(), baseInputFolder);
+    // }
+    //
+    // public String getRelativeFolderPath(File baseInputFolder, TranslationUnit tUnit) {
+    // return ClavaCode.getRelativePath(tUnit.getFile().getParentFile(), baseInputFolder);
+    // }
 
     public Optional<TranslationUnit> getFile(String filename) {
         return getTranslationUnits().stream()

@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
@@ -251,8 +250,8 @@ public class TranslationUnit extends ClavaNode {
      * 
      * @param translationUnit
      */
-    public void addInclude(TranslationUnit translationUnit) {
-        addInclude(translationUnit, false);
+    public void addInclude(TranslationUnit translationUnit, File baseSourceFolder) {
+        addInclude(translationUnit, false, baseSourceFolder);
     }
 
     /**
@@ -260,14 +259,27 @@ public class TranslationUnit extends ClavaNode {
      * 
      * @param translationUnit
      */
-    private void addInclude(TranslationUnit translationUnit, boolean isAngled) {
+    // private void addInclude(TranslationUnit translationUnit, boolean isAngled) {
+    private void addInclude(TranslationUnit translationUnit, boolean isAngled, File baseSourceFolder) {
+        String relativePath = translationUnit.getRelativeFilepath(baseSourceFolder);
+        // If file does not exist yet, relative path is the path of the file itself
+        // Otherwise, calculate
+        // File tuFile = translationUnit.getFile();
+
+        // String relativePath = tuFile.exists() ? SpecsIo.getRelativePath(tuFile, getFile()) : tuFile.getPath();
 
         // Get relative path to include the file in this file
-        String relativePath = SpecsIo.getRelativePath(translationUnit.getFile(), getFile());
+        // String relativePath = SpecsIo.getRelativePath(translationUnit.getFile(), getFile());
+        // System.out.println("RELATIVE PATH:" + relativePath);
         addInclude(relativePath, isAngled);
     }
 
     public void addInclude(String includeName, boolean isAngled) {
+        // if (includeName.startsWith("..")) {
+        // throw new RuntimeException("STOP");
+        // }
+        // System.out.println("INCLUDE NAME:" + includeName);
+
         getIncludes().addInclude(ClavaNodeFactory.include(includeName, isAngled));
     }
 
@@ -293,9 +305,11 @@ public class TranslationUnit extends ClavaNode {
 
     }
 
-    public void write(File baseInputFolder, File destinationFolder) {
-        String relativePath = ClavaCode.getRelativePath(new File(getFolderpath()), baseInputFolder);
-
+    public void write(File destinationFolder, File baseInputFolder) {
+        String relativePath = getRelativeFolderpath(baseInputFolder);
+        // String relativePath2 = ClavaCode.getRelativePath(new File(getFolderpath()), baseInputFolder);
+        // System.out.println("OLD PATH:" + relativePath2);
+        // System.out.println("NEW PATH:" + relativePath);
         // Build destination path
         // System.out.println("DESTINATION FOLDER:" + destinationFolder);
         // System.out.println("RELATIVE PATH:" + relativePath);
@@ -303,5 +317,52 @@ public class TranslationUnit extends ClavaNode {
         File destinationFile = new File(actualDestinationFolder, getFilename());
         // System.out.println("DESTINATION FILE:" + destinationFile);
         SpecsIo.write(destinationFile, getCode());
+    }
+
+    public String getRelativeFolderpath(File baseSourceFolder) {
+        return getRelativePath(new File(path), baseSourceFolder);
+        // // If file does not exist yet, or base source folder is null, return its path
+        // if (!getFile().isFile() || baseSourceFolder == null) {
+        // return getFolderpath();
+        // }
+        //
+        // return getAppTry()
+        // .map(app -> app.getRelativeFolderPath(baseSourceFolder, this))
+        // .orElse(getFolderpath());
+
+    }
+
+    public String getRelativeFilepath(File baseSourceFolder) {
+        return getRelativePath(getFile(), baseSourceFolder);
+        // // If file does not exist yet, or base source folder is null, return its path
+        // if (!getFile().isFile() || baseSourceFolder == null) {
+        // return getFile().getPath();
+        // }
+        //
+        // return getAppTry()
+        // .map(app -> app.getRelativePath(baseSourceFolder, this))
+        // .orElse(getFile().getPath());
+    }
+
+    private String getRelativePath(File sourcePath, File baseSourceFolder) {
+        // If source path does not exist yet, or no base source folder specified, just return source path
+        if (!sourcePath.exists()) {
+            return sourcePath.getPath();
+        }
+
+        // No base input folder specified, just return source path
+        // if (baseSourceFolder == null) {
+        // return sourcePath.getPath();
+        // }
+
+        // Calculate relative path
+        String relativePath = SpecsIo.getRelativePath(sourcePath, baseSourceFolder);
+
+        // Avoid writing outside of the destination folder, if relative path has '../', remove them
+        // while (relativePath.startsWith("../")) {
+        // relativePath = relativePath.substring("../".length());
+        // }
+
+        return relativePath;
     }
 }
