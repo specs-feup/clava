@@ -346,7 +346,7 @@ public class TranslationUnit extends ClavaNode {
 
     private String getRelativePath(File sourcePath, File baseSourceFolder) {
         // If source path does not exist yet, or no base source folder specified, just return source path
-        if (!sourcePath.exists()) {
+        if (!sourcePath.exists() || baseSourceFolder == null) {
             return sourcePath.getPath();
         }
 
