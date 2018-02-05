@@ -455,20 +455,23 @@ public class CxxWeaver extends ACxxWeaver {
 
     public App createApp(List<File> sources, List<String> parserOptions) {
 
-        List<String> filenames = processSources(sources);
+        // All files, header and implementation
+        Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExceptions());
+        // List<String> implementationFilenames = processSources(sources);
+        List<String> implementationFilenames = processSources(allFiles);
 
         // TODO: If option to separe include folders in generation is on, it should return just that folder
         // List<File> includeFolders = sources;
 
         // addFlagsFromFiles(includeFolders, filenames, parserOptions);
-        addFlagsFromFiles(filenames, parserOptions);
+        addFlagsFromFiles(implementationFilenames, parserOptions);
 
         // Sort filenames so that select order of files is consistent between OSes
-        Collections.sort(filenames);
+        Collections.sort(implementationFilenames);
 
         // TODO: parse should receive File instead of String?
         long tic = System.nanoTime();
-        ClangRootNode ast = new ClangAstParser().parse(filenames, parserOptions);
+        ClangRootNode ast = new ClangAstParser().parse(implementationFilenames, parserOptions);
         SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
         if (SHOW_MEMORY_USAGE) {
             SpecsLogs
@@ -478,7 +481,10 @@ public class CxxWeaver extends ACxxWeaver {
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             tic = System.nanoTime();
             App app = clavaParser.parse();
-            app.setSources(sources);
+
+            // Set source paths of each TranslationUnit
+            app.setSources(allFiles);
+            // app.setSources(sources);
             SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang AST to Clava", tic));
 
             tic = System.nanoTime();
@@ -519,7 +525,9 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private List<String> processSources(List<File> sources) {
+        // private Map<String, File> processSources(List<File> sources) {
         List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
+        // Map<String, File> sourceFiles = SpecsIo.getFileMap(sources, SourceType.IMPLEMENTATION.getExtensions());
 
         if (!sourceFiles.isEmpty()) {
             return sourceFiles;
@@ -558,6 +566,66 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         throw new RuntimeException("Could not find C/C++ files in the given source folders (" + sources + ")");
+    }
+
+    private List<String> processSources(Map<String, File> sourceFiles) {
+        Preconditions.checkArgument(!sourceFiles.isEmpty(), "No C/C++ files found in the given source folders");
+
+        List<String> implementationFiles = sourceFiles.keySet().stream()
+                .filter(SourceType.IMPLEMENTATION::hasExtension)
+                .collect(Collectors.toList());
+
+        // List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
+
+        if (!implementationFiles.isEmpty()) {
+            return implementationFiles;
+        }
+
+        // No implementation files found. Create temporary file with only the includes
+
+        StringBuilder code = new StringBuilder();
+        for (Entry<String, File> sourceFile : sourceFiles.entrySet()) {
+            // If not an header file, ignore
+            if (!SourceType.HEADER.hasExtension(sourceFile.getKey())) {
+                continue;
+            }
+
+            String includePath = SpecsIo.getRelativePath(new File(sourceFile.getKey()), sourceFile.getValue());
+            String includeCode = "#include \"" + includePath + "\"";
+            code.append(includeCode).append("\n");
+        }
+
+        /*
+        for (File sourceFolder : sources) {
+            // List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, App.getExtensionsHeaders());
+            List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions());
+        
+            // Create source code to call header
+            String includeCode = headerFiles.stream()
+                    .map(file -> SpecsIo.getRelativePath(file, sourceFolder))
+                    .map(include -> "#include \"" + include + "\"")
+                    .collect(Collectors.joining("\n"));
+        
+            if (includeCode.length() != 0) {
+                code.append(includeCode).append("\n");
+            }
+        
+        }
+        */
+
+        Preconditions.checkArgument(code.length() != 0, "Expected to find at least one header file:" + sourceFiles);
+
+        // Write and return file
+        File tempFolder = SpecsIo.mkdir(TEMP_SRC_FOLDER);
+        SpecsIo.deleteFolderContents(tempFolder, true);
+
+        String extension = args.get(ClavaOptions.STANDARD).getImplementionExtension();
+
+        File implementationFile = new File(tempFolder, "implementation." + extension);
+        SpecsIo.write(implementationFile, code.toString());
+
+        return Arrays.asList(implementationFile.getAbsolutePath());
+
     }
 
     /**
