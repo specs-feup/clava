@@ -61,6 +61,8 @@ public class TranslationUnit extends ClavaNode {
 
     private final Lazy<Boolean> isCxxUnit;
 
+    private File sourcePath;
+
     public TranslationUnit(String filename, String relativePath, Collection<Decl> declarations) {
         super(createInfo(new ArrayList<>(declarations), relativePath + filename), declarations);
 
@@ -75,6 +77,8 @@ public class TranslationUnit extends ClavaNode {
         includes = new IncludeManager(includesList, this);
 
         this.isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
+
+        sourcePath = null;
     }
 
     public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
@@ -116,6 +120,28 @@ public class TranslationUnit extends ClavaNode {
         return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, startLine, startCol, endLine, endCol));
     }
 
+    public static String getRelativePath(File sourcePath, File baseSourceFolder) {
+        // If source path does not exist yet, or no base source folder specified, just return source path
+        if (!sourcePath.exists() || baseSourceFolder == null) {
+            return sourcePath.getPath();
+        }
+
+        // No base input folder specified, just return source path
+        // if (baseSourceFolder == null) {
+        // return sourcePath.getPath();
+        // }
+
+        // Calculate relative path
+        String relativePath = SpecsIo.getRelativePath(sourcePath, baseSourceFolder);
+
+        // Avoid writing outside of the destination folder, if relative path has '../', remove them
+        // while (relativePath.startsWith("../")) {
+        // relativePath = relativePath.substring("../".length());
+        // }
+
+        return relativePath;
+    }
+
     @Override
     protected ClavaNode copyPrivate() {
         return new TranslationUnit(filename, path, Collections.emptyList());
@@ -136,6 +162,20 @@ public class TranslationUnit extends ClavaNode {
         }
 
         return body;
+    }
+
+    /**
+     * 'Source path' refers to the path that was given as the base for the source file of this Translation Unit. It
+     * corresponds to an ancestor folder of the file, which was given as a folder where to look for sources.
+     * 
+     * @return if set, returns the original source path of this translation unit
+     */
+    public Optional<File> getSourcePath() {
+        return Optional.ofNullable(sourcePath);
+    }
+
+    public void setSourcePath(File sourcePath) {
+        this.sourcePath = sourcePath;
     }
 
     private String getChildCode(ClavaNode decl) {
@@ -342,28 +382,6 @@ public class TranslationUnit extends ClavaNode {
         // return getAppTry()
         // .map(app -> app.getRelativePath(baseSourceFolder, this))
         // .orElse(getFile().getPath());
-    }
-
-    private String getRelativePath(File sourcePath, File baseSourceFolder) {
-        // If source path does not exist yet, or no base source folder specified, just return source path
-        if (!sourcePath.exists() || baseSourceFolder == null) {
-            return sourcePath.getPath();
-        }
-
-        // No base input folder specified, just return source path
-        // if (baseSourceFolder == null) {
-        // return sourcePath.getPath();
-        // }
-
-        // Calculate relative path
-        String relativePath = SpecsIo.getRelativePath(sourcePath, baseSourceFolder);
-
-        // Avoid writing outside of the destination folder, if relative path has '../', remove them
-        // while (relativePath.startsWith("../")) {
-        // relativePath = relativePath.substring("../".length());
-        // }
-
-        return relativePath;
     }
 
 }

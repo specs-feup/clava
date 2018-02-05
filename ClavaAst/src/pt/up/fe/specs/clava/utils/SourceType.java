@@ -75,6 +75,12 @@ public enum SourceType {
     }
 
     public boolean hasExtension(String extension) {
+        // Check if it contains a .
+        int lastIndexOfDot = extension.lastIndexOf('.');
+        if (lastIndexOfDot != -1) {
+            extension = extension.substring(lastIndexOfDot + 1);
+        }
+
         return extensions.contains(extension.toLowerCase());
     }
 

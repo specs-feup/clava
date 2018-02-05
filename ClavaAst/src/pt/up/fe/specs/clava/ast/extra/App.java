@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.extra;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
@@ -101,7 +99,8 @@ public class App extends ClavaNode {
 
     private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
 
-    private List<File> sources;
+    // private List<File> sources;
+    private Map<String, File> sourceFiles;
 
     private GlobalManager globalManager;
     private final Map<String, ClavaNode> nodesCache;
@@ -121,7 +120,8 @@ public class App extends ClavaNode {
     public App(Collection<TranslationUnit> children) {
         super(ClavaNodeInfo.undefinedInfo(), children);
 
-        sources = Collections.emptyList();
+        // sources = Collections.emptyList();
+        sourceFiles = new HashMap<>();
         globalManager = new GlobalManager();
         nodesCache = new HashMap<>();
         functionDeclarationCache = new HashMap<>();
@@ -200,9 +200,9 @@ public class App extends ClavaNode {
         return code.toString();
     }
 
-    public void setSources(List<File> sources) {
-        this.sources = sources;
-    }
+    // public void setSources(List<File> sources) {
+    // this.sources = sources;
+    // }
 
     public List<TranslationUnit> getTranslationUnits() {
         return getChildren(TranslationUnit.class);
@@ -346,8 +346,8 @@ public class App extends ClavaNode {
             // files.put(destinationFile, tUnit.getCode());
         }
 
-        List<File> localSources = sources.isEmpty() ? Arrays.asList(baseInputFolder) : sources;
-        List<File> allFiles = getAllSourcefiles(localSources, true);
+        // List<File> localSources = sources.isEmpty() ? Arrays.asList(baseInputFolder) : sources;
+        // List<File> allFiles = getAllSourcefiles(localSources, true);
 
         // System.out.println("All files:" + allFiles);
 
@@ -356,10 +356,13 @@ public class App extends ClavaNode {
                 .collect(Collectors.toSet());
         // System.out.println("GENERATED FILES:" + relativeWoven);
 
-        for (File file : allFiles) {
-            // String relativeSource = ClavaCode.getRelativePath(file, baseInputFolder);
+        // for (File file : allFiles) {
+        for (Entry<String, File> sourceFile : sourceFiles.entrySet()) {
+            File file = new File(sourceFile.getKey());
+
             String relativeSource = SpecsIo.getRelativePath(file, baseInputFolder);
-            String clavaCodeOutput = ClavaCode.getRelativePath(file, baseInputFolder);
+            // String clavaCodeOutput = ClavaCode.getRelativePath(file, baseInputFolder);
+            String clavaCodeOutput = TranslationUnit.getRelativePath(file, sourceFile.getValue());
             if (!relativeSource.equals(clavaCodeOutput)) {
                 SpecsLogs.msgWarn("TEMPORARY TEST: expected '" + clavaCodeOutput + "', got '" + relativeSource + "'");
             }
@@ -607,5 +610,27 @@ public class App extends ClavaNode {
         }
 
         return find(tu.getFile().getPath(), id);
+    }
+
+    /**
+     * Sets the sources of each Translation Unit.
+     * 
+     * @param allFiles
+     */
+    public void setSources(Map<String, File> allFiles) {
+
+        // Set sourceFiles
+        this.sourceFiles = allFiles;
+
+        for (TranslationUnit tu : getTranslationUnits()) {
+            // Find the corresponding source
+            File sourcePath = allFiles.get(tu.getFilepath());
+            if (sourcePath == null) {
+                // SpecsLogs.msgWarn("Could not find source path for TU '" + tu.getFilepath() + "'. Table:" + allFiles);
+                continue;
+            }
+
+            tu.setSourcePath(sourcePath);
+        }
     }
 }
