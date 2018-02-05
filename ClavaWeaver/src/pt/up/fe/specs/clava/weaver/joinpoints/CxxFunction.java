@@ -57,11 +57,6 @@ public class CxxFunction extends AFunction {
         this.parent = parent;
     }
 
-    // @Override
-    // public String getNameImpl() {
-    // return function.getDeclName();
-    // }
-
     @Override
     public List<? extends AScope> selectBody() {
         CxxScope body = getBodyImpl();
@@ -280,43 +275,10 @@ public class CxxFunction extends AFunction {
      */
     private List<IncludeDecl> getWrapperIncludesFromFile(TranslationUnit newTu) {
 
-        // List<IncludeDecl> includes = new ArrayList<>();
-
         TranslationUnit callFile = function.getAncestor(TranslationUnit.class);
 
         return TreeNodeUtils.copy(callFile.getIncludes().getIncludes());
-        // List<IncludeDecl> includes = callFile.getIncludes().getIncludes().stream()
-        // .map(includeDecl -> (IncludeDecl) includeDecl.copy())
-        // .collect(Collectors.toList());
 
-        /*
-        for (IncludeDecl includeDecl : callFile.getIncludes().getIncludes()) {
-        //            includes.add((IncludeDecl) includeDecl.copy());
-            
-            Include include = includeDecl.getInclude();
-            
-            // If angled include, does not need modification
-            if (include.isAngled()) {
-                // May not work if we add directly an IncludeDecl that is already part of a translation unit
-                includes.add((IncludeDecl) includeDecl.copy());
-                continue;
-            }
-            
-            // For each include which is not an angled include, calculate relative path
-            
-            // Get relative path to include the file in this file
-            String relativePath = CxxWeaver.getRelativeFilepath(callFile);
-            // callFile.getRelativeFilepathImpl(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
-            // File includeFile = new File(callFile.getFolderpath(), include.getInclude());
-            // String relativePath = SpecsIo.getRelativePath(includeFile, newTu.getFile());
-            includes.add(new IncludeDecl(relativePath, false));
-            // System.out.println("OLD PATH:" + relativePath);
-            // System.out.println("NEW PATH:" + relativePath2);
-             
-             
-        }
-        */
-        // return includes;
     }
 
     @Override
@@ -374,16 +336,6 @@ public class CxxFunction extends AFunction {
             ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt, null);
             returnJp.insertBefore(code);
         }
-
-        // // Find return statement in direct children
-        // List<ClavaNode> childStmts = getBodyImpl().selectChildStmt().stream()
-        // .map(AStatement::getNode)
-        // .collect(Collectors.toList());
-        //
-        // ReturnStmt endReturn = getLastReturnStmt();
-
-        // TODO Auto-generated method stub
-        // super.insertReturnImpl(code);
     }
 
     /**
