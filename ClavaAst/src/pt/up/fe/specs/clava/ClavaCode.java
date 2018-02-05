@@ -27,9 +27,22 @@ public class ClavaCode {
                 .collect(Collectors.joining(" "));
     }
 
+    /**
+     * 
+     * @param sourcePath
+     * @param baseInputFolder
+     * @deprecated use TranslationUnit.getRelativeFilepath and .getRelativeFolderpath
+     * @return
+     */
+    @Deprecated
     public static String getRelativePath(File sourcePath, File baseInputFolder) {
         // If base file does not exist yet, just return it
         if (!sourcePath.exists()) {
+            return sourcePath.getPath();
+        }
+
+        // No base input folder specified, just return source path
+        if (baseInputFolder == null) {
             return sourcePath.getPath();
         }
 
