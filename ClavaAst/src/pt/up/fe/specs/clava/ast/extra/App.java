@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.extra;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +41,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
-import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -229,6 +227,11 @@ public class App extends ClavaNode {
     // write(baseInputFolder, destinationFolder, null);
     // }
 
+    /**
+     * 
+     * @param baseInputFolder
+     * @param destinationFolder
+     */
     public void write(File baseInputFolder, File destinationFolder) {
         for (Entry<File, String> entry : getCode(baseInputFolder, destinationFolder).entrySet()) {
             SpecsIo.write(entry.getKey(), entry.getValue());
@@ -284,32 +287,36 @@ public class App extends ClavaNode {
         return true;
     }
 
+    /*
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
-
+    
         if (includeHeaders) {
             // return SpecsIo.getFiles(sources, PERMITTED_EXTENSIONS).stream()
-            return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions()).stream()
-                    .map(filename -> new File(filename))
-                    .collect(Collectors.toList());
+            return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions());
+            // return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions()).stream()
+            // .map(filename -> new File(filename))
+            // .collect(Collectors.toList());
         }
-
+    
         List<File> allFiles = new ArrayList<>();
-
+    
         // List<File> implementationFiles = SpecsIo.getFiles(sources, EXTENSIONS_IMPLEMENTATION).stream()
-        List<File> implementationFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions()).stream()
-                .map(filename -> new File(filename))
-                .collect(Collectors.toList());
-
+        List<File> implementationFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
+        // List<File> implementationFiles = SpecsIo.getFiles(sources,
+        // SourceType.IMPLEMENTATION.getExtensions()).stream()
+        // .map(filename -> new File(filename))
+        // .collect(Collectors.toList());
+    
         allFiles.addAll(implementationFiles);
-
+    
         for (File sourceFolder : sources) {
             // allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, EXTENSIONS_HEADERS));
             allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions()));
         }
-
+    
         return allFiles;
     }
-
+    */
     public Map<File, String> getCode(File baseInputFolder, File destinationFolder) {
         return getCode(baseInputFolder, destinationFolder, null);
     }
