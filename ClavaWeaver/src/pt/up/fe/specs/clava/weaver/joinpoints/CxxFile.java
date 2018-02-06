@@ -383,4 +383,9 @@ public class CxxFile extends AFile {
         return CxxSelects.select(AInclude.class, tunit.getChildren(), false, this, IncludeDecl.class);
     }
 
+    @Override
+    public String getBaseSourcePathImpl() {
+        return tunit.getSourcePath().map(File::getPath).orElse(null);
+    }
+
 }

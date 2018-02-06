@@ -6009,6 +6009,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "the path to the source folder that was given as the base folder of this file",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "baseSourcePath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "the complete path to the file",
                   "children": [
                            {
@@ -6072,7 +6081,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "the path to the file relative to the program base folder",
+                  "tooltip": "the path to the file relative to the base source path",
                   "children": [
                            {
                               "type": "String",
@@ -6081,7 +6090,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "the path to the folder of the source file relative to the program base folder",
+                  "tooltip": "the path to the folder of the source file relative to the base source path",
                   "children": [
                            {
                               "type": "String",

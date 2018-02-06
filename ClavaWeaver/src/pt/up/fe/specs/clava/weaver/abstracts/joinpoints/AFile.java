@@ -112,12 +112,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * the path to the file relative to the program base folder
+     * the path to the file relative to the base source path
      */
     public abstract String getRelativeFilepathImpl();
 
     /**
-     * the path to the file relative to the program base folder
+     * the path to the file relative to the base source path
      */
     public final Object getRelativeFilepath() {
         try {
@@ -135,12 +135,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * the path to the folder of the source file relative to the program base folder
+     * the path to the folder of the source file relative to the base source path
      */
     public abstract String getRelativeFolderpathImpl();
 
     /**
-     * the path to the folder of the source file relative to the program base folder
+     * the path to the folder of the source file relative to the base source path
      */
     public final Object getRelativeFolderpath() {
         try {
@@ -154,6 +154,29 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "relativeFolderpath", e);
+        }
+    }
+
+    /**
+     * the path to the source folder that was given as the base folder of this file
+     */
+    public abstract String getBaseSourcePathImpl();
+
+    /**
+     * the path to the source folder that was given as the base folder of this file
+     */
+    public final Object getBaseSourcePath() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "baseSourcePath", Optional.empty());
+        	}
+        	String result = this.getBaseSourcePathImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "baseSourcePath", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "baseSourcePath", e);
         }
     }
 
@@ -646,6 +669,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("filepath");
         attributes.add("relativeFilepath");
         attributes.add("relativeFolderpath");
+        attributes.add("baseSourcePath");
         attributes.add("isCxx");
         attributes.add("isHeader");
         attributes.add("isOpenCL");
@@ -708,6 +732,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         FILEPATH("filepath"),
         RELATIVEFILEPATH("relativeFilepath"),
         RELATIVEFOLDERPATH("relativeFolderpath"),
+        BASESOURCEPATH("baseSourcePath"),
         ISCXX("isCxx"),
         ISHEADER("isHeader"),
         ISOPENCL("isOpenCL"),
