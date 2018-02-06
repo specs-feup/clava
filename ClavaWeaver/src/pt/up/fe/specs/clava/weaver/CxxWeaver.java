@@ -524,50 +524,51 @@ public class CxxWeaver extends ACxxWeaver {
 
     }
 
+    /*
     private List<String> processSources(List<File> sources) {
         // private Map<String, File> processSources(List<File> sources) {
         List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
         // Map<String, File> sourceFiles = SpecsIo.getFileMap(sources, SourceType.IMPLEMENTATION.getExtensions());
-
+    
         if (!sourceFiles.isEmpty()) {
             return sourceFiles;
         }
-
+    
         // No implementation files found. Create temporary file with only the includes
-
+    
         StringBuilder code = new StringBuilder();
         for (File sourceFolder : sources) {
             // List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, App.getExtensionsHeaders());
             List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions());
-
+    
             // Create source code to call header
             String includeCode = headerFiles.stream()
                     .map(file -> SpecsIo.getRelativePath(file, sourceFolder))
                     .map(include -> "#include \"" + include + "\"")
                     .collect(Collectors.joining("\n"));
-
+    
             if (includeCode.length() != 0) {
                 code.append(includeCode).append("\n");
             }
-
+    
         }
-
+    
         // If there is code, write and return file
         if (code.length() != 0) {
             File tempFolder = SpecsIo.mkdir(TEMP_SRC_FOLDER);
             SpecsIo.deleteFolderContents(tempFolder, true);
-
+    
             String extension = args.get(ClavaOptions.STANDARD).getImplementionExtension();
-
+    
             File implementationFile = new File(tempFolder, "implementation." + extension);
             SpecsIo.write(implementationFile, code.toString());
-
+    
             return Arrays.asList(implementationFile.getAbsolutePath());
         }
-
+    
         throw new RuntimeException("Could not find C/C++ files in the given source folders (" + sources + ")");
     }
-
+    */
     private List<String> processSources(Map<String, File> sourceFiles) {
         Preconditions.checkArgument(!sourceFiles.isEmpty(), "No C/C++ files found in the given source folders");
 
