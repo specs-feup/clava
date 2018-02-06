@@ -38,7 +38,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
@@ -710,7 +709,7 @@ public class CxxWeaver extends ACxxWeaver {
         Set<String> modifiedFilenames = getModifiedFilenames();
 
         // Get files and contents to write
-        Map<File, String> files = getApp().getCode(baseFolder, outputFolder, modifiedFilenames);
+        Map<File, String> files = getApp().getCode(outputFolder, modifiedFilenames);
 
         // Write files that have changed
         for (Entry<File, String> entry : files.entrySet()) {
@@ -821,7 +820,7 @@ public class CxxWeaver extends ACxxWeaver {
         File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER);
         SpecsIo.deleteFolderContents(tempFolder, true);
 
-        getApp().write(baseFolder, tempFolder);
+        getApp().write(tempFolder);
 
         // TODO: When separation of src/include is done, take it into account here
         List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
@@ -978,11 +977,11 @@ public class CxxWeaver extends ACxxWeaver {
         return includes;
     }
 
-    public static String getRelativeFilepath(TranslationUnit tunit) {
-        return tunit.getRelativeFilepath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
-    }
+    // public static String getRelativeFilepath(TranslationUnit tunit) {
+    // return tunit.getRelativeFilepath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
+    // }
 
-    public static String getRelativeFolderpath(TranslationUnit tunit) {
-        return tunit.getRelativeFolderpath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
-    }
+    // public static String getRelativeFolderpath(TranslationUnit tunit) {
+    // return tunit.getRelativeFolderpath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
+    // }
 }

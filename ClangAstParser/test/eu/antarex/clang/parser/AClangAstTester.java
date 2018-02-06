@@ -173,6 +173,8 @@ public abstract class AClangAstTester {
     @Test
     public void testProper() {
 
+        // Parse files
+
         CodeParser codeParser = new CodeParser()
                 .setShowClangAst(showClangAst)
                 .setShowClangDump(showClangDump)
@@ -183,8 +185,7 @@ public abstract class AClangAstTester {
 
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
 
-        clavaAst.write(new File(AClangAstTester.OUTPUT_FOLDERNAME),
-                SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
+        clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
 
         if (onePass) {
             return;
@@ -192,13 +193,15 @@ public abstract class AClangAstTester {
 
         CodeParser testCodeParser = new CodeParser();
 
+        // Parse output again, check if files are the same
+
         File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
 
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
-        testClavaAst.write(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst/"),
-                SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
+        testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
 
         // Test if files from first and second are the same
+
         Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));

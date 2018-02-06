@@ -290,8 +290,8 @@ public class TranslationUnit extends ClavaNode {
      * 
      * @param translationUnit
      */
-    public void addInclude(TranslationUnit translationUnit, File baseSourceFolder) {
-        addInclude(translationUnit, false, baseSourceFolder);
+    public void addInclude(TranslationUnit translationUnit) {
+        addInclude(translationUnit, false);
     }
 
     /**
@@ -299,9 +299,9 @@ public class TranslationUnit extends ClavaNode {
      * 
      * @param translationUnit
      */
-    // private void addInclude(TranslationUnit translationUnit, boolean isAngled) {
-    private void addInclude(TranslationUnit translationUnit, boolean isAngled, File baseSourceFolder) {
-        String relativePath = translationUnit.getRelativeFilepath(baseSourceFolder);
+    private void addInclude(TranslationUnit translationUnit, boolean isAngled) {
+        // private void addInclude(TranslationUnit translationUnit, boolean isAngled, File baseSourceFolder) {
+        String relativePath = translationUnit.getRelativeFilepath();
         // If file does not exist yet, relative path is the path of the file itself
         // Otherwise, calculate
         // File tuFile = translationUnit.getFile();
@@ -345,20 +345,23 @@ public class TranslationUnit extends ClavaNode {
 
     }
 
-    public void write(File destinationFolder, File baseInputFolder) {
-        String relativePath = getRelativeFolderpath(baseInputFolder);
-        // String relativePath2 = ClavaCode.getRelativePath(new File(getFolderpath()), baseInputFolder);
-        // System.out.println("OLD PATH:" + relativePath2);
-        // System.out.println("NEW PATH:" + relativePath);
-        // Build destination path
-        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
-        // System.out.println("RELATIVE PATH:" + relativePath);
+    // public void write(File destinationFolder, File baseInputFolder) {
+    public void write(File destinationFolder) {
+        String relativePath = getRelativeFolderpath();
+
         File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
         File destinationFile = new File(actualDestinationFolder, getFilename());
-        // System.out.println("DESTINATION FILE:" + destinationFile);
+
         SpecsIo.write(destinationFile, getCode());
     }
 
+    /**
+     * @deprecated
+     * @param baseSourceFolder
+     * @return
+     */
+    /*
+    @Deprecated
     public String getRelativeFolderpath(File baseSourceFolder) {
         return getRelativePath(new File(path), baseSourceFolder);
         // // If file does not exist yet, or base source folder is null, return its path
@@ -369,9 +372,25 @@ public class TranslationUnit extends ClavaNode {
         // return getAppTry()
         // .map(app -> app.getRelativeFolderPath(baseSourceFolder, this))
         // .orElse(getFolderpath());
+    
+    }
+    */
 
+    /**
+     * 
+     * @return
+     */
+    public String getRelativeFolderpath() {
+        return getRelativePath(new File(path), sourcePath);
     }
 
+    /**
+     * @deprecated
+     * @param baseSourceFolder
+     * @return
+     */
+    /*
+    @Deprecated
     public String getRelativeFilepath(File baseSourceFolder) {
         return getRelativePath(getFile(), baseSourceFolder);
         // // If file does not exist yet, or base source folder is null, return its path
@@ -382,6 +401,15 @@ public class TranslationUnit extends ClavaNode {
         // return getAppTry()
         // .map(app -> app.getRelativePath(baseSourceFolder, this))
         // .orElse(getFile().getPath());
+    }
+    */
+
+    /**
+     * 
+     * @return
+     */
+    public String getRelativeFilepath() {
+        return getRelativePath(getFile(), sourcePath);
     }
 
 }

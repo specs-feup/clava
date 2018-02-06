@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -124,8 +125,13 @@ public class CxxProgram extends AProgram {
         weaver.addMessageToUser(message);
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public String getBaseFolderImpl() {
+        ClavaLog.deprecated("attribute baseFolder should not be used, instead use file.sourcePath");
         List<File> sources = getWeaver().getSources();
         if (sources.isEmpty()) {
             SpecsLogs.msgWarn("Expected at least program to have one source folder, found none");
@@ -143,7 +149,7 @@ public class CxxProgram extends AProgram {
 
     @Override
     public String getCodeImpl() {
-        return app.getCode(new File(getBaseFolderImpl()));
+        return app.getCode();
     }
 
     @Override

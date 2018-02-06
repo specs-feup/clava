@@ -246,8 +246,8 @@ public class CxxFunction extends AFunction {
 
             if (!file.isPresent()) {
 
-                String path = getRootImpl().getBaseFolderImpl();
-                TranslationUnit tu = ClavaNodeFactory.translationUnit(fileName, path,
+                // String path = getRootImpl().getBaseFolderImpl();
+                TranslationUnit tu = ClavaNodeFactory.translationUnit(fileName, "",
                         Collections.emptyList());
 
                 app.addFile(tu);

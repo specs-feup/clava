@@ -40,7 +40,6 @@ import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
-import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
@@ -240,7 +239,8 @@ public class CxxFile extends AFile {
         // Get first joinpoint that is a CxxFile
         CxxFile includeFile = CxxJoinpoints.getAncestorandSelf(jp, CxxFile.class).get();
 
-        String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
+        // String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
+        String includePath = includeFile.getNode().getRelativeFilepath();
         tunit.addInclude(includePath, false);
         // tunit.addInclude(includeFile.getNode(), getWeaverEngine().getBaseSourceFolder());
 
@@ -257,12 +257,14 @@ public class CxxFile extends AFile {
 
     @Override
     public String getRelativeFolderpathImpl() {
-        return CxxWeaver.getRelativeFolderpath(tunit);
+        return tunit.getRelativeFolderpath();
+        // return CxxWeaver.getRelativeFolderpath(tunit);
     }
 
     @Override
     public String getRelativeFilepathImpl() {
-        return CxxWeaver.getRelativeFilepath(tunit);
+        return tunit.getRelativeFilepath();
+        // return CxxWeaver.getRelativeFilepath(tunit);
     }
 
     @Override
@@ -365,9 +367,10 @@ public class CxxFile extends AFile {
             return;
         }
 
-        File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
+        // File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
+        // tunit.write(destinationFolder, baseSourceFolder);
 
-        tunit.write(destinationFolder, baseSourceFolder);
+        tunit.write(destinationFolder);
     }
 
     @Override

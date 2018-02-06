@@ -57,7 +57,7 @@ public class ClavaSandbox {
         // File baseFolder = new File("pdist/");
         // List<String> files = Arrays.asList("pdist/*.cpp");
 
-        File baseFolder = new File("betweenness/");
+        // File baseFolder = new File("betweenness/");
         List<String> files = Arrays.asList("betweenness/*.cpp");
 
         // File baseFolder = new File("montecarlo/");
@@ -102,7 +102,7 @@ public class ClavaSandbox {
             SpecsIo.write(new File("clavaDump.txt"), clavaAst.toString());
             // System.out.println("CLAVA TREE:\n" + clavaAst);
 
-            clavaAst.write(baseFolder, SpecsIo.mkdir("./output"));
+            clavaAst.write(SpecsIo.mkdir("./output"));
 
             String filename = "test.cpp";
             clavaAst.getFile(filename).ifPresent(tu -> System.out.println(filename + ":\n" + tu));
