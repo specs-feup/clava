@@ -174,11 +174,12 @@ public class CxxWeaver extends ACxxWeaver {
     // private Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
 
     // private File outputDir = null;
-    private List<File> sources = null;
+    private List<File> originalSources = null;
+    private List<File> currentSources = null;
     private List<String> userFlags = null;
     // private CxxJoinpoints jpFactory = null;
 
-    private File baseFolder = null;
+    // private File baseFolder = null;
     private List<String> parserOptions = new ArrayList<>();
 
     private Logger infoLogger = null;
@@ -198,10 +199,10 @@ public class CxxWeaver extends ACxxWeaver {
         args = null;
 
         // outputDir = null;
-        sources = null;
+        currentSources = null;
         userFlags = null;
 
-        baseFolder = null;
+        // baseFolder = null;
         parserOptions = new ArrayList<>();
 
         infoLogger = null;
@@ -230,9 +231,9 @@ public class CxxWeaver extends ACxxWeaver {
         return weaverData.getAst();
     }
 
-    public File getBaseSourceFolder() {
-        return baseFolder;
-    }
+    // public File getBaseSourceFolder() {
+    // return baseFolder;
+    // }
 
     public CxxProgram getAppJp() {
         return CxxJoinpoints.programFactory(getApp());
@@ -289,13 +290,14 @@ public class CxxWeaver extends ACxxWeaver {
             infoLogger.setLevel(Level.WARNING);
         }
 
-        boolean disableWeaving = args.get(CxxWeaverOption.DISABLE_WEAVING);
+        // boolean disableWeaving = args.get(CxxWeaverOption.DISABLE_WEAVING);
 
         // Set weaver in CxxFactory, so that it can have access to a weaver configuration
         // This setting is local to the thread
 
         // Weaver arguments
-        this.sources = sources;
+        this.originalSources = sources;
+        this.currentSources = sources;
         // this.outputDir = outputDir;
         this.args = args;
 
@@ -333,9 +335,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         // First folder is considered the base folder
         // Only needs folder if we are doing weaving
-        if (!disableWeaving) {
-            baseFolder = getBaseFolder(sources);
-        }
+        // if (!disableWeaving) {
+        // baseFolder = getFirstSourceFolder(sources);
+        // }
 
         // Init messages to user
         messagesToUser = new LinkedHashSet<>();
@@ -380,12 +382,12 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public Set<String> getIncludeFlags() {
-        if (sources == null) {
+        if (currentSources == null) {
             SpecsLogs.msgWarn("Source folders are not set");
             return Collections.emptySet();
         }
 
-        return getIncludeFlags(sources);
+        return getIncludeFlags(currentSources);
     }
 
     private Set<String> getIncludeFlags(List<File> sources) {
@@ -397,12 +399,12 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public Set<String> getIncludeFolders() {
-        if (sources == null) {
+        if (currentSources == null) {
             SpecsLogs.msgWarn("Source folders are not set");
             return Collections.emptySet();
         }
 
-        return getIncludeFolders(sources);
+        return getIncludeFolders(currentSources);
     }
 
     private Set<String> getIncludeFolders(List<File> sources) {
@@ -413,7 +415,7 @@ public class CxxWeaver extends ACxxWeaver {
         return sourceIncludeFolders;
     }
 
-    private static File getBaseFolder(List<File> sources) {
+    private static File getFirstSourceFolder(List<File> sources) {
         Preconditions.checkArgument(!sources.isEmpty(), "Needs at least one source specified (file or folder)");
 
         File firstSource = sources.stream()
@@ -640,7 +642,12 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public String getProgramName() {
-        return baseFolder.getName();
+        return getFirstSourceFolder(getSources()).getName();
+        // return getSources().stream()
+        // .findFirst()
+        // .map(File::getName)
+        // .orElse("C/C++ Program");
+        // return baseFolder.getName();
     }
 
     public File getWeavingFolder() {
@@ -852,7 +859,10 @@ public class CxxWeaver extends ACxxWeaver {
             // Add rebuilt app
             weaverData.pushAst(rebuiltApp);
 
-            baseFolder = tempFolder;
+            // TODO: When separation of src/include is done, update accordingly
+            currentSources = srcFolders;
+
+            // baseFolder = tempFolder;
         }
 
         // Clear user values, all stored nodes are invalid now
@@ -908,7 +918,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public List<File> getSources() {
-        return sources;
+        return currentSources;
     }
 
     public boolean clearUserField(ClavaNode node) {
@@ -944,7 +954,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Search on sources and normal includes
 
         List<File> searchPaths = new ArrayList<>();
-        searchPaths.addAll(sources);
+        searchPaths.addAll(currentSources);
         searchPaths.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
         // System.out.println("SEARCH PATHS:" + searchPaths);
         Set<String> includeFolders = searchPaths.stream()
