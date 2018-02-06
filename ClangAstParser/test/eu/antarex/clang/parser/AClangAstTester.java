@@ -30,7 +30,7 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -174,22 +174,31 @@ public abstract class AClangAstTester {
 
     @Test
     public void testProper() {
-        List<String> files = new ArrayList<>();
+        // List<String> files = new ArrayList<>();
+        File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
+
+        // Collect implementation files
+        Map<String, File> allFiles = SpecsIo.getFileMap(Arrays.asList(workFolder),
+                SourceType.getPermittedExceptions());
+
+        List<String> implementationFiles = allFiles.keySet().stream()
+                .filter(SourceType.IMPLEMENTATION::hasExtension)
+                .collect(Collectors.toList());
 
         // Add C++ sources
-        files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "cpp"),
-                file -> SpecsIo.getCanonicalPath(file)));
+        // files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "cpp"),
+        // file -> SpecsIo.getCanonicalPath(file)));
 
         // Add C sources
-        files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "c"),
-                file -> SpecsIo.getCanonicalPath(file)));
+        // files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "c"),
+        // file -> SpecsIo.getCanonicalPath(file)));
 
         // Add OpenCL sources
-        files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "cl"),
-                file -> SpecsIo.getCanonicalPath(file)));
+        // files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "cl"),
+        // file -> SpecsIo.getCanonicalPath(file)));
 
         // Parse files
-        ClangRootNode ast = new ClangAstParser(showClangDump).parse(files, compilerOptions);
+        ClangRootNode ast = new ClangAstParser(showClangDump).parse(implementationFiles, compilerOptions);
 
         if (showClangDump) {
             SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
@@ -202,6 +211,7 @@ public abstract class AClangAstTester {
         // Parse dump information
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             App clavaAst = clavaParser.parse();
+            clavaAst.setSources(allFiles);
 
             if (showClavaAst) {
                 SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst);
@@ -215,6 +225,7 @@ public abstract class AClangAstTester {
             // Write
             // clavaAst.writeFromTopFile(new File(OUTPUT_FOLDERNAME + "/" + mainFile),
             // IoUtils.safeFolder(OUTPUT_FOLDERNAME + "/outputFirst"));
+
             clavaAst.write(new File(AClangAstTester.OUTPUT_FOLDERNAME),
                     SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
         } catch (Exception e) {
@@ -226,32 +237,51 @@ public abstract class AClangAstTester {
         }
 
         // Parse output again, check if files are the same
-        List<String> files2 = new ArrayList<>();
+        // List<String> files2 = new ArrayList<>();
+
+        File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
+
+        // Collect implementation files
+        Map<String, File> allFiles2 = SpecsIo.getFileMap(Arrays.asList(firstOutputFolder),
+                SourceType.getPermittedExceptions());
+
+        List<String> implementationFiles2 = allFiles2.keySet().stream()
+                .filter(SourceType.IMPLEMENTATION::hasExtension)
+                .collect(Collectors.toList());
+
+        // Implementation files
+        // List<String> files2 = SpecsIo
+        // .getFiles(Arrays.asList(firstOutputFolder), SourceType.IMPLEMENTATION.getExtensions()).stream()
+        // .map(file -> SpecsIo.getCanonicalPath(file))
+        // .collect(Collectors.toList());
 
         // C++ sources
-        files2.addAll(SpecsCollections.map(
-                SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "cpp"),
-                file -> SpecsIo.getCanonicalPath(file)));
+        // files2.addAll(
+        // SpecsCollections.map(SpecsIo.getFiles(firstOutputFolder, "cpp"),
+        // file -> SpecsIo.getCanonicalPath(file)));
 
         // C sources
-        files2.addAll(
-                SpecsCollections.map(
-                        SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "c"),
-                        file -> SpecsIo.getCanonicalPath(file)));
+        // files2.addAll(
+        // SpecsCollections.map(SpecsIo.getFiles(firstOutputFolder, "c"), file -> SpecsIo.getCanonicalPath(file)));
 
         // OpenCL sources
-        files2.addAll(
-                SpecsCollections.map(
-                        SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "cl"),
-                        file -> SpecsIo.getCanonicalPath(file)));
+
+        // files2.addAll(
+        // SpecsCollections.map(SpecsIo.getFiles(firstOutputFolder, "cl"),
+        // file -> SpecsIo.getCanonicalPath(file)));
+
+        // List<String> secondCompilerOptions = new ArrayList<>(compilerOptions);
+
+        // Add first output folder to includes
+        // secondCompilerOptions.add("\"-I" + firstOutputFolder.getAbsolutePath() + "\"");
 
         // Parse files
-        ClangRootNode ast2 = new ClangAstParser().parse(files2, compilerOptions);
+        ClangRootNode ast2 = new ClangAstParser().parse(implementationFiles2, compilerOptions);
 
         // Parse dump information
         try (ClavaParser clavaParser = new ClavaParser(ast2)) {
             App clavaAst2 = clavaParser.parse();
-
+            clavaAst2.setSources(allFiles2);
             // Write
             // clavaAst2.writeFromTopFile(new File(OUTPUT_FOLDERNAME + "/outputFirst/" + mainFile),
             // IoUtils.safeFolder(OUTPUT_FOLDERNAME + "/outputSecond"));

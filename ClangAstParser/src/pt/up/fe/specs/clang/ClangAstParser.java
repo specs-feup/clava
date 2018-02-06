@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,14 +107,14 @@ public class ClangAstParser {
     // }
     // }
 
-    public ClangRootNode parse(List<String> files, List<String> options) {
+    public ClangRootNode parse(Collection<String> files, List<String> options) {
 
         ClangRootNode output = parse(files, ClavaOptions.toDataStore(options));
 
         return output;
     }
 
-    public ClangRootNode parse(List<String> files, DataStore config) {
+    public ClangRootNode parse(Collection<String> files, DataStore config) {
 
         DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.LOCAL_OPTIONS_FILE, getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
