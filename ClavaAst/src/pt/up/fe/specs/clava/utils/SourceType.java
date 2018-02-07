@@ -17,22 +17,32 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 public enum SourceType {
 
     HEADER("h", "hpp", "incl"),
     IMPLEMENTATION("c", "cpp", "cl", "cc");
 
-    private final static Set<String> PERMITTED_EXCEPTIONS = new HashSet<>(
-            SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
+    // private final static Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
+    // SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
+    private final static Lazy<Set<String>> PERMITTED_EXTENSIONS = Lazy
+            .newInstance(SourceType::buildPermittedExtensions);
 
     private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp", "cc"));
 
-    public static Set<String> getPermittedExceptions() {
-        return PERMITTED_EXCEPTIONS;
+    private static Set<String> buildPermittedExtensions() {
+        return SpecsEnums.extractValues(SourceType.class).stream()
+                .flatMap(sourceType -> sourceType.getExtensions().stream())
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<String> getPermittedExtensions() {
+        return PERMITTED_EXTENSIONS.get();
     }
 
     public static boolean isCxxExtension(String extension) {
@@ -56,7 +66,7 @@ public enum SourceType {
     public static SourceType getType(String filepath) {
         return getTypeTry(filepath)
                 .orElseThrow(() -> new RuntimeException("Given filepath '" + filepath
-                        + "' is not valid, permitted extensions: " + getPermittedExceptions()));
+                        + "' is not valid, permitted extensions: " + getPermittedExtensions()));
     }
 
     public static Optional<SourceType> getTypeTry(String filepath) {

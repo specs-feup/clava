@@ -63,7 +63,7 @@ public class CodeParser {
     public App parse(List<File> sources, List<String> compilerOptions) {
 
         // Collect implementation files
-        Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExceptions());
+        Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
 
         List<String> implementationFiles = allFiles.keySet().stream()
                 .filter(SourceType.IMPLEMENTATION::hasExtension)
