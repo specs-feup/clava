@@ -10,6 +10,8 @@ function ClavaDataStore(data) {
 	
 	// Add alias
 	this.addAlias("Disable Clava Info", "disable_info");
+	//this.addAlias("config_folder", "joptions_current_folder_path");
+	
 }
 // Inheritance
 ClavaDataStore.prototype = Object.create(WeaverDataStore.prototype);
