@@ -30,7 +30,16 @@ public class CharacterLiteral extends Expr {
         CHAR_LITERAL = new HashMap<>();
         CHAR_LITERAL.put('\n', "\\n");
         CHAR_LITERAL.put('\t', "\\t");
+        CHAR_LITERAL.put('\u000b', "\\v");
+        CHAR_LITERAL.put('\b', "\\b");
         CHAR_LITERAL.put('\r', "\\r");
+        CHAR_LITERAL.put('\f', "\\f");
+        CHAR_LITERAL.put('\u0007', "\\a");
+        CHAR_LITERAL.put('\\', "\\\\");
+        CHAR_LITERAL.put((char) 63, "\\?");
+        CHAR_LITERAL.put('\'', "\\'");
+        CHAR_LITERAL.put('"', "\\\"");
+        CHAR_LITERAL.put('\0', "\\0");
     }
 
     private final long charValue;
