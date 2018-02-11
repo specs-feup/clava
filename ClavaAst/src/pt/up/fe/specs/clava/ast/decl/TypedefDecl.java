@@ -21,7 +21,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.TypedefType;
 
 /**
  * Declaration of a typedef-name via the 'typedef' type specifier.
@@ -50,13 +49,26 @@ public class TypedefDecl extends TypedefNameDecl {
     }
 
     @Override
+    public Type getType() {
+        // HACK: Sometimes, the returned type is the same as type being declared, we have not discovered why
+        // In this case, desugar type
+        Type type = super.getType();
+
+        if (type.getCode().equals(getDeclName())) {
+            return type.desugar();
+        }
+
+        return type;
+    }
+
+    @Override
     public String getCode() {
         Type type = getType();
 
-        // Typedef declaration, desugar TypedefType
-        if (type instanceof TypedefType) {
-            type = type.desugar();
-        }
+        // if (getDeclName().equals("IT")) {
+        // System.out.println("LOCATION:" + getLocation());
+        // System.out.println("TYPEDEF DECL TYPE:\n" + type);
+        // }
 
         // If pointer to ParenType, there can be complicated situations such
         // as having function pointer with VLAs that need the name of parameters,
@@ -68,7 +80,13 @@ public class TypedefDecl extends TypedefNameDecl {
 
         String typeCode = type.getCode();
 
-        return "typedef " + typeCode + " " + getTypelessCode();
+        String code = "typedef " + typeCode + " " + getTypelessCode();
+
+        // if (getDeclName().equals("IT")) {
+        // System.out.println("TYPEDEF DECL CODE:" + code);
+        // }
+
+        return code;
     }
 
     /*
