@@ -169,7 +169,7 @@ public class CxxTest {
 
     @Test
     public void testDblmax() {
-        new CxxTester("dbl_max.cpp").showClangAst().test();
+        new CxxTester("dbl_max.cpp").test();
     }
 
 }
