@@ -13,8 +13,11 @@
 
 package pt.up.fe.specs.clava.utils;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,23 +29,44 @@ import pt.up.fe.specs.util.lazy.Lazy;
 public enum SourceType {
 
     HEADER("h", "hpp", "incl"),
-    IMPLEMENTATION("c", "cpp", "cl", "cc");
+    IMPLEMENTATION("c", "cpp", "cl", "cc"),
+    BUILT_IN("<built-in>");
 
     // private final static Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
     // SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
     private final static Lazy<Set<String>> PERMITTED_EXTENSIONS = Lazy
             .newInstance(SourceType::buildPermittedExtensions);
 
+    private final static Lazy<Map<String, SourceType>> EXTENSIONS_MAP = Lazy
+            .newInstance(SourceType::buildExtensionsMap);
+
     private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp", "cc"));
 
     private static Set<String> buildPermittedExtensions() {
         return SpecsEnums.extractValues(SourceType.class).stream()
+                .filter(sourceType -> sourceType != BUILT_IN)
                 .flatMap(sourceType -> sourceType.getExtensions().stream())
                 .collect(Collectors.toSet());
     }
 
+    private static Map<String, SourceType> buildExtensionsMap() {
+
+        Map<String, SourceType> extensionsMap = new HashMap<>();
+
+        for (SourceType sourceType : SpecsEnums.extractValues(SourceType.class)) {
+            sourceType.getExtensions().stream()
+                    .forEach(extension -> extensionsMap.put(extension, sourceType));
+        }
+
+        return extensionsMap;
+    }
+
     public static Set<String> getPermittedExtensions() {
         return PERMITTED_EXTENSIONS.get();
+    }
+
+    public static Map<String, SourceType> getExtensionsMap() {
+        return EXTENSIONS_MAP.get();
     }
 
     public static boolean isCxxExtension(String extension) {
@@ -73,15 +97,22 @@ public enum SourceType {
 
         String extension = SpecsIo.getExtension(filepath);
 
-        if (IMPLEMENTATION.getExtensions().contains(extension)) {
-            return Optional.of(IMPLEMENTATION);
+        // If no extension, use the name of the filepath (e.g., <built-in>)
+        if (extension.isEmpty()) {
+            extension = new File(filepath).getName();
         }
 
-        if (HEADER.getExtensions().contains(extension)) {
-            return Optional.of(HEADER);
-        }
+        return Optional.ofNullable(getExtensionsMap().get(extension));
 
-        return Optional.empty();
+        // if (IMPLEMENTATION.getExtensions().contains(extension)) {
+        // return Optional.of(IMPLEMENTATION);
+        // }
+        //
+        // if (HEADER.getExtensions().contains(extension)) {
+        // return Optional.of(HEADER);
+        // }
+
+        // return Optional.empty();
     }
 
     public boolean hasExtension(String extension) {
