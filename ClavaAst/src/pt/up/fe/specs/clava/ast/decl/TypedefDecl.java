@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypedefType;
 
 /**
  * Declaration of a typedef-name via the 'typedef' type specifier.
@@ -52,6 +53,11 @@ public class TypedefDecl extends TypedefNameDecl {
     public String getCode() {
         Type type = getType();
 
+        // Typedef declaration, desugar TypedefType
+        if (type instanceof TypedefType) {
+            type = type.desugar();
+        }
+
         // If pointer to ParenType, there can be complicated situations such
         // as having function pointer with VLAs that need the name of parameters,
         // which are not available for function types in Clang
@@ -63,7 +69,6 @@ public class TypedefDecl extends TypedefNameDecl {
         String typeCode = type.getCode();
 
         return "typedef " + typeCode + " " + getTypelessCode();
-
     }
 
     /*

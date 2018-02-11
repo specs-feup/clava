@@ -123,7 +123,6 @@ public abstract class NamedDecl extends Decl implements Typable {
         // // return ClavaNodeFactory.literalType("<no type>", getInfo());
         // return ClavaNodeFactory.nullType(getInfo());
         // }
-
         return type;
     }
 
