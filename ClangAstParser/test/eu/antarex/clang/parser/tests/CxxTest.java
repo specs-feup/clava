@@ -167,4 +167,9 @@ public class CxxTest {
         new CxxTester("lambda.cpp").addFlags("-std=c++14").test();
     }
 
+    @Test
+    public void testDblmax() {
+        new CxxTester("dbl_max.cpp").showClangAst().test();
+    }
+
 }
