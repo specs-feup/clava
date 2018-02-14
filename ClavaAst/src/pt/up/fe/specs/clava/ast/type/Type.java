@@ -105,12 +105,17 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
-     * By default, returns empty list.
+     * By default, if has sugar, returns the desugared implementation of template args. Otherwise, returns an empty
+     * list.
      *
      * @return
      */
     public List<String> getTemplateArgs() {
-        return Collections.emptyList();
+        if (!hasSugar()) {
+            return Collections.emptyList();
+        }
+
+        return desugar().getTemplateArgs();
     }
 
     /**
@@ -120,6 +125,10 @@ public abstract class Type extends ClavaNode {
      */
     public boolean hasTemplateArgs() {
         return !getTemplateArgs().isEmpty();
+    }
+
+    public boolean hasSugar() {
+        return getTypeData().hasSugar();
     }
 
     public Type desugar() {

@@ -30,7 +30,7 @@ public enum SourceType {
 
     HEADER("h", "hpp", "incl"),
     IMPLEMENTATION("c", "cpp", "cl", "cc"),
-    BUILT_IN("<built-in>");
+    OUT_OF_SOURCE();
 
     // private final static Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
     // SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
@@ -44,7 +44,7 @@ public enum SourceType {
 
     private static Set<String> buildPermittedExtensions() {
         return SpecsEnums.extractValues(SourceType.class).stream()
-                .filter(sourceType -> sourceType != BUILT_IN)
+                .filter(sourceType -> sourceType != OUT_OF_SOURCE)
                 .flatMap(sourceType -> sourceType.getExtensions().stream())
                 .collect(Collectors.toSet());
     }
@@ -97,12 +97,23 @@ public enum SourceType {
 
         String extension = SpecsIo.getExtension(filepath);
 
-        // If no extension, use the name of the filepath (e.g., <built-in>)
+        // If no extension, use the name of the filepath
         if (extension.isEmpty()) {
             extension = new File(filepath).getName();
+
         }
 
-        return Optional.ofNullable(getExtensionsMap().get(extension));
+        SourceType sourceType = getExtensionsMap().get(extension);
+
+        if (sourceType == null) {
+            // Check if Clang out-of-source (e.g., <built-in>)
+            if (extension.startsWith("<") && extension.endsWith(">")) {
+                sourceType = SourceType.OUT_OF_SOURCE;
+            }
+
+        }
+
+        return Optional.ofNullable(sourceType);
 
         // if (IMPLEMENTATION.getExtensions().contains(extension)) {
         // return Optional.of(IMPLEMENTATION);
