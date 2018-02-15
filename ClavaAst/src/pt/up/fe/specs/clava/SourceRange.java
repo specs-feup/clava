@@ -107,10 +107,12 @@ public class SourceRange {
             throw new RuntimeException("Case not implemented:" + startType + " and " + endType);
         }
 
-        SpecsLogs.msgInfo("Two different paths in the location from the same source type, check this case.\nStart:"
-                + start.getFilepath() + "\nEnd:" + end.getFilepath());
-
-        return start.getFilepath();
+        return null;
+        // SpecsLogs.msgInfo("Two different paths in the location from the same source type, check this case.\nStart:"
+        // + start.getFilepath() + "\nEnd:" + end.getFilepath());
+        // System.out.println("GET LOCATION:" + this);
+        // SpecsLogs.msgWarn("WARNIMNG");
+        // return start.getFilepath();
         // System.out.println("START FILEPATH:" + start.getFilepath());
         // System.out.println("END FILEPATH:" + end.getFilepath());
         // return start.getFilepath();
