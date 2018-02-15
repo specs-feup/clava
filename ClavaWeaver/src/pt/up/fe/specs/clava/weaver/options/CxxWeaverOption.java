@@ -55,11 +55,13 @@ public interface CxxWeaverOption {
     DataKey<Boolean> GENERATE_MODIFIED_CODE_ONLY = KeyFactory.bool("Generate Modified Code Only")
             .setLabel("Generate code from AST only if tree is modified (otherwise copies original file)");
 
+    DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten weaved code folder structure");
+
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
                     HEADER_INCLUDES, SYSTEM_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION,
-                    GENERATE_MODIFIED_CODE_ONLY)
+                    GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
             .build();
 
 }

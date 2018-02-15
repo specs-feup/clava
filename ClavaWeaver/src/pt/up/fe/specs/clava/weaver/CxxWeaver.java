@@ -52,7 +52,6 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -717,8 +716,10 @@ public class CxxWeaver extends ACxxWeaver {
     public void writeCode(File outputFolder) {
         Set<String> modifiedFilenames = getModifiedFilenames();
 
+        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+
         // Get files and contents to write
-        Map<File, String> files = getApp().getCode(outputFolder, modifiedFilenames);
+        Map<File, String> files = getApp().getCode(outputFolder, flattenFolders, modifiedFilenames);
 
         // Write files that have changed
         for (Entry<File, String> entry : files.entrySet()) {
@@ -829,10 +830,17 @@ public class CxxWeaver extends ACxxWeaver {
         File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER);
         SpecsIo.deleteFolderContents(tempFolder, true);
 
-        getApp().write(tempFolder);
+        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+
+        getApp().write(tempFolder, flattenFolders);
+
+        // For all Translation Units, collect new destination folders
+        List<File> srcFolders = getApp().getTranslationUnits().stream()
+                .map(tu -> tu.getDestinationFolder(tempFolder, flattenFolders))
+                .collect(Collectors.toList());
 
         // TODO: When separation of src/include is done, take it into account here
-        List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
+        // List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         List<File> includeFolders = srcFolders;
 
         // Copy current options
