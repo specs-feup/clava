@@ -65,7 +65,6 @@ public class FloatingLiteralParser extends AClangNodeParser<FloatingLiteral> {
         String dumpLiteral = parser.apply(StringParsers::parseWord);
 
         String number = getSourceLiteral(node).orElse(dumpLiteral);
-
         // System.out.println("DUMP FLOAT:" + number);
 
         // Optional<String> source = location.getSource();
