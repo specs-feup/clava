@@ -414,4 +414,24 @@ public class TranslationUnit extends ClavaNode {
         return getRelativePath(getFile(), sourcePath);
     }
 
+    public File getDestinationFolder(File baseFolder, boolean flattenFolder) {
+        if (flattenFolder) {
+            return baseFolder;
+        }
+
+        if (!getSourcePath().isPresent()) {
+            return baseFolder;
+        }
+
+        File sourcePath = getSourcePath().get();
+        File sourceFolder = sourcePath.isDirectory() ? sourcePath : sourcePath.getParentFile();
+
+        if (sourceFolder == null) {
+            return baseFolder;
+        }
+
+        // If parent name is not null, create destination folder that mimics original input source
+        return SpecsIo.mkdir(new File(baseFolder, sourceFolder.getName()));
+    }
+
 }
