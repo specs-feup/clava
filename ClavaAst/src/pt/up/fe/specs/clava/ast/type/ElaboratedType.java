@@ -16,12 +16,29 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
+
+import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
+/**
+ * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name,
+ * e.g., N::M::type, or both.
+ * 
+ * <p>
+ * This type is used to keep track of a type name as written in the source code, including tag keywords and any
+ * nested-name-specifiers. The type itself is always "sugar", used to express what was written in the source code but
+ * containing no additional semantic information.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class ElaboratedType extends TypeWithKeyword {
+
+    // private static final ClassSet<Type> BARE_TYPE_CLASSES = ClassSet.newInstance(RecordType.class);
 
     public ElaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
             Type namedType) {
@@ -53,6 +70,23 @@ public class ElaboratedType extends TypeWithKeyword {
 
     @Override
     public String getCode(String name) {
+        // HACK Set of Type classes whose .getCode() is not working properly, using bare type
+
+        // System.out.println("ELABORATED:" + namedType);
+        // if (BARE_TYPE_CLASSES.contains(namedType)) {
+        // String bareType = getBareType();
+        //
+        // if (name == null) {
+        // return bareType;
+        // }
+        //
+        // return bareType + " " + name;
+        // }
+
+        // If named type is a TemplateSpecializationType, return its code
+        // Return code of the desugared version
+        // return getNamedType().getCode(name);
+
         String bareType = getBareType();
 
         // HACK
@@ -63,15 +97,30 @@ public class ElaboratedType extends TypeWithKeyword {
         // System.out.println("AFTER:" + bareType);
         // }
 
+        // If named type has template arguments, update them
+        Type namedType = getNamedType();
+        if (namedType.hasUpdatedTemplateArgTypes()) {
+            int startIndex = bareType.indexOf('<');
+            int endIndex = bareType.lastIndexOf('>');
+            Preconditions.checkArgument(startIndex != -1 && endIndex != -1,
+                    "Named type has template arguments, expected bare type to have them too: " + bareType);
+
+            String templateArgs = namedType.getTemplateArgTypes().stream()
+                    .map(Type::getCode)
+                    .collect(Collectors.joining(", "));
+            bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
+        }
+
         if (name == null) {
             return bareType;
         }
 
         return bareType + " " + name;
+
     }
 
     @Override
     public Type desugar() {
-        return getNamedType().desugar();
+        return getNamedType();
     }
 }

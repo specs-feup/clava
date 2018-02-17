@@ -13,8 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -47,10 +50,18 @@ public class RecordType extends TagType {
 
     @Override
     public String getCode(String name) {
+        // ClavaLog.warning("RecordType.getCode() is not working properly yet");
+
+        String baseType = getRecordName();
+        // TagKind tagKind = getTagKind();
+        // if (tagKind == TagKind.STRUCT || tagKind == TagKind.UNION || tagKind == TagKind.ENUM) {
+        // baseType = tagKind.getCode() + " " + baseType;
+        // }
+
         String var = name == null ? "" : " " + name;
 
         // return getBareType() + var;
-        return getRecordName() + var;
+        return baseType + var;
 
         // TODO Needs to add class/struct/union?
         /*
@@ -70,6 +81,37 @@ public class RecordType extends TagType {
     @Override
     public String toContentString() {
         return super.toContentString() + ", record Name: " + recordName;
+    }
+
+    public String getNamespace() {
+        // Extract namespace from record name
+        String namespace = recordName;
+
+        // Drop template parameters
+        int indexOfTemplateArgs = recordName.indexOf('<');
+        if (indexOfTemplateArgs != -1) {
+            namespace = recordName.substring(0, indexOfTemplateArgs);
+        }
+
+        int lastIndexOfColon = namespace.lastIndexOf(':');
+        if (lastIndexOfColon == -1) {
+            // No namespace
+            return "";
+        }
+
+        Preconditions.checkArgument(lastIndexOfColon != 0 && namespace.charAt(lastIndexOfColon - 1) == ':',
+                "Expected two colons: " + namespace);
+
+        return namespace.substring(0, lastIndexOfColon - 1);
+
+        // System.out.println("RECORD NAME:" + recordName);
+        // System.out.println("DECL INFO:" + getDeclInfo());
+        // System.out.println("TYPE INFO:" + getInfo());
+
+    }
+
+    public List<String> getNamespaceElements() {
+        return Arrays.asList(getNamespace().split("::"));
     }
 
 }
