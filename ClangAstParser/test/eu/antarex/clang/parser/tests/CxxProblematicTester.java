@@ -58,4 +58,9 @@ public class CxxProblematicTester {
         new CxxTester("problematic/implicit_reference.cpp").test();
     }
 
+    @Test
+    public void testSortedId() {
+        new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").test();
+    }
+
 }
