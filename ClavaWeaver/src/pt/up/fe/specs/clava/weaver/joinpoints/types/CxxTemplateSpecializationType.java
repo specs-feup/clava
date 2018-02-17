@@ -13,8 +13,12 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
+import java.util.List;
+
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATemplateSpecializationType;
@@ -60,11 +64,15 @@ public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
 
     @Override
     public AType getFirstArgTypeImpl() {
-        if (templateSpecializationType.getTemplateArgumetTypes().isEmpty()) {
+        ClavaLog.deprecated(
+                "$templateSpecializationType.firstArgType is deprecated, please use $type.templateArgTypes");
+
+        List<Type> templateArgTypes = templateSpecializationType.getTemplateArgTypes();
+        if (templateArgTypes.isEmpty()) {
             return null;
         }
 
-        return (AType) CxxJoinpoints.create(templateSpecializationType.getTemplateArgumetTypes().get(0), this);
+        return (AType) CxxJoinpoints.create(templateArgTypes.get(0), this);
     }
 
 }

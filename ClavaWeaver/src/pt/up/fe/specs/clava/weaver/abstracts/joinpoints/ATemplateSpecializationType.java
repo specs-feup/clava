@@ -210,6 +210,15 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Get value on attribute templateArgTypesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AType[] getTemplateArgTypesArrayImpl() {
+        return this.aType.getTemplateArgTypesArrayImpl();
+    }
+
+    /**
      * Get value on attribute hasSugar
      * @return the attribute's value
      */
@@ -252,6 +261,13 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public AType getUnwrapImpl() {
         return this.aType.getUnwrapImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defTemplateArgTypesImpl(AType[] value) {
+        this.aType.defTemplateArgTypesImpl(value);
     }
 
     /**
@@ -353,6 +369,25 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
+     */
+    @Override
+    public void setTemplateArgTypesImpl(AType[] templateArgTypes) {
+        this.aType.setTemplateArgTypesImpl(templateArgTypes);
+    }
+
+    /**
+     * Sets a single template argument type of a template type
+     * @param index 
+     * @param templateArgType 
+     */
+    @Override
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+        this.aType.setTemplateArgTypeImpl(index, templateArgType);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -398,6 +433,13 @@ public abstract class ATemplateSpecializationType extends AType {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "templateArgTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -467,6 +509,7 @@ public abstract class ATemplateSpecializationType extends AType {
         ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGS("templateArgs"),
+        TEMPLATEARGTYPES("templateArgTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),

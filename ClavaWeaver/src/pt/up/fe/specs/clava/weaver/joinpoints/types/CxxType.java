@@ -13,6 +13,10 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -125,4 +129,30 @@ public class CxxType extends AType {
         return !type.hasParent();
     }
 
+    @Override
+    public AType[] getTemplateArgTypesArrayImpl() {
+        return type.getTemplateArgTypes().stream()
+                .map(argType -> (AType) CxxJoinpoints.create(argType, this))
+                .toArray(size -> new AType[size]);
+
+    }
+
+    @Override
+    public void defTemplateArgTypesImpl(AType[] value) {
+        List<Type> argTypes = Arrays.stream(value)
+                .map(aType -> (Type) aType.getNode())
+                .collect(Collectors.toList());
+
+        type.setTemplateArgTypes(argTypes);
+    }
+
+    @Override
+    public void setTemplateArgTypesImpl(AType[] templateArgTypes) {
+        defTemplateArgTypesImpl(templateArgTypes);
+    }
+
+    @Override
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+        type.setTemplateArgType(index, (Type) templateArgType.getNode());
+    }
 }

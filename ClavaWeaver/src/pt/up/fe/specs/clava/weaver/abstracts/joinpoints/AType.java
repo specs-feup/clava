@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -230,6 +231,48 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute templateArgTypes
+     * @return the attribute's value
+     */
+    public abstract AType[] getTemplateArgTypesArrayImpl();
+
+    /**
+     * Get value on attribute templateArgTypes
+     * @return the attribute's value
+     */
+    public Bindings getTemplateArgTypesImpl() {
+        AType[] aTypeArrayImpl0 = getTemplateArgTypesArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute templateArgTypes
+     * @return the attribute's value
+     */
+    public final Object getTemplateArgTypes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgTypes", Optional.empty());
+        	}
+        	Bindings result = this.getTemplateArgTypesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgTypes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "templateArgTypes", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defTemplateArgTypesImpl(AType[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def templateArgTypes with type AType not implemented ");
+    }
+
+    /**
      * Get value on attribute hasSugar
      * @return the attribute's value
      */
@@ -353,6 +396,60 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
+     */
+    public void setTemplateArgTypesImpl(AType[] templateArgTypes) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgTypes not implemented ");
+    }
+
+    /**
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
+     */
+    public final void setTemplateArgTypes(AType[] templateArgTypes) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgTypes", this, Optional.empty(), templateArgTypes);
+        	}
+        	this.setTemplateArgTypesImpl(templateArgTypes);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgTypes", this, Optional.empty(), templateArgTypes);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setTemplateArgTypes", e);
+        }
+    }
+
+    /**
+     * Sets a single template argument type of a template type
+     * @param index 
+     * @param templateArgType 
+     */
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgType not implemented ");
+    }
+
+    /**
+     * Sets a single template argument type of a template type
+     * @param index 
+     * @param templateArgType 
+     */
+    public final void setTemplateArgType(Integer index, AType templateArgType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
+        	}
+        	this.setTemplateArgTypeImpl(index, templateArgType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setTemplateArgType", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -372,6 +469,13 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "templateArgTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -390,6 +494,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("elementType");
         attributes.add("hasTemplateArgs");
         attributes.add("templateArgs");
+        attributes.add("templateArgTypes");
         attributes.add("hasSugar");
         attributes.add("desugar");
         attributes.add("isBuiltin");
@@ -411,6 +516,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
+        actions.add("void setTemplateArgTypes(type[])");
+        actions.add("void setTemplateArgType(Integer, type)");
     }
 
     /**
@@ -433,6 +540,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGS("templateArgs"),
+        TEMPLATEARGTYPES("templateArgTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),

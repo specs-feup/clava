@@ -354,6 +354,10 @@
 		<attribute name="elementType" type="joinpoint" />
 		<attribute name="hasTemplateArgs" type="Boolean" />
 		<attribute name="templateArgs" type="String[]" />
+		<attribute name="templateArgTypes" type="type[]">
+		 	<!-- <def/> -->
+			<def type="type[]"/>
+		</attribute>		
 		<attribute name="hasSugar" type="Boolean" />
 		<attribute name="desugar" type="joinpoint" />
 		<attribute name="isBuiltin" type="Boolean" />
