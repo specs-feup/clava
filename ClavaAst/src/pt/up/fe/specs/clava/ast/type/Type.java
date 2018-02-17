@@ -118,6 +118,43 @@ public abstract class Type extends ClavaNode {
         return desugar().getTemplateArgs();
     }
 
+    public List<Type> getTemplateArgTypes() {
+        if (!hasSugar()) {
+            return Collections.emptyList();
+        }
+
+        return desugar().getTemplateArgTypes();
+    }
+
+    /**
+     * Sets all argument types of the template.
+     * 
+     * @param newTemplateArgTypes
+     */
+    public void setTemplateArgTypes(List<Type> newTemplateArgTypes) {
+        // If no sugar, do nothing
+        if (!hasSugar()) {
+            return;
+        }
+
+        desugar().setTemplateArgTypes(newTemplateArgTypes);
+    }
+
+    /**
+     * Sets a single argument type of the template. Cannot use an index larger than the number of original arguments.
+     * 
+     * @param index
+     * @param newTemplateArgType
+     */
+    public void setTemplateArgType(int index, Type newTemplateArgType) {
+        // If no sugar, do nothing
+        if (!hasSugar()) {
+            return;
+        }
+
+        desugar().setTemplateArgType(index, newTemplateArgType);
+    }
+
     /**
      *
      *
@@ -125,6 +162,18 @@ public abstract class Type extends ClavaNode {
      */
     public boolean hasTemplateArgs() {
         return !getTemplateArgs().isEmpty();
+    }
+
+    public boolean hasTemplateArgTypes() {
+        return !getTemplateArgTypes().isEmpty();
+    }
+
+    /**
+     * 
+     * @return true if this type updated its template argument types, false otherwise
+     */
+    public boolean hasUpdatedTemplateArgTypes() {
+        return false;
     }
 
     public boolean hasSugar() {
