@@ -422,9 +422,9 @@ public class ClangDataParsers {
             qualifiers.add(Qualifier.RESTRICT);
         }
 
-        // if (parser.apply(ClangGenericParsers::checkWord, "__global")) {
-        // qualifiers.add(Qualifier.GLOBAL);
-        // }
+        if (parser.apply(ClangGenericParsers::checkWord, "__global")) {
+            qualifiers.add(Qualifier.GLOBAL);
+        }
 
         return new ParserResult<>(parser.getCurrentString(), qualifiers);
 

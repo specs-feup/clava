@@ -44,6 +44,7 @@ public class QualTypeParser extends AClangNodeParser<QualType> {
         //
         // 'const char' const
         // 'const char *__restrict' __restrict
+        // 'const __global int' const __global
 
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
 
