@@ -19,33 +19,44 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TemplateArgumentType extends TemplateArgument {
 
-    private final List<String> type;
+    private final List<String> stringType;
+    private Type type;
 
     public TemplateArgumentType(List<String> type, ClavaNodeInfo nodeInfo) {
         super(nodeInfo, Collections.emptyList());
 
-        this.type = type;
+        this.stringType = type;
+        type = null;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TemplateArgumentType(type, getInfo());
+        return new TemplateArgumentType(stringType, getInfo());
     }
 
-    public List<String> getType() {
+    public List<String> getTypeString() {
+        return stringType;
+    }
+
+    public Type getType() {
         return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Override
     public String toContentString() {
-        return getType().stream().collect(Collectors.joining(":"));
+        return getTypeString().stream().collect(Collectors.joining(":"));
     }
 
     @Override
     public String getCode() {
-        return type.get(0);
+        return stringType.get(0);
     }
 }
