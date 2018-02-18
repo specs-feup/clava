@@ -62,7 +62,8 @@ public class TemplateSpecializationType extends Type {
 
     @Override
     protected ClavaNode copyPrivate() {
-        TemplateSpecializationType type = new TemplateSpecializationType(templateName, templateArgumentsStrings, isTypeAlias,
+        TemplateSpecializationType type = new TemplateSpecializationType(templateName, templateArgumentsStrings,
+                isTypeAlias,
                 getTypeData(),
                 getInfo(), Collections.emptyList());
 
@@ -149,7 +150,8 @@ public class TemplateSpecializationType extends Type {
     }
 
     public List<TemplateArgument> getTemplateArguments() {
-        return SpecsCollections.cast(getChildren().subList(0, getTemplateArgumentStrings().size()), TemplateArgument.class);
+        return SpecsCollections.cast(getChildren().subList(0, getTemplateArgumentStrings().size()),
+                TemplateArgument.class);
     }
 
     public <T extends TemplateArgument> List<T> getTemplateArguments(Class<T> templateArgumentClass) {
@@ -279,7 +281,7 @@ public class TemplateSpecializationType extends Type {
         // System.out.println("NEW TYPES:" + argsTypes);
         // int numExpectedArgTypes = templateArguments.size();
         int numExpectedArgTypes = typeTemplateArguments.size();
-        System.out.println("TEMPLATE ARGS:" + getTemplateArguments());
+        // System.out.println("TEMPLATE ARGS:" + getTemplateArguments());
         Preconditions.checkArgument(argsTypes.size() == numExpectedArgTypes,
                 "Expected number of template argument types (" + argsTypes.size()
                         + ") to be the same as the number of template nodes of kind'type' (" + numExpectedArgTypes
@@ -311,7 +313,8 @@ public class TemplateSpecializationType extends Type {
                     .toArray();
 
             IntStream.range(0, numExpectedArgTypes)
-                    .forEach(index -> templateArgumentsStrings.set(indexesToUpdate[index], argsTypes.get(index).getCode()));
+                    .forEach(index -> templateArgumentsStrings.set(indexesToUpdate[index],
+                            argsTypes.get(index).getCode()));
 
         }
     }

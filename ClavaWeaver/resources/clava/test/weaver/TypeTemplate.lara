@@ -1,0 +1,62 @@
+import clava.ClavaJoinPoints;
+
+aspectdef Test
+
+   var floatType = ClavaJoinPoints.builtinType("float");
+   var intType = ClavaJoinPoints.builtinType("int");
+   var doubleType = ClavaJoinPoints.builtinType("double");
+
+
+	//// Vector
+   
+	// Get template argument types
+	select file.vardecl{"W"} end
+	apply
+		println("Original template args: " + $vardecl.type.templateArgsStrings);		
+		//var $firstTemplateArg = $vardecl.type.templateArgsTypes[0];
+		//if($firstTemplateArg !== undefined) {
+		//	println("First template arg type: " + $firstTemplateArg.code);		
+		//}
+		
+	end
+
+	// Set a single template argument
+	select file.vardecl{"W"} end
+	apply
+		$vardecl.type.setTemplateArgsTypes(0, floatType);
+		println("After setting float: " + $vardecl.type.templateArgsStrings);		
+	end
+
+	// Set all template arguments
+	select file.vardecl{"W"} end
+	apply
+		//$vardecl.type.setTemplateArgTypes([intType, floatType]);
+		$vardecl.type.templateArgsTypes = [intType];
+		println("After setting int with array: " + $vardecl.type.templateArgsStrings);		
+	end
+	
+	
+	
+	//// Map
+   
+	// Get template argument types
+	select file.vardecl{"map"} end
+	apply
+		println("Original template args: " + $vardecl.type.templateArgsStrings);				
+	end
+
+	// Set a single template argument
+	select file.vardecl{"map"} end
+	apply
+		$vardecl.type.setTemplateArgsTypes(1, doubleType);
+		println("After second arg to double: " + $vardecl.type.templateArgsStrings);		
+	end
+
+	// Set all template arguments
+	select file.vardecl{"map"} end
+	apply
+		$vardecl.type.templateArgsTypes = [doubleType, intType];
+		println("After setting with array [double, int]: " + $vardecl.type.templateArgsStrings);		
+	end
+	
+end

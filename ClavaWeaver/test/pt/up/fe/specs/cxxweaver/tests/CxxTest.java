@@ -170,4 +170,9 @@ public class CxxTest {
     public void testPragmaClavaAttribute() {
         newTester().test("PragmaAttribute.lara", "pragma_attribute.cpp");
     }
+
+    @Test
+    public void testTypeTemplate() {
+        newTester().test("TypeTemplate.lara", "type_template.cpp");
+    }
 }

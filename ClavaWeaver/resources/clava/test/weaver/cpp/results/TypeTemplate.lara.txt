@@ -1,0 +1,6 @@
+Original template args: double
+After setting float: float
+After setting int with array: int
+Original template args: int,float
+After second arg to double: int,double
+After setting with array [double, int]: double,int
