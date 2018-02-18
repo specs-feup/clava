@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
@@ -34,7 +35,7 @@ import pt.up.fe.specs.util.utilities.StringLines;
 public class CompoundStmt extends Stmt {
 
     // true if this CompoundStmt initially did not have curly braces {}
-    private final boolean isNaked;
+    private boolean isNaked;
 
     public static CompoundStmt newNakedInstance(ClavaNodeInfo info, Collection<? extends Stmt> children) {
         return new CompoundStmt(true, info, children);
@@ -163,5 +164,18 @@ public class CompoundStmt extends Stmt {
     @Override
     public boolean isAggregateStmt() {
         return true;
+    }
+
+    public boolean isNaked() {
+        return isNaked;
+    }
+
+    public void setNaked(boolean isNaked) {
+        if (isNaked && getStatements().size() > 1) {
+            ClavaLog.warning("Compount statements with more than one statement can't be naked");
+            return;
+        }
+
+        this.isNaked = isNaked;
     }
 }
