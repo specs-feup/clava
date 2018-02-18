@@ -484,8 +484,8 @@ public class ClavaParser implements AutoCloseable {
                 .map(typeId -> converter.getOriginalTypes().get(typeId))
                 .collect(Collectors.toList());
 
-        // Set
-        templateType.setArgsTypes(argTypes);
+        // Set template argument types, but without changing the string template arguments
+        templateType.setArgsTypes(argTypes, false);
     }
 
     private void parseDelayedTypes() {
