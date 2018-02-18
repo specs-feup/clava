@@ -330,11 +330,11 @@
 	</action>
 	
 	<!-- TYPE -->
-	<action name="setTemplateArgTypes" class="type" tooltip="Sets the template argument types of a template type">
+	<action name="setTemplateArgsTypes" class="type" tooltip="Sets the template argument types of a template type">
 		<parameter name="templateArgTypes" type="type[]" />
 	</action>
 	
-	<action name="setTemplateArgType" class="type" tooltip="Sets a single template argument type of a template type">
+	<action name="setTemplateArgsTypes" class="type" tooltip="Sets a single template argument type of a template type">
 		<parameter name="index" type="Integer" />
 		<parameter name="templateArgType" type="type" />
 	</action>

@@ -196,80 +196,80 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute templateArgs
+     * Get value on attribute templateArgsStrings
      * @return the attribute's value
      */
-    public abstract String[] getTemplateArgsArrayImpl();
+    public abstract String[] getTemplateArgsStringsArrayImpl();
 
     /**
-     * Get value on attribute templateArgs
+     * Get value on attribute templateArgsStrings
      * @return the attribute's value
      */
-    public Bindings getTemplateArgsImpl() {
-        String[] stringArrayImpl0 = getTemplateArgsArrayImpl();
+    public Bindings getTemplateArgsStringsImpl() {
+        String[] stringArrayImpl0 = getTemplateArgsStringsArrayImpl();
         Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * Get value on attribute templateArgs
+     * Get value on attribute templateArgsStrings
      * @return the attribute's value
      */
-    public final Object getTemplateArgs() {
+    public final Object getTemplateArgsStrings() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgs", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgsStrings", Optional.empty());
         	}
-        	Bindings result = this.getTemplateArgsImpl();
+        	Bindings result = this.getTemplateArgsStringsImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgs", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgsStrings", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "templateArgs", e);
+        	throw new AttributeException(get_class(), "templateArgsStrings", e);
         }
     }
 
     /**
-     * Get value on attribute templateArgTypes
+     * Get value on attribute templateArgsTypes
      * @return the attribute's value
      */
-    public abstract AType[] getTemplateArgTypesArrayImpl();
+    public abstract AType[] getTemplateArgsTypesArrayImpl();
 
     /**
-     * Get value on attribute templateArgTypes
+     * Get value on attribute templateArgsTypes
      * @return the attribute's value
      */
-    public Bindings getTemplateArgTypesImpl() {
-        AType[] aTypeArrayImpl0 = getTemplateArgTypesArrayImpl();
+    public Bindings getTemplateArgsTypesImpl() {
+        AType[] aTypeArrayImpl0 = getTemplateArgsTypesArrayImpl();
         Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * Get value on attribute templateArgTypes
+     * Get value on attribute templateArgsTypes
      * @return the attribute's value
      */
-    public final Object getTemplateArgTypes() {
+    public final Object getTemplateArgsTypes() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgTypes", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgsTypes", Optional.empty());
         	}
-        	Bindings result = this.getTemplateArgTypesImpl();
+        	Bindings result = this.getTemplateArgsTypesImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgTypes", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "templateArgsTypes", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "templateArgTypes", e);
+        	throw new AttributeException(get_class(), "templateArgsTypes", e);
         }
     }
 
     /**
      * 
      */
-    public void defTemplateArgTypesImpl(AType[] value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def templateArgTypes with type AType not implemented ");
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def templateArgsTypes with type AType not implemented ");
     }
 
     /**
@@ -399,25 +399,25 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
-    public void setTemplateArgTypesImpl(AType[] templateArgTypes) {
-        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgTypes not implemented ");
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
     }
 
     /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
-    public final void setTemplateArgTypes(AType[] templateArgTypes) {
+    public final void setTemplateArgsTypes(AType[] templateArgTypes) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgTypes", this, Optional.empty(), templateArgTypes);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), templateArgTypes);
         	}
-        	this.setTemplateArgTypesImpl(templateArgTypes);
+        	this.setTemplateArgsTypesImpl(templateArgTypes);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgTypes", this, Optional.empty(), templateArgTypes);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), templateArgTypes);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setTemplateArgTypes", e);
+        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
         }
     }
 
@@ -426,8 +426,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
-        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgType not implemented ");
+    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
     }
 
     /**
@@ -435,17 +435,17 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public final void setTemplateArgType(Integer index, AType templateArgType) {
+    public final void setTemplateArgsTypes(Integer index, AType templateArgType) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), index, templateArgType);
         	}
-        	this.setTemplateArgTypeImpl(index, templateArgType);
+        	this.setTemplateArgsTypesImpl(index, templateArgType);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), index, templateArgType);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setTemplateArgType", e);
+        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
         }
     }
 
@@ -469,9 +469,9 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "templateArgTypes": {
+        case "templateArgsTypes": {
         	if(value instanceof AType[]){
-        		this.defTemplateArgTypesImpl((AType[])value);
+        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -493,8 +493,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("arraySize");
         attributes.add("elementType");
         attributes.add("hasTemplateArgs");
-        attributes.add("templateArgs");
-        attributes.add("templateArgTypes");
+        attributes.add("templateArgsStrings");
+        attributes.add("templateArgsTypes");
         attributes.add("hasSugar");
         attributes.add("desugar");
         attributes.add("isBuiltin");
@@ -516,8 +516,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void setTemplateArgTypes(type[])");
-        actions.add("void setTemplateArgType(Integer, type)");
+        actions.add("void setTemplateArgsTypes(type[])");
+        actions.add("void setTemplateArgsTypes(Integer, type)");
     }
 
     /**
@@ -539,8 +539,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         ARRAYSIZE("arraySize"),
         ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
-        TEMPLATEARGS("templateArgs"),
-        TEMPLATEARGTYPES("templateArgTypes"),
+        TEMPLATEARGSSTRINGS("templateArgsStrings"),
+        TEMPLATEARGSTYPES("templateArgsTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),

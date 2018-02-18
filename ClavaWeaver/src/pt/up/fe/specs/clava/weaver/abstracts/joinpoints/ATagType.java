@@ -115,21 +115,21 @@ public abstract class ATagType extends AType {
     }
 
     /**
-     * Get value on attribute templateArgsArrayImpl
+     * Get value on attribute templateArgsStringsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String[] getTemplateArgsArrayImpl() {
-        return this.aType.getTemplateArgsArrayImpl();
+    public String[] getTemplateArgsStringsArrayImpl() {
+        return this.aType.getTemplateArgsStringsArrayImpl();
     }
 
     /**
-     * Get value on attribute templateArgTypesArrayImpl
+     * Get value on attribute templateArgsTypesArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AType[] getTemplateArgTypesArrayImpl() {
-        return this.aType.getTemplateArgTypesArrayImpl();
+    public AType[] getTemplateArgsTypesArrayImpl() {
+        return this.aType.getTemplateArgsTypesArrayImpl();
     }
 
     /**
@@ -180,8 +180,8 @@ public abstract class ATagType extends AType {
     /**
      * 
      */
-    public void defTemplateArgTypesImpl(AType[] value) {
-        this.aType.defTemplateArgTypesImpl(value);
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
@@ -287,8 +287,8 @@ public abstract class ATagType extends AType {
      * @param templateArgTypes 
      */
     @Override
-    public void setTemplateArgTypesImpl(AType[] templateArgTypes) {
-        this.aType.setTemplateArgTypesImpl(templateArgTypes);
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        this.aType.setTemplateArgsTypesImpl(templateArgTypes);
     }
 
     /**
@@ -297,8 +297,8 @@ public abstract class ATagType extends AType {
      * @param templateArgType 
      */
     @Override
-    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
-        this.aType.setTemplateArgTypeImpl(index, templateArgType);
+    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
+        this.aType.setTemplateArgsTypesImpl(index, templateArgType);
     }
 
     /**
@@ -347,9 +347,9 @@ public abstract class ATagType extends AType {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
-        case "templateArgTypes": {
+        case "templateArgsTypes": {
         	if(value instanceof AType[]){
-        		this.defTemplateArgTypesImpl((AType[])value);
+        		this.defTemplateArgsTypesImpl((AType[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -416,8 +416,8 @@ public abstract class ATagType extends AType {
         ARRAYSIZE("arraySize"),
         ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
-        TEMPLATEARGS("templateArgs"),
-        TEMPLATEARGTYPES("templateArgTypes"),
+        TEMPLATEARGSSTRINGS("templateArgsStrings"),
+        TEMPLATEARGSTYPES("templateArgsTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),

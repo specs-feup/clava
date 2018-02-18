@@ -4979,16 +4979,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "type[]",
-                              "name": "templateArgTypes"
+                              "type": "String[]",
+                              "name": "templateArgsStrings"
                            }]
                },
                {
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
-                              "name": "templateArgs"
+                              "type": "type[]",
+                              "name": "templateArgsTypes"
                            }]
                },
                {
@@ -5311,11 +5311,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the template argument types of a template type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setTemplateArgsTypes"
+                           },
+                           {
+                              "type": "type[]",
+                              "name": "templateArgTypes",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets a single template argument type of a template type",
                   "children": [
                            {
                               "type": "void",
-                              "name": "setTemplateArgType"
+                              "name": "setTemplateArgsTypes"
                            },
                            {
                               "type": "Integer",
@@ -5325,20 +5339,6 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the template argument types of a template type",
-                  "children": [
-                           {
-                              "type": "void",
-                              "name": "setTemplateArgTypes"
-                           },
-                           {
-                              "type": "type[]",
-                              "name": "templateArgTypes",
                               "defaultValue": ""
                            }]
                },
@@ -7626,16 +7626,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "type[]",
-                              "name": "templateArgTypes"
+                              "type": "String[]",
+                              "name": "templateArgsStrings"
                            }]
                },
                {
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
-                              "name": "templateArgs"
+                              "type": "type[]",
+                              "name": "templateArgsTypes"
                            }]
                },
                {
@@ -7972,11 +7972,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the template argument types of a template type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setTemplateArgsTypes"
+                           },
+                           {
+                              "type": "type[]",
+                              "name": "templateArgTypes",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets a single template argument type of a template type",
                   "children": [
                            {
                               "type": "void",
-                              "name": "setTemplateArgType"
+                              "name": "setTemplateArgsTypes"
                            },
                            {
                               "type": "Integer",
@@ -7986,20 +8000,6 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the template argument types of a template type",
-                  "children": [
-                           {
-                              "type": "void",
-                              "name": "setTemplateArgTypes"
-                           },
-                           {
-                              "type": "type[]",
-                              "name": "templateArgTypes",
                               "defaultValue": ""
                            }]
                },
@@ -18837,16 +18837,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "type[]",
-                              "name": "templateArgTypes"
+                              "type": "String[]",
+                              "name": "templateArgsStrings"
                            }]
                },
                {
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
-                              "name": "templateArgs"
+                              "type": "type[]",
+                              "name": "templateArgsTypes"
                            }]
                },
                {
@@ -19169,11 +19169,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the template argument types of a template type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setTemplateArgsTypes"
+                           },
+                           {
+                              "type": "type[]",
+                              "name": "templateArgTypes",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets a single template argument type of a template type",
                   "children": [
                            {
                               "type": "void",
-                              "name": "setTemplateArgType"
+                              "name": "setTemplateArgsTypes"
                            },
                            {
                               "type": "Integer",
@@ -19183,20 +19197,6 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the template argument types of a template type",
-                  "children": [
-                           {
-                              "type": "void",
-                              "name": "setTemplateArgTypes"
-                           },
-                           {
-                              "type": "type[]",
-                              "name": "templateArgTypes",
                               "defaultValue": ""
                            }]
                },
@@ -19503,16 +19503,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "type[]",
-                              "name": "templateArgTypes"
+                              "type": "String[]",
+                              "name": "templateArgsStrings"
                            }]
                },
                {
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
-                              "name": "templateArgs"
+                              "type": "type[]",
+                              "name": "templateArgsTypes"
                            }]
                },
                {
@@ -19835,11 +19835,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the template argument types of a template type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setTemplateArgsTypes"
+                           },
+                           {
+                              "type": "type[]",
+                              "name": "templateArgTypes",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets a single template argument type of a template type",
                   "children": [
                            {
                               "type": "void",
-                              "name": "setTemplateArgType"
+                              "name": "setTemplateArgsTypes"
                            },
                            {
                               "type": "Integer",
@@ -19849,20 +19863,6 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the template argument types of a template type",
-                  "children": [
-                           {
-                              "type": "void",
-                              "name": "setTemplateArgTypes"
-                           },
-                           {
-                              "type": "type[]",
-                              "name": "templateArgTypes",
                               "defaultValue": ""
                            }]
                },
@@ -20137,16 +20137,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "type[]",
-                              "name": "templateArgTypes"
+                              "type": "String[]",
+                              "name": "templateArgsStrings"
                            }]
                },
                {
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
-                              "name": "templateArgs"
+                              "type": "type[]",
+                              "name": "templateArgsTypes"
                            }]
                },
                {
@@ -20469,11 +20469,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the template argument types of a template type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setTemplateArgsTypes"
+                           },
+                           {
+                              "type": "type[]",
+                              "name": "templateArgTypes",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets a single template argument type of a template type",
                   "children": [
                            {
                               "type": "void",
-                              "name": "setTemplateArgType"
+                              "name": "setTemplateArgsTypes"
                            },
                            {
                               "type": "Integer",
@@ -20483,20 +20497,6 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the template argument types of a template type",
-                  "children": [
-                           {
-                              "type": "void",
-                              "name": "setTemplateArgTypes"
-                           },
-                           {
-                              "type": "type[]",
-                              "name": "templateArgTypes",
                               "defaultValue": ""
                            }]
                },

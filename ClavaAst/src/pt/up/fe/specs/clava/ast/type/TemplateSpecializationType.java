@@ -34,7 +34,7 @@ public class TemplateSpecializationType extends Type {
     private final String templateName;
     private final boolean isTypeAlias;
 
-    private List<String> templateArguments;
+    private List<String> templateArgumentsStrings;
     // private List<Type> templateArgumentTypes;
     private boolean hasUpdatedArgumentTypes;
 
@@ -53,7 +53,7 @@ public class TemplateSpecializationType extends Type {
         super(typeData, info, children);
 
         this.templateName = templateName;
-        this.templateArguments = templateArgsNames;
+        this.templateArgumentsStrings = templateArgsNames;
         this.isTypeAlias = isTypeAlias;
         // System.out.println("TEMPLATE ARG TYPES " + getInfo().getExtendedId() + ": CONSTRUCTOR (NULL)");
         // this.templateArgumentTypes = null;
@@ -62,7 +62,7 @@ public class TemplateSpecializationType extends Type {
 
     @Override
     protected ClavaNode copyPrivate() {
-        TemplateSpecializationType type = new TemplateSpecializationType(templateName, templateArguments, isTypeAlias,
+        TemplateSpecializationType type = new TemplateSpecializationType(templateName, templateArgumentsStrings, isTypeAlias,
                 getTypeData(),
                 getInfo(), Collections.emptyList());
 
@@ -80,7 +80,7 @@ public class TemplateSpecializationType extends Type {
 
     @Override
     public List<String> getTemplateArgumentStrings() {
-        return templateArguments;
+        return templateArgumentsStrings;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class TemplateSpecializationType extends Type {
         // }
 
         // Check if there are enough arguments
-        int argsNumber = templateArguments.size();
+        int argsNumber = templateArgumentsStrings.size();
         Preconditions.checkArgument(index < argsNumber, "Tried to set template argument type at index '" + index
                 + "', but template only has '" + argsNumber + "' template arguments.");
 
@@ -139,7 +139,7 @@ public class TemplateSpecializationType extends Type {
 
         // Set argument
         ((TemplateArgumentType) templateArgument).setType(newTemplateArgType);
-        templateArguments.set(index, newTemplateArgType.getCode());
+        templateArgumentsStrings.set(index, newTemplateArgType.getCode());
         // templateArgumentTypes.set(index, newTemplateArgType);
         hasUpdatedArgumentTypes = true;
     }
@@ -283,7 +283,7 @@ public class TemplateSpecializationType extends Type {
         Preconditions.checkArgument(argsTypes.size() == numExpectedArgTypes,
                 "Expected number of template argument types (" + argsTypes.size()
                         + ") to be the same as the number of template nodes of kind'type' (" + numExpectedArgTypes
-                        + ")\nTemplate arguments: " + templateArguments + "\nNew types:"
+                        + ")\nTemplate arguments: " + templateArgumentsStrings + "\nNew types:"
                         + argsTypes.stream().map(Type::getCode).collect(Collectors.joining(", ")));
         // templateArgumentTypes = argsTypes;
 
@@ -311,7 +311,7 @@ public class TemplateSpecializationType extends Type {
                     .toArray();
 
             IntStream.range(0, numExpectedArgTypes)
-                    .forEach(index -> templateArguments.set(indexesToUpdate[index], argsTypes.get(index).getCode()));
+                    .forEach(index -> templateArgumentsStrings.set(indexesToUpdate[index], argsTypes.get(index).getCode()));
 
         }
     }

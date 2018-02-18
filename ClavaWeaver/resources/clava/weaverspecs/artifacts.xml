@@ -356,8 +356,8 @@
 		<attribute name="arraySize" type="Integer" />
 		<attribute name="elementType" type="joinpoint" />
 		<attribute name="hasTemplateArgs" type="Boolean" />
-		<attribute name="templateArgs" type="String[]" />
-		<attribute name="templateArgTypes" type="type[]">
+		<attribute name="templateArgsStrings" type="String[]" />
+		<attribute name="templateArgsTypes" type="type[]">
 		 	<!-- <def/> -->
 			<def type="type[]"/>
 		</attribute>		
