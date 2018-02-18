@@ -79,7 +79,7 @@ public class CxxType extends AType {
 
     @Override
     public String[] getTemplateArgsArrayImpl() {
-        return type.getTemplateArgs().toArray(new String[0]);
+        return type.getTemplateArgumentStrings().toArray(new String[0]);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class CxxType extends AType {
 
     @Override
     public AType[] getTemplateArgTypesArrayImpl() {
-        return type.getTemplateArgTypes().stream()
+        return type.getTemplateArgumentTypes().stream()
                 .map(argType -> (AType) CxxJoinpoints.create(argType, this))
                 .toArray(size -> new AType[size]);
 
@@ -143,7 +143,7 @@ public class CxxType extends AType {
                 .map(aType -> (Type) aType.getNode())
                 .collect(Collectors.toList());
 
-        type.setTemplateArgTypes(argTypes);
+        type.setTemplateArgumentTypes(argTypes);
     }
 
     @Override
@@ -153,6 +153,6 @@ public class CxxType extends AType {
 
     @Override
     public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
-        type.setTemplateArgType(index, (Type) templateArgType.getNode());
+        type.setTemplateArgumentType(index, (Type) templateArgType.getNode());
     }
 }

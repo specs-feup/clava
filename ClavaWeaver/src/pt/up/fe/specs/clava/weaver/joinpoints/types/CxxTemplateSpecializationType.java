@@ -54,12 +54,12 @@ public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
 
     @Override
     public Integer getNumArgsImpl() {
-        return templateSpecializationType.getTemplateArgs().size();
+        return templateSpecializationType.getTemplateArgumentStrings().size();
     }
 
     @Override
     public String[] getArgsArrayImpl() {
-        return templateSpecializationType.getTemplateArgs().toArray(new String[0]);
+        return templateSpecializationType.getTemplateArgumentStrings().toArray(new String[0]);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
         ClavaLog.deprecated(
                 "$templateSpecializationType.firstArgType is deprecated, please use $type.templateArgTypes");
 
-        List<Type> templateArgTypes = templateSpecializationType.getTemplateArgTypes();
+        List<Type> templateArgTypes = templateSpecializationType.getTemplateArgumentTypes();
         if (templateArgTypes.isEmpty()) {
             return null;
         }

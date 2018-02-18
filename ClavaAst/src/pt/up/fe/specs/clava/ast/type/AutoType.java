@@ -48,4 +48,9 @@ public class AutoType extends Type {
 
         return "auto" + " " + name;
     }
+
+    @Override
+    protected Type desugarImpl() {
+        return getDeducedType();
+    }
 }

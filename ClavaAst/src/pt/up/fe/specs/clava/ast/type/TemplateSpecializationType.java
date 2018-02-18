@@ -79,12 +79,12 @@ public class TemplateSpecializationType extends Type {
     }
 
     @Override
-    public List<String> getTemplateArgs() {
+    public List<String> getTemplateArgumentStrings() {
         return templateArguments;
     }
 
     @Override
-    public List<Type> getTemplateArgTypes() {
+    public List<Type> getTemplateArgumentTypes() {
         return getTemplateArguments(TemplateArgumentType.class).stream()
                 .map(TemplateArgumentType::getType)
                 .collect(Collectors.toList());
@@ -96,19 +96,19 @@ public class TemplateSpecializationType extends Type {
         // return templateArgumentTypes;
     }
 
-    @Override
-    public void setTemplateArgTypes(List<Type> newTemplateArgTypes) {
-        setArgsTypes(newTemplateArgTypes);
-        // // Replace arguments types
-        // this.templateArgumentTypes = new ArrayList<>(newTemplateArgTypes);
-        //
-        // // Replace arguments
-        // this.templateArguments = newTemplateArgTypes.stream()
-        // .map(Type::getCode)
-        // .collect(Collectors.toList());
-        //
-        // hasUpdatedArgumentTypes = true;
-    }
+    // @Override
+    // public void setTemplateArgTypes(List<Type> newTemplateArgTypes) {
+    // setArgsTypes(newTemplateArgTypes);
+    // // // Replace arguments types
+    // // this.templateArgumentTypes = new ArrayList<>(newTemplateArgTypes);
+    // //
+    // // // Replace arguments
+    // // this.templateArguments = newTemplateArgTypes.stream()
+    // // .map(Type::getCode)
+    // // .collect(Collectors.toList());
+    // //
+    // // hasUpdatedArgumentTypes = true;
+    // }
 
     @Override
     public boolean hasUpdatedTemplateArgTypes() {
@@ -116,7 +116,7 @@ public class TemplateSpecializationType extends Type {
     }
 
     @Override
-    public void setTemplateArgType(int index, Type newTemplateArgType) {
+    public void setTemplateArgumentType(int index, Type newTemplateArgType) {
         // Check if template argument types are set type
         // if (templateArgumentTypes == null) {
         // ClavaLog.info(
@@ -149,7 +149,7 @@ public class TemplateSpecializationType extends Type {
     }
 
     public List<TemplateArgument> getTemplateArguments() {
-        return SpecsCollections.cast(getChildren().subList(0, getTemplateArgs().size()), TemplateArgument.class);
+        return SpecsCollections.cast(getChildren().subList(0, getTemplateArgumentStrings().size()), TemplateArgument.class);
     }
 
     public <T extends TemplateArgument> List<T> getTemplateArguments(Class<T> templateArgumentClass) {
@@ -164,7 +164,7 @@ public class TemplateSpecializationType extends Type {
             return Optional.empty();
         }
 
-        return Optional.of(getChild(Type.class, getTemplateArgs().size()));
+        return Optional.of(getChild(Type.class, getTemplateArgumentStrings().size()));
     }
 
     @Override
@@ -240,7 +240,7 @@ public class TemplateSpecializationType extends Type {
 
         code.append(templateName);
 
-        String templateArgs = getTemplateArgs().stream()
+        String templateArgs = getTemplateArgumentStrings().stream()
                 .collect(Collectors.joining(", ", "<", ">"));
         code.append(templateArgs);
         if (name != null) {
@@ -261,11 +261,12 @@ public class TemplateSpecializationType extends Type {
      * 
      * @param argsTypes
      */
-    public void setArgsTypes(List<Type> argsTypes) {
-        setArgsTypes(argsTypes, true);
+    @Override
+    public void setTemplateArgumentTypes(List<Type> argsTypes) {
+        setTemplateArgumentTypes(argsTypes, true);
     }
 
-    public void setArgsTypes(List<Type> argsTypes, boolean updateTemplateArgumentStrings) {
+    public void setTemplateArgumentTypes(List<Type> argsTypes, boolean updateTemplateArgumentStrings) {
         // System.out.println("TEMPLATE ARG TYPES " + getInfo().getExtendedId() + ": SET");
         // if (templateArgumentTypes != null) {
         // throw new RuntimeException("Expected argument types to be null");
@@ -278,7 +279,7 @@ public class TemplateSpecializationType extends Type {
         // System.out.println("NEW TYPES:" + argsTypes);
         // int numExpectedArgTypes = templateArguments.size();
         int numExpectedArgTypes = typeTemplateArguments.size();
-
+        System.out.println("TEMPLATE ARGS:" + getTemplateArguments());
         Preconditions.checkArgument(argsTypes.size() == numExpectedArgTypes,
                 "Expected number of template argument types (" + argsTypes.size()
                         + ") to be the same as the number of template nodes of kind'type' (" + numExpectedArgTypes

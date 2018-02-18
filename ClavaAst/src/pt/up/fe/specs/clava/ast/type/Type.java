@@ -110,20 +110,20 @@ public abstract class Type extends ClavaNode {
      *
      * @return
      */
-    public List<String> getTemplateArgs() {
+    public List<String> getTemplateArgumentStrings() {
         if (!hasSugar()) {
             return Collections.emptyList();
         }
 
-        return desugar().getTemplateArgs();
+        return desugar().getTemplateArgumentStrings();
     }
 
-    public List<Type> getTemplateArgTypes() {
+    public List<Type> getTemplateArgumentTypes() {
         if (!hasSugar()) {
             return Collections.emptyList();
         }
 
-        return desugar().getTemplateArgTypes();
+        return desugar().getTemplateArgumentTypes();
     }
 
     /**
@@ -131,13 +131,13 @@ public abstract class Type extends ClavaNode {
      * 
      * @param newTemplateArgTypes
      */
-    public void setTemplateArgTypes(List<Type> newTemplateArgTypes) {
+    public void setTemplateArgumentTypes(List<Type> newTemplateArgTypes) {
         // If no sugar, do nothing
         if (!hasSugar()) {
             return;
         }
 
-        desugar().setTemplateArgTypes(newTemplateArgTypes);
+        desugar().setTemplateArgumentTypes(newTemplateArgTypes);
     }
 
     /**
@@ -146,13 +146,13 @@ public abstract class Type extends ClavaNode {
      * @param index
      * @param newTemplateArgType
      */
-    public void setTemplateArgType(int index, Type newTemplateArgType) {
+    public void setTemplateArgumentType(int index, Type newTemplateArgType) {
         // If no sugar, do nothing
         if (!hasSugar()) {
             return;
         }
 
-        desugar().setTemplateArgType(index, newTemplateArgType);
+        desugar().setTemplateArgumentType(index, newTemplateArgType);
     }
 
     /**
@@ -161,11 +161,11 @@ public abstract class Type extends ClavaNode {
      * @return true if there are template arguments, false otherise
      */
     public boolean hasTemplateArgs() {
-        return !getTemplateArgs().isEmpty();
+        return !getTemplateArgumentStrings().isEmpty();
     }
 
     public boolean hasTemplateArgTypes() {
-        return !getTemplateArgTypes().isEmpty();
+        return !getTemplateArgumentTypes().isEmpty();
     }
 
     /**

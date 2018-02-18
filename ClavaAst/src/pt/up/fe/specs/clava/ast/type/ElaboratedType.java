@@ -105,7 +105,7 @@ public class ElaboratedType extends TypeWithKeyword {
             Preconditions.checkArgument(startIndex != -1 && endIndex != -1,
                     "Named type has template arguments, expected bare type to have them too: " + bareType);
 
-            String templateArgs = namedType.getTemplateArgTypes().stream()
+            String templateArgs = namedType.getTemplateArgumentTypes().stream()
                     .map(Type::getCode)
                     .collect(Collectors.joining(", "));
             bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
