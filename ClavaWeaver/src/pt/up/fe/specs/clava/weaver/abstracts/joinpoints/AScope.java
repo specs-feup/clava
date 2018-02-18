@@ -53,6 +53,36 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * true if the scope does not have curly braces
+     */
+    public abstract Boolean getNakedImpl();
+
+    /**
+     * true if the scope does not have curly braces
+     */
+    public final Object getNaked() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "naked", Optional.empty());
+        	}
+        	Boolean result = this.getNakedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "naked", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "naked", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defNakedImpl(Boolean value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def naked with type Boolean not implemented ");
+    }
+
+    /**
      * Method used by the lara interpreter to select stmts
      * @return 
      */
@@ -241,6 +271,32 @@ public abstract class AScope extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clear", e);
+        }
+    }
+
+    /**
+     * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
+     * @param isNaked 
+     */
+    public void setNakedImpl(Boolean isNaked) {
+        throw new UnsupportedOperationException(get_class()+": Action setNaked not implemented ");
+    }
+
+    /**
+     * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
+     * @param isNaked 
+     */
+    public final void setNaked(Boolean isNaked) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setNaked", this, Optional.empty(), isNaked);
+        	}
+        	this.setNakedImpl(isNaked);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setNaked", this, Optional.empty(), isNaked);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setNaked", e);
         }
     }
 
@@ -556,6 +612,13 @@ public abstract class AScope extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "naked": {
+        	if(value instanceof Boolean){
+        		this.defNakedImpl((Boolean)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -567,6 +630,7 @@ public abstract class AScope extends AStatement {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("numStatements");
+        attributes.add("naked");
     }
 
     /**
@@ -598,6 +662,7 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint insertEnd(joinpoint)");
         actions.add("joinpoint insertEnd(string)");
         actions.add("void clear()");
+        actions.add("void setNaked(Boolean)");
     }
 
     /**
@@ -626,6 +691,7 @@ public abstract class AScope extends AStatement {
      */
     protected enum ScopeAttributes {
         NUMSTATEMENTS("numStatements"),
+        NAKED("naked"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

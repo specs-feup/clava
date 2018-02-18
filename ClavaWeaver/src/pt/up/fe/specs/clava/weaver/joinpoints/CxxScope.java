@@ -290,4 +290,19 @@ public class CxxScope extends AScope {
     public List<? extends AComment> selectComment() {
         return CxxSelects.select(AComment.class, getStatements(), true, this, Comment.class::isInstance);
     }
+
+    @Override
+    public Boolean getNakedImpl() {
+        return scope.isNaked();
+    }
+
+    @Override
+    public void defNakedImpl(Boolean value) {
+        scope.setNaked(value);
+    }
+
+    @Override
+    public void setNakedImpl(Boolean isNaked) {
+        defNakedImpl(isNaked);
+    }
 }

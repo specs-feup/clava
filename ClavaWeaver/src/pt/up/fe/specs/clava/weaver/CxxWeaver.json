@@ -16424,6 +16424,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "true if the scope does not have curly braces",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "naked"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Integer",
@@ -16913,6 +16922,20 @@
                            {
                               "type": "String",
                               "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setNaked"
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "isNaked",
                               "defaultValue": ""
                            }]
                },

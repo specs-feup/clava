@@ -172,6 +172,9 @@
 	<!-- SCOPE -->
 	<artifact class="scope">
 		<attribute name="numStatements" type="Integer" />
+		<attribute name="naked" type="Boolean" tooltip="true if the scope does not have curly braces">
+			<def/>
+		</attribute>
 	</artifact>
 
 
