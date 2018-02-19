@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TemplateArgumentType extends TemplateArgument {
@@ -42,7 +43,15 @@ public class TemplateArgumentType extends TemplateArgument {
         return stringType;
     }
 
+    public boolean hasType() {
+        return type != null;
+    }
+
     public Type getType() {
+        if (type == null) {
+            return ClavaNodeFactory.nullType(getInfo());
+        }
+
         return type;
     }
 
