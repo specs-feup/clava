@@ -441,48 +441,30 @@ public class ClavaParser implements AutoCloseable {
     }
 
     private void completeTemplateSpecializationTypes() {
-
+        // System.out.println("ORIGINAL TYPES:" + converter.getOriginalTypes());
         // Go over all original types and find TemplateSpecializationType nodes
         for (Type type : converter.getOriginalTypes().values()) {
-            type.getDescendantsStream()
-                    .filter(node -> node instanceof TemplateSpecializationType)
-                    .map(node -> (TemplateSpecializationType) node)
+            type.getDescendantsAndSelf(TemplateSpecializationType.class).stream()
                     .forEach(this::completeTemplateSpecializationType);
+
+            // .filter(node -> node instanceof TemplateSpecializationType)
+            // .map(node -> (TemplateSpecializationType) node)
+            // .forEach(this::completeTemplateSpecializationType);
         }
-        /*
-                MultiMap<String, String> templateArgTypes = converter.getClangRootData().getTemplateArgTypes();
-        
-        for (Entry<String, List<String>> entry : templateArgTypes.entrySet()) {
-            // Get TemplateSpecializationType
-            Type type = converter.getOriginalTypes().get(entry.getKey());
-        
-            Preconditions.checkNotNull(type, "Expected type with id '" + entry.getKey() + "' to exist");
-            SpecsChecks.checkClass(type, TemplateSpecializationType.class);
-            TemplateSpecializationType templateType = (TemplateSpecializationType) type;
-        
-            // Get template arguments types
-            List<Type> argsTypes = new ArrayList<>();
-            for (String typeId : entry.getValue()) {
-                // Get type
-                Type argType = converter.getOriginalTypes().get(typeId);
-                Preconditions.checkNotNull(argType, "Could not find a type for id '" + typeId + "'");
-                argsTypes.add(argType);
-            }
-        
-            templateType.setArgsTypes(argsTypes);
-        }
-        */
     }
 
     private void completeTemplateSpecializationType(TemplateSpecializationType templateType) {
         // Get args types id
         List<String> typeIds = converter.getClangRootData().getTemplateArgTypes()
                 .get(templateType.getInfo().getExtendedId());
+        // System.out.println("TYPE IDS:" + typeIds);
 
         // Get args types
         List<Type> argTypes = typeIds.stream()
                 .map(typeId -> converter.getOriginalTypes().get(typeId))
                 .collect(Collectors.toList());
+
+        // System.out.println("ARG TYPES:" + argTypes);
 
         // Set template argument types, but without changing the string template arguments
         templateType.setTemplateArgumentTypes(argTypes, false);

@@ -18,6 +18,8 @@ inline t Distance2(const t a[3], const t b[3])
 				 (a[2] - b[2]) * (a[2] - b[2]);
 }
 
+
+
 // TODO: TypeParser not supporting some nodes
 /*
 template <template <typename> class m>
