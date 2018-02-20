@@ -47,4 +47,9 @@ public class CxxBenchTest {
         new CxxTester("bench/template_expansion_pack.cpp").test();
     }
 
+    @Test
+    public void testAtom() {
+        new CxxTester("bench/atom.cpp").showCode().test();
+    }
+
 }
