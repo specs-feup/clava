@@ -31,7 +31,10 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -158,10 +161,30 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
             CXXCtorInitializerKind kind = CXXCtorInitializerKind.getHelper().valueOf(initKind[0]);
             CXXCtorInitializer init = new CXXCtorInitializerParser(getConverter(), kind, initType)
                     .parse(ctorInit.get(i));
-            initializers.add(init);
+
+            // Filter initializer
+            if (isValidInitializer(init)) {
+                initializers.add(init);
+            }
+
         }
 
         return initializers;
+    }
+
+    private boolean isValidInitializer(CXXCtorInitializer init) {
+
+        Expr initExpr = init.getInitExpr();
+
+        // Special case: CXXConstructExpr that has NullType as return
+        if (initExpr instanceof CXXConstructExpr) {
+            if (initExpr.getType() instanceof NullType) {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
 }
