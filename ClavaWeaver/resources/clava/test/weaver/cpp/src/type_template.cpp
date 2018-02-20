@@ -2,12 +2,22 @@
 #include <map>
 #include <chrono>
 
+using namespace std;
+
+void foo_no_std() {
+  
+  // Removing std:: changes tree
+  vector<double> W;
+
+  //vector<double> W_nostd;
+}
+
 int main ()
 {
   std::vector<double> W;
   W[0] = 12.3;
   W[1] = 1.09;
-
+  
   std::map<int, float> map;
   
   // TemplateArgumentExpr, not implemented yet

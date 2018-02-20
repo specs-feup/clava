@@ -1,5 +1,15 @@
 import clava.ClavaJoinPoints;
+/*
+aspectdef Test2
 
+
+	select function{"foo_no_std"}.vardecl{"W"} end
+	apply
+		println("TYPE:" + $vardecl.type.templateArgsTypes[0].code);
+	end
+	
+end
+*/
 aspectdef Test
 
    var floatType = ClavaJoinPoints.builtinType("float");
@@ -12,7 +22,13 @@ aspectdef Test
 	// Get template argument types
 	select file.vardecl{"W"} end
 	apply
-		println("Original template args: " + $vardecl.type.templateArgsStrings);		
+		println("Original template args: " + $vardecl.type.templateArgsStrings);
+		
+		var typesStrings = [];
+		for(var $type of $vardecl.type.templateArgsTypes) {
+			typesStrings.push($type.code);
+		}
+		println("Original template args types: " + typesStrings.join(", "));		
 	end
 
 	// Set a single template argument
