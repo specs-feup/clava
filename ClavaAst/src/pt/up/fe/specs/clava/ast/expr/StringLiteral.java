@@ -47,7 +47,8 @@ public class StringLiteral extends Expr {
 
     @Override
     public String toContentString() {
-        return super.toContentString() + "string:" + string;
+        return ClavaNode.toContentString(super.toContentString(), "string:" + string);
+        // return super.toContentString() + "string:" + string;
     }
 
     // StringKind getKind()

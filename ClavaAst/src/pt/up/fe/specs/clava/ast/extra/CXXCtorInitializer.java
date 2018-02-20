@@ -134,4 +134,9 @@ public class CXXCtorInitializer extends ClavaNode {
         */
     }
 
+    @Override
+    public String toContentString() {
+        return "kind:" + kind + "; initType:" + initType + "; anyMemberData: [" + anyMemberData + "]";
+    }
+
 }

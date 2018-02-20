@@ -116,4 +116,9 @@ public class CXXConstructExpr extends Expr {
         return false;
     }
 
+    @Override
+    public String toContentString() {
+        return ClavaNode.toContentString(super.toContentString(), constructorData.toString());
+    }
+
 }

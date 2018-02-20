@@ -74,6 +74,21 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return "";
     }
 
+    protected static String toContentString(String previousContentString, String suffix) {
+
+        // Use bridge if there is content and a suffix
+        String bridge = !suffix.isEmpty() && !previousContentString.isEmpty() ? ", " : "";
+
+        return previousContentString + bridge + suffix;
+    }
+    // protected String toContentString(ClavaNode node, String suffix) {
+    // String previousContentString = node.super.toContentString();
+    // // Use bridge if there is content and a suffix
+    // String bridge = !suffix.isEmpty() && !previousContentString.isEmpty() ? "; " : "";
+    //
+    // return previousContentString + bridge + suffix;
+    // }
+
     @Override
     public ClavaNode getThis() {
         return this;

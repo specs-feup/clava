@@ -71,7 +71,10 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public String toContentString() {
-        return super.toContentString() + "types:" + getExprType().getCode() + ", valueKind:" + getValueKind();
+        return ClavaNode.toContentString(super.toContentString(), "exprData: [" + exprData + "]");
+        // return ClavaNode.toContentString(super.toContentString(), "types:" + getExprType().getCode() + ", valueKind:"
+        // + getValueKind() + ", exprData: [" + exprData + "]");
+        // return super.toContentString() + "types:" + getExprType().getCode() + ", valueKind:" + getValueKind();
     }
 
     /**

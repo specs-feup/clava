@@ -58,7 +58,7 @@ public class ExprData {
 
     @Override
     public String toString() {
-        return "ValueKind:" + valueKind + "; ObjectKind:" + objectKind + "; Type:" + type.getCode();
+        return "ValueKind:" + valueKind + ", ObjectKind:" + objectKind + ", Type:" + type.getCode();
     }
 
     /**
