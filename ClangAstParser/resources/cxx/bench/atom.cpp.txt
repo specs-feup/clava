@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cmath>
 #include <stdlib.h>
@@ -28,13 +29,13 @@ class Atom {
    
    void clear();
    
+  
    
 };
-
 
 int main(int argc, char * argv[]) {
    double YY[3] = { 23.20, 25.06, 1.009 };
    Atom * ErrObj = new Atom(YY);
-   
    return 0;
-}
+} 
+

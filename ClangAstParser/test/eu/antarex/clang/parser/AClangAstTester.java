@@ -229,9 +229,9 @@ public abstract class AClangAstTester {
                 continue;
             }
 
-            String txtContents = SpecsStrings.normalizeFileContents(SpecsIo.getResource(txtResource));
+            String txtContents = SpecsStrings.normalizeFileContents(SpecsIo.getResource(txtResource), true);
             File generatedFile = outputFiles2.get(resource.getFilename());
-            String generatedFileContents = SpecsStrings.normalizeFileContents(SpecsIo.read(generatedFile));
+            String generatedFileContents = SpecsStrings.normalizeFileContents(SpecsIo.read(generatedFile), true);
 
             Assert.assertEquals(txtContents, generatedFileContents);
         }
