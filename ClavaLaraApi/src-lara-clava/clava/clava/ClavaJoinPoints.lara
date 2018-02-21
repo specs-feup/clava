@@ -109,7 +109,7 @@ ClavaJoinPoints.file = function(filename, path) {
  * @param {string} stmtString The literal code of the statement.
  */
 ClavaJoinPoints.stmtLiteral = function(stmtString) {
-	return AstFactory.stmtLiteral(typeString);
+	return AstFactory.stmtLiteral(stmtString);
 }
 
 
