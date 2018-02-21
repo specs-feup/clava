@@ -37,7 +37,7 @@ struct B {
 
 
 struct C : public A, public B {
-   C() try : A(), B() {
+   C() try {
       std::cout << "C::C() completed successfully\n";
    }
    catch (...) {
