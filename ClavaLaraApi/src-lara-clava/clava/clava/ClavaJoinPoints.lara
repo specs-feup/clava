@@ -103,5 +103,14 @@ ClavaJoinPoints.file = function(filename, path) {
 	return AstFactory.file(filename, path);
 }
 
+/**
+ * Creates a new literal join point 'stmt'.
+ *
+ * @param {string} stmtString The literal code of the statement.
+ */
+ClavaJoinPoints.stmtLiteral = function(stmtString) {
+	return AstFactory.stmtLiteral(typeString);
+}
+
 
 
