@@ -16866,6 +16866,47 @@
                },
                {
                   "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "addLocal"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "initValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "addLocal"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Clears the contents of this scope (untested)",
                   "children": [
                            {

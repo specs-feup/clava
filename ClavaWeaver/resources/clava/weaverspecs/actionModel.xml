@@ -178,6 +178,19 @@
 		<parameter name="code" type="string" />
 	</action>
 
+	<action name="addLocal" class="scope" return="joinpoint">
+		<parameter name="name" type="String" />
+		<parameter name="type" type="joinpoint" />
+		<parameter name="initValue" type="String" />
+	</action>
+	
+		<action name="addLocal" class="scope" return="joinpoint">
+		<parameter name="name" type="String" />
+		<parameter name="type" type="joinpoint" />
+	</action>
+
+
+
 	<!-- FUNCTON -->
 	<action name="clone" class="function">
 		<parameter name="newName" type="String" />

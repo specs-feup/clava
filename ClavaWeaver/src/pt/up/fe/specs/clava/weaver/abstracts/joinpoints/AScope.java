@@ -251,6 +251,66 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * 
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
+        throw new UnsupportedOperationException(get_class()+": Action addLocal not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     * @param type 
+     * @param initValue 
+     */
+    public final AJoinPoint addLocal(String name, AJoinPoint type, String initValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type, initValue);
+        	}
+        	AJoinPoint result = this.addLocalImpl(name, type, initValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type, initValue);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addLocal", e);
+        }
+    }
+
+    /**
+     * 
+     * @param name 
+     * @param type 
+     */
+    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
+        throw new UnsupportedOperationException(get_class()+": Action addLocal not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     * @param type 
+     */
+    public final AJoinPoint addLocal(String name, AJoinPoint type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type);
+        	}
+        	AJoinPoint result = this.addLocalImpl(name, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addLocal", e);
+        }
+    }
+
+    /**
      * Clears the contents of this scope (untested)
      */
     public void clearImpl() {
@@ -661,6 +721,8 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint insertBegin(String)");
         actions.add("joinpoint insertEnd(joinpoint)");
         actions.add("joinpoint insertEnd(string)");
+        actions.add("joinpoint addLocal(String, joinpoint, String)");
+        actions.add("joinpoint addLocal(String, joinpoint)");
         actions.add("void clear()");
         actions.add("void setNaked(Boolean)");
     }
