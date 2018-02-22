@@ -71,11 +71,18 @@ ClavaJoinPoints.exprLiteral = function(code, type) {
 
 }; 
 
-
+/**
+ * @param {string} varName
+ * @param {joinpoint} init
+ * */
 ClavaJoinPoints.varDecl = function(varName, init) {
 	return AstFactory.varDecl(varName, init);
 }
 
+/**
+ * @param {string} varName
+ * @param {Type} type
+ * */
 ClavaJoinPoints.varDeclNoInit = function(varName, type) {
 	return AstFactory.varDeclNoInit(varName, type);
 }
