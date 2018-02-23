@@ -166,7 +166,9 @@ public class CxxScope extends AScope {
 
         CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
 
-        return node;
+        // return node;
+        // TODO: Consider returning newStmt instead
+        return CxxJoinpoints.create(newStmt, null);
     }
 
     @Override
@@ -181,7 +183,9 @@ public class CxxScope extends AScope {
         // Preconditions.checkArgument(newStmt instanceof Stmt,
         // "Expected input of action scope.insertEnd to be a Stmt joinpoint, is a " + node.getJoinPointType());
         CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
-        return node;
+        // return node;
+        // TODO: Consider returning newStmt instead
+        return CxxJoinpoints.create(newStmt, null);
         /*
         List<? extends AStatement> statements = selectStatements();
         if (statements.isEmpty()) {
