@@ -180,6 +180,44 @@ public abstract class Type extends ClavaNode {
         return getTypeData().hasSugar();
     }
 
+    /**
+     * Desugars a type until it finds a Type of the given class.
+     * 
+     * <p>
+     * TODO: Should return self if given type if the same type as this?
+     * 
+     * @param typeClass
+     * @return
+     */
+    public <T extends Type> Optional<T> desugar(Class<T> typeClass) {
+        // If no sugar, return
+        if (!hasSugar()) {
+            return Optional.empty();
+        }
+
+        Type desugared = desugar();
+
+        if (!typeClass.isInstance(desugared)) {
+            return desugared.desugar(typeClass);
+        }
+
+        return Optional.of(typeClass.cast(desugared));
+
+        /*
+        // Check if current type is the asked type
+        if (typeClass.isInstance(this)) {
+            return Optional.of(typeClass.cast(this));
+        }
+        
+        // If is sugared, desugar and call again
+        if (hasSugar()) {
+            return desugar().desugar(typeClass);
+        }
+        
+        return Optional.empty();
+        */
+    }
+
     public Type desugar() {
         if (!getTypeData().hasSugar()) {
             return this;
