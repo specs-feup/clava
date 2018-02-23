@@ -23,22 +23,24 @@ public class RecordDeclData {
 
     private final TagKind recordKind;
     private final String recordName;
+    private final boolean isAnonymous;
     private final boolean isModulePrivate;
     private final boolean isCompleteDefinition;
     private final List<Attr> attributes;
 
-    public RecordDeclData(TagKind recordKind, String recordName, boolean isModulePrivate, boolean isCompleteDefinition,
-            List<Attr> attributes) {
+    public RecordDeclData(TagKind recordKind, String recordName, boolean isAnonymous, boolean isModulePrivate,
+            boolean isCompleteDefinition, List<Attr> attributes) {
 
         this.recordKind = recordKind;
         this.recordName = recordName;
+        this.isAnonymous = isAnonymous;
         this.isModulePrivate = isModulePrivate;
         this.isCompleteDefinition = isCompleteDefinition;
         this.attributes = attributes;
     }
 
     public RecordDeclData copy() {
-        return new RecordDeclData(recordKind, recordName, isModulePrivate, isCompleteDefinition,
+        return new RecordDeclData(recordKind, recordName, isAnonymous, isModulePrivate, isCompleteDefinition,
                 new ArrayList<>(attributes));
     }
 
@@ -48,6 +50,10 @@ public class RecordDeclData {
 
     public String getRecordName() {
         return recordName;
+    }
+
+    public boolean isAnonymous() {
+        return isAnonymous;
     }
 
     public boolean isModulePrivate() {
@@ -62,4 +68,17 @@ public class RecordDeclData {
         return attributes;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        string.append("record kind: " + recordKind);
+        string.append(", record name: " + recordName);
+        string.append(", is anonymous: " + isAnonymous);
+        string.append(", is module private: " + isModulePrivate);
+        string.append(", is complete definition: " + isCompleteDefinition);
+        string.append(", attributes: " + attributes);
+
+        return string.toString();
+    }
 }

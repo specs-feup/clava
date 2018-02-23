@@ -15,7 +15,7 @@ package pt.up.fe.specs.clava.ast.type.data;
 
 public class TypeData {
 
-    private final String bareType;
+    private String bareType;
     private final boolean hasSugar;
     private final boolean isDependent;
     private final TypeDependency typeDependency;
@@ -75,6 +75,10 @@ public class TypeData {
 
     public boolean isFromAst() {
         return isFromAst;
+    }
+
+    public void setBareType(String bareType) {
+        this.bareType = bareType;
     }
 
     /**
