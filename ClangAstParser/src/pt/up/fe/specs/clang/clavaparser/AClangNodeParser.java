@@ -447,8 +447,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
         // Check name, take into account it can be an anonymous name
         String name = parseNamedDeclName(node, parser);
+        boolean isAnonymous = false;
         if (name == null) {
             name = ClavaParserUtils.createAnonName(node);
+            isAnonymous = true;
         }
 
         // Parse booleans
@@ -475,8 +477,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         // Remove attributes
         List<Attr> attributes = SpecsCollections.pop(children, Attr.class);
 
-        RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isModulePrivate, isCompleteDefinition,
-                attributes);
+        RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isAnonymous, isModulePrivate,
+                isCompleteDefinition, attributes);
 
         return recordDeclData;
     }
