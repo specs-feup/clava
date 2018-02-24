@@ -15,7 +15,6 @@ package pt.up.fe.specs.clang.clavaparser;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeIterator;
-import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -138,12 +137,12 @@ public class ClavaPostProcessing {
 
         NamedDecl namedDecl = (NamedDecl) node;
 
-        if (namedDecl instanceof DeclaratorDecl) {
-            DeclaratorDecl declaratorDecl = (DeclaratorDecl) namedDecl;
-            if (declaratorDecl.getType().isAnonymous()) {
-                return declaratorDecl;
-            }
-        }
+        // if (namedDecl instanceof DeclaratorDecl) {
+        // DeclaratorDecl declaratorDecl = (DeclaratorDecl) namedDecl;
+        // if (declaratorDecl.getType().isAnonymous()) {
+        // return declaratorDecl;
+        // }
+        // }
 
         // If there is no last RecordDecl, there is nothing more that can be done
         // if (lastRecordDecl == null) {
