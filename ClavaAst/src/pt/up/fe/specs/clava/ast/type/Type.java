@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
@@ -268,7 +267,7 @@ public abstract class Type extends ClavaNode {
         }
 
         // Stop, can go no further
-        SpecsLogs.msgWarn("Could not find type '" + type + "'");
+        // SpecsLogs.msgWarn("Could not find type '" + type + "'");
         return Optional.empty();
     }
 
