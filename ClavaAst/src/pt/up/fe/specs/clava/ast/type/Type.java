@@ -89,10 +89,10 @@ public abstract class Type extends ClavaNode {
      *
      * @return true if type is considered anonymous (e.g., anonymous struct)
      */
-    public boolean isAnonymous() {
-        return getCode().contains("(anonymous ");
-        // return false;
-    }
+    // public boolean isAnonymous() {
+    // return getCode().contains("(anonymous ");
+    // // return false;
+    // }
 
     /**
      * Code for a literal constant (e.g., 1u when unsigned)
