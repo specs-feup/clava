@@ -69,6 +69,11 @@ public class ClavaPostProcessing {
                 continue;
             }
 
+            // If last record decl is null, there is nothing that can be done
+            if (lastRecordDecl == null) {
+                continue;
+            }
+
             NamedDecl anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
             if (anonymousDecl == null) {
                 continue;
@@ -139,9 +144,16 @@ public class ClavaPostProcessing {
                 return declaratorDecl;
             }
         }
+
+        // If there is no last RecordDecl, there is nothing more that can be done
+        // if (lastRecordDecl == null) {
+        // return null;
+        // }
+
         // System.out.println("TYPE:" + namedDecl.getType());
         // Check if type has a record type
         RecordType recordType = namedDecl.getType().desugar(RecordType.class).orElse(null);
+
         if (recordType != null // It has a RecordType
                 && lastRecordDecl.getRecordDeclData().isAnonymous() // Last record is anonymous
                 && recordType.getRecordName().equals(lastRecordDecl.getType().getCode())) { // They are the same type
