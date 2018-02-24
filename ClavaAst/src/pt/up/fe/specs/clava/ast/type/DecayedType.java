@@ -56,4 +56,9 @@ public class DecayedType extends AdjustedType {
         return getOriginalType().isArray();
     }
 
+    @Override
+    public Type desugar() {
+        return getOriginalType();
+    }
+
 }
