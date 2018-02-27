@@ -283,6 +283,13 @@ public class ClavaNodeFactory {
         return new TemplateArgumentType(type, nodeInfo);
     }
 
+    public static TemplateArgumentType templateArgumentType(Type type, ClavaNodeInfo nodeInfo) {
+        TemplateArgumentType argType = new TemplateArgumentType(Arrays.asList(type.getCode()), nodeInfo);
+        argType.setType(type, false);
+
+        return argType;
+    }
+
     public static TemplateArgumentExpr templateArgumentExpr(Expr expr, ClavaNodeInfo nodeInfo) {
         return new TemplateArgumentExpr(expr, nodeInfo);
     }

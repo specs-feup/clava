@@ -321,9 +321,9 @@ public class InlineRenamer {
 
         // Get arity of parameter
         Type paramType = parmVarDecl.getType();
-        System.out.println("PARAM TYPE:" + paramType);
-        System.out.println("ARITY:" + Types.getPointerArity(paramType));
-        System.out.println("ELEMENT TYPE:" + Types.getElement(paramType));
+        // System.out.println("PARAM TYPE:" + paramType);
+        // System.out.println("ARITY:" + Types.getPointerArity(paramType));
+        // System.out.println("ELEMENT TYPE:" + Types.getElement(paramType));
 
         int pointerArity = Types.getPointerArity(paramType);
         Type elementType = Types.getElement(paramType);
@@ -337,7 +337,7 @@ public class InlineRenamer {
         Expr exprWithCast = ClavaNodeFactory.cStyleCastExpr(CastKind.NO_OP, new ExprData(newType),
                 ClavaNodeInfo.undefinedInfo(), expr);
 
-        System.out.println("NEW TYPE:" + newType.getCode());
+        // System.out.println("NEW TYPE:" + newType.getCode());
 
         // Add statement with declaration of variable
         VarDeclData varDeclData = parmVarDecl.getVarDeclData().copy();

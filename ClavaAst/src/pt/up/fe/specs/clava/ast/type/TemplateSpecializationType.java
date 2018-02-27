@@ -18,12 +18,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -311,26 +311,60 @@ public class TemplateSpecializationType extends Type {
         // System.out.println("TYPE TEMPLATE NODES:" + typeTemplateArguments);
         // System.out.println("NEW TYPES:" + argsTypes);
         // int numExpectedArgTypes = templateArguments.size();
-        int numExpectedArgTypes = typeTemplateArguments.size();
+        int numCurrentArgTypes = typeTemplateArguments.size();
         // System.out.println("TEMPLATE ARGS:" + getTemplateArguments());
-        Preconditions.checkArgument(argsTypes.size() == numExpectedArgTypes,
-                "Expected number of template argument types (" + argsTypes.size()
-                        + ") to be the same as the number of template nodes of kind'type' (" + numExpectedArgTypes
-                        + ")\nTemplate arguments: " + templateArgumentsStrings + "\nNew types:"
-                        + argsTypes.stream().map(Type::getCode).collect(Collectors.joining(", ")));
+
+        int numArgsTypes = argsTypes.size();
+
+        // Preconditions.checkArgument(numArgsTypes <= numCurrentArgTypes,
+        // "Expected number of template argument types (" + argsTypes.size()
+        // + ") to be the same or lower as the number of template nodes of kind 'type' ("
+        // + numCurrentArgTypes
+        // + ")\nTemplate arguments: " + templateArgumentsStrings + "\nNew types:"
+        // + argsTypes.stream().map(Type::getCode).collect(Collectors.joining(", ")));
+
         // templateArgumentTypes = argsTypes;
 
         // No arguments to set, return
-        if (numExpectedArgTypes == 0) {
+        if (numArgsTypes == 0) {
             return;
         }
 
         // System.out.println("BEFORE:" + this);
         // System.out.println("ARG:" + typeTemplateArguments.get(0));
-        // Set arguments
-        IntStream.range(0, numExpectedArgTypes)
-                .forEach(index -> typeTemplateArguments.get(index)
-                        .setType(argsTypes.get(index), updateTemplateArgumentStrings));
+
+        // Remove previous arguments and add new arguments
+        for (int i = 0; i < numCurrentArgTypes; i++) {
+            removeChild(0);
+        }
+
+        for (int i = 0; i < numArgsTypes; i++) {
+            Type type = argsTypes.get(i);
+
+            TemplateArgumentType templateArg = ClavaNodeFactory.templateArgumentType(type,
+                    ClavaNodeInfo.undefinedInfo());
+
+            addChild(i, templateArg);
+        }
+
+        // IntStream.range(0, numArgsTypes)
+        // .forEach(index -> typeTemplateArguments.get(index)
+        // .setType(argsTypes.get(index), updateTemplateArgumentStrings));
+
+        // Remove extra arguments
+        // int extraArguments = numCurrentArgTypes - numArgsTypes;
+
+        // ... from template argument children
+        // for (int i = 0; i < extraArguments; i++) {
+        // int indexToRemove = numArgsTypes;
+        // removeChild(indexToRemove);
+        // }
+
+        // ... from template argument strings
+        // IntStream.range(0, extraArguments).forEach(index -> SpecsCollections.removeLast(templateArgumentsStrings));
+
+        // IntStream.range(0, extraArguments).forEach(index -> SpecsCollections.removeLast(typeTemplateArguments));
+
         // getTemplateArguments().stream()
         // .filter(templateArg instanceof TemplateArgumentType)
         // .
@@ -338,19 +372,25 @@ public class TemplateSpecializationType extends Type {
         // System.out.println("ARG:" + typeTemplateArguments.get(0));
         // Update template argument strings, if necessary
         if (updateTemplateArgumentStrings) {
+
+            // Update strings
+            templateArgumentsStrings = argsTypes.stream()
+                    .map(Type::getCode)
+                    .collect(Collectors.toList());
+
             // Signal update, because of ElaboratedType
             // this.hasUpdatedArgumentTypes = true;
             setUpdatedTemplateArgTypes(true);
 
             // Get indexes to update
-            List<TemplateArgument> allTemplateArguments = getTemplateArguments();
-            int[] indexesToUpdate = IntStream.range(0, allTemplateArguments.size())
-                    .filter(index -> allTemplateArguments.get(index) instanceof TemplateArgumentType)
-                    .toArray();
+            // List<TemplateArgument> allTemplateArguments = getTemplateArguments();
+            // int[] indexesToUpdate = IntStream.range(0, allTemplateArguments.size())
+            // .filter(index -> allTemplateArguments.get(index) instanceof TemplateArgumentType)
+            // .toArray();
 
-            IntStream.range(0, numExpectedArgTypes)
-                    .forEach(index -> templateArgumentsStrings.set(indexesToUpdate[index],
-                            argsTypes.get(index).getCode()));
+            // IntStream.range(0, numArgsTypes)
+            // .forEach(index -> templateArgumentsStrings.set(indexesToUpdate[index],
+            // argsTypes.get(index).getCode()));
 
         }
 
