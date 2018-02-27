@@ -69,4 +69,25 @@ aspectdef Test
 		println("After setting with array [double, int]: " + $vardecl.type.templateArgsStrings);		
 	end
 	
+
+	// Change typedef declaration
+	select typedefDecl{"typedef_to_change"} end
+	apply
+		$typedefDecl.type.templateArgsTypes = [floatType];
+		println("After setting typedef_to_change: " + $typedefDecl.type.code);		
+	end
+
+	// Change type of vardecl which is a typedef
+	select vardecl{"changed_typedef_type"} end
+	apply
+		$vardecl.type.templateArgsTypes = [intType];
+		if($vardecl.type.kind === "TypedefType") {
+			$vardecl.type = $vardecl.type.desugar;
+		}
+		
+		println("After setting changed_typedef_type: " + $vardecl.type.code);		
+	end
+	
+
+	
 end

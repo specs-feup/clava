@@ -2,6 +2,7 @@
 #include <map>
 #include <chrono>
 
+
 using namespace std;
 
 void foo_no_std() {
@@ -25,3 +26,11 @@ int main ()
   
   return 0;
 }
+
+
+typedef std::vector<double>::const_iterator typedef_to_change;
+typedef_to_change type_of_changed_typedef;
+
+
+typedef std::vector<double>::const_iterator a_typedef;
+a_typedef changed_typedef_type;
