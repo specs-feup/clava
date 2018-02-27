@@ -205,4 +205,29 @@ public class Types {
         return Optional.empty();
     }
 
+    /**
+     * To be called when a sugared type is modified.
+     * 
+     * @param sugaredType
+     */
+    public static void updateSugaredType(Type sugaredType) {
+        // No sugar, nothing to do
+        if (!sugaredType.hasSugar()) {
+            return;
+        }
+
+        Type underlyingType = sugaredType.desugar();
+
+        // If underlyingType type is a TypedefType, to reflect changes replace with the underlying type
+        if (underlyingType instanceof TypedefType) {
+            Type typeClass = ((TypedefType) underlyingType).getTypeClass();
+
+            // Optimization: detach to avoid copy
+            typeClass.detach();
+
+            sugaredType.setDesugar(typeClass);
+        }
+
+    }
+
 }

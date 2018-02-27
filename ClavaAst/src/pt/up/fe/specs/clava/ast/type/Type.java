@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -137,6 +138,8 @@ public abstract class Type extends ClavaNode {
         }
 
         desugar().setTemplateArgumentTypes(newTemplateArgTypes);
+
+        Types.updateSugaredType(this);
     }
 
     /**
@@ -152,6 +155,8 @@ public abstract class Type extends ClavaNode {
         }
 
         desugar().setTemplateArgumentType(index, newTemplateArgType);
+
+        Types.updateSugaredType(this);
     }
 
     /**
@@ -172,7 +177,13 @@ public abstract class Type extends ClavaNode {
      * @return true if this type updated its template argument types, false otherwise
      */
     public boolean hasUpdatedTemplateArgTypes() {
-        return false;
+        // If no sugar, return false
+        if (!hasSugar()) {
+            // System.out.println("NO SUGAR:" + this.getClass().getSimpleName());
+            return false;
+        }
+        // System.out.println("DESUGARING:" + this.getClass().getSimpleName());
+        return desugar().hasUpdatedTemplateArgTypes();
     }
 
     public boolean hasSugar() {
@@ -188,36 +199,37 @@ public abstract class Type extends ClavaNode {
      * @param typeClass
      * @return
      */
-    public <T extends Type> Optional<T> desugar(Class<T> typeClass) {
-        // If no sugar, return
-        if (!hasSugar()) {
-            return Optional.empty();
-        }
 
-        Type desugared = desugar();
+    // public <T extends Type> Optional<T> desugar(Class<T> typeClass) {
+    // // If no sugar, return
+    // if (!hasSugar()) {
+    // return Optional.empty();
+    // }
+    //
+    // Type desugared = desugar();
+    //
+    // if (!typeClass.isInstance(desugared)) {
+    // return desugared.desugar(typeClass);
+    // }
+    //
+    // return Optional.of(typeClass.cast(desugared));
+    //
+    // /*
+    // // Check if current type is the asked type
+    // if (typeClass.isInstance(this)) {
+    // return Optional.of(typeClass.cast(this));
+    // }
+    //
+    // // If is sugared, desugar and call again
+    // if (hasSugar()) {
+    // return desugar().desugar(typeClass);
+    // }
+    //
+    // return Optional.empty();
+    // */
+    // }
 
-        if (!typeClass.isInstance(desugared)) {
-            return desugared.desugar(typeClass);
-        }
-
-        return Optional.of(typeClass.cast(desugared));
-
-        /*
-        // Check if current type is the asked type
-        if (typeClass.isInstance(this)) {
-            return Optional.of(typeClass.cast(this));
-        }
-        
-        // If is sugared, desugar and call again
-        if (hasSugar()) {
-            return desugar().desugar(typeClass);
-        }
-        
-        return Optional.empty();
-        */
-    }
-
-    public Type desugar() {
+    public final Type desugar() {
         if (!getTypeData().hasSugar()) {
             return this;
         }
@@ -226,6 +238,18 @@ public abstract class Type extends ClavaNode {
     }
 
     protected Type desugarImpl() {
+        throw new NotImplementedException(getClass());
+    }
+
+    public final void setDesugar(Type desugaredType) {
+        if (!hasSugar()) {
+            throw new RuntimeException("Type does not have sugar:" + this);
+        }
+
+        setDesugarImpl(desugaredType);
+    }
+
+    protected void setDesugarImpl(Type desugaredType) {
         throw new NotImplementedException(getClass());
     }
 
@@ -285,11 +309,9 @@ public abstract class Type extends ClavaNode {
             return true;
         }
 
-        /*
         if (!super.equals(obj)) {
             return false;
         }
-        */
 
         if (getClass() != obj.getClass()) {
             return false;

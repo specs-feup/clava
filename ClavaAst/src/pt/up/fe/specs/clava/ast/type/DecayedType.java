@@ -40,6 +40,10 @@ public class DecayedType extends AdjustedType {
         return getChild(Type.class, 0);
     }
 
+    public void setOriginalType(Type originalType) {
+        setChild(0, originalType);
+    }
+
     @Override
     public Type getAdjustedType() {
         return getChild(Type.class, 1);
@@ -57,8 +61,13 @@ public class DecayedType extends AdjustedType {
     }
 
     @Override
-    public Type desugar() {
+    protected Type desugarImpl() {
         return getOriginalType();
+    }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setOriginalType(desugaredType);
     }
 
 }

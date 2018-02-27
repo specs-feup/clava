@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -58,6 +56,10 @@ public class ElaboratedType extends TypeWithKeyword {
     @Override
     public Type getNamedType() {
         return getChild(Type.class, 0);
+    }
+
+    public void setNamedType(Type namedType) {
+        setChild(0, namedType);
     }
 
     /*
@@ -99,16 +101,34 @@ public class ElaboratedType extends TypeWithKeyword {
 
         // If named type has template arguments, update them
         Type namedType = getNamedType();
+
+        // System.out.println("BARE TYPE:" + bareType);
+        // System.out.println("NAMED TYPE:" + namedType);
+        // System.out.println("HAS UPDATED:" + namedType.hasUpdatedTemplateArgTypes());
+        // System.out.println("TEMPLATE ARGS:" + namedType.getTemplateArgumentTypes());
+
+        if (bareType.equals("std::set<double>::const_iterator")) {
+            // System.out.println("HELLOA!!!");
+            // System.out.println("NAMED TYPE:" + namedType);
+            // System.out.println("ARGS:" + namedType.getTemplateArgumentTypes());
+        }
+
         if (namedType.hasUpdatedTemplateArgTypes()) {
+
             int startIndex = bareType.indexOf('<');
             int endIndex = bareType.lastIndexOf('>');
-            Preconditions.checkArgument(startIndex != -1 && endIndex != -1,
-                    "Named type has template arguments, expected bare type to have them too: " + bareType);
+            boolean hasTemplateArgs = startIndex != -1 && endIndex != -1;
 
-            String templateArgs = namedType.getTemplateArgumentTypes().stream()
-                    .map(Type::getCode)
-                    .collect(Collectors.joining(", "));
-            bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
+            // Preconditions.checkArgument(startIndex != -1 && endIndex != -1,
+            // "Named type has template arguments, expected bare type to have them too: " + bareType);
+
+            if (hasTemplateArgs) {
+                String templateArgs = namedType.getTemplateArgumentTypes().stream()
+                        .map(Type::getCode)
+                        .collect(Collectors.joining(", "));
+                bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
+            }
+
         }
 
         if (name == null) {
@@ -120,7 +140,13 @@ public class ElaboratedType extends TypeWithKeyword {
     }
 
     @Override
-    public Type desugar() {
+    protected Type desugarImpl() {
         return getNamedType();
     }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setNamedType(desugaredType);
+    }
+
 }

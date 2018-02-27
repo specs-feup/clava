@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TemplateArgumentType extends TemplateArgument {
 
-    private final List<String> stringType;
+    private List<String> stringType;
     private Type type;
 
     public TemplateArgumentType(List<String> type, ClavaNodeInfo nodeInfo) {
@@ -55,8 +56,11 @@ public class TemplateArgumentType extends TemplateArgument {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(Type type, boolean updateTypeString) {
         this.type = type;
+        if (updateTypeString) {
+            stringType = Arrays.asList(type.getCode());
+        }
     }
 
     @Override

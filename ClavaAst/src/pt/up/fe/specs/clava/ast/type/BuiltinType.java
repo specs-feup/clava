@@ -164,4 +164,9 @@ public class BuiltinType extends Type {
         return true;
     }
 
+    @Override
+    public String toContentString() {
+        return super.toContentString() + " " + hashCode();
+    }
+
 }

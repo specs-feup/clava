@@ -40,6 +40,10 @@ public class AutoType extends Type {
         return getChild(Type.class, 0);
     }
 
+    public void setDeducedType(Type deducedType) {
+        setChild(0, deducedType);
+    }
+
     @Override
     public String getCode(String name) {
         if (name == null) {
@@ -52,5 +56,10 @@ public class AutoType extends Type {
     @Override
     protected Type desugarImpl() {
         return getDeducedType();
+    }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setDeducedType(desugaredType);
     }
 }

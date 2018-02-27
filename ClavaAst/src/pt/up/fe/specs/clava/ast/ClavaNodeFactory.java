@@ -352,9 +352,9 @@ public class ClavaNodeFactory {
         return new LinkageSpecDecl(linkageType, declData, info, declarations);
     }
 
-    public static TypedefDecl typedefDecl(String typedefSource, boolean isModulePrivate, String name, Type type,
-            DeclData declData, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new TypedefDecl(typedefSource, isModulePrivate, name, type, declData, info, children);
+    public static TypedefDecl typedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate,
+            String name, Type type, DeclData declData, ClavaNodeInfo info) {
+        return new TypedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData, info);
     }
 
     public static VarDecl varDecl(String varName, Type type) {
@@ -538,10 +538,10 @@ public class ClavaNodeFactory {
         return new FriendDecl(declData, info, friendNode);
     }
 
-    public static TypeAliasDecl typeAliasDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Type aliasedType) {
+    public static TypeAliasDecl typeAliasDecl(Type aliasedType, String declName, Type type, DeclData declData,
+            ClavaNodeInfo info) {
 
-        return new TypeAliasDecl(declName, type, declData, info, aliasedType);
+        return new TypeAliasDecl(aliasedType, declName, type, declData, info);
     }
 
     public static UsingDirectiveDecl usingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {

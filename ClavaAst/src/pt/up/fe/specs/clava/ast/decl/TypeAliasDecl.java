@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -24,25 +23,25 @@ import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TypeAliasDecl extends TypedefNameDecl {
 
-    public TypeAliasDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Type aliasedType) {
-
-        this(declName, type, declData, info, Arrays.asList(aliasedType));
+    public TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info) {
+        this(underlyingType, declName, type, declData, info, Collections.emptyList());
     }
 
-    private TypeAliasDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    private TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-        super(declName, type, declData, info, children);
+        super(underlyingType, declName, type, declData, info, children);
 
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TypeAliasDecl(getDeclName(), getType(), getDeclData(), getInfo(), Collections.emptyList());
+        return new TypeAliasDecl(getUnderlyingType(), getDeclName(), getType(), getDeclData(), getInfo(),
+                Collections.emptyList());
     }
 
     public Type getAliasedType() {
-        return getChild(Type.class, 0);
+        // return getChild(Type.class, 0);
+        return getUnderlyingType();
     }
 
     @Override

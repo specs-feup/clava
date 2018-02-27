@@ -58,14 +58,13 @@ public class TemplateSpecializationType extends Type {
         // System.out.println("TEMPLATE ARG TYPES " + getInfo().getExtendedId() + ": CONSTRUCTOR (NULL)");
         // this.templateArgumentTypes = null;
         this.hasUpdatedArgumentTypes = false;
+
     }
 
     @Override
     protected ClavaNode copyPrivate() {
         TemplateSpecializationType type = new TemplateSpecializationType(templateName, templateArgumentsStrings,
-                isTypeAlias,
-                getTypeData(),
-                getInfo(), Collections.emptyList());
+                isTypeAlias, getTypeData(), getInfo(), Collections.emptyList());
 
         // Set argument types
         // System.out.println("TEMPLATE ARG TYPES " + getInfo().getExtendedId() + ": COPY (NULL? "
@@ -139,10 +138,12 @@ public class TemplateSpecializationType extends Type {
                         + templateArgument.getClass().getName() + "'");
 
         // Set argument
-        ((TemplateArgumentType) templateArgument).setType(newTemplateArgType);
+        ((TemplateArgumentType) templateArgument).setType(newTemplateArgType, true);
         templateArgumentsStrings.set(index, newTemplateArgType.getCode());
         // templateArgumentTypes.set(index, newTemplateArgType);
-        hasUpdatedArgumentTypes = true;
+        setUpdatedTemplateArgTypes(true);
+        // hasUpdatedArgumentTypes = true;
+
     }
 
     public TemplateArgument getTemplateArgument(int index) {
@@ -166,9 +167,36 @@ public class TemplateSpecializationType extends Type {
             return Optional.empty();
         }
 
-        return Optional.of(getChild(Type.class, getTemplateArgumentStrings().size()));
+        int aliasIndex = getTemplateArgumentStrings().size();
+
+        return Optional.of(getChild(Type.class, aliasIndex));
     }
 
+    public Optional<Type> getDesugaredType() {
+        if (!hasSugar()) {
+            return Optional.empty();
+        }
+
+        int desugaredIndex = getTemplateArgumentStrings().size() + 1;
+
+        return Optional.of(getChild(Type.class, desugaredIndex));
+    }
+
+    public void setDesugaredType(Type desugaredType) {
+        int desugaredIndex = getTemplateArgumentStrings().size() + 1;
+        setChild(desugaredIndex, desugaredType);
+    }
+
+    @Override
+    protected Type desugarImpl() {
+        return getChild(Type.class, 1);
+    }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setDesugaredType(desugaredType);
+    }
+    /*
     @Override
     public Type desugar() {
         return getChild(Type.class, 1);
@@ -182,6 +210,7 @@ public class TemplateSpecializationType extends Type {
         // return desugared;
         // return this;
     }
+    */
 
     /*
     @Override
@@ -269,6 +298,8 @@ public class TemplateSpecializationType extends Type {
     }
 
     public void setTemplateArgumentTypes(List<Type> argsTypes, boolean updateTemplateArgumentStrings) {
+
+        // System.out.println("SETTING ARGS OF TYPE " + argsTypes);
         // System.out.println("TEMPLATE ARG TYPES " + getInfo().getExtendedId() + ": SET");
         // if (templateArgumentTypes != null) {
         // throw new RuntimeException("Expected argument types to be null");
@@ -294,17 +325,22 @@ public class TemplateSpecializationType extends Type {
             return;
         }
 
+        // System.out.println("BEFORE:" + this);
+        // System.out.println("ARG:" + typeTemplateArguments.get(0));
         // Set arguments
         IntStream.range(0, numExpectedArgTypes)
-                .forEach(index -> typeTemplateArguments.get(index).setType(argsTypes.get(index)));
+                .forEach(index -> typeTemplateArguments.get(index)
+                        .setType(argsTypes.get(index), updateTemplateArgumentStrings));
         // getTemplateArguments().stream()
         // .filter(templateArg instanceof TemplateArgumentType)
         // .
-
+        // System.out.println("AFTER:" + this);
+        // System.out.println("ARG:" + typeTemplateArguments.get(0));
         // Update template argument strings, if necessary
         if (updateTemplateArgumentStrings) {
             // Signal update, because of ElaboratedType
-            this.hasUpdatedArgumentTypes = true;
+            // this.hasUpdatedArgumentTypes = true;
+            setUpdatedTemplateArgTypes(true);
 
             // Get indexes to update
             List<TemplateArgument> allTemplateArguments = getTemplateArguments();
@@ -317,11 +353,42 @@ public class TemplateSpecializationType extends Type {
                             argsTypes.get(index).getCode()));
 
         }
+
+        // if (!argsTypes.isEmpty() && argsTypes.get(0).getCode().equals("float")) {
+        // System.out.println("ARG TYPES:" + argsTypes);
+        // System.out.println("TEMPLATE ARGS AFTER:" + getTemplateArguments());
+        // System.out.println("CODE:" + this.getCode());
+        // System.out.println("ROOT:" + getRoot());
+        // }
+
     }
 
     // @Override
     // public String getCode() {
     // return templateName + "<" + getTemplateArgument().getCode() + ">";
+    // }
+
+    private void setUpdatedTemplateArgTypes(boolean hasUpdatedArgumentTypes) {
+        // Set field
+        this.hasUpdatedArgumentTypes = hasUpdatedArgumentTypes;
+
+        // Propagate upward
+        // getAncestorTry(TemplateSpecializationType.class)
+        // .ifPresent(type -> type.setUpdatedTemplateArgTypes(hasUpdatedArgumentTypes));
+        //
+        // getAncestorTry(TemplateSpecializationType.class).ifPresent(type -> System.out.println("HEKOOASDOAODAOSD"));
+    }
+
+    @Override
+    public String toContentString() {
+
+        return super.toContentString() + " " + hashCode();
+    }
+
+    // @Override
+    // public String toNodeString() {
+    // System.out.println("TEMPLATE SPECIALIZATION CHILDREN:" + getChildren());
+    // return super.toNodeString();
     // }
 
 }

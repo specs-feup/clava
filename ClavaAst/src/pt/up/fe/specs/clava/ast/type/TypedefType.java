@@ -52,6 +52,10 @@ public class TypedefType extends Type {
         return getChild(Type.class, 0);
     }
 
+    public void setTypeClass(Type typeClass) {
+        setChild(0, typeClass);
+    }
+
     @Override
     public String getCode(String name) {
 
@@ -60,6 +64,7 @@ public class TypedefType extends Type {
         Type typeClass = getTypeClass();
 
         if (typeClass instanceof ElaboratedType) {
+
             if (name == null) {
                 return declInfo.getDeclType();
             }
@@ -106,6 +111,11 @@ public class TypedefType extends Type {
     @Override
     protected Type desugarImpl() {
         return getTypeClass();
+    }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setTypeClass(desugaredType);
     }
 
 }
