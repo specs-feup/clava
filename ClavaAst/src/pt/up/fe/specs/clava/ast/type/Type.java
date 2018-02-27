@@ -199,35 +199,39 @@ public abstract class Type extends ClavaNode {
      * @param typeClass
      * @return
      */
+    public <T extends Type> Optional<T> desugarToTry(Class<T> typeClass) {
+        // If no sugar, return
+        if (!hasSugar()) {
+            return Optional.empty();
+        }
 
-    // public <T extends Type> Optional<T> desugar(Class<T> typeClass) {
-    // // If no sugar, return
-    // if (!hasSugar()) {
-    // return Optional.empty();
-    // }
-    //
-    // Type desugared = desugar();
-    //
-    // if (!typeClass.isInstance(desugared)) {
-    // return desugared.desugar(typeClass);
-    // }
-    //
-    // return Optional.of(typeClass.cast(desugared));
-    //
-    // /*
-    // // Check if current type is the asked type
-    // if (typeClass.isInstance(this)) {
-    // return Optional.of(typeClass.cast(this));
-    // }
-    //
-    // // If is sugared, desugar and call again
-    // if (hasSugar()) {
-    // return desugar().desugar(typeClass);
-    // }
-    //
-    // return Optional.empty();
-    // */
-    // }
+        Type desugared = desugar();
+
+        if (!typeClass.isInstance(desugared)) {
+            return desugared.desugarToTry(typeClass);
+        }
+
+        return Optional.of(typeClass.cast(desugared));
+
+        /*
+        // Check if current type is the asked type
+        if (typeClass.isInstance(this)) {
+        return Optional.of(typeClass.cast(this));
+        }
+        
+        // If is sugared, desugar and call again
+        if (hasSugar()) {
+        return desugar().desugar(typeClass);
+        }
+        
+        return Optional.empty();
+        */
+    }
+
+    public <T extends Type> T desugarTo(Class<T> typeClass) {
+        return desugarToTry(typeClass)
+                .orElseThrow(() -> new RuntimeException("Could not desugar to type '" + typeClass + "':\n" + this));
+    }
 
     public final Type desugar() {
         if (!getTypeData().hasSugar()) {
@@ -270,24 +274,29 @@ public abstract class Type extends ClavaNode {
         return false;
     }
 
+    public <T extends Type> T to(Class<T> type) {
+        return toTry(type).orElseThrow(
+                () -> new RuntimeException("Could not convert type '" + getClass() + "' to '" + type + "':\n" + this));
+    }
+
     /**
      * Goes down the type tree looking for the given type. If a node has more than one child, descending stops.
      *
      * @param type
      * @return
      */
-    public <T extends Type> Optional<T> to(Class<T> type) {
+    public <T extends Type> Optional<T> toTry(Class<T> type) {
         if (type.isInstance(this)) {
             return Optional.of(type.cast(this));
         }
 
         // Continue if there is one child
         if (getNumChildren() == 1) {
-            return ((Type) getChild(0)).to(type);
+            return ((Type) getChild(0)).toTry(type);
         }
 
         if (this instanceof AttributedType) {
-            return ((AttributedType) this).getModifiedType().to(type);
+            return ((AttributedType) this).getModifiedType().toTry(type);
         }
 
         // Stop, can go no further
@@ -297,26 +306,37 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = prime;
-        result = prime * result + ((data == null) ? 0 : data.hashCode());
-        return result;
+        return getCode().hashCode();
+        // final int prime = 31;
+        // int result = prime;
+        // result = prime * result + ((data == null) ? 0 : data.hashCode());
+        // return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
 
-        if (!super.equals(obj)) {
+        // if (this == obj) {
+        // return true;
+        // }
+        //
+        // if (!super.equals(obj)) {
+        // return false;
+        // }
+        //
+        // if (getClass() != obj.getClass()) {
+        // return false;
+        // }
+        // Type other = (Type) obj;
+
+        if (!(obj instanceof Type)) {
             return false;
         }
-
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Type other = (Type) obj;
+        // System.out.println("THIS CODE:" + getCode());
+        // System.out.println("OTHER CODE:" + ((Type) obj).getCode());
+        return getCode().equals(((Type) obj).getCode());
+        /*
+        
         if (data == null) {
             if (other.data != null) {
                 return false;
@@ -325,6 +345,7 @@ public abstract class Type extends ClavaNode {
             return false;
         }
         return true;
+        */
     }
 
 }

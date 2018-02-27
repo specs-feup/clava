@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
@@ -611,6 +612,13 @@ public class App extends ClavaNode {
     }
 
     public CXXRecordDecl getCXXRecordDecl(String namespace, String declName) {
+        return getCXXRecordDeclTry(namespace, declName)
+                .orElseThrow(() -> new RuntimeException(
+                        "Could not find CXXRecordDecl with name '" + (namespace == null ? "" : namespace + "::")
+                                + declName + "'"));
+    }
+
+    public Optional<CXXRecordDecl> getCXXRecordDeclTry(String namespace, String declName) {
         // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
         Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
                 .flatMap(tu -> tu.getChildrenStream());
@@ -628,11 +636,21 @@ public class App extends ClavaNode {
         return cxxRecordCandidates.filter(child -> child instanceof CXXRecordDecl)
                 .map(child -> (CXXRecordDecl) child)
                 .filter(recordDecl -> recordDecl.getDeclName().equals(declName))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(
-                        "Could not find CXXRecordDecl with name '" + (namespace == null ? "" : namespace + "::")
-                                + declName + "'"));
+                .findFirst();
+        // .orElseThrow(() -> new RuntimeException(
+        // "Could not find CXXRecordDecl with name '" + (namespace == null ? "" : namespace + "::")
+        // + declName + "'"));
 
+    }
+
+    /**
+     * Helper method that accepts a RecordType.
+     * 
+     * @param recordType
+     * @return
+     */
+    public Optional<CXXRecordDecl> getCXXRecordDeclTry(RecordType recordType) {
+        return getCXXRecordDeclTry(recordType.getNamespace().orElse(null), recordType.getSimpleRecordName());
     }
 
     public GlobalManager getGlobalManager() {
@@ -709,4 +727,5 @@ public class App extends ClavaNode {
             tu.setSourcePath(sourcePath);
         }
     }
+
 }

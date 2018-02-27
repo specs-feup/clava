@@ -129,16 +129,19 @@ public class BuiltinType extends Type {
         return hasVoid;
     }
 
+    /*
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((getTypeData() == null) ? 0 : getTypeData().hashCode());
         result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
-
+    
         return result;
     }
+    */
 
+    /*
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -150,9 +153,9 @@ public class BuiltinType extends Type {
         if (getClass() != obj.getClass()) {
             return false;
         }
-
+    
         BuiltinType other = (BuiltinType) obj;
-
+    
         if (keywords == null) {
             if (other.keywords != null) {
                 return false;
@@ -160,13 +163,14 @@ public class BuiltinType extends Type {
         } else if (!keywords.equals(other.keywords)) {
             return false;
         }
-
+    
         return true;
     }
+    */
 
     @Override
     public String toContentString() {
-        return super.toContentString() + " " + hashCode();
+        return super.toContentString() + ", keywords: " + getKeywords();
     }
 
 }

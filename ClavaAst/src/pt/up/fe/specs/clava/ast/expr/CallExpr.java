@@ -159,8 +159,7 @@ public class CallExpr extends Expr {
         return getApp().getFunctionDeclaration(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
     }
 
-    private Optional<FunctionDecl> getFunctionDecl() {
-
+    protected Optional<FunctionDecl> getFunctionDecl() {
         Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
 
         if (!varDecl.isPresent()) {
@@ -168,12 +167,45 @@ public class CallExpr extends Expr {
         }
 
         DeclaratorDecl declarator = varDecl.get();
-        if (!(declarator instanceof FunctionDecl)) {
-            SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-            return Optional.empty();
+        if (declarator instanceof FunctionDecl) {
+            return Optional.of((FunctionDecl) declarator);
         }
 
-        return Optional.of((FunctionDecl) declarator);
+        // E.g., constructors
+        /*
+        if (declarator instanceof VarDecl) {
+            System.out.println("VarDecl Type:" + declarator.getType());
+            Expr initExpr = ((VarDecl) declarator).getInit().orElse(null);
+            if (initExpr == null) {
+                SpecsLogs.msgWarn("Could not extract function from call from VarDecl, check if ok:\n" + declarator);
+                return Optional.empty();
+            }
+        
+            if (initExpr instanceof CXXConstructExpr) {
+                Type initExprType = initExpr.getType();
+                RecordType recordType = initExprType instanceof RecordType ? (RecordType) initExprType
+                        : initExprType.desugarTo(RecordType.class);
+        
+                // RecordType recordType = initExpr.getType().desugarTo(RecordType.class);
+                CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
+                if (recordDecl == null) {
+                    return Optional.empty();
+                }
+                System.out.println("RECORD DECL:" + recordDecl);
+                // recordType.getDeclInfo().;
+                System.out.println("Constructor type:" + initExpr.getType());
+            }
+        }
+        */
+        SpecsLogs.msgLib("Could not extract function from call callee decl, check if ok:\n" + declarator);
+        return Optional.empty();
+
+        // if (!(declarator instanceof FunctionDecl)) {
+        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of((FunctionDecl) declarator);
     }
 
     /**
