@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
+import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms;
@@ -167,13 +168,14 @@ public class CxxWeaver extends ACxxWeaver {
 
     // Gears
     private final ModifiedFilesGear modifiedFilesGear;
+    private final InsideApplyGear insideApplyGear;
 
     // Parsed program state
     // private Deque<App> apps;
     // private Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
 
     // private File outputDir = null;
-    private List<File> originalSources = null;
+    // private List<File> originalSources = null;
     private List<File> currentSources = null;
     private List<String> userFlags = null;
     // private CxxJoinpoints jpFactory = null;
@@ -193,6 +195,7 @@ public class CxxWeaver extends ACxxWeaver {
     public CxxWeaver() {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
+        this.insideApplyGear = new InsideApplyGear();
 
         // Weaver configuration
         args = null;
@@ -295,7 +298,7 @@ public class CxxWeaver extends ACxxWeaver {
         // This setting is local to the thread
 
         // Weaver arguments
-        this.originalSources = sources;
+        // this.originalSources = sources;
         this.currentSources = sources;
         // this.outputDir = outputDir;
         this.args = args;
@@ -794,7 +797,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public List<AGear> getGears() {
-        return Arrays.asList(modifiedFilesGear);
+        return Arrays.asList(modifiedFilesGear, insideApplyGear);
     }
 
     @Override
@@ -826,6 +829,8 @@ public class CxxWeaver extends ACxxWeaver {
      *            if true, the weaver will update its state to use the rebuilt tree instead of the original tree
      */
     public void rebuildAst(boolean update) {
+        // Check if inside apply
+
         // Write current tree to a temporary folder
         File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER);
         SpecsIo.deleteFolderContents(tempFolder, true);
