@@ -19,6 +19,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
@@ -275,6 +276,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        // Check if type
+        if (node.getNode() instanceof Type) {
+            ClavaLog.info("Action 'insertBefore' not available for 'type' join points");
+            return null;
+        }
+
         return CxxActions.insertBefore(this, node);
     }
 
@@ -285,6 +292,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        // Check if type
+        if (node.getNode() instanceof Type) {
+            ClavaLog.info("Action 'insertAfter' not available for 'type' join points");
+            return null;
+        }
+
         return CxxActions.insertAfter(this, node);
     }
 

@@ -42,6 +42,7 @@ public class ClavaWeaverData {
 
         this.apps = new ArrayDeque<>();
         this.userValuesStack = new ArrayDeque<>();
+
     }
 
     public Optional<App> getAst() {

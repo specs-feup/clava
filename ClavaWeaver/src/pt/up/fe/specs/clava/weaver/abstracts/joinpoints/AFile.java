@@ -328,6 +328,18 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     public abstract List<? extends AInclude> selectInclude();
 
     /**
+     * Method used by the lara interpreter to select typedefDecls
+     * @return 
+     */
+    public abstract List<? extends ATypedefDecl> selectTypedefDecl();
+
+    /**
+     * Method used by the lara interpreter to select decls
+     * @return 
+     */
+    public abstract List<? extends ADecl> selectDecl();
+
+    /**
      * 
      * @param name 
      * @param isAngled 
@@ -640,6 +652,12 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	case "include": 
         		joinPointList = selectInclude();
         		break;
+        	case "typedefDecl": 
+        		joinPointList = selectTypedefDecl();
+        		break;
+        	case "decl": 
+        		joinPointList = selectDecl();
+        		break;
         	default:
         		joinPointList = super.select(selectName);
         		break;
@@ -694,6 +712,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         selects.add("vardecl");
         selects.add("comment");
         selects.add("include");
+        selects.add("typedefDecl");
+        selects.add("decl");
     }
 
     /**

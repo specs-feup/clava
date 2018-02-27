@@ -30,10 +30,12 @@
 		<select							class="tag"/>		
 		<select 						class="vardecl"/>
 		<select 						class="comment"/>
-		<select 						class="include"/>		
+		<select 						class="include"/>	
+		<select 						class="typedefDecl"/>			
+		<select 						class="decl"/>		
 	</joinpoint>
 	
-	<joinpoint class="include">
+	<joinpoint class="include" extends="decl">
 	</joinpoint>
 	
 	<!-- RECORD -->
@@ -83,6 +85,13 @@
  	<joinpoint class="vardecl" extends="namedDecl">
  		<select alias="init"			class="expression"/>
  	</joinpoint>  		
+	
+	
+	<!-- TYPEDEF DECL -->
+	<joinpoint class="typedefDecl" extends="namedDecl">
+ 	</joinpoint>  		
+	
+	
 	
 	<!--  FUNCTION PARAMETER -->
 	<joinpoint class="param" extends="vardecl">

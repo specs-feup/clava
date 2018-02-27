@@ -14,18 +14,18 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 
-public class CxxInclude extends AInclude {
+public class CxxTypedefDecl extends ATypedefDecl {
 
-    private final IncludeDecl include;
+    private final TypedefDecl typedefDecl;
     private final ACxxWeaverJoinPoint parent;
 
-    public CxxInclude(IncludeDecl include, ACxxWeaverJoinPoint parent) {
-        super(new CxxDecl(include, parent));
-        this.include = include;
+    public CxxTypedefDecl(TypedefDecl typedefDecl, ACxxWeaverJoinPoint parent) {
+        super(new CxxNamedDecl(typedefDecl, parent));
+        this.typedefDecl = typedefDecl;
         this.parent = parent;
     }
 
@@ -36,27 +36,7 @@ public class CxxInclude extends AInclude {
 
     @Override
     public ClavaNode getNode() {
-        return include;
-    }
-
-    @Override
-    public String getNameImpl() {
-        return include.getInclude().getInclude();
-    }
-
-    @Override
-    public Boolean getIsAngledImpl() {
-        return include.getInclude().isAngled();
-    }
-
-    @Override
-    public String getFilepathImpl() {
-        return include.getInclude().getSourceFile().getAbsolutePath();
-    }
-
-    @Override
-    public String getRelativeFolderpathImpl() {
-        return include.getInclude().getRelativeFolder().getAbsolutePath();
+        return typedefDecl;
     }
 
 }

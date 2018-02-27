@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -43,6 +44,7 @@ import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
@@ -54,6 +56,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
@@ -388,4 +391,19 @@ public class CxxFile extends AFile {
         return tunit.getSourcePath().map(File::getPath).orElse(null);
     }
 
+    @Override
+    public List<? extends ADecl> selectDecl() {
+        return tunit.getDescendantsStream()
+                .filter(node -> node instanceof Decl)
+                .map(varDecl -> CxxJoinpoints.create((Decl) varDecl, this, ADecl.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<? extends ATypedefDecl> selectTypedefDecl() {
+        return tunit.getDescendantsStream()
+                .filter(node -> node instanceof TypedefDecl)
+                .map(varDecl -> CxxJoinpoints.create((TypedefDecl) varDecl, this, ATypedefDecl.class))
+                .collect(Collectors.toList());
+    }
 }

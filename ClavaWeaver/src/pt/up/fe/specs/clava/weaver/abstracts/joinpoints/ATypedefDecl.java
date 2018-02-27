@@ -1,121 +1,53 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AInclude
+ * Auto-Generated class for join point ATypedefDecl
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AInclude extends ADecl {
+public abstract class ATypedefDecl extends ANamedDecl {
 
-    protected ADecl aDecl;
+    protected ANamedDecl aNamedDecl;
 
     /**
      * 
      */
-    public AInclude(ADecl aDecl){
-        this.aDecl = aDecl;
+    public ATypedefDecl(ANamedDecl aNamedDecl){
+        super(aNamedDecl);
+        this.aNamedDecl = aNamedDecl;
     }
     /**
-     * the name of the include
+     * Get value on attribute name
+     * @return the attribute's value
      */
-    public abstract String getNameImpl();
-
-    /**
-     * the name of the include
-     */
-    public final Object getName() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
-        	}
-        	String result = this.getNameImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "name", e);
-        }
+    @Override
+    public String getNameImpl() {
+        return this.aNamedDecl.getNameImpl();
     }
 
     /**
-     * true if this is an angled include (i.e., system include)
+     * Get value on attribute isPublic
+     * @return the attribute's value
      */
-    public abstract Boolean getIsAngledImpl();
-
-    /**
-     * true if this is an angled include (i.e., system include)
-     */
-    public final Object getIsAngled() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAngled", Optional.empty());
-        	}
-        	Boolean result = this.getIsAngledImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAngled", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isAngled", e);
-        }
+    @Override
+    public Boolean getIsPublicImpl() {
+        return this.aNamedDecl.getIsPublicImpl();
     }
 
     /**
-     * the complete path to the file
+     * 
      */
-    public abstract String getFilepathImpl();
-
-    /**
-     * the complete path to the file
-     */
-    public final Object getFilepath() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "filepath", Optional.empty());
-        	}
-        	String result = this.getFilepathImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "filepath", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "filepath", e);
-        }
-    }
-
-    /**
-     * the path to the folder of the source file of the include, relative to the name of the include
-     */
-    public abstract String getRelativeFolderpathImpl();
-
-    /**
-     * the path to the folder of the source file of the include, relative to the name of the include
-     */
-    public final Object getRelativeFolderpath() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "relativeFolderpath", Optional.empty());
-        	}
-        	String result = this.getRelativeFolderpathImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "relativeFolderpath", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "relativeFolderpath", e);
-        }
+    public void defNameImpl(String value) {
+        this.aNamedDecl.defNameImpl(value);
     }
 
     /**
@@ -124,7 +56,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aDecl.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -133,7 +65,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aDecl.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -142,7 +74,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aDecl.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -151,7 +83,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aDecl.insertAfterImpl(node);
+        return this.aNamedDecl.insertAfterImpl(node);
     }
 
     /**
@@ -160,7 +92,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aDecl.insertAfterImpl(code);
+        return this.aNamedDecl.insertAfterImpl(code);
     }
 
     /**
@@ -168,7 +100,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public void detachImpl() {
-        this.aDecl.detachImpl();
+        this.aNamedDecl.detachImpl();
     }
 
     /**
@@ -177,7 +109,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aDecl.setTypeImpl(type);
+        this.aNamedDecl.setTypeImpl(type);
     }
 
     /**
@@ -185,7 +117,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aDecl.copyImpl();
+        return this.aNamedDecl.copyImpl();
     }
 
     /**
@@ -195,7 +127,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aDecl.setUserFieldImpl(fieldName, value);
+        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -204,7 +136,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aDecl.setUserFieldImpl(fieldNameAndValue);
+        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -213,7 +145,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aDecl.messageToUserImpl(message);
+        this.aNamedDecl.messageToUserImpl(message);
     }
 
     /**
@@ -223,7 +155,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aDecl.insertImpl(position, code);
+        this.aNamedDecl.insertImpl(position, code);
     }
 
     /**
@@ -231,15 +163,15 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public String toString() {
-        return this.aDecl.toString();
+        return this.aNamedDecl.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends ADecl> getSuper() {
-        return Optional.of(this.aDecl);
+    public Optional<? extends ANamedDecl> getSuper() {
+        return Optional.of(this.aNamedDecl);
     }
 
     /**
@@ -250,7 +182,7 @@ public abstract class AInclude extends ADecl {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
-        		joinPointList = this.aDecl.select(selectName);
+        		joinPointList = this.aNamedDecl.select(selectName);
         		break;
         }
         return joinPointList;
@@ -262,6 +194,13 @@ public abstract class AInclude extends ADecl {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -271,11 +210,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aDecl.fillWithAttributes(attributes);
-        attributes.add("name");
-        attributes.add("isAngled");
-        attributes.add("filepath");
-        attributes.add("relativeFolderpath");
+        this.aNamedDecl.fillWithAttributes(attributes);
     }
 
     /**
@@ -283,7 +218,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aDecl.fillWithSelects(selects);
+        this.aNamedDecl.fillWithSelects(selects);
     }
 
     /**
@@ -291,7 +226,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aDecl.fillWithActions(actions);
+        this.aNamedDecl.fillWithActions(actions);
     }
 
     /**
@@ -300,7 +235,7 @@ public abstract class AInclude extends ADecl {
      */
     @Override
     public final String get_class() {
-        return "include";
+        return "typedefDecl";
     }
 
     /**
@@ -313,16 +248,14 @@ public abstract class AInclude extends ADecl {
         if(isInstance) {
         	return true;
         }
-        return this.aDecl.instanceOf(joinpointClass);
+        return this.aNamedDecl.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum IncludeAttributes {
+    protected enum TypedefDeclAttributes {
         NAME("name"),
-        ISANGLED("isAngled"),
-        FILEPATH("filepath"),
-        RELATIVEFOLDERPATH("relativeFolderpath"),
+        ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -358,13 +291,13 @@ public abstract class AInclude extends ADecl {
         /**
          * 
          */
-        private IncludeAttributes(String name){
+        private TypedefDeclAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<IncludeAttributes> fromString(String name) {
+        public static Optional<TypedefDeclAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -372,7 +305,7 @@ public abstract class AInclude extends ADecl {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(IncludeAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(TypedefDeclAttributes::name).collect(Collectors.toList());
         }
 
         /**

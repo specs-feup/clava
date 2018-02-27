@@ -144,6 +144,7 @@ public class CxxType extends AType {
                 .collect(Collectors.toList());
 
         type.setTemplateArgumentTypes(argTypes);
+
     }
 
     @Override

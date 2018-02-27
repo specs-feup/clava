@@ -18,5 +18,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraExtraApi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraDoc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/XStreamPlus"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LaraUnit"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
