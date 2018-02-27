@@ -95,6 +95,13 @@ public class RecordType extends TagType {
     }
 
     private static Pair<String, String> getNamespace(String recordName) {
+        // Exception: lambda, anonymous
+        // (lambda at...)
+        // (anonymous at...)
+        if (recordName.startsWith("(")) {
+            return new Pair<>(null, recordName);
+        }
+
         // Extract namespace from record name
         String namespace = recordName;
 
