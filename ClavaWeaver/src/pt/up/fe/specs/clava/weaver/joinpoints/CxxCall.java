@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -179,16 +180,16 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public CxxFunction getDeclarationImpl() {
-        return call.getDeclaration().map(decl -> (CxxFunction) CxxJoinpoints.create(decl, this)).orElse(null);
+    public AFunction getDeclarationImpl() {
+        return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl, this)).orElse(null);
         // Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
         //
         // return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override
-    public CxxFunction getDefinitionImpl() {
-        return call.getDefinition().map(decl -> (CxxFunction) CxxJoinpoints.create(decl, this)).orElse(null);
+    public AFunction getDefinitionImpl() {
+        return call.getDefinition().map(decl -> (AFunction) CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override

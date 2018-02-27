@@ -47,9 +47,9 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -138,7 +138,7 @@ public class CallWrap {
      */
     private void createInPlaceWrapper(String name) {
 
-        FunctionDecl declaration = cxxCall.getDefinitionImpl().getNode();
+        FunctionDecl declaration = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
         addWrapperFunctionInPlace(name, declaration);
     }
 
@@ -156,7 +156,7 @@ public class CallWrap {
         // FunctionDecl declaration = functionDecl.getDeclaration().get();
 
         // Get declaration of function call
-        FunctionDecl declaration = cxxCall.getDeclarationImpl().getNode();
+        FunctionDecl declaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
 
         // Get include file
         TranslationUnit includeFile = declaration.getAncestor(TranslationUnit.class);
@@ -260,8 +260,8 @@ public class CallWrap {
 
     private CallWrapType getWrapType() {
         // Get declaration of function call
-        CxxFunction functionDeclJp = cxxCall.getDeclarationImpl();
-        CxxFunction functionDefJp = cxxCall.getDefinitionImpl();
+        AFunction functionDeclJp = cxxCall.getDeclarationImpl();
+        AFunction functionDefJp = cxxCall.getDefinitionImpl();
         // AJoinPoint functionDeclJp = cxxCall.getDeclImpl();
 
         // If no declaration join point is found, this probably means that the call is from
@@ -278,14 +278,14 @@ public class CallWrap {
             // the
             // file of the function call
             else {
-                FunctionDecl funcDef = functionDefJp.getNode();
+                FunctionDecl funcDef = (FunctionDecl) functionDefJp.getNode();
                 SpecsLogs.msgLib("Could not find declaration of function '" + funcDef.getDeclName() + "' at "
                         + funcDef.getLocation());
                 return CallWrapType.NO_INCLUDE;
             }
         }
 
-        FunctionDecl functionDecl = functionDeclJp.getNode();
+        FunctionDecl functionDecl = (FunctionDecl) functionDeclJp.getNode();
         // Optional<FunctionDecl> declarationTry = functionDecl.getDeclaration();
 
         // if (!declarationTry.isPresent()) {
@@ -301,7 +301,7 @@ public class CallWrap {
 
         // Get include file of declaration
         // FunctionDecl declaration = declarationTry.get();
-        FunctionDecl declaration = functionDeclJp.getNode();
+        FunctionDecl declaration = (FunctionDecl) functionDeclJp.getNode();
         TranslationUnit includeFile = declaration.getAncestor(TranslationUnit.class);
 
         if (!includeFile.isHeaderFile()) {
@@ -356,7 +356,7 @@ public class CallWrap {
     }
 
     private FunctionType getFunctionType() {
-        return cxxCall.getNode().getCalleeDeclRef().getType().to(FunctionType.class).get();
+        return cxxCall.getNode().getCalleeDeclRef().getType().toTry(FunctionType.class).get();
     }
 
     private List<Stmt> createFunctionCallCode(List<String> paramNames) {

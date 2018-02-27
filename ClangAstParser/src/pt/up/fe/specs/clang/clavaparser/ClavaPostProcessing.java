@@ -151,7 +151,7 @@ public class ClavaPostProcessing {
 
         // System.out.println("TYPE:" + namedDecl.getType());
         // Check if type has a record type
-        RecordType recordType = namedDecl.getType().to(RecordType.class).orElse(null);
+        RecordType recordType = namedDecl.getType().toTry(RecordType.class).orElse(null);
 
         if (recordType != null // It has a RecordType
                 && lastRecordDecl.getRecordDeclData().isAnonymous() // Last record is anonymous
