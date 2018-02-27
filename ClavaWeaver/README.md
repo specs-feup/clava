@@ -12,6 +12,11 @@ This should create the file ClavaWeaver.jar.
 Clava can be downloaded from this [link](http://specs.fe.up.pt/tools/clava.jar).
 
 
+## Clava Online Demo Version
+
+There is a demo online version of Clava available [here](http://specs.fe.up.pt/tools/clava).
+
+
 
 ## Running Clava
 
