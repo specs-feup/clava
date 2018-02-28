@@ -48,6 +48,13 @@ int main() {
 	auto fooResult = foo();
     auto fooRefResult = fooRef("Hello");
 
+
+	std::vector<int> t = std::vector<int> {};
+   	t = std::vector<int> {};
+	t = {0};
+   	t = {};
+	std::vector<int> v = {};
+
 	
 	return 0;
 }

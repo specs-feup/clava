@@ -156,7 +156,6 @@ public abstract class AClangAstTester {
         // if (keepFiles) {
         // return;
         // }
-
         // Delete resources under test
         File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
         SpecsIo.deleteFolderContents(outputFolder);
@@ -172,7 +171,6 @@ public abstract class AClangAstTester {
 
     @Test
     public void testProper() {
-
         // Parse files
 
         CodeParser codeParser = new CodeParser()
@@ -186,7 +184,6 @@ public abstract class AClangAstTester {
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
 
         clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
-
         if (onePass) {
             return;
         }

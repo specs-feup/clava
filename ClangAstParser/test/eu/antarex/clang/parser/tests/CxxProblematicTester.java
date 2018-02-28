@@ -13,11 +13,24 @@
 
 package eu.antarex.clang.parser.tests;
 
+import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.antarex.clang.parser.AClangAstTester;
 import eu.antarex.clang.parser.CxxTester;
 
 public class CxxProblematicTester {
+
+    @BeforeClass
+    public static void setup() throws Exception {
+        AClangAstTester.clear();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        AClangAstTester.clear();
+    }
 
     @Test
     public void testBoost() {
@@ -61,6 +74,12 @@ public class CxxProblematicTester {
     @Test
     public void testSortedId() {
         new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").test();
+    }
+
+    @Test
+    public void testDummy() {
+        new CxxTester("problematic/dummy.cpp").showCode().test();
+        // onePass().showCode().showClangAst().showClavaAst()
     }
 
 }
