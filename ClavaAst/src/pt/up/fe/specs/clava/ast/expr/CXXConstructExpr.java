@@ -86,6 +86,13 @@ public class CXXConstructExpr extends Expr {
             return "";
         }
 
+        String argsCode = getArgsCode();
+
+        // No arguments
+        if (argsCode.isEmpty()) {
+            return "{}";
+        }
+
         return cxxRecordName + getArgsCode();
     }
 

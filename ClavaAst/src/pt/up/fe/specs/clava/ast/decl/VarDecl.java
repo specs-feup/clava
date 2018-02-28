@@ -115,7 +115,8 @@ public class VarDecl extends DeclaratorDecl {
      * @return
      */
     private String cinitCode() {
-        return " = " + getChild(0).getCode();
+        // return " = " + getChild(0).getCode();
+        return " = " + getInit().get().getCode();
     }
 
     private String callInitCode() {
