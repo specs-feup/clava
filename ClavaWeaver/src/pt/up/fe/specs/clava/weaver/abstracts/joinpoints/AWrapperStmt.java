@@ -423,6 +423,7 @@ public abstract class AWrapperStmt extends AStatement {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
         DESCENDANTS("descendants"),

@@ -460,6 +460,7 @@ public abstract class AMethod extends AFunction {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
         DESCENDANTS("descendants"),

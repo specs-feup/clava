@@ -409,6 +409,7 @@ public abstract class ABinaryOp extends AExpression {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
         DESCENDANTS("descendants"),

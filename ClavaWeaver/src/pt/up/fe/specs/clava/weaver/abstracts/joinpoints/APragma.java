@@ -220,6 +220,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
         DESCENDANTS("descendants"),

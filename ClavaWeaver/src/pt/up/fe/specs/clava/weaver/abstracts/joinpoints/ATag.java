@@ -302,6 +302,7 @@ public abstract class ATag extends APragma {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
         DESCENDANTS("descendants"),

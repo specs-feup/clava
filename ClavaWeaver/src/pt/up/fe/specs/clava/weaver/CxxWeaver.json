@@ -180,6 +180,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -725,6 +738,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -1309,6 +1335,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -1955,6 +1994,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -2618,6 +2670,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -3156,6 +3221,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -3675,6 +3753,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -4176,6 +4267,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -4669,6 +4773,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -5299,6 +5416,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -5859,6 +5989,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -6455,6 +6598,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -7281,6 +7437,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -8008,6 +8177,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -8596,6 +8778,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -9208,6 +9403,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -9829,6 +10037,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -10580,6 +10801,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -11163,6 +11397,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -11815,6 +12062,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -12512,6 +12772,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -13118,6 +13391,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -13826,6 +14112,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -14650,6 +14949,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -15198,6 +15510,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -15818,6 +16143,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -16459,6 +16797,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -16990,6 +17341,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -17731,6 +18095,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -18306,6 +18683,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -18838,6 +19228,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -19486,6 +19889,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -20173,6 +20589,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -20820,6 +21249,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -21362,6 +21804,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -21929,6 +22384,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -22483,6 +22951,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",
@@ -23092,6 +23573,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -23622,6 +24116,19 @@
                            {
                               "type": "joinpoint[]",
                               "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
                            },
                            {
                               "type": "String",

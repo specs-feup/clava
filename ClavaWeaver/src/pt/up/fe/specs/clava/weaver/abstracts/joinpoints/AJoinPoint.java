@@ -376,6 +376,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("parent");
         attributes.add("ancestor(String type)");
         attributes.add("descendants(String type)");
+        attributes.add("descendantsAndSelf(String type)");
         attributes.add("chainAncestor(String type)");
         attributes.add("astParent");
         attributes.add("astAncestor(String type)");
@@ -515,6 +516,44 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "descendants", e);
+        }
+    }
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public abstract AJoinPoint[] descendantsAndSelfArrayImpl(String type);
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public Bindings descendantsAndSelfImpl(String type) {
+        AJoinPoint[] aJoinPointArrayImpl0 = descendantsAndSelfArrayImpl(type);
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public final Object descendantsAndSelf(String type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "descendantsAndSelf", Optional.empty(), type);
+        	}
+        	Bindings result = this.descendantsAndSelfImpl(type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "descendantsAndSelf", Optional.ofNullable(result), type);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "descendantsAndSelf", e);
         }
     }
 

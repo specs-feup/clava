@@ -17,6 +17,10 @@
 			tooltip="Retrieves the descendants of the given type">
 			<parameter name="type" type="String" />
 		</attribute>
+		<attribute name="descendantsAndSelf" type="joinpoint[]"
+			tooltip="Retrieves the descendants of the given type, including the node itself">
+			<parameter name="type" type="String" />
+		</attribute>
 		<attribute name="chainAncestor" type="joinpoint"
 			tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
 			<parameter name="type" type="String" />

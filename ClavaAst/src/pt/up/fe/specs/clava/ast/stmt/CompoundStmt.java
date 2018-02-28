@@ -178,4 +178,5 @@ public class CompoundStmt extends Stmt {
 
         this.isNaked = isNaked;
     }
+
 }
