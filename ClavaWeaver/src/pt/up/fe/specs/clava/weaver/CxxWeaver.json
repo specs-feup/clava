@@ -167,6 +167,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -703,6 +716,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -1274,6 +1300,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -1911,6 +1950,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -2346,6 +2398,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "expression",
+                              "name": "subExpr"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "joinpoint",
                               "name": "toType"
                            }]
@@ -2541,6 +2601,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -3070,6 +3143,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -3576,6 +3662,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -4064,6 +4163,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -4548,6 +4660,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -5161,6 +5286,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -5712,6 +5850,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -6295,6 +6446,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -7104,6 +7268,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -7818,6 +7995,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -8397,6 +8587,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -8996,6 +9199,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -9604,6 +9820,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -10338,6 +10567,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -10912,6 +11154,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -11551,6 +11806,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -12231,6 +12499,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -12828,6 +13109,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -13523,6 +13817,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -14330,6 +14637,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -14869,6 +15189,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -15476,6 +15809,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -16100,6 +16446,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -16622,6 +16981,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -17346,6 +17718,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -17908,6 +18293,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -18431,6 +18829,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -19066,6 +19477,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -19736,6 +20160,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -20370,6 +20807,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -20903,6 +21353,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -21453,6 +21916,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -21998,6 +22474,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -22590,6 +23079,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -23111,6 +23613,19 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {

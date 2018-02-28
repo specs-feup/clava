@@ -532,6 +532,7 @@ public abstract class AMemberCall extends ACall {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),

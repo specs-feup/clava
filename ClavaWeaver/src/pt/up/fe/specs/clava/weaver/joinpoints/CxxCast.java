@@ -75,4 +75,9 @@ public class CxxCast extends ACast {
         return CxxExpression.selectVarDecl(this);
     }
 
+    @Override
+    public AExpression getSubExprImpl() {
+        return (AExpression) CxxJoinpoints.create(cast.getSubExpr(), this);
+
+    }
 }

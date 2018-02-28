@@ -523,6 +523,7 @@ public abstract class ATemplateSpecializationType extends AType {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),

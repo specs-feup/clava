@@ -649,6 +649,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),

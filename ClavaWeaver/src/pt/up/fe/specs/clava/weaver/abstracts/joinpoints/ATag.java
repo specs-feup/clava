@@ -304,6 +304,7 @@ public abstract class ATag extends APragma {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),

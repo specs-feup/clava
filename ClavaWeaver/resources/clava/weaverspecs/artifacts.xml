@@ -13,6 +13,10 @@
 			tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
 			<parameter name="type" type="String" />
 		</attribute>
+		<attribute name="descendants" type="joinpoint[]"
+			tooltip="Retrieves the descendants of the given type">
+			<parameter name="type" type="String" />
+		</attribute>
 		<attribute name="chainAncestor" type="joinpoint"
 			tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
 			<parameter name="type" type="String" />
@@ -320,6 +324,7 @@
 		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use expr.implicitCast instead"/> 
 		<attribute name="fromType" type="joinpoint" />
 		<attribute name="toType" type="joinpoint" />
+		<attribute name="subExpr" type="expression" />
 	</artifact>
 
 	<!-- ARRAY ACCESS -->

@@ -100,6 +100,31 @@ public abstract class ACast extends AExpression {
     }
 
     /**
+     * Get value on attribute subExpr
+     * @return the attribute's value
+     */
+    public abstract AExpression getSubExprImpl();
+
+    /**
+     * Get value on attribute subExpr
+     * @return the attribute's value
+     */
+    public final Object getSubExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "subExpr", Optional.empty());
+        	}
+        	AExpression result = this.getSubExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "subExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "subExpr", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -304,6 +329,7 @@ public abstract class ACast extends AExpression {
         attributes.add("isImplicitCast");
         attributes.add("fromType");
         attributes.add("toType");
+        attributes.add("subExpr");
     }
 
     /**
@@ -350,6 +376,7 @@ public abstract class ACast extends AExpression {
         ISIMPLICITCAST("isImplicitCast"),
         FROMTYPE("fromType"),
         TOTYPE("toType"),
+        SUBEXPR("subExpr"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
@@ -362,6 +389,7 @@ public abstract class ACast extends AExpression {
         LINE("line"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
