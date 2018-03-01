@@ -115,8 +115,19 @@ public class VarDecl extends DeclaratorDecl {
      * @return
      */
     private String cinitCode() {
+        String prefix = " = ";
+
         // return " = " + getChild(0).getCode();
-        return " = " + getInit().get().getCode();
+        Expr initExpr = getInit().get();
+
+        // Special case: CXXConstructorExpr without args
+        // if (initExpr instanceof CXXConstructExpr) {
+        // if (((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
+        // return prefix + " {}";
+        // }
+        // }
+
+        return prefix + initExpr.getCode();
     }
 
     private String callInitCode() {

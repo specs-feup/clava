@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
@@ -86,14 +88,23 @@ public class CXXConstructExpr extends Expr {
             return "";
         }
 
+        // Special case: initializer_list
+        if (cxxRecordName.equals("initializer_list<value_type>")) {
+            return getArgs().stream()
+                    .map(arg -> arg.getCode())
+                    .collect(Collectors.joining(", ", "{", "}"));
+        }
+
         String argsCode = getArgsCode();
 
-        // No arguments
-        if (argsCode.isEmpty()) {
+        // Special case: No arguments before VarDecl
+        if (argsCode.isEmpty() &&
+                ClavaNodes.getParentNormalized(this) instanceof VarDecl) {
+            // return cxxRecordName + "{}";
             return "{}";
         }
 
-        return cxxRecordName + getArgsCode();
+        return cxxRecordName + argsCode;
     }
 
     public String getArgsCode() {

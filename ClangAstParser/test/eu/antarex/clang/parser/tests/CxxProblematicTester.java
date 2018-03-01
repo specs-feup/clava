@@ -78,7 +78,7 @@ public class CxxProblematicTester {
 
     @Test
     public void testDummy() {
-        new CxxTester("problematic/dummy.cpp").showCode().test();
+        new CxxTester("problematic/dummy.cpp").showCode().showClavaAst().test();
         // onePass().showCode().showClangAst().showClavaAst()
     }
 
