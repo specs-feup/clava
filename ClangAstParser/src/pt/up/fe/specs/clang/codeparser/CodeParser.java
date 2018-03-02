@@ -84,6 +84,7 @@ public class CodeParser {
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             App clavaAst = clavaParser.parse();
             clavaAst.setSources(allFiles);
+            clavaAst.addConfig(ast.getConfig());
 
             if (showClavaAst) {
                 SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst);

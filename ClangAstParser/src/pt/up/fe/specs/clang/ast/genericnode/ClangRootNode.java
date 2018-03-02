@@ -202,4 +202,8 @@ public class ClangRootNode extends ClangNode {
         return clangRootData.getNodeToTypes();
     }
 
+    public DataStore getConfig() {
+        return clangRootData.getConfig();
+    }
+
 }

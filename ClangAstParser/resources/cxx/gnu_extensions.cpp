@@ -10,10 +10,13 @@ int main() {
 	typeof(x1) y;   /* Same type as x. Plain old int variable. */	
 
 	int *px;
-	typeof(*px) y2;
+	typeof(*px) py;
+	
+	int* x2;
+    __typeof__(*x2 + *x2) y2;
 	
 	// TypeId
-	//auto x2 = typeid(int).name();
+	//auto x3 = typeid(int).name();
 	
 	return 0;
 }
