@@ -34,15 +34,31 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 public abstract class Type extends ClavaNode {
 
     private TypeData data;
+    private App app;
 
     public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
         this.data = data;
+        app = null;
     }
 
     public TypeData getTypeData() {
         return data;
+    }
+
+    public void setApp(App app) {
+        this.app = app;
+    }
+
+    @Override
+    public Type copy() {
+        Type copy = (Type) super.copy();
+
+        // Set app
+        copy.app = app;
+
+        return copy;
     }
 
     /**
@@ -259,7 +275,17 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public App getApp() {
-        throw new RuntimeException("Type nodes are detached from the App tree, this method is not implemented");
+        // If app not null, return it
+        if (app != null) {
+            return app;
+        }
+
+        // Return app of parent node
+        if (hasParent()) {
+            return getParent().getApp();
+        }
+
+        throw new RuntimeException("Could not find an 'App' node associated with this type");
     }
 
     /**

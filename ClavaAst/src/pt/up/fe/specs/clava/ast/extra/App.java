@@ -30,6 +30,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -39,6 +40,7 @@ import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
@@ -726,6 +728,14 @@ public class App extends ClavaNode {
 
             tu.setSourcePath(sourcePath);
         }
+    }
+
+    public void addConfig(DataStore config) {
+        appData.addAll(config);
+    }
+
+    public Standard getStandard() {
+        return appData.get(ClavaOptions.STANDARD);
     }
 
 }

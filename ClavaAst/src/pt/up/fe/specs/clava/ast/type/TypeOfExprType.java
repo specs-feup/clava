@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -44,6 +46,22 @@ public class TypeOfExprType extends Type {
     @Override
     protected Type desugarImpl() {
         return getChild(Type.class, 1);
+    }
+
+    @Override
+    public String getCode(String name) {
+
+        // If GNU, do not change type (i.e., typeof)
+        if (getApp().getStandard().isGnu()) {
+            return super.getCode(name);
+        }
+
+        // Not GNU, change to __typeof__
+
+        String typeCode = super.getCode(name);
+        Preconditions.checkArgument(typeCode.startsWith("typeof "), "Expected code of type to start with 'typeof '");
+
+        return "__typeof__" + typeCode.substring("typeof".length());
     }
 
 }
