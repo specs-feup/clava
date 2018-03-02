@@ -57,7 +57,6 @@ public class TypeOfExprType extends Type {
         }
 
         // Not GNU, change to __typeof__
-
         String typeCode = super.getCode(name);
         Preconditions.checkArgument(typeCode.startsWith("typeof "), "Expected code of type to start with 'typeof '");
 
