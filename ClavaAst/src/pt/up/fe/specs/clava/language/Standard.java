@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava.language;
 
+import java.util.Set;
+
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -35,6 +38,9 @@ public enum Standard implements StringProvider {
     GNUXX14("gnu++14", true);
 
     private static final Lazy<EnumHelper<Standard>> ENUM_HELPER = EnumHelper.newLazyHelper(Standard.class);
+
+    private static final Set<Standard> GNU_STANDARDS = SpecsCollections.asSet(GNU90, GNU99, GNU11, GNUXX98, GNUXX11,
+            GNUXX14);
 
     public static EnumHelper<Standard> getEnumHelper() {
         return ENUM_HELPER.get();
@@ -81,5 +87,9 @@ public enum Standard implements StringProvider {
 
     public String getFlag() {
         return "-std=" + standard;
+    }
+
+    public boolean isGnu() {
+        return GNU_STANDARDS.contains(this);
     }
 }
