@@ -153,6 +153,7 @@ import pt.up.fe.specs.clang.clavaparser.type.RecordTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.SubstTemplateTypeParmTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.TemplateSpecializationTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.TemplateTypeParmTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.TypeOfExprTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.TypedefTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.UnaryTransformTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.VariableArrayTypeParser;
@@ -372,6 +373,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
         converter.put("PackExpansionType", PackExpansionTypeParser::new);
         converter.put("DependentSizedArrayType", DependentSizedArrayTypeParser::new);
+        converter.put("TypeOfExprType", TypeOfExprTypeParser::new);
 
         /* comment */
         converter.put("ParagraphComment", ParagraphCommentParser::new);

@@ -172,4 +172,8 @@ public class CxxTest {
         new CxxTester("dbl_max.cpp").test();
     }
 
+    @Test
+    public void testGnuExtensions() {
+        new CxxTester("gnu_extensions.cpp").addFlags("-std=gnu++11").test();
+    }
 }
