@@ -88,8 +88,8 @@ public class CXXConstructExpr extends Expr {
             return "";
         }
 
-        // Special case: initializer_list
-        if (cxxRecordName.equals("initializer_list<value_type>")) {
+        // Special case: constructor that receives an initializer_list
+        if (cxxRecordName.startsWith("initializer_list<")) {
             return getArgs().stream()
                     .map(arg -> arg.getCode())
                     .collect(Collectors.joining(", ", "{", "}"));
