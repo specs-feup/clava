@@ -207,6 +207,7 @@ import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType.TemplateParmData;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
@@ -767,6 +768,11 @@ public class ClavaNodeFactory {
             Type elementType, Expr sizeExpr) {
 
         return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
+    }
+
+    public static TypeOfExprType typeOfExprType(TypeData data, ClavaNodeInfo info, Expr underlyingExpr,
+            Type underlyingType) {
+        return new TypeOfExprType(data, info, underlyingExpr, underlyingType);
     }
 
     /*
