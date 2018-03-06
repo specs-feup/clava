@@ -397,3 +397,27 @@ void ClangAstDumper::VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstruc
     llvm::errs() << getId(Node) << "\n";
     llvm::errs() << getId(Node->getTypeAsWritten().getTypePtr()) << "\n";
 }
+
+void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    log("CXXTypeidExpr", Node);
+
+    bool isTypeOperand = Node->isTypeOperand();
+    llvm::errs() << TYPEID_DATA << "\n";
+    llvm::errs() << getId(Node) << "\n";
+
+    llvm::errs() << isTypeOperand << "\n"; // True if is a type operand, false if it is an expression
+
+    // Address of type/expr
+    if(isTypeOperand) {
+        QualType typeOperand = Node->getTypeOperand(*Context);
+        llvm::errs() << getId(Node->getTypeOperand(*Context).getTypePtr()) << "\n";
+        VisitTypeTop(typeOperand);
+    } else {
+        llvm::errs() << getId(Node->getExprOperand()) << "\n";
+        VisitStmtTop(Node->getExprOperand());
+    }
+}

@@ -73,6 +73,8 @@ public:
     void VisitLambdaExpr(const LambdaExpr *Node);
     void VisitSizeOfPackExpr(const SizeOfPackExpr *Node);
     void VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node);
+    void VisitCXXTypeidExpr(const CXXTypeidExpr *Node);
+
 
 
     /*

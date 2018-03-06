@@ -46,5 +46,7 @@ static const std::string TYPE_AS_WRITTEN = "<Type As Written>";
 
 static const std::string LAMBDA_EXPR_DATA = "<Lambda Expr Data>";
 
+static const std::string TYPEID_DATA = "<Typeid Data>";
+
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H
