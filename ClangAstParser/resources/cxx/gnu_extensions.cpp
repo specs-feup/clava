@@ -14,9 +14,7 @@ int main() {
 	
 	int* x2;
     __typeof__(*x2 + *x2) y2;
-	
-	// TypeId
-	//auto x3 = typeid(int).name();
+
 	
 	return 0;
 }

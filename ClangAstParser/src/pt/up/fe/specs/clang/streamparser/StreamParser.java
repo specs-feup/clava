@@ -38,6 +38,7 @@ import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
@@ -216,6 +217,10 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.LAMBDA_EXPR_DATA,
                 SnippetParser.newInstance("<Lambda Expr Data>", new HashMap<String, LambdaExprData>(),
                         StreamParser::parseLambdaExprData));
+
+        snippetsMap.put(StreamKeys.TYPEID_DATA,
+                SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
+                        StreamParser::parseTypeidData));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -643,6 +648,22 @@ public class StreamParser {
 
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
                 captureDefault, captureKinds));
+    }
+
+    public static void parseTypeidData(LineStream lines, Map<String, TypeidData> map) {
+        String key = lines.nextLine();
+
+        // Format:
+
+        // Format:
+        // isTypeOperator (boolean)
+        // operatorId (String)
+
+        boolean isTypeOperator = parseOneOrZero(lines.nextLine());
+        String operatorId = lines.nextLine();
+
+        map.put(key, new TypeidData(isTypeOperator, operatorId));
+
     }
 
 }

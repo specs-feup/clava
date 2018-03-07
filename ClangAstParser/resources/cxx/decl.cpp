@@ -55,6 +55,9 @@ int main() {
    	t = {};
 	std::vector<int> v = {};
 
+	// TypeId
+	auto typeId = typeid(int).name();
+	auto typeId2 = typeid(1).name();
 	
 	return 0;
 }

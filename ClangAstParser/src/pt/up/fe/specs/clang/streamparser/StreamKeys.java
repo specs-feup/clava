@@ -28,6 +28,7 @@ import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.MultiMap;
@@ -116,6 +117,9 @@ public interface StreamKeys {
     DataKey<Map<String, LambdaExprData>> LAMBDA_EXPR_DATA = KeyFactory.generic("stderr_lambda_expr_data",
             new HashMap<String, LambdaExprData>());
 
+    DataKey<Map<String, TypeidData>> TYPEID_DATA = KeyFactory.generic("stderr_typeid_data",
+            new HashMap<String, TypeidData>());
+
     // DataKey<Map<String, String>> CXX_METHOD_DECL_DECLARATION =
     // KeyFactory.generic("stderr_cxx_method_decl_declaration",
     // SpecsCollections.<String, String> newHashMap())
@@ -153,6 +157,7 @@ public interface StreamKeys {
             .addKey(CXX_MEMBER_EXPR_INFO)
             .addKey(TYPE_AS_WRITTEN)
             .addKey(LAMBDA_EXPR_DATA)
+            .addKey(TYPEID_DATA)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)
