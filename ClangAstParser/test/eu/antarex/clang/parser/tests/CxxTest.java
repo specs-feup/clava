@@ -176,4 +176,9 @@ public class CxxTest {
     public void testGnuExtensions() {
         new CxxTester("gnu_extensions.cpp").addFlags("-std=gnu++11").test();
     }
+
+    @Test
+    public void testSizeof() {
+        new CxxTester("sizeof.cpp").test();
+    }
 }
