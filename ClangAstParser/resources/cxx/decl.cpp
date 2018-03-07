@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <typeinfo>
 
 int nullGlobal = NULL;
 int nullGlobal2 = NULL + 1;
