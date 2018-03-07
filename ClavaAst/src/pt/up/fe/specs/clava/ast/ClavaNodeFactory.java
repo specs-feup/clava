@@ -101,6 +101,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTemporaryObjectExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
@@ -141,6 +142,7 @@ import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
+import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -1258,6 +1260,15 @@ public class ClavaNodeFactory {
             CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
 
         return new LambdaExpr(lambdaData, exprData, info, lambdaClass, captureArguments, body);
+    }
+
+    public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
+        return new CXXTypeidExpr(typeidData, exprData, info);
+    }
+
+    public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
+            Expr operatorExpr) {
+        return new CXXTypeidExpr(typeidData, exprData, info, operatorExpr);
     }
 
     /*
