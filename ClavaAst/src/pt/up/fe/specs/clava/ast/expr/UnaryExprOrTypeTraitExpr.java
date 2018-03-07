@@ -98,21 +98,48 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         return hasChildren();
     }
 
+    public boolean hasTypeExpression() {
+        return argType != null;
+    }
+
     @Override
     public String getCode() {
+        boolean useParenthesis = true;
+        if (uettKind == UnaryExprOrTypeTrait.SIZE_OF && hasArgumentExpression()) {
+            useParenthesis = false;
+        }
+
+        String argumentCode = hasArgumentExpression() ? getArgumentExpression().getCode()
+                : getArgumentType().get().getCode();
+
+        if (useParenthesis) {
+            return uettKind.getString() + "(" + argumentCode + ")";
+        }
+
+        return uettKind.getString() + " " + argumentCode;
+        /*        
         if (getArgumentType().isPresent()) {
             // System.out.println("UETT CODE 1:" + uettKind.getString() + "(" + getArgumentType().get().getCode() +
             // ")");
             return uettKind.getString() + "(" + getArgumentType().get().getCode() + ")";
         }
-
+        
         // System.out.println("UETT CODE 2:" + uettKind.getString() + "(" + getArgumentExpression().getCode() + ")");
         return uettKind.getString() + "(" + getArgumentExpression().getCode() + ")";
-
+        
         // if (hasArgumentExpression()) {
         // return exprName + "(" + getArgumentExpression().getCode() + ")";
         // // LoggingUtils.msgWarn("Code with arg expr, not tested:" + getLocation());
         // }
         // return exprName + "(" + getArgType() + ")";
+         
+         */
+    }
+
+    @Override
+    public String toContentString() {
+        String argTypeString = argType == null ? null : argType.getBareType();
+        return toContentString(super.toContentString(),
+                "uett kind: " + uettKind + ", arg type: " + argTypeString);
     }
 }
