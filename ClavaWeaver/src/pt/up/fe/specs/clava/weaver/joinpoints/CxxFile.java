@@ -60,6 +60,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -232,7 +233,7 @@ public class CxxFile extends AFile {
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-        
+
         return path;
         */
     }
@@ -405,5 +406,16 @@ public class CxxFile extends AFile {
                 .filter(node -> node instanceof TypedefDecl)
                 .map(varDecl -> CxxJoinpoints.create((TypedefDecl) varDecl, this, ATypedefDecl.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getDestinationFilepathImpl() {
+        return destinationFilepathImpl(getWeaverEngine().getWeavingFolder().getAbsolutePath());
+    }
+
+    @Override
+    public String destinationFilepathImpl(String destinationFolderpath) {
+        boolean flattenFolders = getWeaverEngine().getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+        return tunit.getDestinationFile(new File(destinationFolderpath), flattenFolders).getAbsolutePath();
     }
 }
