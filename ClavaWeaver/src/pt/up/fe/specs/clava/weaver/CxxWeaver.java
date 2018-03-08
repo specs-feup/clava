@@ -53,6 +53,7 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -575,7 +576,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
     */
     private List<String> processSources(Map<String, File> sourceFiles) {
-        Preconditions.checkArgument(!sourceFiles.isEmpty(), "No C/C++ files found in the given source folders");
+        SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
+                () -> "No C/C++ files found in the given source folders:" + getSources());
 
         List<String> implementationFiles = sourceFiles.keySet().stream()
                 .filter(SourceType.IMPLEMENTATION::hasExtension)

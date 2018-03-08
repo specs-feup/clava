@@ -21,11 +21,13 @@ import org.junit.Test;
 
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.lara.unit.LaraUnitTester;
+import pt.up.fe.specs.util.SpecsSystem;
 
 public class ClavaWeaverUnitTester {
 
     @Test
     public void test() {
+        SpecsSystem.programStandardInit();
         LaraUnitTester laraUnitTester = new LaraUnitTester(new CxxWeaver());
 
         boolean passedTests = laraUnitTester.testFolder(
