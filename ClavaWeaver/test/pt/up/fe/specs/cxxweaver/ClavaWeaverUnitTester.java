@@ -20,7 +20,9 @@ import java.io.File;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
+import pt.up.fe.specs.lara.unit.LaraUnitReport;
 import pt.up.fe.specs.lara.unit.LaraUnitTester;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class ClavaWeaverUnitTester {
@@ -30,12 +32,13 @@ public class ClavaWeaverUnitTester {
         SpecsSystem.programStandardInit();
         LaraUnitTester laraUnitTester = new LaraUnitTester(new CxxWeaver());
 
-        boolean passedTests = laraUnitTester.testFolder(
+        LaraUnitReport results = laraUnitTester.testFolder(
                 new File("C:\\Users\\JoaoBispo\\Documents\\MEGA\\Work\\Tasks\\2018-02-19 LaraUnit Test With Clava"),
                 new File(
                         "C:\\Users\\JoaoBispo\\Documents\\MEGA\\Work\\Tasks\\2018-02-19 LaraUnit Test With Clava\\test"));
 
-        assertTrue("Did not pass the tests", passedTests);
+        SpecsLogs.msgInfo(results.getReport());
+        assertTrue("Did not pass the tests", results.isSuccess());
         // fail("Not yet implemented");
     }
 
