@@ -76,7 +76,7 @@ public class TranslationUnit extends ClavaNode {
 
         includes = new IncludeManager(includesList, this);
 
-        this.isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
+        isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
 
         sourcePath = null;
     }
@@ -169,7 +169,7 @@ public class TranslationUnit extends ClavaNode {
     /**
      * 'Source path' refers to the path that was given as the base for the source file of this Translation Unit. It
      * corresponds to an ancestor folder of the file, which was given as a folder where to look for sources.
-     * 
+     *
      * @return if set, returns the original source path of this translation unit
      */
     public Optional<File> getSourcePath() {
@@ -226,7 +226,7 @@ public class TranslationUnit extends ClavaNode {
     }
 
     /**
-     * 
+     *
      * @return the path to the folder of this file
      */
     public String getFolderpath() {
@@ -289,7 +289,7 @@ public class TranslationUnit extends ClavaNode {
 
     /**
      * Helper method which sets 'isAngled' to false.
-     * 
+     *
      * @param translationUnit
      */
     public void addInclude(TranslationUnit translationUnit) {
@@ -298,7 +298,7 @@ public class TranslationUnit extends ClavaNode {
 
     /**
      * Adds the given translation unit as an include of this translation unit.
-     * 
+     *
      * @param translationUnit
      */
     private void addInclude(TranslationUnit translationUnit, boolean isAngled) {
@@ -374,12 +374,12 @@ public class TranslationUnit extends ClavaNode {
         // return getAppTry()
         // .map(app -> app.getRelativeFolderPath(baseSourceFolder, this))
         // .orElse(getFolderpath());
-    
+
     }
     */
 
     /**
-     * 
+     *
      * @return
      */
     public String getRelativeFolderpath() {
@@ -407,7 +407,7 @@ public class TranslationUnit extends ClavaNode {
     */
 
     /**
-     * 
+     *
      * @return
      */
     public String getRelativeFilepath() {
@@ -432,6 +432,17 @@ public class TranslationUnit extends ClavaNode {
 
         // If parent name is not null, create destination folder that mimics original input source
         return SpecsIo.mkdir(new File(baseFolder, sourceFolder.getName()));
+    }
+
+    public File getDestinationFile(File destinationFolder, boolean flattenFolders) {
+        File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
+
+        String relativePath = getRelativeFolderpath();
+
+        // Build destination path
+        actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
+
+        return new File(actualDestinationFolder, getFilename());
     }
 
 }

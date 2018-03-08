@@ -129,10 +129,10 @@ public class App extends ClavaNode {
         functionDefinitionCache = new HashMap<>();
         appData = DataStore.newInstance("Clava App Data");
 
-        this.idNormalizer = new IdNormalizer();
-        this.callInliner = new CallInliner(idNormalizer);
+        idNormalizer = new IdNormalizer();
+        callInliner = new CallInliner(idNormalizer);
 
-        this.externalDependencies = new ExternalDependencies();
+        externalDependencies = new ExternalDependencies();
         // this.idsAlias = Collections.emptyMap();
         // this.inlineCache = new HashMap<>();
 
@@ -167,7 +167,7 @@ public class App extends ClavaNode {
 
     public void setIdsAlias(Map<String, String> idsAlias) {
         // this.idsAlias = idsAlias;
-        this.idNormalizer.addAlias(idsAlias);
+        idNormalizer.addAlias(idsAlias);
     }
 
     /**
@@ -218,14 +218,14 @@ public class App extends ClavaNode {
                 .filter(tu -> SpecsIo.getCanonicalPath(tu.getFile()).equals(canonicalPath))
                 .findFirst()
                 .isPresent()) {
-    
+
             SpecsLogs.msgInfo(
                     "Could not find top file '" + topFile + "' in the translation units, returning without writing");
             return;
         }
-    
+
         write(destinationFolder);
-    
+
     }
     */
 
@@ -234,7 +234,7 @@ public class App extends ClavaNode {
     // }
 
     /**
-     * 
+     *
      * @param baseInputFolder
      * @param destinationFolder
      */
@@ -251,7 +251,7 @@ public class App extends ClavaNode {
 
     /**
      * TODO: Need map from generated files to original files
-     * 
+     *
      * @param baseInputFolder
      * @param destinationFolder
      * @param filesToGenerate
@@ -259,17 +259,17 @@ public class App extends ClavaNode {
     /*
     public void write(File baseInputFolder, File destinationFolder, Set<String> filesToGenerate) {
         Map<File, String> codeMap = getCode(baseInputFolder, destinationFolder);
-    
+
         boolean filterFilesToGenerate = enableModifiedFilesFilter(codeMap, filesToGenerate);
-    
+
         for (Entry<File, String> entry : codeMap.entrySet()) {
             if (filterFilesToGenerate) {
                 if (!filesToGenerate.contains(entry.getKey().getName())) {
-    
+
                     continue;
                 }
             }
-    
+
             SpecsIo.write(entry.getKey(), entry.getValue());
         }
     }
@@ -300,7 +300,7 @@ public class App extends ClavaNode {
 
     /*
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
-    
+
         if (includeHeaders) {
             // return SpecsIo.getFiles(sources, PERMITTED_EXTENSIONS).stream()
             return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions());
@@ -308,23 +308,23 @@ public class App extends ClavaNode {
             // .map(filename -> new File(filename))
             // .collect(Collectors.toList());
         }
-    
+
         List<File> allFiles = new ArrayList<>();
-    
+
         // List<File> implementationFiles = SpecsIo.getFiles(sources, EXTENSIONS_IMPLEMENTATION).stream()
         List<File> implementationFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
         // List<File> implementationFiles = SpecsIo.getFiles(sources,
         // SourceType.IMPLEMENTATION.getExtensions()).stream()
         // .map(filename -> new File(filename))
         // .collect(Collectors.toList());
-    
+
         allFiles.addAll(implementationFiles);
-    
+
         for (File sourceFolder : sources) {
             // allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, EXTENSIONS_HEADERS));
             allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions()));
         }
-    
+
         return allFiles;
     }
     */
@@ -333,7 +333,7 @@ public class App extends ClavaNode {
     }
 
     /**
-     * 
+     *
      * @param baseInputFolder
      * @param destinationFolder
      * @param modifiedFiles
@@ -351,9 +351,8 @@ public class App extends ClavaNode {
         // and using a path relative to the topFile
 
         for (TranslationUnit tUnit : getTranslationUnits()) {
-            // String relativePath_old = ClavaCode.getRelativePath(new File(tUnit.getFolderpath()), baseInputFolder);
-            // String relativePath = tUnit.getRelativeFolderpath(baseInputFolder);
-            File destinationFile = buildDestinationFile(tUnit, destinationFolder, flattenFolders);
+            // File destinationFile = buildDestinationFile(tUnit, destinationFolder, flattenFolders);
+            File destinationFile = tUnit.getDestinationFile(destinationFolder, flattenFolders);
 
             String code = getTuCode(tUnit, enableModifiedFilesFilter, modifiedFiles);
 
@@ -424,25 +423,25 @@ public class App extends ClavaNode {
             // Create translation unit for the missing file
             String relativePath = SpecsIo.getRelativePath(originalSourceFile.getParentFile(), sourceFile.getValue());
             // String relativePath = SpecsIo.getRelativePath(file.getParentFile(), baseInputFolder);
-            
+
             // Avoid writing outside of the destination folder, if relative path has '../', remove them
             while (relativePath.startsWith("../")) {
                 relativePath = relativePath.substring("../".length());
             }
-            
+
             // Build destination path
             File actualDestinationFolder = destinationFolder;
             if (!flattenFolders) {
-            
+
             }
-            
+
             actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
             File destinationFile = new File(actualDestinationFolder, originalSourceFile.getName());
-            
+
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(originalSourceFile.getName(),
                     originalSourceFile.getParent(),
                     Collections.emptyList());
-            
+
             files.put(destinationFile, tUnit.getCode());
             */
         }
@@ -450,29 +449,17 @@ public class App extends ClavaNode {
         return files;
     }
 
+    /*
     public File buildDestinationFile(TranslationUnit tUnit, File destinationFolder, boolean flattenFolders) {
         File actualDestinationFolder = tUnit.getDestinationFolder(destinationFolder, flattenFolders);
-        /*
-        // Add last folder name of the original source path to the destination folder, if present
-        if (!flattenFolders && tUnit.getSourcePath().isPresent()) {
-            File sourcePath = tUnit.getSourcePath().get();
-            File sourceFolder = sourcePath.isDirectory() ? sourcePath : sourcePath.getParentFile();
-        
-            // If parent name is not null, create destination folder that mimics original input source
-            if (sourceFolder != null) {
-                destinationFolder = SpecsIo.mkdir(new File(destinationFolder, sourceFolder.getName()));
-            }
-        
-        }
-        */
-        String relativePath = tUnit.getRelativeFolderpath();
-
+               String relativePath = tUnit.getRelativeFolderpath();
+    
         // Build destination path
         actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
-
+    
         return new File(actualDestinationFolder, tUnit.getFilename());
     }
-
+    */
     private String getTuCode(TranslationUnit tUnit, boolean enableModifiedFilesFilter, Set<String> modifiedFiles) {
         // If modified files filter is not enable, generate code from the translation unit
         if (!enableModifiedFilesFilter) {
@@ -500,7 +487,7 @@ public class App extends ClavaNode {
     }
 
     /**
-     * 
+     *
      * @return list of current files in the program
      */
     public List<File> getFiles() {
@@ -647,7 +634,7 @@ public class App extends ClavaNode {
 
     /**
      * Helper method that accepts a RecordType.
-     * 
+     *
      * @param recordType
      * @return
      */
@@ -669,7 +656,7 @@ public class App extends ClavaNode {
 
     /**
      * Looks for a node based on the filepath and the id.
-     * 
+     *
      * @param filepath
      * @param astId
      * @return
@@ -710,13 +697,13 @@ public class App extends ClavaNode {
 
     /**
      * Sets the sources of each Translation Unit.
-     * 
+     *
      * @param allFiles
      */
     public void setSources(Map<String, File> allFiles) {
 
         // Set sourceFiles
-        this.sourceFiles = allFiles;
+        sourceFiles = allFiles;
 
         for (TranslationUnit tu : getTranslationUnits()) {
             // Find the corresponding source
