@@ -1,0 +1,8 @@
+aspectdef FunctionTest
+	
+	select function end
+	apply
+		println($function.name + " is inline: " + $function.isInline);
+	end
+
+end

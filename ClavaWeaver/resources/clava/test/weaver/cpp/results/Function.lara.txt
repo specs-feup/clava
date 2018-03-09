@@ -1,0 +1,2 @@
+Max is inline: true
+MaxNoInline is inline: false

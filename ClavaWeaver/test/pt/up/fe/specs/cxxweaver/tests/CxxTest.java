@@ -175,4 +175,9 @@ public class CxxTest {
     public void testTypeTemplate() {
         newTester().test("TypeTemplate.lara", "type_template.cpp");
     }
+
+    @Test
+    public void testFunction() {
+        newTester().test("Function.lara", "function.cpp");
+    }
 }
