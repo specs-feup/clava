@@ -2,16 +2,12 @@ package pt.up.fe.specs.clava.weaver.enums;
 
 import org.lara.interpreter.weaver.interf.NamedEnum;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
-
 /**
  * 
  * 
  * @author Lara C.
  */
-public enum StorageClass implements NamedEnum, StringProvider {
+public enum StorageClass implements NamedEnum {
     NONE("none"),
     AUTO("auto"),
     EXTERN("extern"),
@@ -19,12 +15,6 @@ public enum StorageClass implements NamedEnum, StringProvider {
     REGISTER("register"),
     STATIC("static");
     private String name;
-
-    private static Lazy<EnumHelper<StorageClass>> ENUM_HELPER = EnumHelper.newLazyHelper(StorageClass.class);
-
-    public static EnumHelper<StorageClass> getHelper() {
-        return ENUM_HELPER.get();
-    }
 
     /**
      * 
@@ -46,11 +36,6 @@ public enum StorageClass implements NamedEnum, StringProvider {
      */
     @Override
     public String toString() {
-        return getName();
-    }
-
-    @Override
-    public String getString() {
         return getName();
     }
 }

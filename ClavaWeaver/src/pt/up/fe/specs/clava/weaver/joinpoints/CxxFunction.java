@@ -44,10 +44,15 @@ import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
 public class CxxFunction extends AFunction {
+
+    // TODO: Move this to generated enums
+    private static final Lazy<EnumHelper<StorageClass>> STORAGE_CLASS = EnumHelper.newLazyHelper(StorageClass.class);
 
     private final FunctionDecl function;
     private final ACxxWeaverJoinPoint parent;
@@ -386,7 +391,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public StorageClass getStorageClassImpl() {
-        return StorageClass.getHelper().valueOf(function.getFunctionDeclData().getStorageClass().name().toLowerCase());
+        return STORAGE_CLASS.get().valueOf(function.getFunctionDeclData().getStorageClass().name().toLowerCase());
     }
 
     @Override

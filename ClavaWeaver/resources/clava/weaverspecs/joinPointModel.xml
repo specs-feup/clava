@@ -6,10 +6,12 @@
  -->
 <joinpoints root_class="program">
 
+	<!-- 
 	<global>
 		<select alias="descendant"		class="joinpoint" />
 	</global>
-	
+	 -->
+	 
 	<!-- EMPTY -->
 	<!-- Utility joinpoint, to represent empty nodes when directly accessing the tree -->
 	<joinpoint class="empty"/>

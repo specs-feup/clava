@@ -342,11 +342,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -928,11 +923,6 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -1528,11 +1518,6 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -2194,11 +2179,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "tooltip": "Inlines this call, if possible",
                   "children": [
@@ -2857,11 +2837,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -3418,11 +3393,6 @@
                   "alias": "field"
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -3945,11 +3915,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -4464,11 +4429,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -4981,11 +4941,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -5623,11 +5578,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
@@ -6212,11 +6162,6 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -6918,11 +6863,6 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -7731,11 +7671,6 @@
                   "alias": "body"
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -8466,11 +8401,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "tooltip": "Sets the return type of the FunctionType",
                   "children": [
@@ -9155,11 +9085,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -9708,11 +9633,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -10419,11 +10339,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "tooltip": "DEPRECATED: use 'setKind' instead",
                   "children": [
@@ -11115,11 +11030,6 @@
                   "alias": "contents"
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -11722,11 +11632,6 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -12402,11 +12307,6 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -13146,11 +13046,6 @@
                   "alias": "body"
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -13766,11 +13661,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -14492,11 +14382,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -15333,11 +15218,6 @@
                   "alias": "init"
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -15900,11 +15780,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -16543,11 +16418,6 @@
                   "type": "select",
                   "clazz": "file",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -17196,11 +17066,6 @@
                   "alias": "field"
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -17846,11 +17711,6 @@
                   "type": "select",
                   "clazz": "varref",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -18549,11 +18409,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -19095,11 +18950,6 @@
                   "type": "select",
                   "clazz": "namedDecl",
                   "alias": "field"
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -19648,11 +19498,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -20314,11 +20159,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -21013,11 +20853,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
@@ -21678,11 +21513,6 @@
                            }]
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
@@ -22244,11 +22074,6 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -22833,11 +22658,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -23406,11 +23226,6 @@
                   "type": "select",
                   "clazz": "expression",
                   "alias": "init"
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",
@@ -24027,11 +23842,6 @@
                   "alias": ""
                },
                {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
-               },
-               {
                   "type": "action",
                   "children": [
                            {
@@ -24626,11 +24436,6 @@
                   "type": "select",
                   "clazz": "varref",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "joinpoint",
-                  "alias": "descendant"
                },
                {
                   "type": "action",

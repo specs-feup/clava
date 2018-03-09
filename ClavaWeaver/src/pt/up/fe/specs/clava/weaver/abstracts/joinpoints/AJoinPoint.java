@@ -370,21 +370,6 @@ public abstract class AJoinPoint extends JoinPoint {
      * 
      */
     @Override
-    protected void fillWithSelects(List<String> selects) {
-        //Selects available for all join points
-        selects.add("descendant(joinpoint)");
-    }
-
-    /**
-     * Method used by the lara interpreter to select descendants
-     * @return 
-     */
-    public abstract List<? extends AJoinPoint> selectDescendant();
-
-    /**
-     * 
-     */
-    @Override
     protected void fillWithAttributes(List<String> attributes) {
         //Attributes available for all join points
         attributes.add("root");
