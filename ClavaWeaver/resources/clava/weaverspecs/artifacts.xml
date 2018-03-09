@@ -3,6 +3,8 @@
 	document. https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
 <artifacts>
 
+
+
 	<!-- Global Joinpoint -->
 	<!-- These properties are shared by all joinpoints -->
 	<global>
@@ -264,7 +266,12 @@
 		<attribute name="paramNames" type="String[]"/>
 		<attribute name="params" type="joinpoint[]"/>
 		<attribute name="id" type="String"/>
-		<attribute name="storageClass" type="String"/>
+		<attribute name="isInline" type="Boolean"/>
+		<attribute name="isVirtual" type="Boolean"/>
+		<attribute name="isModulePrivate" type="Boolean"/>
+		<attribute name="isPure" type="Boolean"/>
+		<attribute name="isDelete" type="Boolean"/>
+		<attribute name="storageClass" type="StorageClass"/>
 	</artifact>
 
 
@@ -411,7 +418,6 @@
 	</artifact>
 
 
-
 	<!-- OPENMP -->
 
 	<!-- OMP -->
@@ -442,5 +448,17 @@
 		<attribute name="collapse" type="String" tooltip="An integer expression, or undefined if no 'collapse' clause is defined"/>
 		<attribute name="ordered" type="String" tooltip="An integer expression, or undefined if no 'ordered' clause with a parameter is defined"/>		
 	</artifact>
+
+
+	<!-- ENUMS -->
+	<!--  <enum name="StorageClass" class="pt.up.fe.specs.clava.ast.decl.data.StorageClass">  -->
+	<enum name="StorageClass">	
+		<value name="NONE" string="none"/>
+		<value name="AUTO" string="auto"/>
+		<value name="EXTERN" string="extern"/>
+		<value name="PRIVATE_EXTERN" string="private_extern"/>
+		<value name="REGISTER" string="register"/>
+		<value name="STATIC" string="static"/>
+	</enum>
 
 </artifacts>

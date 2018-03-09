@@ -686,4 +686,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return false;
     }
 
+    @Override
+    public List<? extends ACxxWeaverJoinPoint> selectDescendant() {
+        return getNode().getDescendantsStream()
+                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -384,7 +385,34 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public String getStorageClassImpl() {
-        return function.getFunctionDeclData().getStorageClass().name().toLowerCase();
+    public StorageClass getStorageClassImpl() {
+        return StorageClass.getHelper().valueOf(function.getFunctionDeclData().getStorageClass().name().toLowerCase());
+    }
+
+    @Override
+    public Boolean getIsInlineImpl() {
+        return function.getFunctionDeclData().isInline();
+    }
+
+    @Override
+    public Boolean getIsVirtualImpl() {
+        return function.getFunctionDeclData().isVirtual();
+    }
+
+    @Override
+    public Boolean getIsModulePrivateImpl() {
+        return function.getFunctionDeclData().isModulePrivate();
+    }
+
+    @Override
+    public Boolean getIsPureImpl() {
+        return function.getFunctionDeclData().isPure();
+
+    }
+
+    @Override
+    public Boolean getIsDeleteImpl() {
+        return function.getFunctionDeclData().isDelete();
+
     }
 }

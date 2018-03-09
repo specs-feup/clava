@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
@@ -252,10 +253,135 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsInlineImpl();
+
+    /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    public final Object getIsInline() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInline", Optional.empty());
+        	}
+        	Boolean result = this.getIsInlineImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInline", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInline", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsVirtualImpl();
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    public final Object getIsVirtual() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVirtual", Optional.empty());
+        	}
+        	Boolean result = this.getIsVirtualImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isVirtual", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isVirtual", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsModulePrivateImpl();
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    public final Object getIsModulePrivate() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isModulePrivate", Optional.empty());
+        	}
+        	Boolean result = this.getIsModulePrivateImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isModulePrivate", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isModulePrivate", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsPureImpl();
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    public final Object getIsPure() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPure", Optional.empty());
+        	}
+        	Boolean result = this.getIsPureImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPure", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPure", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsDeleteImpl();
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    public final Object getIsDelete() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDelete", Optional.empty());
+        	}
+        	Boolean result = this.getIsDeleteImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isDelete", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isDelete", e);
+        }
+    }
+
+    /**
      * Get value on attribute storageClass
      * @return the attribute's value
      */
-    public abstract String getStorageClassImpl();
+    public abstract StorageClass getStorageClassImpl();
 
     /**
      * Get value on attribute storageClass
@@ -266,7 +392,7 @@ public abstract class AFunction extends ANamedDecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
         	}
-        	String result = this.getStorageClassImpl();
+        	StorageClass result = this.getStorageClassImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
         	}
@@ -648,6 +774,11 @@ public abstract class AFunction extends ANamedDecl {
         attributes.add("paramNames");
         attributes.add("params");
         attributes.add("id");
+        attributes.add("isInline");
+        attributes.add("isVirtual");
+        attributes.add("isModulePrivate");
+        attributes.add("isPure");
+        attributes.add("isDelete");
         attributes.add("storageClass");
     }
 
@@ -708,6 +839,11 @@ public abstract class AFunction extends ANamedDecl {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        ISINLINE("isInline"),
+        ISVIRTUAL("isVirtual"),
+        ISMODULEPRIVATE("isModulePrivate"),
+        ISPURE("isPure"),
+        ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),

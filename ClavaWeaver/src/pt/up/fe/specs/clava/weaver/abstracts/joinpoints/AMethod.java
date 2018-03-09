@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -125,11 +126,56 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute isInline
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInlineImpl() {
+        return this.aFunction.getIsInlineImpl();
+    }
+
+    /**
+     * Get value on attribute isVirtual
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsVirtualImpl() {
+        return this.aFunction.getIsVirtualImpl();
+    }
+
+    /**
+     * Get value on attribute isModulePrivate
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsModulePrivateImpl() {
+        return this.aFunction.getIsModulePrivateImpl();
+    }
+
+    /**
+     * Get value on attribute isPure
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPureImpl() {
+        return this.aFunction.getIsPureImpl();
+    }
+
+    /**
+     * Get value on attribute isDelete
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsDeleteImpl() {
+        return this.aFunction.getIsDeleteImpl();
+    }
+
+    /**
      * Get value on attribute storageClass
      * @return the attribute's value
      */
     @Override
-    public String getStorageClassImpl() {
+    public StorageClass getStorageClassImpl() {
         return this.aFunction.getStorageClassImpl();
     }
 
@@ -451,6 +497,11 @@ public abstract class AMethod extends AFunction {
         PARAMNAMES("paramNames"),
         PARAMS("params"),
         ID("id"),
+        ISINLINE("isInline"),
+        ISVIRTUAL("isVirtual"),
+        ISMODULEPRIVATE("isModulePrivate"),
+        ISPURE("isPure"),
+        ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),
