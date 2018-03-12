@@ -48,10 +48,10 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
+import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.providers.ResourceProvider;
-import pt.up.fe.specs.util.providers.WebResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.StringLines;
 
@@ -77,6 +77,8 @@ public class ClangAstParser {
             "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
             "types_with_templates.txt");
 
+    private static final String CLANGAST_RESOURCES_FILENAME = "clang_ast.resources";
+
     private static final String TRANSLATION_UNIT_SET_PREFIX = "COUNTER";
 
     public static String getTranslationUnitSetPrefix() {
@@ -93,12 +95,16 @@ public class ClangAstParser {
 
     private final boolean dumpStdout;
 
+    private final FileResourceManager clangAstResources;
+
     public ClangAstParser() {
         this(false);
+
     }
 
     public ClangAstParser(boolean dumpStdout) {
         this.dumpStdout = dumpStdout;
+        clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class, CLANGAST_RESOURCES_FILENAME);
     }
 
     // public ClangAstParser() {
@@ -123,7 +129,7 @@ public class ClangAstParser {
         String version = config.get(ClangAstKeys.CLANGAST_VERSION);
 
         // Copy resources
-        File clangExecutable = ClangAstParser.prepareResources(version);
+        File clangExecutable = prepareResources(version);
 
         List<String> arguments = new ArrayList<>();
         arguments.add(clangExecutable.getAbsolutePath());
@@ -342,8 +348,10 @@ public class ClangAstParser {
 
         // Clang built-in includes, to be used in all platforms
         // Write Clang headers
-        ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
-                resourceFolder, ClangAstParser.class);
+        ResourceWriteData builtinIncludesZip = clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8)
+                .writeVersioned(resourceFolder, ClangAstParser.class);
+        // ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
+        // resourceFolder, ClangAstParser.class);
 
         // boolean hasFolderBeenCleared = false;
 
@@ -366,7 +374,7 @@ public class ClangAstParser {
 
         if (!hasLibC) {
             // Obtain correct version of libc/c++
-            WebResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
+            FileResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
 
             // Write Clang headers
             ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
@@ -669,12 +677,12 @@ public class ClangAstParser {
      *
      * @return path to the executable that was copied
      */
-    private static File prepareResources(String version) {
+    private File prepareResources(String version) {
 
         File resourceFolder = getClangResourceFolder();
 
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
-        WebResourceProvider executableResource = getExecutableResource(platform);
+        FileResourceProvider executableResource = getExecutableResource(platform);
 
         // If version not defined, use the latest version of the resource
         if (version.isEmpty()) {
@@ -689,7 +697,7 @@ public class ClangAstParser {
 
         // If Windows, copy additional dependencies
         if (platform == SupportedPlatform.WINDOWS) {
-            for (FileResourceProvider resource : ClangAstWebResource.getWindowsResources()) {
+            for (FileResourceProvider resource : getWindowsResources()) {
                 resource.writeVersioned(resourceFolder, ClangAstParser.class);
             }
         }
@@ -746,8 +754,9 @@ public class ClangAstParser {
         // throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
     }
 
-    private static WebResourceProvider getExecutableResource(SupportedPlatform platform) {
-
+    /*
+    private static FileResourceProvider getExecutableResource(SupportedPlatform platform) {
+        
         switch (platform) {
         case WINDOWS:
             return ClangAstWebResource.WIN_EXE;
@@ -761,14 +770,32 @@ public class ClangAstParser {
             throw new RuntimeException("Case not defined: '" + platform + "'");
         }
     }
-
-    private static WebResourceProvider getLibCResource(SupportedPlatform platform) {
+    */
+    private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
 
         switch (platform) {
         case WINDOWS:
-            return ClangAstWebResource.LIBC_CXX_WINDOWS;
+            return clangAstResources.get(ClangAstFileResource.WIN_EXE);
+        case CENTOS6:
+            return clangAstResources.get(ClangAstFileResource.CENTOS6_EXE);
+        case LINUX:
+            return clangAstResources.get(ClangAstFileResource.LINUX_EXE);
         case MAC_OS:
-            return ClangAstWebResource.LIBC_CXX_MAC_OS;
+            return clangAstResources.get(ClangAstFileResource.MAC_OS_EXE);
+        default:
+            throw new RuntimeException("Case not defined: '" + platform + "'");
+        }
+    }
+
+    private FileResourceProvider getLibCResource(SupportedPlatform platform) {
+
+        switch (platform) {
+        case WINDOWS:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        // return ClangAstWebResource.LIBC_CXX_WINDOWS;
+        case MAC_OS:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_MAC_OS);
+        // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         default:
             throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
         }
@@ -780,5 +807,18 @@ public class ClangAstParser {
         // File resourceFolder = new File(baseFilename, "clang_ast_exe");
         File resourceFolder = new File(tempDir, "clang_ast_exe");
         return resourceFolder;
+    }
+
+    private List<FileResourceProvider> getWindowsResources() {
+        List<FileResourceProvider> windowsResources = new ArrayList<>();
+
+        windowsResources.add(clangAstResources.get(ClangAstFileResource.WIN_DLL1));
+        windowsResources.add(clangAstResources.get(ClangAstFileResource.WIN_DLL2));
+        windowsResources.add(clangAstResources.get(ClangAstFileResource.WIN_DLL3));
+
+        return windowsResources;
+        // clangAstResources.get(resourceEnum)
+        //
+        // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
     }
 }

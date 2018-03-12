@@ -13,9 +13,6 @@
 
 package pt.up.fe.specs.clang;
 
-import java.util.Arrays;
-import java.util.List;
-
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 public interface ClangAstWebResource {
@@ -79,7 +76,7 @@ public interface ClangAstWebResource {
         return version;
     }
     */
-    static List<WebResourceProvider> getWindowsResources() {
-        return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
-    }
+    // static List<WebResourceProvider> getWindowsResources() {
+    // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
+    // }
 }
