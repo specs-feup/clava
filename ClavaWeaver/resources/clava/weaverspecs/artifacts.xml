@@ -453,12 +453,12 @@
 	<!-- ENUMS -->
 	<!--  <enum name="StorageClass" class="pt.up.fe.specs.clava.ast.decl.data.StorageClass">  -->
 	<enum name="StorageClass">	
-		<value name="NONE" string="none"/>
-		<value name="AUTO" string="auto"/>
-		<value name="EXTERN" string="extern"/>
-		<value name="PRIVATE_EXTERN" string="private_extern"/>
-		<value name="REGISTER" string="register"/>
-		<value name="STATIC" string="static"/>
+		<value name="NONE"/>
+		<value name="AUTO"/>
+		<value name="EXTERN"/>
+		<value name="PRIVATE_EXTERN"/>
+		<value name="REGISTER"/>
+		<value name="STATIC"/>
 	</enum>
 
 </artifacts>
