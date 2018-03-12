@@ -209,7 +209,7 @@ public class ClavaWeaverTester {
 
             // After LaraI execution, static weaver is unset, and it is no longer safe to use the weaver instance,
             // unless we set the weaver again
-            if (weaver.getApp() != null) {
+            if (weaver.getAppTry().isPresent()) {
                 weaver.setWeaver();
                 SpecsLogs.msgInfo("Current code:\n" + weaver.getApp().getCode());
                 weaver.removeWeaver();
