@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava;
 
+import java.util.function.Supplier;
+
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.logging.SpecsLogger;
@@ -36,6 +38,10 @@ public class ClavaLog extends SpecsLogger {
 
     public static void info(String message) {
         logger().msgInfo(message);
+    }
+
+    public static void info(Supplier<String> message) {
+        info(message.get());
     }
 
     public static void warning(ClavaNode node, String message) {
