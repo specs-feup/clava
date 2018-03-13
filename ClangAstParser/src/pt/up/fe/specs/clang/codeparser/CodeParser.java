@@ -32,12 +32,14 @@ public class CodeParser {
     private boolean showClangAst;
     private boolean showClavaAst;
     private boolean showCode;
+    private boolean useCustomResources;
 
     public CodeParser() {
         showClangDump = false;
         showClangAst = false;
         showClavaAst = false;
         showCode = false;
+        useCustomResources = false;
     }
 
     public CodeParser setShowClangDump(boolean showClangDump) {
@@ -60,6 +62,11 @@ public class CodeParser {
         return this;
     }
 
+    public CodeParser setUseCustomResources(boolean useCustomResources) {
+        this.useCustomResources = useCustomResources;
+        return this;
+    }
+
     public App parse(List<File> sources, List<String> compilerOptions) {
 
         // Collect implementation files
@@ -70,7 +77,8 @@ public class CodeParser {
                 .collect(Collectors.toList());
 
         // Parse files
-        ClangRootNode ast = new ClangAstParser(showClangDump).parse(implementationFiles, compilerOptions);
+        ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(implementationFiles,
+                compilerOptions);
 
         if (showClangDump) {
             SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));

@@ -94,17 +94,24 @@ public class ClangAstParser {
     }
 
     private final boolean dumpStdout;
-
+    private final boolean useCustomResources;
     private final FileResourceManager clangAstResources;
 
     public ClangAstParser() {
-        this(false);
+        this(false, false);
 
     }
 
-    public ClangAstParser(boolean dumpStdout) {
+    public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
         this.dumpStdout = dumpStdout;
-        clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class, CLANGAST_RESOURCES_FILENAME);
+        this.useCustomResources = useCustomResources;
+
+        clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
+
+        if (this.useCustomResources) {
+            clangAstResources.addLocalResources(CLANGAST_RESOURCES_FILENAME);
+        }
+
     }
 
     // public ClangAstParser() {
