@@ -474,9 +474,11 @@ public class CxxWeaver extends ACxxWeaver {
         // Sort filenames so that select order of files is consistent between OSes
         Collections.sort(implementationFilenames);
 
+        boolean useCustomResources = getConfig().get(ClavaOptions.CUSTOM_RESOURCES);
+
         // TODO: parse should receive File instead of String?
         long tic = System.nanoTime();
-        ClangRootNode ast = new ClangAstParser().parse(implementationFilenames, parserOptions);
+        ClangRootNode ast = new ClangAstParser(false, useCustomResources).parse(implementationFilenames, parserOptions);
 
         SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
         if (SHOW_MEMORY_USAGE) {
