@@ -34,8 +34,11 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     DataKey<String> FLAGS = KeyFactory.string("Compiler Flags", "");
 
+    DataKey<Boolean> CUSTOM_RESOURCES = KeyFactory.bool("Clava Custom Resources")
+            .setLabel("Enable custom resource files");
+
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
-            .addKeys(STANDARD, FLAGS)
+            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES)
             .build();
 
     @Override
