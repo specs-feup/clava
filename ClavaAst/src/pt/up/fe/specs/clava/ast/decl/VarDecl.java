@@ -28,8 +28,10 @@ import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -92,9 +94,23 @@ public class VarDecl extends DeclaratorDecl {
             return "";
         case CALL_INIT:
             return callInitCode();
+        case LIST_INIT:
+            return listInitCode();
         default:
             throw new RuntimeException("Case not defined:" + data.getInitKind());
         }
+    }
+
+    private String listInitCode() {
+        // Must be present
+        Expr initList = getInit().get();
+        SpecsCheck.checkArgument(initList instanceof InitListExpr,
+                () -> "Expected argument to be an instance of " + InitListExpr.class + ", it is a "
+                        + initList.getClass());
+
+        return initList.getCode();
+        // return getInit().map(ClavaNode::getCode)
+        // .orElseThrow(() -> new RuntimeException());
     }
 
     public boolean hasInit() {
