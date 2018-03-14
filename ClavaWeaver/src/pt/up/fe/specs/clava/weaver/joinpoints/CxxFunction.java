@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaParser;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -105,7 +105,7 @@ public class CxxFunction extends AFunction {
     @Override
     public void insertImpl(String position, String code) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
-        Stmt literalStmt = ClavaParser.parseStmt(code);
+        Stmt literalStmt = ClavaNodeParser.parseStmt(code);
         insertStmt(literalStmt, position);
     }
 
@@ -307,7 +307,7 @@ public class CxxFunction extends AFunction {
     @Override
     public void insertReturnImpl(String code) {
         // insertReturnImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), null));
-        insertReturnImpl(CxxJoinpoints.create(ClavaParser.parseStmt(code), null));
+        insertReturnImpl(CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), null));
     }
 
     @Override

@@ -16,7 +16,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaParser;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -309,7 +309,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint insertBeforeImpl(String code) {
         // return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
-        return insertBeforeImpl(CxxJoinpoints.create(ClavaParser.parseStmt(code), this));
+        return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), this));
     }
 
     @Override
@@ -326,7 +326,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint insertAfterImpl(String code) {
         // return insertAfterImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
-        return insertAfterImpl(CxxJoinpoints.create(ClavaParser.parseStmt(code), this));
+        return insertAfterImpl(CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), this));
     }
 
     @Override
