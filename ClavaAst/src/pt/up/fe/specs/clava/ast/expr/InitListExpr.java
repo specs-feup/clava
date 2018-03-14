@@ -74,7 +74,7 @@ public class InitListExpr extends Expr {
             }
         }
         // , "{ ", " }"
-        return "{ " + list + " }";
+        return "{" + list + "}";
         /*	
         	if (list.length() < 120) {
         	    return list;
