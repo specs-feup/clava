@@ -401,7 +401,10 @@ public class ClangDataParsers {
         boolean isModulePrivate = parser.apply(ClangGenericParsers::checkWord, "__module_private__");
         boolean isNrvo = parser.apply(ClangGenericParsers::checkWord, "nrvo");
 
-        InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
+        InitializationStyle initKind = parser.apply(ClangGenericParsers::parseEnum, InitializationStyle.getHelper(),
+                InitializationStyle.NO_INIT);
+
+        // InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
 
         VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind);
 

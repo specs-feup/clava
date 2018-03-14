@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <typeinfo>
+#include <array>
 
 int nullGlobal = NULL;
 int nullGlobal2 = NULL + 1;
@@ -59,6 +60,10 @@ int main() {
 	// TypeId
 	auto typeId = typeid(int).name();
 	auto typeId2 = typeid(1).name();
+	
+	// List Initialization
+	std::array<int, 3> listInitialized1 = {512, 256, 128};
+	std::array<int, 3> listInitialized2{{512, 256, 128}};
 	
 	return 0;
 }
