@@ -46,3 +46,11 @@ int foo_with_var_shadowing() {
 	
 	return i;
 }
+
+void foo_with_1darray_input(int array[]) {
+	array[0] = 1;
+}
+
+void foo_with_2darray_input(int array[2][2]) {
+	array[0][0] = 1;
+}

@@ -30,4 +30,8 @@ int main() {
 	
 	// var shadowing
 	int shadowingResult = foo_with_var_shadowing();
+	
+	// call function with array parameter using pointer argument
+	foo_with_1darray_input((int *) k[0][0]);
+	foo_with_2darray_input((int (*)[2]) k[0]);
 }
