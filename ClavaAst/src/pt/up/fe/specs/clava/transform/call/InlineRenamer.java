@@ -364,7 +364,11 @@ public class InlineRenamer {
         VarDeclData varDeclData = varDecl.getVarDeclData().copy();
         varDeclData.setInitKind(InitializationStyle.CINIT);
 
-        VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDecl.getType(),
+        // Sanitize Vardecl type (e.g., transform arrays to pointers)
+        // Type varDeclType = sanitizeVarDeclType(varDecl.getType());
+        Type varDeclType = expr.getType().copy();
+
+        VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDeclType,
                 varDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), expr);
 
         DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(newVarDecl));
@@ -377,6 +381,41 @@ public class InlineRenamer {
         // System.out.println("PARAM TYPE:" + parmVarDecl.getType());
     }
 
+    /*
+    private Type sanitizeVarDeclType(Type type) {
+        Type sanitizedType = type.copy();
+    
+        // System.out.println("TYPE BEFORE:" + sanitizedType);
+        // Replace all array types with pointer types
+        Type currentType = sanitizedType;
+        while (currentType != null) {
+            if (currentType instanceof ArrayType) {
+                // Obtain and detach element type
+                Type elementType = ((ArrayType) currentType).getElementType();
+                elementType.detach();
+    
+                // Create pointer type
+                PointerType pointerType = ClavaNodeFactory.pointerType(currentType.getTypeData(),
+                        ClavaNodeInfo.undefinedInfo(), elementType);
+    
+                NodeInsertUtils.replace(currentType, pointerType);
+    
+                currentType = elementType;
+                continue;
+            }
+    
+            if (currentType.hasSugar()) {
+                currentType = currentType.desugar();
+            } else {
+                currentType = null;
+            }
+        }
+    
+        // System.out.println("TYPE AFTER:" + sanitizedType);
+    
+        return sanitizedType;
+    }
+    */
     /**
      * Renames a parameter that has no corresponding argument.
      * 
