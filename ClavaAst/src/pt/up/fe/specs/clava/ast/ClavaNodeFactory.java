@@ -325,6 +325,13 @@ public class ClavaNodeFactory {
         return new MultiLineComment(lines, nodeInfo);
     }
 
+    /**
+     * @deprecated use inlineComment
+     * @param text
+     * @param nodeInfo
+     * @return
+     */
+    @Deprecated
     public static InlineCommandComment inlineCommandComment(String text, ClavaNodeInfo nodeInfo) {
         return new InlineCommandComment(text, nodeInfo);
     }

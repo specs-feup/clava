@@ -21,7 +21,7 @@ import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.util.utilities.StringLines;
 
-public class ClavaParser {
+public class ClavaNodeParser {
 
     /**
      * Parses certain occurrences of code. If could not parse, returns LiteralStmt.
@@ -49,7 +49,7 @@ public class ClavaParser {
         // Inline Comment
         if (lowerCurrentCode.startsWith("//")) {
             return ClavaNodes
-                    .toStmt(ClavaNodeFactory.inlineCommandComment(currentCode.substring("//".length()), undefinedInfo));
+                    .toStmt(ClavaNodeFactory.inlineComment(currentCode.substring("//".length()), true, undefinedInfo));
         }
 
         // Multiline comment
