@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ClavaParser;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -99,7 +100,8 @@ public class CxxScope extends AScope {
     public void insertImpl(String position, String code) {
         // 'body' behaviour
         if (!scope.isNestedScope()) {
-            Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+            // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+            Stmt literalStmt = ClavaParser.parseStmt(code);
             CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
             return;
         }
