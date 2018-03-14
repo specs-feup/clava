@@ -25,7 +25,7 @@ int main() {
       mutable int n2;
       
    };
-   struct anon_qualifiers_cpp_21 const x = { 0, 0 }; // const object with mutable member
+   struct anon_qualifiers_cpp_21 const x = {0, 0}; // const object with mutable member
    n1 = 1; // ok, modifiable object
    //  n2 = 2; // error: non-modifiable object
    n4 = 3; // ok, treated as a side-effect

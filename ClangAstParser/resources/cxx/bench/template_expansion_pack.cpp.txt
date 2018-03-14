@@ -14,7 +14,7 @@ std::vector<float> get_percentiles(result_t estimated_travel_times, int input, V
 template <typename... Values>
 std::vector<float> get_percentiles(result_t estimated_travel_times, int input, Values ... inputs) {
    int len = sizeof...(Values) + 1;
-   int vals[] = { input, inputs... };
+   int vals[] = {input, inputs...};
    std::vector<int> n(len);
    std::vector<float> results(len);
    std::copy(vals, vals + len, n.data());
