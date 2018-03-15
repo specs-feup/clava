@@ -413,7 +413,7 @@ public class ClangDataParsers {
         // SpecsLogs.msgInfo(
         // "ClangDataParsers.parseVarDecl: could not find varDeclDumperInfo for node " + node.getExtendedId());
         // }
-        // Preconditions.checkNotNull(varDeclDumperInfo, "VarDeclDumperInfo for node " + node.getExtendedId());
+        Preconditions.checkNotNull(varDeclDumperInfo, "VarDeclDumperInfo for node " + node.getExtendedId());
         // InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
 
         VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind,
