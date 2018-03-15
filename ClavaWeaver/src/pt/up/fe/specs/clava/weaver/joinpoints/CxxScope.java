@@ -21,8 +21,8 @@ import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaNodeParser;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -356,7 +356,7 @@ public class CxxScope extends AScope {
         boolean isImplicit = false;
         boolean isNrvo = false;
 
-        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle);
+        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
 
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode, declData, ClavaNodeInfo.undefinedInfo(),

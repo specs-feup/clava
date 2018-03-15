@@ -26,8 +26,8 @@ import pt.up.fe.specs.clang.omp.OmpParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ClavaNodeParser;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -111,7 +111,7 @@ public class AstFactory {
         Type type = getVarDeclType(standard, initType);
 
         VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-                InitializationStyle.CINIT);
+                InitializationStyle.CINIT, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, initExpr.getInfo(), initExpr);
 
