@@ -72,4 +72,24 @@ public class UnaryTransformType extends Type {
 
         return Optional.of(getChild(Type.class, index));
     }
+
+    @Override
+    protected Type desugarImpl() {
+        // System.out.println("CURRENT TYPE:" + getCode());
+        // System.out.println("HAS BASE?:" + hasBaseType);
+        // if (hasBaseType) {
+        // System.out.println("BASE:" + getBaseType().get().getCode());
+        // }
+        // System.out.println("HAS UNDERLYING:" + hasUnderlyingType);
+        // if (hasUnderlyingType) {
+        // System.out.println("UNDERLYING:" + getUnderlyingType().get().getCode());
+        // }
+
+        return getBaseType().get();
+    }
+
+    @Override
+    public boolean hasSugar() {
+        return hasBaseType;
+    }
 }
