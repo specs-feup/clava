@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -407,12 +408,12 @@ public class ClangDataParsers {
         InitializationStyle initKind = parser.apply(ClangGenericParsers::parseEnum, InitializationStyle.getHelper(),
                 InitializationStyle.NO_INIT);
 
-        boolean isConstexpr = streamData.get(StreamKeys.IS_CONST_EXPR).contains(node.getExtendedId());
+        VarDeclDumperInfo varDeclDumperInfo = streamData.get(StreamKeys.VARDECL_DUMPER_INFO).get(node.getExtendedId());
 
         // InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
 
         VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind,
-                isConstexpr);
+                varDeclDumperInfo);
 
         return new ParserResult<>(parser.getCurrentString(), varDeclData);
     }

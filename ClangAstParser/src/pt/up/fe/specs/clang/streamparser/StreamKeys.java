@@ -28,6 +28,7 @@ import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -120,10 +121,18 @@ public interface StreamKeys {
     DataKey<Map<String, TypeidData>> TYPEID_DATA = KeyFactory.generic("stderr_typeid_data",
             new HashMap<String, TypeidData>());
 
-    DataKey<Set<String>> IS_CONST_EXPR = KeyFactory.generic("stderr_is_const_expr",
-            SpecsCollections.<String> newHashSet())
-            // Setting default, in case no var decl is a const expr
-            .setDefault(() -> new HashSet<String>());
+    // DataKey<Set<String>> IS_CONST_EXPR = KeyFactory.generic("stderr_is_const_expr",
+    // SpecsCollections.<String> newHashSet())
+    // // Setting default, in case no var decl is a const expr
+    // .setDefault(() -> new HashSet<String>());
+    //
+    // DataKey<Map<String, String>> VARDECL_QUALIFIED_NAME = KeyFactory.generic("stderr_vardecl_qualified_name",
+    // new HashMap<String, String>());
+
+    DataKey<Map<String, VarDeclDumperInfo>> VARDECL_DUMPER_INFO = KeyFactory.generic("stderr_vardecl_dumper_info",
+            new HashMap<String, VarDeclDumperInfo>());
+
+    // <VarDecl Info>
 
     // DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
     // .generic("stderr_parm_var_decl_has_inherited_default_arg",
@@ -169,7 +178,9 @@ public interface StreamKeys {
             .addKey(TYPE_AS_WRITTEN)
             .addKey(LAMBDA_EXPR_DATA)
             .addKey(TYPEID_DATA)
-            .addKey(IS_CONST_EXPR)
+            // .addKey(IS_CONST_EXPR)
+            // .addKey(VARDECL_QUALIFIED_NAME)
+            .addKey(VARDECL_DUMPER_INFO)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

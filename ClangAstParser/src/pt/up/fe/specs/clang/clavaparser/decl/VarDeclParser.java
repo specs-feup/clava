@@ -57,13 +57,18 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
         VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr());
+
+        // System.out.println("NAME: " + varName);
+        // System.out.println(
+        // "QUALIFIED NAME: " + varDeclData.getVarDeclDumperInfo().getQualifiedName());
+
         // System.out.println(
         // "IS CONST EXPR? " + varDeclData.isConstexpr() + " - on " + varName + " line "
         // + node.getLocation().getStartLine());
         // Adapt 'const' in case VarDecl is constexpr
 
         // System.out.println("TYPE BEFORE:" + type + " (" + type.hashCode() + ")");
-        if (varDeclData.isConstexpr()) {
+        if (varDeclData.getVarDeclDumperInfo().isConstexpr()) {
             type = adaptTypeConstToConstexpr(varName, type);
             // type.getDescendantsAndSelf(Type.class).stream()
             // .forEach(VarDeclParser::adaptConstToConstexpr);

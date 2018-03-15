@@ -38,6 +38,7 @@ import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureKind;
@@ -222,9 +223,9 @@ public class StreamParser {
                 SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
                         StreamParser::parseTypeidData));
 
-        snippetsMap.put(StreamKeys.IS_CONST_EXPR,
-                SnippetParser.newInstance("<Is Constexpr>", new HashSet<String>(),
-                        StreamParser::collectString));
+        snippetsMap.put(StreamKeys.VARDECL_DUMPER_INFO,
+                SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
+                        StreamParser::parseVarDeclDumperInfo));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -652,6 +653,26 @@ public class StreamParser {
 
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
                 captureDefault, captureKinds));
+    }
+
+    public static void parseVarDeclDumperInfo(LineStream lines, Map<String, VarDeclDumperInfo> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // qualified name (String)
+        // isConstexpr (boolean)
+        // isStaticDataMember (boolean)
+        // isOutOfLine (boolean)
+        // hasGlobalStorage (boolean)
+
+        String qualifiedName = lines.nextLine();
+        boolean isConstexpr = parseOneOrZero(lines.nextLine());
+        boolean isStaticDataMember = parseOneOrZero(lines.nextLine());
+        boolean isOutOfLine = parseOneOrZero(lines.nextLine());
+        boolean hasGlobalStorage = parseOneOrZero(lines.nextLine());
+
+        map.put(key,
+                new VarDeclDumperInfo(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage));
     }
 
     public static void parseTypeidData(LineStream lines, Map<String, TypeidData> map) {
