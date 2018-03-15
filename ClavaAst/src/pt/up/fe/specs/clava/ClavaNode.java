@@ -29,6 +29,8 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
@@ -357,6 +359,26 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     public void setId(String newId) {
         info.setId(newId);
+    }
+
+    /**
+     * 
+     * @return the CompoundStmt this node belongs to, or TranslationUnit if the scope is global. A node might not have
+     *         scope (e.g., if it is detached from the AST)
+     */
+    public Optional<ClavaNode> getScope() {
+        ClavaNode currentNode = this;
+        while (currentNode.hasParent()) {
+            ClavaNode parent = currentNode.getParent();
+
+            if (parent instanceof CompoundStmt || parent instanceof TranslationUnit) {
+                return Optional.of(parent);
+            }
+
+            currentNode = parent;
+        }
+
+        return Optional.empty();
     }
 
 }
