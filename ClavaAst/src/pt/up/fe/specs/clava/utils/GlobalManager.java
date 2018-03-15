@@ -51,7 +51,7 @@ public class GlobalManager {
         boolean isImplicit = false;
         boolean isNrvo = false;
 
-        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle);
+        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
 
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, type, declData, ClavaNodeInfo.undefinedInfo(),

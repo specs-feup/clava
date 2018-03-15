@@ -20,7 +20,8 @@ public enum Qualifier {
     CONST,
     RESTRICT,
     VOLATILE,
-    GLOBAL;
+    GLOBAL,
+    CONSTEXPR;
 
     public String getCode(boolean isCxx) {
         if (this == RESTRICT) {

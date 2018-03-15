@@ -93,7 +93,7 @@ public class ClavaNodeInfo {
     if (id == null) {
         return;
     }
-
+    
     id.setSet(set);
     }
     */
@@ -155,7 +155,6 @@ public class ClavaNodeInfo {
     }
 
     public void setId(String newId) {
-
         id.setId(newId);
     }
 }
