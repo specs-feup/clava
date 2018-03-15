@@ -79,10 +79,31 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
         VisitStmtTop(D->getInit());
     }
 
+
+    // Print information about VarDecl
+    llvm::errs() << VARDECL_INFO << "\n";
+    llvm::errs() << getId(D) << "\n";
+    llvm::errs() << D->getQualifiedNameAsString() << "\n";
+    llvm::errs() << D->isConstexpr() << "\n";
+    llvm::errs() << D->isStaticDataMember() << "\n";
+    llvm::errs() << D->isOutOfLine() << "\n";
+    llvm::errs() << D->hasGlobalStorage() << "\n";
+
+/*
     if(D->isConstexpr()) {
         llvm::errs() << IS_CONST_EXPR << "\n";
         llvm::errs() << getId(D) << "\n";
     }
+
+    // Print qualified name for all VarDecls
+    llvm::errs() << VARDECL_QUALIFIED_NAME << "\n";
+    llvm::errs() << getId(D) << "\n";
+    llvm::errs() << D->getQualifiedNameAsString() << "\n";
+
+    llvm::errs() << "VARDECL: " << D->getNameAsString() << "\n";
+    llvm::errs() << "IS OUT OF LINE: " << D->isOutOfLine() << "\n";
+    llvm::errs() << "IS STATIC DATA MEMBER: " << D->isStaticDataMember() << "\n";
+*/
 }
 
 

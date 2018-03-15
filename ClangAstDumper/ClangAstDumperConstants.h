@@ -50,4 +50,8 @@ static const std::string TYPEID_DATA = "<Typeid Data>";
 
 static const std::string IS_CONST_EXPR = "<Is Constexpr>";
 
+static const std::string VARDECL_QUALIFIED_NAME = "<VarDecl Qualified Name>";
+
+static const std::string VARDECL_INFO = "<VarDecl Info>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H
