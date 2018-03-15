@@ -30,6 +30,41 @@ void ClangAstDumper::dumpNumberTemplateParameters(const Decl *D, const TemplateP
     llvm::errs() << numberOfTemplateParameters << "\n";
 }
 
+/*
+ * Shared DECL methods
+ */
+
+// Method shared by CXXMethodDecl hierarchy
+void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D);
+
+void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
+    if(D->hasBody()) {
+        dumper->VisitStmtTop(D->getBody());
+    }
+
+    // Dump the corresponding CXXRecordDecl
+    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
+    llvm::errs() << dumper->getId(D) << "\n";
+    llvm::errs() << dumper->getId(D->getParent()) << "\n";
+
+    // Visit type
+    //llvm::errs() << "Visiting type " << dumper->getId(D->getType().getTypePtr()) << " for node " << dumper->getId(D) << "\n";
+    //dumper->VisitTypeTop(D->getType().getTypePtr());
+}
+
+// Method shared by VarDecl hierarchy
+void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D);
+
+void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D) {
+    // Print information about VarDecl
+    llvm::errs() << VARDECL_INFO << "\n";
+    llvm::errs() << dumper->getId(D) << "\n";
+    llvm::errs() << D->getQualifiedNameAsString() << "\n";
+    llvm::errs() << D->isConstexpr() << "\n";
+    llvm::errs() << D->isStaticDataMember() << "\n";
+    llvm::errs() << D->isOutOfLine() << "\n";
+    llvm::errs() << D->hasGlobalStorage() << "\n";
+}
 
 /*
  * DECLS
@@ -79,15 +114,7 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
         VisitStmtTop(D->getInit());
     }
 
-
-    // Print information about VarDecl
-    llvm::errs() << VARDECL_INFO << "\n";
-    llvm::errs() << getId(D) << "\n";
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-    llvm::errs() << D->isConstexpr() << "\n";
-    llvm::errs() << D->isStaticDataMember() << "\n";
-    llvm::errs() << D->isOutOfLine() << "\n";
-    llvm::errs() << D->hasGlobalStorage() << "\n";
+    VisitVarDeclBody(this, D);
 
 /*
     if(D->isConstexpr()) {
@@ -234,23 +261,7 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 
 }
 
-// Method shared by CXXMethodDecl hierarchy
-void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D);
 
-void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
-    if(D->hasBody()) {
-        dumper->VisitStmtTop(D->getBody());
-    }
-
-    // Dump the corresponding CXXRecordDecl
-    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
-    llvm::errs() << dumper->getId(D) << "\n";
-    llvm::errs() << dumper->getId(D->getParent()) << "\n";
-
-    // Visit type
-    //llvm::errs() << "Visiting type " << dumper->getId(D->getType().getTypePtr()) << " for node " << dumper->getId(D) << "\n";
-    //dumper->VisitTypeTop(D->getType().getTypePtr());
-}
 
 
 void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
@@ -389,6 +400,8 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";
         llvm::errs() << getId(D) << "\n";
     }
+
+    VisitVarDeclBody(this, D);
 
 }
 
