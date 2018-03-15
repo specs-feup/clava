@@ -63,7 +63,7 @@ public abstract class TagType extends Type {
             return enumType;
         }
 
-        return enumType + name;
+        return enumType + " " + name;
     }
 
 }
