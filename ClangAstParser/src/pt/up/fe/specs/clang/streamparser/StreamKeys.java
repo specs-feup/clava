@@ -120,6 +120,17 @@ public interface StreamKeys {
     DataKey<Map<String, TypeidData>> TYPEID_DATA = KeyFactory.generic("stderr_typeid_data",
             new HashMap<String, TypeidData>());
 
+    DataKey<Set<String>> IS_CONST_EXPR = KeyFactory.generic("stderr_is_const_expr",
+            SpecsCollections.<String> newHashSet())
+            // Setting default, in case no var decl is a const expr
+            .setDefault(() -> new HashSet<String>());
+
+    // DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
+    // .generic("stderr_parm_var_decl_has_inherited_default_arg",
+    // SpecsCollections.<String> newHashSet())
+    // // Setting default, in case no parm var decl has inherited arg
+    // .setDefault(() -> new HashSet<String>());
+
     // DataKey<Map<String, String>> CXX_METHOD_DECL_DECLARATION =
     // KeyFactory.generic("stderr_cxx_method_decl_declaration",
     // SpecsCollections.<String, String> newHashMap())
@@ -158,6 +169,7 @@ public interface StreamKeys {
             .addKey(TYPE_AS_WRITTEN)
             .addKey(LAMBDA_EXPR_DATA)
             .addKey(TYPEID_DATA)
+            .addKey(IS_CONST_EXPR)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

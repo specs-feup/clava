@@ -222,6 +222,10 @@ public class StreamParser {
                 SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
                         StreamParser::parseTypeidData));
 
+        snippetsMap.put(StreamKeys.IS_CONST_EXPR,
+                SnippetParser.newInstance("<Is Constexpr>", new HashSet<String>(),
+                        StreamParser::collectString));
+
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
         // StdErrParser::collectString));

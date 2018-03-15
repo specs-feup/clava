@@ -61,7 +61,7 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
 
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
-        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl);
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr());
 
         List<ClavaNode> children = parseChildren(node);
 
