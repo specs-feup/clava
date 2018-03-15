@@ -78,6 +78,11 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     if (D->hasInit()) {
         VisitStmtTop(D->getInit());
     }
+
+    if(D->isConstexpr()) {
+        llvm::errs() << IS_CONST_EXPR << "\n";
+        llvm::errs() << getId(D) << "\n";
+    }
 }
 
 

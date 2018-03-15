@@ -48,5 +48,6 @@ static const std::string LAMBDA_EXPR_DATA = "<Lambda Expr Data>";
 
 static const std::string TYPEID_DATA = "<Typeid Data>";
 
+static const std::string IS_CONST_EXPR = "<Is Constexpr>";
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H
