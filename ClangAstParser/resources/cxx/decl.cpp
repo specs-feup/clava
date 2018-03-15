@@ -7,7 +7,7 @@ int nullGlobal = NULL;
 int nullGlobal2 = NULL + 1;
 
 class A {
-
+	static constexpr int constexprInt = 3;
     void defaultInitDecl(int* a = nullptr);
 	void defaultInitImpl(int* a);
 	void defaultInitImpl(int* a, int* b = nullptr);
@@ -41,6 +41,8 @@ int main() {
 	int b, c=0, d;
 	/** Full comment */
 	const int e=2, f=3;
+	constexpr int constexpr_local = 1;
+	int g = 4;
 	std::vector<int> v1, v2;
 
 	{
