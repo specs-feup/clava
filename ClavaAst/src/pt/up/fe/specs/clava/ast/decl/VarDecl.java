@@ -89,7 +89,7 @@ public class VarDecl extends DeclaratorDecl {
     private String getDeclNameCode() {
         String name = getDeclName();
 
-        if (getVarDeclData().getVarDeclDumperInfo() == null) {
+        if (!getVarDeclData().hasVarDeclDumperInfo()) {
             return name;
         }
 

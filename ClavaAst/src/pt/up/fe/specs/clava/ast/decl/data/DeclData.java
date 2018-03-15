@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+import pt.up.fe.specs.util.SpecsLogs;
+
 public class DeclData {
 
     private static final DeclData EMPTY_DATA = new DeclData(false, false, false, false, false, false);
@@ -41,6 +43,12 @@ public class DeclData {
         this.referenced = referenced;
         this.invalid = invalid;
         this.constexpr = constexpr;
+
+        if (constexpr) {
+            SpecsLogs.msgWarn(
+                    "ConstExpr true in DeclData, check if there is difference between VarDeclDumperInfo.isConstexpr");
+        }
+
     }
 
     public boolean isHidden() {

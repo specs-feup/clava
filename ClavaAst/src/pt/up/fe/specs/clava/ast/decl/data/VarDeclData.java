@@ -117,4 +117,8 @@ public class VarDeclData {
         return varDeclDumperInfo;
     }
 
+    public boolean hasVarDeclDumperInfo() {
+        return varDeclDumperInfo != null;
+    }
+
 }
