@@ -50,11 +50,15 @@ public class QualType extends Type {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new QualType(qualTypeData, getTypeData(), getInfo(), Collections.emptyList());
+        return new QualType(qualTypeData.copy(), getTypeData(), getInfo(), Collections.emptyList());
     }
 
     public List<Qualifier> getQualifiers() {
         return qualTypeData.getQualifiers();
+    }
+
+    public void setQualifiers(List<Qualifier> qualifiers) {
+        qualTypeData.setQualifiers(qualifiers);
     }
 
     @Override

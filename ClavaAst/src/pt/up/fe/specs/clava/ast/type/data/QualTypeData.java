@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaCode;
@@ -21,7 +22,7 @@ import pt.up.fe.specs.clava.language.Standard;
 public class QualTypeData {
 
     private final AddressSpaceQualifier addressSpaceQualifier;
-    private final List<Qualifier> qualifiers;
+    private List<Qualifier> qualifiers;
     private final Standard standard;
 
     public QualTypeData(AddressSpaceQualifier addressSpaceQualifier, List<Qualifier> qualifiers, Standard standard) {
@@ -44,5 +45,13 @@ public class QualTypeData {
 
     public String getQualifiersCode() {
         return ClavaCode.getQualifiersCode(qualifiers, standard.isCxx());
+    }
+
+    public void setQualifiers(List<Qualifier> qualifiers) {
+        this.qualifiers = qualifiers;
+    }
+
+    public QualTypeData copy() {
+        return new QualTypeData(addressSpaceQualifier, new ArrayList<>(qualifiers), standard);
     }
 }

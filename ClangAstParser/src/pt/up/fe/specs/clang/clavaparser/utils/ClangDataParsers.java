@@ -18,10 +18,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
@@ -391,7 +394,7 @@ public class ClangDataParsers {
         return new ParserResult<>(parser.getCurrentString(), cxxNamedCastExprData);
     }
 
-    public static ParserResult<VarDeclData> parseVarDecl(StringSlice string) {
+    public static ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node, DataStore streamData) {
         StringParser parser = new StringParser(string);
 
         StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelper(),
@@ -404,9 +407,12 @@ public class ClangDataParsers {
         InitializationStyle initKind = parser.apply(ClangGenericParsers::parseEnum, InitializationStyle.getHelper(),
                 InitializationStyle.NO_INIT);
 
+        boolean isConstexpr = streamData.get(StreamKeys.IS_CONST_EXPR).contains(node.getExtendedId());
+
         // InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
 
-        VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind);
+        VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind,
+                isConstexpr);
 
         return new ParserResult<>(parser.getCurrentString(), varDeclData);
     }

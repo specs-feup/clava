@@ -380,7 +380,7 @@ public class ClavaNodeFactory {
         boolean isNrvo = false;
 
         VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-                InitializationStyle.NO_INIT);
+                InitializationStyle.NO_INIT, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
         return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, null, null);
     }

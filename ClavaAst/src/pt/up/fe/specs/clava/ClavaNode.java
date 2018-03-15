@@ -355,4 +355,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return getChildren().stream().map(ClavaNodes::normalize).collect(Collectors.toList());
     }
 
+    public void setId(String newId) {
+        info.setId(newId);
+    }
+
 }

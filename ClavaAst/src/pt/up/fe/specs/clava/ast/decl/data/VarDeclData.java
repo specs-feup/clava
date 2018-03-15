@@ -37,22 +37,25 @@ public class VarDeclData {
 
     private InitializationStyle initKind;
 
+    private final boolean isConstexpr;
+
     public VarDeclData() {
-        this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT);
+        this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT, false);
     }
 
     public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,
-            InitializationStyle initKind) {
+            InitializationStyle initKind, boolean isConstexpr) {
 
         this.storageClass = storageClass;
         this.tlsKind = tlsKind;
         this.isModulePrivate = isModulePrivate;
         this.isNrvo = isNrvo;
         this.initKind = initKind;
+        this.isConstexpr = isConstexpr;
     }
 
     public VarDeclData copy() {
-        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind);
+        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind, isConstexpr);
     }
 
     @Override
@@ -64,12 +67,17 @@ public class VarDeclData {
         string.append(", isModulePrivate:").append(isModulePrivate);
         string.append(", isNrvo:").append(isNrvo);
         string.append(", init:").append(initKind);
+        string.append(", constexpr:").append(isConstexpr);
 
         return string.toString();
     }
 
     public InitializationStyle getInitKind() {
         return initKind;
+    }
+
+    public boolean isConstexpr() {
+        return isConstexpr;
     }
 
     public void setInitKind(InitializationStyle initKind) {

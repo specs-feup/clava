@@ -107,7 +107,7 @@ public class CxxCall extends ACall {
         if (declareVariable) {
 
             VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, false,
-                    InitializationStyle.CINIT);
+                    InitializationStyle.CINIT, false);
             DeclData declData = new DeclData(false, false, true, false, false, false);
             VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, variableName, returnType, declData, call.getInfo(),
                     call);
