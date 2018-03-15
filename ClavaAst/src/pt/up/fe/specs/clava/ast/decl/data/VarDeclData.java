@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clava.language.TLSKind;
 
 public class VarDeclData {
@@ -37,25 +39,48 @@ public class VarDeclData {
 
     private InitializationStyle initKind;
 
-    private final boolean isConstexpr;
+    private final VarDeclDumperInfo varDeclDumperInfo;
 
     public VarDeclData() {
         this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT, false);
     }
 
     public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,
-            InitializationStyle initKind, boolean isConstexpr) {
+            InitializationStyle initKind, VarDeclDumperInfo varDeclDumperInfo) {
 
         this.storageClass = storageClass;
         this.tlsKind = tlsKind;
         this.isModulePrivate = isModulePrivate;
         this.isNrvo = isNrvo;
         this.initKind = initKind;
-        this.isConstexpr = isConstexpr;
+        this.varDeclDumperInfo = varDeclDumperInfo;
+    }
+
+    /**
+     * @deprecated Use construtor that accepts VarDeclDumperInfo, or a future constructor that is simpler
+     * @param storageClass
+     * @param tlsKind
+     * @param isModulePrivate
+     * @param isNrvo
+     * @param initKind
+     * @param isConstexpr
+     */
+    @Deprecated
+    public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,
+            InitializationStyle initKind, boolean isConstexpr) {
+
+        Preconditions.checkArgument(isConstexpr == false, "This constructor only works if 'isConstexpr' is false");
+
+        this.storageClass = storageClass;
+        this.tlsKind = tlsKind;
+        this.isModulePrivate = isModulePrivate;
+        this.isNrvo = isNrvo;
+        this.initKind = initKind;
+        this.varDeclDumperInfo = new VarDeclDumperInfo(null, false, false, false, false);
     }
 
     public VarDeclData copy() {
-        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind, isConstexpr);
+        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind, varDeclDumperInfo);
     }
 
     @Override
@@ -67,7 +92,7 @@ public class VarDeclData {
         string.append(", isModulePrivate:").append(isModulePrivate);
         string.append(", isNrvo:").append(isNrvo);
         string.append(", init:").append(initKind);
-        string.append(", constexpr:").append(isConstexpr);
+        string.append(", vardecl dumper info:").append(varDeclDumperInfo);
 
         return string.toString();
     }
@@ -76,9 +101,9 @@ public class VarDeclData {
         return initKind;
     }
 
-    public boolean isConstexpr() {
-        return isConstexpr;
-    }
+    // public boolean isConstexpr() {
+    // return isConstexpr;
+    // }
 
     public void setInitKind(InitializationStyle initKind) {
         this.initKind = initKind;
@@ -86,6 +111,10 @@ public class VarDeclData {
 
     public boolean isNrvo() {
         return isNrvo;
+    }
+
+    public VarDeclDumperInfo getVarDeclDumperInfo() {
+        return varDeclDumperInfo;
     }
 
 }

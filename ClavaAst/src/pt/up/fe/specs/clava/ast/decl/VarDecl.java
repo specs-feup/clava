@@ -70,7 +70,7 @@ public class VarDecl extends DeclaratorDecl {
             code.append(getVarDeclData().getStorageClass().getString()).append(" ");
         }
 
-        code.append(getType().getCode(getDeclName()));
+        code.append(getType().getCode(getDeclNameCode()));
         code.append(getInitializationCode());
 
         return code.toString();
@@ -83,7 +83,19 @@ public class VarDecl extends DeclaratorDecl {
      */
     @Override
     public String getTypelessCode() {
-        return getDeclName() + getInitializationCode();
+        return getDeclNameCode() + getInitializationCode();
+    }
+
+    private String getDeclNameCode() {
+        String name = getDeclName();
+
+        // Check if it is a static member outside of the record
+        if (getVarDeclData().getVarDeclDumperInfo().isStaticDataMember()
+                && getVarDeclData().getVarDeclDumperInfo().isOutOfLine()) {
+            name = getVarDeclData().getVarDeclDumperInfo().getQualifiedName();
+        }
+
+        return name;
     }
 
     public String getInitializationCode() {
