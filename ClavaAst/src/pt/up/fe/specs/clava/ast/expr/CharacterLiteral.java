@@ -23,7 +23,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.SpecsStrings;
 
-public class CharacterLiteral extends Expr {
+public class CharacterLiteral extends Literal {
 
     private static final Map<Character, String> CHAR_LITERAL;
     static {
@@ -93,5 +93,10 @@ public class CharacterLiteral extends Expr {
     @Override
     public String toContentString() {
         return super.toContentString() + ", charValue:" + charValue;
+    }
+
+    @Override
+    public String getLiteral() {
+        return getCode();
     }
 }
