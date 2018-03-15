@@ -39,7 +39,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider CENTOS6_EXE = create("centos6/clang_ast", "v2.16");
 
-    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v2.15");
+    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v2.16");
 
     // private static final String BASE_URL = "http://specs.fe.up.pt/resources/clangast/";
     // private static final String BASE_URL = "http://192.168.55.89/resources/clangast/";
