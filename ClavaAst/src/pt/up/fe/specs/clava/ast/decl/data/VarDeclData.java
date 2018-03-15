@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+import java.util.Optional;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.language.TLSKind;
@@ -113,12 +115,31 @@ public class VarDeclData {
         return isNrvo;
     }
 
-    public VarDeclDumperInfo getVarDeclDumperInfo() {
-        return varDeclDumperInfo;
+    public Optional<VarDeclDumperInfo> getVarDeclDumperInfo() {
+        return Optional.ofNullable(varDeclDumperInfo);
     }
 
     public boolean hasVarDeclDumperInfo() {
         return varDeclDumperInfo != null;
     }
 
+    public boolean isConstexpr() {
+        return getVarDeclDumperInfo().map(data -> data.isConstexpr()).orElse(false);
+    }
+
+    public boolean hasGlobalStorage() {
+        return getVarDeclDumperInfo().map(data -> data.hasGlobalStorage()).orElse(false);
+    }
+
+    public boolean isStaticDataMember() {
+        return getVarDeclDumperInfo().map(data -> data.isStaticDataMember()).orElse(false);
+    }
+
+    public boolean isOutOfLine() {
+        return getVarDeclDumperInfo().map(data -> data.isOutOfLine()).orElse(false);
+    }
+
+    public Optional<String> getQualifiedName() {
+        return getVarDeclDumperInfo().map(data -> data.getQualifiedName());
+    }
 }

@@ -94,9 +94,11 @@ public class VarDecl extends DeclaratorDecl {
         }
 
         // Check if it is a static member outside of the record
-        if (getVarDeclData().getVarDeclDumperInfo().isStaticDataMember()
-                && getVarDeclData().getVarDeclDumperInfo().isOutOfLine()) {
-            name = getVarDeclData().getVarDeclDumperInfo().getQualifiedName();
+        if (getVarDeclData().isStaticDataMember()
+                && getVarDeclData().isOutOfLine()) {
+            name = getVarDeclData().getQualifiedName()
+                    .orElseThrow(
+                            () -> new RuntimeException("Expected qualified name to be defined for VarDecl.\n " + this));
         }
 
         return name;
