@@ -68,7 +68,7 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         // Adapt 'const' in case VarDecl is constexpr
 
         // System.out.println("TYPE BEFORE:" + type + " (" + type.hashCode() + ")");
-        if (varDeclData.getVarDeclDumperInfo().isConstexpr()) {
+        if (varDeclData.hasVarDeclDumperInfo() && varDeclData.getVarDeclDumperInfo().isConstexpr()) {
             type = adaptTypeConstToConstexpr(varName, type);
             // type.getDescendantsAndSelf(Type.class).stream()
             // .forEach(VarDeclParser::adaptConstToConstexpr);
