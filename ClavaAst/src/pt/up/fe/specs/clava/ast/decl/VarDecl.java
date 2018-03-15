@@ -89,6 +89,10 @@ public class VarDecl extends DeclaratorDecl {
     private String getDeclNameCode() {
         String name = getDeclName();
 
+        if (getVarDeclData().getVarDeclDumperInfo() == null) {
+            return name;
+        }
+
         // Check if it is a static member outside of the record
         if (getVarDeclData().getVarDeclDumperInfo().isStaticDataMember()
                 && getVarDeclData().getVarDeclDumperInfo().isOutOfLine()) {
