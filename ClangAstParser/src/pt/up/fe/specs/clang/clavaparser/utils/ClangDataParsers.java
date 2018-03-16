@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
+import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
@@ -36,6 +37,7 @@ import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
@@ -59,6 +61,7 @@ import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -121,7 +124,7 @@ public class ClangDataParsers {
     }
 
     public static ParserResult<FunctionDeclParserResult> parseFunctionDecl(StringSlice string,
-            ListParser<ClavaNode> children, ClangNode node) {
+            ListParser<ClavaNode> children, ClangNode node, DataStore streamData) {
 
         StringParser parser = new StringParser(string);
 
@@ -169,8 +172,17 @@ public class ClangDataParsers {
             openClKernelAttr = children.popSingle(OpenCLKernelAttr.class::cast);
         }
 
+        // Get stream information
+        FunctionDeclInfo streamInfo = streamData.get(StreamKeys.FUNCTION_DECL_INFO).get(node.getExtendedId());
+        if (streamInfo == null) {
+            SpecsLogs.msgWarn("Check case: could not get FunctionDeclInfo for " + node.getExtendedId());
+        }
+
+        // Add information from the stream parser
+        TemplateKind templateKind = streamInfo != null ? streamInfo.getTemplateKind() : TemplateKind.NON_TEMPLATE;
+
         FunctionDeclData data = new FunctionDeclData(storageClass, isInline, isVirtual, isModulePrivate, isPure,
-                isDelete, exceptionSpecifier, exceptionAddress, templateArguments, openClKernelAttr);
+                isDelete, exceptionSpecifier, exceptionAddress, templateArguments, openClKernelAttr, templateKind);
 
         FunctionDeclParserResult result = new FunctionDeclParserResult(data, params, definition);
 

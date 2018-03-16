@@ -66,7 +66,7 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
         }
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
-        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, children, node);
+        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, children, node, getStdErr());
         // boolean isStatic = parser.apply(string -> ClangParseWorkers.checkWord(string, "static"));
 
         // boolean isInline = parser.apply(string -> ClangParseWorkers.checkWord(string, "inline"));

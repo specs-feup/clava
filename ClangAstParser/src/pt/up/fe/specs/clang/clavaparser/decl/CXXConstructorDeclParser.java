@@ -83,7 +83,8 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         List<CXXCtorInitializer> defaultInits = parseInitializers(node.getExtendedId(), ctorInit);
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(clangChildren.stream()));
-        FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children, node);
+        FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children, node,
+                getStdErr());
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");

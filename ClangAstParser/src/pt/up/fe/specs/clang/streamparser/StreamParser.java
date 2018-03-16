@@ -34,10 +34,12 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
+import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
@@ -226,6 +228,10 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.VARDECL_DUMPER_INFO,
                 SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
                         StreamParser::parseVarDeclDumperInfo));
+
+        snippetsMap.put(StreamKeys.FUNCTION_DECL_INFO,
+                SnippetParser.newInstance("<FunctionDecl Info>", new HashMap<String, FunctionDeclInfo>(),
+                        StreamParser::parseFunctionDeclInfo));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -689,6 +695,21 @@ public class StreamParser {
 
         map.put(key, new TypeidData(isTypeOperator, operatorId));
 
+    }
+
+    public static void parseFunctionDeclInfo(LineStream lines, Map<String, FunctionDeclInfo> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // templateKind (TemplateKind)
+
+        TemplateKind templateKind = TemplateKind.getHelper().valueOf(Integer.parseInt(lines.nextLine()));
+
+        FunctionDeclInfo info = new FunctionDeclInfo(templateKind);
+
+        map.put(key, info);
+        // map.put(key,
+        // new VarDeclDumperInfo(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage));
     }
 
 }

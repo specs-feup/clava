@@ -54,7 +54,8 @@ public class FunctionDeclParser extends AClangNodeParser<FunctionDecl> {
 
         ListParser<ClavaNode> parsedChildren = new ListParser<>(parseChildren(node));
 
-        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, parsedChildren, node);
+        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, parsedChildren, node,
+                getStdErr());
 
         checkNumChildren(parsedChildren.getList(), 0);
 
