@@ -37,15 +37,17 @@ public class FunctionDeclData {
     private final long exceptionAddress;
     private final List<TemplateArgument> templateArguments;
     private final OpenCLKernelAttr openClKernelAttr;
+    private final TemplateKind templateKind;
 
     public FunctionDeclData() {
         this(StorageClass.NONE, false, false, false, false, false, ExceptionType.NONE, -1, Collections.emptyList(),
-                null);
+                null, TemplateKind.NON_TEMPLATE);
     }
 
     public FunctionDeclData(StorageClass storageClass, boolean isInline, boolean isVirtual, boolean isModulePrivate,
             boolean isPure, boolean isDelete, ExceptionType exceptionSpecifier, long exceptionAddress,
-            List<TemplateArgument> templateArguments, OpenCLKernelAttr openClKernelAttr) {
+            List<TemplateArgument> templateArguments, OpenCLKernelAttr openClKernelAttr, TemplateKind templateKind) {
+
         this.storageClass = storageClass;
         this.isInline = isInline;
         this.isVirtual = isVirtual;
@@ -56,6 +58,7 @@ public class FunctionDeclData {
         this.exceptionAddress = exceptionAddress;
         this.templateArguments = templateArguments;
         this.openClKernelAttr = openClKernelAttr;
+        this.templateKind = templateKind;
     }
 
     public StorageClass getStorageClass() {
@@ -98,6 +101,10 @@ public class FunctionDeclData {
         return openClKernelAttr != null;
     }
 
+    public TemplateKind getTemplateKind() {
+        return templateKind;
+    }
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
@@ -111,6 +118,7 @@ public class FunctionDeclData {
         string.append(", ExceptionType: " + exceptionSpecifier);
         string.append(", exceptionAddress: " + exceptionAddress);
         string.append(", Template Arguments: " + templateArguments);
+        string.append(", Template Kind: " + templateKind);
 
         return string.toString();
     }
