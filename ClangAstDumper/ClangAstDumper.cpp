@@ -23,6 +23,11 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
         return;
     }
 
+//    auto typeAddr = T.getTypePtrOrNull();
+//    if(typeAddr == nullptr) {
+//        return;
+//    }
+
     TypeVisitor::Visit(T.getTypePtr());
     dumpType(T);
 }

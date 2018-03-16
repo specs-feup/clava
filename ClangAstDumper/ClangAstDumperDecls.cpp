@@ -34,13 +34,32 @@ void ClangAstDumper::dumpNumberTemplateParameters(const Decl *D, const TemplateP
  * Shared DECL methods
  */
 
+// Method shared by FunctionDecl hierarchy
+void VisitFunctionDeclBody(ClangAstDumper* dumper, const FunctionDecl *D);
+
+void VisitFunctionDeclBody(ClangAstDumper* dumper, const FunctionDecl *D) {
+    if(D->hasBody()) {
+        dumper->VisitStmtTop(D->getBody());
+    }
+
+    // Print information about FunctionDecl
+    llvm::errs() << FUNCTION_DECL_INFO << "\n";
+    llvm::errs() << dumper->getId(D) << "\n";
+    llvm::errs() << D->getTemplatedKind() << "\n";
+
+/*
+    llvm::errs() << D->getQualifiedNameAsString() << "\n";
+    llvm::errs() << D->isConstexpr() << "\n";
+    llvm::errs() << D->isOutOfLine() << "\n";
+*/
+}
+
+
 // Method shared by CXXMethodDecl hierarchy
 void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D);
 
 void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
-    if(D->hasBody()) {
-        dumper->VisitStmtTop(D->getBody());
-    }
+    VisitFunctionDeclBody(dumper, D);
 
     // Dump the corresponding CXXRecordDecl
     llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
@@ -262,6 +281,16 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 }
 
 
+void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
+    if(dumpDecl(D)) {
+        return;
+    }
+
+    log("FunctionDecl", D);
+
+    VisitFunctionDeclBody(this, D);
+
+}
 
 
 void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {

@@ -54,4 +54,6 @@ static const std::string VARDECL_QUALIFIED_NAME = "<VarDecl Qualified Name>";
 
 static const std::string VARDECL_INFO = "<VarDecl Info>";
 
+static const std::string FUNCTION_DECL_INFO = "<FunctionDecl Info>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

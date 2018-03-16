@@ -82,6 +82,7 @@ public:
      */
     void VisitDecl(const Decl *D); // Should not be manually called, instead call VisitDeclTop()
     void VisitVarDecl(const VarDecl *D);
+    void VisitFunctionDecl(const FunctionDecl *D);
     void VisitCXXMethodDecl(const CXXMethodDecl *D);
     void VisitCXXRecordDecl(const CXXRecordDecl *D);
     void VisitCXXConstructorDecl(const CXXConstructorDecl *D);
