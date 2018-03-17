@@ -35,6 +35,7 @@ import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
+import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
@@ -232,6 +233,10 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.FUNCTION_DECL_INFO,
                 SnippetParser.newInstance("<FunctionDecl Info>", new HashMap<String, FunctionDeclInfo>(),
                         StreamParser::parseFunctionDeclInfo));
+
+        snippetsMap.put(StreamKeys.INIT_LIST_EXPR_INFO,
+                SnippetParser.newInstance("<InitListExpr Info>", new HashMap<String, InitListExprInfo>(),
+                        StreamParser::parseInitListExprInfo));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -708,8 +713,19 @@ public class StreamParser {
         FunctionDeclInfo info = new FunctionDeclInfo(templateKind);
 
         map.put(key, info);
-        // map.put(key,
-        // new VarDeclDumperInfo(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage));
+    }
+
+    public static void parseInitListExprInfo(LineStream lines, Map<String, InitListExprInfo> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // isExplicit (boolean)
+
+        boolean isExplicit = parseOneOrZero(lines.nextLine());
+
+        InitListExprInfo info = new InitListExprInfo(isExplicit);
+
+        map.put(key, info);
     }
 
 }

@@ -27,6 +27,7 @@ import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
+import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
@@ -136,6 +137,9 @@ public interface StreamKeys {
     DataKey<Map<String, FunctionDeclInfo>> FUNCTION_DECL_INFO = KeyFactory.generic("stderr_function_decl_info",
             new HashMap<String, FunctionDeclInfo>());
 
+    DataKey<Map<String, InitListExprInfo>> INIT_LIST_EXPR_INFO = KeyFactory.generic("stderr_init_list_expr_info",
+            new HashMap<String, InitListExprInfo>());
+
     // <VarDecl Info>
 
     // DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
@@ -186,6 +190,7 @@ public interface StreamKeys {
             // .addKey(VARDECL_QUALIFIED_NAME)
             .addKey(VARDECL_DUMPER_INFO)
             .addKey(FUNCTION_DECL_INFO)
+            .addKey(INIT_LIST_EXPR_INFO)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

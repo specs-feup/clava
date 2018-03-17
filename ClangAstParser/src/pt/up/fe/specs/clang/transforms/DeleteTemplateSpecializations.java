@@ -42,9 +42,11 @@ public class DeleteTemplateSpecializations implements SimplePostClavaRule {
 
         // Only tested function specialization, check other cases
         if (functionDecl.getFunctionDeclData().getTemplateKind() != TemplateKind.FUNCTION_TEMPLATE_SPECIALIZATION) {
-            SpecsLogs.msgWarn(
-                    "Removing template specialization of kind '" + functionDecl.getFunctionDeclData().getTemplateKind()
-                            + "', this has not yet been tested. Please contact the developers.");
+            SpecsLogs.untested("Removing template specialization of kind '"
+                    + functionDecl.getFunctionDeclData().getTemplateKind() + "'");
+            // SpecsLogs.msgWarn(
+            // "Removing template specialization of kind '" + functionDecl.getFunctionDeclData().getTemplateKind()
+            // + "', this has not yet been tested. Please contact the developers.");
         }
 
         queue.delete(functionDecl);
