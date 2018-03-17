@@ -60,7 +60,8 @@ public class InitListExprParser extends AClangNodeParser<InitListExpr> {
         // Check if first child is an array filler
         Expr arrayFiller = getArrayFiller(clangChildren);
 
-        boolean isExplicit = info != null ? info.isExplicit() : false;
+        // By default use true
+        boolean isExplicit = info != null ? info.isExplicit() : true;
 
         InitListExprData data = new InitListExprData(hasInitializedFieldInUnion, arrayFiller, fieldData, isExplicit);
 
