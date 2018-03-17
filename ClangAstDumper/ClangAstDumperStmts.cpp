@@ -421,3 +421,18 @@ void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
         VisitStmtTop(Node->getExprOperand());
     }
 }
+
+void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    log("InitListExpr", Node);
+    llvm::errs() << INIT_LIST_EXPR_INFO << "\n";
+    llvm::errs() << getId(Node) << "\n";
+
+    // InitListExpr has method isExplicit(), but is not const
+    bool isExplicit = Node->getLBraceLoc().isValid() && Node->getRBraceLoc().isValid();
+    llvm::errs() << isExplicit << "\n";
+
+}

@@ -56,4 +56,6 @@ static const std::string VARDECL_INFO = "<VarDecl Info>";
 
 static const std::string FUNCTION_DECL_INFO = "<FunctionDecl Info>";
 
+static const std::string INIT_LIST_EXPR_INFO = "<InitListExpr Info>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

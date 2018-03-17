@@ -74,6 +74,7 @@ public:
     void VisitSizeOfPackExpr(const SizeOfPackExpr *Node);
     void VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node);
     void VisitCXXTypeidExpr(const CXXTypeidExpr *Node);
+    void VisitInitListExpr(const InitListExpr *Node);
 
 
 
