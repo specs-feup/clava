@@ -153,12 +153,25 @@ public class VarDecl extends DeclaratorDecl {
         String prefix = " = ";
 
         // return " = " + getChild(0).getCode();
+
         Expr initExpr = getInit().get();
 
         // Special case: CXXConstructorExpr without args
         // if (initExpr instanceof CXXConstructExpr) {
         // if (((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
         // return prefix + " {}";
+        // }
+        // }
+
+        // Special case: InitListExpr
+        // if (initExpr instanceof InitListExpr) {
+        // InitListExpr initListExpr = (InitListExpr) initExpr;
+        // List<Expr> initExprs = initListExpr.getInitExprs();
+        //
+        // if (initExprs.size() == 1) {
+        // if (initExprs.get(0) instanceof InitListExpr) {
+        // return prefix + initExprs.get(0).getCode();
+        // }
         // }
         // }
 

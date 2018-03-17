@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
@@ -32,23 +32,37 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public class InitListExpr extends Expr {
 
-    private final boolean hasInitializedFieldInUnion;
-    private final Expr arrayFiller;
-    private final BareDeclData fieldData;
+    private final InitListExprData data;
 
-    public InitListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller, BareDeclData fieldData, ExprData exprData,
-            ClavaNodeInfo info, Collection<? extends Expr> initExprs) {
+    public InitListExpr(InitListExprData data, ExprData exprData, ClavaNodeInfo info,
+            Collection<? extends Expr> initExprs) {
 
         super(exprData, info, initExprs);
 
+        this.data = data;
+    }
+
+    /*
+    private final boolean hasInitializedFieldInUnion;
+    private final Expr arrayFiller;
+    private final BareDeclData fieldData;
+    
+    public InitListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller, BareDeclData fieldData, ExprData exprData,
+            ClavaNodeInfo info, Collection<? extends Expr> initExprs) {
+    
+        super(exprData, info, initExprs);
+    
         this.hasInitializedFieldInUnion = hasInitializedFieldInUnion;
         this.arrayFiller = arrayFiller;
         this.fieldData = fieldData;
     }
+    */
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, getExprData(), getInfo(),
+        // return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, getExprData(), getInfo(),
+        // Collections.emptyList());
+        return new InitListExpr(data, getExprData(), getInfo(),
                 Collections.emptyList());
     }
 
@@ -62,8 +76,9 @@ public class InitListExpr extends Expr {
                 .map(expr -> expr.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (arrayFiller != null) {
-            String exprClassName = arrayFiller.getClass().getSimpleName();
+        // if (arrayFiller != null) {
+        if (data.hasArrayFiller()) {
+            String exprClassName = data.getArrayFiller().getClass().getSimpleName();
             switch (exprClassName) {
             case "ImplicitValueInitExpr":
                 list = list + ",";
@@ -73,14 +88,26 @@ public class InitListExpr extends Expr {
                 break;
             }
         }
+
+        String code = "{" + list + "}";
+
+        // System.out.println("CODE:" + code);
+        // System.out.println("INIT_LIST:" + this);
+        // System.out.println("INIT_LIST TYPE:" + getType());
+        return code;
+
+        // if (data.isExplicit()) {
+        // return "{" + list + "}";
+        // } else {
+        // return list;
+        // }
+
         // , "{ ", " }"
-        return "{" + list + "}";
-        /*	
-        	if (list.length() < 120) {
-        	    return list;
-        	}
-        
-        	String[] elements = list.split(", ");
-        	*/
+        // return "{" + list + "}";
+    }
+
+    @Override
+    public String toContentString() {
+        return toContentString(super.toContentString(), data.toString());
     }
 }
