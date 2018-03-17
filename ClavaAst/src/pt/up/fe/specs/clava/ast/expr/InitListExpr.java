@@ -89,18 +89,11 @@ public class InitListExpr extends Expr {
             }
         }
 
-        String code = "{" + list + "}";
-
-        // System.out.println("CODE:" + code);
-        // System.out.println("INIT_LIST:" + this);
-        // System.out.println("INIT_LIST TYPE:" + getType());
-        return code;
-
-        // if (data.isExplicit()) {
-        // return "{" + list + "}";
-        // } else {
-        // return list;
-        // }
+        if (data.isExplicit()) {
+            return "{" + list + "}";
+        } else {
+            return list;
+        }
 
         // , "{ ", " }"
         // return "{" + list + "}";
