@@ -1,3 +1,4 @@
+#include <array>
 
 char const * foo1(double const arg1[3]);
 char const mypass_version[4] = "1.0";
@@ -8,11 +9,21 @@ class A {
    
    public:
    void constFoo() const;
+   static int constexpr number_of_sizes = 3;
+   static std::array<int, number_of_sizes> constexpr SPACE{{512, 256, 128}};
+   static std::array<int, number_of_sizes> constexpr SPACE2 = {{512, 256, 128}};
+   static std::array<std::array<int, 2>, 1> constexpr ARRAY_IN_ARRAY{{{{1, 2}}}};
+   static std::array<std::array<int, 2>, 1> constexpr ARRAY_IN_ARRAY2 = {{{{1, 2}}}};
 };
 
 inline void A::constFoo() const {
 }
 
+// constexpr static members need to be allocated outside os the class/structure
+std::array<int, A::number_of_sizes> constexpr A::SPACE;
+std::array<int, A::number_of_sizes> constexpr A::SPACE2;
+std::array<std::array<int, 2>, 1> constexpr A::ARRAY_IN_ARRAY;
+std::array<std::array<int, 2>, 1> constexpr A::ARRAY_IN_ARRAY2;
 
 int main() {
    int n1 = 0; // non-const object
@@ -20,12 +31,12 @@ int main() {
    int const n3 = 0; // const object (same as n2)
    int volatile n4 = 0; // volatile object
    
-   struct anon_qualifiers_cpp_21 {
+   struct anon_qualifiers_cpp_33 {
       int n1;
       mutable int n2;
       
    };
-   struct anon_qualifiers_cpp_21 const x = {0, 0}; // const object with mutable member
+   struct anon_qualifiers_cpp_33 const x = {0, 0}; // const object with mutable member
    n1 = 1; // ok, modifiable object
    //  n2 = 2; // error: non-modifiable object
    n4 = 3; // ok, treated as a side-effect
@@ -45,4 +56,10 @@ int main() {
    int * const constant3 = nullptr;
    // constant pointer to a constant integer
    int const * const constant4 = nullptr;
+   
+   struct anon_qualifiers_cpp_64 {
+      int n1;
+   };
+
+   struct anon_qualifiers_cpp_64 const x2 = {0}; // const object with single member
 }
