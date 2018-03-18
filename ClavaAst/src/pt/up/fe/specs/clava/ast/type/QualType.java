@@ -197,7 +197,7 @@ public class QualType extends Type {
 
     @Override
     public boolean isConst() {
-        if (getQualifiers().contains(Qualifier.CONST)) {
+        if (getQualifiers().contains(Qualifier.CONST) || getQualifiers().contains(Qualifier.CONSTEXPR)) {
             return true;
         }
 
