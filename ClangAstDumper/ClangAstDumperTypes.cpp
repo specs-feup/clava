@@ -3,6 +3,7 @@
 //
 
 #include "ClangAstDumper.h"
+#include "ClangAstDumperConstants.h"
 
 #include "clang/AST/AST.h"
 

@@ -5,7 +5,6 @@
 #ifndef CLANGASTDUMPER_CLANGASTDUMPER_H
 #define CLANGASTDUMPER_CLANGASTDUMPER_H
 
-#include "ClangAstDumperConstants.h"
 
 #include "clang/AST/TypeVisitor.h"
 #include "clang/AST/StmtVisitor.h"
@@ -96,18 +95,28 @@ public:
     void VisitTypedefDecl(const TypedefDecl *D);
 
 
-
     // Utility methods
     std::string loc2str(SourceLocation locStart, SourceLocation locEnd);
     std::string getId(const void* addr);
     std::string toBoolString(int value);
     const Type* getTypePtr(QualType T, std::string source);
+    void log(const char* name, const void* addr);
+
+
+    // Private functions
+private:
+
+    // Info dumpers for Decls
+    void DumpFunctionDeclInfo(const FunctionDecl *D);
+    void DumpCXXMethodDeclInfo(const CXXMethodDecl *D);
+
+
+
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
 
-    // Private functions
-private:
+
     // These methods return true if the node had been already visited
 
     bool dumpType(const Type* typeAddr);
@@ -121,7 +130,6 @@ private:
     void dumpCXXCtorInitializer(const CXXCtorInitializer *Init);
 
 
-    void log(const char* name, const void* addr);
 
 
 };

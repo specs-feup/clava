@@ -3,6 +3,7 @@
 //
 
 #include "ClangAstDumper.h"
+#include "ClangAstDumperConstants.h"
 
 #include "clang/AST/AST.h"
 
@@ -35,41 +36,17 @@ void ClangAstDumper::dumpNumberTemplateParameters(const Decl *D, const TemplateP
  */
 
 // Method shared by FunctionDecl hierarchy
-void VisitFunctionDeclBody(ClangAstDumper* dumper, const FunctionDecl *D);
+//void VisitFunctionDeclBody(ClangAstDumper* dumper, const FunctionDecl *D);
 
-void VisitFunctionDeclBody(ClangAstDumper* dumper, const FunctionDecl *D) {
-    if(D->hasBody()) {
-        dumper->VisitStmtTop(D->getBody());
-    }
+//void VisitFunctionDeclBody(ClangAstDumper* dumper, const FunctionDecl *D) {
 
-    // Print information about FunctionDecl
-    llvm::errs() << FUNCTION_DECL_INFO << "\n";
-    llvm::errs() << dumper->getId(D) << "\n";
-    llvm::errs() << D->getTemplatedKind() << "\n";
-
-/*
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-    llvm::errs() << D->isConstexpr() << "\n";
-    llvm::errs() << D->isOutOfLine() << "\n";
-*/
-}
 
 
 // Method shared by CXXMethodDecl hierarchy
-void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D);
+//void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D);
 
-void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
-    VisitFunctionDeclBody(dumper, D);
+//void VisitCXXMethodDeclBody(ClangAstDumper* dumper, const CXXMethodDecl *D) {
 
-    // Dump the corresponding CXXRecordDecl
-    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
-    llvm::errs() << dumper->getId(D) << "\n";
-    llvm::errs() << dumper->getId(D->getParent()) << "\n";
-
-    // Visit type
-    //llvm::errs() << "Visiting type " << dumper->getId(D->getType().getTypePtr()) << " for node " << dumper->getId(D) << "\n";
-    //dumper->VisitTypeTop(D->getType().getTypePtr());
-}
 
 // Method shared by VarDecl hierarchy
 void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D);
@@ -288,8 +265,7 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
 
     log("FunctionDecl", D);
 
-    VisitFunctionDeclBody(this, D);
-
+    DumpFunctionDeclInfo(D);
 }
 
 
@@ -300,8 +276,7 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
 
     log("CXXMethodDecl", D);
 
-    VisitCXXMethodDeclBody(this, D);
-
+    DumpCXXMethodDeclInfo(D);
 }
 
 void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
@@ -311,7 +286,7 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
 
     log("CXXConstructorDecl", D);
 
-    VisitCXXMethodDeclBody(this, D);
+    DumpCXXMethodDeclInfo(D);
 
 
     // Check if there are CXXCtorInitializers
