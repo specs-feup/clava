@@ -31,6 +31,10 @@ import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
+import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -140,6 +144,18 @@ public interface StreamKeys {
     DataKey<Map<String, InitListExprInfo>> INIT_LIST_EXPR_INFO = KeyFactory.generic("stderr_init_list_expr_info",
             new HashMap<String, InitListExprInfo>());
 
+    DataKey<Map<String, DeclDataV2>> DECL_DATA = KeyFactory.generic("stderr_decl_data",
+            new HashMap<String, DeclDataV2>());
+
+    DataKey<Map<String, FunctionDeclDataV2>> FUNCTION_DECL_DATA = KeyFactory.generic("stderr_function_decl_data",
+            new HashMap<String, FunctionDeclDataV2>());
+
+    DataKey<Map<String, VarDeclDataV2>> VAR_DECL_DATA = KeyFactory.generic("stderr_var_decl_data",
+            new HashMap<String, VarDeclDataV2>());
+
+    DataKey<Map<String, ParmVarDeclDataV2>> PARM_VAR_DECL_DATA = KeyFactory.generic("stderr_parm_var_decl_data",
+            new HashMap<String, ParmVarDeclDataV2>());
+
     // <VarDecl Info>
 
     // DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
@@ -191,6 +207,11 @@ public interface StreamKeys {
             .addKey(VARDECL_DUMPER_INFO)
             .addKey(FUNCTION_DECL_INFO)
             .addKey(INIT_LIST_EXPR_INFO)
+
+            .addKey(DECL_DATA)
+            .addKey(FUNCTION_DECL_DATA)
+            .addKey(VAR_DECL_DATA)
+            .addKey(PARM_VAR_DECL_DATA)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)
