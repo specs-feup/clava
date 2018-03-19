@@ -60,6 +60,19 @@ public class ClavaNodeParser {
 
         // String pragmaPrefix = extractPragmaPrefix(currentCode);
         if (lowerCurrentCode.startsWith("#pragma ")) {
+            // String pragmaContent = currentCode.substring("#pragma ".length());
+
+            // Check if OpenMP pragma
+            // String pragmaKind = new StringParser(pragmaContent).apply(StringParsers::parseWord);
+
+            // if (pragmaKind.equals("omp")) {
+            // return PragmaParsers.parse(pragmaContent, undefinedInfo);
+            // }
+
+            // Try to parse pragma. If pragma not parsable, create generic pragma
+            // ClavaNode pragmaNode = PragmaParsers.parse(pragmaFullContent, info)
+            // .orElse(ClavaNodeFactory.genericPragmaStmt(Arrays.asList(pragmaFullContent), info));
+
             GenericPragma pragma = ClavaNodeFactory
                     .genericPragmaStmt(Arrays.asList(currentCode.substring("#pragma ".length())), undefinedInfo);
             return ClavaNodes.toStmt(pragma);
