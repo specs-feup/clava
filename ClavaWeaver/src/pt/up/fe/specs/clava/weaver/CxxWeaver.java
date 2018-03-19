@@ -228,7 +228,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     public Optional<App> getAppTry() {
         if (weaverData == null) {
-            return null;
+            return Optional.empty();
         }
 
         return weaverData.getAst();
