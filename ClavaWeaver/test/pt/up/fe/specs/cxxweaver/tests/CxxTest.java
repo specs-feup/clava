@@ -180,4 +180,5 @@ public class CxxTest {
     public void testFunction() {
         newTester().test("Function.lara", "function.cpp");
     }
+
 }

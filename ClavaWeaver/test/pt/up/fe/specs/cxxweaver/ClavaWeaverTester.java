@@ -206,7 +206,6 @@ public class ClavaWeaverTester {
             // Check weaver executed correctly
             assertTrue(result);
         } catch (Exception e) {
-
             // After LaraI execution, static weaver is unset, and it is no longer safe to use the weaver instance,
             // unless we set the weaver again
             if (weaver.getAppTry().isPresent()) {

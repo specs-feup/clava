@@ -100,4 +100,9 @@ public class CTest {
     public void testSetType() {
         newTester().test("SetType.lara", "set_type.c");
     }
+
+    @Test
+    public void testDetach() {
+        newTester().test("Detach.lara", "detach.c");
+    }
 }
