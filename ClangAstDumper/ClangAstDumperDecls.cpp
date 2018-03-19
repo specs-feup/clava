@@ -49,18 +49,10 @@ void ClangAstDumper::dumpNumberTemplateParameters(const Decl *D, const TemplateP
 
 
 // Method shared by VarDecl hierarchy
-void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D);
+//void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D);
 
-void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D) {
-    // Print information about VarDecl
-    llvm::errs() << VARDECL_INFO << "\n";
-    llvm::errs() << dumper->getId(D) << "\n";
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-    llvm::errs() << D->isConstexpr() << "\n";
-    llvm::errs() << D->isStaticDataMember() << "\n";
-    llvm::errs() << D->isOutOfLine() << "\n";
-    llvm::errs() << D->hasGlobalStorage() << "\n";
-}
+//void VisitVarDeclBody(ClangAstDumper* dumper, const VarDecl *D) {
+
 
 /*
  * DECLS
@@ -97,7 +89,21 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
 }
 
 void ClangAstDumper::VisitDecl(const Decl *D) {
-    dumpDecl(D);
+    if(dumpDecl(D)) {
+        return;
+    }
+
+    log("Decl", D);
+
+    // Dump info
+    infoDumper.DumpHeader("DECL HEADER", D);
+    infoDumper.DumpDeclInfo(D);
+    //dumpDecl(D);
+
+
+//    llvm::errs() << DECL_INFO << "\n";
+//    llvm::errs() << getId(D) << "\n";
+//    DumpDeclInfo(D);
 }
 
 void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
@@ -106,27 +112,16 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     }
 
     log("VarDecl", D);
-    if (D->hasInit()) {
-        VisitStmtTop(D->getInit());
-    }
 
-    VisitVarDeclBody(this, D);
+    // Dump info
+    infoDumper.DumpHeader("VARDECL HEADER", D);
+    infoDumper.DumpVarDeclInfo(D);
 
-/*
-    if(D->isConstexpr()) {
-        llvm::errs() << IS_CONST_EXPR << "\n";
-        llvm::errs() << getId(D) << "\n";
-    }
+    // Visit children
+    VisitVarDeclChildren(D);
 
-    // Print qualified name for all VarDecls
-    llvm::errs() << VARDECL_QUALIFIED_NAME << "\n";
-    llvm::errs() << getId(D) << "\n";
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-
-    llvm::errs() << "VARDECL: " << D->getNameAsString() << "\n";
-    llvm::errs() << "IS OUT OF LINE: " << D->isOutOfLine() << "\n";
-    llvm::errs() << "IS STATIC DATA MEMBER: " << D->isStaticDataMember() << "\n";
-*/
+    // Old
+    DumpVarDeclInfo(D);
 }
 
 
@@ -136,6 +131,8 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     }
 
     log("CXXRecordDecl", D);
+
+    DumpNamedDeclInfo(D);
 
 //    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
     // Visit definition
@@ -265,7 +262,26 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
 
     log("FunctionDecl", D);
 
+    // Dump info
+    infoDumper.DumpHeader("FUNCTIONDECL HEADER", D);
+    infoDumper.DumpFunctionDeclInfo(D);
+
+    // Visit children
+    VisitFunctionDeclChildren(D);
+
+    // Old
+    // Dump information
     DumpFunctionDeclInfo(D);
+
+    // Visit parameters
+    for (FunctionDecl::param_const_iterator I = D->param_begin(), E = D->param_end(); I != E; ++I) {
+        VisitDeclTop(*I);
+    }
+
+    // Visit body
+    if(D->hasBody()) {
+        VisitStmtTop(D->getBody());
+    }
 }
 
 
@@ -326,6 +342,8 @@ void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D
 
     log("ObjCImplementationDecl", D);
 
+    DumpNamedDeclInfo(D);
+
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {
         llvm::errs() << CXX_CTOR_INITIALIZER_BEGIN << "\n";
@@ -351,6 +369,8 @@ void ClangAstDumper::VisitTemplateDecl(const TemplateDecl *D) {
 
     log("TemplateDecl", D);
 
+    DumpNamedDeclInfo(D);
+
     dumpNumberTemplateParameters(D, D->getTemplateParameters());
 }
 
@@ -360,6 +380,8 @@ void ClangAstDumper::VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D) {
     }
 
     log("TemplateTypeParmDecl", D);
+
+    DumpNamedDeclInfo(D);
 }
 
 void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
@@ -368,6 +390,8 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
     }
 
     log("NamespaceAliasDecl", D);
+
+    DumpNamedDeclInfo(D);
 
     // Dump nested namespace prefix
     llvm::errs() << DUMP_NAMESPACE_ALIAS_PREFIX << "\n";
@@ -382,6 +406,8 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
     }
 
     log("FieldDecl", D);
+
+    DumpNamedDeclInfo(D);
 
 //    llvm::errs() << "DUMPING FIELD DECL: " << getId(D) << "\n";
 
@@ -400,12 +426,20 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
 
     log("ParmVarDecl", D);
 
+    // Dump info
+    infoDumper.DumpHeader("PARMVARDECL HEADER", D);
+    infoDumper.DumpParmVarDeclInfo(D);
+
+    // Visit children
+    VisitParmVarDeclChildren(D);
+
+    // Old
+    DumpVarDeclInfo(D);
+
     if(D->hasInheritedDefaultArg()) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";
         llvm::errs() << getId(D) << "\n";
     }
-
-    VisitVarDeclBody(this, D);
 
 }
 
@@ -415,6 +449,8 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
     }
 
     log("TypedefDecl", D);
+
+    DumpNamedDeclInfo(D);
 
     // Dump typedef source
     llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";

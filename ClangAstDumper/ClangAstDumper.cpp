@@ -15,7 +15,7 @@
 
 using namespace clang;
 
-ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id)  {};
+ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id), infoDumper(id)  {};
 
 
 void ClangAstDumper::VisitTypeTop(const QualType& T) {

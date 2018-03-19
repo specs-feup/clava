@@ -24,8 +24,7 @@ static const std::string DUMP_FIELD_DECL_INFO = "<Field Decl Info>";
 // For NamedDecls, signals if they do not have a defined name (which is less common)
 static const std::string DUMP_NAMED_DECL_WITHOUT_NAME = "<NamedDecl Without Name>";
 
-// Maps a CXXMethodDecl to the corresponding CXXRecordDecl
-static const std::string DUMP_CXX_METHOD_DECL_PARENT = "<CXXMethodDecl Parent>";
+
 
 // Maps a CXXMethodDecl to the corresponding declaration, if the method is a definition
 //static const std::string DUMP_CXX_METHOD_DECL_DECLARATION = "<CXXMethodDecl Declaration>";
@@ -52,10 +51,19 @@ static const std::string IS_CONST_EXPR = "<Is Constexpr>";
 
 static const std::string VARDECL_QUALIFIED_NAME = "<VarDecl Qualified Name>";
 
-static const std::string VARDECL_INFO = "<VarDecl Info>";
 
-static const std::string FUNCTION_DECL_INFO = "<FunctionDecl Info>";
 
 static const std::string INIT_LIST_EXPR_INFO = "<InitListExpr Info>";
+
+// TODO: Create CXXMethodDeclInfo
+// Maps a CXXMethodDecl to the corresponding CXXRecordDecl
+static const std::string DUMP_CXX_METHOD_DECL_PARENT = "<CXXMethodDecl Parent>";
+
+
+// DECL INFO
+static const std::string DECL_INFO = "<Decl Info>";
+static const std::string NAMED_DECL_INFO = "<NamedDecl Info>";
+static const std::string FUNCTION_DECL_INFO = "<FunctionDecl Info>";
+static const std::string VARDECL_INFO = "<VarDecl Info>";
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

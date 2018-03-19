@@ -36,7 +36,8 @@ set(SOURCE_FILES
 		#TypeMarker.h
 		#ClangAstDumperConstants.h
 		#TEst.h
-		)
+		InfoDumper.cpp
+		InfoDumperDecls.cpp)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
 

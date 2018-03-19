@@ -5,6 +5,7 @@
 #ifndef CLANGASTDUMPER_CLANGASTDUMPER_H
 #define CLANGASTDUMPER_CLANGASTDUMPER_H
 
+#include "InfoDumper.h"
 
 #include "clang/AST/TypeVisitor.h"
 #include "clang/AST/StmtVisitor.h"
@@ -29,6 +30,8 @@ private:
     std::set<const Decl*> seenDecls;
 
     std::set<const CXXCtorInitializer*> seenInits;
+
+    InfoDumper infoDumper;
 
 public:
     explicit ClangAstDumper(ASTContext *Context, int id);
@@ -106,10 +109,19 @@ public:
     // Private functions
 private:
 
+    // Children visitors for Decls
+    void VisitFunctionDeclChildren(const FunctionDecl *D);
+    void VisitVarDeclChildren(const VarDecl *D);
+    void VisitParmVarDeclChildren(const ParmVarDecl *D);
+
+
     // Info dumpers for Decls
+    // TODO: Remove
+    void DumpDeclInfo(const Decl *D);
+    void DumpNamedDeclInfo(const NamedDecl *D);
     void DumpFunctionDeclInfo(const FunctionDecl *D);
     void DumpCXXMethodDeclInfo(const CXXMethodDecl *D);
-
+    void DumpVarDeclInfo(const VarDecl *D);
 
 
 
