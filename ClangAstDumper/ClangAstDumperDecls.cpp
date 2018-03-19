@@ -4,6 +4,7 @@
 
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
+#include "InfoDumperConstants.h"
 
 #include "clang/AST/AST.h"
 
@@ -96,7 +97,7 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
     log("Decl", D);
 
     // Dump info
-    infoDumper.DumpHeader("DECL HEADER", D);
+    infoDumper.DumpHeader(DECL_DATA, D);
     infoDumper.DumpDeclInfo(D);
     //dumpDecl(D);
 
@@ -114,7 +115,7 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     log("VarDecl", D);
 
     // Dump info
-    infoDumper.DumpHeader("VARDECL HEADER", D);
+    infoDumper.DumpHeader(VAR_DECL_DATA, D);
     infoDumper.DumpVarDeclInfo(D);
 
     // Visit children
@@ -263,7 +264,7 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
     log("FunctionDecl", D);
 
     // Dump info
-    infoDumper.DumpHeader("FUNCTIONDECL HEADER", D);
+    infoDumper.DumpHeader(FUNCTION_DECL_DATA, D);
     infoDumper.DumpFunctionDeclInfo(D);
 
     // Visit children
@@ -427,7 +428,7 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     log("ParmVarDecl", D);
 
     // Dump info
-    infoDumper.DumpHeader("PARMVARDECL HEADER", D);
+    infoDumper.DumpHeader(PARM_VAR_DECL_DATA, D);
     infoDumper.DumpParmVarDeclInfo(D);
 
     // Visit children

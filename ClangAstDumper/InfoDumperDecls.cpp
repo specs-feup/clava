@@ -7,6 +7,14 @@
 void InfoDumper::DumpDeclInfo(const Decl *D) {
 
     // Print information about Decl
+    llvm::errs() << D->isImplicit() << "\n";
+    llvm::errs() << D->isUsed() << "\n";
+    llvm::errs() << D->isReferenced() << "\n";
+    llvm::errs() << D->isInvalidDecl() << "\n";
+
+    // TODO: Attributes?
+//    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E; ++I)
+
 
 }
 
@@ -14,13 +22,15 @@ void InfoDumper::DumpNamedDeclInfo(const NamedDecl *D) {
     // Hierarchy
     DumpDeclInfo(D);
 
+    llvm::errs() << D->isHidden() << "\n";
+
     //llvm::errs() << "INFO DUMPER\n";
 
     // Print information about NamedDecl
 //    llvm::errs() << NAMED_DECL_INFO << "\n";
 //    llvm::errs() << getId(D) << "\n";
 
-    //llvm::errs() << D->isHidden() << "\n";
+
 }
 
 
@@ -30,6 +40,7 @@ void InfoDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
     DumpNamedDeclInfo(D);
 
     // Print information about FunctionDecl
+    llvm::errs() << D->isConstexpr() << "\n";
     llvm::errs() << D->getTemplatedKind() << "\n";
 
 /*
