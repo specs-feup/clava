@@ -19,6 +19,9 @@ import java.util.List;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.parsing.omp.OmpParser;
+import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 public class ClavaNodeParser {
@@ -60,21 +63,19 @@ public class ClavaNodeParser {
 
         // String pragmaPrefix = extractPragmaPrefix(currentCode);
         if (lowerCurrentCode.startsWith("#pragma ")) {
-            // String pragmaContent = currentCode.substring("#pragma ".length());
+            String pragmaContent = currentCode.substring("#pragma ".length());
+
+            // Get pragma kind
+            StringParser parser = new StringParser(pragmaContent);
+            String pragmaKind = parser.apply(StringParsers::parseWord);
 
             // Check if OpenMP pragma
-            // String pragmaKind = new StringParser(pragmaContent).apply(StringParsers::parseWord);
-
-            // if (pragmaKind.equals("omp")) {
-            // return PragmaParsers.parse(pragmaContent, undefinedInfo);
-            // }
-
-            // Try to parse pragma. If pragma not parsable, create generic pragma
-            // ClavaNode pragmaNode = PragmaParsers.parse(pragmaFullContent, info)
-            // .orElse(ClavaNodeFactory.genericPragmaStmt(Arrays.asList(pragmaFullContent), info));
+            if (pragmaKind.equals("omp")) {
+                return ClavaNodes.toStmt(new OmpParser().parse(parser, undefinedInfo));
+            }
 
             GenericPragma pragma = ClavaNodeFactory
-                    .genericPragmaStmt(Arrays.asList(currentCode.substring("#pragma ".length())), undefinedInfo);
+                    .genericPragmaStmt(Arrays.asList(pragmaContent), undefinedInfo);
             return ClavaNodes.toStmt(pragma);
         }
 
