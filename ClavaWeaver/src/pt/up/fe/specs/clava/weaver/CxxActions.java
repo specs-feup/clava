@@ -18,8 +18,8 @@ import java.util.Optional;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaNodeParser;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -65,7 +65,8 @@ public class CxxActions {
         case AROUND:
         case REPLACE:
             weaver.clearUserField(target);
-            NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, null, target));
+            // NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, null, target));
+            NodeInsertUtils.replace(target, ClavaNodeParser.parseStmt(code));
             break;
         default:
             throw new RuntimeException("Case not defined:" + insert);
