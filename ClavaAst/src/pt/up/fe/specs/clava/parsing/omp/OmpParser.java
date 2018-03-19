@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.omp;
+package pt.up.fe.specs.clava.parsing.omp;
 
 import static pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind.*;
 
@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.pragma.PragmaParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
@@ -41,6 +40,7 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.parsing.pragma.PragmaParser;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
