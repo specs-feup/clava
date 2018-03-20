@@ -37,7 +37,7 @@ set(SOURCE_FILES
 		#ClangAstDumperConstants.h
 		#TEst.h
 		InfoDumper.cpp
-		InfoDumperDecls.cpp)
+		InfoDumperDecls.cpp ChildrenVisitorDecls.cpp)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
 

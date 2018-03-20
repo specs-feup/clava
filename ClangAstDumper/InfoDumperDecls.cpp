@@ -7,10 +7,14 @@
 void InfoDumper::DumpDeclInfo(const Decl *D) {
 
     // Print information about Decl
-    llvm::errs() << D->isImplicit() << "\n";
-    llvm::errs() << D->isUsed() << "\n";
-    llvm::errs() << D->isReferenced() << "\n";
-    llvm::errs() << D->isInvalidDecl() << "\n";
+    dump(D->isImplicit());
+    dump(D->isUsed());
+    dump(D->isReferenced());
+    dump(D->isInvalidDecl());
+    //llvm::errs() << D->isImplicit() << "\n";
+    //llvm::errs() << D->isUsed() << "\n";
+    //llvm::errs() << D->isReferenced() << "\n";
+    //llvm::errs() << D->isInvalidDecl() << "\n";
 
     // TODO: Attributes?
 //    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E; ++I)
@@ -22,14 +26,13 @@ void InfoDumper::DumpNamedDeclInfo(const NamedDecl *D) {
     // Hierarchy
     DumpDeclInfo(D);
 
-    llvm::errs() << D->isHidden() << "\n";
-
-    //llvm::errs() << "INFO DUMPER\n";
-
     // Print information about NamedDecl
-//    llvm::errs() << NAMED_DECL_INFO << "\n";
-//    llvm::errs() << getId(D) << "\n";
-
+    dump(D->getQualifiedNameAsString());
+    dump(D->getDeclName().getNameKind());
+    dump(D->isHidden());
+    //llvm::errs() << D->getQualifiedNameAsString() << "\n";
+    //llvm::errs() << D->getDeclName().getNameKind() << "\n";
+    //llvm::errs() << D->isHidden() << "\n";
 
 }
 
@@ -40,13 +43,22 @@ void InfoDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
     DumpNamedDeclInfo(D);
 
     // Print information about FunctionDecl
-    llvm::errs() << D->isConstexpr() << "\n";
-    llvm::errs() << D->getTemplatedKind() << "\n";
+    dump(D->isConstexpr());
+    dump(D->getTemplatedKind());
+//    llvm::errs() << D->isConstexpr() << "\n";
+//    llvm::errs() << D->getTemplatedKind() << "\n";
+
 
 /*
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-    llvm::errs() << D->isConstexpr() << "\n";
-    llvm::errs() << D->isOutOfLine() << "\n";
+  StorageClass SC = D->getStorageClass();
+  if (SC != SC_None)
+    OS << ' ' << VarDecl::getStorageClassSpecifierString(SC);
+  if (D->isInlineSpecified())
+    OS << " inline";
+  if (D->isVirtualAsWritten())
+    OS << " virtual";
+  if (D->isModulePrivate())
+    OS << " __module_private__";
 */
 }
 
@@ -70,11 +82,35 @@ void InfoDumper::DumpVarDeclInfo(const VarDecl *D) {
     DumpNamedDeclInfo(D);
 
     // Print information about VarDecl
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-    llvm::errs() << D->isConstexpr() << "\n";
-    llvm::errs() << D->isStaticDataMember() << "\n";
-    llvm::errs() << D->isOutOfLine() << "\n";
-    llvm::errs() << D->hasGlobalStorage() << "\n";
+    dump(D->getStorageClass());
+    dump(D->getTLSKind());
+    dump(D->isModulePrivate());
+    dump(D->isNRVOVariable());
+    dump(D->getInitStyle());
+
+    dump(D->isConstexpr());
+    dump(D->isStaticDataMember() );
+    dump(D->isOutOfLine());
+    dump(D->hasGlobalStorage());
+//    llvm::errs() << D->isConstexpr() << "\n";
+//    llvm::errs() << D->isStaticDataMember() << "\n";
+//    llvm::errs() << D->isOutOfLine() << "\n";
+//    llvm::errs() << D->hasGlobalStorage() << "\n";
+
+
+    /**
+
+
+
+  if (D->hasInit()) {
+    switch (D->getInitStyle()) {
+    case VarDecl::CInit: OS << " cinit"; break;
+    case VarDecl::CallInit: OS << " callinit"; break;
+    case VarDecl::ListInit: OS << " listinit"; break;
+    }
+    dumpStmt(D->getInit());
+  }
+     */
 
 /*
     if(D->isConstexpr()) {
@@ -99,5 +135,6 @@ void InfoDumper::DumpParmVarDeclInfo(const ParmVarDecl *D) {
     DumpVarDeclInfo(D);
 
     // Print information about ParmVarDecl
-    llvm::errs() << D->hasInheritedDefaultArg() << "\n";
+    dump(D->hasInheritedDefaultArg());
+    //llvm::errs() << D->hasInheritedDefaultArg() << "\n";
 }

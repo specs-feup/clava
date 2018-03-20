@@ -87,8 +87,10 @@ public:
     void VisitVarDecl(const VarDecl *D);
     void VisitFunctionDecl(const FunctionDecl *D);
     void VisitCXXMethodDecl(const CXXMethodDecl *D);
-    void VisitCXXRecordDecl(const CXXRecordDecl *D);
     void VisitCXXConstructorDecl(const CXXConstructorDecl *D);
+    void VisitCXXConversionDecl(const CXXConversionDecl *D);
+    void VisitCXXDestructorDecl(const CXXDestructorDecl *D);
+    void VisitCXXRecordDecl(const CXXRecordDecl *D);
     void VisitObjCImplementationDecl(const ObjCImplementationDecl *D);
     void VisitTemplateDecl(const TemplateDecl *D);
     void VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D);
@@ -111,6 +113,7 @@ private:
 
     // Children visitors for Decls
     void VisitFunctionDeclChildren(const FunctionDecl *D);
+    //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
     void VisitVarDeclChildren(const VarDecl *D);
     void VisitParmVarDeclChildren(const ParmVarDecl *D);
 
@@ -121,7 +124,7 @@ private:
     void DumpNamedDeclInfo(const NamedDecl *D);
     void DumpFunctionDeclInfo(const FunctionDecl *D);
     void DumpCXXMethodDeclInfo(const CXXMethodDecl *D);
-    void DumpVarDeclInfo(const VarDecl *D);
+    //void DumpVarDeclInfo(const VarDecl *D);
 
 
 

@@ -61,7 +61,7 @@ void ClangAstDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
     //dumper->VisitTypeTop(D->getType().getTypePtr());
 }
 
-
+/*
 void ClangAstDumper::DumpVarDeclInfo(const VarDecl *D) {
     // Hierarchy
     DumpNamedDeclInfo(D);
@@ -79,43 +79,9 @@ void ClangAstDumper::DumpVarDeclInfo(const VarDecl *D) {
     llvm::errs() << D->isOutOfLine() << "\n";
     llvm::errs() << D->hasGlobalStorage() << "\n";
 
-/*
-    if(D->isConstexpr()) {
-        llvm::errs() << IS_CONST_EXPR << "\n";
-        llvm::errs() << getId(D) << "\n";
-    }
 
-    // Print qualified name for all VarDecls
-    llvm::errs() << VARDECL_QUALIFIED_NAME << "\n";
-    llvm::errs() << getId(D) << "\n";
-    llvm::errs() << D->getQualifiedNameAsString() << "\n";
-
-    llvm::errs() << "VARDECL: " << D->getNameAsString() << "\n";
-    llvm::errs() << "IS OUT OF LINE: " << D->isOutOfLine() << "\n";
-    llvm::errs() << "IS STATIC DATA MEMBER: " << D->isStaticDataMember() << "\n";
+}
 */
-}
 
 
-void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D) {
-    // Visit parameters
-    for (FunctionDecl::param_const_iterator I = D->param_begin(), E = D->param_end(); I != E; ++I) {
-        VisitDeclTop(*I);
-    }
 
-    // Visit body
-    if(D->hasBody()) {
-        VisitStmtTop(D->getBody());
-    }
-}
-
-void ClangAstDumper::VisitVarDeclChildren(const VarDecl *D) {
-    if (D->hasInit()) {
-        VisitStmtTop(D->getInit());
-    }
-}
-
-void ClangAstDumper::VisitParmVarDeclChildren(const ParmVarDecl *D) {
-    // Hierarchy
-    VisitVarDeclChildren(D);
-}

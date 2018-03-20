@@ -122,7 +122,7 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     VisitVarDeclChildren(D);
 
     // Old
-    DumpVarDeclInfo(D);
+    //DumpVarDeclInfo(D);
 }
 
 
@@ -274,6 +274,7 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
     // Dump information
     DumpFunctionDeclInfo(D);
 
+    /*
     // Visit parameters
     for (FunctionDecl::param_const_iterator I = D->param_begin(), E = D->param_end(); I != E; ++I) {
         VisitDeclTop(*I);
@@ -283,6 +284,7 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
     if(D->hasBody()) {
         VisitStmtTop(D->getBody());
     }
+     */
 }
 
 
@@ -293,6 +295,10 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
 
     log("CXXMethodDecl", D);
 
+    // Visit children
+    VisitFunctionDeclChildren(D);
+
+    // Old
     DumpCXXMethodDeclInfo(D);
 }
 
@@ -303,8 +309,11 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
 
     log("CXXConstructorDecl", D);
 
-    DumpCXXMethodDeclInfo(D);
+    // Visit children
+    VisitFunctionDeclChildren(D);
 
+    // Old
+    DumpCXXMethodDeclInfo(D);
 
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {
@@ -333,6 +342,28 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     }
      */
 
+}
+
+void ClangAstDumper::VisitCXXConversionDecl(const CXXConversionDecl *D) {
+    if(dumpDecl(D)) {
+        return;
+    }
+
+    log("CXXConversionDecl", D);
+
+    // Visit children
+    VisitFunctionDeclChildren(D);
+}
+
+void ClangAstDumper::VisitCXXDestructorDecl(const CXXDestructorDecl *D) {
+    if(dumpDecl(D)) {
+        return;
+    }
+
+    log("CXXDestructorDecl", D);
+
+    // Visit children
+    VisitFunctionDeclChildren(D);
 }
 
 
@@ -435,7 +466,7 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     VisitParmVarDeclChildren(D);
 
     // Old
-    DumpVarDeclInfo(D);
+    //DumpVarDeclInfo(D);
 
     if(D->hasInheritedDefaultArg()) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";

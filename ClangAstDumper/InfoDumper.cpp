@@ -20,3 +20,17 @@ std::string InfoDumper::getId(const void* addr) {
     return ss.str();
 }
 
+void InfoDumper::dump(bool boolean) {
+    llvm::errs() << boolean << "\n";
+}
+
+
+void InfoDumper::dump(int integer) {
+    llvm::errs() << integer << "\n";
+}
+
+void InfoDumper::dump(std::string string) {
+    llvm::errs() << string << "\n";
+}
+
+

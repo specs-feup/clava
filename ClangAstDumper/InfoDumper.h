@@ -9,6 +9,8 @@
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
 
+#include <string>
+
 //#include "ClangAstDumper.h"
 
 using namespace clang;
@@ -47,6 +49,10 @@ public:
 
 private:
     //void dumpHeaderAny(const std::string tag, void *D);
+
+    void dump(bool boolean);
+    void dump(int integer);
+    void dump(std::string string);
 };
 
 #endif //CLANGASTDUMPER_NODEDUMPER_H
