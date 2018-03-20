@@ -27,6 +27,10 @@ public class FunctionDeclDataV2 extends NamedDeclData {
         this.templateKind = templateKind;
     }
 
+    public FunctionDeclDataV2(FunctionDeclDataV2 data) {
+        this(data.isConstexpr, data.templateKind, data);
+    }
+
     public boolean isConstexpr() {
         return isConstexpr;
     }

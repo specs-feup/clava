@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+/**
+ * @deprecated replaced with VarDeclDataV2
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class VarDeclDumperInfo {
 
     private final String qualifiedName;

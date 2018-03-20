@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.language.TLSKind;
 
 public class VarDeclData {
@@ -41,21 +42,21 @@ public class VarDeclData {
 
     private InitializationStyle initKind;
 
-    private final VarDeclDumperInfo varDeclDumperInfo;
+    private final VarDeclDataV2 varDeclData2;
 
     public VarDeclData() {
         this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT, false);
     }
 
     public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,
-            InitializationStyle initKind, VarDeclDumperInfo varDeclDumperInfo) {
+            InitializationStyle initKind, VarDeclDataV2 varDeclData2) {
 
         this.storageClass = storageClass;
         this.tlsKind = tlsKind;
         this.isModulePrivate = isModulePrivate;
         this.isNrvo = isNrvo;
         this.initKind = initKind;
-        this.varDeclDumperInfo = varDeclDumperInfo;
+        this.varDeclData2 = varDeclData2;
     }
 
     /**
@@ -78,11 +79,11 @@ public class VarDeclData {
         this.isModulePrivate = isModulePrivate;
         this.isNrvo = isNrvo;
         this.initKind = initKind;
-        this.varDeclDumperInfo = new VarDeclDumperInfo(null, false, false, false, false);
+        this.varDeclData2 = VarDeclDataV2.empty();
     }
 
     public VarDeclData copy() {
-        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind, varDeclDumperInfo);
+        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind, varDeclData2);
     }
 
     @Override
@@ -94,7 +95,7 @@ public class VarDeclData {
         string.append(", isModulePrivate:").append(isModulePrivate);
         string.append(", isNrvo:").append(isNrvo);
         string.append(", init:").append(initKind);
-        string.append(", vardecl dumper info:").append(varDeclDumperInfo);
+        string.append(", vardecl data v2:").append(varDeclData2);
 
         return string.toString();
     }
@@ -115,31 +116,58 @@ public class VarDeclData {
         return isNrvo;
     }
 
+    /**
+     * @deprecated use getVarDeclDataV2() instead. Will throw an exception if used.
+     * @return
+     */
+    @Deprecated
     public Optional<VarDeclDumperInfo> getVarDeclDumperInfo() {
-        return Optional.ofNullable(varDeclDumperInfo);
+        throw new RuntimeException(
+                "VarDeclData.getVarDeclDumperInfo() is deprecated, please use VarDeclData.getVarDeclDataV2()");
+        // return Optional.ofNullable(varDeclDumperInfo);
     }
 
+    public VarDeclDataV2 getVarDeclDataV2() {
+        return varDeclData2;
+    }
+
+    /**
+     * @deprecated use hasVarDeclV2() instead. Will throw an exception if used.
+     * @return
+     */
+    @Deprecated
     public boolean hasVarDeclDumperInfo() {
-        return varDeclDumperInfo != null;
+        throw new RuntimeException(
+                "VarDeclData.hasVarDeclDumperInfo() is deprecated, please use VarDeclData.hasVarDeclV2()");
+        // return varDeclDumperInfo != null;
+    }
+
+    public boolean hasVarDeclV2() {
+        return varDeclData2 != null;
     }
 
     public boolean isConstexpr() {
-        return getVarDeclDumperInfo().map(data -> data.isConstexpr()).orElse(false);
+        return varDeclData2.isConstexpr();
+        // return getVarDeclDumperInfo().map(data -> data.isConstexpr()).orElse(false);
     }
 
     public boolean hasGlobalStorage() {
-        return getVarDeclDumperInfo().map(data -> data.hasGlobalStorage()).orElse(false);
+        return varDeclData2.hasGlobalStorage();
+        // return getVarDeclDumperInfo().map(data -> data.hasGlobalStorage()).orElse(false);
     }
 
     public boolean isStaticDataMember() {
-        return getVarDeclDumperInfo().map(data -> data.isStaticDataMember()).orElse(false);
+        return varDeclData2.isStaticDataMember();
+        // return getVarDeclDumperInfo().map(data -> data.isStaticDataMember()).orElse(false);
     }
 
     public boolean isOutOfLine() {
-        return getVarDeclDumperInfo().map(data -> data.isOutOfLine()).orElse(false);
+        return varDeclData2.isOutOfLine();
+        // return getVarDeclDumperInfo().map(data -> data.isOutOfLine()).orElse(false);
     }
 
     public Optional<String> getQualifiedName() {
-        return getVarDeclDumperInfo().map(data -> data.getQualifiedName());
+        return varDeclData2.getQualifiedName();
+        // return getVarDeclDumperInfo().map(data -> data.getQualifiedName());
     }
 }

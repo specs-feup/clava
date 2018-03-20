@@ -15,6 +15,10 @@ package pt.up.fe.specs.clava.ast.decl.data2;
 
 public class DeclDataV2 extends ClavaData {
 
+    public static DeclDataV2 empty() {
+        return new DeclDataV2(false, false, false, false);
+    }
+
     private final boolean isImplicit;
     private final boolean isUsed;
     private final boolean isReferenced;
@@ -27,8 +31,8 @@ public class DeclDataV2 extends ClavaData {
         this.isInvalidDecl = isInvalidDecl;
     }
 
-    public DeclDataV2(DeclDataV2 declData) {
-        this(declData.isImplicit, declData.isUsed, declData.isReferenced, declData.isInvalidDecl);
+    public DeclDataV2(DeclDataV2 data) {
+        this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl);
     }
 
     public boolean isImplicit() {

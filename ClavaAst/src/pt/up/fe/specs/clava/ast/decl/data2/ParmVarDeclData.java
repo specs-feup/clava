@@ -23,8 +23,12 @@ public class ParmVarDeclData extends VarDeclDataV2 {
         this.hasInheritedDefaultArg = hasInheritedDefaultArg;
     }
 
-    public ParmVarDeclData(ParmVarDeclData parmVarDeclData) {
-        this(parmVarDeclData.hasInheritedDefaultArg, parmVarDeclData);
+    public ParmVarDeclData(ParmVarDeclData data) {
+        this(data.hasInheritedDefaultArg, data);
+    }
+
+    public boolean hasInheritedDefaultArg() {
+        return hasInheritedDefaultArg;
     }
 
 }

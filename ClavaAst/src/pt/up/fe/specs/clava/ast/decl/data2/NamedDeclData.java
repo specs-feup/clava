@@ -13,18 +13,44 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
+import java.util.Optional;
+
+import pt.up.fe.specs.clava.ast.decl.data.NameKind;
+
 public class NamedDeclData extends DeclDataV2 {
 
-    private final boolean isHidden;
-
-    public NamedDeclData(boolean isHidden, DeclDataV2 declData) {
-        super(declData);
-
-        this.isHidden = isHidden;
+    public static NamedDeclData empty() {
+        return new NamedDeclData(null, NameKind.IDENTIFIER, false, DeclDataV2.empty());
     }
 
-    public NamedDeclData(NamedDeclData namedDeclData) {
-        this(namedDeclData.isHidden, namedDeclData);
+    private final String qualifiedName;
+    private final NameKind nameKind;
+    private final boolean isHidden;
+
+    public NamedDeclData(String qualifiedName, NameKind nameKind, boolean isHidden, DeclDataV2 declData) {
+        super(declData);
+
+        this.qualifiedName = qualifiedName == null ? "" : qualifiedName;
+        this.nameKind = nameKind;
+        this.isHidden = isHidden;
+
+        // Preconditions.checkNotNull(qualifiedName, "Just to check if it can be null");
+    }
+
+    public NamedDeclData(NamedDeclData data) {
+        this(data.qualifiedName, data.nameKind, data.isHidden, data);
+    }
+
+    public Optional<String> getQualifiedName() {
+        if (qualifiedName.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(qualifiedName);
+    }
+
+    public NameKind getNameKind() {
+        return nameKind;
     }
 
     public boolean isHidden() {
