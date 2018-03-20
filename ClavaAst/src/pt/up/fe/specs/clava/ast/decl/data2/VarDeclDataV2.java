@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
-public class VarDeclDataV2 extends NamedDeclDataV2 {
+public class VarDeclDataV2 extends NamedDeclData {
 
     private final String qualifiedName;
     private final boolean isConstexpr;
@@ -22,7 +22,7 @@ public class VarDeclDataV2 extends NamedDeclDataV2 {
     private final boolean hasGlobalStorage;
 
     public VarDeclDataV2(String qualifiedName, boolean isConstexpr, boolean isStaticDataMember, boolean isOutOfLine,
-            boolean hasGlobalStorage, NamedDeclDataV2 namedDeclData) {
+            boolean hasGlobalStorage, NamedDeclData namedDeclData) {
         super(namedDeclData);
 
         this.qualifiedName = qualifiedName;

@@ -15,12 +15,12 @@ package pt.up.fe.specs.clava.ast.decl.data2;
 
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 
-public class FunctionDeclDataV2 extends NamedDeclDataV2 {
+public class FunctionDeclDataV2 extends NamedDeclData {
 
     private final boolean isConstexpr;
     private final TemplateKind templateKind;
 
-    public FunctionDeclDataV2(boolean isConstexpr, TemplateKind templateKind, NamedDeclDataV2 namedDeclData) {
+    public FunctionDeclDataV2(boolean isConstexpr, TemplateKind templateKind, NamedDeclData namedDeclData) {
         super(namedDeclData);
 
         this.isConstexpr = isConstexpr;

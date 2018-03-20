@@ -13,28 +13,18 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
-public class NamedDeclDataV2 extends DeclDataV2 {
+public class ParmVarDeclData extends VarDeclDataV2 {
 
-    private final boolean isHidden;
+    private boolean hasInheritedDefaultArg;
 
-    public NamedDeclDataV2(boolean isHidden, DeclDataV2 declData) {
-        super(declData);
+    public ParmVarDeclData(boolean hasInheritedDefaultArg, VarDeclDataV2 varDeclData) {
+        super(varDeclData);
 
-        this.isHidden = isHidden;
+        this.hasInheritedDefaultArg = hasInheritedDefaultArg;
     }
 
-    public NamedDeclDataV2(NamedDeclDataV2 namedDeclData) {
-        this(namedDeclData.isHidden, namedDeclData);
-    }
-
-    public boolean isHidden() {
-        return isHidden;
-    }
-
-    @Override
-    public String toString() {
-
-        return toString(super.toString(), "is hidded: " + isHidden);
+    public ParmVarDeclData(ParmVarDeclData parmVarDeclData) {
+        this(parmVarDeclData.hasInheritedDefaultArg, parmVarDeclData);
     }
 
 }
