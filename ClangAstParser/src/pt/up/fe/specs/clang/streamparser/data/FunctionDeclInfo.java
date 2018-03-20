@@ -14,7 +14,14 @@
 package pt.up.fe.specs.clang.streamparser.data;
 
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 
+/**
+ * @deprecated use {@link FunctionDeclDataV2} instead
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class FunctionDeclInfo {
 
     private final TemplateKind templateKind;
