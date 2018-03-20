@@ -97,4 +97,7 @@ void InfoDumper::DumpParmVarDeclInfo(const ParmVarDecl *D) {
 
     // Hierarchy
     DumpVarDeclInfo(D);
+
+    // Print information about ParmVarDecl
+    llvm::errs() << D->hasInheritedDefaultArg() << "\n";
 }
