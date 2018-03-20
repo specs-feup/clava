@@ -30,7 +30,6 @@ import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
@@ -135,8 +134,8 @@ public interface StreamKeys {
     // DataKey<Map<String, String>> VARDECL_QUALIFIED_NAME = KeyFactory.generic("stderr_vardecl_qualified_name",
     // new HashMap<String, String>());
 
-    DataKey<Map<String, VarDeclDumperInfo>> VARDECL_DUMPER_INFO = KeyFactory.generic("stderr_vardecl_dumper_info",
-            new HashMap<String, VarDeclDumperInfo>());
+    // DataKey<Map<String, VarDeclDumperInfo>> VARDECL_DUMPER_INFO = KeyFactory.generic("stderr_vardecl_dumper_info",
+    // new HashMap<String, VarDeclDumperInfo>());
 
     DataKey<Map<String, FunctionDeclInfo>> FUNCTION_DECL_INFO = KeyFactory.generic("stderr_function_decl_info",
             new HashMap<String, FunctionDeclInfo>());
@@ -204,7 +203,7 @@ public interface StreamKeys {
             .addKey(TYPEID_DATA)
             // .addKey(IS_CONST_EXPR)
             // .addKey(VARDECL_QUALIFIED_NAME)
-            .addKey(VARDECL_DUMPER_INFO)
+            // .addKey(VARDECL_DUMPER_INFO)
             .addKey(FUNCTION_DECL_INFO)
             .addKey(INIT_LIST_EXPR_INFO)
 

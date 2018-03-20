@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -39,7 +40,7 @@ import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
+import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -407,7 +408,8 @@ public class ClangDataParsers {
         return new ParserResult<>(parser.getCurrentString(), cxxNamedCastExprData);
     }
 
-    public static ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node, DataStore streamData) {
+    public static <T extends VarDeclDataV2> ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node,
+            DataStore streamData, DataKey<Map<String, T>> key) {
         StringParser parser = new StringParser(string);
 
         StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelper(),
@@ -420,17 +422,25 @@ public class ClangDataParsers {
         InitializationStyle initKind = parser.apply(ClangGenericParsers::parseEnum, InitializationStyle.getHelper(),
                 InitializationStyle.NO_INIT);
 
-        VarDeclDumperInfo varDeclDumperInfo = streamData.get(StreamKeys.VARDECL_DUMPER_INFO).get(node.getExtendedId());
-        if (varDeclDumperInfo == null) {
+        // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
+        VarDeclDataV2 varDeclData2 = streamData.get(key).get(node.getExtendedId());
+        if (varDeclData2 == null) {
             SpecsLogs.msgWarn(
-                    "ClangDataParsers.parseVarDecl: could not find varDeclDumperInfo for node " + node.getExtendedId());
+                    "ClangDataParsers.parseVarDecl: could not find varDeclDataV2 for node " + node.getExtendedId());
             System.out.println("PARENT NODE:" + node.getParent());
         }
+        // VarDeclDumperInfo varDeclDumperInfo =
+        // streamData.get(StreamKeys.VARDECL_DUMPER_INFO).get(node.getExtendedId());
+        // if (varDeclDumperInfo == null) {
+        // SpecsLogs.msgWarn(
+        // "ClangDataParsers.parseVarDecl: could not find varDeclDumperInfo for node " + node.getExtendedId());
+        // System.out.println("PARENT NODE:" + node.getParent());
+        // }
         // Preconditions.checkNotNull(varDeclDumperInfo, "VarDeclDumperInfo for node " + node.getExtendedId());
         // InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
 
         VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind,
-                varDeclDumperInfo);
+                varDeclData2);
 
         return new ParserResult<>(parser.getCurrentString(), varDeclData);
     }

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -39,6 +40,7 @@ import pt.up.fe.specs.clava.ast.attr.Attr;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -481,5 +483,17 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                 isCompleteDefinition, attributes);
 
         return recordDeclData;
+    }
+
+    protected <T extends ClavaData> T getData(DataKey<Map<String, T>> key, ClangNode node) {
+        T data = getStdErr().get(key).get(node.getExtendedId());
+
+        if (data == null) {
+            // SpecsLogs.msgWarn("Could not find data for node '" + node.getName() + "':\n" + node);
+            throw new RuntimeException(
+                    "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent());
+        }
+
+        return data;
     }
 }

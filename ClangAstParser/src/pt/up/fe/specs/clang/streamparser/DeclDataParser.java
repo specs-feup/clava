@@ -17,6 +17,9 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.data.NameKind;
+import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
@@ -24,6 +27,7 @@ import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
+import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class DeclDataParser {
@@ -46,10 +50,10 @@ public class DeclDataParser {
 
     public static DeclDataV2 parseDeclData(LineStream lines) {
 
-        boolean isImplicit = StreamParser.parseOneOrZero(lines.nextLine());
-        boolean isUsed = StreamParser.parseOneOrZero(lines.nextLine());
-        boolean isReferenced = StreamParser.parseOneOrZero(lines.nextLine());
-        boolean isInvalidDecl = StreamParser.parseOneOrZero(lines.nextLine());
+        boolean isImplicit = StreamParser.parseOneOrZero(lines);
+        boolean isUsed = StreamParser.parseOneOrZero(lines);
+        boolean isReferenced = StreamParser.parseOneOrZero(lines);
+        boolean isInvalidDecl = StreamParser.parseOneOrZero(lines);
 
         return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl);
     }
@@ -59,9 +63,11 @@ public class DeclDataParser {
         // Parse Decl data
         DeclDataV2 declData = parseDeclData(lines);
 
-        boolean isHidden = StreamParser.parseOneOrZero(lines.nextLine());
+        String qualifiedName = lines.nextLine();
+        NameKind nameKind = NameKind.getHelper().valueOf(StreamParser.parseInt(lines));
+        boolean isHidden = StreamParser.parseOneOrZero(lines);
 
-        return new NamedDeclData(isHidden, declData);
+        return new NamedDeclData(qualifiedName, nameKind, isHidden, declData);
     }
 
     public static FunctionDeclDataV2 parseFunctionDeclData(LineStream lines) {
@@ -69,8 +75,8 @@ public class DeclDataParser {
         // Parse NamedDecl data
         NamedDeclData namedDeclData = parseNamedDeclData(lines);
 
-        boolean isConstexpr = StreamParser.parseOneOrZero(lines.nextLine());
-        TemplateKind templateKind = TemplateKind.getHelper().valueOf(Integer.parseInt(lines.nextLine()));
+        boolean isConstexpr = StreamParser.parseOneOrZero(lines);
+        TemplateKind templateKind = TemplateKind.getHelper().valueOf(StreamParser.parseInt(lines));
 
         return new FunctionDeclDataV2(isConstexpr, templateKind, namedDeclData);
     }
@@ -80,21 +86,26 @@ public class DeclDataParser {
         // Parse NamedDecl data
         NamedDeclData namedDeclData = parseNamedDeclData(lines);
 
-        String qualifiedName = lines.nextLine();
-        boolean isConstexpr = StreamParser.parseOneOrZero(lines.nextLine());
-        boolean isStaticDataMember = StreamParser.parseOneOrZero(lines.nextLine());
-        boolean isOutOfLine = StreamParser.parseOneOrZero(lines.nextLine());
-        boolean hasGlobalStorage = StreamParser.parseOneOrZero(lines.nextLine());
+        StorageClass storageClass = StreamParser.enumFromInt(StorageClass.getHelper(), lines);
+        TLSKind tlsKind = StreamParser.enumFromInt(TLSKind.getHelper(), lines);
+        boolean isModulePrivate = StreamParser.parseOneOrZero(lines);
+        boolean isNRVOVariable = StreamParser.parseOneOrZero(lines);
+        InitializationStyle initStyle = StreamParser.enumFromInt(InitializationStyle.getHelper(), lines);
 
-        return new VarDeclDataV2(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage,
-                namedDeclData);
+        boolean isConstexpr = StreamParser.parseOneOrZero(lines);
+        boolean isStaticDataMember = StreamParser.parseOneOrZero(lines);
+        boolean isOutOfLine = StreamParser.parseOneOrZero(lines);
+        boolean hasGlobalStorage = StreamParser.parseOneOrZero(lines);
+
+        return new VarDeclDataV2(storageClass, tlsKind, isModulePrivate, isNRVOVariable, initStyle, isConstexpr,
+                isStaticDataMember, isOutOfLine, hasGlobalStorage, namedDeclData);
     }
 
     public static ParmVarDeclData parseParmVarDeclData(LineStream lines) {
         // Parse VarDecl data
         VarDeclDataV2 varDeclData = parseVarDeclData(lines);
 
-        boolean hasInheritedDefaultArg = StreamParser.parseOneOrZero(lines.nextLine());
+        boolean hasInheritedDefaultArg = StreamParser.parseOneOrZero(lines);
 
         return new ParmVarDeclData(hasInheritedDefaultArg, varDeclData);
     }

@@ -41,13 +41,14 @@ import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
+import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class StreamParser {
@@ -226,9 +227,9 @@ public class StreamParser {
                 SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
                         StreamParser::parseTypeidData));
 
-        snippetsMap.put(StreamKeys.VARDECL_DUMPER_INFO,
-                SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
-                        StreamParser::parseVarDeclDumperInfo));
+        // snippetsMap.put(StreamKeys.VARDECL_DUMPER_INFO,
+        // SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
+        // StreamParser::parseVarDeclDumperInfo));
 
         snippetsMap.put(StreamKeys.FUNCTION_DECL_INFO,
                 SnippetParser.newInstance("<FunctionDecl Info>", new HashMap<String, FunctionDeclInfo>(),
@@ -628,6 +629,10 @@ public class StreamParser {
         map.put(key, new CxxMemberExprInfo(isArrow, memberName));
     }
 
+    public static boolean parseOneOrZero(LineStream lines) {
+        return parseOneOrZero(lines.nextLine());
+    }
+
     public static boolean parseOneOrZero(String aBoolean) {
         if (aBoolean.equals("1")) {
             return true;
@@ -680,26 +685,27 @@ public class StreamParser {
                 captureDefault, captureKinds));
     }
 
+    /*
     public static void parseVarDeclDumperInfo(LineStream lines, Map<String, VarDeclDumperInfo> map) {
         String key = lines.nextLine();
-
+    
         // Format:
         // qualified name (String)
         // isConstexpr (boolean)
         // isStaticDataMember (boolean)
         // isOutOfLine (boolean)
         // hasGlobalStorage (boolean)
-
+    
         String qualifiedName = lines.nextLine();
         boolean isConstexpr = parseOneOrZero(lines.nextLine());
         boolean isStaticDataMember = parseOneOrZero(lines.nextLine());
         boolean isOutOfLine = parseOneOrZero(lines.nextLine());
         boolean hasGlobalStorage = parseOneOrZero(lines.nextLine());
-
+    
         map.put(key,
                 new VarDeclDumperInfo(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage));
     }
-
+    */
     public static void parseTypeidData(LineStream lines, Map<String, TypeidData> map) {
         String key = lines.nextLine();
 
@@ -740,6 +746,12 @@ public class StreamParser {
         InitListExprInfo info = new InitListExprInfo(isExplicit);
 
         map.put(key, info);
+    }
+
+    public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper,
+            LineStream lines) {
+
+        return helper.valueOf(StreamParser.parseInt(lines));
     }
 
 }
