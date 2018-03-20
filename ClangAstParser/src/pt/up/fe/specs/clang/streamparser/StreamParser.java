@@ -241,16 +241,16 @@ public class StreamParser {
         // ClavaData parsers
 
         snippetsMap.put(StreamKeys.DECL_DATA,
-                SnippetParser.newInstance("<Decl Data>", StreamDataParser::parseDeclData));
+                SnippetParser.newInstance("<Decl Data>", DeclDataParser::parseDeclData));
 
         snippetsMap.put(StreamKeys.FUNCTION_DECL_DATA,
-                SnippetParser.newInstance("<FunctionDecl Data>", StreamDataParser::parseFunctionDeclData));
+                SnippetParser.newInstance("<FunctionDecl Data>", DeclDataParser::parseFunctionDeclData));
 
         snippetsMap.put(StreamKeys.VAR_DECL_DATA,
-                SnippetParser.newInstance("<VarDecl Data>", StreamDataParser::parseVarDeclData));
+                SnippetParser.newInstance("<VarDecl Data>", DeclDataParser::parseVarDeclData));
 
         snippetsMap.put(StreamKeys.PARM_VAR_DECL_DATA,
-                SnippetParser.newInstance("<ParmVarDecl Data>", StreamDataParser::parseParmVarDeclData));
+                SnippetParser.newInstance("<ParmVarDecl Data>", DeclDataParser::parseParmVarDeclData));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),

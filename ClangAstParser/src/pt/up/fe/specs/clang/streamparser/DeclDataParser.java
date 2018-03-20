@@ -26,7 +26,7 @@ import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class StreamDataParser {
+public class DeclDataParser {
 
     public static <D extends ClavaData> void parseNodeData(Function<LineStream, D> dataParser, LineStream lines,
             Map<String, D> map) {

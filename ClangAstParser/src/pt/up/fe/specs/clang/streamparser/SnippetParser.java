@@ -45,7 +45,7 @@ public interface SnippetParser<I, T> {
 
         Map<String, D> resultInit = new HashMap<>();
 
-        BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> StreamDataParser.parseNodeData(dataParser,
+        BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> DeclDataParser.parseNodeData(dataParser,
                 lineStream, map);
 
         return new GenericSnippetParser<>(id, resultInit, parser, current -> current);
