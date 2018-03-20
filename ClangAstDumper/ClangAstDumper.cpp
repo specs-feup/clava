@@ -48,10 +48,38 @@ void ClangAstDumper::VisitDeclTop(const Decl *Node) {
     ConstDeclVisitor::Visit(Node);
 }
 
-void ClangAstDumper::log(const char* name, const void* addr) {
+//void ClangAstDumper::log(const char* name, const void* addr) {
+void ClangAstDumper::log(std::string name, const void* addr) {
 #ifdef DEBUG
     llvm::errs() << name << " " << addr << "\n";
 #endif
+}
+
+void ClangAstDumper::log(const Decl* D) {
+    log(getClassName(D), D);
+}
+
+void ClangAstDumper::log(const Stmt* S) {
+    log(getClassName(S), S);
+}
+
+void ClangAstDumper::log(const Type* T) {
+    log(getClassName(T), T);
+}
+
+const std::string ClangAstDumper::getClassName(const Decl* D) {
+    const std::string kindName = D->getDeclKindName();
+    return kindName + "Decl";
+}
+
+const std::string ClangAstDumper::getClassName(const Stmt* S) {
+    const std::string className = S->getStmtClassName();
+    return className;
+}
+
+const std::string ClangAstDumper::getClassName(const Type* T) {
+    const std::string kindName = T->getTypeClassName();
+    return kindName + "Type";
 }
 
 std::string ClangAstDumper::loc2str(SourceLocation locStart, SourceLocation locEnd) {

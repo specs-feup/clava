@@ -23,6 +23,8 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
         return true;
     }
 
+    log(typeAddr);
+
     // Dump type if it has not appeared yet
     // A TypeDumper is created for each context,
     // no need to use id to disambiguate

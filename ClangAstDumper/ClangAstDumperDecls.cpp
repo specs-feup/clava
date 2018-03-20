@@ -64,6 +64,8 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
         return true;
     }
 
+    log(declAddr);
+
     // A StmtDumper is created for each context,
     // no need to use id to disambiguate
     seenDecls.insert(declAddr);
@@ -94,8 +96,6 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
         return;
     }
 
-    log("Decl", D);
-
     // Dump info
     infoDumper.DumpHeader(DECL_DATA, D);
     infoDumper.DumpDeclInfo(D);
@@ -111,8 +111,6 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("VarDecl", D);
 
     // Dump info
     infoDumper.DumpHeader(VAR_DECL_DATA, D);
@@ -130,8 +128,6 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("CXXRecordDecl", D);
 
     DumpNamedDeclInfo(D);
 
@@ -261,8 +257,6 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
         return;
     }
 
-    log("FunctionDecl", D);
-
     // Dump info
     infoDumper.DumpHeader(FUNCTION_DECL_DATA, D);
     infoDumper.DumpFunctionDeclInfo(D);
@@ -293,7 +287,8 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
         return;
     }
 
-    log("CXXMethodDecl", D);
+    // Dump info
+    DumpCXXMethodDeclInfo(D);
 
     // Visit children
     VisitFunctionDeclChildren(D);
@@ -306,8 +301,6 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("CXXConstructorDecl", D);
 
     // Visit children
     VisitFunctionDeclChildren(D);
@@ -349,8 +342,6 @@ void ClangAstDumper::VisitCXXConversionDecl(const CXXConversionDecl *D) {
         return;
     }
 
-    log("CXXConversionDecl", D);
-
     // Visit children
     VisitFunctionDeclChildren(D);
 }
@@ -359,8 +350,6 @@ void ClangAstDumper::VisitCXXDestructorDecl(const CXXDestructorDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("CXXDestructorDecl", D);
 
     // Visit children
     VisitFunctionDeclChildren(D);
@@ -371,8 +360,6 @@ void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D
     if(dumpDecl(D)) {
         return;
     }
-
-    log("ObjCImplementationDecl", D);
 
     DumpNamedDeclInfo(D);
 
@@ -399,8 +386,6 @@ void ClangAstDumper::VisitTemplateDecl(const TemplateDecl *D) {
         return;
     }
 
-    log("TemplateDecl", D);
-
     DumpNamedDeclInfo(D);
 
     dumpNumberTemplateParameters(D, D->getTemplateParameters());
@@ -411,8 +396,6 @@ void ClangAstDumper::VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D) {
         return;
     }
 
-    log("TemplateTypeParmDecl", D);
-
     DumpNamedDeclInfo(D);
 }
 
@@ -420,8 +403,6 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("NamespaceAliasDecl", D);
 
     DumpNamedDeclInfo(D);
 
@@ -436,8 +417,6 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("FieldDecl", D);
 
     DumpNamedDeclInfo(D);
 
@@ -455,8 +434,6 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("ParmVarDecl", D);
 
     // Dump info
     infoDumper.DumpHeader(PARM_VAR_DECL_DATA, D);
@@ -479,8 +456,6 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
-
-    log("TypedefDecl", D);
 
     DumpNamedDeclInfo(D);
 

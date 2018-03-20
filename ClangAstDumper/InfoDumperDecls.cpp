@@ -66,6 +66,7 @@ void InfoDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
     // Hierarchy
     DumpFunctionDeclInfo(D);
 
+    dump(getId(D->getParent()));
     // Dump the corresponding CXXRecordDecl
 //    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
 //    llvm::errs() << getId(D) << "\n";
