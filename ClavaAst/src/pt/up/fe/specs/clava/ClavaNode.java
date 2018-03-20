@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
+import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -32,6 +33,7 @@ import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
@@ -381,4 +383,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return Optional.empty();
     }
 
+    public ClavaData getData() {
+        throw new NotImplementedException(this);
+    }
 }
