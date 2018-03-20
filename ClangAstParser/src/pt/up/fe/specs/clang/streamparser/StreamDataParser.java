@@ -21,8 +21,8 @@ import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -54,20 +54,20 @@ public class StreamDataParser {
         return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl);
     }
 
-    public static NamedDeclDataV2 parseNamedDeclData(LineStream lines) {
+    public static NamedDeclData parseNamedDeclData(LineStream lines) {
 
         // Parse Decl data
         DeclDataV2 declData = parseDeclData(lines);
 
         boolean isHidden = StreamParser.parseOneOrZero(lines.nextLine());
 
-        return new NamedDeclDataV2(isHidden, declData);
+        return new NamedDeclData(isHidden, declData);
     }
 
     public static FunctionDeclDataV2 parseFunctionDeclData(LineStream lines) {
 
         // Parse NamedDecl data
-        NamedDeclDataV2 namedDeclData = parseNamedDeclData(lines);
+        NamedDeclData namedDeclData = parseNamedDeclData(lines);
 
         boolean isConstexpr = StreamParser.parseOneOrZero(lines.nextLine());
         TemplateKind templateKind = TemplateKind.getHelper().valueOf(Integer.parseInt(lines.nextLine()));
@@ -78,7 +78,7 @@ public class StreamDataParser {
     public static VarDeclDataV2 parseVarDeclData(LineStream lines) {
 
         // Parse NamedDecl data
-        NamedDeclDataV2 namedDeclData = parseNamedDeclData(lines);
+        NamedDeclData namedDeclData = parseNamedDeclData(lines);
 
         String qualifiedName = lines.nextLine();
         boolean isConstexpr = StreamParser.parseOneOrZero(lines.nextLine());
@@ -90,11 +90,13 @@ public class StreamDataParser {
                 namedDeclData);
     }
 
-    public static ParmVarDeclDataV2 parseParmVarDeclData(LineStream lines) {
+    public static ParmVarDeclData parseParmVarDeclData(LineStream lines) {
         // Parse VarDecl data
         VarDeclDataV2 varDeclData = parseVarDeclData(lines);
 
-        return new ParmVarDeclDataV2(varDeclData);
+        boolean hasInheritedDefaultArg = StreamParser.parseOneOrZero(lines.nextLine());
+
+        return new ParmVarDeclData(hasInheritedDefaultArg, varDeclData);
     }
 
 }

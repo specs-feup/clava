@@ -33,7 +33,7 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclDumperInfo;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
@@ -153,8 +153,8 @@ public interface StreamKeys {
     DataKey<Map<String, VarDeclDataV2>> VAR_DECL_DATA = KeyFactory.generic("stderr_var_decl_data",
             new HashMap<String, VarDeclDataV2>());
 
-    DataKey<Map<String, ParmVarDeclDataV2>> PARM_VAR_DECL_DATA = KeyFactory.generic("stderr_parm_var_decl_data",
-            new HashMap<String, ParmVarDeclDataV2>());
+    DataKey<Map<String, ParmVarDeclData>> PARM_VAR_DECL_DATA = KeyFactory.generic("stderr_parm_var_decl_data",
+            new HashMap<String, ParmVarDeclData>());
 
     // <VarDecl Info>
 
