@@ -288,7 +288,8 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
     }
 
     // Dump info
-    DumpCXXMethodDeclInfo(D);
+    infoDumper.DumpHeader("<CXXMethodDecl Data>", D);
+    infoDumper.DumpCXXMethodDeclInfo(D);
 
     // Visit children
     VisitFunctionDeclChildren(D);
