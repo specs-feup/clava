@@ -30,6 +30,7 @@ import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.streamparser.ClangNodeParsing;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -485,8 +486,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         return recordDeclData;
     }
 
-    protected <T extends ClavaData> T getData(DataKey<Map<String, T>> key, ClangNode node) {
-        T data = getStdErr().get(key).get(node.getExtendedId());
+    protected <T extends ClavaData> T getData(Class<? extends ClavaNode> clavaNodeClass, Class<T> dataClass,
+            ClangNode node) {
+
+        DataKey<Map<String, ClavaData>> key = ClangNodeParsing.getNodeDataKey(clavaNodeClass);
+        ClavaData data = getStdErr().get(key).get(node.getExtendedId());
 
         if (data == null) {
             // SpecsLogs.msgWarn("Could not find data for node '" + node.getName() + "':\n" + node);
@@ -494,6 +498,6 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                     "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent());
         }
 
-        return data;
+        return dataClass.cast(data);
     }
 }

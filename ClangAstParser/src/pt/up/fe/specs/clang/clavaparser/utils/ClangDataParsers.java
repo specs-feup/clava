@@ -18,19 +18,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
+import pt.up.fe.specs.clang.streamparser.ClangNodeParsing;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.ExceptionType;
@@ -409,7 +410,8 @@ public class ClangDataParsers {
     }
 
     public static <T extends VarDeclDataV2> ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node,
-            DataStore streamData, DataKey<Map<String, T>> key) {
+            DataStore streamData, Class<? extends VarDecl> varDeclClass) {
+        // DataStore streamData, DataKey<Map<String, T>> key) {
         StringParser parser = new StringParser(string);
 
         StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelper(),
@@ -423,7 +425,9 @@ public class ClangDataParsers {
                 InitializationStyle.NO_INIT);
 
         // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
-        VarDeclDataV2 varDeclData2 = streamData.get(key).get(node.getExtendedId());
+
+        VarDeclDataV2 varDeclData2 = (VarDeclDataV2) streamData.get(ClangNodeParsing.getNodeDataKey(varDeclClass))
+                .get(node.getExtendedId());
         if (varDeclData2 == null) {
             SpecsLogs.msgWarn(
                     "ClangDataParsers.parseVarDecl: could not find varDeclDataV2 for node " + node.getExtendedId());

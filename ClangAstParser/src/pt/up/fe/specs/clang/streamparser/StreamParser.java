@@ -105,8 +105,6 @@ public class StreamParser {
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
-    private final Map<String, ClavaData> nodeData;
-
     public StreamParser() {
         this(null);
     }
@@ -119,16 +117,20 @@ public class StreamParser {
         this.dumpFile = dumpFile;
         hasParsed = false;
 
-        nodeData = new HashMap<>();
-
-        keysToSnippetsMap = buildDatakeysToSnippetsMap(nodeData);
+        keysToSnippetsMap = buildDatakeysToSnippetsMap();
         parsers = keysToSnippetsMap.values().stream()
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
     }
 
-    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap(Map<String, ClavaData> nodeData) {
+    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
+
+        // Single map for all the node data dumps
+        Map<String, ClavaData> nodeData = new HashMap<>();
+
+        // Add snippet parsers for Clang Node parsing
+        snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
 
         // This builder will be shared between Counter and Types
         StringBuilder typesBuilder = new StringBuilder();
@@ -246,20 +248,20 @@ public class StreamParser {
 
         // ClavaData parsers
 
-        snippetsMap.put(StreamKeys.DECL_DATA,
-                SnippetParser.newInstance("<Decl Data>", nodeData, DeclDataParser::parseDeclData));
-
-        snippetsMap.put(StreamKeys.FUNCTION_DECL_DATA,
-                SnippetParser.newInstance("<FunctionDecl Data>", nodeData, DeclDataParser::parseFunctionDeclData));
-
-        snippetsMap.put(StreamKeys.VAR_DECL_DATA,
-                SnippetParser.newInstance("<VarDecl Data>", nodeData, DeclDataParser::parseVarDeclData));
-
-        snippetsMap.put(StreamKeys.PARM_VAR_DECL_DATA,
-                SnippetParser.newInstance("<ParmVarDecl Data>", nodeData, DeclDataParser::parseParmVarDeclData));
-
-        snippetsMap.put(StreamKeys.CXX_METHOD_DECL_DATA,
-                SnippetParser.newInstance("<CXXMethodDecl Data>", nodeData, DeclDataParser::parseCXXMethodDeclData));
+        // snippetsMap.put(StreamKeys.DECL_DATA,
+        // SnippetParser.newInstance("<Decl Data>", nodeData, DeclDataParser::parseDeclData));
+        //
+        // snippetsMap.put(StreamKeys.FUNCTION_DECL_DATA,
+        // SnippetParser.newInstance("<FunctionDecl Data>", nodeData, DeclDataParser::parseFunctionDeclData));
+        //
+        // snippetsMap.put(StreamKeys.VAR_DECL_DATA,
+        // SnippetParser.newInstance("<VarDecl Data>", nodeData, DeclDataParser::parseVarDeclData));
+        //
+        // snippetsMap.put(StreamKeys.PARM_VAR_DECL_DATA,
+        // SnippetParser.newInstance("<ParmVarDecl Data>", nodeData, DeclDataParser::parseParmVarDeclData));
+        //
+        // snippetsMap.put(StreamKeys.CXX_METHOD_DECL_DATA,
+        // SnippetParser.newInstance("<CXXMethodDecl Data>", nodeData, DeclDataParser::parseCXXMethodDeclData));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
