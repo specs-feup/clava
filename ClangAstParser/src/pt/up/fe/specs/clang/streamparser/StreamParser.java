@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureKind;
@@ -104,6 +105,8 @@ public class StreamParser {
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
+    private final Map<String, ClavaData> nodeData;
+
     public StreamParser() {
         this(null);
     }
@@ -116,13 +119,15 @@ public class StreamParser {
         this.dumpFile = dumpFile;
         hasParsed = false;
 
-        keysToSnippetsMap = buildDatakeysToSnippetsMap();
+        nodeData = new HashMap<>();
+
+        keysToSnippetsMap = buildDatakeysToSnippetsMap(nodeData);
         parsers = keysToSnippetsMap.values().stream()
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
     }
 
-    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
+    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap(Map<String, ClavaData> nodeData) {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
 
         // This builder will be shared between Counter and Types
@@ -242,16 +247,19 @@ public class StreamParser {
         // ClavaData parsers
 
         snippetsMap.put(StreamKeys.DECL_DATA,
-                SnippetParser.newInstance("<Decl Data>", DeclDataParser::parseDeclData));
+                SnippetParser.newInstance("<Decl Data>", nodeData, DeclDataParser::parseDeclData));
 
         snippetsMap.put(StreamKeys.FUNCTION_DECL_DATA,
-                SnippetParser.newInstance("<FunctionDecl Data>", DeclDataParser::parseFunctionDeclData));
+                SnippetParser.newInstance("<FunctionDecl Data>", nodeData, DeclDataParser::parseFunctionDeclData));
 
         snippetsMap.put(StreamKeys.VAR_DECL_DATA,
-                SnippetParser.newInstance("<VarDecl Data>", DeclDataParser::parseVarDeclData));
+                SnippetParser.newInstance("<VarDecl Data>", nodeData, DeclDataParser::parseVarDeclData));
 
         snippetsMap.put(StreamKeys.PARM_VAR_DECL_DATA,
-                SnippetParser.newInstance("<ParmVarDecl Data>", DeclDataParser::parseParmVarDeclData));
+                SnippetParser.newInstance("<ParmVarDecl Data>", nodeData, DeclDataParser::parseParmVarDeclData));
+
+        snippetsMap.put(StreamKeys.CXX_METHOD_DECL_DATA,
+                SnippetParser.newInstance("<CXXMethodDecl Data>", nodeData, DeclDataParser::parseCXXMethodDeclData));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),

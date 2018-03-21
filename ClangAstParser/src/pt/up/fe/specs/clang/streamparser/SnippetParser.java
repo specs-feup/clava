@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clang.streamparser;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -41,9 +40,9 @@ public interface SnippetParser<I, T> {
     }
 
     static <D extends ClavaData> SnippetParser<Map<String, D>, Map<String, D>> newInstance(String id,
-            Function<LineStream, D> dataParser) {
+            Map<String, D> resultInit, Function<LineStream, D> dataParser) {
 
-        Map<String, D> resultInit = new HashMap<>();
+        // Map<String, D> resultInit = new HashMap<>();
 
         BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> DeclDataParser.parseNodeData(dataParser,
                 lineStream, map);

@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.NameKind;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
@@ -35,11 +36,16 @@ public class DeclDataParser {
     public static <D extends ClavaData> void parseNodeData(Function<LineStream, D> dataParser, LineStream lines,
             Map<String, D> map) {
 
+        // TODO: Let ClavaNode parser read the key/id, and access it from clavaData.getId()
         String key = lines.nextLine();
 
         D clavaData = dataParser.apply(lines);
 
-        map.put(key, clavaData);
+        D previousValue = map.put(key, clavaData);
+
+        if (previousValue != null) {
+            throw new RuntimeException("Duplicated parsing of node '" + key + "'");
+        }
     }
 
     public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
@@ -79,6 +85,16 @@ public class DeclDataParser {
         TemplateKind templateKind = TemplateKind.getHelper().valueOf(StreamParser.parseInt(lines));
 
         return new FunctionDeclDataV2(isConstexpr, templateKind, namedDeclData);
+    }
+
+    public static CXXMethodDeclDataV2 parseCXXMethodDeclData(LineStream lines) {
+
+        // Parse FunctionDecl data
+        FunctionDeclDataV2 functionDeclData = parseFunctionDeclData(lines);
+
+        String recordId = lines.nextLine();
+
+        return new CXXMethodDeclDataV2(recordId, functionDeclData);
     }
 
     public static VarDeclDataV2 parseVarDeclData(LineStream lines) {

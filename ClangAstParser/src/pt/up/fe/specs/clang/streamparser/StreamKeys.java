@@ -30,6 +30,7 @@ import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
@@ -154,6 +155,9 @@ public interface StreamKeys {
 
     DataKey<Map<String, ParmVarDeclData>> PARM_VAR_DECL_DATA = KeyFactory.generic("stderr_parm_var_decl_data",
             new HashMap<String, ParmVarDeclData>());
+
+    DataKey<Map<String, CXXMethodDeclDataV2>> CXX_METHOD_DECL_DATA = KeyFactory.generic("stderr_cxx_method_decl_data",
+            new HashMap<String, CXXMethodDeclDataV2>());
 
     // <VarDecl Info>
 
