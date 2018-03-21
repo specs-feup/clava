@@ -17,12 +17,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -30,7 +32,9 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.classmap.ClassMap;
+import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.utilities.CachedItems;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -41,6 +45,8 @@ public class ClangNodeParsing {
      */
     private static final CachedItems<Class<? extends ClavaNode>, DataKey<Map<String, ClavaData>>> CACHED_DATA_KEYS = new CachedItems<>(
             ClangNodeParsing::buildDataKey);
+
+    private static final String BASE_CLAVA_AST_PACKAGE = "pt.up.fe.specs.clava.ast";
 
     private static final ClassMap<ClavaNode, Function<LineStream, ClavaData>> DATA_PARSERS;
     static {
@@ -97,7 +103,7 @@ public class ClangNodeParsing {
         // .setDefault(() -> new HashMap<>());
     }
 
-    private static String getNodeDataId(Class<? extends ClavaNode> nodeClass) {
+    private static String getNodeDataId(Class<?> nodeClass) {
         return "<" + nodeClass.getSimpleName() + "Data>";
     }
 
@@ -129,6 +135,100 @@ public class ClangNodeParsing {
                 .map(aClass -> getNodeDataKey(aClass))
                 .collect(Collectors.toList());
 
+    }
+
+    /**
+     * Tries to adapt the given stream parser key, in case it is for a node that has not been considered yet.
+     * 
+     * @param currentLine
+     * @return
+     */
+    public static Optional<String> adaptsKey(String streamParserKey) {
+        StringParser parser = new StringParser(streamParserKey);
+
+        if (!parser.apply(ClangGenericParsers::checkStringStarts, "<")) {
+            return Optional.empty();
+        }
+
+        if (!parser.apply(ClangGenericParsers::checkStringEnds, ">")) {
+            return Optional.empty();
+        }
+
+        Optional<String> dataKey = adaptNodeDataKey(parser.toString());
+        if (dataKey.isPresent()) {
+            return dataKey;
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<String> adaptNodeDataKey(String nodeDataKey) {
+        if (!nodeDataKey.endsWith("Data")) {
+            return Optional.empty();
+        }
+
+        // Extract class name
+        String nodeClassname = nodeDataKey.substring(0, nodeDataKey.length() - "Data".length());
+
+        // Get corresponding ClavaNode class
+        Optional<Class<? extends ClavaNode>> nodeClass = fromSimpleName(nodeClassname);
+
+        // Get equivalent key and id
+        Optional<String> adaptedKey = nodeClass
+                .flatMap(aClass -> DATA_PARSERS.getEquivalentKey(aClass))
+                .map(equivalentClass -> getNodeDataId(equivalentClass));
+
+        // Node not yet implemented in Clava
+        if (!adaptedKey.isPresent()) {
+            SpecsLogs.debug("Node not yet implemented in Clava: " + nodeClassname);
+            return Optional.empty();
+        }
+
+        return adaptedKey;
+    }
+
+    private static Optional<Class<? extends ClavaNode>> fromSimpleName(String nodeClassname) {
+        String fullClassname = simpleNameToFullName(nodeClassname);
+
+        if (fullClassname == null) {
+            return Optional.empty();
+        }
+
+        try {
+            // Get class
+            Class<?> aClass = Class.forName(fullClassname);
+
+            // Check if class is a subtype of ClavaNode
+            if (!ClavaNode.class.isAssignableFrom(aClass)) {
+                return Optional.empty();
+            }
+
+            // Cast class object
+            return Optional.of(aClass.asSubclass(ClavaNode.class));
+
+        } catch (ClassNotFoundException e) {
+            SpecsLogs.debug("Could not find class '" + fullClassname + "'");
+            return Optional.empty();
+        }
+
+    }
+
+    private static String simpleNameToFullName(String nodeClassname) {
+        if (nodeClassname.endsWith("Decl")) {
+            return BASE_CLAVA_AST_PACKAGE + ".decl." + nodeClassname;
+        }
+
+        if (nodeClassname.endsWith("Stmt")) {
+            return BASE_CLAVA_AST_PACKAGE + ".stmt." + nodeClassname;
+        }
+
+        if (nodeClassname.endsWith("Type")) {
+            return BASE_CLAVA_AST_PACKAGE + ".type." + nodeClassname;
+        }
+
+        SpecsLogs.msgWarn("Classname suffix not supported: " + nodeClassname);
+
+        return null;
     }
 
 }

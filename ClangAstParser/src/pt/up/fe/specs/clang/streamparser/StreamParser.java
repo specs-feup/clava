@@ -300,6 +300,11 @@ public class StreamParser {
             // Find parser for line
             SnippetParser<?, ?> parser = parsers.get(currentLine);
 
+            // If parser null, check if it needs to be adapted
+            if (parser == null) {
+                parser = ClangNodeParsing.adaptsKey(currentLine).map(parsers::get).orElse(null);
+            }
+
             // If parser not null, use it and continue
             if (parser != null) {
                 try {
