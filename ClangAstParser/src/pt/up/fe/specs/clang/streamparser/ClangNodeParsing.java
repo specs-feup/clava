@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.utilities.CachedItems;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -39,17 +40,34 @@ public class ClangNodeParsing {
      * Caches DataKey instances related with nodes data
      */
     private static final CachedItems<Class<? extends ClavaNode>, DataKey<Map<String, ClavaData>>> CACHED_DATA_KEYS = new CachedItems<>(
-            aClass -> dataKeyFactory(aClass, "stream_", "_data"));
+            ClangNodeParsing::buildDataKey);
 
-    private static final Map<Class<? extends ClavaNode>, Function<LineStream, ClavaData>> DATA_PARSERS;
+    private static final ClassMap<ClavaNode, Function<LineStream, ClavaData>> DATA_PARSERS;
     static {
-        DATA_PARSERS = new HashMap<>();
+        DATA_PARSERS = new ClassMap<>();
 
         DATA_PARSERS.put(Decl.class, DeclDataParser::parseDeclData);
         DATA_PARSERS.put(FunctionDecl.class, DeclDataParser::parseFunctionDeclData);
         DATA_PARSERS.put(VarDecl.class, DeclDataParser::parseVarDeclData);
         DATA_PARSERS.put(ParmVarDecl.class, DeclDataParser::parseParmVarDeclData);
         DATA_PARSERS.put(CXXMethodDecl.class, DeclDataParser::parseCXXMethodDeclData);
+    }
+
+    /**
+     * Takes into account that can only use classes that have been defined in the map.
+     * 
+     * @return
+     */
+    private static final DataKey<Map<String, ClavaData>> buildDataKey(Class<? extends ClavaNode> nodeClass) {
+        // Obtain the correct class
+        @SuppressWarnings("unchecked")
+        Class<ClavaNode> equivalentClass = DATA_PARSERS.getEquivalentKey(nodeClass)
+                .map(aClass -> (Class<ClavaNode>) aClass)
+                .orElseThrow(() -> new RuntimeException("Mappings for class '" + nodeClass + "' not supported"));
+        // getEquivalentKey
+        // System.out.println("GIVEN CLASS:" + nodeClass);
+        // System.out.println("EQUIVALENT CLASS:" + equivalentClass);
+        return dataKeyFactory(equivalentClass, "stream_", "_data");
     }
 
     /**

@@ -489,6 +489,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     protected <T extends ClavaData> T getData(Class<? extends ClavaNode> clavaNodeClass, Class<T> dataClass,
             ClangNode node) {
 
+        return dataClass.cast(getData(clavaNodeClass, node));
+    }
+
+    protected ClavaData getData(Class<? extends ClavaNode> clavaNodeClass, ClangNode node) {
+
         DataKey<Map<String, ClavaData>> key = ClangNodeParsing.getNodeDataKey(clavaNodeClass);
         ClavaData data = getStdErr().get(key).get(node.getExtendedId());
 
@@ -498,6 +503,6 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                     "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent());
         }
 
-        return dataClass.cast(data);
+        return data;
     }
 }
