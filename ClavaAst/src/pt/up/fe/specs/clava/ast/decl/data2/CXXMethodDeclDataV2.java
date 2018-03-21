@@ -13,19 +13,23 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
+public class CXXMethodDeclDataV2 extends FunctionDeclDataV2 {
 
-public abstract class ClavaData {
+    private final String recordId;
 
-    protected String toString(String superToString, String thisToString) {
+    public CXXMethodDeclDataV2(String recordId, FunctionDeclDataV2 data) {
+        super(data);
 
-        // Use bridge if there is content and a suffix
-        String bridge = !thisToString.isEmpty() && !superToString.isEmpty() ? ", " : "";
-
-        return superToString + bridge + thisToString;
+        this.recordId = recordId;
     }
 
-    public String getId() {
-        throw new NotImplementedException(this);
+    public CXXMethodDeclDataV2(CXXMethodDeclDataV2 data) {
+        this(data.recordId, data);
     }
+
+    @Override
+    public String toString() {
+        return toString(super.toString(), "recordId: " + recordId);
+    }
+
 }
