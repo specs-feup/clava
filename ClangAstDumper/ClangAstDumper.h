@@ -107,17 +107,14 @@ public:
     const Type* getTypePtr(QualType T, std::string source);
 
     //void log(const char* name, const void* addr);
-    void log(std::string name, const void* addr);
     void log(const Decl* D);
     void log(const Stmt* S);
     void log(const Type* T);
 
-    const std::string getClassName(const Decl* D);
-    const std::string getClassName(const Stmt* S);
-    const std::string getClassName(const Type* T);
-
     // Private functions
 private:
+
+    void log(std::string name, const void* addr);
 
     // Children visitors for Decls
     void VisitFunctionDeclChildren(const FunctionDecl *D);

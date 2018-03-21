@@ -30,7 +30,11 @@ public:
 
     // Utility methods
     std::string getId(const void* addr);
-    void DumpHeader(const std::string tag, const void *pointer);
+
+    void DumpHeader(const Decl* D);
+    void DumpHeader(const Stmt* S);
+    void DumpHeader(const Type* T);
+
 
 
         // void DumpHeader(const std::string tag, const void *pointer);
@@ -49,6 +53,8 @@ public:
 
 private:
     //void dumpHeaderAny(const std::string tag, void *D);
+    void DumpHeader(const std::string tag, const void *pointer);
+
 
     void dump(bool boolean);
     void dump(int integer);

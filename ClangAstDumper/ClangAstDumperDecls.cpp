@@ -97,7 +97,7 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
     }
 
     // Dump info
-    infoDumper.DumpHeader(DECL_DATA, D);
+    infoDumper.DumpHeader(D);
     infoDumper.DumpDeclInfo(D);
     //dumpDecl(D);
 
@@ -113,7 +113,7 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     }
 
     // Dump info
-    infoDumper.DumpHeader(VAR_DECL_DATA, D);
+    infoDumper.DumpHeader(D);
     infoDumper.DumpVarDeclInfo(D);
 
     // Visit children
@@ -258,7 +258,7 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
     }
 
     // Dump info
-    infoDumper.DumpHeader(FUNCTION_DECL_DATA, D);
+    infoDumper.DumpHeader(D);
     infoDumper.DumpFunctionDeclInfo(D);
 
     // Visit children
@@ -288,7 +288,7 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
     }
 
     // Dump info
-    infoDumper.DumpHeader("<CXXMethodDecl Data>", D);
+    infoDumper.DumpHeader(D);
     infoDumper.DumpCXXMethodDeclInfo(D);
 
     // Visit children
@@ -437,7 +437,7 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     }
 
     // Dump info
-    infoDumper.DumpHeader(PARM_VAR_DECL_DATA, D);
+    infoDumper.DumpHeader(D);
     infoDumper.DumpParmVarDeclInfo(D);
 
     // Visit children
