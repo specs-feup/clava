@@ -60,10 +60,4 @@ static const std::string INIT_LIST_EXPR_INFO = "<InitListExpr Info>";
 static const std::string DUMP_CXX_METHOD_DECL_PARENT = "<CXXMethodDecl Parent>";
 
 
-// DECL INFO
-static const std::string DECL_INFO = "<Decl Info>";
-static const std::string NAMED_DECL_INFO = "<NamedDecl Info>";
-static const std::string FUNCTION_DECL_INFO = "<FunctionDecl Info>";
-static const std::string VARDECL_INFO = "<VarDecl Info>";
-
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

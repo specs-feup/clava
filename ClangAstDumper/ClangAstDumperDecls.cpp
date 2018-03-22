@@ -267,22 +267,6 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
 
     // Visit children
     VisitFunctionDeclChildren(D);
-
-    // Old
-    // Dump information
-    DumpFunctionDeclInfo(D);
-
-    /*
-    // Visit parameters
-    for (FunctionDecl::param_const_iterator I = D->param_begin(), E = D->param_end(); I != E; ++I) {
-        VisitDeclTop(*I);
-    }
-
-    // Visit body
-    if(D->hasBody()) {
-        VisitStmtTop(D->getBody());
-    }
-     */
 }
 
 
@@ -297,9 +281,6 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
 
     // Visit children
     VisitFunctionDeclChildren(D);
-
-    // Old
-    DumpCXXMethodDeclInfo(D);
 }
 
 void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
@@ -314,8 +295,7 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     // Visit children
     VisitFunctionDeclChildren(D);
 
-    // Old
-    DumpCXXMethodDeclInfo(D);
+
 
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {
@@ -332,17 +312,6 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
         llvm::errs() << CXX_CTOR_INITIALIZER_END << "\n";
     }
 
-
-
-
-    // Store id if it has no name
-    // Replaced with code in dumpDecl()
-    /*
-    if(D->getDeclName().getAsString().length() == 0) {
-        llvm::errs() << DUMP_NAMED_DECL_WITHOUT_NAME << "\n";
-        llvm::errs() << getId(D) << "\n";
-    }
-     */
 
 }
 
