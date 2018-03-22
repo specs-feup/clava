@@ -29,11 +29,20 @@ list(APPEND llvm3.8_INCLUDES
 # Ideally we would use 'find_libraries'
 LINK_DIRECTORIES("${LIB_DIR}/build/lib")
 
+set(LINKER_GROUP_START "-Wl,--start-group")
+set(LINKER_GROUP_END "-Wl,--end-group")
+
+if(APPLE)
+  # Apple Clang linker does not understand groups
+  unset(LINKER_GROUP_START)
+  unset(LINKER_GROUP_END)
+endif()
+
 #find_libraries(llvm3.8_LIBRARIES "${LIB_DIR}/build/lib" 
 list(APPEND llvm3.8_LIBRARIES 
 	
 	# Clang libraries, they have circular dependencies, so they are inside a group
-	-Wl,--start-group
+  ${LINKER_GROUP_START}
         clangAnalysis
         #clangApplyReplacements
         clangARCMigrate
@@ -71,7 +80,7 @@ list(APPEND llvm3.8_LIBRARIES
         #clangTidyUtils
         clangTooling
         clangToolingCore
-	-Wl,--end-group
+  ${LINKER_GROUP_END}
 		
 	# LLVM libraries, as given by 'llvm-config --libs'
 	LLVMLTO
@@ -131,21 +140,23 @@ list(APPEND llvm3.8_LIBRARIES
 	LLVMSupport
 )
 	
-	
-	
-	
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
+  # Generic UNIX dependencies
 	list(APPEND llvm3.8_LIBRARIES 
 		rt
-		tinfo
+    tinfo
+    z
+		m
+		dl
+	)
+elseif(APPLE)
+  # macOS dependencies
+  list(APPEND llvm3.8_LIBRARIES 
 		z
 		m
 		dl
-	
-		# Needed by LLVMSupport
-		# CentOS does not support this, you can comment this
-		#c++abi
+    ncurses	
 	)
 endif()
-
+
