@@ -70,7 +70,7 @@ public class CxxTest {
 
     @Test
     public void testExceptions() {
-        new CxxTester("exceptions.cpp").showClangDump().test();
+        new CxxTester("exceptions.cpp").test();
     }
 
     @Test

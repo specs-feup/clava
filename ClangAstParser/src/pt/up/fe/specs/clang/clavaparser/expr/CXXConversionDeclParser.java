@@ -22,9 +22,9 @@ import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.expr.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -62,7 +62,8 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
         }
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
-        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, children, node, getStdErr());
+        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, children, node, getStdErr(),
+                CXXConversionDecl.class);
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");

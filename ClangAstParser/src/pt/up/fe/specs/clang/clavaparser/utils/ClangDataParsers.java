@@ -25,11 +25,10 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
 import pt.up.fe.specs.clang.streamparser.ClangNodeParsing;
-import pt.up.fe.specs.clang.streamparser.StreamKeys;
-import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
@@ -41,6 +40,7 @@ import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
@@ -126,7 +126,8 @@ public class ClangDataParsers {
     }
 
     public static ParserResult<FunctionDeclParserResult> parseFunctionDecl(StringSlice string,
-            ListParser<ClavaNode> children, ClangNode node, DataStore streamData) {
+            ListParser<ClavaNode> children, ClangNode node, DataStore streamData,
+            Class<? extends FunctionDecl> nodeClass) {
 
         StringParser parser = new StringParser(string);
 
@@ -174,14 +175,26 @@ public class ClangDataParsers {
             openClKernelAttr = children.popSingle(OpenCLKernelAttr.class::cast);
         }
 
+        // System.out.println("DATAS:" + streamData
+        // .get(ClangNodeParsing.getNodeDataKey(nodeClass)).keySet());
+
         // Get stream information
-        FunctionDeclInfo streamInfo = streamData.get(StreamKeys.FUNCTION_DECL_INFO).get(node.getExtendedId());
-        if (streamInfo == null) {
-            SpecsLogs.msgWarn("Check case: could not get FunctionDeclInfo for " + node.getExtendedId());
+        FunctionDeclDataV2 functionData = (FunctionDeclDataV2) streamData
+                .get(ClangNodeParsing.getNodeDataKey(nodeClass)).get(node.getExtendedId());
+        // Preconditions.checkNotNull(functionData, "Could not get data for node: " + node.getExtendedId());
+
+        if (functionData == null) {
+            SpecsLogs.msgWarn("Check case: could not get FunctionDeclData for " + node.getExtendedId());
         }
+        // FunctionDeclInfo streamInfo = streamData.get(StreamKeys.FUNCTION_DECL_INFO).get(node.getExtendedId());
+        // if (streamInfo == null) {
+        // SpecsLogs.msgWarn("Check case: could not get FunctionDeclInfo for " + node.getExtendedId());
+        // }
 
         // Add information from the stream parser
-        TemplateKind templateKind = streamInfo != null ? streamInfo.getTemplateKind() : TemplateKind.NON_TEMPLATE;
+        // TemplateKind templateKind = streamInfo != null ? streamInfo.getTemplateKind() : TemplateKind.NON_TEMPLATE;
+        TemplateKind templateKind = functionData != null ? functionData.getTemplateKind() : TemplateKind.NON_TEMPLATE;
+        // TemplateKind templateKind = functionData.getTemplateKind();
 
         FunctionDeclData data = new FunctionDeclData(storageClass, isInline, isVirtual, isModulePrivate, isPure,
                 isDelete, exceptionSpecifier, exceptionAddress, templateArguments, openClKernelAttr, templateKind);
