@@ -15,6 +15,8 @@
 
 #include <assert.h>
 
+//#define DEBUG
+
 using namespace clang;
 
 ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id), infoDumper(id)  {};

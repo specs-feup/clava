@@ -119,6 +119,8 @@ private:
     // Children visitors for Decls
     void VisitFunctionDeclChildren(const FunctionDecl *D);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
+    void VisitCXXRecordDeclChildren(const CXXRecordDecl *D);
+
     void VisitVarDeclChildren(const VarDecl *D);
     void VisitParmVarDeclChildren(const ParmVarDecl *D);
 

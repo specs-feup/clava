@@ -21,9 +21,9 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D) {
     if (D->doesThisDeclarationHaveABody()) {
         VisitStmtTop(D->getBody());
     }
+}
 
-
-
+void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D) {
 
 }
 

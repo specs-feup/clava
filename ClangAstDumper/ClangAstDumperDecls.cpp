@@ -129,6 +129,10 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
         return;
     }
 
+
+    // Visit children
+    VisitCXXRecordDeclChildren(D);
+
     DumpNamedDeclInfo(D);
 
 //    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
@@ -303,6 +307,10 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
         return;
     }
 
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpCXXMethodDeclInfo(D);
+
     // Visit children
     VisitFunctionDeclChildren(D);
 
@@ -343,6 +351,10 @@ void ClangAstDumper::VisitCXXConversionDecl(const CXXConversionDecl *D) {
         return;
     }
 
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpCXXMethodDeclInfo(D);
+
     // Visit children
     VisitFunctionDeclChildren(D);
 }
@@ -351,6 +363,10 @@ void ClangAstDumper::VisitCXXDestructorDecl(const CXXDestructorDecl *D) {
     if(dumpDecl(D)) {
         return;
     }
+
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpCXXMethodDeclInfo(D);
 
     // Visit children
     VisitFunctionDeclChildren(D);
