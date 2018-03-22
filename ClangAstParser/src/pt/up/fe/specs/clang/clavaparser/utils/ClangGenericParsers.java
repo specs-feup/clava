@@ -914,28 +914,30 @@ public class ClangGenericParsers {
      * @param string
      * @return
      */
+    /*
     public static ParserResult<String> parseTypename(StringSlice string) {
         // Test on the first word
         StringSlice testString = string.getFirstWord();
-
+    
         int firstIndex = testString.indexOf(':');
         // Return empty string if could not find ':', or if it is the last character
         if (firstIndex == -1 || (firstIndex + 1) == string.length()) {
             return new ParserResult<>(string, "");
         }
-
+    
         // Return if there is no '::'
         if (string.charAt(firstIndex + 1) != ':') {
             return new ParserResult<>(string, "");
         }
-
+    
         String typename = string.substring(0, firstIndex).toString();
         // System.out.println("!!STRING:" + string);
         // System.out.println("!!TYPENAME:" + typename);
-
+    
         // Cut up to '::', return typename
         return new ParserResult<>(string.substring(firstIndex + 2), typename);
     }
+    */
 
     /**
      * For a string in the format <TEMPLATE><<TYPE>>, returns a string with what is before '<', StringSlide with what is
@@ -948,24 +950,28 @@ public class ClangGenericParsers {
      * @param string
      * @return
      */
+    /*
     public static ParserResult<String> parseTemplate(StringSlice string) {
-        StringSlice testString = string.getFirstWord();
-
+        System.out.println("ASDASDASDASD");
+        // StringSlice testString = string.getFirstWord();
+        String testString = string.next().getWord();
+    
         int openIndex = testString.indexOf('<');
         int closeIndex = testString.indexOf('>');
-
+    
         // Return empty string if could not find '<' or '>' in the first word
         if (openIndex == -1 || closeIndex == -1) {
             return new ParserResult<>(string, "");
         }
-
+    
         Preconditions.checkArgument(openIndex < closeIndex, "Expected < to appear before > : " + string);
-
+    
         String templateName = string.substring(0, openIndex).toString();
-
+    
         // Cut up what is outside of '<>', return templateName
         return new ParserResult<>(string.substring(openIndex + 1, closeIndex), templateName);
     }
+    */
 
     /**
      * 
