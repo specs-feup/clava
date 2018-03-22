@@ -30,8 +30,7 @@ set(SOURCE_FILES
 		ClangAstDumperTypes.cpp
 		ClangAstDumperStmts.cpp
 		ClangAstDumperDecls.cpp
-		ClangAstDumperDeclsInfo.cpp
-		ClangAstDumperExtra.cpp
+        ClangAstDumperExtra.cpp
 		TypeMarker.cpp
 		#TypeMarker.h
 		#ClangAstDumperConstants.h

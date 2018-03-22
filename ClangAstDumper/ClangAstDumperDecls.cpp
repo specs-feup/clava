@@ -129,11 +129,12 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
         return;
     }
 
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 
     // Visit children
     VisitCXXRecordDeclChildren(D);
-
-    DumpNamedDeclInfo(D);
 
 //    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
     // Visit definition
@@ -347,7 +348,9 @@ void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D
         return;
     }
 
-    DumpNamedDeclInfo(D);
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {
@@ -372,7 +375,9 @@ void ClangAstDumper::VisitTemplateDecl(const TemplateDecl *D) {
         return;
     }
 
-    DumpNamedDeclInfo(D);
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 
     dumpNumberTemplateParameters(D, D->getTemplateParameters());
 }
@@ -382,7 +387,9 @@ void ClangAstDumper::VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D) {
         return;
     }
 
-    DumpNamedDeclInfo(D);
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 }
 
 void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
@@ -390,7 +397,9 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
         return;
     }
 
-    DumpNamedDeclInfo(D);
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 
     // Dump nested namespace prefix
     llvm::errs() << DUMP_NAMESPACE_ALIAS_PREFIX << "\n";
@@ -404,7 +413,9 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
         return;
     }
 
-    DumpNamedDeclInfo(D);
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 
 //    llvm::errs() << "DUMPING FIELD DECL: " << getId(D) << "\n";
 
@@ -443,7 +454,9 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
         return;
     }
 
-    DumpNamedDeclInfo(D);
+    // Dump info
+    infoDumper.DumpHeader(D);
+    infoDumper.DumpNamedDeclInfo(D);
 
     // Dump typedef source
     llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";

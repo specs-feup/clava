@@ -125,15 +125,6 @@ private:
     void VisitParmVarDeclChildren(const ParmVarDecl *D);
 
 
-    // Info dumpers for Decls
-    // TODO: Remove
-    void DumpDeclInfo(const Decl *D);
-    void DumpNamedDeclInfo(const NamedDecl *D);
-    void DumpFunctionDeclInfo(const FunctionDecl *D);
-    void DumpCXXMethodDeclInfo(const CXXMethodDecl *D);
-    //void DumpVarDeclInfo(const VarDecl *D);
-
-
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
