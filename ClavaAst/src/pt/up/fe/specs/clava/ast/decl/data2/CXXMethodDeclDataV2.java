@@ -32,4 +32,7 @@ public class CXXMethodDeclDataV2 extends FunctionDeclDataV2 {
         return toString(super.toString(), "recordId: " + recordId);
     }
 
+    public String getRecordId() {
+        return recordId;
+    }
 }
