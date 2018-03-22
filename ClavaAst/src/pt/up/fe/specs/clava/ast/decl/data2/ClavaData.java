@@ -28,4 +28,11 @@ public abstract class ClavaData {
     public String getId() {
         throw new NotImplementedException(this);
     }
+
+    /**
+     * Makes a deep copy of this object.
+     * 
+     * @return
+     */
+    abstract ClavaData copy();
 }

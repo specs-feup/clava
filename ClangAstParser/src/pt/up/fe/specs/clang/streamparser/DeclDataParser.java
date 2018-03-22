@@ -46,6 +46,7 @@ public class DeclDataParser {
         if (previousValue != null) {
             throw new RuntimeException("Duplicated parsing of node '" + key + "'");
         }
+
     }
 
     public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
