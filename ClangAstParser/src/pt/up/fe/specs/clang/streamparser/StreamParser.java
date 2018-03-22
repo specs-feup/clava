@@ -34,13 +34,11 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
-import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaCaptureDefault;
@@ -245,9 +243,9 @@ public class StreamParser {
         // SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
         // StreamParser::parseVarDeclDumperInfo));
 
-        snippetsMap.put(StreamKeys.FUNCTION_DECL_INFO,
-                SnippetParser.newInstance("<FunctionDecl Info>", new HashMap<String, FunctionDeclInfo>(),
-                        StreamParser::parseFunctionDeclInfo));
+        // snippetsMap.put(StreamKeys.FUNCTION_DECL_INFO,
+        // SnippetParser.newInstance("<FunctionDecl Info>", new HashMap<String, FunctionDeclInfo>(),
+        // StreamParser::parseFunctionDeclInfo));
 
         snippetsMap.put(StreamKeys.INIT_LIST_EXPR_INFO,
                 SnippetParser.newInstance("<InitListExpr Info>", new HashMap<String, InitListExprInfo>(),
@@ -744,18 +742,18 @@ public class StreamParser {
 
     }
 
-    public static void parseFunctionDeclInfo(LineStream lines, Map<String, FunctionDeclInfo> map) {
-        String key = lines.nextLine();
-
-        // Format:
-        // templateKind (TemplateKind)
-
-        TemplateKind templateKind = TemplateKind.getHelper().valueOf(Integer.parseInt(lines.nextLine()));
-
-        FunctionDeclInfo info = new FunctionDeclInfo(templateKind);
-
-        map.put(key, info);
-    }
+    // public static void parseFunctionDeclInfo(LineStream lines, Map<String, FunctionDeclInfo> map) {
+    // String key = lines.nextLine();
+    //
+    // // Format:
+    // // templateKind (TemplateKind)
+    //
+    // TemplateKind templateKind = TemplateKind.getHelper().valueOf(Integer.parseInt(lines.nextLine()));
+    //
+    // FunctionDeclInfo info = new FunctionDeclInfo(templateKind);
+    //
+    // map.put(key, info);
+    // }
 
     public static void parseInitListExprInfo(LineStream lines, Map<String, InitListExprInfo> map) {
         String key = lines.nextLine();

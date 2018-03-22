@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clang.streamparser.data;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class InitListExprInfo {
 
     private final boolean isExplicit;

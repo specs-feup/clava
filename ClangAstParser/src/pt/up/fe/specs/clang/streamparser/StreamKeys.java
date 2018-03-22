@@ -26,7 +26,6 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
-import pt.up.fe.specs.clang.streamparser.data.FunctionDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
@@ -132,9 +131,9 @@ public interface StreamKeys {
 
     // DataKey<Map<String, VarDeclDumperInfo>> VARDECL_DUMPER_INFO = KeyFactory.generic("stderr_vardecl_dumper_info",
     // new HashMap<String, VarDeclDumperInfo>());
-
-    DataKey<Map<String, FunctionDeclInfo>> FUNCTION_DECL_INFO = KeyFactory.generic("stderr_function_decl_info",
-            new HashMap<String, FunctionDeclInfo>());
+    //
+    // DataKey<Map<String, FunctionDeclInfo>> FUNCTION_DECL_INFO = KeyFactory.generic("stderr_function_decl_info",
+    // new HashMap<String, FunctionDeclInfo>());
 
     DataKey<Map<String, InitListExprInfo>> INIT_LIST_EXPR_INFO = KeyFactory.generic("stderr_init_list_expr_info",
             new HashMap<String, InitListExprInfo>());
@@ -204,7 +203,7 @@ public interface StreamKeys {
             // .addKey(IS_CONST_EXPR)
             // .addKey(VARDECL_QUALIFIED_NAME)
             // .addKey(VARDECL_DUMPER_INFO)
-            .addKey(FUNCTION_DECL_INFO)
+            // .addKey(FUNCTION_DECL_INFO)
             .addKey(INIT_LIST_EXPR_INFO)
             .addKeys(ClangNodeParsing.getKeys())
             // .addKey(DECL_DATA)
