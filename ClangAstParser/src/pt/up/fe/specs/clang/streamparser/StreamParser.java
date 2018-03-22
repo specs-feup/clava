@@ -109,6 +109,9 @@ public class StreamParser {
         this(null);
     }
 
+    // Single map for all the node data dumps
+    Map<String, ClavaData> nodeData;
+
     /**
      * We need a new instance every time we want to parse a String.
      */
@@ -116,18 +119,22 @@ public class StreamParser {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
-
-        keysToSnippetsMap = buildDatakeysToSnippetsMap();
+        nodeData = new HashMap<>();
+        keysToSnippetsMap = buildDatakeysToSnippetsMap(nodeData);
         parsers = keysToSnippetsMap.values().stream()
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
     }
 
-    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
+    public Map<String, ClavaData> getNodeData() {
+        return nodeData;
+    }
+
+    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap(Map<String, ClavaData> nodeData) {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
 
         // Single map for all the node data dumps
-        Map<String, ClavaData> nodeData = new HashMap<>();
+        // Map<String, ClavaData> nodeData = new HashMap<>();
 
         // Add snippet parsers for Clang Node parsing
         snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
