@@ -19,12 +19,12 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
-import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -45,6 +45,8 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
         //
         // col:12 implicit operator int (*)() 'int (*(void) const)(void)' inline
 
+        CXXMethodDeclDataV2 data = getData(CXXConversionDecl.class, CXXMethodDeclDataV2.class, node);
+
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
@@ -62,7 +64,8 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
         }
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
-        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, children, node, getStdErr(),
+        FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
+                node, getStdErr(),
                 CXXConversionDecl.class);
 
         // Check namespace and store next word
@@ -72,14 +75,16 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
+        String recordId = data.getRecordId();
+        // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         CXXMethodDeclData methodData = new CXXMethodDeclData(namespace, record, recordId);
 
         checkNumChildren(children.getList(), 0);
 
-        return ClavaNodeFactory.cxxConversionDecl(methodData, name, type, data.getFunctionDeclData(), declData,
-                node.getInfo(), data.getParameters(), data.getDefinition());
+        return ClavaNodeFactory.cxxConversionDecl(methodData, name, type, functionDeclParserdata.getFunctionDeclData(),
+                declData,
+                node.getInfo(), functionDeclParserdata.getParameters(), functionDeclParserdata.getDefinition());
 
     }
 

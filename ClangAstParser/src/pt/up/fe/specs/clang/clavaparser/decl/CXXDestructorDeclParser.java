@@ -21,12 +21,12 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
-import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -47,6 +47,8 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         // line:285:24 ~MCSimulation 'void (void) noexcept' namespace Routing record CSVReader
         // col:13 ~Exception 'void (void) noexcept' virtual
 
+        CXXMethodDeclDataV2 data = getData(CXXDestructorDecl.class, CXXMethodDeclDataV2.class, node);
+
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
@@ -61,7 +63,8 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         }
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
-        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, children, node, getStdErr(),
+        FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
+                node, getStdErr(),
                 CXXDestructorDecl.class);
 
         // Check namespace and store next word
@@ -71,10 +74,11 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
+        String recordId = data.getRecordId();
+        // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         // TODO: Do not know yet position of virtual, check Clang dumper
-        boolean isVirtual = parser.apply(string -> ClangGenericParsers.checkWord(string, "virtual"));
+        // boolean isVirtual = parser.apply(string -> ClangGenericParsers.checkWord(string, "virtual"));
 
         CXXMethodDeclData methodData = new CXXMethodDeclData(namespace, record, recordId);
 
@@ -93,8 +97,9 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
 
         checkNumChildren(children.getList(), 0);
 
-        return ClavaNodeFactory.cxxDestructorDecl(methodData, className, type, data.getFunctionDeclData(), declData,
-                node.getInfo(), data.getParameters(), data.getDefinition());
+        return ClavaNodeFactory.cxxDestructorDecl(methodData, className, type,
+                functionDeclParserdata.getFunctionDeclData(), declData,
+                node.getInfo(), functionDeclParserdata.getParameters(), functionDeclParserdata.getDefinition());
     }
 
 }

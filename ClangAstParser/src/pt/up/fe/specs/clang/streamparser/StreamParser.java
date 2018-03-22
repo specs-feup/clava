@@ -203,9 +203,9 @@ public class StreamParser {
                 SnippetParser.newInstance("<NamedDecl Without Name>", new HashMap<String, String>(),
                         StreamParser::collectString));
 
-        snippetsMap.put(StreamKeys.CXX_METHOD_DECL_PARENT,
-                SnippetParser.newInstance("<CXXMethodDecl Parent>", new HashMap<String, String>(),
-                        StreamParser::collectString));
+        // snippetsMap.put(StreamKeys.CXX_METHOD_DECL_PARENT,
+        // SnippetParser.newInstance("<CXXMethodDecl Parent>", new HashMap<String, String>(),
+        // StreamParser::collectString));
 
         snippetsMap.put(StreamKeys.PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG,
                 SnippetParser.newInstance("<ParmVarDecl Has Inherited Default Arg>", new HashSet<String>(),

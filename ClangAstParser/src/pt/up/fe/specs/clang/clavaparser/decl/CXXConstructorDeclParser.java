@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
@@ -56,6 +57,8 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         // col:11 implicit CSVReader 'void (class Routing::CSVReader &&)' inline noexcept-unevaluated 0x4ff6948
         // col:4 MCSimulation 'void (const std::string, const std::string)'
         // line:304:24 MCSimulation 'void (const std::string, const std::string)' namespace Routing record CSVReader
+
+        CXXMethodDeclDataV2 data = getData(CXXConstructorDecl.class, CXXMethodDeclDataV2.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -93,7 +96,8 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
+        String recordId = data.getRecordId();
+        // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         CXXMethodDeclData methodData = new CXXMethodDeclData(namespace, record, recordId);
 

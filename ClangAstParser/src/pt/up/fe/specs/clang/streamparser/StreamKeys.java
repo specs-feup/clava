@@ -92,8 +92,8 @@ public interface StreamKeys {
             // Setting default, in case all named decls have names
             .setDefault(() -> new HashMap<>());
 
-    DataKey<Map<String, String>> CXX_METHOD_DECL_PARENT = KeyFactory.generic("stderr_cxx_method_decl_parent",
-            new HashMap<String, String>());
+    // DataKey<Map<String, String>> CXX_METHOD_DECL_PARENT = KeyFactory.generic("stderr_cxx_method_decl_parent",
+    // new HashMap<String, String>());
 
     DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
             .generic("stderr_parm_var_decl_has_inherited_default_arg",
@@ -191,7 +191,7 @@ public interface StreamKeys {
             .addKey(TEMPLATE_ARGUMENTS)
             .addKey(FIELD_DECL_INFO)
             .addKey(NAMED_DECL_WITHOUT_NAME)
-            .addKey(CXX_METHOD_DECL_PARENT)
+            // .addKey(CXX_METHOD_DECL_PARENT)
             .addKey(PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG)
             .addKey(OFFSET_OF_INFO)
             .addKey(FUNCTION_PROTOTYPE_EXCEPTION)
