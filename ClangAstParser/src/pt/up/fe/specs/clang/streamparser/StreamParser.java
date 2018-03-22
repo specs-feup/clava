@@ -307,6 +307,8 @@ public class StreamParser {
 
             // If parser null, check if it needs to be adapted
             if (parser == null) {
+                // System.out
+                // .println("ADAPTING '" + currentLine + "' to '" + ClangNodeParsing.adaptsKey(currentLine) + "'");
                 parser = ClangNodeParsing.adaptsKey(currentLine).map(parsers::get).orElse(null);
             }
 

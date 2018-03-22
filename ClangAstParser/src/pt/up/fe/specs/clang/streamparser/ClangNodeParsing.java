@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
@@ -51,12 +52,13 @@ public class ClangNodeParsing {
     private static final ClassMap<ClavaNode, Function<LineStream, ClavaData>> DATA_PARSERS;
     static {
         DATA_PARSERS = new ClassMap<>();
-
         DATA_PARSERS.put(Decl.class, DeclDataParser::parseDeclData);
+        DATA_PARSERS.put(NamedDecl.class, DeclDataParser::parseNamedDeclData);
         DATA_PARSERS.put(FunctionDecl.class, DeclDataParser::parseFunctionDeclData);
+        DATA_PARSERS.put(CXXMethodDecl.class, DeclDataParser::parseCXXMethodDeclData);
         DATA_PARSERS.put(VarDecl.class, DeclDataParser::parseVarDeclData);
         DATA_PARSERS.put(ParmVarDecl.class, DeclDataParser::parseParmVarDeclData);
-        DATA_PARSERS.put(CXXMethodDecl.class, DeclDataParser::parseCXXMethodDeclData);
+
     }
 
     /**
