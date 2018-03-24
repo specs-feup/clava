@@ -47,17 +47,13 @@ static const std::string LAMBDA_EXPR_DATA = "<Lambda Expr Data>";
 
 static const std::string TYPEID_DATA = "<Typeid Data>";
 
-static const std::string IS_CONST_EXPR = "<Is Constexpr>";
+//static const std::string IS_CONST_EXPR = "<Is Constexpr>";
 
-static const std::string VARDECL_QUALIFIED_NAME = "<VarDecl Qualified Name>";
-
+//static const std::string VARDECL_QUALIFIED_NAME = "<VarDecl Qualified Name>";
 
 
 static const std::string INIT_LIST_EXPR_INFO = "<InitListExpr Info>";
 
-// TODO: Create CXXMethodDeclInfo
-// Maps a CXXMethodDecl to the corresponding CXXRecordDecl
-static const std::string DUMP_CXX_METHOD_DECL_PARENT = "<CXXMethodDecl Parent>";
 
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

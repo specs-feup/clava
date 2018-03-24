@@ -13,6 +13,7 @@
 
 #include <set>
 #include <string>
+#include <vector>
 
 //#define DEBUG
 
@@ -117,12 +118,12 @@ private:
     void log(std::string name, const void* addr);
 
     // Children visitors for Decls
-    void VisitFunctionDeclChildren(const FunctionDecl *D);
+    std::vector<std::string> VisitFunctionDeclChildren(const FunctionDecl *D);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
-    void VisitCXXRecordDeclChildren(const CXXRecordDecl *D);
+    std::vector<std::string> VisitCXXRecordDeclChildren(const CXXRecordDecl *D);
 
-    void VisitVarDeclChildren(const VarDecl *D);
-    void VisitParmVarDeclChildren(const ParmVarDecl *D);
+    std::vector<std::string> VisitVarDeclChildren(const VarDecl *D);
+    std::vector<std::string> VisitParmVarDeclChildren(const ParmVarDecl *D);
 
 
 

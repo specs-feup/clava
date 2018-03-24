@@ -294,9 +294,13 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     infoDumper.DumpCXXMethodDeclInfo(D);
 
     // Visit children
-    VisitFunctionDeclChildren(D);
-
-
+    std::vector<std::string> children = VisitFunctionDeclChildren(D);
+/*
+    llvm::errs() << "children:\n";
+    for(auto childId : children) {
+        llvm::errs() << "child: " << childId << "\n";
+    }
+*/
 
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {
