@@ -52,6 +52,13 @@ public abstract class AJoinPoint extends JoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -868,6 +875,13 @@ public abstract class AJoinPoint extends JoinPoint {
      * @return the attribute's value
      */
     public abstract AJoinPoint getTypeImpl();
+
+    /**
+     * 
+     */
+    public void defTypeImpl(AJoinPoint value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def type with type AJoinPoint not implemented ");
+    }
 
     /**
      * Get value on attribute type

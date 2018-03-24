@@ -7662,6 +7662,11 @@
                },
                {
                   "type": "select",
+                  "clazz": "decl",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "param",
                   "alias": ""
                },
@@ -13034,6 +13039,11 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "decl",
+                  "alias": ""
                },
                {
                   "type": "select",

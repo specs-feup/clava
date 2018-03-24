@@ -272,7 +272,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void defTypeImpl(AJoinPoint type) {
         // Check if joinpoint is a type
         if (!(type instanceof CxxType)) {
             SpecsLogs.msgInfo(
@@ -293,6 +293,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         ((Typable) node).setType(cxxType.getNode());
 
+    }
+
+    @Override
+    public void setTypeImpl(AJoinPoint type) {
+        defTypeImpl(type);
     }
 
     @Override
@@ -445,17 +450,18 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .findFirst().isPresent();
     }
 
+    /*
     @Override
     public void defImpl(String attribute, Object value) {
         // Get def map
         DefMap<?> defMap = getDefMap();
-
+    
         if (defMap == null) {
             SpecsLogs
                     .msgInfo("Joinpoint '" + getJoinpointType() + "' does not have 'def' defined for any attribute");
             return;
         }
-
+    
         if (!defMap.hasAttribute(attribute)) {
             List<String> keys = new ArrayList<>(defMap.keys());
             Collections.sort(keys);
@@ -464,9 +470,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             SpecsLogs.msgInfo("Available attributes: " + keys);
             return;
         }
-
+    
         defMap.apply(attribute, this, value);
     }
+    */
 
     protected DefMap<?> getDefMap() {
         return null;

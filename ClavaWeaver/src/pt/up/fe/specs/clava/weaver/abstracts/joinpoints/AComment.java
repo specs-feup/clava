@@ -63,6 +63,13 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }

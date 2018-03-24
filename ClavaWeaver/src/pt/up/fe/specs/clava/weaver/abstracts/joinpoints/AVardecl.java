@@ -352,6 +352,13 @@ public abstract class AVardecl extends ANamedDecl {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);

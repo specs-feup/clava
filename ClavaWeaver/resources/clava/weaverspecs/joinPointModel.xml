@@ -109,6 +109,7 @@
 		<!--  <select 						class="body"/>   -->
 	 	<select alias="body" 			class="scope"/>
 		<select 						class="param"/>
+		<select 						class="decl"/>
 	</joinpoint>
 		
 	<!-- METHOD -->

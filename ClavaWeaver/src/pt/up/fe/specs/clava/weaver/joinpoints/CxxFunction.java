@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
@@ -37,6 +38,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
@@ -422,5 +424,12 @@ public class CxxFunction extends AFunction {
     public Boolean getIsDeleteImpl() {
         return function.getFunctionDeclData().isDelete();
 
+    }
+
+    @Override
+    public List<? extends ADecl> selectDecl() {
+        return function.getDescendants(Decl.class).stream()
+                .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
+                .collect(Collectors.toList());
     }
 }

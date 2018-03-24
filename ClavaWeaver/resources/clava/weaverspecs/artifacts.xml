@@ -43,7 +43,9 @@
 		<attribute name="ast" type="String" />
 		<attribute name="code" type="String" />
 		<attribute name="joinpointType" type="String" />
-		<attribute name="type" type="joinpoint" />
+		<attribute name="type" type="joinpoint">
+			<def/>
+		</attribute>
 		<attribute name="astNumChildren" type="Integer" />
 		<attribute name="astChildren" type="joinpoint[]" />
 		<attribute name="astName" type="String" />

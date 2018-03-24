@@ -415,6 +415,12 @@ public abstract class AFunction extends ANamedDecl {
     public abstract List<? extends AParam> selectParam();
 
     /**
+     * Method used by the lara interpreter to select decls
+     * @return 
+     */
+    public abstract List<? extends ADecl> selectDecl();
+
+    /**
      * 
      * @param newName 
      */
@@ -736,6 +742,9 @@ public abstract class AFunction extends ANamedDecl {
         	case "param": 
         		joinPointList = selectParam();
         		break;
+        	case "decl": 
+        		joinPointList = selectDecl();
+        		break;
         	default:
         		joinPointList = this.aNamedDecl.select(selectName);
         		break;
@@ -749,6 +758,13 @@ public abstract class AFunction extends ANamedDecl {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
@@ -790,6 +806,7 @@ public abstract class AFunction extends ANamedDecl {
         this.aNamedDecl.fillWithSelects(selects);
         selects.add("body");
         selects.add("param");
+        selects.add("decl");
     }
 
     /**

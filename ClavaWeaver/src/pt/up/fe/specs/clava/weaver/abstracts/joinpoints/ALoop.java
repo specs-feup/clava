@@ -909,6 +909,13 @@ public abstract class ALoop extends AStatement {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "isParallel": {
         	if(value instanceof Boolean){
         		this.defIsParallelImpl((Boolean)value);

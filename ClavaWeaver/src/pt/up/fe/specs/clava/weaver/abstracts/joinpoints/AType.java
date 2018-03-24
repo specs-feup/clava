@@ -469,6 +469,13 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);

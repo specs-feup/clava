@@ -198,6 +198,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Method used by the lara interpreter to select decls
+     * @return 
+     */
+    @Override
+    public List<? extends ADecl> selectDecl() {
+        return this.aFunction.selectDecl();
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -414,6 +423,9 @@ public abstract class AMethod extends AFunction {
         	case "param": 
         		joinPointList = selectParam();
         		break;
+        	case "decl": 
+        		joinPointList = selectDecl();
+        		break;
         	default:
         		joinPointList = this.aFunction.select(selectName);
         		break;
@@ -427,6 +439,13 @@ public abstract class AMethod extends AFunction {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
