@@ -56,6 +56,11 @@ public class VarDeclDataV2 extends NamedDeclData {
                 data);
     }
 
+    @Override
+    public VarDeclDataV2 copy() {
+        return new VarDeclDataV2(this);
+    }
+
     public StorageClass getStorageClass() {
         return storageClass;
     }

@@ -34,5 +34,5 @@ public abstract class ClavaData {
      * 
      * @return
      */
-    abstract ClavaData copy();
+    public abstract ClavaData copy();
 }

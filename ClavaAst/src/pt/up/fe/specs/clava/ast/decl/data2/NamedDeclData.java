@@ -41,6 +41,11 @@ public class NamedDeclData extends DeclDataV2 {
         this(data.qualifiedName, data.nameKind, data.isHidden, data);
     }
 
+    @Override
+    public NamedDeclData copy() {
+        return new NamedDeclData(this);
+    }
+
     public Optional<String> getQualifiedName() {
         if (qualifiedName.isEmpty()) {
             return Optional.empty();

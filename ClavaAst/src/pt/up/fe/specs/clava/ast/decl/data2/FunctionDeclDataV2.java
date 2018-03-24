@@ -31,6 +31,11 @@ public class FunctionDeclDataV2 extends NamedDeclData {
         this(data.isConstexpr, data.templateKind, data);
     }
 
+    @Override
+    public FunctionDeclDataV2 copy() {
+        return new FunctionDeclDataV2(this);
+    }
+
     public boolean isConstexpr() {
         return isConstexpr;
     }

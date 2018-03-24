@@ -36,7 +36,7 @@ public class DeclDataV2 extends ClavaData {
     }
 
     @Override
-    ClavaData copy() {
+    public DeclDataV2 copy() {
         return new DeclDataV2(this);
     }
 

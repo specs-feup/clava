@@ -28,6 +28,11 @@ public class CXXMethodDeclDataV2 extends FunctionDeclDataV2 {
     }
 
     @Override
+    public CXXMethodDeclDataV2 copy() {
+        return new CXXMethodDeclDataV2(this);
+    }
+
+    @Override
     public String toString() {
         return toString(super.toString(), "recordId: " + recordId);
     }
