@@ -32,17 +32,7 @@ namespace clava {
 
 
 
-    /**
-     * Names of DeclData dumpers
-     */
-    static std::map<DeclNode,std::string>  DECL_DATA_NAMES = {
-        {DeclNode::DECL, "<DeclData>"},
-        {DeclNode::NAMED_DECL, "<NamedDeclData>"},
-        {DeclNode::FUNCTION_DECL, "<FunctionDeclData>"},
-        {DeclNode::CXX_METHOD_DECL, "<CXXMethodDeclData>"},
-        {DeclNode::VAR_DECL, "<VarDeclData>"},
-        {DeclNode::PARM_VAR_DECL, "<ParmVarDeclData>"}
-    };
+
 
 }
 #endif //CLANGASTDUMPER_INFODUMPERCONSTANTS_H

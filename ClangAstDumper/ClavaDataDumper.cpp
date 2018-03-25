@@ -2,15 +2,15 @@
 // Created by JoaoBispo on 18/03/2018.
 //
 
-#include "InfoDumper.h"
+#include "ClavaDataDumper.h"
 
 #include "ClangNodes.h"
 
 #include <sstream>
 
-InfoDumper::InfoDumper(int id) : id(id)  {};
+ClavaDataDumper::ClavaDataDumper(int id) : id(id)  {};
 
-void InfoDumper::DumpHeader(const std::string tag, const void *pointer) {
+void clava::ClavaDataDumper::DumpHeader(const std::string tag, const void *pointer) {
     llvm::errs() << tag << "\n";
     llvm::errs() << getId(pointer) << "\n";
 }
@@ -31,23 +31,23 @@ void InfoDumper::DumpHeader(const Type* T) {
 }
  */
 
-std::string InfoDumper::getId(const void* addr) {
+std::string clava::ClavaDataDumper::getId(const void* addr) {
     std::stringstream ss;
     ss <<  addr << "_" << id;
 
     return ss.str();
 }
 
-void InfoDumper::dump(bool boolean) {
+void clava::ClavaDataDumper::dump(bool boolean) {
     llvm::errs() << boolean << "\n";
 }
 
 
-void InfoDumper::dump(int integer) {
+void clava::ClavaDataDumper::dump(int integer) {
     llvm::errs() << integer << "\n";
 }
 
-void InfoDumper::dump(std::string string) {
+void clava::ClavaDataDumper::dump(std::string string) {
     llvm::errs() << string << "\n";
 }
 

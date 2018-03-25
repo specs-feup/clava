@@ -38,8 +38,8 @@ set(SOURCE_FILES
 		ClangAstDumperDecls.cpp
         ClangAstDumperExtra.cpp
 		TypeMarker.cpp
-		InfoDumper.cpp
-		InfoDumperDecls.cpp 
+        ClavaDataDumper.cpp
+        ClavaDataDumperDecls.cpp
     ChildrenVisitorDecls.cpp 
     ClangNodes.cpp)
 

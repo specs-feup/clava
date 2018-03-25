@@ -5,7 +5,7 @@
 #ifndef CLANGASTDUMPER_CLANGASTDUMPER_H
 #define CLANGASTDUMPER_CLANGASTDUMPER_H
 
-#include "InfoDumper.h"
+#include "ClavaDataDumper.h"
 
 #include "clang/AST/TypeVisitor.h"
 #include "clang/AST/StmtVisitor.h"
@@ -32,7 +32,7 @@ private:
 
     std::set<const CXXCtorInitializer*> seenInits;
 
-    InfoDumper infoDumper;
+    clava::ClavaDataDumper dataDumper;
 
 public:
     explicit ClangAstDumper(ASTContext *Context, int id);

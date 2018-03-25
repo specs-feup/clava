@@ -2,9 +2,9 @@
 // Created by JoaoBispo on 18/03/2018.
 //
 
-#include "InfoDumper.h"
+#include "ClavaDataDumper.h"
 
-void InfoDumper::dump(clava::DeclNode declNode, const Decl* D) {
+void ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
     DumpHeader(clava::DECL_DATA_NAMES[declNode], D);
 
     switch(declNode) {
@@ -20,7 +20,7 @@ void InfoDumper::dump(clava::DeclNode declNode, const Decl* D) {
 
 
 
-void InfoDumper::DumpDeclInfo(const Decl *D) {
+void ClavaDataDumper::DumpDeclInfo(const Decl *D) {
 
     // Print information about Decl
     dump(D->isImplicit());
@@ -38,7 +38,7 @@ void InfoDumper::DumpDeclInfo(const Decl *D) {
 
 }
 
-void InfoDumper::DumpNamedDeclInfo(const NamedDecl *D) {
+void ClavaDataDumper::DumpNamedDeclInfo(const NamedDecl *D) {
     // Hierarchy
     DumpDeclInfo(D);
 
@@ -54,7 +54,7 @@ void InfoDumper::DumpNamedDeclInfo(const NamedDecl *D) {
 
 
 
-void InfoDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
+void ClavaDataDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
     // Hierarchy
     DumpNamedDeclInfo(D);
 
@@ -78,7 +78,7 @@ void InfoDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
 */
 }
 
-void InfoDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
+void ClavaDataDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
     // Hierarchy
     DumpFunctionDeclInfo(D);
 
@@ -94,7 +94,7 @@ void InfoDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
 }
 
 
-void InfoDumper::DumpVarDeclInfo(const VarDecl *D) {
+void ClavaDataDumper::DumpVarDeclInfo(const VarDecl *D) {
     // Hierarchy
     DumpNamedDeclInfo(D);
 
@@ -146,7 +146,7 @@ void InfoDumper::DumpVarDeclInfo(const VarDecl *D) {
 */
 }
 
-void InfoDumper::DumpParmVarDeclInfo(const ParmVarDecl *D) {
+void ClavaDataDumper::DumpParmVarDeclInfo(const ParmVarDecl *D) {
 
     // Hierarchy
     DumpVarDeclInfo(D);
