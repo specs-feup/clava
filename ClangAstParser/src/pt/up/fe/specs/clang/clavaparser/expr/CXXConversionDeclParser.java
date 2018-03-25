@@ -45,7 +45,7 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
         //
         // col:12 implicit operator int (*)() 'int (*(void) const)(void)' inline
 
-        CXXMethodDeclDataV2 data = getData(CXXConversionDecl.class, CXXMethodDeclDataV2.class, node);
+        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -65,8 +65,7 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
         FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
-                node, getStdErr(),
-                CXXConversionDecl.class);
+                node, getStdErr(), CXXMethodDeclDataV2.class);
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");

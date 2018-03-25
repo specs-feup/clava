@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 import org.suikasoft.jOptions.DataStore.SimpleDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 
 import com.google.common.base.Preconditions;
 
@@ -306,11 +308,12 @@ public class StreamParser {
             SnippetParser<?, ?> parser = parsers.get(currentLine);
 
             // If parser null, check if it needs to be adapted
-            if (parser == null) {
-                // System.out
-                // .println("ADAPTING '" + currentLine + "' to '" + ClangNodeParsing.adaptsKey(currentLine) + "'");
-                parser = ClangNodeParsing.adaptsKey(currentLine).map(parsers::get).orElse(null);
-            }
+            // TODO: Parser after normal parser, and before warning
+            // if (parser == null) {
+            // // System.out
+            // // .println("ADAPTING '" + currentLine + "' to '" + ClangNodeParsing.adaptsKey(currentLine) + "'");
+            // parser = ClangNodeParsing.adaptsKey(currentLine).map(parsers::get).orElse(null);
+            // }
 
             // If parser not null, use it and continue
             if (parser != null) {
@@ -329,7 +332,17 @@ public class StreamParser {
         }
 
         // Parsed all lines, create datastore
-        DataStore stdErrOutput = new SimpleDataStore(StreamKeys.STORE_DEFINITION);
+        StoreDefinition streamParserDefinition = new StoreDefinitionBuilder("StreamParser Data")
+                .addDefinition(StreamKeys.STORE_DEFINITION)
+                // .addKeys(ClangNodeParsing.getKeys())
+                .build();
+
+        // DataStore stdErrOutput = new SimpleDataStore(StreamKeys.STORE_DEFINITION);
+        DataStore stdErrOutput = new SimpleDataStore(streamParserDefinition);
+        // Add keys for ClavaData parsers
+
+        // TODO: Merge with map that you get from DumperDataParser
+
         for (DataKey<?> key : StreamKeys.STORE_DEFINITION.getKeys()) {
 
             // Special case: warnings

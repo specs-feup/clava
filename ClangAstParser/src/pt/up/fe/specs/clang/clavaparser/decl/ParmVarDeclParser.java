@@ -52,7 +52,7 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
         // col:28 referenced a 'const t *':'const t *'
 
         // ParmVarDeclData data = getStdErr().get(StreamKeys.PARM_VAR_DECL_DATA).get(node.getExtendedId());
-        ParmVarDeclData data = getData(ParmVarDecl.class, ParmVarDeclData.class, node);
+        ParmVarDeclData data = getData(ParmVarDeclData.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -65,7 +65,8 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
 
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
-        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr(), ParmVarDecl.class);
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr(),
+                ParmVarDeclData.class);
         List<ClavaNode> children = parseChildren(node);
 
         boolean hasInit = varDeclData.getInitKind() != InitializationStyle.NO_INIT;

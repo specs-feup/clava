@@ -58,7 +58,7 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         // col:4 MCSimulation 'void (const std::string, const std::string)'
         // line:304:24 MCSimulation 'void (const std::string, const std::string)' namespace Routing record CSVReader
 
-        CXXMethodDeclDataV2 data = getData(CXXConstructorDecl.class, CXXMethodDeclDataV2.class, node);
+        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -87,7 +87,7 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(clangChildren.stream()));
         FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children, node,
-                getStdErr(), CXXConstructorDecl.class);
+                getStdErr(), CXXMethodDeclDataV2.class);
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");

@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -58,7 +59,7 @@ public class FunctionDeclParser extends AClangNodeParser<FunctionDecl> {
         ListParser<ClavaNode> parsedChildren = new ListParser<>(parseChildren(node));
 
         FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, parsedChildren, node,
-                getStdErr(), FunctionDecl.class);
+                getStdErr(), FunctionDeclDataV2.class);
 
         checkNumChildren(parsedChildren.getList(), 0);
 

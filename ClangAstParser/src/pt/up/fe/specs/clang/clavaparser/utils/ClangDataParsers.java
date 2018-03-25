@@ -28,9 +28,7 @@ import pt.up.fe.specs.clang.streamparser.ClangNodeParsing;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.ExceptionType;
@@ -127,7 +125,7 @@ public class ClangDataParsers {
 
     public static ParserResult<FunctionDeclParserResult> parseFunctionDecl(StringSlice string,
             ListParser<ClavaNode> children, ClangNode node, DataStore streamData,
-            Class<? extends FunctionDecl> nodeClass) {
+            Class<? extends FunctionDeclDataV2> nodeClass) {
 
         StringParser parser = new StringParser(string);
 
@@ -179,8 +177,8 @@ public class ClangDataParsers {
         // .get(ClangNodeParsing.getNodeDataKey(nodeClass)).keySet());
 
         // Get stream information
-        FunctionDeclDataV2 functionData = (FunctionDeclDataV2) streamData
-                .get(ClangNodeParsing.getNodeDataKey(nodeClass)).get(node.getExtendedId());
+        FunctionDeclDataV2 functionData = streamData.get(ClangNodeParsing.getNodeDataKey(nodeClass))
+                .get(node.getExtendedId());
         // Preconditions.checkNotNull(functionData, "Could not get data for node: " + node.getExtendedId());
 
         if (functionData == null) {
@@ -423,7 +421,7 @@ public class ClangDataParsers {
     }
 
     public static <T extends VarDeclDataV2> ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node,
-            DataStore streamData, Class<? extends VarDecl> varDeclClass) {
+            DataStore streamData, Class<? extends VarDeclDataV2> varDeclClass) {
         // DataStore streamData, DataKey<Map<String, T>> key) {
         StringParser parser = new StringParser(string);
 
@@ -439,7 +437,7 @@ public class ClangDataParsers {
 
         // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
 
-        VarDeclDataV2 varDeclData2 = (VarDeclDataV2) streamData.get(ClangNodeParsing.getNodeDataKey(varDeclClass))
+        VarDeclDataV2 varDeclData2 = streamData.get(ClangNodeParsing.getNodeDataKey(varDeclClass))
                 .get(node.getExtendedId());
         if (varDeclData2 == null) {
             SpecsLogs.msgWarn(

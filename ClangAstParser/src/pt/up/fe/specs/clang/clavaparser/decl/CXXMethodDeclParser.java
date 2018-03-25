@@ -50,7 +50,7 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
         // WriteResultSingle 'void (std::vector<float> &, std::string &&, float)' static namespace Routing record Data
         // PARSER:col:14 AreEqual '_Bool (double, double)' static
 
-        CXXMethodDeclDataV2 data = getData(CXXMethodDecl.class, CXXMethodDeclDataV2.class, node);
+        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -70,8 +70,7 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
         FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
-                node, getStdErr(),
-                CXXMethodDecl.class);
+                node, getStdErr(), CXXMethodDeclDataV2.class);
         // boolean isStatic = parser.apply(string -> ClangParseWorkers.checkWord(string, "static"));
 
         // boolean isInline = parser.apply(string -> ClangParseWorkers.checkWord(string, "inline"));

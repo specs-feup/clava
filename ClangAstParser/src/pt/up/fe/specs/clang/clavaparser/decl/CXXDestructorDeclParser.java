@@ -47,7 +47,7 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         // line:285:24 ~MCSimulation 'void (void) noexcept' namespace Routing record CSVReader
         // col:13 ~Exception 'void (void) noexcept' virtual
 
-        CXXMethodDeclDataV2 data = getData(CXXDestructorDecl.class, CXXMethodDeclDataV2.class, node);
+        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -65,7 +65,7 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
         FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
                 node, getStdErr(),
-                CXXDestructorDecl.class);
+                CXXMethodDeclDataV2.class);
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");

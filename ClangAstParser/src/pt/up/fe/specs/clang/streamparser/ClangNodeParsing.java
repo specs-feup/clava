@@ -26,17 +26,17 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
-import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
+import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.stringparser.StringParser;
-import pt.up.fe.specs.util.utilities.CachedItems;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class ClangNodeParsing {
@@ -44,20 +44,40 @@ public class ClangNodeParsing {
     /**
      * Caches DataKey instances related with nodes data
      */
-    private static final CachedItems<Class<? extends ClavaNode>, DataKey<Map<String, ClavaData>>> CACHED_DATA_KEYS = new CachedItems<>(
-            ClangNodeParsing::buildDataKey);
+    // private final static CachedItems<Class<? extends ClavaData>, DataKey<Map<String, ClavaData>>> CACHED_DATA_KEYS =
+    // new CachedItems<>(
+    // ClangNodeParsing::buildDataKeyGeneric);
+    // private final static CachedItems<Class<? extends ClavaData>, DataKey<Map<String, ? extends ClavaData>>>
+    // CACHED_DATA_KEYS = new CachedItems<>(
+    // ClangNodeParsing::buildDataKey);
 
     private static final String BASE_CLAVA_AST_PACKAGE = "pt.up.fe.specs.clava.ast";
 
-    private static final ClassMap<ClavaNode, Function<LineStream, ClavaData>> DATA_PARSERS;
+    private static final ClassMap<ClavaData, Function<LineStream, ClavaData>> DATA_PARSERS;
     static {
         DATA_PARSERS = new ClassMap<>();
-        DATA_PARSERS.put(Decl.class, DeclDataParser::parseDeclData);
-        DATA_PARSERS.put(NamedDecl.class, DeclDataParser::parseNamedDeclData);
-        DATA_PARSERS.put(FunctionDecl.class, DeclDataParser::parseFunctionDeclData);
-        DATA_PARSERS.put(CXXMethodDecl.class, DeclDataParser::parseCXXMethodDeclData);
-        DATA_PARSERS.put(VarDecl.class, DeclDataParser::parseVarDeclData);
-        DATA_PARSERS.put(ParmVarDecl.class, DeclDataParser::parseParmVarDeclData);
+
+        // DECLS
+        DATA_PARSERS.put(DeclDataV2.class, DeclDataParser::parseDeclData);
+        DATA_PARSERS.put(NamedDeclData.class, DeclDataParser::parseNamedDeclData);
+
+        // DATA_PARSERS.put(CXXRecordDecl.class, DeclDataParser::parseNamedDeclData);
+        // DATA_PARSERS.put(FieldDecl.class, DeclDataParser::parseNamedDeclData);
+        // DATA_PARSERS.put(NamespaceAliasDecl.class, DeclDataParser::parseNamedDeclData);
+        // Not implemented yet
+        // DATA_PARSERS.put(ObjCImplementationDecl.class, DeclDataParser::parseNamedDeclData);
+        // DATA_PARSERS.put(TemplateDecl.class, DeclDataParser::parseNamedDeclData);
+        // DATA_PARSERS.put(TemplateTypeParmDecl.class, DeclDataParser::parseNamedDeclData);
+        // DATA_PARSERS.put(TypedefDecl.class, DeclDataParser::parseNamedDeclData);
+
+        DATA_PARSERS.put(FunctionDeclDataV2.class, DeclDataParser::parseFunctionDeclData);
+        DATA_PARSERS.put(CXXMethodDeclDataV2.class, DeclDataParser::parseCXXMethodDeclData);
+        // DATA_PARSERS.put(CXXConstructorDecl.class, DeclDataParser::parseCXXMethodDeclData);
+        // DATA_PARSERS.put(CXXConversionDecl.class, DeclDataParser::parseCXXMethodDeclData);
+        // DATA_PARSERS.put(CXXDestructorDecl.class, DeclDataParser::parseCXXMethodDeclData);
+
+        DATA_PARSERS.put(VarDeclDataV2.class, DeclDataParser::parseVarDeclData);
+        DATA_PARSERS.put(ParmVarDeclData.class, DeclDataParser::parseParmVarDeclData);
 
     }
 
@@ -66,47 +86,76 @@ public class ClangNodeParsing {
      * 
      * @return
      */
-    private static final DataKey<Map<String, ClavaData>> buildDataKey(Class<? extends ClavaNode> nodeClass) {
+    private static final <T extends ClavaData> DataKey<Map<String, T>> buildDataKey(Class<T> nodeClass) {
+        // private static final DataKey<Map<String, ? extends ClavaData>> buildDataKey(Class<? extends ClavaData>
+        // nodeClass) {
         // Obtain the correct class
-        @SuppressWarnings("unchecked")
-        Class<ClavaNode> equivalentClass = DATA_PARSERS.getEquivalentKey(nodeClass)
-                .map(aClass -> (Class<ClavaNode>) aClass)
-                .orElseThrow(() -> new RuntimeException("Mappings for class '" + nodeClass + "' not supported"));
+        // @SuppressWarnings("unchecked")
+        // Class<ClavaNode> equivalentClass = DATA_PARSERS.getEquivalentKey(nodeClass)
+        // .map(aClass -> (Class<ClavaNode>) aClass)
+        // .orElseThrow(() -> new RuntimeException("Mappings for class '" + nodeClass + "' not supported"));
+
+        // System.out.println("CLASS:" + nodeClass);
+        // System.out.println("EQUIVALENT CLASS:" + equivalentClass);
         // getEquivalentKey
         // System.out.println("GIVEN CLASS:" + nodeClass);
         // System.out.println("EQUIVALENT CLASS:" + equivalentClass);
-        return dataKeyFactory(equivalentClass, "stream_", "_data");
+        // return dataKeyFactory(equivalentClass, "stream_", "_data");
+        return dataKeyFactory(nodeClass, "stream_", "_data");
     }
+
+    // Casting from ClavaData capture to ClavaData
+    // @SuppressWarnings("unchecked")
+    // private static final DataKey<Map<String, ClavaData>> buildDataKeyGeneric(
+    // Class<? extends ClavaData> nodeClass) {
+    //
+    // return buildDataKey((Class<ClavaData>) nodeClass);
+    // }
 
     /**
      * 
      * @param nodeClass
      * @return the corresponding DataKey for the node data of the given class
      */
-    public static <T extends ClavaNode> DataKey<Map<String, ClavaData>> getNodeDataKey(Class<T> nodeClass) {
-        return CACHED_DATA_KEYS.get(nodeClass);
+    // public static <T extends ClavaNode> DataKey<Map<String, ClavaData>> getNodeDataKey(Class<T> nodeClass) {
+    // return CACHED_DATA_KEYS.get(nodeClass);
+    // }
+    public static <T extends ClavaData> DataKey<Map<String, T>> getNodeDataKey(Class<T> nodeClass) {
+        // DataKey<Map<String, ClavaData>> clavaDataMap = CACHED_DATA_KEYS.get(nodeClass);
+        //
+        // return (DataKey<Map<String, T>>) clavaDataMap;
+        return buildDataKey(nodeClass);
     }
 
     /**
      * Helper method for building keys.
      * 
-     * @param nodeClass
+     * @param dataClass
      * @param prefix
      * @param suffix
      * @return
      */
-    private static <T extends ClavaNode> DataKey<Map<String, ClavaData>> dataKeyFactory(Class<T> nodeClass,
+    private static <T extends ClavaData> DataKey<Map<String, T>> dataKeyFactory(Class<T> dataClass,
             String prefix, String suffix) {
+
+        String simpleName = dataClass.getSimpleName();
+
+        simpleName = StringParsers.removeSuffix(simpleName, "V2");
+
         // Create key name
-        String keyName = prefix + nodeClass.getSimpleName() + suffix;
+        String keyName = prefix + simpleName + suffix;
 
         // Create DataKey
-        return KeyFactory.generic(keyName, (Map<String, ClavaData>) new HashMap<String, ClavaData>());
+        return KeyFactory.generic(keyName, (Map<String, T>) new HashMap<String, T>());
         // .setDefault(() -> new HashMap<>());
     }
 
     private static String getNodeDataId(Class<?> nodeClass) {
-        return "<" + nodeClass.getSimpleName() + "Data>";
+        String simpleName = nodeClass.getSimpleName();
+        simpleName = StringParsers.removeSuffix(simpleName, "V2");
+
+        // return "<" + nodeClass.getSimpleName() + "Data>";
+        return "<" + simpleName + ">";
     }
 
     public static Map<? extends DataKey<?>, SnippetParser<?, ?>> buildSnippetParsers(
@@ -117,11 +166,12 @@ public class ClangNodeParsing {
 
         // Add node data parsers
         // TODO: var candidate
-        for (Entry<Class<? extends ClavaNode>, Function<LineStream, ClavaData>> entry : DATA_PARSERS
+        for (Entry<Class<? extends ClavaData>, Function<LineStream, ClavaData>> entry : DATA_PARSERS
                 .entrySet()) {
 
-            Class<? extends ClavaNode> clavaNodeClass = entry.getKey();
+            Class<? extends ClavaData> clavaNodeClass = entry.getKey();
             Function<LineStream, ClavaData> parser = entry.getValue();
+
             String id = getNodeDataId(clavaNodeClass);
 
             snippetParsers.put(getNodeDataKey(clavaNodeClass), SnippetParser.newInstance(id, nodeData, parser));
@@ -165,6 +215,7 @@ public class ClangNodeParsing {
     }
 
     private static Optional<String> adaptNodeDataKey(String nodeDataKey) {
+
         if (!nodeDataKey.endsWith("Data")) {
             return Optional.empty();
         }
@@ -175,9 +226,17 @@ public class ClangNodeParsing {
         // Get corresponding ClavaNode class
         Optional<Class<? extends ClavaNode>> nodeClass = fromSimpleName(nodeClassname);
 
+        // TEST
+        // Check if class exists in table
+        // nodeClass = nodeClass
+        // .flatMap(aClass -> getEquivalentClangKey(aClass, nodeClassname);
+        // END TEST
+
+        // System.out.println("NOE CLASS NAME:" + nodeClassname);
         // Get equivalent key and id
         Optional<String> adaptedKey = nodeClass
-                .flatMap(aClass -> DATA_PARSERS.getEquivalentKey(aClass))
+                // .flatMap(aClass -> DATA_PARSERS.getEquivalentKey(aClass))
+                // .map(aClass -> getEquivalentClangKey(aClass, nodeClassname))
                 .map(equivalentClass -> getNodeDataId(equivalentClass));
 
         // Node not yet implemented in Clava
@@ -188,6 +247,31 @@ public class ClangNodeParsing {
 
         return adaptedKey;
     }
+    //
+    // private static Class<? extends ClavaNode> getEquivalentClangKey(Class<? extends ClavaNode> aClass,
+    // String nodeClassname) {
+    // if (DATA_PARSERS.keySet().contains(aClass)) {
+    // return aClass;
+    // }
+    //
+    // return getBaseNode(nodeClassname);
+    // }
+
+    // private static Class<? extends ClavaNode> getBaseNode(String nodeClassname) {
+    // if (nodeClassname.endsWith("Decl")) {
+    // return Decl.class;
+    // }
+    //
+    // if (nodeClassname.endsWith("Stmt")) {
+    // return Stmt.class;
+    // }
+    //
+    // if (nodeClassname.endsWith("Type")) {
+    // return Type.class;
+    // }
+    //
+    // return Expr.class;
+    // }
 
     private static Optional<Class<? extends ClavaNode>> fromSimpleName(String nodeClassname) {
         String fullClassname = simpleNameToFullName(nodeClassname);
