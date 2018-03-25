@@ -35,7 +35,6 @@ public:
 
     void dump(clava::DeclNode declNode, const Decl* D);
 
-    // TODO: Deprecate
     //void DumpHeader(const Decl* D);
     //void DumpHeader(const Stmt* S);
     //void DumpHeader(const Type* T);

@@ -9,11 +9,11 @@ void InfoDumper::dump(clava::DeclNode declNode, const Decl* D) {
 
     switch(declNode) {
         case clava::DeclNode::DECL: DumpDeclInfo(D); break;
-        case clava::DeclNode::NAMED_DECL: DumpNamedDeclInfo(dynamic_cast<NamedDecl*>(D)); break;
-        case clava::DeclNode::FUNCTION_DECL: DumpFunctionDeclInfo(dynamic_cast<FunctionDecl*>(D)); break;
-        case clava::DeclNode::CXX_METHOD_DECL: DumpCXXMethodDeclInfo(dynamic_cast<CXXMethodDecl*>(D)); break;
-        case clava::DeclNode::VAR_DECL: DumpVarDeclInfo(dynamic_cast<VarDecl*>(D)); break;
-        case clava::DeclNode::PARM_VAR_DECL: DumpParmVarDeclInfo(dynamic_cast<ParmVarDecl*>(D)); break;
+        case clava::DeclNode::NAMED_DECL: DumpNamedDeclInfo(dynamic_cast<const NamedDecl*>(D)); break;
+        case clava::DeclNode::FUNCTION_DECL: DumpFunctionDeclInfo(dynamic_cast<const FunctionDecl*>(D)); break;
+        case clava::DeclNode::CXX_METHOD_DECL: DumpCXXMethodDeclInfo(dynamic_cast<const CXXMethodDecl*>(D)); break;
+        case clava::DeclNode::VAR_DECL: DumpVarDeclInfo(dynamic_cast<const VarDecl*>(D)); break;
+        case clava::DeclNode::PARM_VAR_DECL: DumpParmVarDeclInfo(dynamic_cast<const ParmVarDecl*>(D)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump: Case not implemented, '"+clava::DECL_DATA_NAMES[declNode]+"'");
     }
 }
