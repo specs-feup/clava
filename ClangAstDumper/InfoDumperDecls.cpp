@@ -4,6 +4,21 @@
 
 #include "InfoDumper.h"
 
+void InfoDumper::Dump(clava::DeclNode declNode, const Decl* D) {
+    DumpHeader(clava::DECL_DATA_NAMES[declNode], D);
+
+    switch(declNode) {
+        case clava::DeclNode::DECL: DumpDeclInfo(D); break;
+        case clava::DeclNode::NAMED_DECL: DumpNamedDeclInfo(dynamic_cast<NamedDecl*>(D)); break;
+        case clava::DeclNode::FUNCTION_DECL: DumpFunctionDeclInfo(dynamic_cast<FunctionDecl*>(D)); break;
+        case clava::DeclNode::CXX_METHOD_DECL: DumpCXXMethodDeclInfo(dynamic_cast<CXXMethodDecl*>(D)); break;
+        case clava::DeclNode::VAR_DECL: DumpVarDeclInfo(dynamic_cast<VarDecl*>(D)); break;
+        case clava::DeclNode::PARM_VAR_DECL: DumpParmVarDeclInfo(dynamic_cast<ParmVarDecl*>(D)); break;
+    }
+}
+
+
+
 void InfoDumper::DumpDeclInfo(const Decl *D) {
 
     // Print information about Decl

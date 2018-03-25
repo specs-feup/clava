@@ -12,6 +12,8 @@
 #include <string>
 
 //#include "ClangAstDumper.h"
+#include "InfoDumperConstants.h"
+
 
 using namespace clang;
 
@@ -31,6 +33,9 @@ public:
     // Utility methods
     std::string getId(const void* addr);
 
+    void Dump(clava::DeclNode declNode, const Decl* D);
+
+    // TODO: Deprecate
     void DumpHeader(const Decl* D);
     void DumpHeader(const Stmt* S);
     void DumpHeader(const Type* T);
@@ -59,6 +64,10 @@ private:
     void dump(bool boolean);
     void dump(int integer);
     void dump(std::string string);
+
 };
+
+
+
 
 #endif //CLANGASTDUMPER_NODEDUMPER_H

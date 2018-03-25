@@ -4,7 +4,7 @@
 
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
-#include "InfoDumperConstants.h"
+//#include "InfoDumperConstants.h"
 
 #include "clang/AST/AST.h"
 
@@ -295,12 +295,12 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
 
     // Visit children
     std::vector<std::string> children = VisitFunctionDeclChildren(D);
-/*
+
     llvm::errs() << "children:\n";
     for(auto childId : children) {
         llvm::errs() << "child: " << childId << "\n";
     }
-*/
+
 
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {

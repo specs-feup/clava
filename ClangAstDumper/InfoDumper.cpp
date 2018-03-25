@@ -18,6 +18,7 @@ void InfoDumper::DumpHeader(const std::string tag, const void *pointer) {
 void InfoDumper::DumpHeader(const Decl* D) {
     DumpHeader("<" + clava::getClassName(D) + "Data>", D);
 }
+
 void InfoDumper::DumpHeader(const Stmt* S) {
     DumpHeader("<" + clava::getClassName(S) + "Data>", S);
 }
