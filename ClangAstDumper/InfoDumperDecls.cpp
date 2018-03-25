@@ -4,7 +4,7 @@
 
 #include "InfoDumper.h"
 
-void InfoDumper::Dump(clava::DeclNode declNode, const Decl* D) {
+void InfoDumper::dump(clava::DeclNode declNode, const Decl* D) {
     DumpHeader(clava::DECL_DATA_NAMES[declNode], D);
 
     switch(declNode) {
@@ -14,6 +14,7 @@ void InfoDumper::Dump(clava::DeclNode declNode, const Decl* D) {
         case clava::DeclNode::CXX_METHOD_DECL: DumpCXXMethodDeclInfo(dynamic_cast<CXXMethodDecl*>(D)); break;
         case clava::DeclNode::VAR_DECL: DumpVarDeclInfo(dynamic_cast<VarDecl*>(D)); break;
         case clava::DeclNode::PARM_VAR_DECL: DumpParmVarDeclInfo(dynamic_cast<ParmVarDecl*>(D)); break;
+        default: throw std::invalid_argument("ClangDataDumper::dump: Case not implemented, '"+clava::DECL_DATA_NAMES[declNode]+"'");
     }
 }
 

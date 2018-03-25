@@ -9,10 +9,12 @@ include("../deps.cmake")
 # Add Modules
 deps_find_package(llvm3.8 REQUIRED) # LLVM
 
+set(COMMON_CXX_FLAGS "-std=c++11 -O3")
+
 if(SYSTEM_PLATFORM STREQUAL "MacOS")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -O3")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -stdlib=libc++")
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -static-libgcc -static-libstdc++")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -static-libgcc -static-libstdc++")
 endif()
 
 

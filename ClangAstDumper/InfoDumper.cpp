@@ -15,10 +15,13 @@ void InfoDumper::DumpHeader(const std::string tag, const void *pointer) {
     llvm::errs() << getId(pointer) << "\n";
 }
 
+/*
 void InfoDumper::DumpHeader(const Decl* D) {
     DumpHeader("<" + clava::getClassName(D) + "Data>", D);
 }
+ */
 
+/*
 void InfoDumper::DumpHeader(const Stmt* S) {
     DumpHeader("<" + clava::getClassName(S) + "Data>", S);
 }
@@ -26,6 +29,7 @@ void InfoDumper::DumpHeader(const Stmt* S) {
 void InfoDumper::DumpHeader(const Type* T) {
     DumpHeader("<" + clava::getClassName(T) + "Data>", T);
 }
+ */
 
 std::string InfoDumper::getId(const void* addr) {
     std::stringstream ss;

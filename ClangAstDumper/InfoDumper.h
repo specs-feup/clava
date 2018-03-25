@@ -33,18 +33,31 @@ public:
     // Utility methods
     std::string getId(const void* addr);
 
-    void Dump(clava::DeclNode declNode, const Decl* D);
+    void dump(clava::DeclNode declNode, const Decl* D);
 
     // TODO: Deprecate
-    void DumpHeader(const Decl* D);
-    void DumpHeader(const Stmt* S);
-    void DumpHeader(const Type* T);
+    //void DumpHeader(const Decl* D);
+    //void DumpHeader(const Stmt* S);
+    //void DumpHeader(const Type* T);
 
 
 
         // void DumpHeader(const std::string tag, const void *pointer);
     //void dumpHeader(const std::string tag, Stmt *D);
     //void dumpHeader(const std::string tag, Type *D);
+
+
+
+
+private:
+    //void dumpHeaderAny(const std::string tag, void *D);
+    void DumpHeader(const std::string tag, const void *pointer);
+
+    // Generic value dumpers
+    void dump(bool boolean);
+    void dump(int integer);
+    void dump(std::string string);
+
 
     // DECLS
 
@@ -54,16 +67,6 @@ public:
     void DumpCXXMethodDeclInfo(const CXXMethodDecl *D);
     void DumpVarDeclInfo(const VarDecl *D);
     void DumpParmVarDeclInfo(const ParmVarDecl *D);
-
-
-private:
-    //void dumpHeaderAny(const std::string tag, void *D);
-    void DumpHeader(const std::string tag, const void *pointer);
-
-
-    void dump(bool boolean);
-    void dump(int integer);
-    void dump(std::string string);
 
 };
 
