@@ -205,7 +205,7 @@ public interface StreamKeys {
             // .addKey(VARDECL_DUMPER_INFO)
             // .addKey(FUNCTION_DECL_INFO)
             .addKey(INIT_LIST_EXPR_INFO)
-            .addKeys(ClangNodeParsing.getKeys())
+            // .addKeys(ClangNodeParsing.getKeys())
             // .addKey(DECL_DATA)
             // .addKey(FUNCTION_DECL_DATA)
             // .addKey(VAR_DECL_DATA)

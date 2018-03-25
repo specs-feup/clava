@@ -334,7 +334,7 @@ public class StreamParser {
         // Parsed all lines, create datastore
         StoreDefinition streamParserDefinition = new StoreDefinitionBuilder("StreamParser Data")
                 .addDefinition(StreamKeys.STORE_DEFINITION)
-                // .addKeys(ClangNodeParsing.getKeys())
+                .addKeys(ClangNodeParsing.getKeys())
                 .build();
 
         // DataStore stdErrOutput = new SimpleDataStore(StreamKeys.STORE_DEFINITION);
@@ -343,7 +343,8 @@ public class StreamParser {
 
         // TODO: Merge with map that you get from DumperDataParser
 
-        for (DataKey<?> key : StreamKeys.STORE_DEFINITION.getKeys()) {
+        // for (DataKey<?> key : StreamKeys.STORE_DEFINITION.getKeys()) {
+        for (DataKey<?> key : streamParserDefinition.getKeys()) {
 
             // Special case: warnings
             if (key.equals(StreamKeys.WARNINGS)) {
