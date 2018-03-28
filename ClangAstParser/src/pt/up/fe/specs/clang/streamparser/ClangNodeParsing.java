@@ -25,6 +25,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
@@ -140,7 +141,7 @@ public class ClangNodeParsing {
 
         String simpleName = dataClass.getSimpleName();
 
-        simpleName = StringParsers.removeSuffix(simpleName, "V2");
+        // simpleName = StringParsers.removeSuffix(simpleName, "V2");
 
         // Create key name
         String keyName = prefix + simpleName + suffix;

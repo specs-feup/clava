@@ -11,12 +11,13 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.streamparser;
+package pt.up.fe.specs.clang.parsers.clavadata;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.NameKind;
 import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
@@ -33,7 +34,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class DeclDataParser {
 
-    public static <D extends ClavaData> void parseNodeData(Function<LineStream, D> dataParser, LineStream lines,
+    public static <D extends ClavaData> void parseClavaData(Function<LineStream, D> dataParser, LineStream lines,
             Map<String, D> map) {
 
         // TODO: Let ClavaNode parser read the key/id, and access it from clavaData.getId()
@@ -52,7 +53,7 @@ public class DeclDataParser {
     public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
             Function<LineStream, D> dataParser) {
 
-        return (lineStream, map) -> parseNodeData(dataParser, lineStream, map);
+        return (lineStream, map) -> parseClavaData(dataParser, lineStream, map);
     }
 
     public static DeclDataV2 parseDeclData(LineStream lines) {

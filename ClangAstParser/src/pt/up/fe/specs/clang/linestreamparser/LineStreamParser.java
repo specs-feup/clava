@@ -15,7 +15,6 @@ package pt.up.fe.specs.clang.linestreamparser;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -45,22 +44,31 @@ public interface LineStreamParser {
 
     /**
      * 
-     * @return available keys from this parser
+     * @return available DataStore keys for this parser
      */
-    public Collection<DataKey<?>> getKeys();
+    // public Collection<DataKey<?>> getKeys();
 
     /**
+     * Builds a DataStore with the current parsed values.
      * 
      * @return DataStore with parsed data
      */
-    public DataStore getData();
+    public DataStore buildData();
 
     /**
+     * Parsers the LineStream section corresponding to the given id.
      * 
-     * @param key
+     * @param id
      * @param lineStream
-     * @return true if the key was a valid key, false otherwise
+     * @return true if the id was valid, false otherwise. When returning false, the LineStream remains unmodified
      */
-    public boolean parse(String key, LineStream lineStream);
+    public boolean parse(String id, LineStream lineStream);
 
+    /**
+     * Each section of LineStream lines is associated to a given id. This function returns the ids supported by this
+     * parser.
+     * 
+     * @return the LineStream ids supported by this parser
+     */
+    public Collection<String> getIds();
 }
