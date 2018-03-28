@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -143,7 +144,6 @@ public class CallExpr extends Expr {
         // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
         // return Optional.empty();
         // }
-
         Optional<FunctionDecl> functionDecl = getFunctionDecl();
 
         if (!functionDecl.isPresent()) {
@@ -156,7 +156,8 @@ public class CallExpr extends Expr {
         }
 
         // Search for the declaration
-        return getApp().getFunctionDeclaration(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
+        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
+                functionDecl.get().getFunctionType()));
     }
 
     protected Optional<FunctionDecl> getFunctionDecl() {
@@ -250,19 +251,34 @@ public class CallExpr extends Expr {
         getCalleeDeclRef().setRefName(name);
     }
 
-    public FunctionType getFunctionType() {
+    public Optional<FunctionType> getFunctionType() {
+
         // First check declaration
         FunctionType typeFromDecl = getDeclaration().map(FunctionDecl::getFunctionType).orElse(null);
         if (typeFromDecl != null) {
-            return typeFromDecl;
+            return Optional.of(typeFromDecl);
         }
 
         // Check definition
         FunctionType typeFromDef = getDefinition().map(FunctionDecl::getFunctionType).orElse(null);
         if (typeFromDef != null) {
-            return typeFromDef;
+            return Optional.of(typeFromDef);
         }
 
-        throw new RuntimeException("Could not find the function type for call at " + getLocation());
+        // Could not find the function type for call
+        return Optional.empty();
+        // throw new RuntimeException("Could not find the function type for call at " + getLocation());
+    }
+
+    /**
+     * 
+     * @return true if this call is the only expression of a statement
+     */
+    public boolean isStmtCall() {
+        if (!hasParent()) {
+            return false;
+        }
+
+        return getParent() instanceof Stmt;
     }
 }
