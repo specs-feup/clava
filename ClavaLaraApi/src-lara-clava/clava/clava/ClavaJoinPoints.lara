@@ -119,5 +119,25 @@ ClavaJoinPoints.stmtLiteral = function(stmtString) {
 	return AstFactory.stmtLiteral(stmtString);
 }
 
+/**
+ * Creates a new join point 'call'. 
+ *
+ * @param {$function} $function - The literal code of the statement.
+ * @param {...$expression} arguments - The arguments of the function.
+ */
+ClavaJoinPoints.call = function($function) {
+	var callArgs = arrayFromArgs(arguments, 1);
+	return AstFactory.stmtLiteral($function, callArgs);
+}
 
+/**
+ * Creates a new join point 'switch'
+ *
+ * @param {$function} $function - The literal code of the statement.
+ * @param {...$expression} cases - An even number of expression join points, each pair representing the case value and expression, respectively.
+ */
+ClavaJoinPoints.switchStmt = function($conditionExpr) {
+	var cases = arrayFromArgs(arguments, 1);
+	return AstFactory.switchStmt($conditionExpr, cases);
+}
 
