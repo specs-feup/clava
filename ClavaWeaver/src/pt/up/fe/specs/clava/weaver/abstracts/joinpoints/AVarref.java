@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -49,6 +50,13 @@ public abstract class AVarref extends AExpression {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
     }
 
     /**
@@ -119,6 +127,32 @@ public abstract class AVarref extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFunctionCall", e);
+        }
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
         }
     }
 
@@ -321,6 +355,13 @@ public abstract class AVarref extends AExpression {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -351,6 +392,7 @@ public abstract class AVarref extends AExpression {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
+        actions.add("void setName(String)");
     }
 
     /**

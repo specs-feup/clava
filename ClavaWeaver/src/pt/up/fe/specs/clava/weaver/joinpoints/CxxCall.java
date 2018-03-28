@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -193,13 +194,18 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AExpression[] getArgListArrayImpl() {
+    public AExpression[] getArgsArrayImpl() {
         return call.getArgs()
                 .stream()
                 // .map(Expr::getCode)
                 .map(arg -> (AExpression) CxxJoinpoints.create(arg, this))
                 .collect(Collectors.toList())
                 .toArray(new AExpression[0]);
+    }
+
+    @Override
+    public AExpression[] getArgListArrayImpl() {
+        return getArgsArrayImpl();
     }
 
     @Override
@@ -276,8 +282,16 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AType getFunctionTypeImpl() {
-        return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
+    public AFunctionType getFunctionTypeImpl() {
+        return call.getFunctionType()
+                .map(type -> (AFunctionType) CxxJoinpoints.create(type, this))
+                .orElse(null);
 
+        // return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
+    }
+
+    @Override
+    public Boolean getIsStmtCallImpl() {
+        return call.isStmtCall();
     }
 }

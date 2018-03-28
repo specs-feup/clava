@@ -189,10 +189,13 @@
 		<parameter name="type" type="joinpoint" />
 	</action>
 
-
+	<action name="setNaked" class="scope" tooltip="Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)">
+		<parameter name="isNaked" type="Boolean" />
+	</action>	
+	
 
 	<!-- FUNCTON -->
-	<action name="clone" class="function">
+	<action name="clone" class="function" return="function">
 		<parameter name="newName" type="String" />
 	</action>
 
@@ -331,9 +334,20 @@
 	</action>
 	
 	
+	<!-- VARREF -->
+	<action name="setName" class="varref">
+		<parameter name="name" type="String" />
+	</action>
+	
+	
 	<!-- FUNCTION -->
 	<action name="setName" class="function">
 		<parameter name="name" type="String" />
+	</action>
+	
+	
+	<action name="call" class="function" return="call">
+		<parameter name="args" type="joinpoint[]" />
 	</action>
 	
 	
@@ -353,10 +367,7 @@
 	</action>
 	
 
-	<!-- SCOPE -->
-	<action name="setNaked" class="scope" tooltip="Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)">
-		<parameter name="isNaked" type="Boolean" />
-	</action>	
+
 	
 	
 	

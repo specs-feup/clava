@@ -1712,10 +1712,20 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "an alias for 'args'",
                   "children": [
                            {
                               "type": "expression[]",
                               "name": "argList"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "an array with the arguments of the call",
+                  "children": [
+                           {
+                              "type": "expression[]",
+                              "name": "args"
                            }]
                },
                {
@@ -1741,7 +1751,7 @@
                   "tooltip": "the function type of the call, which includes the return type and the types of the parameters",
                   "children": [
                            {
-                              "type": "type",
+                              "type": "functionType",
                               "name": "functionType"
                            }]
                },
@@ -1751,6 +1761,14 @@
                            {
                               "type": "boolean",
                               "name": "isMemberAccess"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "isStmtCall"
                            }]
                },
                {
@@ -7225,7 +7243,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "functionType",
                               "name": "functionType"
                            }]
                },
@@ -7679,7 +7697,20 @@
                   "type": "action",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "call",
+                              "name": "call"
+                           },
+                           {
+                              "type": "joinpoint[]",
+                              "name": "args",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "function",
                               "name": "clone"
                            },
                            {
@@ -11847,10 +11878,20 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "an alias for 'args'",
                   "children": [
                            {
                               "type": "expression[]",
                               "name": "argList"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "an array with the arguments of the call",
+                  "children": [
+                           {
+                              "type": "expression[]",
+                              "name": "args"
                            }]
                },
                {
@@ -11876,7 +11917,7 @@
                   "tooltip": "the function type of the call, which includes the return type and the types of the parameters",
                   "children": [
                            {
-                              "type": "type",
+                              "type": "functionType",
                               "name": "functionType"
                            }]
                },
@@ -11886,6 +11927,14 @@
                            {
                               "type": "boolean",
                               "name": "isMemberAccess"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "isStmtCall"
                            }]
                },
                {
@@ -12605,7 +12654,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "functionType",
                               "name": "functionType"
                            }]
                },
@@ -13059,7 +13108,20 @@
                   "type": "action",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "call",
+                              "name": "call"
+                           },
+                           {
+                              "type": "joinpoint[]",
+                              "name": "args",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "function",
                               "name": "clone"
                            },
                            {
@@ -23850,6 +23912,19 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",

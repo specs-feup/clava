@@ -59,7 +59,7 @@ public abstract class AFunction extends ANamedDecl {
      * Get value on attribute functionType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getFunctionTypeImpl();
+    public abstract AFunctionType getFunctionTypeImpl();
 
     /**
      * Get value on attribute functionType
@@ -70,7 +70,7 @@ public abstract class AFunction extends ANamedDecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
         	}
-        	AJoinPoint result = this.getFunctionTypeImpl();
+        	AFunctionType result = this.getFunctionTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
         	}
@@ -424,7 +424,7 @@ public abstract class AFunction extends ANamedDecl {
      * 
      * @param newName 
      */
-    public void cloneImpl(String newName) {
+    public AFunction cloneImpl(String newName) {
         throw new UnsupportedOperationException(get_class()+": Action clone not implemented ");
     }
 
@@ -432,15 +432,16 @@ public abstract class AFunction extends ANamedDecl {
      * 
      * @param newName 
      */
-    public final void clone(String newName) {
+    public final AFunction clone(String newName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName);
         	}
-        	this.cloneImpl(newName);
+        	AFunction result = this.cloneImpl(newName);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.empty(), newName);
+        		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "clone", e);
         }
@@ -577,6 +578,33 @@ public abstract class AFunction extends ANamedDecl {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    public ACall callImpl(AJoinPoint[] args) {
+        throw new UnsupportedOperationException(get_class()+": Action call not implemented ");
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    public final ACall call(AJoinPoint[] args) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "call", this, Optional.empty(), args);
+        	}
+        	ACall result = this.callImpl(args);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "call", this, Optional.ofNullable(result), args);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "call", e);
         }
     }
 
@@ -815,12 +843,13 @@ public abstract class AFunction extends ANamedDecl {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aNamedDecl.fillWithActions(actions);
-        actions.add("void clone(String)");
+        actions.add("function clone(String)");
         actions.add("String cloneOnFile(String)");
         actions.add("String cloneOnFile(String, String)");
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
         actions.add("void setName(String)");
+        actions.add("call call(joinpoint[])");
     }
 
     /**

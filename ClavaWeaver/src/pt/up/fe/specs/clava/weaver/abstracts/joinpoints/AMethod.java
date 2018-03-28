@@ -67,7 +67,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getFunctionTypeImpl() {
+    public AFunctionType getFunctionTypeImpl() {
         return this.aFunction.getFunctionTypeImpl();
     }
 
@@ -334,8 +334,8 @@ public abstract class AMethod extends AFunction {
      * @param newName 
      */
     @Override
-    public void cloneImpl(String newName) {
-        this.aFunction.cloneImpl(newName);
+    public AFunction cloneImpl(String newName) {
+        return this.aFunction.cloneImpl(newName);
     }
 
     /**
@@ -382,6 +382,15 @@ public abstract class AMethod extends AFunction {
     @Override
     public void setNameImpl(String name) {
         this.aFunction.setNameImpl(name);
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    @Override
+    public ACall callImpl(AJoinPoint[] args) {
+        return this.aFunction.callImpl(args);
     }
 
     /**

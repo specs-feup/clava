@@ -38,12 +38,15 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
+import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -95,8 +98,13 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public CxxFunctionType getFunctionTypeImpl() {
+    public AFunctionType getFunctionTypeImpl() {
         return (CxxFunctionType) CxxJoinpoints.create(function.getType(), this);
+    }
+
+    @Override
+    public ACall callImpl(AJoinPoint[] args) {
+        return AstFactory.callFromFunction(this, args);
     }
 
     @Override
@@ -172,19 +180,19 @@ public class CxxFunction extends AFunction {
 
     // TODO check if the new name clashes with other symbol?
     @Override
-    public void cloneImpl(String newName) {
+    public AFunction cloneImpl(String newName) {
 
         /* make clone and insert after the function of this join point */
-        makeCloneAndInsert(newName, function);
+        return makeCloneAndInsert(newName, function);
     }
 
-    private void makeCloneAndInsert(String newName, ClavaNode reference) {
+    private AFunction makeCloneAndInsert(String newName, ClavaNode reference) {
 
         if (function instanceof CXXMethodDecl) {
 
             SpecsLogs.msgInfo(
                     "function " + function.getDeclName() + " is a class method, which is not supported yet for clone");
-            return;
+            return null;
         }
 
         FunctionDecl newFunc = makeNewFuncDecl(newName);
@@ -203,7 +211,9 @@ public class CxxFunction extends AFunction {
         }
 
         // change the ids of stuff
-        newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
+        // newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
+
+        return CxxJoinpoints.create(newFunc, null, AFunction.class);
     }
 
     /**

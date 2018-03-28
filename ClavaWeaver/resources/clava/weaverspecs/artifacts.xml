@@ -220,14 +220,16 @@
 			tooltip="a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found"/>
 		<attribute name="definition" type="joinpoint" 
 			tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found"/>
-		<attribute name="argList" type="expression[]"/>
+		<attribute name="argList" type="expression[]" tooltip="an alias for 'args'"/>
+		<attribute name="args" type="expression[]" tooltip="an array with the arguments of the call"/>
 		<attribute name="arg" type="expression">
 			<parameter name="index" type="int" />	
 		</attribute>
 		<attribute name="returnType" type="type" tooltip="the return type of the call"/>
-		<attribute name="functionType" type="type" tooltip="the function type of the call, which includes the return type and the types of the parameters"/>
+		<attribute name="functionType" type="functionType" tooltip="the function type of the call, which includes the return type and the types of the parameters"/>
 		<attribute name="isMemberAccess" type="boolean"/>
 		<attribute name="memberAccess" type="memberAccess"/>
+		<attribute name="isStmtCall" type="boolean"/>
 	</artifact>
 	
 	<!-- MEMBER CALL -->	
@@ -247,7 +249,9 @@
 
 	<!-- VARREF -->
 	<artifact class="varref" default="name">
-		<attribute name="name" type="String" />
+		<attribute name="name" type="String">
+			<def/>
+		</attribute>
 		<attribute name="kind" type="String" />
 		<attribute name="useExpr" type="joinpoint"
 			tooltip="expression where this reference is used" />
@@ -259,7 +263,7 @@
 	<artifact class="function" default="name">
 		<!--  <attribute name="name" type="String" />  -->
 		<attribute name="hasDefinition" type="Boolean" />
-		<attribute name="functionType" type="joinpoint" />
+		<attribute name="functionType" type="functionType" />
 		<attribute name="declarationJp" type="joinpoint" />
 		<attribute name="declaration" type="String">
 			<parameter name="withReturnType" type="Boolean" />

@@ -132,6 +132,15 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute argsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AExpression[] getArgsArrayImpl() {
+        return this.aCall.getArgsArrayImpl();
+    }
+
+    /**
      * Get value on attribute arg
      * @return the attribute's value
      */
@@ -154,7 +163,7 @@ public abstract class AMemberCall extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AType getFunctionTypeImpl() {
+    public AFunctionType getFunctionTypeImpl() {
         return this.aCall.getFunctionTypeImpl();
     }
 
@@ -174,6 +183,15 @@ public abstract class AMemberCall extends ACall {
     @Override
     public AMemberAccess getMemberAccessImpl() {
         return this.aCall.getMemberAccessImpl();
+    }
+
+    /**
+     * Get value on attribute isStmtCall
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsStmtCallImpl() {
+        return this.aCall.getIsStmtCallImpl();
     }
 
     /**
@@ -522,11 +540,13 @@ public abstract class AMemberCall extends ACall {
         DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),
+        ARGS("args"),
         ARG("arg"),
         RETURNTYPE("returnType"),
         FUNCTIONTYPE("functionType"),
         ISMEMBERACCESS("isMemberAccess"),
         MEMBERACCESS("memberAccess"),
+        ISSTMTCALL("isStmtCall"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

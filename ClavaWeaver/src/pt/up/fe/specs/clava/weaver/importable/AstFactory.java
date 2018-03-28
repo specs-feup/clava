@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.importable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,7 @@ import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -47,6 +49,11 @@ import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
+import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
+import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
@@ -68,6 +75,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -221,8 +229,12 @@ public class AstFactory {
         return CxxJoinpoints.create(ClavaNodeFactory.literalExpr(code, astType), null, AExpression.class);
     }
 
-    public static ACall call(String functionName, CxxType typeJp, AJoinPoint... args) {
-        Type returnType = typeJp.getNode();
+    public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
+        return call(function.getNameImpl(), function.getFunctionTypeImpl(), args);
+    }
+
+    public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
+        Type returnType = (Type) typeJp.getNode();
 
         DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(functionName, ValueKind.L_VALUE, returnType,
                 ClavaNodeInfo.undefinedInfo());
@@ -332,4 +344,85 @@ public class AstFactory {
 
         // ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(),
     }
+
+    public static AStatement caseStmt(AExpression value, AStatement subStmt) {
+        CaseStmt caseStmt = ClavaNodeFactory.caseStmt(ClavaNodeInfo.undefinedInfo(), (Expr) value.getNode(),
+                (Stmt) subStmt.getNode());
+
+        return CxxJoinpoints.create(caseStmt, null, AStatement.class);
+    }
+
+    /**
+     * 
+     * @param value
+     * @param expr
+     * @return a list with a case statement and a break statement
+     */
+    public static List<AStatement> caseFromExpr(AExpression value, AExpression expr) {
+        // Create compound stmt
+        ExprStmt exprStmt = ClavaNodeFactory.exprStmt((Expr) expr.getNode());
+        BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
+
+        // CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),
+        // Arrays.asList(exprStmt, breakStmt));
+        InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
+                ClavaNodeInfo.undefinedInfo());
+        Stmt commentStmt = ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(), comment);
+
+        AStatement caseStmt = caseStmt(value, CxxJoinpoints.create(commentStmt, null, AStatement.class));
+
+        return Arrays.asList(caseStmt, CxxJoinpoints.create(exprStmt, null, AStatement.class),
+                CxxJoinpoints.create(breakStmt, null, AStatement.class));
+
+    }
+
+    public static AStatement switchStmt(AExpression condition, AStatement body) {
+        Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(),
+                (Stmt) body.getNode());
+
+        return CxxJoinpoints.create(switchStmt, null, AStatement.class);
+    }
+
+    public static AStatement switchStmt(AExpression condition, AExpression[] cases) {
+        if (cases.length % 2 != 0) {
+            ClavaLog.info("The number of join points for the cases must be even (expression-stmt pairs)");
+            return null;
+        }
+
+        // boolean invalidInput = Arrays.stream(cases)
+        // .filter(aCase -> !(aCase instanceof AExpression))
+        // .findFirst()
+        // .isPresent();
+
+        // if (invalidInput) {
+        // ClavaLog.info("Expected all inputs to be 'expression' join points");
+        // return null;
+        // }
+
+        List<Stmt> statements = new ArrayList<>();
+
+        for (int i = 0; i < cases.length; i += 2) {
+
+            statements.addAll(caseFromExpr(cases[i], cases[i + 1]).stream()
+                    .map(aStmt -> (Stmt) aStmt.getNode())
+                    .collect(Collectors.toList()));
+            /*
+            if (cases[i] instanceof AExpression) {
+                ClavaLog.info("Expected argument " + (i + 2) + " to be an expression join point");
+                return null;
+            }
+            
+            if (cases[i + 1] instanceof AStatement) {
+                ClavaLog.info("Expected argument " + (i + 3) + " to be a statement join point");
+                return null;
+            }
+            */
+        }
+
+        CompoundStmt body = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), statements);
+        Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(), body);
+
+        return CxxJoinpoints.create(switchStmt, null, AStatement.class);
+    }
+
 }

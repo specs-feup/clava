@@ -52,6 +52,16 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
+    public void defNameImpl(String value) {
+        refExpr.setRefName(value);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
+
+    @Override
     public String getKindImpl() {
         return refExpr.getKind().name().toLowerCase();
     }
