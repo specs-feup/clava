@@ -352,7 +352,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public void setInfo(ClavaNodeInfo info) {
-        this.info = info;
+        this.info = info != null ? info : ClavaNodeInfo.undefinedInfo();
     }
 
     public List<ClavaNode> getChildrenNormalized() {

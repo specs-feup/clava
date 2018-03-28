@@ -98,6 +98,10 @@ public class ClavaNodeInfo {
     }
     */
     public String getExtendedId() {
+        if (id == null) {
+            return null;
+        }
+
         return id.getExtendedId();
     }
 
@@ -141,6 +145,7 @@ public class ClavaNodeInfo {
 
     public Optional<String> getIdSuffix() {
         String id = getExtendedId();
+
         if (id == null) {
             return Optional.empty();
         }
