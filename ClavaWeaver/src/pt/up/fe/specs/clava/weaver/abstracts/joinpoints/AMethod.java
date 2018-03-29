@@ -389,8 +389,8 @@ public abstract class AMethod extends AFunction {
      * @param args 
      */
     @Override
-    public ACall callImpl(AJoinPoint[] args) {
-        return this.aFunction.callImpl(args);
+    public ACall newCallImpl(AJoinPoint[] args) {
+        return this.aFunction.newCallImpl(args);
     }
 
     /**

@@ -103,7 +103,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public ACall callImpl(AJoinPoint[] args) {
+    public ACall newCallImpl(AJoinPoint[] args) {
         return AstFactory.callFromFunction(this, args);
     }
 

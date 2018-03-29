@@ -585,26 +585,26 @@ public abstract class AFunction extends ANamedDecl {
      * 
      * @param args 
      */
-    public ACall callImpl(AJoinPoint[] args) {
-        throw new UnsupportedOperationException(get_class()+": Action call not implemented ");
+    public ACall newCallImpl(AJoinPoint[] args) {
+        throw new UnsupportedOperationException(get_class()+": Action newCall not implemented ");
     }
 
     /**
      * 
      * @param args 
      */
-    public final ACall call(AJoinPoint[] args) {
+    public final ACall newCall(AJoinPoint[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "call", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), args);
         	}
-        	ACall result = this.callImpl(args);
+        	ACall result = this.newCallImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "call", this, Optional.ofNullable(result), args);
+        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), args);
         	}
         	return result;
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "call", e);
+        	throw new ActionException(get_class(), "newCall", e);
         }
     }
 
@@ -849,7 +849,7 @@ public abstract class AFunction extends ANamedDecl {
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
         actions.add("void setName(String)");
-        actions.add("call call(joinpoint[])");
+        actions.add("call newCall(joinpoint[])");
     }
 
     /**

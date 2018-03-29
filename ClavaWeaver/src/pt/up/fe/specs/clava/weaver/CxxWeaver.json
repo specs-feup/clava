@@ -8349,19 +8349,6 @@
                   "type": "action",
                   "children": [
                            {
-                              "type": "call",
-                              "name": "call"
-                           },
-                           {
-                              "type": "joinpoint[]",
-                              "name": "args",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "children": [
-                           {
                               "type": "function",
                               "name": "clone"
                            },
@@ -8429,6 +8416,19 @@
                            {
                               "type": "String",
                               "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "call",
+                              "name": "newCall"
+                           },
+                           {
+                              "type": "joinpoint[]",
+                              "name": "args",
                               "defaultValue": ""
                            }]
                },
@@ -13752,19 +13752,6 @@
                   "type": "action",
                   "children": [
                            {
-                              "type": "call",
-                              "name": "call"
-                           },
-                           {
-                              "type": "joinpoint[]",
-                              "name": "args",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "children": [
-                           {
                               "type": "function",
                               "name": "clone"
                            },
@@ -13832,6 +13819,19 @@
                            {
                               "type": "String",
                               "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "call",
+                              "name": "newCall"
+                           },
+                           {
+                              "type": "joinpoint[]",
+                              "name": "args",
                               "defaultValue": ""
                            }]
                },
