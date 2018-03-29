@@ -14,9 +14,13 @@
 package pt.up.fe.specs.clang.linestreamparser;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.streamparser.SnippetParser;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -26,27 +30,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
  *
  */
 public interface LineStreamParser {
-
-    /**
-     * Tries to adapt the given stream parser key, in case it is for a node that has not been considered yet.
-     * 
-     * @param currentLine
-     * @return
-     */
-    // public Optional<String> adaptsKey(String streamParserKey);
-
-    /**
-     * 
-     * @param clavaDataClass
-     * @return the corresponding DataKey for the ClavaData of the given class
-     */
-    // public <T extends ClavaData> DataKey<Map<String, T>> getClavaDataKey(Class<T> clavaDataClass);
-
-    /**
-     * 
-     * @return available DataStore keys for this parser
-     */
-    // public Collection<DataKey<?>> getKeys();
 
     /**
      * Builds a DataStore with the current parsed values.
@@ -71,4 +54,12 @@ public interface LineStreamParser {
      * @return the LineStream ids supported by this parser
      */
     public Collection<String> getIds();
+
+    static LineStreamParser newInstance(DataKey<?> key, SnippetParser<?, ?> parser) {
+
+        Map<DataKey<?>, SnippetParser<?, ?>> parsers = new HashMap<>();
+        parsers.put(key, parser);
+
+        return new GenericLineStreamParser(parsers);
+    }
 }
