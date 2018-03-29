@@ -179,6 +179,7 @@ import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
@@ -430,6 +431,10 @@ public class ClavaParser implements AutoCloseable {
 
         // Sets app to all type nodes
         nodeTypes.values().stream().forEach(type -> type.setApp(app));
+        app.getDescendantsStream()
+                .filter(node -> node instanceof Typable)
+                .map(node -> (Typable) node)
+                .forEach(typable -> typable.getType().setApp(app));
 
         SpecsLogs.msgInfo("--- AST parsing report ---");
         checkUndefinedNodes(app);
