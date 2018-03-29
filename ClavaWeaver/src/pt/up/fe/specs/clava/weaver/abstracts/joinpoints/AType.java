@@ -146,31 +146,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute elementType
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getElementTypeImpl();
-
-    /**
-     * Get value on attribute elementType
-     * @return the attribute's value
-     */
-    public final Object getElementType() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "elementType", Optional.empty());
-        	}
-        	AJoinPoint result = this.getElementTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "elementType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "elementType", e);
-        }
-    }
-
-    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -498,7 +473,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("isArray");
         attributes.add("isPointer");
         attributes.add("arraySize");
-        attributes.add("elementType");
         attributes.add("hasTemplateArgs");
         attributes.add("templateArgsStrings");
         attributes.add("templateArgsTypes");
@@ -544,7 +518,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
-        ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGSSTRINGS("templateArgsStrings"),
         TEMPLATEARGSTYPES("templateArgsTypes"),

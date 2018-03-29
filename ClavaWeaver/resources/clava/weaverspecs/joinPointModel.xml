@@ -226,10 +226,19 @@
 	<!-- COMMENT -->
 	<joinpoint class="comment"/>
 
-	<!--  TYPE -->
+	<!-- TYPE -->
 	<joinpoint class="type">
 	</joinpoint>
 
+		
+	<!--  POINTER TYPE -->
+	<joinpoint class="pointerType" extends="type">
+	</joinpoint>
+	
+	<!--  ARRAY TYPE -->
+	<joinpoint class="arrayType" extends="type">
+	</joinpoint>
+			
 		
 	<!--  ENUM TYPE -->
 	<joinpoint class="enumType" extends="type">

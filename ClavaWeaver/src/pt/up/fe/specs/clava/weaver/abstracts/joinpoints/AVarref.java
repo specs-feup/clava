@@ -131,6 +131,31 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    public abstract AVardecl getDeclarationImpl();
+
+    /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    public final Object getDeclaration() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
+        	}
+        	AVardecl result = this.getDeclarationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "declaration", e);
+        }
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -376,6 +401,7 @@ public abstract class AVarref extends AExpression {
         attributes.add("kind");
         attributes.add("useExpr");
         attributes.add("isFunctionCall");
+        attributes.add("declaration");
     }
 
     /**
@@ -424,6 +450,7 @@ public abstract class AVarref extends AExpression {
         KIND("kind"),
         USEEXPR("useExpr"),
         ISFUNCTIONCALL("isFunctionCall"),
+        DECLARATION("declaration"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

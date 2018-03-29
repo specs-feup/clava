@@ -311,30 +311,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Clears the contents of this scope (untested)
-     */
-    public void clearImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action clear not implemented ");
-    }
-
-    /**
-     * Clears the contents of this scope (untested)
-     */
-    public final void clear() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "clear", this, Optional.empty());
-        	}
-        	this.clearImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clear", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "clear", e);
-        }
-    }
-
-    /**
      * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
      * @param isNaked 
      */
@@ -357,6 +333,30 @@ public abstract class AScope extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setNaked", e);
+        }
+    }
+
+    /**
+     * Clears the contents of this scope (untested)
+     */
+    public void clearImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action clear not implemented ");
+    }
+
+    /**
+     * Clears the contents of this scope (untested)
+     */
+    public final void clear() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "clear", this, Optional.empty());
+        	}
+        	this.clearImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "clear", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "clear", e);
         }
     }
 
@@ -730,8 +730,8 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint insertEnd(string)");
         actions.add("joinpoint addLocal(String, joinpoint, String)");
         actions.add("joinpoint addLocal(String, joinpoint)");
-        actions.add("void clear()");
         actions.add("void setNaked(Boolean)");
+        actions.add("void clear()");
     }
 
     /**

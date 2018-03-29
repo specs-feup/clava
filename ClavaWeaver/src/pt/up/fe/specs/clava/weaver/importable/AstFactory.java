@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -363,15 +362,16 @@ public class AstFactory {
         ExprStmt exprStmt = ClavaNodeFactory.exprStmt((Expr) expr.getNode());
         BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
 
-        // CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),
-        // Arrays.asList(exprStmt, breakStmt));
-        InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
-                ClavaNodeInfo.undefinedInfo());
-        Stmt commentStmt = ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(), comment);
+        CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),
+                Arrays.asList(exprStmt));
+        compoundStmt.setNaked(true);
+        // InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
+        // ClavaNodeInfo.undefinedInfo());
+        // Stmt commentStmt = ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(), comment);
 
-        AStatement caseStmt = caseStmt(value, CxxJoinpoints.create(commentStmt, null, AStatement.class));
+        AStatement caseStmt = caseStmt(value, CxxJoinpoints.create(compoundStmt, null, AStatement.class));
 
-        return Arrays.asList(caseStmt, CxxJoinpoints.create(exprStmt, null, AStatement.class),
+        return Arrays.asList(caseStmt,
                 CxxJoinpoints.create(breakStmt, null, AStatement.class));
 
     }

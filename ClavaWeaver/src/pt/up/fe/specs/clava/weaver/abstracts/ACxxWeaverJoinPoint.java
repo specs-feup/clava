@@ -28,9 +28,9 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
@@ -274,13 +274,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public void defTypeImpl(AJoinPoint type) {
         // Check if joinpoint is a type
-        if (!(type instanceof CxxType)) {
+        if (!(type instanceof AType)) {
             SpecsLogs.msgInfo(
                     "[setType] Passed a joinpoint that is not a Type ('" + type.getJoinpointType() + "'), ignoring");
             return;
         }
 
-        CxxType cxxType = (CxxType) type;
+        AType cxxType = (AType) type;
 
         // Check if node has a type
         ClavaNode node = getNode();
@@ -291,7 +291,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return;
         }
 
-        ((Typable) node).setType(cxxType.getNode());
+        ((Typable) node).setType((Type) cxxType.getNode());
 
     }
 

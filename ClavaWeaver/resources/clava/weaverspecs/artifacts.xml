@@ -257,6 +257,7 @@
 			tooltip="expression where this reference is used" />
 		<attribute name="isFunctionCall" type="Boolean" 
 			tooltip="true if this varref represents a function call" />
+		<attribute name="declaration" type="vardecl" />
 	</artifact>
 
 	<!-- FUNCTION -->
@@ -381,7 +382,7 @@
 		<attribute name="isArray" type="Boolean" />
 		<attribute name="isPointer" type="Boolean" />
 		<attribute name="arraySize" type="Integer" />
-		<attribute name="elementType" type="joinpoint" />
+		<!-- <attribute name="elementType" type="joinpoint" />  -->
 		<attribute name="hasTemplateArgs" type="Boolean" />
 		<attribute name="templateArgsStrings" type="String[]" />
 		<attribute name="templateArgsTypes" type="type[]">
@@ -397,7 +398,18 @@
 
 
 
-	<!-- ENUMTYPE -->
+	<!-- POINTER TYPE -->
+	<artifact class="pointerType">
+		<attribute name="pointee" type="type" />
+	</artifact>
+	
+	
+	<!-- ARRAY TYPE -->
+	<artifact class="arrayType">
+		<attribute name="elementType" type="type" />
+	</artifact>
+
+	<!-- ENUM TYPE -->
 	<artifact class="enumType">
 		<attribute name="integerType" type="joinpoint" />
 	</artifact>
@@ -413,7 +425,9 @@
 
 	<!-- FUNCTION TYPE -->
 	<artifact class="functionType">
-		<attribute name="returnType" type="joinpoint" />
+		<attribute name="returnType" type="joinpoint">
+			<def/>
+		</attribute>
 		<attribute name="paramTypes" type="joinpoint[]" />
 	</artifact>
 

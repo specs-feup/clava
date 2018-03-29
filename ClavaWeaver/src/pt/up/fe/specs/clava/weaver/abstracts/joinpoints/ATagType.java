@@ -97,15 +97,6 @@ public abstract class ATagType extends AType {
     }
 
     /**
-     * Get value on attribute elementType
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getElementTypeImpl() {
-        return this.aType.getElementTypeImpl();
-    }
-
-    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -421,7 +412,6 @@ public abstract class ATagType extends AType {
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
-        ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGSSTRINGS("templateArgsStrings"),
         TEMPLATEARGSTYPES("templateArgsTypes"),

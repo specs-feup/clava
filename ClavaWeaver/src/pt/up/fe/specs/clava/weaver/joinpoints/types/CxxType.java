@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
@@ -63,14 +62,16 @@ public class CxxType extends AType {
         return ((ConstantArrayType) type).getConstant();
     }
 
+    /*
     @Override
     public AJoinPoint getElementTypeImpl() {
         if (type instanceof ArrayType) {
             return CxxJoinpoints.create(((ArrayType) type).getElementType(), this);
         }
-
+    
         return this;
     }
+    */
 
     @Override
     public Boolean getHasTemplateArgsImpl() {

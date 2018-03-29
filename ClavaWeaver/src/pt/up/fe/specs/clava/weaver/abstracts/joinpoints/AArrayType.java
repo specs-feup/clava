@@ -3,8 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
-import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -12,112 +10,44 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AFunctionType
+ * Auto-Generated class for join point AArrayType
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AFunctionType extends AType {
+public abstract class AArrayType extends AType {
 
     protected AType aType;
 
     /**
      * 
      */
-    public AFunctionType(AType aType){
+    public AArrayType(AType aType){
         this.aType = aType;
     }
     /**
-     * Get value on attribute returnType
+     * Get value on attribute elementType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getReturnTypeImpl();
+    public abstract AType getElementTypeImpl();
 
     /**
-     * Get value on attribute returnType
+     * Get value on attribute elementType
      * @return the attribute's value
      */
-    public final Object getReturnType() {
+    public final Object getElementType() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "elementType", Optional.empty());
         	}
-        	AJoinPoint result = this.getReturnTypeImpl();
+        	AType result = this.getElementTypeImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "elementType", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "returnType", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defReturnTypeImpl(AJoinPoint value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AJoinPoint not implemented ");
-    }
-
-    /**
-     * Get value on attribute paramTypes
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint[] getParamTypesArrayImpl();
-
-    /**
-     * Get value on attribute paramTypes
-     * @return the attribute's value
-     */
-    public Bindings getParamTypesImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getParamTypesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute paramTypes
-     * @return the attribute's value
-     */
-    public final Object getParamTypes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "paramTypes", Optional.empty());
-        	}
-        	Bindings result = this.getParamTypesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "paramTypes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "paramTypes", e);
-        }
-    }
-
-    /**
-     * Sets the return type of the FunctionType
-     * @param newType 
-     */
-    public void setReturnTypeImpl(AType newType) {
-        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
-    }
-
-    /**
-     * Sets the return type of the FunctionType
-     * @param newType 
-     */
-    public final void setReturnType(AType newType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), newType);
-        	}
-        	this.setReturnTypeImpl(newType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), newType);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setReturnType", e);
+        	throw new AttributeException(get_class(), "elementType", e);
         }
     }
 
@@ -415,13 +345,6 @@ public abstract class AFunctionType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "returnType": {
-        	if(value instanceof AJoinPoint){
-        		this.defReturnTypeImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
@@ -439,8 +362,7 @@ public abstract class AFunctionType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("returnType");
-        attributes.add("paramTypes");
+        attributes.add("elementType");
     }
 
     /**
@@ -457,7 +379,6 @@ public abstract class AFunctionType extends AType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
-        actions.add("void setReturnType(type)");
     }
 
     /**
@@ -466,7 +387,7 @@ public abstract class AFunctionType extends AType {
      */
     @Override
     public final String get_class() {
-        return "functionType";
+        return "arrayType";
     }
 
     /**
@@ -484,9 +405,8 @@ public abstract class AFunctionType extends AType {
     /**
      * 
      */
-    protected enum FunctionTypeAttributes {
-        RETURNTYPE("returnType"),
-        PARAMTYPES("paramTypes"),
+    protected enum ArrayTypeAttributes {
+        ELEMENTTYPE("elementType"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
@@ -537,13 +457,13 @@ public abstract class AFunctionType extends AType {
         /**
          * 
          */
-        private FunctionTypeAttributes(String name){
+        private ArrayTypeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<FunctionTypeAttributes> fromString(String name) {
+        public static Optional<ArrayTypeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -551,7 +471,7 @@ public abstract class AFunctionType extends AType {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(FunctionTypeAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(ArrayTypeAttributes::name).collect(Collectors.toList());
         }
 
         /**

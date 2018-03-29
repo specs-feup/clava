@@ -58,9 +58,14 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public void setReturnTypeImpl(AType newType) {
-        Type newClavaType = (Type) newType.getNode();
+    public void defReturnTypeImpl(AJoinPoint value) {
+        Type newClavaType = (Type) value.getNode();
         CxxActions.replace(type.getReturnType(), newClavaType, getWeaverEngine());
+    }
+
+    @Override
+    public void setReturnTypeImpl(AType newType) {
+        defReturnTypeImpl(newType);
     }
 
 }

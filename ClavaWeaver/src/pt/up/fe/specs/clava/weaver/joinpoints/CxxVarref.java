@@ -72,7 +72,7 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
 
         Optional<DeclaratorDecl> varDecl = refExpr.getVariableDeclaration();
 
@@ -80,7 +80,7 @@ public class CxxVarref extends AVarref {
             return null;
         }
 
-        return CxxJoinpoints.create(varDecl.get(), null);
+        return CxxJoinpoints.create(varDecl.get(), null, AVardecl.class);
     }
 
     @Override
@@ -93,4 +93,8 @@ public class CxxVarref extends AVarref {
         return refExpr.isFunctionCall();
     }
 
+    @Override
+    public AVardecl getDeclarationImpl() {
+        return getVardeclImpl();
+    }
 }
