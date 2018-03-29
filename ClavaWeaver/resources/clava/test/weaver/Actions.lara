@@ -16,7 +16,7 @@ aspectdef Actions
 	apply 
 		println($file.code);
 	end
-	
+	/*
 	select function.decl end
 	apply
 		println("BEFORE:" + $decl.type.code);
@@ -27,7 +27,7 @@ aspectdef Actions
 	apply 
 		println($file.code);
 	end
-	
+	*/
 	
 	/*
 	var aStmt = undefined;
