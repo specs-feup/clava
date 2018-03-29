@@ -10,4 +10,5 @@ cmake_minimum_required(VERSION 3.2)
 #set(SYSTEM_PLATFORM "Centos")
 #set(SYSTEM_PLATFORM "MacOS")
 
-set(DEPS_COMPILER "gcc5")
+# DEPS_COMPILER: Manually set the compiler
+#set(DEPS_COMPILER "gcc5")
