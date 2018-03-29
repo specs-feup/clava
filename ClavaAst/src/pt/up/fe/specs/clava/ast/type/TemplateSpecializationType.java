@@ -88,12 +88,6 @@ public class TemplateSpecializationType extends Type {
         return getTemplateArguments(TemplateArgumentType.class).stream()
                 .map(TemplateArgumentType::getType)
                 .collect(Collectors.toList());
-        // if (templateArgumentTypes == null) {
-        // SpecsLogs.msgWarn("Template argument types not set yet for type '" + getInfo().getExtendedId() + "'!");
-        // return Collections.emptyList();
-        // }
-        // // System.out.println("TEMPLATE ARG TYPES " + getInfo().getExtendedId() + ": GET (NOT NULL)");
-        // return templateArgumentTypes;
     }
 
     // @Override

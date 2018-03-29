@@ -32,12 +32,16 @@ public class TemplateArgumentType extends TemplateArgument {
         super(nodeInfo, Collections.emptyList());
 
         this.stringType = type;
-        type = null;
+        this.type = null;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TemplateArgumentType(stringType, getInfo());
+        TemplateArgumentType argType = new TemplateArgumentType(stringType, getInfo());
+        if (type != null) {
+            argType.setType(type.copy(), false);
+        }
+        return argType;
     }
 
     public List<String> getTypeString() {
