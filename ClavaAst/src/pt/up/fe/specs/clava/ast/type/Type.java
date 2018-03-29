@@ -34,12 +34,14 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 public abstract class Type extends ClavaNode {
 
     private TypeData data;
+    // private Supplier<App> app;
     private App app;
 
     public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
         this.data = data;
+        // app = () -> null;
         app = null;
     }
 
@@ -48,8 +50,13 @@ public abstract class Type extends ClavaNode {
     }
 
     public void setApp(App app) {
+        // setApp(() -> app);
         this.app = app;
     }
+
+    // public void setApp(Supplier<App> app) {
+    // this.app = app;
+    // }
 
     @Override
     public Type copy() {
@@ -275,6 +282,11 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public App getApp() {
+        // App appNode = app.get();
+        // if (appNode != null) {
+        // return appNode;
+        // }
+
         // If app not null, return it
         if (app != null) {
             return app;

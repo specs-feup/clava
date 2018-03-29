@@ -54,7 +54,9 @@ public abstract class NamedDecl extends Decl implements Typable {
         // this.declName = declName == null ? "" : declName;
         this.declName = declName != null && declName.isEmpty() ? null : declName;
         // this.declName = declName;
-        this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type;
+        // Types should be unique
+        this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type.copy();
+        // this.type.setApp(type.getApp());
     }
 
     /*
