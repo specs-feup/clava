@@ -33,7 +33,6 @@ import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsStrings;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
@@ -45,11 +44,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     // private final Location location;
     private ClavaNodeInfo info;
 
+    private ClavaData data;
+
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
         super(children);
 
         info = nodeInfo != null ? nodeInfo : ClavaNodeInfo.undefinedInfo();
         inlineComments = null;
+        data = null;
     }
 
     // private ClavaNode(ClavaId id, Location location, Collection<? extends ClavaNode> children) {
@@ -384,6 +386,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public ClavaData getData() {
-        throw new NotImplementedException(this);
+        return data;
+    }
+
+    public void setData(ClavaData data) {
+        this.data = data;
     }
 }

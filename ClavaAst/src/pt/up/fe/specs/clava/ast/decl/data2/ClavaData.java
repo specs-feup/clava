@@ -13,9 +13,28 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
+import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class ClavaData {
+
+    private final String id;
+    private final SourceRange location;
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public ClavaData() {
+        id = null;
+        location = null;
+        SpecsLogs.msgWarn("Method is deprecated, use constructor that receives id and location");
+    }
+
+    public ClavaData(String id, SourceRange location) {
+        this.id = id;
+        this.location = location;
+    }
 
     protected String toString(String superToString, String thisToString) {
 
@@ -26,7 +45,7 @@ public abstract class ClavaData {
     }
 
     public String getId() {
-        throw new NotImplementedException(this);
+        return id;
     }
 
     /**
