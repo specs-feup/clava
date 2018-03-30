@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.decl.data2;
 
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class ClavaData {
 
@@ -28,7 +27,7 @@ public abstract class ClavaData {
     public ClavaData() {
         id = null;
         location = null;
-        SpecsLogs.msgWarn("Method is deprecated, use constructor that receives id and location");
+        // SpecsLogs.msgWarn("Method is deprecated, use constructor that receives id and location");
     }
 
     public ClavaData(String id, SourceRange location) {
