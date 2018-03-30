@@ -860,6 +860,11 @@ public class CxxWeaver extends ACxxWeaver {
             rebuildOptions.add("\"-I" + includeFolder.getAbsolutePath() + "\"");
         }
 
+        // Add extra includes
+        for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
+            rebuildOptions.add("\"-I" + extraInclude.getAbsolutePath() + "\"");
+        }
+
         App rebuiltApp = createApp(srcFolders, rebuildOptions);
 
         // System.out.println("TUs:"
