@@ -13,10 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
+import pt.up.fe.specs.clava.SourceRange;
+
 public class DeclDataV2 extends ClavaData {
 
     public static DeclDataV2 empty() {
-        return new DeclDataV2(false, false, false, false);
+        return new DeclDataV2(null, SourceRange.invalidRange(), false, false, false, false);
     }
 
     private final boolean isImplicit;
@@ -24,7 +26,9 @@ public class DeclDataV2 extends ClavaData {
     private final boolean isReferenced;
     private final boolean isInvalidDecl;
 
-    public DeclDataV2(boolean isImplicit, boolean isUsed, boolean isReferenced, boolean isInvalidDecl) {
+    public DeclDataV2(String id, SourceRange location, boolean isImplicit, boolean isUsed, boolean isReferenced,
+            boolean isInvalidDecl) {
+        super(id, location);
         this.isImplicit = isImplicit;
         this.isUsed = isUsed;
         this.isReferenced = isReferenced;
@@ -32,7 +36,7 @@ public class DeclDataV2 extends ClavaData {
     }
 
     public DeclDataV2(DeclDataV2 data) {
-        this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl);
+        this(data.getId(), data.getLocation(), data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl);
     }
 
     @Override
@@ -58,7 +62,6 @@ public class DeclDataV2 extends ClavaData {
 
     @Override
     public String toString() {
-        // DeclData is top-level
 
         StringBuilder builder = new StringBuilder();
 
@@ -67,6 +70,6 @@ public class DeclDataV2 extends ClavaData {
         builder.append(", is referenced: " + isReferenced);
         builder.append(", is invalid decl: " + isInvalidDecl);
 
-        return toString("", builder.toString());
+        return toString(super.toString(), builder.toString());
     }
 }

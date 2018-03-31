@@ -23,13 +23,18 @@ public abstract class ClavaData {
     /**
      * @deprecated
      */
-    @Deprecated
-    public ClavaData() {
-        id = null;
-        location = null;
-        // SpecsLogs.msgWarn("Method is deprecated, use constructor that receives id and location");
-    }
+    // @Deprecated
+    // public ClavaData() {
+    // id = null;
+    // location = null;
+    // // SpecsLogs.msgWarn("Method is deprecated, use constructor that receives id and location");
+    // }
 
+    /**
+     * 
+     * @param id
+     * @param location
+     */
     public ClavaData(String id, SourceRange location) {
         this.id = id;
         this.location = location;
@@ -45,6 +50,22 @@ public abstract class ClavaData {
 
     public String getId() {
         return id;
+    }
+
+    public SourceRange getLocation() {
+        return location;
+    }
+
+    @Override
+    public String toString() {
+        // ClavaData is top-level
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("id: " + id);
+        builder.append(", location: " + location.isValid());
+
+        return toString("", builder.toString());
     }
 
     /**
