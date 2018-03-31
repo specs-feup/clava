@@ -44,6 +44,8 @@ void ClangAstDumper::VisitStmt(const Stmt *Node) {
 
 //    llvm::errs() << "DUMPING STMT: " << getId(Node) << "\n";
 
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT, Node);
 
     for (const Stmt *SubStmt : Node->children()) {
         if (SubStmt) {
