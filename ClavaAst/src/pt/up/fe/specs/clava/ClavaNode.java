@@ -71,6 +71,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public String toContentString() {
+        return getData().toString();
+        /*
         if (getId().isPresent()) {
             // return "(0x" + Long.toHexString(getId().get().getId()) + ") ";
             // String location = getLocation().isValid() ? getLocation().toString() + " " : "";
@@ -78,6 +80,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return location + "(" + getId().get().getId() + ") ";
         }
         return "";
+        */
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
