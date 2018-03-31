@@ -40,7 +40,9 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
 }
 
 void ClangAstDumper::VisitStmt(const Stmt *Node) {
-    dumpStmt(Node);
+    if(dumpStmt(Node)) {
+        return;
+    }
 
 //    llvm::errs() << "DUMPING STMT: " << getId(Node) << "\n";
 
