@@ -41,7 +41,7 @@ set(SOURCE_FILES
         ClavaDataDumper.cpp
         ClavaDataDumperDecls.cpp
     ChildrenVisitorDecls.cpp 
-    ClangNodes.cpp ClavaDataDumperStmts.cpp ClavaDataDumperTypes.cpp)
+    ClangNodes.cpp ClavaDataDumperStmts.cpp ClavaDataDumperTypes.cpp ClangAstDumperExprs.cpp)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
 
