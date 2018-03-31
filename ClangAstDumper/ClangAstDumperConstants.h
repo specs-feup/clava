@@ -58,5 +58,6 @@ static const std::string VISITED_CHILDREN = "<Visited Children>";
 
 static const std::string ID_TO_CLASS_MAP = "<Id to Class Map>";
 
+static const std::string TOP_LEVEL_NODES = "<Top Level Nodes>";
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

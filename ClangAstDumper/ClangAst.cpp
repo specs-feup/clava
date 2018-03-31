@@ -5,6 +5,8 @@
 // Based on public domain code by Eli Bendersky (eliben@gmail.com) - http://eli.thegreenplace.net/
 //------------------------------------------------------------------------------
 #include "ClangAst.h"
+#include "ClangAstDumperConstants.h"
+#include "ClangNodes.h"
 
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
@@ -39,6 +41,10 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
     FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
     if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
         (*D).dump(llvm::outs());
+
+        // Top-level Node
+        llvm::errs() << TOP_LEVEL_NODES << "\n";
+        llvm::errs() << D << "_" << id << "\n";
     }
 
     return false;
