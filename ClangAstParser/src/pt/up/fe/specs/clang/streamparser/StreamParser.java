@@ -36,6 +36,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
+import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;

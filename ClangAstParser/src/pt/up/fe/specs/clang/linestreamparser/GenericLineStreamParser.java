@@ -21,7 +21,6 @@ import java.util.Map.Entry;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.streamparser.SnippetParser;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**

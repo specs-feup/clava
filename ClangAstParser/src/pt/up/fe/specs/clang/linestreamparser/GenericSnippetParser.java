@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.streamparser;
+package pt.up.fe.specs.clang.linestreamparser;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
