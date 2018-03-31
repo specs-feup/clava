@@ -3,6 +3,7 @@
 //
 
 #include "ClangAstDumper.h"
+#include "ClangNodes.h"
 
 #include <string>
 
@@ -30,10 +31,19 @@ std::vector<std::string> ClangAstDumper::VisitFunctionDeclChildren(const Functio
     std::vector<std::string> children;
 
     // Visit parameters
-    for (FunctionDecl::param_const_iterator I = D->param_begin(), E = D->param_end(); I != E; ++I) {
+    for(auto param : D->parameters()) {
+        VisitDeclTop(param);
+        children.push_back(getId(param));
+    }
+    /*
+    for (auto I = D->param_begin(), E = D->param_end(); I != E; ++I) {
+        llvm::errs() << "PARAM: " <<  getId(I) << "\n";
+        llvm::errs() << "PARAM CLASS: " <<  clava::getClassName(I) << "\n";
+
         VisitDeclTop(*I);
         children.push_back(getId(I));
     }
+     */
 
     // Visit decls in prototype scope
     for (ArrayRef<NamedDecl *>::iterator I = D->getDeclsInPrototypeScope().begin(),
@@ -45,6 +55,7 @@ std::vector<std::string> ClangAstDumper::VisitFunctionDeclChildren(const Functio
     // Visit body
     //if(D->hasBody()) {
     if (D->doesThisDeclarationHaveABody()) {
+        //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
         VisitStmtTop(D->getBody());
         children.push_back(getId(D->getBody()));
     }
