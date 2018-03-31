@@ -102,7 +102,7 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
 
 //    llvm::errs() << DECL_INFO << "\n";
 //    llvm::errs() << getId(D) << "\n";
-//    DumpDeclInfo(D);
+//    DumpDeclData(D);
 }
 
 void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
@@ -117,7 +117,7 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     VisitVarDeclChildren(D);
 
     // Old
-    //DumpVarDeclInfo(D);
+    //DumpVarDeclData(D);
 }
 
 
@@ -431,7 +431,7 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     VisitParmVarDeclChildren(D);
 
     // Old
-    //DumpVarDeclInfo(D);
+    //DumpVarDeclData(D);
 
     if(D->hasInheritedDefaultArg()) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";

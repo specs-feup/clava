@@ -112,6 +112,8 @@ public:
     void log(const Stmt* S);
     void log(const Type* T);
 
+
+
     // Private functions
 private:
 
@@ -130,6 +132,7 @@ private:
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
 
+    void dumpSourceRange(std::string id, SourceLocation startLoc, SourceLocation endLoc);
 
     // These methods return true if the node had been already visited
 
@@ -138,7 +141,6 @@ private:
     bool dumpStmt(const Stmt* stmtAddr);
     bool dumpDecl(const Decl* declAddr);
 
-    void dumpSourceRange(std::string id, SourceLocation startLoc, SourceLocation endLoc);
 
     /* EXTRA */
     void dumpCXXCtorInitializer(const CXXCtorInitializer *Init);

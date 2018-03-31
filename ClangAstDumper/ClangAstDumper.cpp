@@ -19,7 +19,7 @@
 
 using namespace clang;
 
-ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id), dataDumper(id)  {};
+ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id), dataDumper(Context, id)  {};
 
 
 void ClangAstDumper::VisitTypeTop(const QualType& T) {

@@ -3,11 +3,21 @@
 // Created by JoaoBispo on 18/03/2018.
 //
 
-#ifndef CLANGASTDUMPER_NODEDUMPER_H
-#define CLANGASTDUMPER_NODEDUMPER_H
+#ifndef CLANGASTDUMPER_CLAVADATADUMPER_H
+#define CLANGASTDUMPER_CLAVADATADUMPER_H
 
+#include "clang/AST/AST.h"
 #include "clang/AST/Decl.h"
-#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+
+/*
+#include "clang/AST/TypeVisitor.h"
+#include "clang/AST/StmtVisitor.h"
+#include "clang/AST/DeclVisitor.h"
+*/
+///#include "clang/AST/Decl.h"
+//#include "clang/AST/DeclCXX.h"
 
 #include <string>
 
@@ -23,20 +33,23 @@ namespace clava {
     /**
     * Dumps information about each node
     */
-    class ClavaDataDumper {
+    class ClavaDataDumper  {
 
     private:
         //ClangAstDumper dumper;
+        ASTContext *Context;
         int id;
 
     public:
         // Constructor
-        explicit ClavaDataDumper(int id);
+        explicit ClavaDataDumper(ASTContext *Context, int id);
 
         // Utility methods
         std::string getId(const void* addr);
 
         void dump(clava::DeclNode declNode, const Decl* D);
+        void dump(clava::StmtNode stmtNode, const Stmt* S);
+        void dump(clava::TypeNode typeNode, const Type* T);
 
         //void DumpHeader(const Decl* D);
         //void DumpHeader(const Stmt* S);
@@ -60,16 +73,26 @@ namespace clava {
         void dump(int integer);
         void dump(std::string string);
 
-
         // DECLS
 
-        void DumpDeclInfo(const Decl *D);
-        void DumpNamedDeclInfo(const NamedDecl *D); // Not being called yet in ClangAstDumper
-        void DumpFunctionDeclInfo(const FunctionDecl *D);
-        void DumpCXXMethodDeclInfo(const CXXMethodDecl *D);
-        void DumpVarDeclInfo(const VarDecl *D);
-        void DumpParmVarDeclInfo(const ParmVarDecl *D);
+        void DumpDeclData(const Decl *D);
+        void DumpNamedDeclData(const NamedDecl *D); // Not being called yet in ClangAstDumper
+        void DumpFunctionDeclData(const FunctionDecl *D);
+        void DumpCXXMethodDeclData(const CXXMethodDecl *D);
+        void DumpVarDeclData(const VarDecl *D);
+        void DumpParmVarDeclData(const ParmVarDecl *D);
 
+
+        // STMTS
+        void DumpStmtData(const Stmt *S);
+
+
+        // EXPRS
+        void DumpExprData(const Expr *E);
+
+
+        // TYPES
+        void DumpTypeData(const Type *T);
     };
 
 
@@ -87,6 +110,32 @@ namespace clava {
             {DeclNode::PARM_VAR_DECL, "<ParmVarDeclData>"}
     };
 
+
+    /**
+    * Names of StmtData dumpers. In Clang Expr is a subclass of Stmt, but in Clava they are different classes.
+    */
+    static std::map<StmtNode,std::string>  STMT_DATA_NAMES = {
+            // Stmts
+            {StmtNode::STMT, "<StmtData>"},
+
+            // Exprs
+            {StmtNode::EXPR, "<ExprData>"}
+    };
+
+    /**
+    * Names of ExprData dumpers. In Clang Expr is a subclass of Stmt, but in Clava they are different classes.
+    */
+/*
+    static std::map<ExprNode,std::string>  EXPR_DATA_NAMES = {
+
+    };
+*/
+    /**
+    * Names of StmtData dumpers
+    */
+    static std::map<TypeNode,std::string>  TYPE_DATA_NAMES = {
+            {TypeNode::TYPE, "<TypeData>"}
+    };
 }
 
-#endif //CLANGASTDUMPER_NODEDUMPER_H
+#endif //CLANGASTDUMPER_CLAVADATADUMPER_H

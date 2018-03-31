@@ -3,34 +3,38 @@
 //
 
 #include "ClavaDataDumper.h"
+#include "ClangNodes.h"
 
 void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
     DumpHeader(clava::DECL_DATA_NAMES[declNode], D);
 
     switch(declNode) {
-        case clava::DeclNode::DECL: DumpDeclInfo(D); break;
-        case clava::DeclNode::NAMED_DECL: DumpNamedDeclInfo(static_cast<const NamedDecl*>(D)); break;
-        case clava::DeclNode::FUNCTION_DECL: DumpFunctionDeclInfo(static_cast<const FunctionDecl*>(D)); break;
-        case clava::DeclNode::CXX_METHOD_DECL: DumpCXXMethodDeclInfo(static_cast<const CXXMethodDecl*>(D)); break;
-        case clava::DeclNode::VAR_DECL: DumpVarDeclInfo(static_cast<const VarDecl*>(D)); break;
-        case clava::DeclNode::PARM_VAR_DECL: DumpParmVarDeclInfo(static_cast<const ParmVarDecl*>(D)); break;
+        case clava::DeclNode::DECL:
+            DumpDeclData(D); break;
+        case clava::DeclNode::NAMED_DECL:
+            DumpNamedDeclData(static_cast<const NamedDecl *>(D)); break;
+        case clava::DeclNode::FUNCTION_DECL:
+            DumpFunctionDeclData(static_cast<const FunctionDecl *>(D)); break;
+        case clava::DeclNode::CXX_METHOD_DECL:
+            DumpCXXMethodDeclData(static_cast<const CXXMethodDecl *>(D)); break;
+        case clava::DeclNode::VAR_DECL:
+            DumpVarDeclData(static_cast<const VarDecl *>(D)); break;
+        case clava::DeclNode::PARM_VAR_DECL:
+            DumpParmVarDeclData(static_cast<const ParmVarDecl *>(D)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump: Case not implemented, '"+clava::DECL_DATA_NAMES[declNode]+"'");
     }
 }
 
 
 
-void clava::ClavaDataDumper::DumpDeclInfo(const Decl *D) {
+void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
+    clava::dumpSourceRange(Context, D->getLocStart(), D->getLocEnd());
 
     // Print information about Decl
     dump(D->isImplicit());
     dump(D->isUsed());
     dump(D->isReferenced());
     dump(D->isInvalidDecl());
-    //llvm::errs() << D->isImplicit() << "\n";
-    //llvm::errs() << D->isUsed() << "\n";
-    //llvm::errs() << D->isReferenced() << "\n";
-    //llvm::errs() << D->isInvalidDecl() << "\n";
 
     // TODO: Attributes?
 //    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E; ++I)
@@ -38,9 +42,9 @@ void clava::ClavaDataDumper::DumpDeclInfo(const Decl *D) {
 
 }
 
-void clava::ClavaDataDumper::DumpNamedDeclInfo(const NamedDecl *D) {
+void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
     // Hierarchy
-    DumpDeclInfo(D);
+    DumpDeclData(D);
 
     // Print information about NamedDecl
     dump(D->getQualifiedNameAsString());
@@ -54,9 +58,9 @@ void clava::ClavaDataDumper::DumpNamedDeclInfo(const NamedDecl *D) {
 
 
 
-void clava::ClavaDataDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
+void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     // Hierarchy
-    DumpNamedDeclInfo(D);
+    DumpNamedDeclData(D);
 
     // Print information about FunctionDecl
     dump(D->isConstexpr());
@@ -78,9 +82,9 @@ void clava::ClavaDataDumper::DumpFunctionDeclInfo(const FunctionDecl *D) {
 */
 }
 
-void clava::ClavaDataDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
+void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
     // Hierarchy
-    DumpFunctionDeclInfo(D);
+    DumpFunctionDeclData(D);
 
     dump(getId(D->getParent()));
     // Dump the corresponding CXXRecordDecl
@@ -94,9 +98,9 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclInfo(const CXXMethodDecl *D) {
 }
 
 
-void clava::ClavaDataDumper::DumpVarDeclInfo(const VarDecl *D) {
+void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     // Hierarchy
-    DumpNamedDeclInfo(D);
+    DumpNamedDeclData(D);
 
     // Print information about VarDecl
     dump(D->getStorageClass());
@@ -146,10 +150,10 @@ void clava::ClavaDataDumper::DumpVarDeclInfo(const VarDecl *D) {
 */
 }
 
-void clava::ClavaDataDumper::DumpParmVarDeclInfo(const ParmVarDecl *D) {
+void clava::ClavaDataDumper::DumpParmVarDeclData(const ParmVarDecl *D) {
 
     // Hierarchy
-    DumpVarDeclInfo(D);
+    DumpVarDeclData(D);
 
     // Print information about ParmVarDecl
     dump(D->hasInheritedDefaultArg());

@@ -30,9 +30,31 @@ namespace clava {
         PARM_VAR_DECL
     };
 
+    /**
+     * Represents stmt and expr node classes
+     */
+    enum class StmtNode {
+        // Stmt nodes
+        STMT,
 
+        // Expr nodes
+        EXPR
+    };
 
-
+    /**
+     * Represents expr node classes
+     */
+/*
+    enum class ExprNode {
+        EXPR
+    };
+*/
+    /**
+     * Represents type node classes
+    */
+    enum class TypeNode {
+        TYPE
+    };
 
 }
 #endif //CLANGASTDUMPER_INFODUMPERCONSTANTS_H

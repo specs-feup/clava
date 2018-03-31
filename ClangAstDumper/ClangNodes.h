@@ -5,6 +5,7 @@
 #ifndef CLANGASTDUMPER_CLANGNODES_H
 #define CLANGASTDUMPER_CLANGNODES_H
 
+#include "clang/AST/AST.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/Stmt.h"
 #include "clang/AST/Type.h"
@@ -17,6 +18,8 @@ namespace clava {
     const std::string getClassName(const Decl* D);
     const std::string getClassName(const Stmt* S);
     const std::string getClassName(const Type* T);
+
+    void dumpSourceRange(ASTContext *Context, SourceLocation startLoc, SourceLocation endLoc);
 }
 
 #endif //CLANGASTDUMPER_CLANGNODES_H

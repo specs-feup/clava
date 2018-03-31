@@ -8,7 +8,7 @@
 
 #include <sstream>
 
-clava::ClavaDataDumper::ClavaDataDumper(int id) : id(id)  {};
+clava::ClavaDataDumper::ClavaDataDumper(ASTContext *Context, int id) : Context(Context), id(id)  {};
 
 void clava::ClavaDataDumper::DumpHeader(const std::string tag, const void *pointer) {
     llvm::errs() << tag << "\n";
