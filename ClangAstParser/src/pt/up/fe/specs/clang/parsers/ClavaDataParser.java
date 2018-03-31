@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.parsers.clavadata;
+package pt.up.fe.specs.clang.parsers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +27,10 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.linestreamparser.GenericLineStreamParser;
+import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.ExprDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.StmtDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
 import pt.up.fe.specs.clang.streamparser.SnippetParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;

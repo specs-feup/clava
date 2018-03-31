@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import pt.up.fe.specs.clang.parsers.clavadata.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.util.utilities.LineStream;
 

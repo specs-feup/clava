@@ -30,7 +30,7 @@ import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clang.parsers.clavadata.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
