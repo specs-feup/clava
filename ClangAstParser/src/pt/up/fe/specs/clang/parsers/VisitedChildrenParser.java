@@ -67,10 +67,11 @@ public class VisitedChildrenParser extends GenericLineStreamParser {
     private static void parseVisitedChildren(LineStream linestream, Map<String, List<String>> children) {
         String key = linestream.nextLine();
 
-        GeneralParsers.checkDuplicate(PARSER_ID, key, children);
-
         int numChildren = GeneralParsers.parseInt(linestream);
         List<String> childrenIds = parseChildren(linestream, numChildren);
+
+        // Check after consuming all elements from the stream
+        GeneralParsers.checkDuplicate(PARSER_ID, key, children);
         children.put(key, childrenIds);
     }
 

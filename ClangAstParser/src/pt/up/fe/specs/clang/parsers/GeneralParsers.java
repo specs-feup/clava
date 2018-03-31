@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.parsers;
 
 import java.util.Map;
+import java.util.Set;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -61,4 +62,24 @@ public class GeneralParsers {
         }
     }
 
+    public static <K> void checkDuplicate(String id, K key, Set<K> set) {
+        if (set.contains(key)) {
+            throw new RuntimeException("Duplicate value for id '" + id + "', key '" + key + "'");
+        }
+    }
+
+    public static void parseStringMap(String id, LineStream linestream, Map<String, String> stringMap) {
+        String key = linestream.nextLine();
+        String value = linestream.nextLine();
+
+        GeneralParsers.checkDuplicate(id, key, stringMap);
+        stringMap.put(key, value);
+    }
+
+    public static void parseStringSet(String id, LineStream linestream, Set<String> stringSet) {
+        String key = linestream.nextLine();
+
+        GeneralParsers.checkDuplicate(id, key, stringSet);
+        stringSet.add(key);
+    }
 }

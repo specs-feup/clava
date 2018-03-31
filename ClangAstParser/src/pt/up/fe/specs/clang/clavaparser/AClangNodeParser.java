@@ -93,6 +93,18 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     @Override
     public N parse(ClangNode node) {
+        // String id = node.getExtendedId();
+        // if (id != null) {
+        // // Check if node exists in the id to classname map
+        // String classname = getStdErr().get(IdToClassnameParser.getDataKey()).get(node.getExtendedId());
+        // if (classname == null) {
+        // throw new RuntimeException(
+        // "Classname not found in the id to classname map for node '" + node.getExtendedId() + "':\n"
+        // + node);
+        // }
+        //
+        // }
+
         // Create StringParser from node content
         StringParser parser = new StringParser(node.getContentTry().orElse("").trim());
 

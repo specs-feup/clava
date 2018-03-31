@@ -39,6 +39,8 @@ import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
+import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
+import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
@@ -139,7 +141,8 @@ public class StreamParser {
     }
 
     private Collection<LineStreamParser> buildLineStreamParsers() {
-        return Arrays.asList(ClavaDataParser.newInstance(), VisitedChildrenParser.newInstance());
+        return Arrays.asList(ClavaDataParser.newInstance(), VisitedChildrenParser.newInstance(),
+                IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance());
     }
 
     private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {
@@ -404,6 +407,8 @@ public class StreamParser {
         for (LineStreamParser parser : linestreamParsers) {
             stdErrOutput.addAll(parser.buildData());
         }
+
+        // System.out.println("ID TO CLASSNAME:" + stdErrOutput.get(IdToClassnameParser.getDataKey()));
 
         // if (dumpFile != null) {
         // dumpFile.close();
