@@ -63,6 +63,8 @@ import pt.up.fe.specs.util.utilities.StringLines;
  */
 public class ClangAstParser {
 
+    private static boolean STRICT_MODE = false;
+
     private final static String LOCAL_OPTIONS_FILE = "local_options.xml";
 
     private final static Set<String> TOP_NODES_WITHOUT_TYPES = new HashSet<>(
@@ -91,6 +93,14 @@ public class ClangAstParser {
 
     public static String getClangDumpFilename() {
         return CLANG_DUMP_FILENAME;
+    }
+
+    public static boolean isStrictMode() {
+        return STRICT_MODE;
+    }
+
+    public static void strictMode(boolean value) {
+        STRICT_MODE = value;
     }
 
     private final boolean dumpStdout;

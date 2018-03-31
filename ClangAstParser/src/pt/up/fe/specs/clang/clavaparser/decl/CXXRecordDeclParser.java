@@ -69,6 +69,7 @@ public class CXXRecordDeclParser extends AClangNodeParser<CXXRecordDecl> {
         // Parse children, to extract attributes to RecordDeclData
         // List<ClavaNode> children = parseChildren(node);
         List<ClavaNode> children = parseChildren(clangChildren.stream());
+        checkNewChildren(node.getExtendedId(), children);
 
         // RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(),
         // getStdErr(), children);

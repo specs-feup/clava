@@ -64,6 +64,8 @@ public class CXXConversionDeclParser extends AClangNodeParser<CXXConversionDecl>
         }
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(node));
+        checkNewChildren(node.getExtendedId(), children.getList());
+
         FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
                 node, getStdErr(), CXXMethodDeclDataV2.class);
 

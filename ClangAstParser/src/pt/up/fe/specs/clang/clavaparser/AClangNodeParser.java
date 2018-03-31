@@ -23,6 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
@@ -515,6 +516,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     }
 
     protected void checkNewChildren(String parentId, List<ClavaNode> previousChildren) {
+        if (!ClangAstParser.isStrictMode()) {
+            return;
+        }
+
         // Compare against new children
         List<String> newChildren = getStdErr().get(VisitedChildrenParser.getDataKey()).get(parentId);
 
@@ -523,7 +528,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         }
 
         if (newChildren.size() != previousChildren.size()) {
-            throw new RuntimeException("Different number of children, previously found '" + previousChildren.size()
+            throw new RuntimeException("Different number of children in node '" + parentId + "', previously found '"
+                    + previousChildren.size()
                     + "' children, now has '" + newChildren.size() + "' children");
         }
 
@@ -542,7 +548,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
         if (!allSame) {
             throw new RuntimeException(
-                    "New children do not match.\nPrevious children:" + previousChildrenIds + "\nNew children:"
+                    "New children do not match for node '" + parentId + "'.\nPrevious children:" + previousChildrenIds
+                            + "\nNew children:"
                             + newChildren);
         }
     }

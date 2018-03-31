@@ -57,6 +57,7 @@ public class FunctionDeclParser extends AClangNodeParser<FunctionDecl> {
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
         ListParser<ClavaNode> parsedChildren = new ListParser<>(parseChildren(node));
+        checkNewChildren(node.getExtendedId(), parsedChildren.getList());
 
         FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, parsedChildren, node,
                 getStdErr(), FunctionDeclDataV2.class);

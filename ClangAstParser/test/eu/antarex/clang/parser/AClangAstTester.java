@@ -84,6 +84,9 @@ public abstract class AClangAstTester {
     public AClangAstTester(Collection<ResourceProvider> resources, List<String> compilerOptions) {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
+
+        // Set strict mode
+        // ClangAstParser.strictMode(true);
     }
 
     public AClangAstTester showClangAst() {

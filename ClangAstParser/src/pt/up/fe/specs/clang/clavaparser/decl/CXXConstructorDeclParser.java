@@ -86,6 +86,8 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         List<CXXCtorInitializer> defaultInits = parseInitializers(node.getExtendedId(), ctorInit);
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(clangChildren.stream()));
+        checkNewChildren(node.getExtendedId(), children.getList());
+
         FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children, node,
                 getStdErr(), CXXMethodDeclDataV2.class);
 

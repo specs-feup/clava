@@ -68,6 +68,7 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
         VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr(),
                 ParmVarDeclData.class);
         List<ClavaNode> children = parseChildren(node);
+        checkNewChildren(node.getExtendedId(), children);
 
         boolean hasInit = varDeclData.getInitKind() != InitializationStyle.NO_INIT;
         if (hasInit) {
