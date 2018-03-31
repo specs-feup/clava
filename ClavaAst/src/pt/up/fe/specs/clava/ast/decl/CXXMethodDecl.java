@@ -22,7 +22,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.Type;

@@ -26,7 +26,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.lambda.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.StringParser;

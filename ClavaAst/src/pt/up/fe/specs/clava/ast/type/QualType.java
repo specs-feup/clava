@@ -23,8 +23,8 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
-import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 
 /**
  * Represents a set of qualifiers for a type.

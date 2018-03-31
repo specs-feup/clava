@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
+import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecifier;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 
 public class FunctionProtoTypeData {

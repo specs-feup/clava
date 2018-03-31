@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaCode;
+import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifier;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.language.Standard;
 
 public class QualTypeData {

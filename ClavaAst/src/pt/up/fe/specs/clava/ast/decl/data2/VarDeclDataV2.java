@@ -13,8 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.language.TLSKind;
 
 public class VarDeclDataV2 extends NamedDeclData {

@@ -11,37 +11,42 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.type.data;
+package pt.up.fe.specs.clava.ast.decl.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum UnaryTransformTypeKind implements StringProvider {
+/**
+ * Storage class specifiers.
+ * 
+ * @author JoaoBispo
+ *
+ */
+public enum ExceptionType implements StringProvider {
+    NONE,
+    UNEVALUATED("noexcept-unevaluated"),
+    UNINSTANTIATED("noexcept-uninstantiated");
 
-    ENUM_UNDERLYING_TYPE("underlying_type"),
-    NONE;
+    private static final Lazy<EnumHelper<ExceptionType>> HELPER = EnumHelper
+	    .newLazyHelper(ExceptionType.class, NONE);
 
-    private final String string;
-
-    private UnaryTransformTypeKind() {
-        this.string = name().toLowerCase();
+    public static EnumHelper<ExceptionType> getHelper() {
+	return HELPER.get();
     }
 
-    private UnaryTransformTypeKind(String string) {
-        this.string = string;
+    private final String name;
+
+    private ExceptionType() {
+	this.name = name().toLowerCase();
     }
 
-    private static final Lazy<EnumHelper<UnaryTransformTypeKind>> ENUM_HELPER = EnumHelper.newLazyHelper(
-            UnaryTransformTypeKind.class,
-            NONE);
-
-    public static EnumHelper<UnaryTransformTypeKind> getHelper() {
-        return ENUM_HELPER.get();
+    private ExceptionType(String name) {
+	this.name = name;
     }
 
     @Override
     public String getString() {
-        return string;
+	return name;
     }
 }

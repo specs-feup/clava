@@ -11,42 +11,37 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr.data;
+package pt.up.fe.specs.clava.ast.type.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum ObjectKind implements StringProvider {
-    ORDINARY("ordinary"),
-    BIT_FIELD("bitfield"),
-    OBJ_C_PROPERTY("objcproperty"),
-    OBJ_C_SUBSCRIPT("objcsubscript"),
-    VECTOR_COMPONENT("vectorcomponent");
+public enum UnaryTransformTypeKind implements StringProvider {
 
-    private static final Lazy<EnumHelper<ObjectKind>> ENUM_HELPER = EnumHelper.newLazyHelper(ObjectKind.class,
-            ORDINARY);
+    ENUM_UNDERLYING_TYPE("underlying_type"),
+    NONE;
 
-    public static EnumHelper<ObjectKind> getEnumHelper() {
+    private final String string;
+
+    private UnaryTransformTypeKind() {
+        this.string = name().toLowerCase();
+    }
+
+    private UnaryTransformTypeKind(String string) {
+        this.string = string;
+    }
+
+    private static final Lazy<EnumHelper<UnaryTransformTypeKind>> ENUM_HELPER = EnumHelper.newLazyHelper(
+            UnaryTransformTypeKind.class,
+            NONE);
+
+    public static EnumHelper<UnaryTransformTypeKind> getHelper() {
         return ENUM_HELPER.get();
-    }
-
-    private final String code;
-
-    private ObjectKind(String code) {
-        this.code = code;
-    }
-
-    /**
-     * 
-     * @return returns R_VALUE
-     */
-    public static ObjectKind getDefault() {
-        return ORDINARY;
     }
 
     @Override
     public String getString() {
-        return code;
+        return string;
     }
 }

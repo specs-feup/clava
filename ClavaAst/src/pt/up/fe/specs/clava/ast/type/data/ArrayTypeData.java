@@ -16,6 +16,8 @@ package pt.up.fe.specs.clava.ast.type.data;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaCode;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.language.Standard;
 
 public class ArrayTypeData {

@@ -20,7 +20,7 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data.UnaryTransformTypeKind;
+import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class UnaryTransformType extends Type {

@@ -24,7 +24,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.NullType;
 
 /**

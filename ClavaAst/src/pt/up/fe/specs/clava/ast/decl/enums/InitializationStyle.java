@@ -11,37 +11,37 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.decl.data;
+package pt.up.fe.specs.clava.ast.decl.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum NestedNamedSpecifier implements StringProvider {
-    IDENTIFIER("Identifier"),
-    NAMESPACE("Namespace"),
-    NAMESPACE_ALIAS("NamespaceAlias"),
-    TYPE_SPEC("TypeSpec"),
-    TYPE_SPEC_WITH_TEMPLATE("TypeSpecWithTemplate"),
-    GLOBAL("Global"),
-    SUPER("Super"),
-    NONE("");
+public enum InitializationStyle implements StringProvider {
+    NO_INIT,
+    CINIT, // C-style initialization with assignment
+    CALL_INIT("callinit"), // Call-style initialization (C++98)
+    LIST_INIT("listinit"); // Direct list-initialization (C++11)
 
-    private static final Lazy<EnumHelper<NestedNamedSpecifier>> ENUM_HELPER = EnumHelper
-            .newLazyHelper(NestedNamedSpecifier.class, NONE);
+    private static Lazy<EnumHelper<InitializationStyle>> ENUM_HELPER = EnumHelper
+            .newLazyHelper(InitializationStyle.class, NO_INIT);
 
-    public static EnumHelper<NestedNamedSpecifier> getEnumHelper() {
+    public static EnumHelper<InitializationStyle> getHelper() {
         return ENUM_HELPER.get();
     }
 
-    private final String description;
+    private final String string;
 
-    private NestedNamedSpecifier(String description) {
-        this.description = description;
+    private InitializationStyle() {
+        this.string = name().toLowerCase();
+    }
+
+    private InitializationStyle(String string) {
+        this.string = string;
     }
 
     @Override
     public String getString() {
-        return description;
+        return string;
     }
 }

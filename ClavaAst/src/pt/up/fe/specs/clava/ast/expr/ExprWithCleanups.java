@@ -20,7 +20,7 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 
 /**
  * Represents an expression that introduces cleanups to be run at the end of the sub-expression's evaluation. The most

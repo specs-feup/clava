@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.expr.data;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class ExprData {

@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr.data;
+package pt.up.fe.specs.clava.ast.expr.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;

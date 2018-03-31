@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
+
 public class TypeData {
 
     private String bareType;

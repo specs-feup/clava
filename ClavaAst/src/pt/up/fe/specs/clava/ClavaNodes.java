@@ -39,7 +39,7 @@ import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
+import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;

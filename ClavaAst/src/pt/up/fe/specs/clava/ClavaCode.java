@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.ast.type.data.Qualifier;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.util.SpecsIo;
 
 public class ClavaCode {

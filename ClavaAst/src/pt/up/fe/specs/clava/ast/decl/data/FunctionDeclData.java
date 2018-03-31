@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
+import pt.up.fe.specs.clava.ast.decl.enums.ExceptionType;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 
 public class FunctionDeclData {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 SPeCS.
+ * Copyright 2016 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,33 +11,37 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.decl.data;
+package pt.up.fe.specs.clava.ast.decl.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum NameKind implements StringProvider {
-    IDENTIFIER,
-    OBJ_C_ZERO_ARG_SELECTOR,
-    OBJ_C_ONE_ARG_SELECTOR,
-    OBJ_C_MULTI_ARG_SELECTOR,
-    CXX_CONSTRUCTOR_NAME,
-    CXX_DESTRUCTOR_NAME,
-    CXX_CONVERSION_FUNCTION_NAME,
-    CXX_DEDUCTION_GUIDE_NAME,
-    CXX_OPERATOR_NAME,
-    CXX_LITERAL_OPERATOR_NAME,
-    CXX_USING_DIRECTIVE;
+public enum NestedNamedSpecifier implements StringProvider {
+    IDENTIFIER("Identifier"),
+    NAMESPACE("Namespace"),
+    NAMESPACE_ALIAS("NamespaceAlias"),
+    TYPE_SPEC("TypeSpec"),
+    TYPE_SPEC_WITH_TEMPLATE("TypeSpecWithTemplate"),
+    GLOBAL("Global"),
+    SUPER("Super"),
+    NONE("");
 
-    private static final Lazy<EnumHelper<NameKind>> ENUM_HELPER = EnumHelper.newLazyHelper(NameKind.class);
+    private static final Lazy<EnumHelper<NestedNamedSpecifier>> ENUM_HELPER = EnumHelper
+            .newLazyHelper(NestedNamedSpecifier.class, NONE);
 
-    public static EnumHelper<NameKind> getHelper() {
+    public static EnumHelper<NestedNamedSpecifier> getEnumHelper() {
         return ENUM_HELPER.get();
+    }
+
+    private final String description;
+
+    private NestedNamedSpecifier(String description) {
+        this.description = description;
     }
 
     @Override
     public String getString() {
-        return name();
+        return description;
     }
 }

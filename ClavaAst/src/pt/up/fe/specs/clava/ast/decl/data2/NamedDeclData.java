@@ -15,7 +15,7 @@ package pt.up.fe.specs.clava.ast.decl.data2;
 
 import java.util.Optional;
 
-import pt.up.fe.specs.clava.ast.decl.data.NameKind;
+import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 
 public class NamedDeclData extends DeclDataV2 {
 

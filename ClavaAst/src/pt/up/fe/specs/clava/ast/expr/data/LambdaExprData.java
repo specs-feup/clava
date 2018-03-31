@@ -11,9 +11,12 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr.data.lambda;
+package pt.up.fe.specs.clava.ast.expr.data;
 
 import java.util.List;
+
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 
 public class LambdaExprData {
 

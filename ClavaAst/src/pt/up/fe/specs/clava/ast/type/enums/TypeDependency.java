@@ -11,42 +11,27 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.decl.data;
+package pt.up.fe.specs.clava.ast.type.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-/**
- * Storage class specifiers.
- * 
- * @author JoaoBispo
- *
- */
-public enum ExceptionType implements StringProvider {
-    NONE,
-    UNEVALUATED("noexcept-unevaluated"),
-    UNINSTANTIATED("noexcept-uninstantiated");
+public enum TypeDependency implements StringProvider {
 
-    private static final Lazy<EnumHelper<ExceptionType>> HELPER = EnumHelper
-	    .newLazyHelper(ExceptionType.class, NONE);
+    DEPENDENT,
+    INSTANTIATION_DEPENDENT,
+    NONE;
 
-    public static EnumHelper<ExceptionType> getHelper() {
-	return HELPER.get();
-    }
+    private static final Lazy<EnumHelper<TypeDependency>> ENUM_HELPER = EnumHelper.newLazyHelper(TypeDependency.class,
+            NONE);
 
-    private final String name;
-
-    private ExceptionType() {
-	this.name = name().toLowerCase();
-    }
-
-    private ExceptionType(String name) {
-	this.name = name;
+    public static EnumHelper<TypeDependency> getHelper() {
+        return ENUM_HELPER.get();
     }
 
     @Override
     public String getString() {
-	return name;
+        return name().toLowerCase();
     }
 }

@@ -30,7 +30,7 @@ import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.LanguageId;
+import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class LinkageSpecDeclParser extends AClangNodeParser<LinkageSpecDecl> {

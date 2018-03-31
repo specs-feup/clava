@@ -24,10 +24,10 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.AddressSpaceQualifier;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
-import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifier;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.stringparser.StringParser;
 

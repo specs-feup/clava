@@ -19,7 +19,7 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 

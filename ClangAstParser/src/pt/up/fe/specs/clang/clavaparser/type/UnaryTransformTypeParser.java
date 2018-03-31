@@ -27,7 +27,7 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data.UnaryTransformTypeKind;
+import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class UnaryTransformTypeParser extends AClangNodeParser<UnaryTransformType> {

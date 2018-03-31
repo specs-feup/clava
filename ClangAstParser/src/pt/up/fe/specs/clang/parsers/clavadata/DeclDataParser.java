@@ -14,10 +14,6 @@
 package pt.up.fe.specs.clang.parsers.clavadata;
 
 import pt.up.fe.specs.clang.streamparser.StreamParser;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.data.NameKind;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
-import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
@@ -25,6 +21,10 @@ import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 

@@ -21,7 +21,7 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.UsingDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.NestedNamedSpecifier;
+import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 

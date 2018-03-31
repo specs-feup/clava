@@ -11,45 +11,33 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr.data.lambda;
+package pt.up.fe.specs.clava.ast.decl.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum LambdaCaptureKind implements StringProvider {
+public enum NameKind implements StringProvider {
+    IDENTIFIER,
+    OBJ_C_ZERO_ARG_SELECTOR,
+    OBJ_C_ONE_ARG_SELECTOR,
+    OBJ_C_MULTI_ARG_SELECTOR,
+    CXX_CONSTRUCTOR_NAME,
+    CXX_DESTRUCTOR_NAME,
+    CXX_CONVERSION_FUNCTION_NAME,
+    CXX_DEDUCTION_GUIDE_NAME,
+    CXX_OPERATOR_NAME,
+    CXX_LITERAL_OPERATOR_NAME,
+    CXX_USING_DIRECTIVE;
 
-    THIS,
-    BY_COPY,
-    BY_REF,
-    VLA_TYPE;
+    private static final Lazy<EnumHelper<NameKind>> ENUM_HELPER = EnumHelper.newLazyHelper(NameKind.class);
 
-    private static final Lazy<EnumHelper<LambdaCaptureKind>> ENUM_HELPER = EnumHelper
-            .newLazyHelper(LambdaCaptureKind.class);
-
-    public static EnumHelper<LambdaCaptureKind> getHelper() {
+    public static EnumHelper<NameKind> getHelper() {
         return ENUM_HELPER.get();
     }
 
     @Override
     public String getString() {
         return name();
-    }
-
-    public String getCode(String exprCode) {
-        switch (this) {
-        case THIS:
-            if (exprCode.equals("this")) {
-                return "this";
-            }
-            // Does this happen?
-            return "this." + exprCode;
-        case BY_COPY:
-            return exprCode;
-        case BY_REF:
-            return "&" + exprCode;
-        default:
-            throw new RuntimeException("Not implemented for case " + this);
-        }
     }
 }

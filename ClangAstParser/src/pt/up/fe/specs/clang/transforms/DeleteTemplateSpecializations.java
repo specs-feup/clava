@@ -15,7 +15,7 @@ package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;

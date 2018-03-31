@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.LanguageId;
+import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 
 /**
  * Represents a linkage specification (e.g., extern "C" ...).

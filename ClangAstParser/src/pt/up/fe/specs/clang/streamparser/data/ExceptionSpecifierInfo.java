@@ -15,7 +15,7 @@ package pt.up.fe.specs.clang.streamparser.data;
 
 import java.util.Map;
 
-import pt.up.fe.specs.clava.ast.type.data.ExceptionSpecifier;
+import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecifier;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 import pt.up.fe.specs.util.utilities.LineStream;

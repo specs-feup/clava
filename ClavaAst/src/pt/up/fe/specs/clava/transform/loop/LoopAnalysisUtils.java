@@ -28,7 +28,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
+import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.ContinueStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;

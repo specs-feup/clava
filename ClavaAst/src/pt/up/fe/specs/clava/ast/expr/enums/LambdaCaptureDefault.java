@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 SPeCS.
+ * Copyright 2018 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,27 +11,39 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.type.data;
+package pt.up.fe.specs.clava.ast.expr.enums;
+
+import java.util.Optional;
 
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum TypeDependency implements StringProvider {
+public enum LambdaCaptureDefault implements StringProvider {
 
-    DEPENDENT,
-    INSTANTIATION_DEPENDENT,
-    NONE;
+    NONE(null),
+    BY_COPY("="),
+    BY_REF("&");
 
-    private static final Lazy<EnumHelper<TypeDependency>> ENUM_HELPER = EnumHelper.newLazyHelper(TypeDependency.class,
-            NONE);
+    private final String code;
 
-    public static EnumHelper<TypeDependency> getHelper() {
+    private LambdaCaptureDefault(String code) {
+        this.code = code;
+    }
+
+    private static final Lazy<EnumHelper<LambdaCaptureDefault>> ENUM_HELPER = EnumHelper
+            .newLazyHelper(LambdaCaptureDefault.class);
+
+    public static EnumHelper<LambdaCaptureDefault> getHelper() {
         return ENUM_HELPER.get();
     }
 
     @Override
     public String getString() {
-        return name().toLowerCase();
+        return name();
+    }
+
+    public Optional<String> getCode() {
+        return Optional.ofNullable(code);
     }
 }

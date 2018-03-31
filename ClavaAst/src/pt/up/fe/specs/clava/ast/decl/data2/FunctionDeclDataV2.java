@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
-import pt.up.fe.specs.clava.ast.decl.data.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 
 public class FunctionDeclDataV2 extends NamedDeclData {
 

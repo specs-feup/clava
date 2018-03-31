@@ -21,8 +21,8 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 
