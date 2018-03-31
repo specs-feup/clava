@@ -138,6 +138,9 @@ private:
     std::vector<std::string> VisitParmVarDeclChildren(const ParmVarDecl *D);
 
 
+    // Dumpers of other kinds of information
+    void dumpIdToClassMap(const void* pointer, std::string className);
+
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);

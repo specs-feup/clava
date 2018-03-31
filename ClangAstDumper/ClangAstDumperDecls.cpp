@@ -4,6 +4,7 @@
 
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
+#include "ClangNodes.h"
 //#include "InfoDumperConstants.h"
 
 #include "clang/AST/AST.h"
@@ -87,6 +88,9 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
             llvm::errs() << ND->getNameAsString() << "\n";
         }
     }
+
+
+    dumpIdToClassMap(declAddr, clava::getClassName(declAddr));
 
     return false;
 }

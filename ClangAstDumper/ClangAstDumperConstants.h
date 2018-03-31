@@ -56,5 +56,7 @@ static const std::string INIT_LIST_EXPR_INFO = "<InitListExpr Info>";
 
 static const std::string VISITED_CHILDREN = "<Visited Children>";
 
+static const std::string ID_TO_CLASS_MAP = "<Id to Class Map>";
+
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

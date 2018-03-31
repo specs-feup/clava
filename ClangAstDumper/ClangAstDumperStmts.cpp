@@ -4,6 +4,7 @@
 
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
+#include "ClangNodes.h"
 
 #include "clang/AST/AST.h"
 
@@ -33,8 +34,7 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
     // Dump location
     dumpSourceRange(extendedId.str(), stmtAddr->getLocStart(), stmtAddr->getLocEnd());
 
-
-
+    dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));
 
     return false;
 }

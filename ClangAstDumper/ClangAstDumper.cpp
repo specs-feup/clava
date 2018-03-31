@@ -189,3 +189,9 @@ void ClangAstDumper::dumpVisitedChildren(const void *pointer, std::vector<std::s
         llvm::errs() << child << "\n";
     }
 }
+
+void ClangAstDumper::dumpIdToClassMap(const void* pointer, std::string className) {
+    llvm::errs() << ID_TO_CLASS_MAP << "\n";
+    llvm::errs() << getId(pointer) << "\n";
+    llvm::errs() << className << "\n";
+}
