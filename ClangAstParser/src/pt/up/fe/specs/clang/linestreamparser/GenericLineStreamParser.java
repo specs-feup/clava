@@ -15,10 +15,8 @@ package pt.up.fe.specs.clang.linestreamparser;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -34,7 +32,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
 public class GenericLineStreamParser implements LineStreamParser {
 
     private final Map<DataKey<?>, SnippetParser<?, ?>> parsers;
-    private final Set<String> ids;
+    private final Map<String, SnippetParser<?, ?>> ids;
     // private final DataStore data;
 
     // public GenericLineStreamParser(Collection<SnippetParser<?, ?>> parsers) {
@@ -42,11 +40,12 @@ public class GenericLineStreamParser implements LineStreamParser {
     // }
 
     public GenericLineStreamParser(Map<DataKey<?>, SnippetParser<?, ?>> parsers) {
-        this.ids = new HashSet<>();
+        this.ids = new HashMap<>();
         this.parsers = new HashMap<>();
         // Make sure all parsers have different IDs
         for (Entry<DataKey<?>, SnippetParser<?, ?>> entry : parsers.entrySet()) {
-            if (!this.ids.add(entry.getValue().getId())) {
+            SnippetParser<?, ?> previousValue = this.ids.put(entry.getValue().getId(), entry.getValue());
+            if (previousValue != null) {
                 throw new RuntimeException(
                         "Found duplicated id '" + entry.getValue().getId() + "' in given parsers map:\n" + parsers);
             }
@@ -71,7 +70,8 @@ public class GenericLineStreamParser implements LineStreamParser {
 
     @Override
     public boolean parse(String id, LineStream lineStream) {
-        SnippetParser<?, ?> parser = parsers.get(id);
+        SnippetParser<?, ?> parser = ids.get(id);
+
         if (parser == null) {
             return false;
         }
@@ -83,7 +83,7 @@ public class GenericLineStreamParser implements LineStreamParser {
 
     @Override
     public Collection<String> getIds() {
-        return ids;
+        return ids.keySet();
         // return parsers.values().stream()
         // .map(SnippetParser::getId)
         // .collect(Collectors.toSet());

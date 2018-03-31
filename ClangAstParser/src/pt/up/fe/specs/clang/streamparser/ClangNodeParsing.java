@@ -40,6 +40,12 @@ import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+/**
+ * @deprecated Replaced by ClavaDataParser
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class ClangNodeParsing {
 
     /**

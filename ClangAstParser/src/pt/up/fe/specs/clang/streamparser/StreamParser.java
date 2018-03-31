@@ -16,6 +16,8 @@ package pt.up.fe.specs.clang.streamparser;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +35,8 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
+import pt.up.fe.specs.clang.parsers.clavadata.ClavaDataParser;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
@@ -102,6 +106,9 @@ public class StreamParser {
     private final Map<DataKey<?>, SnippetParser<?, ?>> keysToSnippetsMap;
     private final Map<String, SnippetParser<?, ?>> parsers;
 
+    private final Collection<LineStreamParser> linestreamParsers;
+    private final Map<String, LineStreamParser> linestreamParsersMap;
+
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
@@ -124,6 +131,28 @@ public class StreamParser {
         parsers = keysToSnippetsMap.values().stream()
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
+
+        linestreamParsers = buildLineStreamParsers();
+        linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
+
+    }
+
+    private Collection<LineStreamParser> buildLineStreamParsers() {
+        return Arrays.asList(ClavaDataParser.newInstance());
+    }
+
+    private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {
+
+        Map<String, LineStreamParser> lineStreamParsers = new HashMap<>();
+
+        for (LineStreamParser parser : parsers) {
+            parser.getIds().stream().forEach(id -> lineStreamParsers.put(id, parser));
+        }
+
+        // ClavaDataParser clavaDataParser = ClavaDataParser.newInstance();
+        // clavaDataParser.getIds().stream().forEach(id -> lineStreamParsers.put(id, clavaDataParser));
+
+        return lineStreamParsers;
     }
 
     public Map<String, ClavaData> getNodeData() {
@@ -137,7 +166,7 @@ public class StreamParser {
         // Map<String, ClavaData> nodeData = new HashMap<>();
 
         // Add snippet parsers for Clang Node parsing
-        snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
+        // snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
 
         // This builder will be shared between Counter and Types
         StringBuilder typesBuilder = new StringBuilder();
@@ -326,6 +355,18 @@ public class StreamParser {
                 continue;
             }
 
+            // If parser null, check linestream parsers
+            LineStreamParser lineStreamParser = linestreamParsersMap.get(currentLine);
+            if (lineStreamParser != null) {
+                try {
+                    lineStreamParser.parse(currentLine, lines);
+                } catch (Exception e) {
+                    SpecsLogs.msgWarn("Problems while parsing '" + currentLine + "'", e);
+                }
+
+                continue;
+            }
+
             // Add line to the warnings
             warnings.append(currentLine).append("\n");
             SpecsLogs.msgInfo(currentLine);
@@ -334,7 +375,8 @@ public class StreamParser {
         // Parsed all lines, create datastore
         StoreDefinition streamParserDefinition = new StoreDefinitionBuilder("StreamParser Data")
                 .addDefinition(StreamKeys.STORE_DEFINITION)
-                .addKeys(ClangNodeParsing.getKeys())
+                // .addKeys(ClangNodeParsing.getKeys())
+                // .addKeys(ClavaDataParser.getDataKeys())
                 .build();
 
         // DataStore stdErrOutput = new SimpleDataStore(StreamKeys.STORE_DEFINITION);
@@ -355,6 +397,11 @@ public class StreamParser {
             SnippetParser<?, ?> parser = keysToSnippetsMap.get(key);
             Preconditions.checkNotNull(parser, "Could not find a parser for key '" + key + "'");
             stdErrOutput.setRaw(key, parser.getResult());
+        }
+
+        // Add DataStores from line parsers
+        for (LineStreamParser parser : linestreamParsers) {
+            stdErrOutput.addAll(parser.buildData());
         }
 
         // if (dumpFile != null) {

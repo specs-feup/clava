@@ -30,7 +30,7 @@ import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clang.streamparser.ClangNodeParsing;
+import pt.up.fe.specs.clang.parsers.clavadata.ClavaDataParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -494,7 +494,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     protected <T extends ClavaData> T getData(Class<T> clavaDataClass, ClangNode node) {
 
-        DataKey<Map<String, T>> key = ClangNodeParsing.getNodeDataKey(clavaDataClass);
+        DataKey<Map<String, T>> key = ClavaDataParser.getDataKey(clavaDataClass);
+        // DataKey<Map<String, T>> key = ClangNodeParsing.getNodeDataKey(clavaDataClass);
 
         T data = getStdErr().get(key).get(node.getExtendedId());
 

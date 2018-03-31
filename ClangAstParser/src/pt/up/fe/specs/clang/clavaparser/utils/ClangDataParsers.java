@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
-import pt.up.fe.specs.clang.streamparser.ClangNodeParsing;
+import pt.up.fe.specs.clang.parsers.clavadata.ClavaDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
@@ -177,7 +177,7 @@ public class ClangDataParsers {
         // .get(ClangNodeParsing.getNodeDataKey(nodeClass)).keySet());
 
         // Get stream information
-        FunctionDeclDataV2 functionData = streamData.get(ClangNodeParsing.getNodeDataKey(nodeClass))
+        FunctionDeclDataV2 functionData = streamData.get(ClavaDataParser.getDataKey(nodeClass))
                 .get(node.getExtendedId());
         // Preconditions.checkNotNull(functionData, "Could not get data for node: " + node.getExtendedId());
 
@@ -437,7 +437,7 @@ public class ClangDataParsers {
 
         // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
 
-        VarDeclDataV2 varDeclData2 = streamData.get(ClangNodeParsing.getNodeDataKey(varDeclClass))
+        VarDeclDataV2 varDeclData2 = streamData.get(ClavaDataParser.getDataKey(varDeclClass))
                 .get(node.getExtendedId());
         if (varDeclData2 == null) {
             SpecsLogs.msgWarn(

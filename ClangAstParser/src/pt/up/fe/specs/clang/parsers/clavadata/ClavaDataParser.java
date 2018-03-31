@@ -14,10 +14,12 @@
 package pt.up.fe.specs.clang.parsers.clavadata;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -25,7 +27,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.linestreamparser.GenericLineStreamParser;
-import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
 import pt.up.fe.specs.clang.streamparser.SnippetParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
@@ -75,7 +76,7 @@ public class ClavaDataParser extends GenericLineStreamParser {
         DATA_PARSERS.put(ExprDataV2.class, ExprDataParser::parseExprData);
     }
 
-    public static LineStreamParser newInstance() {
+    public static ClavaDataParser newInstance() {
         // Map where all ClavaData instances will be stored
         Map<String, ClavaData> clavaDataMap = new HashMap<>();
 
@@ -105,6 +106,12 @@ public class ClavaDataParser extends GenericLineStreamParser {
 
         // Create DataKey
         return KeyFactory.generic(keyName, new HashMap<String, T>());
+    }
+
+    public static List<DataKey<?>> getDataKeys() {
+        return DATA_PARSERS.keySet().stream()
+                .map(dataClass -> getDataKey(dataClass))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -206,12 +213,14 @@ public class ClavaDataParser extends GenericLineStreamParser {
         D previousValue = map.put(clavaData.getId(), clavaData);
 
         if (previousValue != null) {
-            throw new RuntimeException("Duplicated parsing of node '" + clavaData.getId() + "'");
+            throw new RuntimeException("Duplicated parsing of node '" + clavaData.getId() + "'.\nPrevious value:"
+                    + previousValue + "\nCurrent value:" + clavaData);
         }
 
     }
 
     public static ClavaData parseClavaData(LineStream lines) {
+
         String id = lines.nextLine();
         SourceRange location = parseLocation(lines);
 
