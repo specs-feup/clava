@@ -15,7 +15,11 @@ package pt.up.fe.specs.clava.ast.decl.data2;
 
 import pt.up.fe.specs.clava.SourceRange;
 
-public abstract class ClavaData {
+public class ClavaData {
+
+    public static ClavaData empty() {
+        return new ClavaData(null, SourceRange.invalidRange());
+    }
 
     private final String id;
     private final SourceRange location;
@@ -38,6 +42,23 @@ public abstract class ClavaData {
     public ClavaData(String id, SourceRange location) {
         this.id = id;
         this.location = location;
+    }
+
+    public ClavaData(ClavaData data) {
+        this(data.id, data.location);
+    }
+
+    /**
+     * Makes a deep copy of this object.
+     * 
+     * <p>
+     * Implementation should use the copy constructor, that way what should be copied and what should be reused is
+     * delegated to the constructor.
+     * 
+     * @return
+     */
+    public ClavaData copy() {
+        return new ClavaData(this);
     }
 
     protected String toString(String superToString, String thisToString) {
@@ -68,10 +89,4 @@ public abstract class ClavaData {
         return toString("", builder.toString());
     }
 
-    /**
-     * Makes a deep copy of this object.
-     * 
-     * @return
-     */
-    public abstract ClavaData copy();
 }
