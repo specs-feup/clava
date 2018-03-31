@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.util.Map;
+
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -50,6 +52,13 @@ public class GeneralParsers {
             LineStream lines) {
 
         return helper.valueOf(parseInt(lines));
+    }
+
+    public static <K> void checkDuplicate(String id, K key, Map<K, ?> map) {
+        Object currentObject = map.get(key);
+        if (currentObject != null) {
+            throw new RuntimeException("Duplicate value for id '" + id + "', key '" + key + "'");
+        }
     }
 
 }

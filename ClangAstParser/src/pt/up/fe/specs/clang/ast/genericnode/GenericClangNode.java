@@ -69,7 +69,7 @@ public class GenericClangNode extends ClangNode {
         }
 
         // return name + "(" + content + ") -> " + GenericClangNode.DECODER.decode(getLocation());
-        return getName() + "(" + content + ") -> " + location;
+        return getName() + "(" + getExtendedId() + ", " + content + ") -> " + location;
 
     }
 

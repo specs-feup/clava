@@ -82,15 +82,14 @@ public class ClavaDataParser extends GenericLineStreamParser {
 
     public static ClavaDataParser newInstance() {
         // Map where all ClavaData instances will be stored
-        Map<String, ClavaData> clavaDataMap = new HashMap<>();
+        // Map<String, ClavaData> clavaDataMap = new HashMap<>();
 
         Map<DataKey<?>, SnippetParser<?, ?>> parsers = new HashMap<>();
 
         for (Entry<Class<? extends ClavaData>, Function<LineStream, ClavaData>> entry : DATA_PARSERS.entrySet()) {
             DataKey<?> dataKey = getDataKey(entry.getKey());
             @SuppressWarnings("unchecked")
-            SnippetParser<?, ?> snippetParser = newSnippetParser((Class<ClavaData>) entry.getKey(), clavaDataMap,
-                    entry.getValue());
+            SnippetParser<?, ?> snippetParser = newSnippetParser((Class<ClavaData>) entry.getKey(), entry.getValue());
 
             parsers.put(dataKey, snippetParser);
         }
@@ -127,15 +126,18 @@ public class ClavaDataParser extends GenericLineStreamParser {
      * @return
      */
     private static <D extends ClavaData> SnippetParser<Map<String, D>, Map<String, D>> newSnippetParser(
-            Class<D> clavaDataClass, Map<String, D> resultInit, Function<LineStream, D> dataParser) {
+            Class<D> clavaDataClass, Function<LineStream, D> dataParser) {
 
         String id = getNodeDataId(clavaDataClass);
+
+        // Map where all ClavaData instances will be stored
+        Map<String, D> clavaDataMap = new HashMap<>();
 
         BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> ClavaDataParser.parseClavaDataTop(
                 dataParser,
                 lineStream, map);
 
-        return SnippetParser.newInstance(id, resultInit, parser);
+        return SnippetParser.newInstance(id, clavaDataMap, parser);
     }
 
     /**

@@ -32,11 +32,25 @@ public class GenericLineStreamParser implements LineStreamParser {
 
     private final Map<DataKey<?>, SnippetParser<?, ?>> parsers;
     private final Map<String, SnippetParser<?, ?>> ids;
+
+    private static Map<DataKey<?>, SnippetParser<?, ?>> buildSingleEntryMap(DataKey<?> key,
+            SnippetParser<?, ?> parser) {
+
+        Map<DataKey<?>, SnippetParser<?, ?>> parsers = new HashMap<>();
+
+        parsers.put(key, parser);
+
+        return parsers;
+    }
     // private final DataStore data;
 
     // public GenericLineStreamParser(Collection<SnippetParser<?, ?>> parsers) {
     // this(parsers.stream().collect(Collectors.toMap(SnippetParser::getId, parser -> parser)));
     // }
+
+    public GenericLineStreamParser(DataKey<?> key, SnippetParser<?, ?> parser) {
+        this(buildSingleEntryMap(key, parser));
+    }
 
     public GenericLineStreamParser(Map<DataKey<?>, SnippetParser<?, ?>> parsers) {
         this.ids = new HashMap<>();

@@ -13,12 +13,9 @@
 
 package pt.up.fe.specs.clang.linestreamparser;
 
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import pt.up.fe.specs.clang.parsers.ClavaDataParser;
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public interface SnippetParser<I, T> {
@@ -40,16 +37,18 @@ public interface SnippetParser<I, T> {
         return new GenericSnippetParser<>(id, resultInit, parser, current -> current);
     }
 
+    /*
     static <D extends ClavaData> SnippetParser<Map<String, D>, Map<String, D>> newInstance(String id,
             Map<String, D> resultInit, Function<LineStream, D> dataParser) {
-
+    
         // Map<String, D> resultInit = new HashMap<>();
-
+    
         BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> ClavaDataParser.parseClavaDataTop(dataParser,
                 lineStream, map);
-
+    
         return new GenericSnippetParser<>(id, resultInit, parser, current -> current);
     }
+    */
 
     // public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
     // Function<LineStream, D> dataParser) {

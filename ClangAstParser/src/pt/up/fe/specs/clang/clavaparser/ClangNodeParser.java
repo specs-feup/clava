@@ -38,6 +38,8 @@ public interface ClangNodeParser<T extends ClavaNode> {
     // ClavaNode parse(ClangNode node);
     T parse(ClangNode node);
 
+    // DataStore getDumperData();
+
     default List<ClavaNode> parseChildren(ClangNode node) {
         return parseChildren(node.getChildrenStream());
     }
@@ -55,6 +57,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
                 // Remove full comment nodes
                 .filter(clavaNode -> !(clavaNode instanceof FullComment))
                 .collect(Collectors.toList());
+
     }
 
     ClavaNode parseChild(ClangNode node, boolean isTypeParser);

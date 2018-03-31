@@ -31,6 +31,7 @@ import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -366,6 +367,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         return converter.getClangRootData();
     }
 
+    // @Override
+    // public DataStore getDumperData() {
+    // return getStdErr();
+    // }
+
     protected DataStore getStdErr() {
         return converter.getClangRootData().getStdErr();
     }
@@ -507,4 +513,38 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
         return data;
     }
+
+    protected void checkNewChildren(String parentId, List<ClavaNode> previousChildren) {
+        // Compare against new children
+        List<String> newChildren = getStdErr().get(VisitedChildrenParser.getDataKey()).get(parentId);
+
+        if (newChildren == null) {
+            throw new RuntimeException("No children visited for node " + parentId);
+        }
+
+        if (newChildren.size() != previousChildren.size()) {
+            throw new RuntimeException("Different number of children, previously found '" + previousChildren.size()
+                    + "' children, now has '" + newChildren.size() + "' children");
+        }
+
+        int numChildren = newChildren.size();
+        boolean allSame = true;
+        List<String> previousChildrenIds = previousChildren.stream()
+                .map(child -> child.getExtendedId().orElse("<UNDEFINED>"))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < numChildren; i++) {
+            if (!previousChildrenIds.get(i).equals(newChildren.get(i))) {
+                allSame = false;
+                break;
+            }
+        }
+
+        if (!allSame) {
+            throw new RuntimeException(
+                    "New children do not match.\nPrevious children:" + previousChildrenIds + "\nNew children:"
+                            + newChildren);
+        }
+    }
+
 }

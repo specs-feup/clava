@@ -78,6 +78,7 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         // System.out.println("TYPE AFTER:" + type + " (" + type.hashCode() + ")");
 
         List<ClavaNode> children = parseChildren(node);
+        checkNewChildren(node.getExtendedId(), children);
 
         boolean hasInit = varDeclData.getInitKind() != InitializationStyle.NO_INIT;
         if (hasInit) {
