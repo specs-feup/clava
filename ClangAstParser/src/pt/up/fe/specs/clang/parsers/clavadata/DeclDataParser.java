@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clang.parsers.clavadata;
 
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
-import pt.up.fe.specs.clang.streamparser.StreamParser;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
@@ -47,10 +47,10 @@ public class DeclDataParser {
 
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines);
 
-        boolean isImplicit = StreamParser.parseOneOrZero(lines);
-        boolean isUsed = StreamParser.parseOneOrZero(lines);
-        boolean isReferenced = StreamParser.parseOneOrZero(lines);
-        boolean isInvalidDecl = StreamParser.parseOneOrZero(lines);
+        boolean isImplicit = GeneralParsers.parseOneOrZero(lines);
+        boolean isUsed = GeneralParsers.parseOneOrZero(lines);
+        boolean isReferenced = GeneralParsers.parseOneOrZero(lines);
+        boolean isInvalidDecl = GeneralParsers.parseOneOrZero(lines);
 
         return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, clavaData);
     }
@@ -61,8 +61,8 @@ public class DeclDataParser {
         DeclDataV2 declData = parseDeclData(lines);
 
         String qualifiedName = lines.nextLine();
-        NameKind nameKind = NameKind.getHelper().valueOf(StreamParser.parseInt(lines));
-        boolean isHidden = StreamParser.parseOneOrZero(lines);
+        NameKind nameKind = NameKind.getHelper().valueOf(GeneralParsers.parseInt(lines));
+        boolean isHidden = GeneralParsers.parseOneOrZero(lines);
 
         return new NamedDeclData(qualifiedName, nameKind, isHidden, declData);
     }
@@ -72,8 +72,8 @@ public class DeclDataParser {
         // Parse NamedDecl data
         NamedDeclData namedDeclData = parseNamedDeclData(lines);
 
-        boolean isConstexpr = StreamParser.parseOneOrZero(lines);
-        TemplateKind templateKind = TemplateKind.getHelper().valueOf(StreamParser.parseInt(lines));
+        boolean isConstexpr = GeneralParsers.parseOneOrZero(lines);
+        TemplateKind templateKind = TemplateKind.getHelper().valueOf(GeneralParsers.parseInt(lines));
 
         return new FunctionDeclDataV2(isConstexpr, templateKind, namedDeclData);
     }
@@ -93,16 +93,16 @@ public class DeclDataParser {
         // Parse NamedDecl data
         NamedDeclData namedDeclData = parseNamedDeclData(lines);
 
-        StorageClass storageClass = StreamParser.enumFromInt(StorageClass.getHelper(), lines);
-        TLSKind tlsKind = StreamParser.enumFromInt(TLSKind.getHelper(), lines);
-        boolean isModulePrivate = StreamParser.parseOneOrZero(lines);
-        boolean isNRVOVariable = StreamParser.parseOneOrZero(lines);
-        InitializationStyle initStyle = StreamParser.enumFromInt(InitializationStyle.getHelper(), lines);
+        StorageClass storageClass = GeneralParsers.enumFromInt(StorageClass.getHelper(), lines);
+        TLSKind tlsKind = GeneralParsers.enumFromInt(TLSKind.getHelper(), lines);
+        boolean isModulePrivate = GeneralParsers.parseOneOrZero(lines);
+        boolean isNRVOVariable = GeneralParsers.parseOneOrZero(lines);
+        InitializationStyle initStyle = GeneralParsers.enumFromInt(InitializationStyle.getHelper(), lines);
 
-        boolean isConstexpr = StreamParser.parseOneOrZero(lines);
-        boolean isStaticDataMember = StreamParser.parseOneOrZero(lines);
-        boolean isOutOfLine = StreamParser.parseOneOrZero(lines);
-        boolean hasGlobalStorage = StreamParser.parseOneOrZero(lines);
+        boolean isConstexpr = GeneralParsers.parseOneOrZero(lines);
+        boolean isStaticDataMember = GeneralParsers.parseOneOrZero(lines);
+        boolean isOutOfLine = GeneralParsers.parseOneOrZero(lines);
+        boolean hasGlobalStorage = GeneralParsers.parseOneOrZero(lines);
 
         return new VarDeclDataV2(storageClass, tlsKind, isModulePrivate, isNRVOVariable, initStyle, isConstexpr,
                 isStaticDataMember, isOutOfLine, hasGlobalStorage, namedDeclData);
@@ -112,7 +112,7 @@ public class DeclDataParser {
         // Parse VarDecl data
         VarDeclDataV2 varDeclData = parseVarDeclData(lines);
 
-        boolean hasInheritedDefaultArg = StreamParser.parseOneOrZero(lines);
+        boolean hasInheritedDefaultArg = GeneralParsers.parseOneOrZero(lines);
 
         return new ParmVarDeclData(hasInheritedDefaultArg, varDeclData);
     }

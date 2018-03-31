@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pt.up.fe.specs.clang.streamparser.StreamParser;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -70,10 +70,10 @@ public class OffsetOfInfo {
 
         // number of expressions
         // int numExpressions = StdErrParser.parseInt(lines, "numExpr:");
-        int numExpressions = StreamParser.parseInt(lines);
+        int numExpressions = GeneralParsers.parseInt(lines);
         // number of components
         // int numComponents = StdErrParser.parseInt(lines, "numComp:");
-        int numComponents = StreamParser.parseInt(lines);
+        int numComponents = GeneralParsers.parseInt(lines);
 
         // Parse each component
         List<OffsetOfClangComponent> components = new ArrayList<>(numComponents);
@@ -87,12 +87,12 @@ public class OffsetOfInfo {
     private static OffsetOfClangComponent parseComponent(LineStream lines) {
         // Kind
         // int kindOrdinal = StdErrParser.parseInt(lines, "kind:");
-        int kindOrdinal = StreamParser.parseInt(lines);
+        int kindOrdinal = GeneralParsers.parseInt(lines);
         OffsetOfComponentKind kind = KIND_VALUES.get()[kindOrdinal];
 
         switch (kind) {
         case ARRAY:
-            int expressionIndex = StreamParser.parseInt(lines);
+            int expressionIndex = GeneralParsers.parseInt(lines);
             return OffsetOfClangComponent.newArrayComponent(expressionIndex);
         case FIELD:
             String fieldName = lines.nextLine();

@@ -38,6 +38,7 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
@@ -53,8 +54,6 @@ import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
-import pt.up.fe.specs.util.enums.EnumHelper;
-import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class StreamParser {
@@ -688,10 +687,6 @@ public class StreamParser {
         map.put(key, new FieldDeclInfo(isBitField, hasInClassInitializer));
     }
 
-    public static int parseInt(LineStream lines) {
-        return Integer.parseInt(lines.nextLine());
-    }
-
     public static int parseInt(LineStream lines, String prefix) {
         String line = lines.nextLine();
         Preconditions.checkArgument(line.startsWith(prefix), "Expected line to start with '" + prefix + "':" + line);
@@ -707,26 +702,10 @@ public class StreamParser {
         // memberName (String)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isArrow = parseOneOrZero(lines.nextLine());
+        boolean isArrow = GeneralParsers.parseOneOrZero(lines.nextLine());
         String memberName = lines.nextLine();
 
         map.put(key, new CxxMemberExprInfo(isArrow, memberName));
-    }
-
-    public static boolean parseOneOrZero(LineStream lines) {
-        return parseOneOrZero(lines.nextLine());
-    }
-
-    public static boolean parseOneOrZero(String aBoolean) {
-        if (aBoolean.equals("1")) {
-            return true;
-        }
-
-        if (aBoolean.equals("0")) {
-            return false;
-        }
-
-        throw new RuntimeException("Unexpected value: " + aBoolean);
     }
 
     public static boolean parseTrueOrFalse(String aBoolean) {
@@ -753,16 +732,16 @@ public class StreamParser {
         // captureKinds (List<LambdaCaptureKind)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isGenericLambda = parseOneOrZero(lines.nextLine());
-        boolean isMutable = parseOneOrZero(lines.nextLine());
-        boolean hasExplicitParameters = parseOneOrZero(lines.nextLine());
-        boolean hasExplicitResultType = parseOneOrZero(lines.nextLine());
+        boolean isGenericLambda = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isMutable = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean hasExplicitParameters = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean hasExplicitResultType = GeneralParsers.parseOneOrZero(lines.nextLine());
 
-        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().valueOf(parseInt(lines));
-        int numCaptures = parseInt(lines);
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().valueOf(GeneralParsers.parseInt(lines));
+        int numCaptures = GeneralParsers.parseInt(lines);
         List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
         for (int i = 0; i < numCaptures; i++) {
-            captureKinds.add(LambdaCaptureKind.getHelper().valueOf(parseInt(lines)));
+            captureKinds.add(LambdaCaptureKind.getHelper().valueOf(GeneralParsers.parseInt(lines)));
         }
 
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
@@ -799,7 +778,7 @@ public class StreamParser {
         // isTypeOperator (boolean)
         // operatorId (String)
 
-        boolean isTypeOperator = parseOneOrZero(lines.nextLine());
+        boolean isTypeOperator = GeneralParsers.parseOneOrZero(lines.nextLine());
         String operatorId = lines.nextLine();
 
         map.put(key, new TypeidData(isTypeOperator, operatorId));
@@ -825,17 +804,11 @@ public class StreamParser {
         // Format:
         // isExplicit (boolean)
 
-        boolean isExplicit = parseOneOrZero(lines.nextLine());
+        boolean isExplicit = GeneralParsers.parseOneOrZero(lines.nextLine());
 
         InitListExprInfo info = new InitListExprInfo(isExplicit);
 
         map.put(key, info);
-    }
-
-    public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper,
-            LineStream lines) {
-
-        return helper.valueOf(StreamParser.parseInt(lines));
     }
 
 }
