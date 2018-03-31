@@ -54,6 +54,7 @@ static const std::string TYPEID_DATA = "<Typeid Data>";
 
 static const std::string INIT_LIST_EXPR_INFO = "<InitListExpr Info>";
 
+static const std::string VISITED_CHILDREN = "<Visited Children>";
 
 
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

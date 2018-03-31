@@ -114,7 +114,8 @@ void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
     dataDumper.dump(clava::DeclNode::VAR_DECL, D);
 
     // Visit children
-    VisitVarDeclChildren(D);
+    visitChildren(clava::DeclNode::VAR_DECL, D);
+    //VisitVarDeclChildren(D);
 
     // Old
     //DumpVarDeclData(D);
@@ -130,7 +131,8 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
     // Visit children
-    VisitCXXRecordDeclChildren(D);
+    visitChildren(clava::DeclNode::CXX_RECORD_DECL, D);
+    //VisitCXXRecordDeclChildren(D);
 
 //    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
     // Visit definition
@@ -262,7 +264,8 @@ void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
     dataDumper.dump(clava::DeclNode::FUNCTION_DECL, D);
 
     // Visit children
-    VisitFunctionDeclChildren(D);
+    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
+    //VisitFunctionDeclChildren(D);
 }
 
 
@@ -275,7 +278,8 @@ void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
     dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
 
     // Visit children
-    VisitFunctionDeclChildren(D);
+    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
+    //VisitFunctionDeclChildren(D);
 }
 
 void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
@@ -287,7 +291,8 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
 
     // Visit children
-    std::vector<std::string> children = VisitFunctionDeclChildren(D);
+    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
+    //std::vector<std::string> children = VisitFunctionDeclChildren(D);
 
     /*
     llvm::errs() << "children:\n";
@@ -324,7 +329,8 @@ void ClangAstDumper::VisitCXXConversionDecl(const CXXConversionDecl *D) {
     dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
 
     // Visit children
-    VisitFunctionDeclChildren(D);
+    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
+    //VisitFunctionDeclChildren(D);
 }
 
 void ClangAstDumper::VisitCXXDestructorDecl(const CXXDestructorDecl *D) {
@@ -336,7 +342,8 @@ void ClangAstDumper::VisitCXXDestructorDecl(const CXXDestructorDecl *D) {
     dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
 
     // Visit children
-    VisitFunctionDeclChildren(D);
+    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
+    //VisitFunctionDeclChildren(D);
 }
 
 
@@ -428,7 +435,8 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     dataDumper.dump(clava::DeclNode::PARM_VAR_DECL, D);
 
     // Visit children
-    VisitParmVarDeclChildren(D);
+    visitChildren(clava::DeclNode::VAR_DECL, D);
+    //VisitParmVarDeclChildren(D);
 
     // Old
     //DumpVarDeclData(D);

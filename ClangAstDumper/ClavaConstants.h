@@ -27,7 +27,8 @@ namespace clava {
         FUNCTION_DECL,
         CXX_METHOD_DECL,
         VAR_DECL,
-        PARM_VAR_DECL
+        PARM_VAR_DECL,
+        CXX_RECORD_DECL
     };
 
     /**

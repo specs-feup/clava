@@ -119,6 +119,16 @@ private:
 
     void log(std::string name, const void* addr);
 
+
+    // Children visitors
+    void dumpVisitedChildren(const void *pointer, std::vector<std::string> children);
+
+
+    void visitChildren(clava::DeclNode declNode, const Decl* D);
+    void visitChildren(clava::StmtNode stmtNode, const Stmt* S);
+    void visitChildren(clava::TypeNode typeNode, const Type* T);
+
+
     // Children visitors for Decls
     std::vector<std::string> VisitFunctionDeclChildren(const FunctionDecl *D);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);

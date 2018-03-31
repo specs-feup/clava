@@ -3,7 +3,7 @@
 //
 
 #include "ClangAstDumper.h"
-
+#include "ClangAstDumperConstants.h"
 #include "ClangNodes.h"
 
 #include "clang/AST/AST.h"
@@ -177,4 +177,15 @@ const Type* getTypePtr(QualType T, std::string source)  {
     assert(!T.isNull() && "Cannot retrieve a NULL type pointer");
 
     return T.getTypePtr();
+}
+
+
+void ClangAstDumper::dumpVisitedChildren(const void *pointer, std::vector<std::string> children) {
+    llvm::errs() << VISITED_CHILDREN << "\n";
+    llvm::errs() << getId(pointer) << "\n";
+    llvm::errs() << children.size() << "\n";
+
+    for(auto child : children) {
+        llvm::errs() << child << "\n";
+    }
 }
