@@ -45,13 +45,17 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
         // Top-level Node
         llvm::errs() << TOP_LEVEL_NODES << "\n";
         llvm::errs() << D << "_" << id << "\n";
+
+        // Visit Top Node
+        // Experiment: can this visitor replace all other visitors?
+        dumper.VisitDeclTop(D);
     }
 
     return false;
 
 }
 
-PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id) : Context(Context), id(id), dumper(Context, id)  {};
+PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper dumper) : Context(Context), id(id), dumper(dumper)  {};
 
 static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::LangOptions lopt) {
     clang::SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
@@ -286,12 +290,32 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
 }
 
 
+ClangAstDumper PrintNodesTypesRelationsVisitor::getDumper() {
+        return dumper;
+    }
+
+/*
     MyASTConsumer::MyASTConsumer(ASTContext *C, int id) : topLevelDeclVisitor(C, id), printRelationsVisitor(C, id), id(id) {
         std::ofstream consumer;
         consumer.open("consumer_order.txt", std::ofstream::app);
         consumer << "ASTConsumer built " << id << "\n";
         consumer.close();
     }
+*/
+MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(id)
+        ,topLevelDeclVisitor(C, id, dumper), printRelationsVisitor(C, id, dumper)  {
+/*
+    this->id = id;
+    this->dumper = ClangAstDumper(C, id);
+    topLevelDeclVisitor = DumpAstVisitor(C, id, dumper);
+    printRelationsVisitor = PrintNodesTypesRelationsVisitor(C, id, dumper);
+*/
+    //dumper(C, id), topLevelDeclVisitor(C, id, dumper), printRelationsVisitor(C, id, dumper), id(id)
+    std::ofstream consumer;
+    consumer.open("consumer_order.txt", std::ofstream::app);
+    consumer << "ASTConsumer built " << id << "\n";
+    consumer.close();
+}
 
     MyASTConsumer::~MyASTConsumer() {
         std::ofstream consumer;
@@ -334,7 +358,10 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
         int counter = GLOBAL_COUNTER.fetch_add(1);
         DumpResources::writeCounter(counter);
 
-        return llvm::make_unique<MyASTConsumer>(&CI.getASTContext(), counter);
+        ASTContext *Context = &CI.getASTContext();
+        ClangAstDumper dumper(Context, counter);
+
+        return llvm::make_unique<MyASTConsumer>(Context, counter, dumper);
     }
 
 
