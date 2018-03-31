@@ -28,9 +28,13 @@ import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+/**
+ * ClavaData parsers for Decl nodes.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class DeclDataParser {
-
-    
 
     // public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
     // Function<LineStream, D> dataParser) {

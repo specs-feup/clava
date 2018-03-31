@@ -36,6 +36,9 @@ import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
+import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
+import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
+import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -62,6 +65,14 @@ public class ClavaDataParser extends GenericLineStreamParser {
         DATA_PARSERS.put(VarDeclDataV2.class, DeclDataParser::parseVarDeclData);
         DATA_PARSERS.put(ParmVarDeclData.class, DeclDataParser::parseParmVarDeclData);
 
+        // STMTS
+        DATA_PARSERS.put(StmtData.class, StmtDataParser::parseStmtData);
+
+        // TYPES
+        DATA_PARSERS.put(TypeDataV2.class, TypeDataParser::parseTypeData);
+
+        // EXPRS
+        DATA_PARSERS.put(ExprDataV2.class, ExprDataParser::parseExprData);
     }
 
     public static LineStreamParser newInstance() {
@@ -109,7 +120,8 @@ public class ClavaDataParser extends GenericLineStreamParser {
 
         String id = getNodeDataId(clavaDataClass);
 
-        BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> ClavaDataParser.parseClavaDataTop(dataParser,
+        BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> ClavaDataParser.parseClavaDataTop(
+                dataParser,
                 lineStream, map);
 
         return SnippetParser.newInstance(id, resultInit, parser);
@@ -184,25 +196,25 @@ public class ClavaDataParser extends GenericLineStreamParser {
 
     public static <D extends ClavaData> void parseClavaDataTop(Function<LineStream, D> dataParser, LineStream lines,
             Map<String, D> map) {
-    
+
         // TODO: Let ClavaNode parser read the key/id, and access it from clavaData.getId()
         // String key = lines.nextLine();
         // SourceRange location = ClavaDataParser.parseLocation(lines);
-    
+
         D clavaData = dataParser.apply(lines);
-    
+
         D previousValue = map.put(clavaData.getId(), clavaData);
-    
+
         if (previousValue != null) {
             throw new RuntimeException("Duplicated parsing of node '" + clavaData.getId() + "'");
         }
-    
+
     }
 
     public static ClavaData parseClavaData(LineStream lines) {
         String id = lines.nextLine();
         SourceRange location = parseLocation(lines);
-    
+
         return new ClavaData(id, location);
     }
 
