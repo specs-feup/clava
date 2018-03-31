@@ -13,10 +13,6 @@
 
 package pt.up.fe.specs.clang.parsers.clavadata;
 
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
 import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.NameKind;
@@ -34,36 +30,24 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class DeclDataParser {
 
-    public static <D extends ClavaData> void parseClavaData(Function<LineStream, D> dataParser, LineStream lines,
-            Map<String, D> map) {
+    
 
-        // TODO: Let ClavaNode parser read the key/id, and access it from clavaData.getId()
-        String key = lines.nextLine();
-
-        D clavaData = dataParser.apply(lines);
-
-        D previousValue = map.put(key, clavaData);
-
-        if (previousValue != null) {
-            throw new RuntimeException("Duplicated parsing of node '" + key + "'");
-        }
-
-    }
-
-    public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
-            Function<LineStream, D> dataParser) {
-
-        return (lineStream, map) -> parseClavaData(dataParser, lineStream, map);
-    }
+    // public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
+    // Function<LineStream, D> dataParser) {
+    //
+    // return (lineStream, map) -> parseClavaDataTop(dataParser, lineStream, map);
+    // }
 
     public static DeclDataV2 parseDeclData(LineStream lines) {
+
+        ClavaData clavaData = ClavaDataParser.parseClavaData(lines);
 
         boolean isImplicit = StreamParser.parseOneOrZero(lines);
         boolean isUsed = StreamParser.parseOneOrZero(lines);
         boolean isReferenced = StreamParser.parseOneOrZero(lines);
         boolean isInvalidDecl = StreamParser.parseOneOrZero(lines);
 
-        return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl);
+        return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, clavaData);
     }
 
     public static NamedDeclData parseNamedDeclData(LineStream lines) {

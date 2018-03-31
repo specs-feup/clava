@@ -22,9 +22,13 @@ import java.util.function.Function;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clang.linestreamparser.GenericLineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
 import pt.up.fe.specs.clang.streamparser.SnippetParser;
+import pt.up.fe.specs.clava.SourceLocation;
+import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
@@ -105,7 +109,7 @@ public class ClavaDataParser extends GenericLineStreamParser {
 
         String id = getNodeDataId(clavaDataClass);
 
-        BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> DeclDataParser.parseClavaData(dataParser,
+        BiConsumer<LineStream, Map<String, D>> parser = (lineStream, map) -> ClavaDataParser.parseClavaDataTop(dataParser,
                 lineStream, map);
 
         return SnippetParser.newInstance(id, resultInit, parser);
@@ -136,6 +140,70 @@ public class ClavaDataParser extends GenericLineStreamParser {
      */
     private ClavaDataParser(Map<DataKey<?>, SnippetParser<?, ?>> parsers) {
         super(parsers);
+    }
+
+    public static SourceRange parseLocation(LineStream lines) {
+        // Next line will tell if is an invalid location or if to continue parsing
+        String firstPart = lines.nextLine();
+
+        if (firstPart.equals("<invalid>")) {
+            return SourceRange.invalidRange();
+        }
+
+        // Filepaths will be shared between most nodes, intern them
+
+        String startFilepath = firstPart.intern();
+        // String startFilepath = firstPart;
+        int startLine = Integer.parseInt(lines.nextLine());
+        int startColumn = Integer.parseInt(lines.nextLine());
+
+        SourceLocation startLocation = new SourceLocation(startFilepath, startLine, startColumn);
+
+        // Check if start is the same as the end
+        String secondPart = lines.nextLine();
+
+        if (startFilepath.equals("<built-in>")) {
+            Preconditions.checkArgument(secondPart.equals("<end>"));
+            return SourceRange.invalidRange();
+        }
+
+        if (secondPart.equals("<end>")) {
+            return new SourceRange(startLocation);
+        }
+
+        // Parser end location
+        String endFilepath = secondPart.intern();
+        // String endFilepath = secondPart;
+
+        int endLine = Integer.parseInt(lines.nextLine());
+        int endColumn = Integer.parseInt(lines.nextLine());
+
+        SourceLocation endLocation = new SourceLocation(endFilepath, endLine, endColumn);
+        return new SourceRange(startLocation, endLocation);
+    }
+
+    public static <D extends ClavaData> void parseClavaDataTop(Function<LineStream, D> dataParser, LineStream lines,
+            Map<String, D> map) {
+    
+        // TODO: Let ClavaNode parser read the key/id, and access it from clavaData.getId()
+        // String key = lines.nextLine();
+        // SourceRange location = ClavaDataParser.parseLocation(lines);
+    
+        D clavaData = dataParser.apply(lines);
+    
+        D previousValue = map.put(clavaData.getId(), clavaData);
+    
+        if (previousValue != null) {
+            throw new RuntimeException("Duplicated parsing of node '" + clavaData.getId() + "'");
+        }
+    
+    }
+
+    public static ClavaData parseClavaData(LineStream lines) {
+        String id = lines.nextLine();
+        SourceRange location = parseLocation(lines);
+    
+        return new ClavaData(id, location);
     }
 
 }
