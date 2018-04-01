@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.parsers;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -50,7 +51,7 @@ public class TopLevelNodesParser extends GenericLineStreamParser {
     private static SimpleSnippetParser<Set<String>> newSnippetParser() {
 
         String id = PARSER_ID;
-        Set<String> resultInit = new HashSet<>();
+        Set<String> resultInit = new LinkedHashSet<>();
 
         BiConsumer<LineStream, Set<String>> parser = (linestream, set) -> GeneralParsers
                 .parseStringSet(PARSER_ID, linestream, set);

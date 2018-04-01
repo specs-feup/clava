@@ -188,6 +188,9 @@ public class ClangAstParser {
 
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
+
+        new ClangStreamParser(stderr).parse();
+
         // System.out.println("NUM DECLS:" + stderr.get(ClangNodeParsing.getNodeDataKey(Decl.class)).size());
         // System.out.println("KEYS:" + stderr.get);
         // DataStore stderr = new StdErrParser().parse(output.getStdErr());
