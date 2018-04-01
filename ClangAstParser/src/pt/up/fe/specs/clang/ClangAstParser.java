@@ -40,6 +40,7 @@ import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
+import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.utils.ZipResourceManager;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;

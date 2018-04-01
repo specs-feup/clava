@@ -11,11 +11,10 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang;
+package pt.up.fe.specs.clang.streamparserv2;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -37,24 +36,28 @@ import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
  */
 public class ClangStreamParser {
     private final DataStore data;
-    private final Map<String, Class<ClavaData>> clavaDataMap;
-    private final Map<String, BiFunction<ClavaData, List<ClavaNode>, ClavaNode>> clavaNodeBuilders;
+    // private final Map<String, Class<ClavaData>> clavaDataMap;
+    // private final Map<String, BiFunction<ClavaData, List<ClavaNode>, ClavaNode>> clavaNodeBuilders;
+
+    private final ClassesService classesService;
 
     public ClangStreamParser(DataStore data) {
         this.data = data;
-        clavaDataMap = buildClavaDataMap();
-        clavaNodeBuilders = buildClavaNodeBuilders();
+        // clavaDataMap = buildClavaDataMap();
+        // clavaNodeBuilders = buildClavaNodeBuilders();
+
+        classesService = new ClassesService(new HashMap<>());
     }
 
-    private Map<String, Class<ClavaData>> buildClavaDataMap() {
-        // TODO Auto-generated method stub
-        return new HashMap<>();
-    }
+    // private Map<String, Class<ClavaData>> buildClavaDataMap() {
+    // // TODO Auto-generated method stub
+    // return new HashMap<>();
+    // }
 
-    private Map<String, BiFunction<ClavaData, List<ClavaNode>, ClavaNode>> buildClavaNodeBuilders() {
-        // TODO Auto-generated method stub
-        return new HashMap<>();
-    }
+    // private Map<String, BiFunction<ClavaData, List<ClavaNode>, ClavaNode>> buildClavaNodeBuilders() {
+    // // TODO Auto-generated method stub
+    // return new HashMap<>();
+    // }
 
     public void parse() {
         // Get top-level nodes
@@ -74,8 +77,12 @@ public class ClangStreamParser {
         String classname = data.get(IdToClassnameParser.getDataKey()).get(nodeId);
         System.out.println("CLASSNAME:" + classname);
 
+        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname);
+        System.out.println("CLAVA NODE:" + clavaNodeClass);
+
         // Map classname to ClavaData class
-        Class<ClavaData> clavaDataClass = getClavaDataClass(classname);
+        Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
+        // Class<ClavaData> clavaDataClass = getClavaDataClass(classname);
         if (clavaDataClass == null) {
             System.out.println("No ClavaData class for node '" + nodeId + "' (" + classname + ")");
             return null;
@@ -102,7 +109,8 @@ public class ClangStreamParser {
                 .collect(Collectors.toList());
         System.out.println("CHILDREN:" + children);
 
-        BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = getBuilder(classname);
+        BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = classesService.getBuilder(clavaNodeClass,
+                clavaDataClass);
         if (builder == null) {
             System.out.println("No builder for node '" + nodeId + "' (" + classname + ")");
             return null;
@@ -111,22 +119,22 @@ public class ClangStreamParser {
         // Build node based on data and children (map with ClavaNode class -> builder?)
         return builder.apply(clavaData, children);
     }
+    //
+    // private Class<ClavaData> getClavaDataClass(String classname) {
+    // Class<ClavaData> clavaDataClass = clavaDataMap.get(classname);
+    // if (clavaDataClass == null) {
+    // return null;
+    // }
+    //
+    // return clavaDataClass;
+    // }
 
-    private Class<ClavaData> getClavaDataClass(String classname) {
-        Class<ClavaData> clavaDataClass = clavaDataMap.get(classname);
-        if (clavaDataClass == null) {
-            return null;
-        }
-
-        return clavaDataClass;
-    }
-
-    private BiFunction<ClavaData, List<ClavaNode>, ClavaNode> getBuilder(String classname) {
-        BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = clavaNodeBuilders.get(classname);
-        if (builder == null) {
-            return null;
-        }
-
-        return builder;
-    }
+    // private BiFunction<ClavaData, List<ClavaNode>, ClavaNode> getBuilder(String classname) {
+    // BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = clavaNodeBuilders.get(classname);
+    // if (builder == null) {
+    // return null;
+    // }
+    //
+    // return builder;
+    // }
 }
