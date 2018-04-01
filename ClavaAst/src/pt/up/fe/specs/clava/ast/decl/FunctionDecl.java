@@ -74,6 +74,12 @@ public class FunctionDecl extends DeclaratorDecl {
     // private final int numParameters;
     // private final boolean hasDefinition;
 
+    // Just for testing
+    // public FunctionDecl(FunctionDeclDataV2 data, List<ClavaNode> children) {
+    // super(null, null, null, null, Collections.emptyList());
+    // functionDeclData = null;
+    // }
+
     /**
      * Constructor for a function definition.
      */
