@@ -55,11 +55,12 @@ public class GeneralParsers {
         return helper.valueOf(parseInt(lines));
     }
 
-    public static <K> void checkDuplicate(String id, K key, Map<K, ?> map) {
+    public static <K> void checkDuplicate(String id, K key, Object value, Map<K, ?> map) {
         Object currentObject = map.get(key);
         if (currentObject != null) {
             throw new RuntimeException("Duplicate value for id '" + id + "', key '" + key + "'");
         }
+
     }
 
     public static <K> void checkDuplicate(String id, K key, Set<K> set) {
@@ -72,7 +73,7 @@ public class GeneralParsers {
         String key = linestream.nextLine();
         String value = linestream.nextLine();
 
-        GeneralParsers.checkDuplicate(id, key, stringMap);
+        GeneralParsers.checkDuplicate(id, key, value, stringMap);
         stringMap.put(key, value);
     }
 

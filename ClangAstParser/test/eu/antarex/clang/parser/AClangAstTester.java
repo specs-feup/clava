@@ -155,10 +155,12 @@ public abstract class AClangAstTester {
 
     // @After
     public static void clear() throws Exception {
+
         // if (!AClangAstTester.CLEAN) {
         // if (keepFiles) {
         // return;
         // }
+
         // Delete resources under test
         File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
         SpecsIo.deleteFolderContents(outputFolder);

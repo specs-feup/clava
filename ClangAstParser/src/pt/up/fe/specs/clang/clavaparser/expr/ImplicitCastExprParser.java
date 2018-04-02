@@ -50,7 +50,8 @@ public class ImplicitCastExprParser extends AClangNodeParser<ImplicitCastExpr> {
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
         CastKind castKind = parser.apply(ClangGenericParsers::parseCastKind);
 
-        List<ClavaNode> children = getConverter().parse(node.getChildren());
+        // List<ClavaNode> children = getConverter().parse(node.getChildren());
+        List<ClavaNode> children = parseChildren(node);
 
         if (children.size() == 1) {
             Expr subExpr = toExpr(children.get(0));

@@ -32,6 +32,8 @@ import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
@@ -44,6 +46,7 @@ public class ClavaNodeToData {
     static {
         CLAVA_NODE_TO_DATA = new HashMap<>();
 
+        // DECL
         CLAVA_NODE_TO_DATA.put(FunctionDecl.class, FunctionDeclDataV2.class);
         CLAVA_NODE_TO_DATA.put(CXXConstructorDecl.class, CXXMethodDeclDataV2.class);
         CLAVA_NODE_TO_DATA.put(CXXConversionDecl.class, CXXMethodDeclDataV2.class);
@@ -51,6 +54,9 @@ public class ClavaNodeToData {
         CLAVA_NODE_TO_DATA.put(CXXMethodDecl.class, CXXMethodDeclDataV2.class);
         CLAVA_NODE_TO_DATA.put(VarDecl.class, VarDeclDataV2.class);
         CLAVA_NODE_TO_DATA.put(ParmVarDecl.class, ParmVarDeclData.class);
+
+        // EXPR
+        CLAVA_NODE_TO_DATA.put(ImplicitCastExpr.class, CastExprData.class);
     }
 
     public static Class<? extends ClavaData> getClavaDataClass(Class<? extends ClavaNode> clavaNodeClass) {
