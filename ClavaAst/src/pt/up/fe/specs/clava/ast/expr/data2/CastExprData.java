@@ -13,36 +13,35 @@
 
 package pt.up.fe.specs.clava.ast.expr.data2;
 
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.language.CastKind;
 
-public class ExprDataV2 extends ClavaData {
+public class CastExprData extends ExprDataV2 {
 
-    public static ExprDataV2 empty() {
-        return new ExprDataV2(ClavaData.empty());
+    private final CastKind castKind;
+
+    public CastExprData(CastKind castKind, ExprDataV2 data) {
+        super(data);
+
+        this.castKind = castKind;
     }
 
-    public ExprDataV2(ClavaData clavaData) {
-        super(clavaData);
+    public CastExprData(CastExprData data) {
+        this(data.castKind, data);
 
     }
-
-    public ExprDataV2(ExprDataV2 data) {
-        super((ClavaData) data);
-
-    }
-
-    // public ExprDataV2(ExprDataV2 data) {
-    // this(data);
-    // }
 
     @Override
-    public ExprDataV2 copy() {
-        return new ExprDataV2(this);
+    public CastExprData copy() {
+        return new CastExprData(this);
     }
 
     @Override
     public String toString() {
-
-        return toString(super.toString(), "");
+        return toString(super.toString(), "castKind: " + castKind);
     }
+
+    public CastKind getCastKind() {
+        return castKind;
+    }
+
 }
