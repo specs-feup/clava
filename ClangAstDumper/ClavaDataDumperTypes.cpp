@@ -6,12 +6,12 @@
 
 
 void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
-    DumpHeader(clava::TYPE_DATA_NAMES[typeNode], T);
+    DumpHeader(getDataName(typeNode), T);
 
     switch(typeNode) {
         case clava::TypeNode::TYPE:
             DumpTypeData(T); break;
-        default: throw std::invalid_argument("ClangDataDumper::dump: Case not implemented, '"+clava::TYPE_DATA_NAMES[typeNode]+"'");
+        default: throw std::invalid_argument("ClangDataDumper::dump(TypeNode): Case not implemented, '"+ getName(typeNode) +"'");
     }
 }
 

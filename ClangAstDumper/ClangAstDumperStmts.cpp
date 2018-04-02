@@ -18,6 +18,7 @@ using namespace clang;
  */
 
 bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
+
     if(seenStmts.count(stmtAddr) != 0) {
         return true;
     }
@@ -63,9 +64,13 @@ void ClangAstDumper::VisitDeclStmt(const DeclStmt *Node) {
         return;
     }
 
-    for (DeclStmt::const_decl_iterator I = Node->decl_begin(), E = Node->decl_end(); I != E; ++I) {
-        VisitDeclTop(*I);
-    }
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT , Node);
+
+    // Visit children
+    visitChildren(clava::StmtNode::DECL_STMT, Node);
+
+
 
 }
 void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
@@ -85,9 +90,11 @@ void ClangAstDumper::VisitCompoundStmt(const CompoundStmt *Node) {
         return;
     }
 
-    for (auto &Arg : Node->body()) {
-        VisitStmtTop(Arg);
-    }
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT , Node);
+
+    // Visit children
+    visitChildren(clava::StmtNode::COMPOUND_STMT, Node);
 }
 
 void ClangAstDumper::VisitForStmt(const ForStmt *Node) {

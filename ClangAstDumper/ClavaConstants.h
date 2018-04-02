@@ -37,9 +37,12 @@ namespace clava {
     enum class StmtNode {
         // Stmt nodes
         STMT,
+        COMPOUND_STMT,
+        DECL_STMT,
 
         // Expr nodes
-        EXPR
+        EXPR,
+        CAST_EXPR
     };
 
     /**
@@ -56,6 +59,12 @@ namespace clava {
     enum class TypeNode {
         TYPE
     };
+
+
+    const std::string getName(const DeclNode D);
+    const std::string getName(const StmtNode S);
+    const std::string getName(const TypeNode T);
+
 
 }
 #endif //CLANGASTDUMPER_INFODUMPERCONSTANTS_H

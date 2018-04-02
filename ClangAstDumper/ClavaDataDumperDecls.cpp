@@ -4,9 +4,10 @@
 
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
+#include "ClavaConstants.h"
 
 void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
-    DumpHeader(clava::DECL_DATA_NAMES[declNode], D);
+    DumpHeader(getDataName(declNode), D);
 
     switch(declNode) {
         case clava::DeclNode::DECL:
@@ -21,7 +22,10 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpVarDeclData(static_cast<const VarDecl *>(D)); break;
         case clava::DeclNode::PARM_VAR_DECL:
             DumpParmVarDeclData(static_cast<const ParmVarDecl *>(D)); break;
-        default: throw std::invalid_argument("ClangDataDumper::dump: Case not implemented, '"+clava::DECL_DATA_NAMES[declNode]+"'");
+        default:
+            throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
+
+
     }
 }
 

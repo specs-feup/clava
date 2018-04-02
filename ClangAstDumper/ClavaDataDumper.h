@@ -6,6 +6,8 @@
 #ifndef CLANGASTDUMPER_CLAVADATADUMPER_H
 #define CLANGASTDUMPER_CLAVADATADUMPER_H
 
+#include "ClavaConstants.h"
+
 #include "clang/AST/AST.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/Stmt.h"
@@ -22,7 +24,6 @@
 #include <string>
 
 //#include "ClangAstDumper.h"
-#include "ClavaConstants.h"
 
 
 using namespace clang;
@@ -50,6 +51,7 @@ namespace clava {
         void dump(clava::DeclNode declNode, const Decl* D);
         void dump(clava::StmtNode stmtNode, const Stmt* S);
         void dump(clava::TypeNode typeNode, const Type* T);
+
 
         //void DumpHeader(const Decl* D);
         //void DumpHeader(const Stmt* S);
@@ -89,53 +91,21 @@ namespace clava {
 
         // EXPRS
         void DumpExprData(const Expr *E);
+        void DumpCastExprData(const CastExpr *E);
 
 
         // TYPES
         void DumpTypeData(const Type *T);
-    };
 
-
-
-
-    /**
-    * Names of DeclData dumpers
-    */
-    static std::map<DeclNode,std::string>  DECL_DATA_NAMES = {
-            {DeclNode::DECL, "<DeclData>"},
-            {DeclNode::NAMED_DECL, "<NamedDeclData>"},
-            {DeclNode::FUNCTION_DECL, "<FunctionDeclData>"},
-            {DeclNode::CXX_METHOD_DECL, "<CXXMethodDeclData>"},
-            {DeclNode::VAR_DECL, "<VarDeclData>"},
-            {DeclNode::PARM_VAR_DECL, "<ParmVarDeclData>"}
-    };
-
-
-    /**
-    * Names of StmtData dumpers. In Clang Expr is a subclass of Stmt, but in Clava they are different classes.
-    */
-    static std::map<StmtNode,std::string>  STMT_DATA_NAMES = {
-            // Stmts
-            {StmtNode::STMT, "<StmtData>"},
-
-            // Exprs
-            {StmtNode::EXPR, "<ExprData>"}
-    };
-
-    /**
-    * Names of ExprData dumpers. In Clang Expr is a subclass of Stmt, but in Clava they are different classes.
-    */
-/*
-    static std::map<ExprNode,std::string>  EXPR_DATA_NAMES = {
+        const std::string getDataName(DeclNode node);
+        const std::string getDataName(StmtNode node);
+        const std::string getDataName(TypeNode node);
+        const std::string getDataName(std::string nodeName);
 
     };
-*/
-    /**
-    * Names of StmtData dumpers
-    */
-    static std::map<TypeNode,std::string>  TYPE_DATA_NAMES = {
-            {TypeNode::TYPE, "<TypeData>"}
-    };
+
+
+
 }
 
 #endif //CLANGASTDUMPER_CLAVADATADUMPER_H

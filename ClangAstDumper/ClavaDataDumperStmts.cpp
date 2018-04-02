@@ -6,14 +6,16 @@
 #include "ClangNodes.h"
 
 void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
-    DumpHeader(clava::STMT_DATA_NAMES[stmtNode], S);
+    DumpHeader(getDataName(stmtNode), S);
 
     switch(stmtNode) {
         case clava::StmtNode::STMT:
             DumpStmtData(S); break;
         case clava::StmtNode::EXPR:
             DumpExprData(static_cast<const Expr *>(S)); break;
-        default: throw std::invalid_argument("ClangDataDumper::dump: Case not implemented, '"+clava::STMT_DATA_NAMES[stmtNode]+"'");
+        case clava::StmtNode::CAST_EXPR:
+            DumpCastExprData(static_cast<const CastExpr *>(S)); break;
+        default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
 }
 
@@ -37,3 +39,11 @@ void clava::ClavaDataDumper::DumpStmtData(const Stmt *S) {
 void clava::ClavaDataDumper::DumpExprData(const Expr *E) {
     DumpStmtData(E);
 }
+
+void clava::ClavaDataDumper::DumpCastExprData(const CastExpr *E) {
+    DumpExprData(E);
+
+    dump(E->getCastKindName());
+}
+
+

@@ -96,13 +96,15 @@ public:
 class DumpAstVisitor : public RecursiveASTVisitor<DumpAstVisitor> {
 
 public:
-    explicit DumpAstVisitor(ASTContext *Context, int id, ClangAstDumper dumper) : Context(Context) , id(id), dumper(dumper) {}
+    //explicit DumpAstVisitor(ASTContext *Context, int id, ClangAstDumper *dumper) : Context(Context) , id(id), dumper(dumper) {}
+    explicit DumpAstVisitor(ASTContext *Context, int id) : Context(Context) , id(id) {}
     bool TraverseDecl(Decl *D);
 
 private:
     ASTContext *Context;
     int id;
-    ClangAstDumper dumper;
+    //ClangAstDumper dumper;
+    //ClangAstDumper *dumper;
 };
 
 
@@ -112,10 +114,13 @@ private:
     ASTContext *Context;
     int id;
     ClangAstDumper dumper;
+    //ClangAstDumper *dumper;
     std::set<void *> seenNodes;
 
 public:
+    //explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper *dumper);
     explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper dumper);
+    //bool TraverseDecl(Decl *D);
 
     bool VisitOMPExecutableDirective(OMPExecutableDirective * D);
     //bool VisitDeclRefExpr(DeclRefExpr * D);
@@ -142,7 +147,7 @@ public:
 
     void dumpNodeToType(std::ofstream &stream, void* nodeAddr, const QualType& type, bool checkDuplicates = true);
 
-    ClangAstDumper getDumper();
+    //ClangAstDumper getDumper();
 
 };
 
@@ -159,6 +164,7 @@ private:
 
     public:
     MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper);
+    //MyASTConsumer(ASTContext *C, int id, ClangAstDumper *dumper);
     ~MyASTConsumer();
 
 

@@ -65,6 +65,10 @@ public:
     void VisitCompoundStmt(const CompoundStmt *Node);
     void VisitForStmt(const ForStmt *Node);
 
+
+    /*
+     * EXPRS
+     */
     void VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExpr *Node);
     void VisitCXXConstructExpr(const CXXConstructExpr *Node);
     void VisitDeclRefExpr(const DeclRefExpr *Node);
@@ -78,6 +82,8 @@ public:
     void VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node);
     void VisitCXXTypeidExpr(const CXXTypeidExpr *Node);
     void VisitInitListExpr(const InitListExpr *Node);
+    void VisitCastExpr(const CastExpr *Node); // Works for ImplicitCastExpr, etc
+    //void VisitImplicitCastExpr(const ImplicitCastExpr *Node);
 
 
 
@@ -130,13 +136,21 @@ private:
 
 
     // Children visitors for Decls
-    std::vector<std::string> VisitFunctionDeclChildren(const FunctionDecl *D);
+    void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
-    std::vector<std::string> VisitCXXRecordDeclChildren(const CXXRecordDecl *D);
+    void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
 
-    std::vector<std::string> VisitVarDeclChildren(const VarDecl *D);
-    std::vector<std::string> VisitParmVarDeclChildren(const ParmVarDecl *D);
+    void VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children);
+    void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);
 
+
+    // Children visitors for Stmts
+    void VisitStmtChildren(const Stmt *S, std::vector<std::string> &children);
+    void VisitCompoundStmtChildren(const CompoundStmt *S, std::vector<std::string> &children);
+    void VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::string> &children);
+
+    // Children visitors for Exprs
+    void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
 
     // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);

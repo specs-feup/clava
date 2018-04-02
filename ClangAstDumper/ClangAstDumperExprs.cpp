@@ -303,3 +303,17 @@ void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
     llvm::errs() << isExplicit << "\n";
 
 }
+
+//void ClangAstDumper::VisitImplicitCastExpr(const ImplicitCastExpr *Node) {
+void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);
+
+    // Visit children
+    visitChildren(clava::StmtNode::CAST_EXPR , Node);
+}
+

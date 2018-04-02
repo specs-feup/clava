@@ -4,6 +4,7 @@
 
 #include "ClavaDataDumper.h"
 
+#include "ClavaConstants.h"
 #include "ClangNodes.h"
 
 #include <sstream>
@@ -51,4 +52,67 @@ void clava::ClavaDataDumper::dump(std::string string) {
     llvm::errs() << string << "\n";
 }
 
+
+
+const std::string clava::ClavaDataDumper::getDataName(std::string nodeName) {
+    return "<" + nodeName + "Data>";
+}
+
+const std::string clava::ClavaDataDumper::getDataName(DeclNode node) {
+    return getDataName(clava::getName(node));
+}
+const std::string clava::ClavaDataDumper::getDataName(StmtNode node) {
+    return getDataName(clava::getName(node));
+}
+
+const std::string clava::ClavaDataDumper::getDataName(TypeNode node) {
+    return getDataName(clava::getName(node));
+}
+
+/**
+* Names of DeclData dumpers
+*/
+/*
+static std::map<DeclNode,std::string>  DECL_DATA_NAMES = {
+        {DeclNode::DECL, "<DeclData>"},
+        {DeclNode::NAMED_DECL, "<NamedDeclData>"},
+        {DeclNode::FUNCTION_DECL, "<FunctionDeclData>"},
+        {DeclNode::CXX_METHOD_DECL, "<CXXMethodDeclData>"},
+        {DeclNode::VAR_DECL, "<VarDeclData>"},
+        {DeclNode::PARM_VAR_DECL, "<ParmVarDeclData>"},
+        {DeclNode::CXX_RECORD_DECL, "<CXXRecordDeclData>"}
+
+};
+*/
+
+/**
+* Names of StmtData dumpers. In Clang Expr is a subclass of Stmt, but in Clava they are different classes.
+*/
+/*
+static std::map<StmtNode,std::string>  STMT_DATA_NAMES = {
+        // Stmts
+        {StmtNode::STMT, "<StmtData>"},
+        {StmtNode::COMPOUND_STMT, "<CompoundStmtData>"},
+        {StmtNode::DECL_STMT, "<DeclStmtData>"},
+
+        // Exprs
+        {StmtNode::EXPR, "<ExprData>"}
+};
+*/
+/**
+* Names of ExprData dumpers. In Clang Expr is a subclass of Stmt, but in Clava they are different classes.
+*/
+/*
+    static std::map<ExprNode,std::string>  EXPR_DATA_NAMES = {
+
+    };
+*/
+/**
+* Names of StmtData dumpers
+*/
+/*
+static std::map<TypeNode,std::string>  TYPE_DATA_NAMES = {
+        {TypeNode::TYPE, "<TypeData>"}
+};
+ */
 

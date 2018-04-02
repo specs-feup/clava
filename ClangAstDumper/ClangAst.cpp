@@ -48,14 +48,46 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
 
         // Visit Top Node
         // Experiment: can this visitor replace all other visitors?
-        dumper.VisitDeclTop(D);
+        //dumper.VisitDeclTop(D);
+        //dumper->VisitDeclTop(D);
     }
 
     return false;
 
 }
 
+
+
+//bool PrintNodesTypesRelationsVisitor::TraverseDecl(Decl *D) {
+/*
+    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+    if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
+        // Visit Top Node
+        // Experiment: can this visitor replace all other visitors?
+        dumper.VisitDeclTop(D);
+    }
+
+*/
+//    return RecursiveASTVisitor::TraverseDecl(D);
+    /*
+    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+    if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
+        // Visit Top Node
+        // Experiment: can this visitor replace all other visitors?
+        dumper.VisitDeclTop(D);
+        //dumper->VisitDeclTop(D);
+    }
+
+    // TODO: If at some moment dumper provides all information, this can be set to false
+    return true;
+*/
+//}
+
+
+
+
 PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper dumper) : Context(Context), id(id), dumper(dumper)  {};
+//PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper *dumper) : Context(Context), id(id), dumper(dumper)  {};
 
 static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::LangOptions lopt) {
     clang::SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
@@ -216,6 +248,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         if (!fullLocation.isInSystemHeader()) {
             dumper.VisitDeclTop(D);
+            //dumper->VisitDeclTop(D);
             return true;
         }
 
@@ -227,6 +260,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         if (!fullLocation.isInSystemHeader()) {
             dumper.VisitStmtTop(D);
+            //dumper->VisitStmtTop(D);
             return true;
         }
 
@@ -267,6 +301,7 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
 
 
     dumper.VisitTypeTop(type);
+    //dumper->VisitTypeTop(type);
 }
 
 
@@ -287,13 +322,14 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
     }
 
     dumper.VisitTypeTop(typeAddr);
+    // dumper->VisitTypeTop(typeAddr);
 }
 
-
+/*
 ClangAstDumper PrintNodesTypesRelationsVisitor::getDumper() {
         return dumper;
     }
-
+*/
 /*
     MyASTConsumer::MyASTConsumer(ASTContext *C, int id) : topLevelDeclVisitor(C, id), printRelationsVisitor(C, id), id(id) {
         std::ofstream consumer;
@@ -303,7 +339,8 @@ ClangAstDumper PrintNodesTypesRelationsVisitor::getDumper() {
     }
 */
 MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(id)
-        ,topLevelDeclVisitor(C, id, dumper), printRelationsVisitor(C, id, dumper)  {
+//MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper *dumper) : id(id)
+        ,topLevelDeclVisitor(C, id), printRelationsVisitor(C, id, dumper)  {
 /*
     this->id = id;
     this->dumper = ClangAstDumper(C, id);
@@ -362,6 +399,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         ClangAstDumper dumper(Context, counter);
 
         return llvm::make_unique<MyASTConsumer>(Context, counter, dumper);
+        //return llvm::make_unique<MyASTConsumer>(Context, counter, &dumper);
     }
 
 

@@ -4,6 +4,7 @@
 
 #include "ClangAstDumper.h"
 #include "ClangNodes.h"
+#include "ClavaConstants.h"
 
 #include <string>
 
@@ -13,22 +14,21 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
 
     switch(declNode) {
         case clava::DeclNode::FUNCTION_DECL:
-            visitedChildren = VisitFunctionDeclChildren(static_cast<const FunctionDecl *>(D)); break;
+            VisitFunctionDeclChildren(static_cast<const FunctionDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_RECORD_DECL:
-            visitedChildren = VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D)); break;
+            VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VAR_DECL:
-            visitedChildren = VisitVarDeclChildren(static_cast<const VarDecl *>(D)); break;
+            VisitVarDeclChildren(static_cast<const VarDecl *>(D), visitedChildren); break;
 //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
-        default: throw std::invalid_argument("ClangDataDumper::visitChildren: Case not implemented, '"+clava::DECL_DATA_NAMES[declNode]+"'");
+        default: throw std::invalid_argument("ClangDataDumper::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
     }
 
     dumpVisitedChildren(D, visitedChildren);
 }
 
 
-std::vector<std::string> ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D) {
-    std::vector<std::string> children;
+void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children) {
 
     // Visit parameters
     for(auto param : D->parameters()) {
@@ -60,16 +60,13 @@ std::vector<std::string> ClangAstDumper::VisitFunctionDeclChildren(const Functio
         children.push_back(getId(D->getBody()));
     }
 
-    return children;
 }
 
 
 
 
-std::vector<std::string> ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D) {
-    std::vector<std::string> children;
+void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children) {
 
-    return children;
 }
 
 
@@ -83,15 +80,13 @@ void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D
  */
 
 
-std::vector<std::string> ClangAstDumper::VisitVarDeclChildren(const VarDecl *D) {
-    std::vector<std::string> children;
+void ClangAstDumper::VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children) {
 
     if (D->hasInit()) {
         VisitStmtTop(D->getInit());
         children.push_back(getId(D->getInit()));
     }
 
-    return children;
 }
 
 /*
