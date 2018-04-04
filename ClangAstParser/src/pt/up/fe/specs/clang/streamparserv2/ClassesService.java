@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class ClassesService {

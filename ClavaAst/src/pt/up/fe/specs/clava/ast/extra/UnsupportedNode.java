@@ -18,7 +18,7 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class UnsupportedNode extends ClavaNode {
 

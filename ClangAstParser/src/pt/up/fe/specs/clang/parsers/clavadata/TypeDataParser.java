@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clang.parsers.clavadata;
 
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.utilities.LineStream;
 

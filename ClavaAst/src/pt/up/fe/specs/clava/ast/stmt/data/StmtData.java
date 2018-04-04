@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.stmt.data;
 
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class StmtData extends ClavaData {
 

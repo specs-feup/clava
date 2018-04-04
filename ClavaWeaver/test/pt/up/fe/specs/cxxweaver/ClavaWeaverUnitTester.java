@@ -39,7 +39,8 @@ public class ClavaWeaverUnitTester {
         // String testFolder = "C:\\Users\\JoaoBispo\\Documents\\MEGA\\Work\\Tasks\\2018-02-19 LaraUnit Test With
         // Clava\\test";
 
-        LaraUnitReport results = laraUnitTester.testFolder(new File(baseFolder), new File(baseFolder, "test"));
+        LaraUnitReport results = laraUnitTester.testFolder(new File(baseFolder),
+                new File(baseFolder, "test"));
 
         SpecsLogs.msgInfo(results.getReport());
         assertTrue("Did not pass the tests", results.isSuccess());

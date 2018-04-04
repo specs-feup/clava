@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.decl.data2;
+package pt.up.fe.specs.clava.ast;
 
 import pt.up.fe.specs.clava.SourceRange;
 

@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data2;
 
-import pt.up.fe.specs.clava.ast.decl.data2.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class TypeDataV2 extends ClavaData {
 

@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
+import pt.up.fe.specs.clava.ast.ClavaData;
+
 public class DeclDataV2 extends ClavaData {
 
     public static DeclDataV2 empty() {
