@@ -32,13 +32,17 @@ void InfoDumper::DumpHeader(const Type* T) {
 }
  */
 
-std::string clava::ClavaDataDumper::getId(const void* addr) {
+const std::string clava::ClavaDataDumper::getId(const void* addr) {
+    return clava::getId(addr, id);
+    /*
     std::stringstream ss;
     ss <<  addr << "_" << id;
 
     return ss.str();
+     */
 }
 
+/*
 void clava::ClavaDataDumper::dump(bool boolean) {
     llvm::errs() << boolean << "\n";
 }
@@ -52,10 +56,21 @@ void clava::ClavaDataDumper::dump(unsigned int integer) {
     llvm::errs() << integer << "\n";
 }
 
-void clava::ClavaDataDumper::dump(std::string string) {
+void clava::ClavaDataDumper::dump(const std::string& string) {
     llvm::errs() << string << "\n";
 }
 
+void clava::ClavaDataDumper::dump(const QualType& type) {
+    //clava::dump(type, id);
+
+    if(type.isNull()) {
+        clava::dump("nullptr");
+    }
+
+    clava::dump(getId(type.getTypePtr()));
+
+}
+*/
 
 
 const std::string clava::ClavaDataDumper::getDataName(std::string nodeName) {

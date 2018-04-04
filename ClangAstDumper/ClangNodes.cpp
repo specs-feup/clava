@@ -78,3 +78,34 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
     llvm::errs() << endCol << "\n";
 }
 
+const std::string clava::getId(const void* addr, int id) {
+    std::stringstream ss;
+    ss <<  addr << "_" << id;
+
+    return ss.str();
+}
+
+
+void clava::dump(bool boolean) {
+    llvm::errs() << boolean << "\n";
+}
+
+void clava::dump(int integer) {
+    llvm::errs() << integer << "\n";
+}
+
+void clava::dump(unsigned int integer) {
+    llvm::errs() << integer << "\n";
+}
+
+void clava::dump(const std::string& string) {
+    llvm::errs() << string << "\n";
+}
+
+void clava::dump(const QualType& type, int id) {
+    if(type.isNull()) {
+        dump("nullptr");
+    }
+
+    dump(getId(type.getTypePtr(), id));
+}

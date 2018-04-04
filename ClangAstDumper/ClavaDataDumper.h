@@ -46,7 +46,7 @@ namespace clava {
         explicit ClavaDataDumper(ASTContext *Context, int id);
 
         // Utility methods
-        std::string getId(const void* addr);
+        const std::string getId(const void* addr);
 
         void dump(clava::DeclNode declNode, const Decl* D);
         void dump(clava::StmtNode stmtNode, const Stmt* S);
@@ -71,10 +71,11 @@ namespace clava {
         void DumpHeader(const std::string tag, const void *pointer);
 
         // Generic value dumpers
-        void dump(bool boolean);
-        void dump(int integer);
-        void dump(unsigned int integer) ;
-        void dump(std::string string);
+        //void dump(bool boolean);
+        //void dump(int integer);
+        //void dump(unsigned int integer) ;
+        //void dump(const std::string& string);
+        //void dump(const QualType& type);
 
         // DECLS
 

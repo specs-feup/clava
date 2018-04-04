@@ -4,6 +4,7 @@
 
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
+#include "ClangNodes.h"
 
 #include "clang/AST/AST.h"
 
@@ -13,6 +14,22 @@
 using namespace clang;
 
 // EXPR
+
+void ClangAstDumper::VisitExpr(const Expr *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    // Visit children
+    visitChildren(clava::StmtNode::EXPR, Node);
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::EXPR, Node);
+
+    // Dump type to parse
+    dumpTopLevelType(Node->getType());
+}
+
 
 void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
     if(dumpStmt(Node)) {
@@ -311,7 +328,7 @@ void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
     }
 
     // Visit children
-    visitChildren(clava::StmtNode::STMT, Node);
+    visitChildren(clava::StmtNode::EXPR, Node);
 
     // Dump data
     dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);

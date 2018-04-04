@@ -35,10 +35,10 @@ void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     clava::dumpSourceRange(Context, D->getLocStart(), D->getLocEnd());
 
     // Print information about Decl
-    dump(D->isImplicit());
-    dump(D->isUsed());
-    dump(D->isReferenced());
-    dump(D->isInvalidDecl());
+    clava::dump(D->isImplicit());
+    clava::dump(D->isUsed());
+    clava::dump(D->isReferenced());
+    clava::dump(D->isInvalidDecl());
 
     // TODO: Attributes?
 //    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E; ++I)
@@ -51,9 +51,9 @@ void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
     DumpDeclData(D);
 
     // Print information about NamedDecl
-    dump(D->getQualifiedNameAsString());
-    dump(D->getDeclName().getNameKind());
-    dump(D->isHidden());
+    clava::dump(D->getQualifiedNameAsString());
+    clava::dump(D->getDeclName().getNameKind());
+    clava::dump(D->isHidden());
     //llvm::errs() << D->getQualifiedNameAsString() << "\n";
     //llvm::errs() << D->getDeclName().getNameKind() << "\n";
     //llvm::errs() << D->isHidden() << "\n";
@@ -67,8 +67,8 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     DumpNamedDeclData(D);
 
     // Print information about FunctionDecl
-    dump(D->isConstexpr());
-    dump(D->getTemplatedKind());
+    clava::dump(D->isConstexpr());
+    clava::dump(D->getTemplatedKind());
 //    llvm::errs() << D->isConstexpr() << "\n";
 //    llvm::errs() << D->getTemplatedKind() << "\n";
 
@@ -90,7 +90,7 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
     // Hierarchy
     DumpFunctionDeclData(D);
 
-    dump(getId(D->getParent()));
+    clava::dump(getId(D->getParent()));
     // Dump the corresponding CXXRecordDecl
 //    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
 //    llvm::errs() << getId(D) << "\n";
@@ -107,16 +107,16 @@ void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     DumpNamedDeclData(D);
 
     // Print information about VarDecl
-    dump(D->getStorageClass());
-    dump(D->getTLSKind());
-    dump(D->isModulePrivate());
-    dump(D->isNRVOVariable());
-    dump(D->getInitStyle());
+    clava::dump(D->getStorageClass());
+    clava::dump(D->getTLSKind());
+    clava::dump(D->isModulePrivate());
+    clava::dump(D->isNRVOVariable());
+    clava::dump(D->getInitStyle());
 
-    dump(D->isConstexpr());
-    dump(D->isStaticDataMember() );
-    dump(D->isOutOfLine());
-    dump(D->hasGlobalStorage());
+    clava::dump(D->isConstexpr());
+    clava::dump(D->isStaticDataMember() );
+    clava::dump(D->isOutOfLine());
+    clava::dump(D->hasGlobalStorage());
 //    llvm::errs() << D->isConstexpr() << "\n";
 //    llvm::errs() << D->isStaticDataMember() << "\n";
 //    llvm::errs() << D->isOutOfLine() << "\n";
@@ -160,6 +160,6 @@ void clava::ClavaDataDumper::DumpParmVarDeclData(const ParmVarDecl *D) {
     DumpVarDeclData(D);
 
     // Print information about ParmVarDecl
-    dump(D->hasInheritedDefaultArg());
+    clava::dump(D->hasInheritedDefaultArg());
     //llvm::errs() << D->hasInheritedDefaultArg() << "\n";
 }

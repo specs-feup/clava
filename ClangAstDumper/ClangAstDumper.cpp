@@ -195,6 +195,11 @@ void ClangAstDumper::dumpIdToClassMap(const void* pointer, std::string className
     llvm::errs() << className << "\n";
 }
 
+void ClangAstDumper::dumpTopLevelType(const QualType &type) {
+    llvm::errs() << TOP_LEVEL_TYPES << "\n";
+    clava::dump(type, id);
+}
+
 void ClangAstDumper::emptyChildren(const void *pointer) {
     std::vector<std::string> noChildren;
     dumpVisitedChildren(pointer, noChildren);

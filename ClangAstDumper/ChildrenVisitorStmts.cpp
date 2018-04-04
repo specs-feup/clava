@@ -21,7 +21,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitDeclStmtChildren(static_cast<const DeclStmt *>(S), visitedChildren); break;
 
 
-
+        case clava::StmtNode::EXPR:
+            VisitExprChildren(static_cast<const Expr *>(S), visitedChildren); break;
 //        case clava::StmtNode::CAST_EXPR:
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
 
@@ -68,6 +69,15 @@ void ClangAstDumper::VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::s
     }
 
 }
+
+void ClangAstDumper::VisitExprChildren(const Expr *E, std::vector<std::string> &children) {
+    // Visit sub-statements
+    VisitStmtChildren(E, children);
+
+    // Visit type
+    VisitTypeTop(E->getType());
+}
+
 
 /*
 void ClangAstDumper::VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children) {

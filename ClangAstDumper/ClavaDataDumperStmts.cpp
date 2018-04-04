@@ -40,18 +40,22 @@ void clava::ClavaDataDumper::DumpStmtData(const Stmt *S) {
 
 void clava::ClavaDataDumper::DumpExprData(const Expr *E) {
     DumpStmtData(E);
+
+    clava::dump(E->getType(), id);
+    clava::dump(E->getValueKind());
+    clava::dump(E->getObjectKind());
 }
 
 void clava::ClavaDataDumper::DumpCastExprData(const CastExpr *E) {
     DumpExprData(E);
 
-    dump(E->getCastKindName());
+    clava::dump(E->getCastKindName());
 }
 
 void clava::ClavaDataDumper::DumpCharacterLiteralData(const CharacterLiteral *E) {
     DumpExprData(E);
 
-    dump(E->getValue());
-    dump(E->getKind());
+    clava::dump(E->getValue());
+    clava::dump(E->getKind());
 }
 

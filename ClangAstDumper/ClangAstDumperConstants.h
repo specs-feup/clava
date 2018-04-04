@@ -60,4 +60,6 @@ static const std::string ID_TO_CLASS_MAP = "<Id to Class Map>";
 
 static const std::string TOP_LEVEL_NODES = "<Top Level Nodes>";
 
+static const std::string TOP_LEVEL_TYPES = "<Top Level Types>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

@@ -69,6 +69,8 @@ public:
     /*
      * EXPRS
      */
+
+    void VisitExpr(const Expr *Node);
     void VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExpr *Node);
     void VisitCXXConstructExpr(const CXXConstructExpr *Node);
     void VisitDeclRefExpr(const DeclRefExpr *Node);
@@ -152,10 +154,12 @@ private:
     void VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::string> &children);
 
     // Children visitors for Exprs
+    void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
     //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
 
     // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);
+    void dumpTopLevelType(const QualType &type);
 
 
     /* Utility methods for DECLS */
