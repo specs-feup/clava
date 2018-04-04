@@ -107,5 +107,6 @@ void clava::dump(const QualType& type, int id) {
         dump("nullptr");
     }
 
-    dump(getId(type.getTypePtr(), id));
+    //dump(getId(type.getTypePtr(), id));
+    dump(getId(type.getAsOpaquePtr(), id));
 }

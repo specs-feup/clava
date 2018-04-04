@@ -27,7 +27,7 @@ void ClangAstDumper::VisitExpr(const Expr *Node) {
     dataDumper.dump(clava::StmtNode::EXPR, Node);
 
     // Dump type to parse
-    dumpTopLevelType(Node->getType());
+    //dumpTopLevelType(Node->getType());
 }
 
 
@@ -339,8 +339,8 @@ void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
         return;
     }
 
-    // No children to visit
-    emptyChildren(Node);
+    // Visit children
+    visitChildren(clava::StmtNode::EXPR, Node);
 
     // Dump data
     dataDumper.dump(clava::StmtNode::CHARACTER_LITERAL , Node);

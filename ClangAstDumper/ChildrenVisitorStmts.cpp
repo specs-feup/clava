@@ -76,6 +76,7 @@ void ClangAstDumper::VisitExprChildren(const Expr *E, std::vector<std::string> &
 
     // Visit type
     VisitTypeTop(E->getType());
+    dumpTopLevelType(E->getType());
 }
 
 
