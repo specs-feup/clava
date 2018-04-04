@@ -45,6 +45,9 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public Type getType() {
+        if (exprData == null) {
+
+        }
         return exprData.getType();
     }
 

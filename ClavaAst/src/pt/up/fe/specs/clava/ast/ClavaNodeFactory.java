@@ -1144,6 +1144,10 @@ public class ClavaNodeFactory {
         return new CXXOperatorCallExpr(exprData, info, function, args);
     }
 
+    // public static CharacterLiteral characterLiteral(CharacterLiteralData data) {
+    // return new CharacterLiteral(data, Collections.emptyList());
+    // }
+
     public static CharacterLiteral characterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info) {
         return new CharacterLiteral(charValue, exprData, info);
     }

@@ -21,6 +21,7 @@ import java.util.Map;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.util.SpecsStrings;
 
 public class CharacterLiteral extends Literal {
@@ -50,18 +51,32 @@ public class CharacterLiteral extends Literal {
 
     private CharacterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
+
         super(exprData, info, children);
 
         this.charValue = charValue;
     }
+    //
+    // public CharacterLiteral(CharacterLiteralData data, List<? extends ClavaNode> children) {
+    // super(null, null, children);
+    // setData(data);
+    // }
 
     @Override
     protected ClavaNode copyPrivate() {
         return new CharacterLiteral(charValue, getExprData(), getInfo(), Collections.emptyList());
     }
 
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CharacterLiteral(getData().copy(), Collections.emptyList());
+    // // return new CharacterLiteral(charValue, getExprData(), getInfo(), Collections.emptyList());
+    // }
+
     @Override
     public String getCode() {
+        // long charValue = getData().getValue();
+
         // Check if value is inside Character boundaries
         if (charValue > (long) Character.MAX_VALUE) {
             throw new RuntimeException("Not implemented dealing with values larger than Character.MAX_VALUE");
@@ -98,5 +113,10 @@ public class CharacterLiteral extends Literal {
     @Override
     public String getLiteral() {
         return getCode();
+    }
+
+    @Override
+    public CharacterLiteralData getData() {
+        return (CharacterLiteralData) super.getData();
     }
 }
