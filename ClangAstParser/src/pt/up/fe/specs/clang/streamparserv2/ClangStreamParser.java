@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.streamparserv2;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -41,12 +42,14 @@ import pt.up.fe.specs.util.collections.MultiMap;
 public class ClangStreamParser {
     private final DataStore data;
 
+    private final Map<String, ClavaNode> parsedNodes;
     private final ClassesService classesService;
 
     public ClangStreamParser(DataStore data) {
         this.data = data;
 
         classesService = new ClassesService(new HashMap<>());
+        this.parsedNodes = new HashMap<>();
     }
 
     public void parse() {
@@ -69,36 +72,48 @@ public class ClangStreamParser {
             app.put(key, clavaNode);
         }
 
+        // After all ClavaNodes are created, apply post-processing
+
         System.out.println("PARSED NODES:\n" + app);
 
     }
 
     private ClavaNode parse(String nodeId) {
+        // Check if node was already parsed
+        if (parsedNodes.containsKey(nodeId)) {
+            return parsedNodes.get(nodeId);
+        }
 
+        // Parse node and store
+        ClavaNode parsedNode = parseWorker(nodeId);
+        parsedNodes.put(nodeId, parsedNode);
+
+        return parsedNode;
+    }
+
+    private ClavaNode parseWorker(String nodeId) {
+
+        // Get classname
         String classname = data.get(IdToClassnameParser.getDataKey()).get(nodeId);
-        // System.out.println("CLASSNAME:" + classname);
 
         if (classname == null) {
             SpecsLogs.msgInfo("No classname for node '" + nodeId + "");
             return new UnsupportedNode("<CLASSNAME NOT FOUND>", ClavaData.empty(), Collections.emptyList());
         }
 
+        // Get corresponding ClavaNode class
         Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname);
 
         // Map classname to ClavaData class
         Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
 
         if (clavaDataClass == null) {
-            // SpecsLogs.msgInfo("No ClavaData class for node '" + nodeId + "'. Add mapping for class '' in Java class
-            // '"
-            // + ClavaNodeToData.class.getSimpleName() + "'");
             SpecsLogs.msgInfo("No ClavaData class (specific or base) for node '" + nodeId + "'. Add mapping for class '"
                     + classname + "' in Java class '"
                     + ClavaNodeToData.class.getSimpleName() + "'");
             return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
-        // DataKey<Map<String, ClavaData>> clavaDataKey = ClavaDataParser.getDataKey(clavaDataClass);
         if (!data.hasValue(ClavaDataParser.getDataKey(clavaDataClass))) {
             SpecsLogs.msgInfo("No parsed information for class '" + classname + "', missing entry in "
                     + ClavaDataParser.class.getSimpleName() + "? (node '" + nodeId
@@ -106,6 +121,7 @@ public class ClangStreamParser {
             return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
+        // Get ClavaData
         ClavaData clavaData = data.get(ClavaDataParser.getDataKey(clavaDataClass)).get(nodeId);
 
         if (clavaData == null) {
@@ -113,7 +129,7 @@ public class ClangStreamParser {
             return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
-        // Get children
+        // Get children ids
         List<String> childrenIds = data.get(VisitedChildrenParser.getDataKey()).get(nodeId);
 
         if (childrenIds == null) {
@@ -125,16 +141,17 @@ public class ClangStreamParser {
         List<ClavaNode> children = childrenIds.stream()
                 .map(childId -> parse(childId))
                 .collect(Collectors.toList());
-        // System.out.println("CHILDREN:" + children);
 
+        // Get ClavaNode constructor
         BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = classesService.getBuilder(clavaNodeClass,
                 clavaDataClass);
+
         if (builder == null) {
             SpecsLogs.msgInfo("No builder for node '" + nodeId + "' (" + classname + ")");
             return new UnsupportedNode(classname, clavaData, children);
         }
 
-        // Build node based on data and children (map with ClavaNode class -> builder?)
+        // Build node based on data and children
         return builder.apply(clavaData, children);
     }
 
