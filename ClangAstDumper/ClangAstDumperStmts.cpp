@@ -47,14 +47,15 @@ void ClangAstDumper::VisitStmt(const Stmt *Node) {
 
 //    llvm::errs() << "DUMPING STMT: " << getId(Node) << "\n";
 
-    // Dump data
-    dataDumper.dump(clava::StmtNode::STMT, Node);
 
     for (const Stmt *SubStmt : Node->children()) {
         if (SubStmt) {
             VisitStmtTop(SubStmt);
         }
     }
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT, Node);
 
 }
 
@@ -64,13 +65,11 @@ void ClangAstDumper::VisitDeclStmt(const DeclStmt *Node) {
         return;
     }
 
-    // Dump data
-    dataDumper.dump(clava::StmtNode::STMT , Node);
-
     // Visit children
     visitChildren(clava::StmtNode::DECL_STMT, Node);
 
-
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT , Node);
 
 }
 void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
@@ -90,11 +89,11 @@ void ClangAstDumper::VisitCompoundStmt(const CompoundStmt *Node) {
         return;
     }
 
-    // Dump data
-    dataDumper.dump(clava::StmtNode::STMT , Node);
-
     // Visit children
     visitChildren(clava::StmtNode::COMPOUND_STMT, Node);
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT , Node);
 }
 
 void ClangAstDumper::VisitForStmt(const ForStmt *Node) {

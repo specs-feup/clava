@@ -310,11 +310,11 @@ void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
         return;
     }
 
-    // Dump data
-    dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);
-
     // Visit children
     visitChildren(clava::StmtNode::CAST_EXPR , Node);
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);
 }
 
 void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
@@ -322,10 +322,11 @@ void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
         return;
     }
 
+    // No children to visit
+    emptyChildren(Node);
+
     // Dump data
     dataDumper.dump(clava::StmtNode::CHARACTER_LITERAL , Node);
 
-    // No children to visit
-    emptyChildren(Node);
 }
 
