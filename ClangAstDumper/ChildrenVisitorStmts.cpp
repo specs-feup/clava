@@ -13,15 +13,17 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
     std::vector<std::string> visitedChildren;
 
     switch(stmtNode) {
-        //case clava::StmtNode::STMT:
-        //    visitedChildren = VisitStmtChildren(static_cast<const Stmt *>(S)); break;
-        case clava::StmtNode::COMPOUND_STMT:
-            VisitCompoundStmtChildren(static_cast<const CompoundStmt *>(S), visitedChildren); break;
+        case clava::StmtNode::STMT:
+            VisitStmtChildren(S, visitedChildren); break;
+//        case clava::StmtNode::COMPOUND_STMT:
+//            VisitCompoundStmtChildren(static_cast<const CompoundStmt *>(S), visitedChildren); break;
         case clava::StmtNode::DECL_STMT:
             VisitDeclStmtChildren(static_cast<const DeclStmt *>(S), visitedChildren); break;
 
-        case clava::StmtNode::CAST_EXPR:
-            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
+
+
+//        case clava::StmtNode::CAST_EXPR:
+//            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ClangDataDumper::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -32,10 +34,17 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
 }
 
 void ClangAstDumper::VisitStmtChildren(const Stmt *S, std::vector<std::string> &children) {
-    // Return empty vector
+    // Visit Stmt children
+    for (const Stmt *SubStmt : S->children()) {
+        if (SubStmt) {
+            VisitStmtTop(SubStmt);
+            children.push_back(getId(SubStmt));
+        }
+    }
 }
 
 
+/*
 void ClangAstDumper::VisitCompoundStmtChildren(const CompoundStmt *S, std::vector<std::string> &children) {
 
     // Visit sub-statements
@@ -44,11 +53,14 @@ void ClangAstDumper::VisitCompoundStmtChildren(const CompoundStmt *S, std::vecto
         children.push_back(getId(Arg));
     }
 }
+ */
 
 
 void ClangAstDumper::VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::string> &children) {
     // Visit sub-statements
+    VisitStmtChildren(S, children);
 
+    // Visit decls
     for (DeclStmt::const_decl_iterator I = S->decl_begin(), E = S->decl_end(); I != E; ++I) {
 
         VisitDeclTop(*I);
@@ -57,7 +69,7 @@ void ClangAstDumper::VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::s
 
 }
 
-
+/*
 void ClangAstDumper::VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children) {
 
     // Sub-expression
@@ -65,3 +77,4 @@ void ClangAstDumper::VisitCastExprChildren(const CastExpr *S, std::vector<std::s
     VisitStmtTop(subExprAsWritten);
     children.push_back(getId(subExprAsWritten));
 }
+ */

@@ -148,11 +148,11 @@ private:
 
     // Children visitors for Stmts
     void VisitStmtChildren(const Stmt *S, std::vector<std::string> &children);
-    void VisitCompoundStmtChildren(const CompoundStmt *S, std::vector<std::string> &children);
+    //void VisitCompoundStmtChildren(const CompoundStmt *S, std::vector<std::string> &children);
     void VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::string> &children);
 
     // Children visitors for Exprs
-    void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
+    //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
 
     // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);

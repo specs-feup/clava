@@ -47,12 +47,15 @@ void ClangAstDumper::VisitStmt(const Stmt *Node) {
 
 //    llvm::errs() << "DUMPING STMT: " << getId(Node) << "\n";
 
-
+/*
     for (const Stmt *SubStmt : Node->children()) {
         if (SubStmt) {
             VisitStmtTop(SubStmt);
         }
     }
+*/
+    // Visit children
+    visitChildren(clava::StmtNode::STMT, Node);
 
     // Dump data
     dataDumper.dump(clava::StmtNode::STMT, Node);
@@ -90,7 +93,7 @@ void ClangAstDumper::VisitCompoundStmt(const CompoundStmt *Node) {
     }
 
     // Visit children
-    visitChildren(clava::StmtNode::COMPOUND_STMT, Node);
+    visitChildren(clava::StmtNode::STMT, Node);
 
     // Dump data
     dataDumper.dump(clava::StmtNode::STMT , Node);

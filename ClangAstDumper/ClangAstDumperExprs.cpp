@@ -311,7 +311,7 @@ void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
     }
 
     // Visit children
-    visitChildren(clava::StmtNode::CAST_EXPR , Node);
+    visitChildren(clava::StmtNode::STMT, Node);
 
     // Dump data
     dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);
