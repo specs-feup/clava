@@ -42,7 +42,8 @@ namespace clava {
 
         // Expr nodes
         EXPR,
-        CAST_EXPR
+        CAST_EXPR,
+        CHARACTER_LITERAL
     };
 
     /**

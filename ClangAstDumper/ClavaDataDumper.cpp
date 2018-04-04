@@ -48,6 +48,10 @@ void clava::ClavaDataDumper::dump(int integer) {
     llvm::errs() << integer << "\n";
 }
 
+void clava::ClavaDataDumper::dump(unsigned int integer) {
+    llvm::errs() << integer << "\n";
+}
+
 void clava::ClavaDataDumper::dump(std::string string) {
     llvm::errs() << string << "\n";
 }

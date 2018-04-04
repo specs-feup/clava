@@ -317,3 +317,15 @@ void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
     visitChildren(clava::StmtNode::CAST_EXPR , Node);
 }
 
+void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::CHARACTER_LITERAL , Node);
+
+    // No children to visit
+    emptyChildren(Node);
+}
+

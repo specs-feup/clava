@@ -179,7 +179,6 @@ const Type* getTypePtr(QualType T, std::string source)  {
     return T.getTypePtr();
 }
 
-
 void ClangAstDumper::dumpVisitedChildren(const void *pointer, std::vector<std::string> children) {
     llvm::errs() << VISITED_CHILDREN << "\n";
     llvm::errs() << getId(pointer) << "\n";
@@ -195,3 +194,10 @@ void ClangAstDumper::dumpIdToClassMap(const void* pointer, std::string className
     llvm::errs() << getId(pointer) << "\n";
     llvm::errs() << className << "\n";
 }
+
+void ClangAstDumper::emptyChildren(const void *pointer) {
+    std::vector<std::string> noChildren;
+    dumpVisitedChildren(pointer, noChildren);
+}
+
+

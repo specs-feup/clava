@@ -73,6 +73,7 @@ namespace clava {
         // Generic value dumpers
         void dump(bool boolean);
         void dump(int integer);
+        void dump(unsigned int integer) ;
         void dump(std::string string);
 
         // DECLS
@@ -92,6 +93,7 @@ namespace clava {
         // EXPRS
         void DumpExprData(const Expr *E);
         void DumpCastExprData(const CastExpr *E);
+        void DumpCharacterLiteralData(const CharacterLiteral *E);
 
 
         // TYPES

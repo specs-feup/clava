@@ -34,6 +34,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         // EXPRS
         case clava::StmtNode::EXPR: return "Expr";
         case clava::StmtNode::CAST_EXPR: return "CastExpr";
+        case clava::StmtNode::CHARACTER_LITERAL: return "CharacterLiteral";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<DeclNode>::type>(stmtNode));

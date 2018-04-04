@@ -83,6 +83,8 @@ public:
     void VisitCXXTypeidExpr(const CXXTypeidExpr *Node);
     void VisitInitListExpr(const InitListExpr *Node);
     void VisitCastExpr(const CastExpr *Node); // Works for ImplicitCastExpr, etc
+    void VisitCharacterLiteral(const CharacterLiteral *Node);
+
     //void VisitImplicitCastExpr(const ImplicitCastExpr *Node);
 
 
@@ -133,7 +135,7 @@ private:
     void visitChildren(clava::DeclNode declNode, const Decl* D);
     void visitChildren(clava::StmtNode stmtNode, const Stmt* S);
     void visitChildren(clava::TypeNode typeNode, const Type* T);
-
+    void emptyChildren(const void *pointer);
 
     // Children visitors for Decls
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
