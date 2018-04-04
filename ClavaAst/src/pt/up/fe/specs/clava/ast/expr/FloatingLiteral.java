@@ -44,10 +44,14 @@ public class FloatingLiteral extends Literal {
         return new FloatingLiteral(floatKind, number, getExprData(), getInfo());
     }
 
+    /**
+     * @return
+     */
+    /*
     public FloatKind getFloatKind() {
         return floatKind;
     }
-
+    */
     @Override
     public String getLiteral() {
         return number;
