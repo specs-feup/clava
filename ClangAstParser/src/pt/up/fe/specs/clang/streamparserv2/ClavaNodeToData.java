@@ -31,9 +31,11 @@ import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
+import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
@@ -57,6 +59,10 @@ public class ClavaNodeToData {
 
         // EXPR
         CLAVA_NODE_TO_DATA.put(ImplicitCastExpr.class, CastExprData.class);
+        CLAVA_NODE_TO_DATA.put(CharacterLiteral.class, CharacterLiteralData.class);
+        // CLAVA_NODE_TO_DATA.put(FloatingLiteral.class, LiteralData.class);
+        // CLAVA_NODE_TO_DATA.put(IntegerLiteral.class, LiteralData.class);
+        // CLAVA_NODE_TO_DATA.put(StringLiteral.class, LiteralData.class);
     }
 
     public static Class<? extends ClavaData> getClavaDataClass(Class<? extends ClavaNode> clavaNodeClass) {

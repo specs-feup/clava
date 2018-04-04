@@ -49,6 +49,10 @@ public class GeneralParsers {
         return Integer.parseInt(lines.nextLine());
     }
 
+    public static long parseLong(LineStream lines) {
+        return Long.parseLong(lines.nextLine());
+    }
+
     public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper,
             LineStream lines) {
 

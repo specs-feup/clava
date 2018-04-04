@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
@@ -80,6 +81,7 @@ public class ClavaDataParser extends GenericLineStreamParser {
         // EXPRS
         DATA_PARSERS.put(ExprDataV2.class, ExprDataParser::parseExprData);
         DATA_PARSERS.put(CastExprData.class, ExprDataParser::parseCastExprData);
+        DATA_PARSERS.put(CharacterLiteralData.class, ExprDataParser::parseCharacterLiteralData);
     }
 
     public static ClavaDataParser newInstance() {
