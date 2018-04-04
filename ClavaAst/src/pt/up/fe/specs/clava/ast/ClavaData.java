@@ -89,4 +89,13 @@ public class ClavaData {
         return toString("", builder.toString());
     }
 
+    /**
+     * Package-level method that can be used for any post-processing the node might need.
+     * 
+     * @param data
+     */
+    void postProcess(ClavaDataPostProcessing data) {
+        // By default, do nothing
+    }
+
 }
