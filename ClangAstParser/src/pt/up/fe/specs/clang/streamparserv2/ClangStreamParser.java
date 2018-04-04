@@ -29,6 +29,8 @@ import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
+import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
@@ -73,6 +75,9 @@ public class ClangStreamParser {
         }
 
         // After all ClavaNodes are created, apply post-processing
+        ClavaDataPostProcessing postData = new ClavaDataPostProcessing(parsedNodes);
+        parsedNodes.values().stream()
+                .forEach(node -> ClavaDataUtils.applyPostProcessing(node.getData(), postData));
 
         System.out.println("PARSED NODES:\n" + app);
 
