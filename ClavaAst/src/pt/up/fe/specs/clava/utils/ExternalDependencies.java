@@ -35,21 +35,40 @@ public class ExternalDependencies {
     private final Set<Supplier<File>> includes;
     private final Set<Supplier<File>> sources;
 
+    private boolean disableRemoteDependencies;
+
     // private List<String> unresolvedRepos;
     // private List<String> unresolvedReposPaths;
     private GitRepos gitRepos;
 
     public ExternalDependencies() {
+        this(false);
+    }
+
+    /**
+     * 
+     * @param disableRemoteDependencies
+     *            if true, ignores remote dependencies (e.g., git)
+     */
+    public ExternalDependencies(boolean disableRemoteDependencies) {
         this.includes = new LinkedHashSet<>();
         this.sources = new LinkedHashSet<>();
-
+        this.disableRemoteDependencies = disableRemoteDependencies;
         // this.unresolvedRepos = new ArrayList<>();
         // this.unresolvedReposPaths = new ArrayList<>();
         this.gitRepos = new GitRepos();
     }
 
+    public void setDisableRemoteDependencies(boolean disableRemoteDependencies) {
+        this.disableRemoteDependencies = disableRemoteDependencies;
+    }
+
+    public boolean disableRemoteDependencies() {
+        return disableRemoteDependencies;
+    }
+
     public ExternalDependencies copy() {
-        ExternalDependencies copy = new ExternalDependencies();
+        ExternalDependencies copy = new ExternalDependencies(disableRemoteDependencies);
 
         copy.includes.addAll(includes);
         copy.sources.addAll(sources);
@@ -71,6 +90,9 @@ public class ExternalDependencies {
     }
 
     public void addIncludeFromGit(String gitRepository, String path) {
+        if (disableRemoteDependencies) {
+            return;
+        }
         // File baseFolder = gitRepos.getFolder(gitRepository);
         //
         // File includePath = path == null ? baseFolder : new File(baseFolder, path);
@@ -91,6 +113,9 @@ public class ExternalDependencies {
     }
 
     public void addSourceFromGit(String gitRepository, String path) {
+        if (disableRemoteDependencies) {
+            return;
+        }
         // File baseFolder = gitRepos.getFolder(gitRepository);
         //
         // File includePath = path == null ? baseFolder : new File(baseFolder, path);

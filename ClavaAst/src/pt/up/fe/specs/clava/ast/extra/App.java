@@ -218,14 +218,14 @@ public class App extends ClavaNode {
                 .filter(tu -> SpecsIo.getCanonicalPath(tu.getFile()).equals(canonicalPath))
                 .findFirst()
                 .isPresent()) {
-
+    
             SpecsLogs.msgInfo(
                     "Could not find top file '" + topFile + "' in the translation units, returning without writing");
             return;
         }
-
+    
         write(destinationFolder);
-
+    
     }
     */
 
@@ -259,17 +259,17 @@ public class App extends ClavaNode {
     /*
     public void write(File baseInputFolder, File destinationFolder, Set<String> filesToGenerate) {
         Map<File, String> codeMap = getCode(baseInputFolder, destinationFolder);
-
+    
         boolean filterFilesToGenerate = enableModifiedFilesFilter(codeMap, filesToGenerate);
-
+    
         for (Entry<File, String> entry : codeMap.entrySet()) {
             if (filterFilesToGenerate) {
                 if (!filesToGenerate.contains(entry.getKey().getName())) {
-
+    
                     continue;
                 }
             }
-
+    
             SpecsIo.write(entry.getKey(), entry.getValue());
         }
     }
@@ -300,7 +300,7 @@ public class App extends ClavaNode {
 
     /*
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
-
+    
         if (includeHeaders) {
             // return SpecsIo.getFiles(sources, PERMITTED_EXTENSIONS).stream()
             return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions());
@@ -308,23 +308,23 @@ public class App extends ClavaNode {
             // .map(filename -> new File(filename))
             // .collect(Collectors.toList());
         }
-
+    
         List<File> allFiles = new ArrayList<>();
-
+    
         // List<File> implementationFiles = SpecsIo.getFiles(sources, EXTENSIONS_IMPLEMENTATION).stream()
         List<File> implementationFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
         // List<File> implementationFiles = SpecsIo.getFiles(sources,
         // SourceType.IMPLEMENTATION.getExtensions()).stream()
         // .map(filename -> new File(filename))
         // .collect(Collectors.toList());
-
+    
         allFiles.addAll(implementationFiles);
-
+    
         for (File sourceFolder : sources) {
             // allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, EXTENSIONS_HEADERS));
             allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions()));
         }
-
+    
         return allFiles;
     }
     */
@@ -423,25 +423,25 @@ public class App extends ClavaNode {
             // Create translation unit for the missing file
             String relativePath = SpecsIo.getRelativePath(originalSourceFile.getParentFile(), sourceFile.getValue());
             // String relativePath = SpecsIo.getRelativePath(file.getParentFile(), baseInputFolder);
-
+            
             // Avoid writing outside of the destination folder, if relative path has '../', remove them
             while (relativePath.startsWith("../")) {
                 relativePath = relativePath.substring("../".length());
             }
-
+            
             // Build destination path
             File actualDestinationFolder = destinationFolder;
             if (!flattenFolders) {
-
+            
             }
-
+            
             actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
             File destinationFile = new File(actualDestinationFolder, originalSourceFile.getName());
-
+            
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(originalSourceFile.getName(),
                     originalSourceFile.getParent(),
                     Collections.emptyList());
-
+            
             files.put(destinationFile, tUnit.getCode());
             */
         }

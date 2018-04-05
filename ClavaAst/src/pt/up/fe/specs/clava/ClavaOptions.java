@@ -37,8 +37,11 @@ public interface ClavaOptions extends StoreDefinitionProvider {
     DataKey<Boolean> CUSTOM_RESOURCES = KeyFactory.bool("Clava Custom Resources")
             .setLabel("Enable custom resource files");
 
+    DataKey<Boolean> DISABLE_REMOTE_DEPENDENCIES = KeyFactory.bool("Disable Remote Dependencies")
+            .setLabel("Disable remote dependencies (e.g., git repositories)");
+
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
-            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES)
+            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES)
             .build();
 
     @Override
