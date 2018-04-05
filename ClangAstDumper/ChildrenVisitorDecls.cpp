@@ -8,11 +8,39 @@
 
 #include <string>
 
+const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDREN_MAP = {
+        {"CXXConstructorDecl", clava::DeclNode::FUNCTION_DECL},
+        {"CXXConversionDecl", clava::DeclNode::FUNCTION_DECL},
+        {"CXXDestructorDecl", clava::DeclNode::FUNCTION_DECL},
+        {"CXXMethodDecl", clava::DeclNode::FUNCTION_DECL},
+        {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
+        {"VarDecl", clava::DeclNode::VAR_DECL},
+        {"ParmVarDecl", clava::DeclNode::VAR_DECL}
+
+};
+
+
+void ClangAstDumper::visitChildren(const Decl* D) {
+    // Get classname
+    const std::string classname = clava::getClassName(D);
+
+    // Get corresponding DeclNode
+    clava::DeclNode declNode = DECL_CHILDREN_MAP.count(classname) == 1 ? DECL_CHILDREN_MAP.find(classname)->second :
+                               clava::DeclNode::DECL;
+
+    visitChildren(declNode, D);
+}
+
+
 void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
 
     std::vector<std::string> visitedChildren;
 
     switch(declNode) {
+        case clava::DeclNode::DECL:
+            // DO NOTHING, WILL SHOW WARNING ABOUT NO CHILDREN ASSOCIATED
+            return;
         case clava::DeclNode::VALUE_DECL:
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
@@ -23,7 +51,7 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitVarDeclChildren(static_cast<const VarDecl *>(D), visitedChildren); break;
 //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
-        default: throw std::invalid_argument("ClangDataDumper::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
+        default: throw std::invalid_argument("ChildrenVisitorDecls::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
     }
 
     dumpVisitedChildren(D, visitedChildren);

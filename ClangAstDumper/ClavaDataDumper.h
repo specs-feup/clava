@@ -22,6 +22,7 @@
 //#include "clang/AST/DeclCXX.h"
 
 #include <string>
+#include <map>
 
 //#include "ClangAstDumper.h"
 
@@ -30,6 +31,11 @@ using namespace clang;
 
 namespace clava {
 
+
+    extern const std::map<const std::string, clava::DeclNode > DECL_DATA_MAP;
+    extern const std::map<const std::string, clava::StmtNode > STMT_DATA_MAP;
+    extern const std::map<const std::string, clava::StmtNode > EXPR_DATA_MAP;
+    extern const std::map<const std::string, clava::TypeNode > TYPE_DATA_MAP;
 
     /**
     * Dumps information about each node
@@ -47,6 +53,11 @@ namespace clava {
 
         // Utility methods
         const std::string getId(const void* addr);
+
+        void dump(const Decl* D);
+        void dump(const Stmt* S);
+        void dump(const Expr* E);
+        void dump(const Type* T);
 
         void dump(clava::DeclNode declNode, const Decl* D);
         void dump(clava::StmtNode stmtNode, const Stmt* S);

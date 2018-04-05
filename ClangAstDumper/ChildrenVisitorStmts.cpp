@@ -8,6 +8,36 @@
 
 #include <string>
 
+const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDREN_MAP = {
+        {"DeclStmt", clava::StmtNode::DECL_STMT}
+};
+
+const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
+
+};
+
+void ClangAstDumper::visitChildren(const Stmt* S) {
+    // Get classname
+    const std::string classname = clava::getClassName(S);
+
+    // Get corresponding StmtNode
+    clava::StmtNode stmtNode = STMT_CHILDREN_MAP.count(classname) == 1 ? STMT_CHILDREN_MAP.find(classname)->second :
+                               clava::StmtNode::STMT;
+
+    visitChildren(stmtNode, S);
+}
+
+void ClangAstDumper::visitChildren(const Expr* E) {
+    // Get classname
+    const std::string classname = clava::getClassName(E);
+
+    // Get corresponding ExprNode
+    clava::StmtNode exprNode = EXPR_CHILDREN_MAP.count(classname) == 1 ? EXPR_CHILDREN_MAP.find(classname)->second :
+                               clava::StmtNode::EXPR;
+
+    visitChildren(exprNode, E);
+}
+
 void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
 
     std::vector<std::string> visitedChildren;
@@ -27,7 +57,7 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
 
 
-        default: throw std::invalid_argument("ClangDataDumper::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
+        default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
 
     }
 

@@ -34,6 +34,12 @@ private:
 
     clava::ClavaDataDumper dataDumper;
 
+    static const std::map<const std::string, clava::DeclNode > DECL_CHILDREN_MAP;
+    static const std::map<const std::string, clava::StmtNode > STMT_CHILDREN_MAP;
+    static const std::map<const std::string, clava::StmtNode > EXPR_CHILDREN_MAP;
+    static const std::map<const std::string, clava::TypeNode > TYPE_CHILDREN_MAP;
+
+
 public:
     explicit ClangAstDumper(ASTContext *Context, int id);
 
@@ -47,6 +53,8 @@ public:
      * TYPES
      */
     void VisitType(const Type *T); // Should not be manually called, instead call VisitTypeTop()
+    // TODO: We should only need to call VisitType, children/data maps should handle all cases
+    //void VisitBuiltinType(const BuiltinType *T);
     void VisitPointerType(const PointerType *T);
     void VisitTemplateSpecializationType(const TemplateSpecializationType *T);
     void VisitFunctionProtoType(const FunctionProtoType *T);
@@ -60,9 +68,9 @@ public:
          * STMTS
          */
     void VisitStmt(const Stmt *T); // Should not be manually called, instead call VisitStmtTop()
-    void VisitDeclStmt(const DeclStmt *Node);
+    //void VisitDeclStmt(const DeclStmt *Node);
     void VisitCXXForRangeStmt(const CXXForRangeStmt *Node);
-    void VisitCompoundStmt(const CompoundStmt *Node);
+    //void VisitCompoundStmt(const CompoundStmt *Node);
     void VisitForStmt(const ForStmt *Node);
 
 
@@ -84,8 +92,8 @@ public:
     void VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node);
     void VisitCXXTypeidExpr(const CXXTypeidExpr *Node);
     void VisitInitListExpr(const InitListExpr *Node);
-    void VisitCastExpr(const CastExpr *Node); // Works for ImplicitCastExpr, etc
-    void VisitCharacterLiteral(const CharacterLiteral *Node);
+    //void VisitCastExpr(const CastExpr *Node); // Works for ImplicitCastExpr, etc
+    //void VisitCharacterLiteral(const CharacterLiteral *Node);
 
     //void VisitImplicitCastExpr(const ImplicitCastExpr *Node);
 
@@ -95,12 +103,12 @@ public:
      * DELCS
      */
     void VisitDecl(const Decl *D); // Should not be manually called, instead call VisitDeclTop()
-    void VisitVarDecl(const VarDecl *D);
-    void VisitFunctionDecl(const FunctionDecl *D);
-    void VisitCXXMethodDecl(const CXXMethodDecl *D);
+    //void VisitVarDecl(const VarDecl *D);
+    //void VisitFunctionDecl(const FunctionDecl *D);
+    //void VisitCXXMethodDecl(const CXXMethodDecl *D);
     void VisitCXXConstructorDecl(const CXXConstructorDecl *D);
-    void VisitCXXConversionDecl(const CXXConversionDecl *D);
-    void VisitCXXDestructorDecl(const CXXDestructorDecl *D);
+    //void VisitCXXConversionDecl(const CXXConversionDecl *D);
+    //void VisitCXXDestructorDecl(const CXXDestructorDecl *D);
     void VisitCXXRecordDecl(const CXXRecordDecl *D);
     void VisitObjCImplementationDecl(const ObjCImplementationDecl *D);
     void VisitTemplateDecl(const TemplateDecl *D);
@@ -129,10 +137,20 @@ private:
 
     void log(std::string name, const void* addr);
 
+    // Children and data
+    void visitChildrenAndData(const Decl *D);
+    void visitChildrenAndData(const Stmt *S);
+    void visitChildrenAndData(const Expr *E);
+    void visitChildrenAndData(const Type *T);
+
 
     // Children visitors
     void dumpVisitedChildren(const void *pointer, std::vector<std::string> children);
 
+    void visitChildren(const Decl* D);
+    void visitChildren(const Stmt* S);
+    void visitChildren(const Expr* E);
+    void visitChildren(const Type* T);
 
     void visitChildren(clava::DeclNode declNode, const Decl* D);
     void visitChildren(clava::StmtNode stmtNode, const Stmt* S);

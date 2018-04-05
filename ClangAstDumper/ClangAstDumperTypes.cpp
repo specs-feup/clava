@@ -11,6 +11,14 @@
 
 using namespace clang;
 
+void ClangAstDumper::visitChildrenAndData(const Type *T) {
+    // Visit children
+    visitChildren(T);
+
+    // Dump data
+    dataDumper.dump(T);
+}
+
 /*
  * TYPES
  */
@@ -81,14 +89,29 @@ void ClangAstDumper::VisitType(const Type *T){
         return;
     }
 
+    visitChildrenAndData(T);
+    /*
     // Visit children
     visitChildren(clava::TypeNode::TYPE, T);
 
     // Dump data
     dataDumper.dump(clava::TypeNode::TYPE, T);
+     */
 }
 
+/*
+void ClangAstDumper::VisitBuiltinType(const BuiltinType *T) {
+    if(dumpType(T)) {
+        return;
+    }
 
+    // Visit children
+    visitChildren(clava::TypeNode::TYPE, T);
+
+    // Dump data
+    dataDumper.dump(clava::TypeNode::BUILTIN_TYPE, T);
+}
+ */
 
 void ClangAstDumper::VisitPointerType(const PointerType *T) {
     if(dumpType(T)) {

@@ -6,6 +6,38 @@
 #include "ClangNodes.h"
 #include "ClavaConstants.h"
 
+#include <map>
+
+const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
+        {"CXXConstructorDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXRecordDecl", clava::DeclNode::NAMED_DECL},
+        {"FieldDecl", clava::DeclNode::NAMED_DECL},
+        {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
+        {"NamespaceAliasDecl", clava::DeclNode::NAMED_DECL},
+        {"ObjCImplementationDecl", clava::DeclNode::NAMED_DECL},
+        {"ParmVarDecl", clava::DeclNode::PARM_VAR_DECL},
+        {"TemplateDecl", clava::DeclNode::NAMED_DECL},
+        {"TemplateTypeParmDecl", clava::DeclNode::NAMED_DECL},
+        {"TypedefDecl", clava::DeclNode::NAMED_DECL},
+        {"VarDecl", clava::DeclNode::VAR_DECL}
+};
+
+
+
+void clava::ClavaDataDumper::dump(const Decl* D) {
+
+    // Get classname
+    const std::string classname = clava::getClassName(D);
+
+    // Get corresponding DeclNode
+    DeclNode declNode = DECL_DATA_MAP.count(classname) == 1 ? DECL_DATA_MAP.find(classname)->second : DeclNode::DECL;
+
+    dump(declNode, D);
+}
+
 void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
     DumpHeader(getDataName(declNode), D);
 

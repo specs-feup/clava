@@ -5,6 +5,40 @@
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
 
+#include <map>
+
+const std::map<const std::string, clava::StmtNode > clava::STMT_DATA_MAP = {
+
+};
+
+const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
+        {"CharacterLiteral", clava::StmtNode::CHARACTER_LITERAL},
+        {"CastExpr", clava::StmtNode::CAST_EXPR}
+};
+
+
+void clava::ClavaDataDumper::dump(const Stmt* S) {
+
+    // Get classname
+    const std::string classname = clava::getClassName(S);
+
+    // Get corresponding DeclNode
+    StmtNode stmtNode = STMT_DATA_MAP.count(classname) == 1 ? STMT_DATA_MAP.find(classname)->second : StmtNode::STMT;
+
+    dump(stmtNode, S);
+}
+
+void clava::ClavaDataDumper::dump(const Expr* E) {
+
+    // Get classname
+    const std::string classname = clava::getClassName(E);
+
+    // Get corresponding DeclNode
+    StmtNode exprNode = EXPR_DATA_MAP.count(classname) == 1 ? EXPR_DATA_MAP.find(classname)->second : StmtNode::EXPR;
+
+    dump(exprNode, E);
+}
+
 void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
     DumpHeader(getDataName(stmtNode), S);
 

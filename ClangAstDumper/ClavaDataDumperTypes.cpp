@@ -5,6 +5,21 @@
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
 
+const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
+        {"BuiltinType", clava::TypeNode::BUILTIN_TYPE}
+};
+
+void clava::ClavaDataDumper::dump(const Type* T) {
+
+    // Get classname
+    const std::string classname = clava::getClassName(T);
+
+    // Get corresponding DeclNode
+    TypeNode typeNode = TYPE_DATA_MAP.count(classname) == 1 ? TYPE_DATA_MAP.find(classname)->second : TypeNode::TYPE;
+
+    dump(typeNode, T);
+}
+
 void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
     DumpHeader(getDataName(typeNode), T);
 

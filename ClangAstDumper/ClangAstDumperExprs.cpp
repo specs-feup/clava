@@ -20,12 +20,14 @@ void ClangAstDumper::VisitExpr(const Expr *Node) {
         return;
     }
 
+    visitChildrenAndData(Node);
+    /*
     // Visit children
     visitChildren(clava::StmtNode::EXPR, Node);
 
     // Dump data
     dataDumper.dump(clava::StmtNode::EXPR, Node);
-
+*/
     // Dump type to parse
     //dumpTopLevelType(Node->getType());
 }
@@ -325,6 +327,7 @@ void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
 }
 
 //void ClangAstDumper::VisitImplicitCastExpr(const ImplicitCastExpr *Node) {
+/*
 void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
     if(dumpStmt(Node)) {
         return;
@@ -336,7 +339,9 @@ void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
     // Dump data
     dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);
 }
+ */
 
+/*
 void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
     if(dumpStmt(Node)) {
         return;
@@ -349,4 +354,5 @@ void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
     dataDumper.dump(clava::StmtNode::CHARACTER_LITERAL , Node);
 
 }
+ */
 
