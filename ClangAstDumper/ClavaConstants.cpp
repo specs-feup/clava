@@ -5,6 +5,7 @@
 #include "ClavaConstants.h"
 
 #include <string>
+#include <stdexcept>
 
 const std::string clava::getName(const DeclNode declNode) {
     switch(declNode) {
