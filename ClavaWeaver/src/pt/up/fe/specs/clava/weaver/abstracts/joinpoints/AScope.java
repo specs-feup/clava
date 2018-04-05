@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
@@ -80,6 +81,91 @@ public abstract class AScope extends AStatement {
      */
     public void defNakedImpl(Boolean value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def naked with type Boolean not implemented ");
+    }
+
+    /**
+     * Get value on attribute stmts
+     * @return the attribute's value
+     */
+    public abstract AStatement[] getStmtsArrayImpl();
+
+    /**
+     * Get value on attribute stmts
+     * @return the attribute's value
+     */
+    public Bindings getStmtsImpl() {
+        AStatement[] aStatementArrayImpl0 = getStmtsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute stmts
+     * @return the attribute's value
+     */
+    public final Object getStmts() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stmts", Optional.empty());
+        	}
+        	Bindings result = this.getStmtsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "stmts", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "stmts", e);
+        }
+    }
+
+    /**
+     * Get value on attribute firstStmt
+     * @return the attribute's value
+     */
+    public abstract AStatement getFirstStmtImpl();
+
+    /**
+     * Get value on attribute firstStmt
+     * @return the attribute's value
+     */
+    public final Object getFirstStmt() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstStmt", Optional.empty());
+        	}
+        	AStatement result = this.getFirstStmtImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "firstStmt", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "firstStmt", e);
+        }
+    }
+
+    /**
+     * Get value on attribute lastStmt
+     * @return the attribute's value
+     */
+    public abstract AStatement getLastStmtImpl();
+
+    /**
+     * Get value on attribute lastStmt
+     * @return the attribute's value
+     */
+    public final Object getLastStmt() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "lastStmt", Optional.empty());
+        	}
+        	AStatement result = this.getLastStmtImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "lastStmt", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "lastStmt", e);
+        }
     }
 
     /**
@@ -698,6 +784,9 @@ public abstract class AScope extends AStatement {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("numStatements");
         attributes.add("naked");
+        attributes.add("stmts");
+        attributes.add("firstStmt");
+        attributes.add("lastStmt");
     }
 
     /**
@@ -761,6 +850,9 @@ public abstract class AScope extends AStatement {
     protected enum ScopeAttributes {
         NUMSTATEMENTS("numStatements"),
         NAKED("naked"),
+        STMTS("stmts"),
+        FIRSTSTMT("firstStmt"),
+        LASTSTMT("lastStmt"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

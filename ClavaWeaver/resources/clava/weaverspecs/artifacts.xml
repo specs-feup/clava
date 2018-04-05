@@ -192,6 +192,9 @@
 		<attribute name="naked" type="Boolean" tooltip="true if the scope does not have curly braces">
 			<def/>
 		</attribute>
+		<attribute name="stmts" type="statement[]" />
+		<attribute name="firstStmt" type="statement" />
+		<attribute name="lastStmt" type="statement" />
 	</artifact>
 
 

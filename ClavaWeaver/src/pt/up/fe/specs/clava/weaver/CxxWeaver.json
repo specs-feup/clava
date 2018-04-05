@@ -18622,6 +18622,22 @@
          "children": [
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "firstStmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "lastStmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if the scope does not have curly braces",
                   "children": [
                            {
@@ -18635,6 +18651,14 @@
                            {
                               "type": "Integer",
                               "name": "numStatements"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "statement[]",
+                              "name": "stmts"
                            }]
                },
                {

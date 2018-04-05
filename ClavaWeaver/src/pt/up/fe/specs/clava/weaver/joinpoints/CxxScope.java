@@ -368,4 +368,32 @@ public class CxxScope extends AScope {
 
         return varDeclJp;
     }
+
+    @Override
+    public AStatement[] getStmtsArrayImpl() {
+        return selectStmt().toArray(new AStatement[0]);
+    }
+
+    @Override
+    public AStatement getFirstStmtImpl() {
+        AStatement[] stmts = getStmtsArrayImpl();
+
+        if (stmts.length == 0) {
+            return null;
+        }
+
+        return stmts[0];
+
+    }
+
+    @Override
+    public AStatement getLastStmtImpl() {
+        AStatement[] stmts = getStmtsArrayImpl();
+
+        if (stmts.length == 0) {
+            return null;
+        }
+
+        return stmts[stmts.length - 1];
+    }
 }
