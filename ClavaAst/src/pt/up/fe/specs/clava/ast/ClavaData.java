@@ -94,7 +94,7 @@ public class ClavaData {
      * 
      * @param data
      */
-    void postProcess(ClavaDataPostProcessing data) {
+    protected void postProcess(ClavaDataPostProcessing data) {
         // By default, do nothing
     }
 

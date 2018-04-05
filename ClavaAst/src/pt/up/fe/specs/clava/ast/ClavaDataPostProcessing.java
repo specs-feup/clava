@@ -16,9 +16,15 @@ package pt.up.fe.specs.clava.ast;
 import java.util.Map;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
+import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCheck;
 
 public class ClavaDataPostProcessing {
+
+    private static final String NULLPRT = "nullptr";
 
     private final Map<String, ClavaNode> clavaNodes;
 
@@ -26,11 +32,30 @@ public class ClavaDataPostProcessing {
         this.clavaNodes = clavaNodes;
     }
 
-    public ClavaNode getClavaNodes(String id) {
+    public ClavaNode getClavaNode(String id) {
         ClavaNode clavaNode = clavaNodes.get(id);
         SpecsCheck.checkNotNull(clavaNode, () -> "No ClavaNode found for id '" + id + "'");
 
         return clavaNode;
+    }
+
+    public Type getType(String parsedTypeId) {
+        if (NULLPRT.equals(parsedTypeId)) {
+            return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+        }
+
+        ClavaNode node = getClavaNode(parsedTypeId);
+
+        if (node instanceof UnsupportedNode) {
+            NullType nullType = ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+            nullType.setData(node.getData());
+            return nullType;
+        }
+
+        SpecsCheck.checkArgument(node instanceof Type,
+                () -> "Expected id '" + parsedTypeId + "' to be a Type, is a " + node.getClass().getSimpleName());
+
+        return (Type) node;
     }
 
 }
