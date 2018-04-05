@@ -39,6 +39,9 @@ public class CxxWeaverOptions {
         addOneArgOption(ClavaOptions.FLAGS, "fs", "flags", "flags string",
                 "String with C/C++ compiler flags");
 
+        addBooleanOption(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES, "drd", "disable-remote",
+                "Disables remote dependencies (e.g., git repos)");
+
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_WEAVING.getName(), WeaverOptionBuilder.build("nw", "no-weaving",
                 "Disables weaving of source code, only runs the LARA aspect", CxxWeaverOption.DISABLE_WEAVING));
 

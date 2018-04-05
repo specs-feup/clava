@@ -492,6 +492,13 @@ public class CxxWeaver extends ACxxWeaver {
 
             // Set source paths of each TranslationUnit
             app.setSources(allFiles);
+
+            // Set options
+
+            // Set external dependencies
+            app.getExternalDependencies()
+                    .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
+
             // app.setSources(sources);
             SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang AST to Clava", tic));
 
