@@ -20,6 +20,8 @@ import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -36,7 +38,11 @@ public class ExprDataParser {
 
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines);
 
-        return new ExprDataV2(clavaData);
+        String typeId = lines.nextLine();
+        ValueKind valueKind = GeneralParsers.enumFromInt(ValueKind.getEnumHelper(), lines);
+        ObjectKind objectKind = GeneralParsers.enumFromInt(ObjectKind.getEnumHelper(), lines);
+
+        return new ExprDataV2(typeId, valueKind, objectKind, clavaData);
     }
 
     public static CastExprData parseCastExprData(LineStream lines) {

@@ -14,7 +14,10 @@
 package pt.up.fe.specs.clang.parsers.clavadata;
 
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -29,9 +32,20 @@ public class TypeDataParser {
 
     public static TypeDataV2 parseTypeData(LineStream lines) {
 
-        ClavaData clavaData = ClavaDataParser.parseClavaData(lines);
+        // Types do not have location
+        ClavaData clavaData = ClavaDataParser.parseClavaData(lines, false);
 
         return new TypeDataV2(clavaData);
+    }
+
+    public static BuiltinTypeData parseBuiltinTypeData(LineStream lines) {
+
+        TypeDataV2 data = parseTypeData(lines);
+
+        BuiltinKind kind = GeneralParsers.enumFromInt(BuiltinKind.getEnumHelper(), BuiltinKind.UNKNOWN_ANY, lines);
+        boolean isSugared = GeneralParsers.parseOneOrZero(lines);
+
+        return new BuiltinTypeData(kind, isSugared, data);
     }
 
 }

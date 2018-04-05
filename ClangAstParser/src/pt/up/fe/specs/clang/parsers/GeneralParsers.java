@@ -53,6 +53,18 @@ public class GeneralParsers {
         return Long.parseLong(lines.nextLine());
     }
 
+    public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper, T defaultValue,
+            LineStream lines) {
+
+        int index = parseInt(lines);
+
+        if (index >= helper.getSize()) {
+            return defaultValue;
+        }
+
+        return helper.valueOf(index);
+    }
+
     public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper,
             LineStream lines) {
 
@@ -81,10 +93,24 @@ public class GeneralParsers {
         stringMap.put(key, value);
     }
 
+    /**
+     * Overload that sets 'checkDuplicate' to true.
+     * 
+     * @param id
+     * @param linestream
+     * @param stringSet
+     */
     public static void parseStringSet(String id, LineStream linestream, Set<String> stringSet) {
+        parseStringSet(id, linestream, stringSet, true);
+    }
+
+    public static void parseStringSet(String id, LineStream linestream, Set<String> stringSet, boolean checkDuplicate) {
         String key = linestream.nextLine();
 
-        GeneralParsers.checkDuplicate(id, key, stringSet);
+        if (checkDuplicate) {
+            GeneralParsers.checkDuplicate(id, key, stringSet);
+        }
+
         stringSet.add(key);
     }
 }

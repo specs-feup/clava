@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
+import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -77,6 +78,7 @@ public class ClavaDataParser extends GenericLineStreamParser {
 
         // TYPES
         DATA_PARSERS.put(TypeDataV2.class, TypeDataParser::parseTypeData);
+        DATA_PARSERS.put(BuiltinTypeData.class, TypeDataParser::parseBuiltinTypeData);
 
         // EXPRS
         DATA_PARSERS.put(ExprDataV2.class, ExprDataParser::parseExprData);
@@ -230,9 +232,14 @@ public class ClavaDataParser extends GenericLineStreamParser {
     }
 
     public static ClavaData parseClavaData(LineStream lines) {
+        return parseClavaData(lines, true);
+    }
+
+    public static ClavaData parseClavaData(LineStream lines, boolean hasLocation) {
 
         String id = lines.nextLine();
-        SourceRange location = parseLocation(lines);
+
+        SourceRange location = hasLocation ? parseLocation(lines) : SourceRange.invalidRange();
 
         return new ClavaData(id, location);
     }

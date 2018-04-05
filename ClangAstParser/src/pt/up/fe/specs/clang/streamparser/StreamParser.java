@@ -41,6 +41,7 @@ import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
+import pt.up.fe.specs.clang.parsers.TopLevelTypesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
@@ -142,7 +143,8 @@ public class StreamParser {
 
     private Collection<LineStreamParser> buildLineStreamParsers() {
         return Arrays.asList(ClavaDataParser.newInstance(), VisitedChildrenParser.newInstance(),
-                IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance());
+                IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance(),
+                TopLevelTypesParser.newInstance());
     }
 
     private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {

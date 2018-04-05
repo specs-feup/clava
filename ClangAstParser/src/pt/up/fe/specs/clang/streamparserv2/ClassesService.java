@@ -62,7 +62,7 @@ public class ClassesService {
 
             return builder;
         } catch (Exception e) {
-            SpecsLogs.debug("Could not create constructor for ClavaNode:" + e.getMessage());
+            SpecsLogs.msgLib("Could not create constructor for ClavaNode:" + e.getMessage());
             return null;
         }
 

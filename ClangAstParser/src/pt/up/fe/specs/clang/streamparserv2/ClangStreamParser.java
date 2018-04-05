@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang.streamparserv2;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
+import pt.up.fe.specs.clang.parsers.TopLevelTypesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
@@ -57,11 +59,17 @@ public class ClangStreamParser {
     public void parse() {
         // Get top-level nodes
         Set<String> topLevelNodes = data.get(TopLevelNodesParser.getDataKey());
+        Set<String> topLevelTypes = data.get(TopLevelTypesParser.getDataKey());
         // System.out.println("TOP LEVEL NODES:" + topLevelNodes);
         // Separate into translation units?
 
+        List<String> allNodes = new ArrayList<>(topLevelNodes.size() + topLevelTypes.size());
+        allNodes.addAll(topLevelNodes);
+        allNodes.addAll(topLevelTypes);
+        // System.out.println("TOP LEVLE TYPES:" + topLevelTypes);
         MultiMap<String, ClavaNode> app = new MultiMap<>();
-        for (String topLevelId : topLevelNodes) {
+        // for (String topLevelId : topLevelNodes) {
+        for (String topLevelId : allNodes) {
             ClavaNode clavaNode = parse(topLevelId);
 
             // Determine key base on id
