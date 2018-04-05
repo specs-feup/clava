@@ -108,5 +108,7 @@ void clava::dump(const QualType& type, int id) {
     }
 
     //dump(getId(type.getTypePtr(), id));
+    // QUALTYPE EXP
+    //dump(getId(type.getAsOpaquePtr(), id));
     dump(getId(type.getAsOpaquePtr(), id));
 }

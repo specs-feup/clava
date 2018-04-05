@@ -28,7 +28,6 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
 void clava::ClavaDataDumper::DumpStmtData(const Stmt *S) {
 
     clava::dumpSourceRange(Context, S->getLocStart(), S->getLocEnd());
-    //void dumpSourceRange(std::string id, SourceLocation startLoc, SourceLocation endLoc);
 
 }
 

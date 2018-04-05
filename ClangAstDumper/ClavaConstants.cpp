@@ -10,6 +10,7 @@ const std::string clava::getName(const DeclNode declNode) {
     switch(declNode) {
         case clava::DeclNode::DECL: return "Decl";
         case clava::DeclNode::NAMED_DECL: return "NamedDecl";
+        case clava::DeclNode::VALUE_DECL: return "ValueDecl";
         case clava::DeclNode::FUNCTION_DECL: return "FunctionDecl";
         case clava::DeclNode::CXX_METHOD_DECL: return "CXXMethodDecl";
         case clava::DeclNode::VAR_DECL: return "VarDecl";
@@ -46,6 +47,8 @@ const std::string clava::getName(const StmtNode stmtNode) {
 const std::string clava::getName(const TypeNode typeNode) {
     switch(typeNode) {
         case clava::TypeNode::TYPE: return "Type";
+        case clava::TypeNode::QUAL_TYPE: return "QualType";
+        case clava::TypeNode::BUILTIN_TYPE: return "BuiltinType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<DeclNode>::type>(typeNode));

@@ -42,9 +42,13 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
 }
 
 bool ClangAstDumper::dumpType(const QualType& type) {
+    // QUALTYPE EXP
     void* typeAddr = type.getAsOpaquePtr();
+    //const void* typeAddr = &type;
+
 
     if(seenTypes.count(typeAddr) != 0) {
+    //if(seenTypes.count(&type) != 0) {
         return true;
     }
 
@@ -62,6 +66,7 @@ bool ClangAstDumper::dumpType(const QualType& type) {
     dumpIdToClassMap(typeAddr, "QualType");
 
 
+
     return false;
 }
 
@@ -72,7 +77,15 @@ bool ClangAstDumper::dumpType(const QualType& type) {
  * @param T
  */
 void ClangAstDumper::VisitType(const Type *T){
-    dumpType(T);
+    if(dumpType(T)) {
+        return;
+    }
+
+    // Visit children
+    visitChildren(clava::TypeNode::TYPE, T);
+
+    // Dump data
+    dataDumper.dump(clava::TypeNode::TYPE, T);
 }
 
 
@@ -172,7 +185,10 @@ void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
 
     // Parameters type
     for (QualType PT : T->getParamTypes()) {
+        // QUALTYPE EXP
         VisitTypeTop(PT.getTypePtr());
+        //VisitTypeTop(PT);
+        //VisitTypeTop(PT.getAsOpaquePtr());
     }
 
     auto EI = T->getExtInfo();

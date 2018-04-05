@@ -21,19 +21,67 @@ using namespace clang;
 
 ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id), dataDumper(Context, id)  {};
 
-
+// This method is equivalent to a VisitQualType() in ClangAstDumperTypes.cpp
 void ClangAstDumper::VisitTypeTop(const QualType& T) {
     if(T.isNull()) {
         return;
     }
+
+    // Check if QualType is the same as the underlying type
+    if((void*) T.getTypePtr() == T.getAsOpaquePtr()) {
+/*
+        if(dumpType(T.getTypePtr())) {
+            return;
+        }
+*/
+        // TODO: AST dump method relies on visiting the nodes multiple times
+        // For now, detect it to avoid visiting children more than once
+        if(seenTypes.count(T.getTypePtr()) == 0) {
+            TypeVisitor::Visit(T.getTypePtr());
+        }
+
+
+        dumpType(T.getTypePtr());
+
+        return;
+    }
+
+    // Dump QualType
+    /*
+    if(dumpType(T)) {
+        return;
+    }
+    */
+
+
+    // Visit children
+    // TODO: AST dump method relies on visiting the nodes multiple times
+    // For now, detect it to avoid visiting children more than once
+    if(seenTypes.count(T.getAsOpaquePtr()) == 0) {
+        visitChildren(T);
+    }
+
+
+
+
+    dumpType(T);
+
+    // Dump data
+    //dataDumper.dump(clava::TypeNode::TYPE, T);
+
+    // Visit underlying (unqualified) type
+    //TypeVisitor::Visit(T.getTypePtr());
+//llvm::errs() << "Opaque PTR: " << T.getAsOpaquePtr() << "\n";
+//llvm::errs() << "Underlying PTR: " << T.getTypePtr() << "\n";
+
+    //dumpType(T);
 
 //    auto typeAddr = T.getTypePtrOrNull();
 //    if(typeAddr == nullptr) {
 //        return;
 //    }
 
-    TypeVisitor::Visit(T.getTypePtr());
-    dumpType(T);
+
 }
 
 void ClangAstDumper::VisitTypeTop(const Type *T) {

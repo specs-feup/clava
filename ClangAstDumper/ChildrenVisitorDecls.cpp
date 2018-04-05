@@ -13,6 +13,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
     std::vector<std::string> visitedChildren;
 
     switch(declNode) {
+        case clava::DeclNode::VALUE_DECL:
+            VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
             VisitFunctionDeclChildren(static_cast<const FunctionDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_RECORD_DECL:
@@ -28,7 +30,15 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
 }
 
 
+void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
+    // Visit type
+    VisitTypeTop(D->getType());
+    dumpTopLevelType(D->getType());
+}
+
 void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitValueDeclChildren(D, children);
 
     // Visit parameters
     for(auto param : D->parameters()) {
@@ -81,6 +91,8 @@ void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D
 
 
 void ClangAstDumper::VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitValueDeclChildren(D, children);
 
     if (D->hasInit()) {
         VisitStmtTop(D->getInit());

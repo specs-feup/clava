@@ -99,8 +99,11 @@ namespace clava {
 
         // TYPES
         void DumpTypeData(const Type *T);
+        //void DumpQualTypeData(const QualType *T);
+        void DumpBuiltinTypeData(const BuiltinType *T);
 
-        const std::string getDataName(DeclNode node);
+
+            const std::string getDataName(DeclNode node);
         const std::string getDataName(StmtNode node);
         const std::string getDataName(TypeNode node);
         const std::string getDataName(std::string nodeName);

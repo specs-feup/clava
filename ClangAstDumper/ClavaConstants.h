@@ -24,6 +24,7 @@ namespace clava {
     enum class DeclNode {
         DECL,
         NAMED_DECL,
+        VALUE_DECL,
         FUNCTION_DECL,
         CXX_METHOD_DECL,
         VAR_DECL,
@@ -58,7 +59,9 @@ namespace clava {
      * Represents type node classes
     */
     enum class TypeNode {
-        TYPE
+        TYPE,
+        QUAL_TYPE,
+        BUILTIN_TYPE
     };
 
 

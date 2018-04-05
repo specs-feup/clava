@@ -137,9 +137,11 @@ private:
     void visitChildren(clava::DeclNode declNode, const Decl* D);
     void visitChildren(clava::StmtNode stmtNode, const Stmt* S);
     void visitChildren(clava::TypeNode typeNode, const Type* T);
+    void visitChildren(const QualType &T);
     void emptyChildren(const void *pointer);
 
     // Children visitors for Decls
+    void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
     void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
@@ -160,6 +162,10 @@ private:
     // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);
     void dumpTopLevelType(const QualType &type);
+
+
+    // Children visitors for Types
+    void VisitTypeChildren(const Type *T, std::vector<std::string> &children);
 
 
     /* Utility methods for DECLS */

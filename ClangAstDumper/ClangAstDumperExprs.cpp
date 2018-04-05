@@ -299,7 +299,10 @@ void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
     // Address of type/expr
     if(isTypeOperand) {
         QualType typeOperand = Node->getTypeOperand(*Context);
-        llvm::errs() << getId(Node->getTypeOperand(*Context).getTypePtr()) << "\n";
+        // QUALTYPE EXP
+        //llvm::errs() << getId(Node->getTypeOperand(*Context).getTypePtr()) << "\n";
+        //llvm::errs() << getId(&typeOperand) << "\n";
+        llvm::errs() << getId(typeOperand.getAsOpaquePtr()) << "\n";
         VisitTypeTop(typeOperand);
     } else {
         llvm::errs() << getId(Node->getExprOperand()) << "\n";
