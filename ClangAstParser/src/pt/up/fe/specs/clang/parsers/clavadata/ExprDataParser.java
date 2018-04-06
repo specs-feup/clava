@@ -56,10 +56,11 @@ public class ExprDataParser {
     public static CharacterLiteralData parseCharacterLiteralData(LineStream lines) {
         ExprDataV2 data = parseExprData(lines);
 
+        String sourceValue = lines.nextLine();
         long value = GeneralParsers.parseLong(lines);
         CharacterKind kind = GeneralParsers.enumFromInt(CharacterKind.getEnumHelper(), lines);
 
-        return new CharacterLiteralData(value, kind, data);
+        return new CharacterLiteralData(sourceValue, value, kind, data);
     }
 
 }
