@@ -13,7 +13,8 @@ const std::map<const std::string, clava::StmtNode > clava::STMT_DATA_MAP = {
 
 const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CharacterLiteral", clava::StmtNode::CHARACTER_LITERAL},
-        {"CastExpr", clava::StmtNode::CAST_EXPR}
+        {"CastExpr", clava::StmtNode::CAST_EXPR},
+        {"ImplicitCastExpr", clava::StmtNode::CAST_EXPR},
 };
 
 

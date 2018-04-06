@@ -4,6 +4,7 @@
 
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
+#include "ClangEnums.h"
 
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"BuiltinType", clava::TypeNode::BUILTIN_TYPE}
@@ -48,6 +49,6 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
 void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
     DumpTypeData(T);
 
-    clava::dump(T->getKind());
+    clava::dump(T->getName(Context->getPrintingPolicy()));
     clava::dump(T->isSugared());
 }
