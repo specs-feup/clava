@@ -11,13 +11,12 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.streamparserv2;
+package pt.up.fe.specs.clava.ast;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
@@ -44,6 +43,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 
+/**
+ * Maps ClavaNode classes to the corresponding ClavaData classes.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class ClavaNodeToData {
 
     private static final Map<Class<? extends ClavaNode>, Class<? extends ClavaData>> CLAVA_NODE_TO_DATA;

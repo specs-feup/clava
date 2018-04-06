@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.ClavaDataUtils;
+import pt.up.fe.specs.clava.ast.ClavaNodeToData;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
