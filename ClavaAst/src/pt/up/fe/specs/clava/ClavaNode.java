@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaNodeConstructors;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -33,10 +34,13 @@ import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
 public abstract class ClavaNode extends ATreeNode<ClavaNode> {
+
+    private static final ClavaNodeConstructors CLAVA_NODE_CONSTRUCTORS = new ClavaNodeConstructors();
 
     private List<InlineComment> inlineComments;
 
@@ -312,6 +316,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         copy.inlineComments = new ArrayList<>(getInlineComments());
 
         return copy;
+    }
+
+    @Override
+    protected ClavaNode copyPrivate() {
+        if (getData() != null) {
+            return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getData(), Collections.emptyList());
+        }
+
+        throw new NotImplementedException(this);
     }
 
     public boolean hasInlineComments() {

@@ -13,30 +13,30 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
-import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
-import pt.up.fe.specs.util.SpecsLogs;
 
 public class BuiltinType extends Type {
 
-    private final List<BuiltinTypeKeyword> keywords;
-    private final String otherBuiltins;
-
     public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
 
-        this.keywords = null;
-        otherBuiltins = null;
+    /**
+     * @deprecated for legacy reasons
+     * @param data
+     * @param info
+     * @param children
+     */
+    @Deprecated
+    protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(data, info, children);
     }
 
     @Override
@@ -44,93 +44,25 @@ public class BuiltinType extends Type {
         return (BuiltinTypeData) super.getData();
     }
 
-    public BuiltinType(TypeData typeData, ClavaNodeInfo info) {
-        super(typeData, info, Collections.emptyList());
-
-        keywords = buildKeywords(typeData.getBareType());
-        otherBuiltins = buildOtherBuiltins(typeData.getBareType());
-    }
-
-    private static List<BuiltinTypeKeyword> buildKeywords(String bareType) {
-
-        if (bareType.startsWith("<") && bareType.endsWith(">")) {
-            return Collections.emptyList();
-        }
-
-        try {
-            List<BuiltinTypeKeyword> keywords = Arrays.stream(bareType.split(" "))
-                    .filter(type -> !type.isEmpty())
-                    .map(type -> BuiltinTypeKeyword.getHelper().valueOf(type))
-                    .collect(Collectors.toList());
-            return keywords;
-        } catch (Exception e) {
-            throw new RuntimeException("Could not decode type '" + bareType, e);
-        }
-
-    }
-
-    private String buildOtherBuiltins(String bareType) {
-        if (bareType.startsWith("<") && bareType.endsWith(">")) {
-            return bareType;
-        }
-
-        return null;
-    }
-
     @Override
     protected ClavaNode copyPrivate() {
-        if (getData() != null) {
-            return new BuiltinType(getData(), Collections.emptyList());
-        }
-        return new BuiltinType(getTypeData(), getInfo());
+        return new BuiltinType(getData(), Collections.emptyList());
     }
 
     @Override
     public String getCode(String name) {
-        if (getData() == null) {
-            return getCodePrevious(name);
-        }
-
         String type = getData().getKind().getString();
 
         String varName = name == null ? "" : " " + name;
         return type + varName;
     }
 
-    public String getCodePrevious(String name) {
-        // String type = getBareType();
-        String type = keywords.stream()
-                .map(keyword -> keyword.getCode())
-                .collect(Collectors.joining(" "));
-
-        String varName = name == null ? "" : " " + name;
-        return type + varName;
-        /*
-        if (name == null) {
-            return type;
-        }
-        
-        return type + " " + name;
-        */
-    }
-
-    public List<BuiltinTypeKeyword> getKeywords() {
-        return keywords;
-    }
-
-    public Optional<String> getOtherBuiltins() {
-        return Optional.of(otherBuiltins);
-    }
-
+    /**
+     * TODO: Remove this method, move to IntegerLiteral (only use), used BuiltinKind
+     */
     @Override
     public String getConstantCode(String constant) {
-        boolean isUnsigned = false;
-
-        if (getData() != null) {
-            isUnsigned = getData().getKind().isUnsigned();
-        } else {
-            isUnsigned = keywords.contains(BuiltinTypeKeyword.UNSIGNED);
-        }
+        boolean isUnsigned = getData().getKind().isUnsigned();
 
         if (isUnsigned) {
             // if (getBareType().startsWith("unsigned")) {
@@ -138,78 +70,11 @@ public class BuiltinType extends Type {
         }
 
         return constant;
-        // System.out.println("TYPE:" + getType());
-        // switch (getType()) {
-        // case "unsigned int":
-        // case "unsigned long":
-        // case "unsigned long long":
-        // return constant + "u";
-        // default:
-        // return constant;
-        // }
 
     }
 
     public boolean isVoid() {
-        // If return type is not void, add return
-        boolean hasVoid = getKeywords().stream()
-                .filter(keyword -> keyword == BuiltinTypeKeyword.VOID)
-                .findAny()
-                .isPresent();
-
-        if (getKeywords().size() > 1) {
-            SpecsLogs.msgInfo("'void' type has more than one keyword, check if ok: " + getKeywords());
-        }
-
-        return hasVoid;
-    }
-
-    /*
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((getTypeData() == null) ? 0 : getTypeData().hashCode());
-        result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
-    
-        return result;
-    }
-    */
-
-    /*
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-    
-        BuiltinType other = (BuiltinType) obj;
-    
-        if (keywords == null) {
-            if (other.keywords != null) {
-                return false;
-            }
-        } else if (!keywords.equals(other.keywords)) {
-            return false;
-        }
-    
-        return true;
-    }
-    */
-
-    @Override
-    public String toContentString() {
-        if (getData() != null) {
-            // toContentString(super.toContentString(), "kind: " + getData().getKind());
-            return getData().toString();
-        }
-        return super.toContentString() + ", keywords: " + getKeywords();
+        return getData().getKind() == BuiltinKind.VOID;
     }
 
 }

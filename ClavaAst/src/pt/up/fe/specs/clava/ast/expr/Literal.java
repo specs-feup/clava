@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
@@ -27,6 +28,16 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public abstract class Literal extends Expr {
 
+    public Literal(ClavaData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /**
+     * 
+     * @param exprData
+     * @param info
+     * @param children
+     */
     public Literal(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(exprData, info, children);
     }

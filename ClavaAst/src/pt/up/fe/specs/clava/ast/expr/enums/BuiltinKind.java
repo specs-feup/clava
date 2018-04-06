@@ -82,7 +82,7 @@ public enum BuiltinKind implements StringProvider {
     OPENCL_NDRANGE("ndrange_t"),
     OPENCL_RESERVE_ID("reserve_id_t"),
 
-    DEPENDENT,
+    DEPENDENT("<dependent type>"),
     OVERLOAD,
     BOUND_MEMBER("<bound member function type>"),
     PSEUDO_OBJECT,

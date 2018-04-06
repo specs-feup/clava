@@ -146,6 +146,7 @@ import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -221,6 +222,7 @@ import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
+import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
@@ -644,7 +646,7 @@ public class ClavaNodeFactory {
     }
 
     public static BuiltinType builtinType(TypeData typeData, ClavaNodeInfo info) {
-        return new BuiltinType(typeData, info);
+        return new BuiltinTypeLegacy(typeData, info);
     }
 
     public static TypedefType typedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
@@ -1149,7 +1151,7 @@ public class ClavaNodeFactory {
     // }
 
     public static CharacterLiteral characterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info) {
-        return new CharacterLiteral(charValue, exprData, info);
+        return new CharacterLiteralLegacy(charValue, exprData, info);
     }
 
     public static CXXDefaultInitExpr cxxDefaultInitExpr(ExprData exprData, ClavaNodeInfo info) {

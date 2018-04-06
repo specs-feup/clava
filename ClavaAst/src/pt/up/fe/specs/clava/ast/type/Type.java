@@ -114,6 +114,9 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public String toContentString() {
+        if (getData() != null) {
+            return super.toContentString();
+        }
         return super.toContentString() + getCode();
     }
 

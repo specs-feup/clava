@@ -19,6 +19,7 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -36,6 +37,15 @@ public abstract class Expr extends ClavaNode implements Typable {
     private ExprData exprData;
     private ImplicitCastExpr implicitCast;
 
+    public Expr(ClavaData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /**
+     * @param exprData
+     * @param info
+     * @param children
+     */
     public Expr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
