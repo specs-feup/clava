@@ -56,6 +56,15 @@ namespace clava {
      */
     const std::string getId(const void* addr, int id);
 
+    /**
+     *
+     * @param Context
+     * @param sourceRange
+     * @return the source code corresponding to the given sourceRange
+     */
+    const std::string getSource(ASTContext *Context, SourceRange sourceRange);
+
+
 
     // Value dumpers
     void dump(bool boolean);

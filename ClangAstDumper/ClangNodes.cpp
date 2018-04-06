@@ -4,6 +4,8 @@
 
 #include "ClangNodes.h"
 
+#include "clang/Lex/Lexer.h"
+
 using namespace clang;
 
 const std::string clava::getClassName(const Decl* D) {
@@ -111,4 +113,57 @@ void clava::dump(const QualType& type, int id) {
     // QUALTYPE EXP
     //dump(getId(type.getAsOpaquePtr(), id));
     dump(getId(type.getAsOpaquePtr(), id));
+}
+
+
+/**
+ * Taken from: https://stackoverflow.com/questions/11083066/getting-the-source-behind-clangs-ast
+ * @param Context
+ * @param start
+ * @param end
+ * @return
+ */
+const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange) {
+    //const SourceManager &sm = Context->getSourceManager();
+
+  /*
+
+    clang::SourceLocation b(start), _e(end);
+
+    clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, sm, Context->getLangOpts()));
+
+    return std::string(sm.getCharacterData(b),
+                                sm.getCharacterData(e)-sm.getCharacterData(b));
+*/
+    // (T, U) => "T,,"
+
+    const SourceManager &sm = Context->getSourceManager();
+
+
+    SourceLocation begin = sourceRange.getBegin();
+    SourceLocation end = sourceRange.getEnd();
+    if (begin.isMacroID()) {
+        //llvm::errs() << "Begin is macro:" << begin.printToString(sm) << "\n";
+        begin = sm.getSpellingLoc(begin);
+        //llvm::errs() << "Begin spelling loc:" << begin.printToString(sm) << "\n";
+    } else {
+        //llvm::errs() << "Begin is not macro:" << begin.printToString(sm) << "\n";
+    }
+
+    if (end.isMacroID()) {
+        //llvm::errs() << "End is macro:" << end.printToString(sm) << "\n";
+        end = sm.getSpellingLoc(end);
+        //llvm::errs() << "End spelling loc:" << end.printToString(sm) << "\n";
+    } else {
+        //llvm::errs() << "End is not macro:" << begin.printToString(sm) << "\n";
+    }
+
+
+
+    std::string text = Lexer::getSourceText(CharSourceRange::getTokenRange(begin, end), sm, LangOptions(), 0);
+    if (text.size() > 0 && (text.at(text.size()-1) == ',')) //the text can be ""
+        return Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
+    return text;
+
+
 }

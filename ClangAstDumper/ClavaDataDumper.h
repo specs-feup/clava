@@ -63,7 +63,6 @@ namespace clava {
         void dump(clava::StmtNode stmtNode, const Stmt* S);
         void dump(clava::TypeNode typeNode, const Type* T);
 
-
         //void DumpHeader(const Decl* D);
         //void DumpHeader(const Stmt* S);
         //void DumpHeader(const Type* T);
@@ -106,6 +105,8 @@ namespace clava {
         void DumpExprData(const Expr *E);
         void DumpCastExprData(const CastExpr *E);
         void DumpCharacterLiteralData(const CharacterLiteral *E);
+        void DumpIntegerLiteralData(const IntegerLiteral *E);
+        void DumpFloatingLiteralData(const FloatingLiteral *E);
 
 
         // TYPES

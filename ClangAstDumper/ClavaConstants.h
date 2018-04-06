@@ -44,7 +44,9 @@ namespace clava {
         // Expr nodes
         EXPR,
         CAST_EXPR,
-        CHARACTER_LITERAL
+        CHARACTER_LITERAL,
+        INTEGER_LITERAL,
+        FLOATING_LITERAL
     };
 
     /**

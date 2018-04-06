@@ -36,6 +36,7 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 }
 
 
+
 void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
 
 }
