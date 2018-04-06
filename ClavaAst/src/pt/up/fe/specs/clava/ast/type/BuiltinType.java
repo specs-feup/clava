@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -29,6 +31,18 @@ public class BuiltinType extends Type {
 
     private final List<BuiltinTypeKeyword> keywords;
     private final String otherBuiltins;
+
+    public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.keywords = null;
+        otherBuiltins = null;
+    }
+
+    @Override
+    public BuiltinTypeData getData() {
+        return (BuiltinTypeData) super.getData();
+    }
 
     public BuiltinType(TypeData typeData, ClavaNodeInfo info) {
         super(typeData, info, Collections.emptyList());
@@ -65,12 +79,25 @@ public class BuiltinType extends Type {
 
     @Override
     protected ClavaNode copyPrivate() {
+        if (getData() != null) {
+            return new BuiltinType(getData(), Collections.emptyList());
+        }
         return new BuiltinType(getTypeData(), getInfo());
     }
 
     @Override
     public String getCode(String name) {
+        if (getData() == null) {
+            return getCodePrevious(name);
+        }
 
+        String type = getData().getKind().getString();
+
+        String varName = name == null ? "" : " " + name;
+        return type + varName;
+    }
+
+    public String getCodePrevious(String name) {
         // String type = getBareType();
         String type = keywords.stream()
                 .map(keyword -> keyword.getCode())
@@ -97,7 +124,15 @@ public class BuiltinType extends Type {
 
     @Override
     public String getConstantCode(String constant) {
-        if (keywords.contains(BuiltinTypeKeyword.UNSIGNED)) {
+        boolean isUnsigned = false;
+
+        if (getData() != null) {
+            isUnsigned = getData().getKind().isUnsigned();
+        } else {
+            isUnsigned = keywords.contains(BuiltinTypeKeyword.UNSIGNED);
+        }
+
+        if (isUnsigned) {
             // if (getBareType().startsWith("unsigned")) {
             return constant + "u";
         }
@@ -170,6 +205,10 @@ public class BuiltinType extends Type {
 
     @Override
     public String toContentString() {
+        if (getData() != null) {
+            // toContentString(super.toContentString(), "kind: " + getData().getKind());
+            return getData().toString();
+        }
         return super.toContentString() + ", keywords: " + getKeywords();
     }
 

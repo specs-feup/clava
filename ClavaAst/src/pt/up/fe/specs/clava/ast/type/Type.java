@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
@@ -43,6 +44,15 @@ public abstract class Type extends ClavaNode {
         this.data = data;
         // app = () -> null;
         app = null;
+    }
+
+    public Type(TypeDataV2 dataV2, Collection<? extends ClavaNode> children) {
+        super(dataV2, children);
+    }
+
+    @Override
+    public TypeDataV2 getData() {
+        return (TypeDataV2) super.getData();
     }
 
     public TypeData getTypeData() {

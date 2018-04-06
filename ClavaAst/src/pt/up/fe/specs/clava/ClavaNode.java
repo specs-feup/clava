@@ -54,6 +54,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         data = null;
     }
 
+    public ClavaNode(ClavaData data, Collection<? extends ClavaNode> children) {
+        super(children);
+
+        info = null;
+        inlineComments = null;
+        this.data = data;
+    }
+
     // private ClavaNode(ClavaId id, Location location, Collection<? extends ClavaNode> children) {
     // super(children);
     //
@@ -125,6 +133,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public Optional<String> getExtendedId() {
+        if (data != null) {
+            return Optional.ofNullable(data.getId());
+        }
         return info.getId().map(id -> id.getExtendedId());
     }
 
