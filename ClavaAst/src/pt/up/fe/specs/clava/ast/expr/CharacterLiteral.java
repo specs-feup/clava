@@ -50,16 +50,23 @@ public class CharacterLiteral extends Literal {
     // private final long charValue;
 
     /**
-     * For legacy.
+     * For legacy support.
      * 
+     * @deprecated
      * @param charValue
      * @param exprData
      * @param info
      * @param children
      */
+    @Deprecated
     protected CharacterLiteral(ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(exprData, info, children);
+    }
+
+    @Override
+    public CharacterLiteralData getData() {
+        return (CharacterLiteralData) super.getData();
     }
 
     //
@@ -120,8 +127,4 @@ public class CharacterLiteral extends Literal {
         return getCode();
     }
 
-    @Override
-    public CharacterLiteralData getData() {
-        return (CharacterLiteralData) super.getData();
-    }
 }

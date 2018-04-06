@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -29,7 +28,7 @@ public class BuiltinType extends Type {
     }
 
     /**
-     * @deprecated for legacy reasons
+     * @deprecated for legacy support
      * @param data
      * @param info
      * @param children
@@ -42,11 +41,6 @@ public class BuiltinType extends Type {
     @Override
     public BuiltinTypeData getData() {
         return (BuiltinTypeData) super.getData();
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new BuiltinType(getData(), Collections.emptyList());
     }
 
     @Override

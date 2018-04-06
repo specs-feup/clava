@@ -17,18 +17,20 @@ import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 
 public class CharacterLiteralData extends ExprDataV2 {
 
+    private final String sourceValue;
     private final long value;
     private final CharacterKind kind;
 
-    public CharacterLiteralData(long value, CharacterKind kind, ExprDataV2 data) {
+    public CharacterLiteralData(String sourceValue, long value, CharacterKind kind, ExprDataV2 data) {
         super(data);
 
+        this.sourceValue = sourceValue;
         this.value = value;
         this.kind = kind;
     }
 
     public CharacterLiteralData(CharacterLiteralData data) {
-        this(data.value, data.kind, data);
+        this(data.sourceValue, data.value, data.kind, data);
     }
 
     @Override
@@ -38,7 +40,11 @@ public class CharacterLiteralData extends ExprDataV2 {
 
     @Override
     public String toString() {
-        return toString(super.toString(), "charValue: " + value + ", kind: " + kind);
+        return toString(super.toString(), "sourceValue: " + sourceValue + ", charValue: " + value + ", kind: " + kind);
+    }
+
+    public String getSourceValue() {
+        return sourceValue;
     }
 
     public long getValue() {
