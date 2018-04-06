@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.streamparserv2;
 
 import java.lang.reflect.Constructor;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,8 @@ public class ClassesService {
         // Create and store builder
         try {
 
-            Constructor<? extends ClavaNode> constructor = clavaNodeClass.getConstructor(clavaDataClass, List.class);
+            Constructor<? extends ClavaNode> constructor = clavaNodeClass.getConstructor(clavaDataClass,
+                    Collection.class);
             builder = (node, children) -> {
                 try {
                     return constructor.newInstance(node, children);

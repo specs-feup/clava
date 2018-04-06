@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.clavaparser.type;
 
+import java.util.Collections;
+
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
@@ -21,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -41,13 +44,21 @@ public class BuiltinTypeParser extends AClangNodeParser<BuiltinType> {
         // 'unsigned int'
         // 'int'
 
+        // TODO: Temporary
+        BuiltinTypeData data = getDataTry(BuiltinTypeData.class, node).orElse(null);
+
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
         typeData = new TypeData(parseType(typeData.getBareType()), typeData);
         // String parsedType = parseType(type);
 
         checkNoChildren(node);
 
+        if (data != null) {
+            return new BuiltinType(data, Collections.emptyList());
+        }
+
         return ClavaNodeFactory.builtinType(typeData, node.getInfo());
+
     }
 
     private String parseType(String type) {

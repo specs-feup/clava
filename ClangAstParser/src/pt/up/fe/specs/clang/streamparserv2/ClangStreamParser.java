@@ -138,7 +138,8 @@ public class ClangStreamParser {
         ClavaData clavaData = data.get(ClavaDataParser.getDataKey(clavaDataClass)).get(nodeId);
 
         if (clavaData == null) {
-            SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (" + classname + "). ");
+            SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname + ", ClavaData Class: "
+                    + clavaDataClass.getSimpleName() + "). ");
             return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 

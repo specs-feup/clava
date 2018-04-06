@@ -42,7 +42,7 @@ public class TypeDataParser {
 
         TypeDataV2 data = parseTypeData(lines);
 
-        BuiltinKind kind = GeneralParsers.enumFromInt(BuiltinKind.getEnumHelper(), BuiltinKind.UNKNOWN_ANY, lines);
+        BuiltinKind kind = GeneralParsers.enumFromValue(BuiltinKind.getEnumHelper(), lines);
         boolean isSugared = GeneralParsers.parseOneOrZero(lines);
 
         return new BuiltinTypeData(kind, isSugared, data);

@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.clavaparser;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -512,19 +513,26 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     // }
 
     protected <T extends ClavaData> T getData(Class<T> clavaDataClass, ClangNode node) {
+        return getDataTry(clavaDataClass, node).orElseThrow(() -> new RuntimeException(
+                "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent()));
+
+        // if (data == null) {
+        // // SpecsLogs.msgWarn("Could not find data for node '" + node.getName() + "':\n" + node);
+        // throw new
+        // }
+        //
+        // return data;
+    }
+
+    protected <T extends ClavaData> Optional<T> getDataTry(Class<T> clavaDataClass, ClangNode node) {
 
         DataKey<Map<String, T>> key = ClavaDataParser.getDataKey(clavaDataClass);
         // DataKey<Map<String, T>> key = ClangNodeParsing.getNodeDataKey(clavaDataClass);
 
         T data = getStdErr().get(key).get(node.getExtendedId());
 
-        if (data == null) {
-            // SpecsLogs.msgWarn("Could not find data for node '" + node.getName() + "':\n" + node);
-            throw new RuntimeException(
-                    "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent());
-        }
+        return Optional.ofNullable(data);
 
-        return data;
     }
 
     protected void checkNewChildren(String parentId, List<ClavaNode> previousChildren) {

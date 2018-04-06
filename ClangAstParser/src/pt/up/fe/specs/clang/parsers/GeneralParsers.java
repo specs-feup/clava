@@ -53,22 +53,36 @@ public class GeneralParsers {
         return Long.parseLong(lines.nextLine());
     }
 
+    /*
     public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper, T defaultValue,
             LineStream lines) {
-
+    
         int index = parseInt(lines);
-
+    
         if (index >= helper.getSize()) {
             return defaultValue;
         }
-
+    
         return helper.valueOf(index);
     }
+    */
 
     public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper,
             LineStream lines) {
 
         return helper.valueOf(parseInt(lines));
+    }
+
+    public static <T extends Enum<T> & StringProvider> T enumFromName(EnumHelper<T> helper,
+            LineStream lines) {
+
+        return helper.fromName(lines.nextLine());
+    }
+
+    public static <T extends Enum<T> & StringProvider> T enumFromValue(EnumHelper<T> helper,
+            LineStream lines) {
+
+        return helper.valueOf(lines.nextLine());
     }
 
     public static <K> void checkDuplicate(String id, K key, Object value, Map<K, ?> map) {
