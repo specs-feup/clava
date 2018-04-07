@@ -15,39 +15,24 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
-import pt.up.fe.specs.util.SpecsStrings;
 
 public class CharacterLiteral extends Literal {
 
-    private static final Map<Character, String> CHAR_LITERAL;
-    static {
-        CHAR_LITERAL = new HashMap<>();
-        CHAR_LITERAL.put('\n', "\\n");
-        CHAR_LITERAL.put('\t', "\\t");
-        CHAR_LITERAL.put('\u000b', "\\v");
-        CHAR_LITERAL.put('\b', "\\b");
-        CHAR_LITERAL.put('\r', "\\r");
-        CHAR_LITERAL.put('\f', "\\f");
-        CHAR_LITERAL.put('\u0007', "\\a");
-        CHAR_LITERAL.put('\\', "\\\\");
-        CHAR_LITERAL.put((char) 63, "\\?");
-        CHAR_LITERAL.put('\'', "\\'");
-        CHAR_LITERAL.put('"', "\\\"");
-        CHAR_LITERAL.put('\0', "\\0");
-    }
-
     public CharacterLiteral(CharacterLiteralData data, Collection<? extends ClavaNode> children) {
         super(data, Collections.emptyList());
-    }
+        //
+        // if (!getCode().equals(getLiteral())) {
+        // System.out.println("CHAR CODE:" + getCode());
+        // System.out.println("CHAR LITERAL:" + getLiteral());
+        // throw new RuntimeException("STOP");
+        // }
 
-    // private final long charValue;
+    }
 
     /**
      * For legacy support.
@@ -69,62 +54,13 @@ public class CharacterLiteral extends Literal {
         return (CharacterLiteralData) super.getData();
     }
 
-    //
-    // public CharacterLiteral(CharacterLiteralData data, List<? extends ClavaNode> children) {
-    // super(null, null, children);
-    // setData(data);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CharacterLiteral(get, Collections.emptyList());
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CharacterLiteral(getData().copy(), Collections.emptyList());
-    // // return new CharacterLiteral(charValue, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public long getCharValue() {
         return getData().getValue();
     }
 
     @Override
     public String getCode() {
-        long charValue = getCharValue();
-
-        // Check if value is inside Character boundaries
-        if (charValue > (long) Character.MAX_VALUE) {
-            throw new RuntimeException("Not implemented dealing with values larger than Character.MAX_VALUE");
-        }
-
-        char aChar = (char) charValue;
-
-        // Check if character is inside table
-        String literal = CHAR_LITERAL.get(aChar);
-        if (literal != null) {
-            return "'" + literal + "'";
-        }
-
-        // ASCII characters
-        if (aChar < 128) {
-            if (SpecsStrings.isPrintableChar(aChar)) {
-                return "'" + aChar + "'";
-            }
-
-            // Not printable, just return as an int
-            return Integer.toString(aChar);
-        }
-
-        // Print as Unicode
-        String hexString = SpecsStrings.toHexString(aChar, 8).substring("0x".length());
-        return "u'\\U" + hexString + "'";
-    }
-
-    @Override
-    public String getLiteral() {
-        return getCode();
+        return getData().getSourceLiteral();
     }
 
 }
