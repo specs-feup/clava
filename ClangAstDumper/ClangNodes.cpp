@@ -80,6 +80,23 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
     llvm::errs() << endCol << "\n";
 }
 
+void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLocation end) {
+
+    // Original source range
+    clava::dumpSourceRange(Context, begin, end);
+
+    // If it is a macro
+    bool isMacro = begin.isMacroID() || end.isMacroID();
+    clava::dump(isMacro);
+
+    // Spelling location, if macro
+    if(isMacro) {
+        clava::dumpSourceRange(Context, Context->getSourceManager().getSpellingLoc(begin), Context->getSourceManager().getSpellingLoc(end));
+    }
+
+}
+
+
 const std::string clava::getId(const void* addr, int id) {
     std::stringstream ss;
     ss <<  addr << "_" << id;

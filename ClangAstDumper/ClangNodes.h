@@ -48,6 +48,14 @@ namespace clava {
     void dumpSourceRange(ASTContext *Context, SourceLocation startLoc, SourceLocation endLoc);
 
     /**
+     * Dumps info related to the source code (original source location, if it is a macro, spelling source location...)
+     * @param Context
+     * @param startLoc
+     * @param endLoc
+     */
+    void dumpSourceInfo(ASTContext *Context, SourceLocation startLoc, SourceLocation endLoc);
+
+    /**
      * Builds a string id.
      *
      * @param addr

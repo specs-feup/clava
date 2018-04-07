@@ -70,7 +70,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
 
 void clava::ClavaDataDumper::DumpStmtData(const Stmt *S) {
 
-    clava::dumpSourceRange(Context, S->getLocStart(), S->getLocEnd());
+    // Original source range
+    clava::dumpSourceInfo(Context, S->getLocStart(), S->getLocEnd());
 
 }
 
@@ -123,13 +124,10 @@ void clava::ClavaDataDumper::DumpIntegerLiteralData(const IntegerLiteral *E) {
 //    clava::dump(source);
     clava::dump(E->getValue().toString(10, isSigned));
 
-    //std::string source = clava::getSource(Context, E->getSourceRange());
-    //clava::dump(source);
-
-    /*
+/*
     const SourceManager &sm = Context->getSourceManager();
-SourceRange sourceRange = E->getSourceRange();
 
+    SourceRange sourceRange = E->getSourceRange();
     SourceLocation begin = sourceRange.getBegin();
     SourceLocation end = sourceRange.getEnd();
     if (begin.isMacroID()) {
@@ -147,31 +145,18 @@ SourceRange sourceRange = E->getSourceRange();
     } else {
         llvm::errs() << "End is not macro:" << begin.printToString(sm) << "\n";
     }
+
+
+
+    std::string text = Lexer::getSourceText(CharSourceRange::getTokenRange(begin, end), sm, LangOptions(), 0);
+    if (text.size() > 0 && (text.at(text.size()-1) == ',')) //the text can be ""
+        text = Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
+
+    llvm::errs() << "Source:" << text << "\n";
 */
 }
 
 void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
     DumpLiteralData(E);
-    //DumpExprData(E);
-
-    //clava::dump(clava::getSource(Context, E->getSourceRange()));
-
-    //clava::dump(getSource(E));
-
-    /*
-    const SourceManager &sm = Context->getSourceManager();
-    clang::SourceLocation b(E->getLocStart()), _e(E->getLocEnd());
-
-    clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, sm, Context->getLangOpts()));
-    std::string s = std::string(sm.getCharacterData(b),
-                       sm.getCharacterData(e)-sm.getCharacterData(b));
-*/
-//    Context->getSourceManager().getP
-
-//    Context->getSourceManager().sou
-//    clava::dumpSourceRange()
-    //E->getValue()->
-    //bool isSigned = E->getType()->isSignedIntegerType();
-    //clava::dump(E->getValue().toString(10, isSigned));
 }
 
