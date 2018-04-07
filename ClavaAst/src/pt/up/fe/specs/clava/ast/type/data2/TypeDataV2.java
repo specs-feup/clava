@@ -17,8 +17,12 @@ import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class TypeDataV2 extends ClavaData {
 
-    public static TypeDataV2 empty() {
-        return new TypeDataV2(ClavaData.empty());
+    // public static TypeDataV2 empty() {
+    // return empty(ClavaData.empty());
+    // }
+
+    public static TypeDataV2 empty(ClavaData data) {
+        return new TypeDataV2(data);
     }
 
     public TypeDataV2(ClavaData clavaData) {

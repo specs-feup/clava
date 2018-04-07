@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.Collections;
 import java.util.Map;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -20,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.SpecsCheck;
 
 public class ClavaDataPostProcessing {
@@ -47,9 +49,10 @@ public class ClavaDataPostProcessing {
         ClavaNode node = getClavaNode(parsedTypeId);
 
         if (node instanceof UnsupportedNode) {
-            NullType nullType = ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
-            nullType.setData(node.getData());
-            return nullType;
+            return new NullType(TypeDataV2.empty(node.getData()), Collections.emptyList());
+            // NullType nullType = ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+            // nullType.setData(node.getData());
+            // return nullType;
         }
 
         SpecsCheck.checkArgument(node instanceof Type,

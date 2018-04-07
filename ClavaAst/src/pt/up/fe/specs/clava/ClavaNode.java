@@ -418,7 +418,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return data;
     }
 
-    public void setData(ClavaData data) {
-        this.data = data;
-    }
+    // public void setData(ClavaData data) {
+    // this.data = data;
+    // }
 }

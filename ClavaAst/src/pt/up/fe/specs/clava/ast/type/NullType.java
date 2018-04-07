@@ -13,11 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.Collection;
 import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 
 /**
  * Represents an 'empty' node type, to be used, for instance, in cases where type is optional, or when type could not be
@@ -32,6 +34,10 @@ public class NullType extends Type {
 
     public NullType(ClavaNodeInfo info) {
         super(new TypeData("<null type>"), info, Collections.emptyList());
+    }
+
+    public NullType(TypeDataV2 data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     @Override

@@ -13,10 +13,10 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
+import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class UnsupportedNode extends ClavaNode {
@@ -24,10 +24,11 @@ public class UnsupportedNode extends ClavaNode {
     private final String classname;
 
     public UnsupportedNode(String classname, ClavaData data, List<ClavaNode> children) {
-        super(ClavaNodeInfo.undefinedInfo(), children);
+        super(data, Collections.emptyList());
+        // super(ClavaNodeInfo.undefinedInfo(), children);
 
         this.classname = classname;
-        setData(data);
+        // setData(data);
     }
 
     // @Override
