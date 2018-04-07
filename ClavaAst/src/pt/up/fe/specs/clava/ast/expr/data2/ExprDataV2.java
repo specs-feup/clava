@@ -68,10 +68,10 @@ public class ExprDataV2 extends ClavaData {
     // this(data);
     // }
 
-    @Override
-    public ExprDataV2 copy() {
-        return new ExprDataV2(this);
-    }
+    // @Override
+    // public ExprDataV2 copy() {
+    // return new ExprDataV2(this);
+    // }
 
     @Override
     public String toString() {

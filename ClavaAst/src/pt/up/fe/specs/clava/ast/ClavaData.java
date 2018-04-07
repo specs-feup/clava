@@ -13,9 +13,93 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.lang.reflect.Constructor;
+
 import pt.up.fe.specs.clava.SourceRange;
 
 public class ClavaData {
+
+    // private static final Map<Class<? extends ClavaData>, Supplier<ClavaData>> DATA_CONSTRUCTORS_CACHE = new
+    // HashMap<>();
+
+    // private static <T extends ClavaData> T newCopyConstructor(T data) {
+    // try {
+    // return constructorMethod.newInstance(data);
+    // } catch (Exception e) {
+    // throw new RuntimeException(
+    // "Could not call constructor for ClavaNode '" + data.getClass().getSimpleName() + "'", e);
+    // }
+    // }
+
+    public static <T extends ClavaData> T copy(T clavaData) {
+
+        // Get ClavaData class
+        @SuppressWarnings("unchecked")
+        Class<T> clavaDataClass = (Class<T>) clavaData.getClass();
+
+        Constructor<T> constructorMethod = null;
+        try {
+            // Create copy constructor: new T(T data)
+            constructorMethod = clavaDataClass.getConstructor(clavaDataClass);
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Could not create call to copy constructor for ClavaData '" + clavaDataClass.getSimpleName()
+                            + "'. Check if class contains a constructor of the form 'new T(T data)'.",
+                    e);
+        }
+
+        // Invoke constructor
+        try {
+            return constructorMethod.newInstance(clavaData);
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Could not call constructor for ClavaNode '" + clavaData.getClass().getSimpleName() + "'", e);
+        }
+
+        /*
+        
+        
+        // Get required ClavaData class
+        Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
+        
+        // Verify in given ClavaData is compatible with the expected Data for the ClavaNode
+        if (!clavaDataClass.isInstance(clavaData)) {
+            throw new RuntimeException("Given ClavaData '" + clavaData.getClass().getSimpleName()
+                    + "' is not compatible with ClavaNode '" + clavaNodeClass.getSimpleName() + "', requires a '"
+                    + clavaDataClass.getSimpleName() + "'");
+        }
+        
+        // TODO: replace with Java 10 var
+        BiFunction<ClavaData, Collection<? extends ClavaNode>, ClavaNode> constructor = constructorsCache
+                .get(clavaNodeClass);
+        
+        // Check if constructor not built yet
+        if (constructor == null) {
+            try {
+                Constructor<? extends ClavaNode> constructorMethod = clavaNodeClass.getConstructor(clavaData.getClass(),
+                        Collection.class);
+        
+                constructor = (data, childrenNodes) -> {
+                    try {
+                        return constructorMethod.newInstance(data, childrenNodes);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Could not call constructor for ClavaNode", e);
+                    }
+                };
+        
+                // Save constructor
+                constructorsCache.put(clavaNodeClass, constructor);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not create constructor for ClavaNode:" + e.getMessage());
+                // SpecsLogs.msgLib("Could not create constructor for ClavaNode:" + e.getMessage());
+                // return null;
+            }
+        
+        }
+        
+        return constructor.apply(clavaData, children);
+        */
+    }
 
     public static ClavaData empty() {
         return new ClavaData(null, SourceRange.invalidRange());
@@ -57,9 +141,10 @@ public class ClavaData {
      * 
      * @return
      */
-    public ClavaData copy() {
-        return new ClavaData(this);
-    }
+    // public ClavaData copy() {
+    // return copy(this);
+    // // return new ClavaData(this);
+    // }
 
     protected String toString(String superToString, String thisToString) {
 

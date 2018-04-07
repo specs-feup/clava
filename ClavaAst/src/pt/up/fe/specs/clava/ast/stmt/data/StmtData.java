@@ -31,11 +31,6 @@ public class StmtData extends ClavaData {
     // }
 
     @Override
-    public StmtData copy() {
-        return new StmtData(this);
-    }
-
-    @Override
     public String toString() {
 
         return toString(super.toString(), "");

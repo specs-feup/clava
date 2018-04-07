@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
-import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -31,10 +30,10 @@ public class UnsupportedNode extends ClavaNode {
         setData(data);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UnsupportedNode(classname, getData().copy(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UnsupportedNode(classname, ClavaData.copy(getData()), Collections.emptyList());
+    // }
 
     public String getClassname() {
         return classname;

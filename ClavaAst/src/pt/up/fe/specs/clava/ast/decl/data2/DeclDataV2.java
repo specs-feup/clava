@@ -40,11 +40,6 @@ public class DeclDataV2 extends ClavaData {
         this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl, data);
     }
 
-    @Override
-    public DeclDataV2 copy() {
-        return new DeclDataV2(this);
-    }
-
     public boolean isImplicit() {
         return isImplicit;
     }

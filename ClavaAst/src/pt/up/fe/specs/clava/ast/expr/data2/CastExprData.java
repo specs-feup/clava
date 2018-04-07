@@ -31,11 +31,6 @@ public class CastExprData extends ExprDataV2 {
     }
 
     @Override
-    public CastExprData copy() {
-        return new CastExprData(this);
-    }
-
-    @Override
     public String toString() {
         return toString(super.toString(), "castKind: " + castKind);
     }

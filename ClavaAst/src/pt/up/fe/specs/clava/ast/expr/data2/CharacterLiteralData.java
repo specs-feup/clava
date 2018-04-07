@@ -33,10 +33,10 @@ public class CharacterLiteralData extends ExprDataV2 {
         this(data.sourceValue, data.value, data.kind, data);
     }
 
-    @Override
-    public CharacterLiteralData copy() {
-        return new CharacterLiteralData(this);
-    }
+    // @Override
+    // public CharacterLiteralData copy() {
+    // return new CharacterLiteralData(this);
+    // }
 
     @Override
     public String toString() {

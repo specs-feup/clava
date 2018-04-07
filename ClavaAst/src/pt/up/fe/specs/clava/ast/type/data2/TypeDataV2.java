@@ -31,11 +31,6 @@ public class TypeDataV2 extends ClavaData {
     // }
 
     @Override
-    public TypeDataV2 copy() {
-        return new TypeDataV2(this);
-    }
-
-    @Override
     public String toString() {
 
         return toString(super.toString(), "");

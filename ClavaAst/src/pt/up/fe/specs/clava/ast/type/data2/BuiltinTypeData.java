@@ -32,11 +32,6 @@ public class BuiltinTypeData extends TypeDataV2 {
     }
 
     @Override
-    public TypeDataV2 copy() {
-        return new BuiltinTypeData(this);
-    }
-
-    @Override
     public String toString() {
         return toString(super.toString(), "kind: " + kind + ", isSugared: " + isSugared);
     }
