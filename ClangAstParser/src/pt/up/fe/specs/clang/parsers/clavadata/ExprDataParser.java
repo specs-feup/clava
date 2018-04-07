@@ -19,6 +19,7 @@ import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
+import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -53,14 +54,21 @@ public class ExprDataParser {
         return new CastExprData(castKind, data);
     }
 
-    public static CharacterLiteralData parseCharacterLiteralData(LineStream lines) {
+    public static LiteralData parseLiteralData(LineStream lines) {
         ExprDataV2 data = parseExprData(lines);
 
-        String sourceValue = lines.nextLine();
+        String sourceLiteral = lines.nextLine();
+
+        return new LiteralData(sourceLiteral, data);
+    }
+
+    public static CharacterLiteralData parseCharacterLiteralData(LineStream lines) {
+        LiteralData data = parseLiteralData(lines);
+
         long value = GeneralParsers.parseLong(lines);
         CharacterKind kind = GeneralParsers.enumFromInt(CharacterKind.getEnumHelper(), lines);
 
-        return new CharacterLiteralData(sourceValue, value, kind, data);
+        return new CharacterLiteralData(value, kind, data);
     }
 
 }
