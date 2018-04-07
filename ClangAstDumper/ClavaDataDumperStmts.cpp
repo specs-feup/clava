@@ -94,18 +94,28 @@ void clava::ClavaDataDumper::DumpCastExprData(const CastExpr *E) {
     clava::dump(E->getCastKindName());
 }
 
-void clava::ClavaDataDumper::DumpCharacterLiteralData(const CharacterLiteral *E) {
+void clava::ClavaDataDumper::DumpLiteralData(const Expr *E) {
     DumpExprData(E);
 
+    // Source literal
     clava::dump(clava::getSource(Context, E->getSourceRange()));
+}
+
+
+void clava::ClavaDataDumper::DumpCharacterLiteralData(const CharacterLiteral *E) {
+    DumpLiteralData(E);
+//    DumpExprData(E);
+
+//    clava::dump(clava::getSource(Context, E->getSourceRange()));
     clava::dump(E->getValue());
     clava::dump(E->getKind());
 }
 
 void clava::ClavaDataDumper::DumpIntegerLiteralData(const IntegerLiteral *E) {
-    DumpExprData(E);
+    DumpLiteralData(E);
+//    DumpExprData(E);
 
-    clava::dump(clava::getSource(Context, E->getSourceRange()));
+//    clava::dump(clava::getSource(Context, E->getSourceRange()));
 
     bool isSigned = E->getType()->isSignedIntegerType();
 
@@ -141,9 +151,10 @@ SourceRange sourceRange = E->getSourceRange();
 }
 
 void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
-    DumpExprData(E);
+    DumpLiteralData(E);
+    //DumpExprData(E);
 
-    clava::dump(clava::getSource(Context, E->getSourceRange()));
+    //clava::dump(clava::getSource(Context, E->getSourceRange()));
 
     //clava::dump(getSource(E));
 
