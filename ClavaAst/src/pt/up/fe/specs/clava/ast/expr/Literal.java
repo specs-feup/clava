@@ -19,6 +19,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * Represents a literal node.
@@ -42,5 +44,17 @@ public abstract class Literal extends Expr {
         super(exprData, info, children);
     }
 
-    public abstract String getLiteral();
+    @Override
+    public LiteralData getData() {
+        return (LiteralData) super.getData();
+    }
+
+    // public abstract String getLiteral();
+    public String getLiteral() {
+        if (getData() != null) {
+            return getData().getSourceLiteral();
+        }
+
+        throw new NotImplementedException(this);
+    }
 }
