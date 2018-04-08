@@ -44,6 +44,7 @@ import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
+import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
 import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
@@ -84,6 +85,7 @@ public class ClavaDataParser extends GenericLineStreamParser {
         DATA_PARSERS.put(ExprDataV2.class, ExprDataParser::parseExprData);
         DATA_PARSERS.put(CastExprData.class, ExprDataParser::parseCastExprData);
         DATA_PARSERS.put(CharacterLiteralData.class, ExprDataParser::parseCharacterLiteralData);
+        DATA_PARSERS.put(IntegerLiteralData.class, ExprDataParser::parseIntegerLiteralData);
     }
 
     public static ClavaDataParser newInstance() {
@@ -240,8 +242,10 @@ public class ClavaDataParser extends GenericLineStreamParser {
         String id = lines.nextLine();
 
         SourceRange location = hasLocation ? parseLocation(lines) : SourceRange.invalidRange();
+        boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
+        SourceRange spellingLocation = isMacro ? parseLocation(lines) : SourceRange.invalidRange();
 
-        return new ClavaData(id, location);
+        return new ClavaData(id, location, isMacro, spellingLocation);
     }
 
 }

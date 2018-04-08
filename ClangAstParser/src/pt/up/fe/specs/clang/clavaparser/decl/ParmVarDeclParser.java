@@ -52,7 +52,7 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
         // col:28 referenced a 'const t *':'const t *'
 
         // ParmVarDeclData data = getStdErr().get(StreamKeys.PARM_VAR_DECL_DATA).get(node.getExtendedId());
-        ParmVarDeclData data = getData(ParmVarDeclData.class, node);
+        // ParmVarDeclData data = getData(ParmVarDeclData.class, node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 

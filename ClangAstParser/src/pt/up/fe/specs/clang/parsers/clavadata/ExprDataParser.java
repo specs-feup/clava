@@ -13,12 +13,15 @@
 
 package pt.up.fe.specs.clang.parsers.clavadata;
 
+import java.math.BigInteger;
+
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
+import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
@@ -69,6 +72,14 @@ public class ExprDataParser {
         CharacterKind kind = GeneralParsers.enumFromInt(CharacterKind.getEnumHelper(), lines);
 
         return new CharacterLiteralData(value, kind, data);
+    }
+
+    public static IntegerLiteralData parseIntegerLiteralData(LineStream lines) {
+        LiteralData data = parseLiteralData(lines);
+
+        BigInteger value = new BigInteger(lines.nextLine());
+
+        return new IntegerLiteralData(value, data);
     }
 
 }

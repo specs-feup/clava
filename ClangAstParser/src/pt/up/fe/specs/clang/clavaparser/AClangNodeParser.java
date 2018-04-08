@@ -529,6 +529,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         DataKey<Map<String, T>> key = ClavaDataParser.getDataKey(clavaDataClass);
         // DataKey<Map<String, T>> key = ClangNodeParsing.getNodeDataKey(clavaDataClass);
 
+        if (!getStdErr().hasValue(key)) {
+            return Optional.empty();
+        }
+
         T data = getStdErr().get(key).get(node.getExtendedId());
 
         return Optional.ofNullable(data);

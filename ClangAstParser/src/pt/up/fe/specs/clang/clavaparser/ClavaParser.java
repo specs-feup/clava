@@ -434,7 +434,9 @@ public class ClavaParser implements AutoCloseable {
         app.getDescendantsStream()
                 .filter(node -> node instanceof Typable)
                 .map(node -> (Typable) node)
-                .forEach(typable -> typable.getType().setApp(app));
+                .forEach(typable -> {
+                    typable.getType().setApp(app);
+                });
 
         SpecsLogs.msgInfo("--- AST parsing report ---");
         checkUndefinedNodes(app);

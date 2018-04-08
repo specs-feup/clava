@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -37,7 +36,7 @@ public class CharacterLiteralParser extends AClangNodeParser<CharacterLiteral> {
         //
         // 'char' 59
 
-        CharacterLiteralData data = getData(CharacterLiteralData.class, node);
+        // CharacterLiteralData data = getData(CharacterLiteralData.class, node);
 
         // ExprData
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
