@@ -19,8 +19,8 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -37,7 +37,7 @@ public abstract class Expr extends ClavaNode implements Typable {
     private ExprData exprData;
     private ImplicitCastExpr implicitCast;
 
-    public Expr(ClavaData data, Collection<? extends ClavaNode> children) {
+    public Expr(ExprDataV2 data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
@@ -54,9 +54,14 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     @Override
-    public Type getType() {
-        if (exprData == null) {
+    public ExprDataV2 getData() {
+        return (ExprDataV2) super.getData();
+    }
 
+    @Override
+    public Type getType() {
+        if (getData() != null) {
+            return getData().getType();
         }
         return exprData.getType();
     }

@@ -78,6 +78,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
@@ -147,6 +148,7 @@ import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -359,11 +361,11 @@ public class ClavaNodeFactory {
     // }
 
     public static DummyDecl dummyDecl(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyDecl(content, info, children);
+        return new DummyDeclLegacy(content, info, children);
     }
 
     public static DummyDecl dummyDecl(ClavaNode node) {
-        return new DummyDecl(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
     public static LinkageSpecDecl linkageSpecialDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
@@ -971,7 +973,7 @@ public class ClavaNodeFactory {
 
     public static IntegerLiteral integerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
 
-        return new IntegerLiteral(literal, exprData, info);
+        return new IntegerLiteralLegacy(literal, exprData, info);
     }
 
     public static CXXFunctionalCastExpr cxxFunctionalCastExpr(String targetType, CastKind castKind,

@@ -11,15 +11,12 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
-
-import java.util.Collection;
-import java.util.Collections;
+package pt.up.fe.specs.clava.ast.expr.legacy;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
 
 /**
  * Represents an implicit type conversion which has no direct representation in the original source code.
@@ -27,29 +24,40 @@ import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
  * @author JoaoBispo
  *
  */
-public class IntegerLiteral extends Literal {
+public class IntegerLiteralLegacy extends IntegerLiteral {
 
-    // private final String literal;
+    private final String literal;
 
-    public IntegerLiteral(IntegerLiteralData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    /**
-     * For legacy support.
-     * 
-     * @param exprData
-     * @param info
-     */
-    protected IntegerLiteral(ExprData exprData, ClavaNodeInfo info) {
+    public IntegerLiteralLegacy(String literal, ExprData exprData, ClavaNodeInfo info) {
         // According to CPP reference, all literals (except for string literal) are rvalues
         // http://en.cppreference.com/w/cpp/language/value_category
-        super(exprData, info, Collections.emptyList());
+        super(exprData, info);
+
+        this.literal = literal;
     }
 
     @Override
-    public IntegerLiteralData getData() {
-        return (IntegerLiteralData) super.getData();
+    protected ClavaNode copyPrivate() {
+        return new IntegerLiteralLegacy(literal, getExprData(), getInfo());
+    }
+
+    @Override
+    public String getCode() {
+
+        return getType().getConstantCode(literal);
+        // // Check if literal needs "U" or "UL" postfix
+        // String unsigned = Types.getUnsignedPostfix(getType());
+        // return literal + unsigned;
+    }
+
+    @Override
+    public String getLiteral() {
+        return literal;
+    }
+
+    @Override
+    public String toContentString() {
+        return super.toContentString() + ", literal:" + literal;
     }
 
 }

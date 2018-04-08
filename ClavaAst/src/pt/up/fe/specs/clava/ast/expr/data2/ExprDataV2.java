@@ -90,6 +90,7 @@ public class ExprDataV2 extends ClavaData {
         // this.type = data.getType(parsedTypeId).copy();
         // Model without copy, where users have to be careful to not modify types but copies of types
         // Model where types are immutable, any set of a type returns a new node
+
         this.type = data.getType(parsedTypeId);
     }
 }

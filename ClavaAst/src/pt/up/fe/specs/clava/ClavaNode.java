@@ -123,6 +123,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public SourceRange getLocation() {
+        if (getData() != null) {
+            return getData().getLocation();
+        }
         SourceRange sourceRange = info.getLocation();
 
         if (sourceRange == null) {

@@ -33,9 +33,11 @@ import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
+import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -67,6 +69,7 @@ public class ClavaNodeToData {
         // EXPR
         CLAVA_NODE_TO_DATA.put(ImplicitCastExpr.class, CastExprData.class);
         CLAVA_NODE_TO_DATA.put(CharacterLiteral.class, CharacterLiteralData.class);
+        CLAVA_NODE_TO_DATA.put(IntegerLiteral.class, IntegerLiteralData.class);
 
         // TYPE
         CLAVA_NODE_TO_DATA.put(BuiltinType.class, BuiltinTypeData.class);

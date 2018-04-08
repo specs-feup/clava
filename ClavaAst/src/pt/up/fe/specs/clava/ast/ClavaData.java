@@ -102,11 +102,13 @@ public class ClavaData {
     }
 
     public static ClavaData empty() {
-        return new ClavaData(null, SourceRange.invalidRange());
+        return new ClavaData(null, SourceRange.invalidRange(), false, SourceRange.invalidRange());
     }
 
     private final String id;
     private final SourceRange location;
+    private final boolean isMacro;
+    private final SourceRange spellingLocation;
 
     /**
      * @deprecated
@@ -123,13 +125,15 @@ public class ClavaData {
      * @param id
      * @param location
      */
-    public ClavaData(String id, SourceRange location) {
+    public ClavaData(String id, SourceRange location, boolean isMacro, SourceRange spellingLocation) {
         this.id = id;
         this.location = location;
+        this.isMacro = isMacro;
+        this.spellingLocation = spellingLocation;
     }
 
     public ClavaData(ClavaData data) {
-        this(data.id, data.location);
+        this(data.id, data.location, data.isMacro, data.spellingLocation);
     }
 
     /**
@@ -170,6 +174,10 @@ public class ClavaData {
 
         builder.append("id: " + id);
         builder.append(", location: " + location.isValid());
+        builder.append(", isMacro: " + isMacro);
+        if (isMacro) {
+            builder.append(", spellingLoc: " + spellingLocation);
+        }
 
         return toString("", builder.toString());
     }

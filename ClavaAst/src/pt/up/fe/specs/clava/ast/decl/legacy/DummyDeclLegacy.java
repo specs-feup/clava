@@ -11,16 +11,15 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.decl;
+package pt.up.fe.specs.clava.ast.decl.legacy;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 
 /**
  * Dummy declaration, for testing purposes.
@@ -28,29 +27,24 @@ import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
  * @author JoaoBispo
  *
  */
-public class DummyDecl extends Decl implements DummyNode {
+public class DummyDeclLegacy extends DummyDecl {
 
-    private final String classname;
+    private final String content;
 
-    public DummyDecl(String classname, DeclDataV2 clavaData, Collection<? extends ClavaNode> children) {
-        super(clavaData, children);
+    public DummyDeclLegacy(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(info, children);
 
-        this.classname = classname;
-    }
-
-    protected DummyDecl(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(DeclData.empty(), info, children);
-
-        classname = null;
+        this.content = content;
     }
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + classname + ")";
+        return super.getNodeName() + " (" + getOriginalType() + ")";
     }
 
+    @Override
     public String getNodeCode() {
-        return "/* Dummy declaration '" + classname + "' */";
+        return "/* Dummy declaration '" + content + "' */";
     }
 
     @Override
@@ -59,27 +53,17 @@ public class DummyDecl extends Decl implements DummyNode {
     }
 
     @Override
-    public String getContent() {
-        return getData().toString();
-    }
-
-    /*
-    @Override
     protected ClavaNode copyPrivate() {
-        return new DummyDecl(content, getInfo(), Collections.emptyList());
+        return new DummyDeclLegacy(content, getInfo(), Collections.emptyList());
     }
-    */
 
-    /*
     @Override
     public String getContent() {
         return content;
     }
-    */
-    /*
+
     @Override
     public String toContentString() {
         return super.toContentString() + " " + getLocation();
     }
-    */
 }
