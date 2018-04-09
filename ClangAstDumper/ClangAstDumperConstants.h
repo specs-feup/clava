@@ -62,4 +62,6 @@ static const std::string TOP_LEVEL_NODES = "<Top Level Nodes>";
 
 static const std::string TOP_LEVEL_TYPES = "<Top Level Types>";
 
+static const std::string INCLUDES = "<Includes>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

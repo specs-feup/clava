@@ -441,6 +441,14 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
             DumpResources::includes << "line:" << sm.getSpellingLineNumber(HashLoc) << "|";
             DumpResources::includes << "angled:" << IsAngled ? "true" : "false";
             DumpResources::includes << "\n";
+
+            // Includes information in stream
+            llvm::errs() << INCLUDES << "\n";
+            // Source
+            llvm::errs() << sm.getFilename(HashLoc).str() << "\n";
+            llvm::errs() << FileName.str() << "\n";
+            llvm::errs() << sm.getSpellingLineNumber(HashLoc) << "\n";
+            llvm::errs() << IsAngled << "\n";
         }
     }
 
