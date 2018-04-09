@@ -26,7 +26,8 @@ public enum BuiltinKind implements StringProvider {
     VOID,
 
     // Unsigned Types
-    BOOL,
+    C_BOOL("bool"),
+    CXX_BOOL("_Bool"),
     CHAR,
     UNSIGNED_CHAR("unsigned char"),
     WCHAR_T("wchar_t"),
@@ -91,7 +92,9 @@ public enum BuiltinKind implements StringProvider {
     ARC_UNBRIDGED_CAST,
     OMP_ARRAY_SECTION;
 
-    private static final Set<BuiltinKind> UNSIGNED_TYPES = new HashSet<>(Arrays.asList(BOOL,
+    private static final Set<BuiltinKind> UNSIGNED_TYPES = new HashSet<>(Arrays.asList(
+            C_BOOL,
+            CXX_BOOL,
             CHAR,
             UNSIGNED_CHAR,
             WCHAR_T,
