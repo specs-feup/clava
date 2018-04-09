@@ -182,4 +182,9 @@ public class CxxTest {
         new CxxTester("sizeof.cpp").test();
     }
 
+    @Test
+    public void testIncludes() {
+        new CxxTester("includes.cpp", "includes.h", "includes2.h").test();
+    }
+
 }
