@@ -18,30 +18,39 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
+import pt.up.fe.specs.clang.parsers.IncludesParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clang.parsers.TopLevelTypesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.ClavaDataUtils;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.ClavaNodeToData;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
@@ -65,7 +74,7 @@ public class ClangStreamParser {
         this.parsedNodes = new HashMap<>();
     }
 
-    public void parse() {
+    public App parse() {
         // Get top-level nodes
         Set<String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
         Set<String> topLevelTypes = data.get(TopLevelTypesParser.getDataKey());
@@ -101,7 +110,7 @@ public class ClangStreamParser {
                 .collect(Collectors.toList());
 
         // Create App node
-        createApp(topDecls);
+        return createApp(topDecls, data.get(IncludesParser.getDataKey()));
 
         // System.out.println("PARSED NODES:\n" + app);
 
@@ -185,7 +194,7 @@ public class ClangStreamParser {
         return builder.apply(clavaData, children);
     }
 
-    private App createApp(Collection<? extends ClavaNode> topLevelDecls) {
+    private App createApp(Collection<? extends ClavaNode> topLevelDecls, List<Include> includes) {
         System.out.println("TOP LEVEL NODES:" + topLevelDecls);
         // Each node belongs to a file, maintain a map of what nodes belong to each file,
         // in the end create the file nodes and add them to the App node
@@ -231,84 +240,84 @@ public class ClangStreamParser {
             declarations.put(canonicalPath, decl);
         }
 
-        System.out.println("DECLS:" + declarations);
+        // Create includes map
+        MultiMap<String, Include> includesMap = new MultiMap<>();
+        includes.stream()
+                .forEach(include -> includesMap.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include));
 
-        /*
-        
-        
-        
-        
-        
-        
         // For each enty in MultiMap, create a Translation Unit
-        ClangIncludes includes = node.getClangRoot().getIncludes();
-        
         List<TranslationUnit> tUnits = new ArrayList<>();
         for (String path : declarations.keySet()) {
             // Set<Decl> decls = new LinkedHashSet<>();
             List<Decl> decls = new ArrayList<>();
-        
+
             // Build filename
             String filename = new File(path).getName();
             int endIndex = path.length() - filename.length();
             String filenamePath = path.substring(0, endIndex);
-        
+
             // Declaration nodes of the translation unit
             List<Decl> declNodes = declarations.get(path);
-        
-        
+
             // Remove ParmVarDecl nodes
             declNodes = declNodes.stream()
                     .filter(decl -> !(decl instanceof ParmVarDecl))
                     .collect(Collectors.toList());
-        
-            // Add includes
-            List<Include> includeList = includes.getIncludes(new File(path));
-        
-            List<Include> uniqueIncludes = SpecsCollections.filter(includeList, include -> include.toString());
-        
-            // Set<String> addedIncludes = new HashSet<>();
-        
+
+            // Get corresponding includes
+            File declFile = new File(path);
+            List<Include> sourceIncludes = includesMap.get(SpecsIo.getCanonicalPath(declFile));
+
+            if (sourceIncludes == null) {
+                throw new RuntimeException("Could not find includes for source file '" + declFile + "'");
+            }
+
+            List<Include> uniqueIncludes = SpecsCollections.filter(sourceIncludes, include -> include.toString());
+
             // Only add includes that are not in the line number range of the declarations
             if (!uniqueIncludes.isEmpty()) {
                 Set<Integer> lineNumbers = getLineNumbers(declNodes);
-        
+
                 for (Include include : uniqueIncludes) {
-        
+
                     // Only add include if line number of the include is not contained in declaration numbers
                     if (lineNumbers.contains(include.getLine())) {
                         continue;
                     }
-        
-                    // Check if include was not already added
-                    // if (addedIncludes.contains(include.toString())) {
-                    // continue;
-                    // }
-                    //
-                    // addedIncludes.add(include.toString());
+
                     decls.add(ClavaNodeFactory.include(include, path));
                 }
             }
-        
+
             // Add declarations
             decls.addAll(declNodes);
-        
+
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
-        
+
             // Clean translation unit
             ClavaPostProcessing.applyPostPasses(tUnit);
-        
+
             tUnits.add(tUnit);
         }
-        
-        // Create App
-        
+
         App app = ClavaNodeFactory.app(tUnits);
-        
-        app.setIdsAlias(normalizedClangNodes.getRepeatedIdsMap());
-        
-        */
-        return null;
+
+        app.setIdsAlias(normalizedNodes.getRepeatedIdsMap());
+
+        return app;
+    }
+
+    private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes) {
+        Set<Integer> lineNumbers = new HashSet<>();
+
+        for (ClavaNode node : nodes) {
+            int startLine = node.getLocation().getStartLine();
+            int endLine = node.getLocation().getEndLine();
+
+            IntStream.range(startLine, endLine + 1).forEach(index -> lineNumbers.add(index));
+        }
+
+        return lineNumbers;
     }
 
 }

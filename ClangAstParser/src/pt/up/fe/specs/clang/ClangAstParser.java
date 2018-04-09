@@ -44,6 +44,7 @@ import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.utils.ZipResourceManager;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -191,7 +192,8 @@ public class ClangAstParser {
         DataStore stderr = output.getStdErr();
 
         if (SpecsSystem.isDebug()) {
-            new ClangStreamParser(stderr).parse();
+            App newApp = new ClangStreamParser(stderr).parse();
+            System.out.println("NEW APP CODE:\n" + newApp.getCode());
         }
 
         // System.out.println("NUM DECLS:" + stderr.get(ClangNodeParsing.getNodeDataKey(Decl.class)).size());
