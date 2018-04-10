@@ -64,4 +64,6 @@ static const std::string TOP_LEVEL_TYPES = "<Top Level Types>";
 
 static const std::string INCLUDES = "<Includes>";
 
+static const std::string ID_FILE_MAP = "<Id-File Map>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

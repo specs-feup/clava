@@ -44,6 +44,7 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
 
         // Top-level Node
         llvm::errs() << TOP_LEVEL_NODES << "\n";
+        llvm::errs() << id << "\n";
         llvm::errs() << D << "_" << id << "\n";
 
         // Visit Top Node
@@ -394,6 +395,11 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
     std::unique_ptr<ASTConsumer> DumpAstAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
         int counter = GLOBAL_COUNTER.fetch_add(1);
         DumpResources::writeCounter(counter);
+
+        // Dump id->file data
+        llvm::errs() << ID_FILE_MAP << "\n";
+        llvm::errs() << counter << "\n";
+        llvm::errs() << file << "\n";
 
         ASTContext *Context = &CI.getASTContext();
         ClangAstDumper dumper(Context, counter);
