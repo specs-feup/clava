@@ -15,7 +15,9 @@ package pt.up.fe.specs.clang.parsers;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
+import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -127,4 +129,28 @@ public class GeneralParsers {
 
         stringSet.add(key);
     }
+
+    /**
+     * Overload which uses the second line as value.
+     * 
+     * @param lines
+     * @param map
+     */
+    public static void parseMultiMap(LineStream lines, MultiMap<String, String> map) {
+        parseMultiMap(lines, map, string -> string);
+    }
+
+    /**
+     * Reads two lines from LineStream, the first is the key, the second is the value. Applies the given decoder to the
+     * value.
+     * 
+     * @param lines
+     * @param map
+     * @param decoder
+     */
+    public static <T> void parseMultiMap(LineStream lines, MultiMap<String, T> map, Function<String, T> decoder) {
+        String key = lines.nextLine();
+        map.put(key, decoder.apply(lines.nextLine()));
+    }
+
 }

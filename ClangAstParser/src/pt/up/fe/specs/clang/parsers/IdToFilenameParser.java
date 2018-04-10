@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -21,21 +23,20 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import pt.up.fe.specs.clang.linestreamparser.GenericLineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.SimpleSnippetParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class TopLevelNodesParser extends GenericLineStreamParser {
+public class IdToFilenameParser extends GenericLineStreamParser {
 
-    private static final String PARSER_ID = "<Top Level Nodes>";
-    private static final DataKey<MultiMap<String, String>> TOP_LEVEL_NODES = KeyFactory
-            .generic("stream_top_level_nodes", new MultiMap<>());
+    private static final String PARSER_ID = "<Id-File Map>";
+    private static final DataKey<Map<String, String>> ID_TO_CLASSNAME_MAP = KeyFactory
+            .generic("stream_id_to_filename_map", new HashMap<>());
 
-    public static TopLevelNodesParser newInstance() {
-        return new TopLevelNodesParser(getDataKey(), newSnippetParser());
+    public static IdToFilenameParser newInstance() {
+        return new IdToFilenameParser(getDataKey(), newSnippetParser());
     }
 
-    public static DataKey<MultiMap<String, String>> getDataKey() {
-        return TOP_LEVEL_NODES;
+    public static DataKey<Map<String, String>> getDataKey() {
+        return ID_TO_CLASSNAME_MAP;
     }
 
     /**
@@ -46,18 +47,18 @@ public class TopLevelNodesParser extends GenericLineStreamParser {
      * @param dataParser
      * @return
      */
-    private static SimpleSnippetParser<MultiMap<String, String>> newSnippetParser() {
+    private static SimpleSnippetParser<Map<String, String>> newSnippetParser() {
 
         String id = PARSER_ID;
-        MultiMap<String, String> resultInit = new MultiMap<>();
+        Map<String, String> resultInit = new HashMap<>();
 
-        BiConsumer<LineStream, MultiMap<String, String>> parser = (linestream, set) -> GeneralParsers
-                .parseMultiMap(linestream, set);
+        BiConsumer<LineStream, Map<String, String>> parser = (linestream, map) -> GeneralParsers
+                .parseStringMap(PARSER_ID, linestream, map);
 
         return SimpleSnippetParser.newInstance(id, resultInit, parser);
     }
 
-    private TopLevelNodesParser(DataKey<?> key, SnippetParser<?, ?> parser) {
+    private IdToFilenameParser(DataKey<?> key, SnippetParser<?, ?> parser) {
         super(key, parser);
     }
 

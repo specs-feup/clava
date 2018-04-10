@@ -120,7 +120,9 @@ public class ClavaDataParser extends GenericLineStreamParser {
     }
 
     public static List<DataKey<?>> getDataKeys() {
+        // public static List<DataKey<Map<String, ClavaData>>> getDataKeys() {
         return DATA_PARSERS.keySet().stream()
+                // .map(dataClass -> (DataKey<Map<String, ClavaData>>) getDataKey(dataClass))
                 .map(dataClass -> getDataKey(dataClass))
                 .collect(Collectors.toList());
     }

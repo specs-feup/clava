@@ -49,7 +49,7 @@ public class CxxTest {
 
     @Test
     public void testConstructor() {
-        new CxxTester("constructor.cpp").test();
+        new CxxTester("constructor.cpp", "constructor.h").onePass().showClangAst().test();
     }
 
     @Test
@@ -184,7 +184,7 @@ public class CxxTest {
 
     @Test
     public void testIncludes() {
-        new CxxTester("includes.cpp", "includes.h", "includes2.h").test();
+        new CxxTester("includes.cpp", "includes.h", "includes2.h", "includes2.cpp").test();
     }
 
 }

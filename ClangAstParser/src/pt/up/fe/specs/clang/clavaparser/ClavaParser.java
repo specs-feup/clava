@@ -175,6 +175,9 @@ import pt.up.fe.specs.clang.transforms.RemoveImplicitConstructors;
 import pt.up.fe.specs.clang.transforms.ReplaceClangLabelStmt;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
+import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
+import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
@@ -415,6 +418,9 @@ public class ClavaParser implements AutoCloseable {
         // Process Clang nodes to add extra information (e.g., namespace and RecordDecl names to CXXMethodDecl)
         new ClangAstProcessor(converter).process(clangAst);
 
+        // Apply post-processing to ClavaData
+        clavaDataPostProcessing();
+
         // Parse root node
         RootParser rootParser = new RootParser(converter);
 
@@ -438,10 +444,49 @@ public class ClavaParser implements AutoCloseable {
                     typable.getType().setApp(app);
                 });
 
+        // Set app in parsed Type nodes that have ClavaData
+        /*
+        System.out.println("NEW PARSED NODES:" + converter.getNewParsedNodes());
+        converter.getNewParsedNodes().values().stream()
+                .filter(Type.class::isInstance)
+                .map(Type.class::cast)
+                .forEach(type -> type.setApp(app));
+        */
+        // Perform second pass over types
+        // processTypesSecondPass();
+
+        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
+        // original clang tree
+        // if (sourceTree) {
+        // processSourceTree(app);
+        // }
+
         SpecsLogs.msgInfo("--- AST parsing report ---");
         checkUndefinedNodes(app);
 
         return app;
+    }
+
+    private void clavaDataPostProcessing() {
+        // Build map
+        // Map<String, ClavaNode> nodesMap = converter.getParsedNodes().stream()
+        // .filter(node -> node.getData() != null)
+        // .collect(Collectors.toMap(node -> node.getData().getId(), node -> node));
+
+        // ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(nodesMap);
+        ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(converter.getNewParsedNodes());
+
+        for (ClavaNode node : converter.getNewParsedNodes().values()) {
+            ClavaData data = node.getData();
+
+            // If null, no work to be done
+            if (data == null) {
+                continue;
+            }
+
+            ClavaDataUtils.applyPostProcessing(data, postProcessing);
+        }
+
     }
 
     public Map<String, Type> getTypes() {

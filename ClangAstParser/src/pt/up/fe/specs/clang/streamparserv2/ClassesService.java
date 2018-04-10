@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.streamparserv2;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,10 @@ public class ClassesService {
         this.customClassMap = customClassMap;
         this.autoClassMap = new HashMap<>();
         builders = new HashMap<>();
+    }
+
+    public ClassesService() {
+        this(Collections.emptyMap());
     }
 
     public BiFunction<ClavaData, List<ClavaNode>, ClavaNode> getBuilder(Class<? extends ClavaNode> clavaNodeClass,

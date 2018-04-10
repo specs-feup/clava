@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clavaparser.extra.UndefinedParser;
+import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -50,7 +51,10 @@ public class ClangConverterTable implements AutoCloseable {
     private Map<String, Type> types;
     private ClangRootData clangRootData;
     private Map<String, ClavaNode> parsedNodes;
+    // private List<ClavaNode> parsedNodes;
     private final FileService fileService;
+    private final ClassesService classesService;
+    private Map<String, ClavaNode> newParsedNodes;
 
     public ClangConverterTable(ClangRootData clangRootData) {
         this.converter = new HashMap<>();
@@ -58,7 +62,10 @@ public class ClangConverterTable implements AutoCloseable {
         originalTypes = null;
         this.clangRootData = clangRootData;
         parsedNodes = new HashMap<>();
+        // parsedNodes = new ArrayList<>();
         fileService = new LineStreamFileService();
+        classesService = new ClassesService();
+        newParsedNodes = new HashMap<>();
     }
 
     public void setTypesMapping(Map<String, Type> types) {
@@ -76,8 +83,13 @@ public class ClangConverterTable implements AutoCloseable {
         return fileService;
     }
 
-    public Map<String, ClavaNode> getParsedNodes() {
-        return parsedNodes;
+    // public List<ClavaNode> getParsedNodes() {
+    // public Map<String, ClavaNode> getParsedNodes() {
+    // return parsedNodes;
+    // }
+
+    public Map<String, ClavaNode> getNewParsedNodes() {
+        return newParsedNodes;
     }
 
     public void setOriginalTypes(Map<String, Type> originalTypes) {
@@ -95,7 +107,7 @@ public class ClangConverterTable implements AutoCloseable {
         return clangRootData;
     }
 
-    public void put(String nodeName, ClangNodeParser nodeParser) {
+    public void put(String nodeName, ClangNodeParser<?> nodeParser) {
         if (converter.containsKey(nodeParser)) {
             SpecsLogs.msgWarn("Parser already set for nodes of type '" + nodeName + "', overriding it");
         }
@@ -142,15 +154,44 @@ public class ClangConverterTable implements AutoCloseable {
             if (id.isPresent()) {
                 ClavaNode parsedClavaNode = parsedNodes.get(id.get());
                 if (parsedClavaNode != null) {
-                    return parsedClavaNode.copy();
+                    return parsedClavaNode;
+                    // return parsedClavaNode.copy();
                 }
             }
 
         }
 
+        /*
+        if (id.isPresent() && newParsedNodes.containsKey(id.get())) {
+            return newParsedNodes.get(id.get());
+        }
+        
+        // Try parsing the node
+        ClavaNode parsedNode = parseNewMethod(clangNode);
+        if (parsedNode != null) {
+            // Store node
+            ClavaNode previousClavaNode = newParsedNodes.put(parsedNode.getData().getId(), parsedNode);
+            Preconditions.checkArgument(previousClavaNode == null, "Expected node to not be in the table");
+            return parsedNode;
+        }
+        */
+        // if (parsedNode != null) {
+        // // Store node in map
+        // if (CACHE_PARSED_NODES) {
+        // ClavaNode previousClavaNode = parsedNodes.put(id.get(), parsedNode);
+        // Preconditions.checkArgument(previousClavaNode == null, "Expected node to not be in the table");
+        //
+        // }
+        //
+        // // Store node
+        // return parsedNode;
+        // }
+
         try {
 
             ClavaNode clavaNode = converter.get(clangNode.getName()).parse(clangNode);
+            // // Store node
+            // parsedNodes.add(clavaNode);
 
             /*
             // Store node in map if it has an id
@@ -174,6 +215,41 @@ public class ClangConverterTable implements AutoCloseable {
         }
     }
 
+    /*
+    private ClavaNode parseNewMethod(ClangNode node) {
+        // Get ClavaNode class
+        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(node.getName());
+    
+        // Get ClavaData class
+        Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
+    
+        // Check if ClavaData is available
+    
+        if (!clangRootData.getStdErr().hasValue(ClavaDataParser.getDataKey(clavaDataClass))) {
+            return null;
+        }
+    
+        ClavaData data = clangRootData.getStdErr().get(ClavaDataParser.getDataKey(clavaDataClass))
+                .get(node.getExtendedId());
+    
+        if (data == null) {
+            return null;
+        }
+    
+        // Build children
+        List<ClavaNode> children = node.getChildren().stream()
+                .map(child -> parse(child))
+                .collect(Collectors.toList());
+    
+        if (classesService.getBuilder(clavaNodeClass, clavaDataClass) == null) {
+            return null;
+        }
+    
+        System.out.println("NEW NODE");
+    
+        return classesService.getBuilder(clavaNodeClass, clavaDataClass).apply(data, children);
+    }
+    */
     public List<ClavaNode> parse(List<ClangNode> nodes) {
         return nodes.stream()
                 .map(child -> parse(child))
