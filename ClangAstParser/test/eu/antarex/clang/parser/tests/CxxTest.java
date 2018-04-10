@@ -49,7 +49,7 @@ public class CxxTest {
 
     @Test
     public void testConstructor() {
-        new CxxTester("constructor.cpp", "constructor.h").onePass().showClangAst().test();
+        new CxxTester("constructor.cpp", "constructor.h").test();
     }
 
     @Test

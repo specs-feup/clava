@@ -15,13 +15,11 @@ package pt.up.fe.specs.clang.parsers;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -62,8 +60,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
  *
  */
 // Accepts a LineStream and returns a ClavaData object with the contents read from the stream.
-// public interface ClavaDataParser extends Function<LineStream, ClavaData> {
-// public class ClavaDataParser extends GenericLineStreamParser {
 public class ClavaDataParser implements LineStreamParser {
 
     private static final ClassMap<ClavaData, Function<LineStream, ClavaData>> DATA_PARSERS;
@@ -92,18 +88,10 @@ public class ClavaDataParser implements LineStreamParser {
         DATA_PARSERS.put(IntegerLiteralData.class, ExprDataParser::parseIntegerLiteralData);
     }
 
-    // public static <T extends ClavaData> T getClavaData(DataStore dataStore, Class<T> clavaDataClass, String nodeId) {
-    // return getClavaDataTry(dataStore, clavaDataClass, nodeId).orElseThrow(() -> new RuntimeException(
-    // "Could not find data for node '" + nodeId + "'"));
-    // }
-
     public static <T extends ClavaData> Optional<T> getClavaData(DataStore dataStore, Class<T> clavaDataClass,
             String nodeId) {
 
         DataKey<Map<String, ClavaData>> key = ClavaDataParser.getDataKey();
-
-        // DataKey<Map<String, T>> key = ClavaDataParser.getDataKey(clavaDataClass);
-        // DataKey<Map<String, T>> key = ClangNodeParsing.getNodeDataKey(clavaDataClass);
 
         if (!dataStore.hasValue(key)) {
             return Optional.empty();
@@ -133,36 +121,15 @@ public class ClavaDataParser implements LineStreamParser {
 
         Map<String, SimpleSnippetParser<Map<String, ClavaData>>> clavaDataParsers = new HashMap<>();
 
-        // Map<DataKey<?>, SnippetParser<?, ?>> parsers = new HashMap<>();
-
         for (Entry<Class<? extends ClavaData>, Function<LineStream, ClavaData>> entry : DATA_PARSERS.entrySet()) {
-            // DataKey<?> dataKey = getDataKey(entry.getKey());
             String id = getNodeDataId(entry.getKey());
-            // @SuppressWarnings("unchecked")
-            // SnippetParser<?, ?> snippetParser = newSnippetParser((Class<ClavaData>) entry.getKey(),
-            // entry.getValue());
             SimpleSnippetParser<Map<String, ClavaData>> snippetParser = newSnippetParser(id, entry.getValue(),
                     clavaDataMap);
+
             clavaDataParsers.put(id, snippetParser);
-            // parsers.put(dataKey, snippetParser);
         }
 
-        // return new ClavaDataParser(parsers);
         return new ClavaDataParser(clavaDataMap, clavaDataParsers);
-    }
-
-    /**
-     * 
-     * @param nodeClass
-     * @return the corresponding DataKey for the node data of the given class
-     */
-    public static <T extends ClavaData> DataKey<Map<String, T>> getDataKey(Class<T> dataClass) {
-
-        // Create key name
-        String keyName = "stream_" + dataClass.getSimpleName();
-
-        // Create DataKey
-        return KeyFactory.generic(keyName, new HashMap<String, T>());
     }
 
     public static DataKey<Map<String, ClavaData>> getDataKey() {
@@ -174,14 +141,6 @@ public class ClavaDataParser implements LineStreamParser {
         return KeyFactory.generic(keyName, new HashMap<String, ClavaData>());
     }
 
-    public static List<DataKey<?>> getDataKeys() {
-        // public static List<DataKey<Map<String, ClavaData>>> getDataKeys() {
-        return DATA_PARSERS.keySet().stream()
-                // .map(dataClass -> (DataKey<Map<String, ClavaData>>) getDataKey(dataClass))
-                .map(dataClass -> getDataKey(dataClass))
-                .collect(Collectors.toList());
-    }
-
     /**
      * Helper method for building SnipperParser instances.
      * 
@@ -190,15 +149,8 @@ public class ClavaDataParser implements LineStreamParser {
      * @param dataParser
      * @return
      */
-    // private static <D extends ClavaData> SnippetParser<Map<String, D>, Map<String, D>> newSnippetParser(
-    // Class<D> clavaDataClass, Function<LineStream, D> dataParser) {
     private static SimpleSnippetParser<Map<String, ClavaData>> newSnippetParser(
             String id, Function<LineStream, ? extends ClavaData> dataParser, Map<String, ClavaData> clavaDataMap) {
-
-        // String id = getNodeDataId(clavaDataClass);
-
-        // Map where all ClavaData instances will be stored
-        // Map<String, D> clavaDataMap = new HashMap<>();
 
         BiConsumer<LineStream, Map<String, ClavaData>> parser = (lineStream, map) -> ClavaDataParser
                 .parseClavaDataTop(
@@ -243,10 +195,6 @@ public class ClavaDataParser implements LineStreamParser {
      * 
      * @param parsers
      */
-    // private ClavaDataParser(Map<DataKey<?>, SnippetParser<?, ?>> parsers) {
-    // super(parsers);
-    // }
-
     public static SourceRange parseLocation(LineStream lines) {
         // Next line will tell if is an invalid location or if to continue parsing
         String firstPart = lines.nextLine();
@@ -287,15 +235,8 @@ public class ClavaDataParser implements LineStreamParser {
         return new SourceRange(startLocation, endLocation);
     }
 
-    // public static <D extends ClavaData> void parseClavaDataTop(Function<LineStream, D> dataParser, LineStream lines,
-    // Map<String, D> map) {
-    public static void parseClavaDataTop(Function<LineStream, ? extends ClavaData> dataParser,
-            LineStream lines,
-            Map<String, ClavaData> map) {
-
-        // TODO: Let ClavaNode parser read the key/id, and access it from clavaData.getId()
-        // String key = lines.nextLine();
-        // SourceRange location = ClavaDataParser.parseLocation(lines);
+    private static void parseClavaDataTop(Function<LineStream, ? extends ClavaData> dataParser,
+            LineStream lines, Map<String, ClavaData> map) {
 
         ClavaData clavaData = dataParser.apply(lines);
 

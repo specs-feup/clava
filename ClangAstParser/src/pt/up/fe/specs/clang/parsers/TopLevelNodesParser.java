@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -21,20 +23,22 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import pt.up.fe.specs.clang.linestreamparser.GenericLineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.SimpleSnippetParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class TopLevelNodesParser extends GenericLineStreamParser {
 
     private static final String PARSER_ID = "<Top Level Nodes>";
-    private static final DataKey<MultiMap<String, String>> TOP_LEVEL_NODES = KeyFactory
-            .generic("stream_top_level_nodes", new MultiMap<>());
+    // private static final DataKey<MultiMap<String, String>> TOP_LEVEL_NODES = KeyFactory
+    // .generic("stream_top_level_nodes", new MultiMap<>());
+    private static final DataKey<Set<String>> TOP_LEVEL_NODES = KeyFactory
+            .generic("stream_top_level_nodes", new HashSet<>());
 
     public static TopLevelNodesParser newInstance() {
         return new TopLevelNodesParser(getDataKey(), newSnippetParser());
     }
 
-    public static DataKey<MultiMap<String, String>> getDataKey() {
+    // public static DataKey<MultiMap<String, String>> getDataKey() {
+    public static DataKey<Set<String>> getDataKey() {
         return TOP_LEVEL_NODES;
     }
 
@@ -46,13 +50,14 @@ public class TopLevelNodesParser extends GenericLineStreamParser {
      * @param dataParser
      * @return
      */
-    private static SimpleSnippetParser<MultiMap<String, String>> newSnippetParser() {
+    // private static SimpleSnippetParser<MultiMap<String, String>> newSnippetParser() {
+    private static SimpleSnippetParser<Set<String>> newSnippetParser() {
 
         String id = PARSER_ID;
-        MultiMap<String, String> resultInit = new MultiMap<>();
+        Set<String> resultInit = new HashSet<>();
 
-        BiConsumer<LineStream, MultiMap<String, String>> parser = (linestream, set) -> GeneralParsers
-                .parseMultiMap(linestream, set);
+        BiConsumer<LineStream, Set<String>> parser = (linestream, set) -> GeneralParsers
+                .parseStringSet(id, linestream, resultInit);
 
         return SimpleSnippetParser.newInstance(id, resultInit, parser);
     }
