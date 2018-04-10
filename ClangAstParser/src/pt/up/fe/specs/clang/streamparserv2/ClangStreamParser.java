@@ -27,7 +27,6 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -45,7 +44,6 @@ import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodeToData;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -70,30 +68,30 @@ public class ClangStreamParser {
 
     private final Map<String, ClavaNode> parsedNodes;
     private final ClassesService classesService;
-    private final Set<String> idsWithClavaData;
+    // private final Set<String> idsWithClavaData;
 
     public ClangStreamParser(DataStore data) {
         this.data = data;
 
         classesService = new ClassesService(new HashMap<>());
         this.parsedNodes = new HashMap<>();
-        this.idsWithClavaData = buildIdsWithClavaData();
+        // this.idsWithClavaData = buildIdsWithClavaData();
     }
 
-    private Set<String> buildIdsWithClavaData() {
-        // Build record of all ids that have an associated ClavaData, to detect when there are missing entries or
-        // mismatches in ClavaNodeToData
-
-        Set<String> idsWithClavaData = new HashSet<>();
-
-        for (DataKey<?> key : ClavaDataParser.getDataKeys()) {
-            @SuppressWarnings("unchecked") // ClavaDataParser keys are always a Map of String
-            Map<String, ?> idMap = (Map<String, ?>) data.get(key);
-            idsWithClavaData.addAll(idMap.keySet());
-        }
-
-        return idsWithClavaData;
-    }
+    // private Set<String> buildIdsWithClavaData() {
+    // // Build record of all ids that have an associated ClavaData, to detect when there are missing entries or
+    // // mismatches in ClavaNodeToData
+    //
+    // Set<String> idsWithClavaData = new HashSet<>();
+    //
+    // for (DataKey<?> key : ClavaDataParser.getDataKeys()) {
+    // @SuppressWarnings("unchecked") // ClavaDataParser keys are always a Map of String
+    // Map<String, ?> idMap = (Map<String, ?>) data.get(key);
+    // idsWithClavaData.addAll(idMap.keySet());
+    // }
+    //
+    // return idsWithClavaData;
+    // }
 
     public App parse() {
         // Get top-level nodes
@@ -218,34 +216,37 @@ public class ClangStreamParser {
         // Get corresponding ClavaNode class
         Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname);
 
-        // Map classname to ClavaData class
-        Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
+        // Get ClavaData mapped to the node id
+        ClavaData clavaData = data.get(ClavaDataParser.getDataKey()).get(nodeId);
 
-        if (clavaDataClass == null) {
-            SpecsLogs.msgInfo("No ClavaData class (specific or base) for node '" + nodeId + "'. Add mapping for class '"
-                    + classname + "' in Java class '"
-                    + ClavaNodeToData.class.getSimpleName() + "'");
-            return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
-        }
-
-        if (!data.hasValue(ClavaDataParser.getDataKey(clavaDataClass))) {
-            SpecsLogs.msgInfo("No parsed information for class '" + classname + "', missing entry in "
-                    + ClavaDataParser.class.getSimpleName() + "? (node '" + nodeId
-                    + ", expected ClavaData '" + clavaDataClass.getSimpleName() + "')");
-            return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
-        }
-
-        // Get ClavaData
-        ClavaData clavaData = data.get(ClavaDataParser.getDataKey(clavaDataClass)).get(nodeId);
+        // // Map classname to ClavaData class
+        // Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
+        //
+        // if (clavaDataClass == null) {
+        // SpecsLogs.msgInfo("No ClavaData class (specific or base) for node '" + nodeId + "'. Add mapping for class '"
+        // + classname + "' in Java class '"
+        // + ClavaNodeToData.class.getSimpleName() + "'");
+        // return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
+        // }
+        //
+        // if (!data.hasValue(ClavaDataParser.getDataKey(clavaDataClass))) {
+        // SpecsLogs.msgInfo("No parsed information for class '" + classname + "', missing entry in "
+        // + ClavaDataParser.class.getSimpleName() + "? (node '" + nodeId
+        // + ", expected ClavaData '" + clavaDataClass.getSimpleName() + "')");
+        // return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
+        // }
+        //
+        // // Get ClavaData
+        // ClavaData clavaData = data.get(ClavaDataParser.getDataKey(clavaDataClass)).get(nodeId);
 
         // Check if there is a ClavaData for this node, but could not be correctly associated
-        if (clavaData == null && idsWithClavaData.contains(nodeId)) {
-            throw new RuntimeException("ClavaData for node " + nodeId + " exists, but is not correctly associated");
-        }
+        // if (clavaData == null && idsWithClavaData.contains(nodeId)) {
+        // throw new RuntimeException("ClavaData for node " + nodeId + " exists, but is not correctly associated");
+        // }
 
         if (clavaData == null) {
-            SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname + ", ClavaData Class: "
-                    + clavaDataClass.getSimpleName() + "). ");
+            SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
+                    + "), node is not being visited in the dumper");
             return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
@@ -264,10 +265,11 @@ public class ClangStreamParser {
 
         // Get ClavaNode constructor
         BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = classesService.getBuilder(clavaNodeClass,
-                clavaDataClass);
+                clavaData.getClass());
 
         if (builder == null) {
-            SpecsLogs.msgInfo("No builder for node '" + nodeId + "' (" + classname + ")");
+            SpecsLogs.msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
+                    + clavaData.getClass().getSimpleName() + ", Collection<? extends ClavaNode>)'");
             return new UnsupportedNode(classname, clavaData, children);
         }
 
@@ -279,10 +281,6 @@ public class ClangStreamParser {
         // System.out.println("TOP LEVEL DECLS:" + topLevelDecls);
         // Each id represents a translation unit
 
-        for (String decl : topLevelDecls.flatValues()) {
-            System.out.println("DECL:" + parsedNodes.get(decl).getData().getId());
-            System.out.println("DECL LOCATION:" + parsedNodes.get(decl).getLocation());
-        }
         //
         // return null;
 

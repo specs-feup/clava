@@ -177,8 +177,13 @@ public class ClangDataParsers {
         // .get(ClangNodeParsing.getNodeDataKey(nodeClass)).keySet());
 
         // Get stream information
-        FunctionDeclDataV2 functionData = streamData.get(ClavaDataParser.getDataKey(nodeClass))
-                .get(node.getExtendedId());
+        FunctionDeclDataV2 functionData = ClavaDataParser.getClavaData(streamData, nodeClass, node.getExtendedId())
+                .orElse(null);
+        // FunctionDeclDataV2 functionData = ClavaDataParser.getClavaData(clavaDataClass, nodeId,
+        // dataStore)streamData.get(ClavaDataParser.getDataKey(nodeClass))
+        // .get(node.getExtendedId());
+        // FunctionDeclDataV2 functionData = streamData.get(ClavaDataParser.getDataKey(nodeClass))
+        // .get(node.getExtendedId());
         // Preconditions.checkNotNull(functionData, "Could not get data for node: " + node.getExtendedId());
 
         if (functionData == null) {
@@ -437,8 +442,11 @@ public class ClangDataParsers {
 
         // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
 
-        VarDeclDataV2 varDeclData2 = streamData.get(ClavaDataParser.getDataKey(varDeclClass))
-                .get(node.getExtendedId());
+        VarDeclDataV2 varDeclData2 = ClavaDataParser.getClavaData(streamData, varDeclClass, node.getExtendedId())
+                .orElse(null);
+
+        // VarDeclDataV2 varDeclData2 = streamData.get(ClavaDataParser.getDataKey(varDeclClass))
+        // .get(node.getExtendedId());
         if (varDeclData2 == null) {
             SpecsLogs.msgWarn(
                     "ClangDataParsers.parseVarDecl: could not find varDeclDataV2 for node " + node.getExtendedId());
