@@ -32,15 +32,15 @@ public class ClavaNodeConstructors {
     public ClavaNode newClavaNode(Class<? extends ClavaNode> clavaNodeClass, ClavaData clavaData,
             Collection<? extends ClavaNode> children) {
 
-        // Get required ClavaData class
-        Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
-
-        // Verify in given ClavaData is compatible with the expected Data for the ClavaNode
-        if (!clavaDataClass.isInstance(clavaData)) {
-            throw new RuntimeException("Given ClavaData '" + clavaData.getClass().getSimpleName()
-                    + "' is not compatible with ClavaNode '" + clavaNodeClass.getSimpleName() + "', requires a '"
-                    + clavaDataClass.getSimpleName() + "'");
-        }
+        // // Get required ClavaData class
+        // Class<? extends ClavaData> clavaDataClass = ClavaNodeToData.getClavaDataClass(clavaNodeClass);
+        //
+        // // Verify in given ClavaData is compatible with the expected Data for the ClavaNode
+        // if (!clavaDataClass.isInstance(clavaData)) {
+        // throw new RuntimeException("Given ClavaData '" + clavaData.getClass().getSimpleName()
+        // + "' is not compatible with ClavaNode '" + clavaNodeClass.getSimpleName() + "', requires a '"
+        // + clavaDataClass.getSimpleName() + "'");
+        // }
 
         // TODO: replace with Java 10 var
         BiFunction<ClavaData, Collection<? extends ClavaNode>, ClavaNode> constructor = constructorsCache
