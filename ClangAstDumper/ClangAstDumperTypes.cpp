@@ -118,6 +118,8 @@ void ClangAstDumper::VisitPointerType(const PointerType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     // Visit child
     VisitTypeTop(T->getPointeeType().getTypePtr());
 }
@@ -128,6 +130,8 @@ void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializatio
     if(seenTypes.count(T) != 0) {
         return;
     }
+
+    visitChildrenAndData(T);
 
     // Visit template types
     for (auto &Arg : *T) {
@@ -203,6 +207,8 @@ void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     // Return type
     VisitTypeTop(T->getReturnType().getTypePtr());
 
@@ -238,6 +244,8 @@ void ClangAstDumper::VisitTypedefType(const TypedefType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     VisitTypeTop(T->getDecl()->getUnderlyingType().getTypePtr());
 
 }
@@ -248,6 +256,8 @@ void ClangAstDumper::VisitElaboratedType(const ElaboratedType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     VisitTypeTop(T->getNamedType().getTypePtr());
 }
 
@@ -256,6 +266,8 @@ void ClangAstDumper::VisitLValueReferenceType(const LValueReferenceType *T) {
     if(dumpType(T)) {
         return;
     }
+
+    visitChildrenAndData(T);
 
     VisitTypeTop(T->getPointeeType().getTypePtr());
 }
@@ -266,6 +278,8 @@ void ClangAstDumper::VisitDependentSizedArrayType(const DependentSizedArrayType 
     if(dumpType(T)) {
         return;
     }
+
+    visitChildrenAndData(T);
 
     // Element type
     VisitTypeTop(T->getElementType().getTypePtr());

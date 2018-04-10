@@ -29,6 +29,7 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 
     // Check if QualType is the same as the underlying type
     if((void*) T.getTypePtr() == T.getAsOpaquePtr()) {
+
 /*
         if(dumpType(T.getTypePtr())) {
             return;

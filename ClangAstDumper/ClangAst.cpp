@@ -44,7 +44,7 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
 
         // Top-level Node
         llvm::errs() << TOP_LEVEL_NODES << "\n";
-        llvm::errs() << id << "\n";
+        //llvm::errs() << id << "\n";
         llvm::errs() << D << "_" << id << "\n";
 
         // Visit Top Node

@@ -62,9 +62,12 @@ void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std:
     // Visit type
     VisitTypeTop(D->getType());
     dumpTopLevelType(D->getType());
+
+
 }
 
 void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children) {
+
     // Hierarchy
     VisitValueDeclChildren(D, children);
 

@@ -388,6 +388,8 @@ void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D
         return;
     }
 
+    visitChildrenAndData(D);
+
     // Dump data
     dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
@@ -414,8 +416,10 @@ void ClangAstDumper::VisitTemplateDecl(const TemplateDecl *D) {
         return;
     }
 
+    visitChildrenAndData(D);
+
     // Dump data
-    dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
+    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
     dumpNumberTemplateParameters(D, D->getTemplateParameters());
 }
@@ -425,8 +429,10 @@ void ClangAstDumper::VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D) {
         return;
     }
 
+    visitChildrenAndData(D);
+
     // Dump data
-    dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
+    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 }
 
 void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
@@ -434,8 +440,10 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
         return;
     }
 
+    visitChildrenAndData(D);
+
     // Dump data
-    dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
+    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
     // Dump nested namespace prefix
     llvm::errs() << DUMP_NAMESPACE_ALIAS_PREFIX << "\n";
@@ -449,8 +457,10 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
         return;
     }
 
+    visitChildrenAndData(D);
+
     // Dump data
-    dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
+    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
 //    llvm::errs() << "DUMPING FIELD DECL: " << getId(D) << "\n";
 
@@ -492,8 +502,10 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
         return;
     }
 
+    visitChildrenAndData(D);
+
     // Dump data
-    dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
+    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
     // Dump typedef source
     llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";

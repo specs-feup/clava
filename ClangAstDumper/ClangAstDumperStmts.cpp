@@ -99,6 +99,8 @@ void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
         return;
     }
 
+    visitChildrenAndData(Node);
+
     VisitStmtTop(Node->getRangeStmt());
     VisitStmtTop(Node->getBeginEndStmt());
     VisitStmtTop(Node->getCond());
@@ -124,6 +126,9 @@ void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
     if(dumpStmt(Node)) {
         return;
     }
+
+    visitChildrenAndData(Node);
+
     if(Node->getInit() != nullptr) {
         VisitStmtTop(Node->getInit());
     }

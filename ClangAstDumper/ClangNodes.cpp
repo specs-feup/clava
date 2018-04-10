@@ -130,6 +130,27 @@ void clava::dump(const QualType& type, int id) {
     // QUALTYPE EXP
     //dump(getId(type.getAsOpaquePtr(), id));
     dump(getId(type.getAsOpaquePtr(), id));
+
+    // Check if QualType is the same as the underlying type
+    /*
+    if((void*) type.getTypePtr() == type.getAsOpaquePtr()) {
+
+        llvm::errs() << "QualType " << getId(type.getAsOpaquePtr(), id) << " opaque ptr and type ptr are the same\n";
+    } else {
+        llvm::errs() << "QualType " << getId(type.getAsOpaquePtr(), id) << " type ptr is different -> " << getId(type.getTypePtr(), id) << "\n";
+    }
+     */
+
+    // Dump QualType
+    /*
+    if(dumpType(T)) {
+        return;
+    }
+    */
+
+
+
+
 }
 
 
