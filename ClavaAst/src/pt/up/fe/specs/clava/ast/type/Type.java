@@ -310,7 +310,8 @@ public abstract class Type extends ClavaNode {
             return getParent().getApp();
         }
 
-        throw new RuntimeException("Could not find an 'App' node associated with this type");
+        throw new RuntimeException(
+                "Could not find an 'App' node associated with this type (id: " + getExtendedId().orElse(null) + ")");
     }
 
     /**

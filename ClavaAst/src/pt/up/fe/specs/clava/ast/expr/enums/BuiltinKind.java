@@ -172,6 +172,19 @@ public enum BuiltinKind implements StringProvider {
         return code;
     }
 
+    public String getCode(boolean isCxx) {
+        if (!isCxx) {
+            if (this == CXX_BOOL || this == C_BOOL) {
+                return "_Bool";
+            }
+        }
+        // if (this == CXX_BOOL) {
+        // return "bool";
+        // }
+
+        return code;
+    }
+
     public boolean isUnsigned() {
         return UNSIGNED_TYPES.contains(this);
     }

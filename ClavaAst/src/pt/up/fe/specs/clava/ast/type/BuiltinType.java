@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
@@ -45,7 +46,8 @@ public class BuiltinType extends Type {
 
     @Override
     public String getCode(String name) {
-        String type = getData().getKind().getString();
+        boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
+        String type = getData().getKind().getCode(isCxx);
 
         String varName = name == null ? "" : " " + name;
         return type + varName;
