@@ -121,6 +121,10 @@ void clava::dump(const std::string& string) {
     llvm::errs() << string << "\n";
 }
 
+void clava::dump(const char string[]) {
+    dump(std::string(string));
+}
+
 void clava::dump(const QualType& type, int id) {
     if(type.isNull()) {
         dump("nullptr");

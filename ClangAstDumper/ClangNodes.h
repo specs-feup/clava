@@ -79,6 +79,7 @@ namespace clava {
     void dump(int integer);
     void dump(unsigned int integer) ;
     void dump(const std::string& string);
+    void dump(const char string[]);
     void dump(const QualType& type, int id);
 
 }
