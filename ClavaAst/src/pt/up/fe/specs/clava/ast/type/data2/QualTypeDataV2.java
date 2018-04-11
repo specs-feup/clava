@@ -15,28 +15,36 @@ package pt.up.fe.specs.clava.ast.type.data2;
 
 import java.util.List;
 
+import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
-import pt.up.fe.specs.clava.language.Standard;
 
 public class QualTypeDataV2 extends TypeDataV2 {
 
-    private final Standard standard;
     private final List<C99Qualifier> c99Qualifiers;
+    private final AddressSpaceQualifierV2 addressSpaceQualifier;
+    private final long addressSpace;
 
-    public QualTypeDataV2(Standard standard, List<C99Qualifier> c99Qualifiers, TypeDataV2 data) {
+    // public QualTypeDataV2(Standard standard, List<C99Qualifier> c99Qualifiers, TypeDataV2 data) {
+    public QualTypeDataV2(List<C99Qualifier> c99Qualifiers, AddressSpaceQualifierV2 addressSpaceQualifier,
+            long addressSpace, TypeDataV2 data) {
         super(data);
 
-        this.standard = standard;
+        // this.standard = standard;
         this.c99Qualifiers = c99Qualifiers;
+        this.addressSpaceQualifier = addressSpaceQualifier;
+        this.addressSpace = addressSpace;
     }
 
     public QualTypeDataV2(QualTypeDataV2 data) {
-        this(data.standard, data.c99Qualifiers, data);
+        // this(data.standard, data.c99Qualifiers, data);
+        this(data.c99Qualifiers, data.addressSpaceQualifier, data.addressSpace, data);
     }
 
     @Override
     public String toString() {
-        return toString(super.toString(), "standard: " + standard + ", C99 qualifiers: " + c99Qualifiers);
+        // return toString(super.toString(), "standard: " + standard + ", C99 qualifiers: " + c99Qualifiers);
+        return toString(super.toString(), "C99 qualifiers: " + c99Qualifiers + ", address space: "
+                + addressSpaceQualifier + " (" + addressSpace + ")");
     }
 
 }

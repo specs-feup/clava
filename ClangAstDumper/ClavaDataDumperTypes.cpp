@@ -59,15 +59,31 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
     const int numBits = std::numeric_limits<decltype(c99Qualifiers)>::digits;
     size_t numSetBits = std::bitset<numBits>(c99Qualifiers).count();
 
-    Context->getPrintingPolicy().LangOpts.C99;
     // Dumps the number of C99 qualifiers, and then the name of the qualifiers
     clava::dump((int) numSetBits);
     if(qualifiers.hasConst()) {clava::dump("CONST");}
-    if(qualifiers.hasRestrict()) {clava::dump("RESTRICT");}
+    if(qualifiers.hasRestrict()) {
+        if(Context->getPrintingPolicy().LangOpts.C99)
+            clava::dump("RESTRICT_C99");
+        else
+            clava::dump("RESTRICT");
+    }
     if(qualifiers.hasVolatile()) {clava::dump("VOLATILE");}
 
-
-
+    // Dumps address space
+    unsigned addrspace = T.getAddressSpace();
+    if(addrspace) {
+        switch(addrspace) {
+            case LangAS::opencl_global: clava::dump("GLOBAL"); break;
+            case LangAS::opencl_local: clava::dump("LOCAL"); break;
+            case LangAS::opencl_constant: clava::dump("CONSTANT"); break;
+            case LangAS::opencl_generic: clava::dump("GENERIC"); break;
+            default: clava::dump("DEFAULT");
+        }
+    } else {
+        clava::dump("NONE");
+    }
+    clava::dump(addrspace);
 
 /*    DumpTypeData(T.getTypePtr());
 
