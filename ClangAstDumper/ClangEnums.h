@@ -13,6 +13,7 @@
 namespace clava {
 
     //extern const std::string BUILTIN_KIND[];
+    extern const std::string CAST_KIND[];
 
 };
 
