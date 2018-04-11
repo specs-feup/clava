@@ -478,7 +478,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         // TODO: parse should receive File instead of String?
         long tic = System.nanoTime();
-        ClangRootNode ast = new ClangAstParser(false, useCustomResources).parse(implementationFilenames, parserOptions);
+        ClangRootNode ast = new ClangAstParser(false, useCustomResources).parse(implementationFilenames,
+                parserOptions);
 
         SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
         if (SHOW_MEMORY_USAGE) {
