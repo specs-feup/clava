@@ -34,7 +34,7 @@ public class LiteralExpr extends Expr {
      * Appends a semicolon if the given code does not end with one.
      * 
      * @param literalCode
-     * @param info
+     * @param type
      */
     public LiteralExpr(String literalCode, Type type) {
         this(literalCode, type, ClavaNodeInfo.undefinedInfo());

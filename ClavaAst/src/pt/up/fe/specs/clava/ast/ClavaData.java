@@ -105,7 +105,7 @@ public class ClavaData {
         return new ClavaData(null, SourceRange.invalidRange(), false, SourceRange.invalidRange());
     }
 
-    private final String id;
+    private String id;
     private final SourceRange location;
     private final boolean isMacro;
     private final SourceRange spellingLocation;
@@ -189,6 +189,13 @@ public class ClavaData {
      */
     protected void postProcess(ClavaDataPostProcessing data) {
         // By default, do nothing
+    }
+
+    public ClavaData setId(String newId) {
+        ClavaData copy = ClavaData.copy(this);
+        copy.id = newId;
+
+        return copy;
     }
 
 }

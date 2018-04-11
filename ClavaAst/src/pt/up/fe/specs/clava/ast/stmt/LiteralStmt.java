@@ -32,27 +32,26 @@ public class LiteralStmt extends Stmt {
      * 
      * 
      * @param literalCode
-     * @param info
      */
     public LiteralStmt(String literalCode) {
-	this(literalCode, ClavaNodeInfo.undefinedInfo());
+        this(literalCode, ClavaNodeInfo.undefinedInfo());
     }
 
     private LiteralStmt(String literalCode, ClavaNodeInfo info) {
-	super(info, Collections.emptyList());
+        super(info, Collections.emptyList());
 
-	// this.literalCode = literalCode.endsWith(";") ? literalCode : literalCode + ";";
-	this.literalCode = literalCode;
+        // this.literalCode = literalCode.endsWith(";") ? literalCode : literalCode + ";";
+        this.literalCode = literalCode;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-	return new LiteralStmt(literalCode, getInfo());
+        return new LiteralStmt(literalCode, getInfo());
     }
 
     @Override
     public String getCode() {
-	return literalCode;
+        return literalCode;
     }
 
 }

@@ -126,6 +126,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         if (getData() != null) {
             return getData().getLocation();
         }
+
         SourceRange sourceRange = info.getLocation();
 
         if (sourceRange == null) {
@@ -267,12 +268,20 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
         // Location
         builder.addLine("\"location\": \""
-                + SpecsStrings.escapeJson(info.getLocationTry().map(loc -> loc.toString()).orElse("<no_location>"))
+                + SpecsStrings.escapeJson(getLocationTry().map(loc -> loc.toString()).orElse("<no_location>"))
                 + "\",");
 
         // Field above has ',' because the last field of the JSON is always the children
 
         return builder.toString();
+    }
+
+    public Optional<SourceRange> getLocationTry() {
+        if (data != null) {
+            return Optional.of(data.getLocation());
+        }
+
+        return info.getLocationTry();
     }
 
     protected static Expr nullable(Expr expr) {
@@ -394,6 +403,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public void setId(String newId) {
+        if (data != null) {
+            data = data.setId(newId);
+        }
         info.setId(newId);
     }
 

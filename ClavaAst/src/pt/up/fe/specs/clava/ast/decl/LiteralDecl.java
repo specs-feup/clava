@@ -33,7 +33,6 @@ public class LiteralDecl extends Decl {
      * 
      * 
      * @param literalCode
-     * @param info
      */
     public LiteralDecl(String literalCode) {
         this(literalCode, ClavaNodeInfo.undefinedInfo());
