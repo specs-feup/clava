@@ -4,6 +4,7 @@
 
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
+#include "ClangEnums.h"
 
 #include "clang/Lex/Lexer.h"
 
@@ -92,7 +93,7 @@ void clava::ClavaDataDumper::DumpExprData(const Expr *E) {
 void clava::ClavaDataDumper::DumpCastExprData(const CastExpr *E) {
     DumpExprData(E);
 
-    clava::dump(E->getCastKindName());
+    clava::dump(clava::CAST_KIND[E->getCastKind()]);
 }
 
 void clava::ClavaDataDumper::DumpLiteralData(const Expr *E) {

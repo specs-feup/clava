@@ -6,6 +6,9 @@
 #include "ClangNodes.h"
 #include "ClangEnums.h"
 
+#include <bitset>
+#include <limits>
+
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"BuiltinType", clava::TypeNode::BUILTIN_TYPE}
 };
@@ -43,9 +46,27 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
 
 }
 
+
+
 // Dumps the same information as DumpTypeData, and after that, information about QualType
 void clava::ClavaDataDumper::dump(const QualType& T) {
     DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
+
+    auto qualifiers = T.getQualifiers();
+
+    // Dump C99 qualifiers
+    auto c99Qualifiers = qualifiers.getCVRQualifiers();
+    const int numBits = std::numeric_limits<decltype(c99Qualifiers)>::digits;
+    size_t numSetBits = std::bitset<numBits>(c99Qualifiers).count();
+
+    Context->getPrintingPolicy().LangOpts.C99;
+    // Dumps the number of C99 qualifiers, and then the name of the qualifiers
+    clava::dump((int) numSetBits);
+    if(qualifiers.hasConst()) {clava::dump("CONST");}
+    if(qualifiers.hasRestrict()) {clava::dump("RESTRICT");}
+    if(qualifiers.hasVolatile()) {clava::dump("VOLATILE");}
+
+
 
 
 /*    DumpTypeData(T.getTypePtr());
