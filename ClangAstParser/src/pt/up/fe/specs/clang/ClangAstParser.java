@@ -186,7 +186,7 @@ public class ClangAstParser {
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
 
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                this::processStdErr);
+                inputStream -> processStdErr(config, inputStream));
 
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
@@ -283,11 +283,11 @@ public class ClangAstParser {
         return clangDump;
     }
 
-    private DataStore processStdErr(InputStream inputStream) {
+    private DataStore processStdErr(DataStore clavaData, InputStream inputStream) {
         File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
 
         // Parse StdErr from ClangAst
-        return new StreamParser(dumpfile).parse(inputStream);
+        return new StreamParser(clavaData, dumpfile).parse(inputStream);
     }
 
     private void addSourceRanges(List<ClangNode> clangDump, DataStore stderr) {
@@ -484,7 +484,7 @@ public class ClangAstParser {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
 
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                this::processStdErr);
+                inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream));
 
         boolean foundInclude = !output.getStdOut().isEmpty();
 

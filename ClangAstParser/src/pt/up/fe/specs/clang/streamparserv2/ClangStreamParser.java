@@ -29,8 +29,6 @@ import java.util.stream.IntStream;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
@@ -51,7 +49,6 @@ import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -108,15 +105,17 @@ public class ClangStreamParser {
         App app = createApp(topLevelDeclNodes, data.get(IncludesParser.getDataKey()));
 
         // Set app in Type nodes
+        /*
         for (String topLevelTypeId : topLevelTypes) {
             ClavaNode topLevelType = parsedNodes.get(topLevelTypeId);
             Preconditions.checkNotNull(topLevelType);
-
+        
             topLevelType.getDescendantsAndSelfStream()
                     .filter(Type.class::isInstance)
                     .map(Type.class::cast)
                     .forEach(type -> type.setApp(app));
         }
+        */
 
         return app;
 

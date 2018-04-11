@@ -20,11 +20,13 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class TypeOfExprTypeParser extends AClangNodeParser<TypeOfExprType> {
@@ -41,6 +43,8 @@ public class TypeOfExprTypeParser extends AClangNodeParser<TypeOfExprType> {
 
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
 
+        Standard standard = getConfig().get(ClavaOptions.STANDARD);
+
         List<ClavaNode> children = parseChildren(node);
 
         checkNumChildren(children, 2);
@@ -48,7 +52,7 @@ public class TypeOfExprTypeParser extends AClangNodeParser<TypeOfExprType> {
         Expr underlyingExpr = toExpr(children.get(0));
         Type underlyingType = toType(children.get(1));
 
-        return ClavaNodeFactory.typeOfExprType(typeData, node.getInfo(), underlyingExpr, underlyingType);
+        return ClavaNodeFactory.typeOfExprType(standard, typeData, node.getInfo(), underlyingExpr, underlyingType);
     }
 
 }

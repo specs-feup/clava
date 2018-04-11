@@ -36,21 +36,6 @@ import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.NamedDeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
-import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
-import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
-import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
-import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
-import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
-import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
-import pt.up.fe.specs.util.classmap.ClassMap;
-import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -62,10 +47,11 @@ import pt.up.fe.specs.util.utilities.LineStream;
 // Accepts a LineStream and returns a ClavaData object with the contents read from the stream.
 public class ClavaDataParser implements LineStreamParser {
 
+    /*
     private static final ClassMap<ClavaData, Function<LineStream, ClavaData>> DATA_PARSERS;
     static {
         DATA_PARSERS = new ClassMap<>();
-
+        
         // DECLS
         DATA_PARSERS.put(DeclDataV2.class, DeclDataParser::parseDeclData);
         DATA_PARSERS.put(NamedDeclData.class, DeclDataParser::parseNamedDeclData);
@@ -73,19 +59,57 @@ public class ClavaDataParser implements LineStreamParser {
         DATA_PARSERS.put(CXXMethodDeclDataV2.class, DeclDataParser::parseCXXMethodDeclData);
         DATA_PARSERS.put(VarDeclDataV2.class, DeclDataParser::parseVarDeclData);
         DATA_PARSERS.put(ParmVarDeclData.class, DeclDataParser::parseParmVarDeclData);
-
+        
         // STMTS
         DATA_PARSERS.put(StmtData.class, StmtDataParser::parseStmtData);
-
+        
         // TYPES
         DATA_PARSERS.put(TypeDataV2.class, TypeDataParser::parseTypeData);
         DATA_PARSERS.put(BuiltinTypeData.class, TypeDataParser::parseBuiltinTypeData);
-
+        
         // EXPRS
         DATA_PARSERS.put(ExprDataV2.class, ExprDataParser::parseExprData);
         DATA_PARSERS.put(CastExprData.class, ExprDataParser::parseCastExprData);
         DATA_PARSERS.put(CharacterLiteralData.class, ExprDataParser::parseCharacterLiteralData);
         DATA_PARSERS.put(IntegerLiteralData.class, ExprDataParser::parseIntegerLiteralData);
+    }
+    */
+
+    private static final Map<String, Function<LineStream, ClavaData>> STATIC_DATA_PARSERS;
+    static {
+        STATIC_DATA_PARSERS = new HashMap<>();
+
+        // DECLS
+        STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
+        STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
+        STATIC_DATA_PARSERS.put("<FunctionDeclData>", DeclDataParser::parseFunctionDeclData);
+        STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
+        STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);
+        STATIC_DATA_PARSERS.put("<ParmVarDeclData>", DeclDataParser::parseParmVarDeclData);
+
+        // STMTS
+        STATIC_DATA_PARSERS.put("<StmtData>", StmtDataParser::parseStmtData);
+
+        // EXPRS
+        STATIC_DATA_PARSERS.put("<ExprData>", ExprDataParser::parseExprData);
+        STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
+        STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
+        STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
+    }
+
+    private static Map<String, Function<LineStream, ClavaData>> buildDataParsers(DataStore clavaData) {
+
+        // Add statically declared parsers
+        Map<String, Function<LineStream, ClavaData>> dataParsers = new HashMap<>(STATIC_DATA_PARSERS);
+
+        // Add parsers that require a Clava data instance
+
+        // TYPES
+        TypeDataParser typeDataParser = new TypeDataParser(clavaData);
+        dataParsers.put("<TypeData>", typeDataParser::parseTypeData);
+        dataParsers.put("<BuiltinTypeData>", typeDataParser::parseBuiltinTypeData);
+
+        return dataParsers;
     }
 
     public static <T extends ClavaData> Optional<T> getClavaData(DataStore dataStore, Class<T> clavaDataClass,
@@ -115,14 +139,17 @@ public class ClavaDataParser implements LineStreamParser {
 
     }
 
-    public static ClavaDataParser newInstance() {
+    public static ClavaDataParser newInstance(DataStore clavaData) {
         // Map where all ClavaData instances will be stored
         Map<String, ClavaData> clavaDataMap = new HashMap<>();
 
         Map<String, SimpleSnippetParser<Map<String, ClavaData>>> clavaDataParsers = new HashMap<>();
 
-        for (Entry<Class<? extends ClavaData>, Function<LineStream, ClavaData>> entry : DATA_PARSERS.entrySet()) {
-            String id = getNodeDataId(entry.getKey());
+        // for (Entry<Class<? extends ClavaData>, Function<LineStream, ClavaData>> entry : DATA_PARSERS.entrySet()) {
+
+        for (Entry<String, Function<LineStream, ClavaData>> entry : buildDataParsers(clavaData).entrySet()) {
+            // String id = getNodeDataId(entry.getKey());
+            String id = entry.getKey();
             SimpleSnippetParser<Map<String, ClavaData>> snippetParser = newSnippetParser(id, entry.getValue(),
                     clavaDataMap);
 
@@ -169,14 +196,16 @@ public class ClavaDataParser implements LineStreamParser {
      * @param clavaDataClass
      * @return
      */
+    /*
     private static String getNodeDataId(Class<? extends ClavaData> clavaDataClass) {
         String simpleName = clavaDataClass.getSimpleName();
-
+    
         // Simplify name
         simpleName = StringParsers.removeSuffix(simpleName, "V2");
-
+    
         return "<" + simpleName + ">";
     }
+    */
 
     // Map with parsed ClavaData instances
     private final Map<String, ClavaData> clavaData;

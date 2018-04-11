@@ -593,4 +593,7 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         }
     }
 
+    protected DataStore getConfig() {
+        return getClangRootData().getConfig();
+    }
 }

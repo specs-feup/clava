@@ -118,8 +118,8 @@ public class StreamParser {
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
-    public StreamParser() {
-        this(null);
+    public StreamParser(DataStore clavaData) {
+        this(clavaData, null);
     }
 
     // Single map for all the node data dumps
@@ -128,7 +128,7 @@ public class StreamParser {
     /**
      * We need a new instance every time we want to parse a String.
      */
-    public StreamParser(File dumpFile) {
+    public StreamParser(DataStore clavaData, File dumpFile) {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
@@ -138,13 +138,13 @@ public class StreamParser {
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
 
-        linestreamParsers = buildLineStreamParsers();
+        linestreamParsers = buildLineStreamParsers(clavaData);
         linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
 
     }
 
-    private Collection<LineStreamParser> buildLineStreamParsers() {
-        return Arrays.asList(ClavaDataParser.newInstance(), VisitedChildrenParser.newInstance(),
+    private Collection<LineStreamParser> buildLineStreamParsers(DataStore clavaData) {
+        return Arrays.asList(ClavaDataParser.newInstance(clavaData), VisitedChildrenParser.newInstance(),
                 IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance(),
                 TopLevelTypesParser.newInstance(), IncludesParser.newInstance(), IdToFilenameParser.newInstance());
     }

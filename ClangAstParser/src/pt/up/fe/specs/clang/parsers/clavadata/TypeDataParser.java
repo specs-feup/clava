@@ -13,12 +13,16 @@
 
 package pt.up.fe.specs.clang.parsers.clavadata;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -30,7 +34,13 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class TypeDataParser {
 
-    public static TypeDataV2 parseTypeData(LineStream lines) {
+    private final DataStore config;
+
+    public TypeDataParser(DataStore config) {
+        this.config = config;
+    }
+
+    public TypeDataV2 parseTypeData(LineStream lines) {
 
         // Types do not have location
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines, false);
@@ -38,14 +48,15 @@ public class TypeDataParser {
         return new TypeDataV2(clavaData);
     }
 
-    public static BuiltinTypeData parseBuiltinTypeData(LineStream lines) {
+    public BuiltinTypeData parseBuiltinTypeData(LineStream lines) {
 
         TypeDataV2 data = parseTypeData(lines);
 
         BuiltinKind kind = GeneralParsers.enumFromValue(BuiltinKind.getEnumHelper(), lines);
         boolean isSugared = GeneralParsers.parseOneOrZero(lines);
+        Standard standard = config.get(ClavaOptions.STANDARD);
 
-        return new BuiltinTypeData(kind, isSugared, data);
+        return new BuiltinTypeData(kind, isSugared, standard, data);
     }
 
 }
