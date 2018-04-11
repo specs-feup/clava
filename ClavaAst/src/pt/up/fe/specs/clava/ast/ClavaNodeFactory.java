@@ -229,6 +229,7 @@ import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
@@ -784,9 +785,9 @@ public class ClavaNodeFactory {
         return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
     }
 
-    public static TypeOfExprType typeOfExprType(TypeData data, ClavaNodeInfo info, Expr underlyingExpr,
-            Type underlyingType) {
-        return new TypeOfExprType(data, info, underlyingExpr, underlyingType);
+    public static TypeOfExprType typeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
+            Expr underlyingExpr, Type underlyingType) {
+        return new TypeOfExprType(standard, data, info, underlyingExpr, underlyingType);
     }
 
     /*

@@ -21,7 +21,6 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -36,14 +35,14 @@ public abstract class Type extends ClavaNode {
 
     private TypeData data;
     // private Supplier<App> app;
-    private App app;
+    // private App app;
 
     public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
         this.data = data;
         // app = () -> null;
-        app = null;
+        // app = null;
     }
 
     public Type(TypeDataV2 dataV2, Collection<? extends ClavaNode> children) {
@@ -59,10 +58,10 @@ public abstract class Type extends ClavaNode {
         return data;
     }
 
-    public void setApp(App app) {
-        // setApp(() -> app);
-        this.app = app;
-    }
+    // public void setApp(App app) {
+    // // setApp(() -> app);
+    // this.app = app;
+    // }
 
     // public void setApp(Supplier<App> app) {
     // this.app = app;
@@ -73,7 +72,7 @@ public abstract class Type extends ClavaNode {
         Type copy = (Type) super.copy();
 
         // Set app
-        copy.app = app;
+        // copy.app = app;
 
         return copy;
     }
@@ -293,26 +292,28 @@ public abstract class Type extends ClavaNode {
         throw new NotImplementedException(getClass());
     }
 
+    /*
     @Override
     public App getApp() {
         // App appNode = app.get();
         // if (appNode != null) {
         // return appNode;
         // }
-
+    
         // If app not null, return it
         if (app != null) {
             return app;
         }
-
+    
         // Return app of parent node
         if (hasParent()) {
             return getParent().getApp();
         }
-
+    
         throw new RuntimeException(
                 "Could not find an 'App' node associated with this type (id: " + getExtendedId().orElse(null) + ")");
     }
+    */
 
     /**
      *

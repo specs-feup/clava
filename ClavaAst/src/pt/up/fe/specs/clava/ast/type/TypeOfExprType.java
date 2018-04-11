@@ -23,20 +23,29 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.language.Standard;
 
 public class TypeOfExprType extends Type {
 
-    public TypeOfExprType(TypeData data, ClavaNodeInfo info, Expr underlyingExpr, Type underlyingType) {
+    private final Standard standard;
+
+    public TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info, Expr underlyingExpr,
+            Type underlyingType) {
         super(data, info, Arrays.asList(underlyingExpr, underlyingType));
+
+        this.standard = standard;
     }
 
-    private TypeOfExprType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    private TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
+            Collection<? extends ClavaNode> children) {
         super(data, info, children);
+
+        this.standard = standard;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TypeOfExprType(getTypeData(), getInfo(), Collections.emptyList());
+        return new TypeOfExprType(standard, getTypeData(), getInfo(), Collections.emptyList());
     }
 
     public Expr getUnderlyingExpr() {
@@ -52,7 +61,8 @@ public class TypeOfExprType extends Type {
     public String getCode(String name) {
 
         // If GNU, do not change type (i.e., typeof)
-        if (getApp().getStandard().isGnu()) {
+        // if (getApp().getStandard().isGnu()) {
+        if (standard.isGnu()) {
             return super.getCode(name);
         }
 
