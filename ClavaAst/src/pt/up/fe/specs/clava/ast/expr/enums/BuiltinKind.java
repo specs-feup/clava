@@ -26,8 +26,8 @@ public enum BuiltinKind implements StringProvider {
     VOID,
 
     // Unsigned Types
-    C_BOOL("bool"),
-    CXX_BOOL("_Bool"),
+    BOOL("bool"),
+    BOOL_C("_Bool"), // Used in C, when <stdbool> is not included
     CHAR,
     UNSIGNED_CHAR("unsigned char"),
     WCHAR_T("wchar_t"),
@@ -50,6 +50,7 @@ public enum BuiltinKind implements StringProvider {
     INT128_T("__int128_t"),
 
     // Floating point types
+    HALF_OPENCL("half"),
     HALF("__fp16"),
     FLOAT("float"),
     DOUBLE("double"),
@@ -88,13 +89,13 @@ public enum BuiltinKind implements StringProvider {
     BOUND_MEMBER("<bound member function type>"),
     PSEUDO_OBJECT,
     UNKNOWN_ANY("__builtin_any_type"),
-    BUILTIN_FN,
+    BUILTIN_FN("<builtin fn type>"),
     ARC_UNBRIDGED_CAST,
     OMP_ARRAY_SECTION;
 
     private static final Set<BuiltinKind> UNSIGNED_TYPES = new HashSet<>(Arrays.asList(
-            C_BOOL,
-            CXX_BOOL,
+            BOOL,
+            BOOL_C,
             CHAR,
             UNSIGNED_CHAR,
             WCHAR_T,
@@ -153,7 +154,7 @@ public enum BuiltinKind implements StringProvider {
     */
     private static final Lazy<EnumHelper<BuiltinKind>> ENUM_HELPER = EnumHelper.newLazyHelper(BuiltinKind.class);
 
-    public static EnumHelper<BuiltinKind> getEnumHelper() {
+    public static EnumHelper<BuiltinKind> getHelper() {
         return ENUM_HELPER.get();
     }
 
@@ -172,12 +173,12 @@ public enum BuiltinKind implements StringProvider {
         return code;
     }
 
-    public String getCode(boolean isCxx) {
-        if (!isCxx) {
-            if (this == CXX_BOOL || this == C_BOOL) {
-                return "_Bool";
-            }
-        }
+    public String getCode() {
+        // if (!isCxx) {
+        // if (this == BOOL_C || this == BOOL) {
+        // return "_Bool";
+        // }
+        // }
         // if (this == CXX_BOOL) {
         // return "bool";
         // }

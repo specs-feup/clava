@@ -114,7 +114,6 @@ public class QualType extends Type {
     }
 
     private String getCode(String type, String name) {
-
         String addressQualifier = qualTypeData.getAddressSpaceQualifier().getCode();
         if (!addressQualifier.isEmpty()) {
             addressQualifier += " ";

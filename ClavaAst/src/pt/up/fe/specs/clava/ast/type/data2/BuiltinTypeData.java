@@ -14,29 +14,27 @@
 package pt.up.fe.specs.clava.ast.type.data2;
 
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
-import pt.up.fe.specs.clava.language.Standard;
 
 public class BuiltinTypeData extends TypeDataV2 {
 
     private final BuiltinKind kind;
     private final boolean isSugared;
-    private final Standard standard;
 
-    public BuiltinTypeData(BuiltinKind kind, boolean isSugared, Standard standard, TypeDataV2 data) {
+    public BuiltinTypeData(BuiltinKind kind, boolean isSugared, TypeDataV2 data) {
         super(data);
 
         this.kind = kind;
         this.isSugared = isSugared;
-        this.standard = standard;
     }
 
     public BuiltinTypeData(BuiltinTypeData data) {
-        this(data.kind, data.isSugared, data.standard, data);
+        // this(data.kind, data.isSugared, data.standard, data);
+        this(data.kind, data.isSugared, data);
     }
 
     @Override
     public String toString() {
-        return toString(super.toString(), "kind: " + kind + ", isSugared: " + isSugared + ", standard: " + standard);
+        return toString(super.toString(), "kind: " + kind + ", isSugared: " + isSugared);
     }
 
     public BuiltinKind getKind() {
@@ -47,7 +45,7 @@ public class BuiltinTypeData extends TypeDataV2 {
         return isSugared;
     }
 
-    public Standard getStandard() {
-        return standard;
-    }
+    // public Standard getStandard() {
+    // return standard;
+    // }
 }
