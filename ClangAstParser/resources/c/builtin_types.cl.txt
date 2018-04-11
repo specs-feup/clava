@@ -2,7 +2,7 @@
 
 __kernel void builtin_types() {
    __fp16 anHalf;
-   __fp16 armHalf;
+   __local __fp16  armHalf;
    sampler_t sampler;
    event_t event;
    //clk_event_t clockEvent;

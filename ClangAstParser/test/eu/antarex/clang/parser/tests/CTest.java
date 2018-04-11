@@ -35,7 +35,7 @@ public class CTest {
 
     @Test
     public void testBoolean() {
-        new CTester("boolean.c").test();
+        new CTester("boolean.c", "boolean2.c").test();
     }
 
     @Test

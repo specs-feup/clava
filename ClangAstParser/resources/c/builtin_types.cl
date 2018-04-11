@@ -3,9 +3,9 @@
 __kernel void builtin_types() {
 
 	half anHalf;
-	__fp16 armHalf;
+	__local __fp16 armHalf;
 	sampler_t sampler;
-	event_t event;
+	__private event_t event;
 	//clk_event_t clockEvent;
 	//queue_t queue;
 	//reserve_id_t reserveId;

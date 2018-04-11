@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers.clavadata;
 
+import java.util.List;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
@@ -21,7 +23,9 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
+import pt.up.fe.specs.clava.ast.type.data2.QualTypeDataV2;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -52,11 +56,27 @@ public class TypeDataParser {
 
         TypeDataV2 data = parseTypeData(lines);
 
-        BuiltinKind kind = GeneralParsers.enumFromValue(BuiltinKind.getEnumHelper(), lines);
+        BuiltinKind kind = GeneralParsers.enumFromValue(BuiltinKind.getHelper(), lines);
         boolean isSugared = GeneralParsers.parseOneOrZero(lines);
+        // Standard standard = config.get(ClavaOptions.STANDARD);
+
+        return new BuiltinTypeData(kind, isSugared, data);
+    }
+
+    public QualTypeDataV2 parseQualTypeData(LineStream lines) {
+
+        TypeDataV2 data = parseTypeData(lines);
+
         Standard standard = config.get(ClavaOptions.STANDARD);
 
-        return new BuiltinTypeData(kind, isSugared, standard, data);
+        List<C99Qualifier> c99Qualifiers = GeneralParsers.enumListFromName(C99Qualifier.getHelper(), lines);
+        System.out.println("C99 QUALIFIERS:" + c99Qualifiers);
+
+        return new QualTypeDataV2(standard, c99Qualifiers, data);
+        // BuiltinKind kind = GeneralParsers.enumFromValue(BuiltinKind.getEnumHelper(), lines);
+        // boolean isSugared = GeneralParsers.parseOneOrZero(lines);
+
+        // return new BuiltinTypeData(kind, isSugared, standard, data);
     }
 
 }

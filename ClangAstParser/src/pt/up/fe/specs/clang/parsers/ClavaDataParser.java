@@ -108,6 +108,7 @@ public class ClavaDataParser implements LineStreamParser {
         TypeDataParser typeDataParser = new TypeDataParser(clavaData);
         dataParsers.put("<TypeData>", typeDataParser::parseTypeData);
         dataParsers.put("<BuiltinTypeData>", typeDataParser::parseBuiltinTypeData);
+        dataParsers.put("<QualTypeData>", typeDataParser::parseQualTypeData);
 
         return dataParsers;
     }

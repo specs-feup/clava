@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -84,7 +86,28 @@ public class GeneralParsers {
     public static <T extends Enum<T> & StringProvider> T enumFromValue(EnumHelper<T> helper,
             LineStream lines) {
 
-        return helper.valueOf(lines.nextLine());
+        String value = lines.nextLine();
+        return helper.valueOf(value);
+    }
+
+    /**
+     * First line represents the number of enums to parse, one in each succeding line.
+     * 
+     * @param helper
+     * @param lines
+     * @return
+     */
+    public static <T extends Enum<T> & StringProvider> List<T> enumListFromName(EnumHelper<T> helper,
+            LineStream lines) {
+
+        int numEnums = parseInt(lines);
+        List<T> enums = new ArrayList<>(numEnums);
+
+        for (int i = 0; i < numEnums; i++) {
+            enums.add(enumFromName(helper, lines));
+        }
+
+        return enums;
     }
 
     public static <K> void checkDuplicate(String id, K key, Object value, Map<K, ?> map) {

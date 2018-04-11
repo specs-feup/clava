@@ -52,7 +52,7 @@ public class ExprDataParser {
     public static CastExprData parseCastExprData(LineStream lines) {
         ExprDataV2 data = parseExprData(lines);
 
-        CastKind castKind = GeneralParsers.enumFromInt(CastKind.getHelper(), lines);
+        CastKind castKind = GeneralParsers.enumFromName(CastKind.getHelper(), lines);
 
         return new CastExprData(castKind, data);
     }
