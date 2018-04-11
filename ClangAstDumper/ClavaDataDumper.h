@@ -58,6 +58,7 @@ namespace clava {
         void dump(const Stmt* S);
         void dump(const Expr* E);
         void dump(const Type* T);
+        void dump(const QualType& T);
 
         void dump(clava::DeclNode declNode, const Decl* D);
         void dump(clava::StmtNode stmtNode, const Stmt* S);

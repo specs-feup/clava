@@ -21,6 +21,8 @@ void clava::ClavaDataDumper::dump(const Type* T) {
     dump(typeNode, T);
 }
 
+
+
 void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
     DumpHeader(getDataName(typeNode), T);
 
@@ -38,6 +40,25 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 
 
 void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
+
+}
+
+// Dumps the same information as DumpTypeData, and after that, information about QualType
+void clava::ClavaDataDumper::dump(const QualType& T) {
+    DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
+
+
+/*    DumpTypeData(T.getTypePtr());
+
+    DumpTypeData(const_cast<Type*>(static_cast<Type*>(T.getAsOpaquePtr())));
+    llvm::errs() << "Opaque PTR dump:\n";
+    static_cast<Type*>(T.getAsOpaquePtr())->dump();
+    llvm::errs() << "Type PTR dump:\n";
+    T.getTypePtr()->dump();
+    // Dump info about constant, volatile
+    */
+    // Dump qualifiers as string
+    //llvm::errs() << T.getQualifiers().getAsString() << "\n";
 
 }
 

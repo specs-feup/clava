@@ -58,15 +58,23 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
     // Visit children
     // TODO: AST dump method relies on visiting the nodes multiple times
     // For now, detect it to avoid visiting children more than once
+
+/*
     if(seenTypes.count(T.getAsOpaquePtr()) == 0) {
         visitChildren(T);
     }
+*/
 
 
 
+    //dumpType(T);
 
-    dumpType(T);
+    if(dumpType(T)) {
+        return;
+    }
 
+    visitChildren(T);
+    dataDumper.dump(T);
     // Dump data
     //dataDumper.dump(clava::TypeNode::TYPE, T);
 
