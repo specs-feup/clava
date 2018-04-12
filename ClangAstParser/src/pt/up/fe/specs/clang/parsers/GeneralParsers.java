@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import pt.up.fe.specs.clava.ast.lang.Attribute;
+import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -174,6 +176,23 @@ public class GeneralParsers {
     public static <T> void parseMultiMap(LineStream lines, MultiMap<String, T> map, Function<String, T> decoder) {
         String key = lines.nextLine();
         map.put(key, decoder.apply(lines.nextLine()));
+    }
+
+    public static List<Attribute> parseAttributes(LineStream lines) {
+        int numAttrs = parseInt(lines);
+
+        List<Attribute> attributes = new ArrayList<>(numAttrs);
+        for (int i = 0; i < numAttrs; i++) {
+            AttributeKind kind = GeneralParsers.enumFromName(AttributeKind.getHelper(), lines);
+            boolean isImplicit = parseOneOrZero(lines);
+            boolean isInherited = parseOneOrZero(lines);
+            boolean isLateParsed = parseOneOrZero(lines);
+            boolean isPackExpansion = parseOneOrZero(lines);
+
+            attributes.add(new Attribute(kind, isImplicit, isInherited, isLateParsed, isPackExpansion));
+        }
+
+        return attributes;
     }
 
 }

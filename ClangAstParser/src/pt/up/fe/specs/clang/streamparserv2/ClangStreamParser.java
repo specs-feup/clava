@@ -175,7 +175,7 @@ public class ClangStreamParser {
 
         if (builder == null) {
             SpecsLogs.msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
-                    + clavaData.getClass().getSimpleName() + ", Collection<? extends ClavaNode>)'");
+                    + clavaData.getClass().getSimpleName() + " data, Collection<? extends ClavaNode> children)'");
             return new UnsupportedNode(classname, clavaData, children);
         }
 

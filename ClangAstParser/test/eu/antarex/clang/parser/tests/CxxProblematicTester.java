@@ -77,6 +77,12 @@ public class CxxProblematicTester {
     }
 
     @Test
+    public void testAttribute() {
+        // Attributes not implemented
+        new CxxTester("problematic/attribute.cpp").onePass().test();
+    }
+
+    @Test
     public void testDummy() {
         new CxxTester("problematic/dummy.cpp").showCode().onePass().test();
         // onePass().showCode().showClangAst().showClavaAst()

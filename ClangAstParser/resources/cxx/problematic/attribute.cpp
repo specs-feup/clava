@@ -1,0 +1,1 @@
+struct aligned_struct { short f[3]; } __attribute__ ((aligned (8)));

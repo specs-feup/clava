@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers.clavadata;
 
+import java.util.List;
+
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
@@ -26,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
+import pt.up.fe.specs.clava.ast.lang.Attribute;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -52,7 +55,9 @@ public class DeclDataParser {
         boolean isReferenced = GeneralParsers.parseOneOrZero(lines);
         boolean isInvalidDecl = GeneralParsers.parseOneOrZero(lines);
 
-        return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, clavaData);
+        List<Attribute> attributes = GeneralParsers.parseAttributes(lines);
+
+        return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, attributes, clavaData);
     }
 
     public static NamedDeclData parseNamedDeclData(LineStream lines) {
