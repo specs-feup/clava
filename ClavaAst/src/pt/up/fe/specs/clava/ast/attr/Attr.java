@@ -18,19 +18,27 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 
 public abstract class Attr extends ClavaNode {
 
+    private final AttributeKind kind;
     private final AttrData attrData;
 
-    public Attr(AttrData attrData, ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
+    public Attr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
+            Collection<? extends ClavaNode> children) {
         super(nodeInfo, children);
 
+        this.kind = kind;
         this.attrData = attrData;
     }
 
     public AttrData getAttrData() {
         return attrData;
+    }
+
+    public AttributeKind getKind() {
+        return kind;
     }
 
 }

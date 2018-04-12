@@ -19,20 +19,22 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 
 public class OpenCLKernelAttr extends Attr {
 
     public OpenCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-        this(attrData, nodeInfo, Collections.emptyList());
+        this(AttributeKind.OpenCLKernel, attrData, nodeInfo, Collections.emptyList());
     }
 
-    private OpenCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
-        super(attrData, nodeInfo, children);
+    private OpenCLKernelAttr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
+            Collection<? extends ClavaNode> children) {
+        super(kind, attrData, nodeInfo, children);
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new OpenCLKernelAttr(getAttrData(), getInfo(), Collections.emptyList());
+        return new OpenCLKernelAttr(getKind(), getAttrData(), getInfo(), Collections.emptyList());
     }
 
     @Override

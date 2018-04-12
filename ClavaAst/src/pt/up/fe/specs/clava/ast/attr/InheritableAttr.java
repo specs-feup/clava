@@ -18,11 +18,13 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 
 public abstract class InheritableAttr extends Attr {
 
-    public InheritableAttr(AttrData attrData, ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
-        super(attrData, nodeInfo, children);
+    public InheritableAttr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
+            Collection<? extends ClavaNode> children) {
+        super(kind, attrData, nodeInfo, children);
     }
 
 }

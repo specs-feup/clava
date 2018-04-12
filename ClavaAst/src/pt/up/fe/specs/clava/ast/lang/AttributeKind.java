@@ -77,7 +77,7 @@ public enum AttributeKind implements StringProvider {
     EnableIf,
     ExclusiveTrylockFunction,
     FastCall,
-    Final,
+    Final("final"),
     FlagEnum,
     Flatten,
     Format,
@@ -138,7 +138,7 @@ public enum AttributeKind implements StringProvider {
     ObjCRequiresSuper,
     ObjCReturnsInnerPointer,
     ObjCRootClass,
-    OpenCLKernel,
+    OpenCLKernel("__kernel"),
     OptimizeNone,
     Override,
     Ownership,
@@ -207,9 +207,28 @@ public enum AttributeKind implements StringProvider {
         return ENUM_HELPER.get();
     }
 
+    private final String code;
+
+    private AttributeKind() {
+        code = null;
+    }
+
+    private AttributeKind(String code) {
+        this.code = code;
+    }
+
     @Override
     public String getString() {
-        return name().toLowerCase();
+        // return name().toLowerCase();
+        return name();
+    }
+
+    public String getCode() {
+        if (code == null) {
+            throw new RuntimeException("Code not defined for attribute '" + this + "'");
+        }
+
+        return code;
     }
 
 }
