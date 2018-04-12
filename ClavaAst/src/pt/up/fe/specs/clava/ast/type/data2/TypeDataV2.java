@@ -39,4 +39,18 @@ public class TypeDataV2 extends ClavaData {
 
         return toString(super.toString(), "");
     }
+
+    /**
+     * Copies the current instance and sets the id of the new instance. Returns the copy.
+     */
+    // @Override
+    // public TypeDataV2 setId(String newId) {
+    // TypeDataV2 copy = ClavaData.copy(this);
+    // copy.superSetId(newId);
+    // return copy;
+    // }
+
+    // private void superSetId(String newId) {
+    // super.setId(newId);
+    // }
 }

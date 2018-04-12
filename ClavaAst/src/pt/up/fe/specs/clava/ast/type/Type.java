@@ -28,6 +28,9 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 /**
  * The base class of the type hierarchy.
  *
+ * <p>
+ * Type instances are immutable, setters should return a copy of the node with the modified attribute.
+ *
  * @author JoaoBispo
  *
  */
@@ -400,5 +403,17 @@ public abstract class Type extends ClavaNode {
         return true;
         */
     }
+
+    /*
+    @Override
+    protected void setData(ClavaData data) {
+        throw new RuntimeException(".setData() not allowed for Type nodes, they are considered immutable");
+    }
+    
+    @Override
+    public void setId(String newId) {
+        throw new RuntimeException(".setId() not allowed for Type nodes, they are considered immutable");
+    }
+    */
 
 }

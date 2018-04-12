@@ -404,7 +404,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     public void setId(String newId) {
         if (data != null) {
-            data = data.setId(newId);
+            // data = data.setId(newId);
+            data.setId(newId);
         }
         info.setId(newId);
     }
@@ -433,7 +434,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return data;
     }
 
-    // public void setData(ClavaData data) {
+    // protected void setData(ClavaData data) {
     // this.data = data;
     // }
+
+    /**
+     * TODO: If legacy code is removed, this method becomes obsolete.
+     * 
+     * @return
+     */
+    public boolean hasData() {
+        return data != null;
+    }
 }

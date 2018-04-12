@@ -63,11 +63,17 @@ public abstract class Expr extends ClavaNode implements Typable {
         if (getData() != null) {
             return getData().getType();
         }
+
         return exprData.getType();
     }
 
     @Override
     public void setType(Type type) {
+        if (getData() != null) {
+            getData().setType(type);
+            return;
+        }
+
         this.exprData = new ExprData(type, exprData.getValueKind());
     }
 
@@ -80,6 +86,9 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public ValueKind getValueKind() {
+        if (hasData()) {
+            return getData().getValueKind();
+        }
         return exprData.getValueKind();
     }
 
@@ -89,6 +98,10 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public String toContentString() {
+        if (hasData()) {
+            return super.toContentString();
+        }
+
         return ClavaNode.toContentString(super.toContentString(), "exprData: [" + exprData + "]");
         // return ClavaNode.toContentString(super.toContentString(), "types:" + getExprType().getCode() + ", valueKind:"
         // + getValueKind() + ", exprData: [" + exprData + "]");

@@ -17,6 +17,16 @@ import java.lang.reflect.Constructor;
 
 import pt.up.fe.specs.clava.SourceRange;
 
+/**
+ * Represents the data of a ClavaNode.
+ * 
+ * <p>
+ * ClavaData instances are mutable for convenience of ClavaNodes, however they should only be modified by the ClavaNodes
+ * themselves.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class ClavaData {
 
     // private static final Map<Class<? extends ClavaData>, Supplier<ClavaData>> DATA_CONSTRUCTORS_CACHE = new
@@ -191,11 +201,20 @@ public class ClavaData {
         // By default, do nothing
     }
 
-    public ClavaData setId(String newId) {
-        ClavaData copy = ClavaData.copy(this);
-        copy.id = newId;
-
-        return copy;
+    /**
+     * Sets the id of the current instance.
+     * 
+     * @param newId
+     * @return
+     */
+    // public ClavaData setId(String newId) {
+    public void setId(String newId) {
+        this.id = newId;
+        // return this;
+        // ClavaData copy = ClavaData.copy(this);
+        // copy.id = newId;
+        //
+        // return copy;
     }
 
 }
