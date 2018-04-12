@@ -13,31 +13,39 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.lang.Attribute;
 
 public class DeclDataV2 extends ClavaData {
 
     public static DeclDataV2 empty() {
-        return new DeclDataV2(false, false, false, false, ClavaData.empty());
+        return new DeclDataV2(false, false, false, false, Collections.emptyList(), ClavaData.empty());
     }
 
     private final boolean isImplicit;
     private final boolean isUsed;
     private final boolean isReferenced;
     private final boolean isInvalidDecl;
+    private final List<Attribute> attributes;
 
     public DeclDataV2(boolean isImplicit, boolean isUsed, boolean isReferenced,
-            boolean isInvalidDecl, ClavaData clavaData) {
+            boolean isInvalidDecl, List<Attribute> attributes, ClavaData clavaData) {
+
         super(clavaData);
 
         this.isImplicit = isImplicit;
         this.isUsed = isUsed;
         this.isReferenced = isReferenced;
         this.isInvalidDecl = isInvalidDecl;
+        this.attributes = new ArrayList<>(attributes);
     }
 
     public DeclDataV2(DeclDataV2 data) {
-        this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl, data);
+        this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl, data.attributes, data);
     }
 
     public boolean isImplicit() {
@@ -56,6 +64,10 @@ public class DeclDataV2 extends ClavaData {
         return isInvalidDecl;
     }
 
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
     @Override
     public String toString() {
 
@@ -65,6 +77,7 @@ public class DeclDataV2 extends ClavaData {
         builder.append(", is used: " + isUsed);
         builder.append(", is referenced: " + isReferenced);
         builder.append(", is invalid decl: " + isInvalidDecl);
+        builder.append(", attributes: " + attributes);
 
         return toString(super.toString(), builder.toString());
     }

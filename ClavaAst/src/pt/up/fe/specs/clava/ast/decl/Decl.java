@@ -36,6 +36,18 @@ public abstract class Decl extends ClavaNode {
         this.data = null;
     }
 
+    @Override
+    public DeclDataV2 getData() {
+        return (DeclDataV2) super.getData();
+    }
+
+    /**
+     * Legacy support.
+     * 
+     * @param data
+     * @param info
+     * @param children
+     */
     public Decl(DeclData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
