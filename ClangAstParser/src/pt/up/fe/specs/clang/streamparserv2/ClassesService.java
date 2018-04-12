@@ -139,6 +139,10 @@ public class ClassesService {
             return CLAVA_AST_PACKAGE + ".type." + nodeClassname;
         }
 
+        if (nodeClassname.endsWith("Attr")) {
+            return CLAVA_AST_PACKAGE + ".attr." + nodeClassname;
+        }
+
         // By default, if none of the above, try expression
         return CLAVA_AST_PACKAGE + ".expr." + nodeClassname;
     }

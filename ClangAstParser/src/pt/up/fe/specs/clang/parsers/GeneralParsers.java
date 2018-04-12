@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import pt.up.fe.specs.clava.ast.lang.Attribute;
+import pt.up.fe.specs.clava.ast.lang.AttributeData;
 import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.enums.EnumHelper;
@@ -178,10 +178,27 @@ public class GeneralParsers {
         map.put(key, decoder.apply(lines.nextLine()));
     }
 
-    public static List<Attribute> parseAttributes(LineStream lines) {
+    /**
+     * First line represents the number of elements of the list.
+     * 
+     * @param lines
+     * @return
+     */
+    public static List<String> parseStringList(LineStream lines) {
+        int numElements = parseInt(lines);
+
+        List<String> strings = new ArrayList<>(numElements);
+        for (int i = 0; i < numElements; i++) {
+            strings.add(lines.nextLine());
+        }
+
+        return strings;
+    }
+
+    public static List<AttributeData> parseAttributes(LineStream lines) {
         int numAttrs = parseInt(lines);
 
-        List<Attribute> attributes = new ArrayList<>(numAttrs);
+        List<AttributeData> attributes = new ArrayList<>(numAttrs);
         for (int i = 0; i < numAttrs; i++) {
             AttributeKind kind = GeneralParsers.enumFromName(AttributeKind.getHelper(), lines);
             boolean isImplicit = parseOneOrZero(lines);
@@ -189,7 +206,7 @@ public class GeneralParsers {
             boolean isLateParsed = parseOneOrZero(lines);
             boolean isPackExpansion = parseOneOrZero(lines);
 
-            attributes.add(new Attribute(kind, isImplicit, isInherited, isLateParsed, isPackExpansion));
+            // attributes.add(new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion));
         }
 
         return attributes;

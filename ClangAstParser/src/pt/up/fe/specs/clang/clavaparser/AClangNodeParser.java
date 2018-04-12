@@ -40,7 +40,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.attr.Attr;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
@@ -497,7 +497,7 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         */
 
         // Remove attributes
-        List<Attr> attributes = SpecsCollections.pop(children, Attr.class);
+        List<Attribute> attributes = SpecsCollections.pop(children, Attribute.class);
 
         RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isAnonymous, isModulePrivate,
                 isCompleteDefinition, attributes);

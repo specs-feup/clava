@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.SimpleSnippetParser;
+import pt.up.fe.specs.clang.parsers.clavadata.AttrDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.ExprDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.StmtDataParser;
@@ -95,6 +96,10 @@ public class ClavaDataParser implements LineStreamParser {
         STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
         STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
         STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
+
+        // ATTRIBUTES
+        STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
+
     }
 
     private static Map<String, Function<LineStream, ClavaData>> buildDataParsers(DataStore clavaData) {
