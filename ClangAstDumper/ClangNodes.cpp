@@ -3,6 +3,7 @@
 //
 
 #include "ClangNodes.h"
+#include "ClangEnums.h"
 
 #include "clang/Lex/Lexer.h"
 
@@ -124,6 +125,21 @@ void clava::dump(const std::string& string) {
 void clava::dump(const char string[]) {
     dump(std::string(string));
 }
+
+void clava::dump(const std::vector<Attr*> &attributes) {
+    // Number of attributes
+    dump((unsigned int)attributes.size());
+
+    // Dump each attribute
+    for(auto attr : attributes) {
+        dump(clava::ATTRIBUTES[attr->getKind()]);
+        dump(attr->isImplicit());
+        dump(attr->isInherited());
+        dump(attr->isLateParsed());
+        dump(attr->isPackExpansion());
+    }
+}
+
 
 void clava::dump(const QualType& type, int id) {
     if(type.isNull()) {

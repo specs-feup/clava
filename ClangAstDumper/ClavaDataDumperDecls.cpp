@@ -72,9 +72,13 @@ void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     clava::dump(D->isReferenced());
     clava::dump(D->isInvalidDecl());
 
-    // TODO: Attributes?
-//    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E; ++I)
-
+    // Attributes
+    std::vector<Attr*> attributes;
+    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E;
+         ++I) {
+        attributes.push_back(*I);
+    }
+    clava::dump(attributes);
 
 }
 

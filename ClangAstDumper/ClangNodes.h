@@ -12,6 +12,7 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 
 using namespace clang;
 
@@ -80,7 +81,9 @@ namespace clava {
     void dump(unsigned int integer) ;
     void dump(const std::string& string);
     void dump(const char string[]);
+    void dump(const std::vector<Attr*> &attributes);
     void dump(const QualType& type, int id);
+
 
 }
 
