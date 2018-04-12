@@ -109,6 +109,10 @@ void ClangAstDumper::VisitDeclTop(const Decl *Node) {
     ConstDeclVisitor::Visit(Node);
 }
 
+void ClangAstDumper::VisitAttrTop(const Attr *Node) {
+    VisitAttr(Node);
+}
+
 //void ClangAstDumper::log(const char* name, const void* addr) {
 void ClangAstDumper::log(std::string name, const void* addr) {
 #ifdef DEBUG
@@ -128,6 +132,9 @@ void ClangAstDumper::log(const Type* T) {
     log(clava::getClassName(T), T);
 }
 
+void ClangAstDumper::log(const Attr* A) {
+    log(clava::getClassName(A), A);
+}
 
 
 std::string ClangAstDumper::loc2str(SourceLocation locStart, SourceLocation locEnd) {
@@ -256,6 +263,14 @@ void ClangAstDumper::dumpTopLevelType(const QualType &type) {
     llvm::errs() << TOP_LEVEL_TYPES << "\n";
     clava::dump(type, id);
 }
+
+
+void ClangAstDumper::dumpTopLevelAttr(const Attr *attr) {
+    llvm::errs() << TOP_LEVEL_TYPES << "\n";
+    llvm::errs() << getId(attr) << "\n";
+}
+
+
 
 void ClangAstDumper::emptyChildren(const void *pointer) {
     std::vector<std::string> noChildren;

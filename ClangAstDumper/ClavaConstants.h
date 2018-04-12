@@ -67,9 +67,18 @@ namespace clava {
     };
 
 
+    /**
+     * Represents attribute node classes
+    */
+    enum class AttrNode {
+        ATTR
+    };
+
+
     const std::string getName(const DeclNode D);
     const std::string getName(const StmtNode S);
     const std::string getName(const TypeNode T);
+    const std::string getName(const AttrNode A);
 
 
 }

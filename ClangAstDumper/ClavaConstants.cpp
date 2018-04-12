@@ -41,7 +41,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::FLOATING_LITERAL: return "FloatingLiteral";
 
         default: {
-            std::string enumValue = std::to_string(static_cast<std::underlying_type<DeclNode>::type>(stmtNode));
+            std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
             throw std::invalid_argument("ClavaConstants::getDataName(StmtNode):: Case not implemented, '" + enumValue + "'");
         }
     }
@@ -54,8 +54,19 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::BUILTIN_TYPE: return "BuiltinType";
 
         default: {
-            std::string enumValue = std::to_string(static_cast<std::underlying_type<DeclNode>::type>(typeNode));
+            std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));
             throw std::invalid_argument("ClavaConstants::getDataName(TypeNode):: Case not implemented, '" + enumValue + "'");
+        }
+    }
+}
+
+const std::string clava::getName(const AttrNode attrNode) {
+    switch(attrNode) {
+        case clava::AttrNode::ATTR: return "Attribute";
+
+        default: {
+            std::string enumValue = std::to_string(static_cast<std::underlying_type<AttrNode>::type>(attrNode));
+            throw std::invalid_argument("ClavaConstants::getDataName(AttrNode):: Case not implemented, '" + enumValue + "'");
         }
     }
 }

@@ -39,8 +39,7 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
 
     switch(declNode) {
         case clava::DeclNode::DECL:
-            // DO NOTHING, WILL SHOW WARNING ABOUT NO CHILDREN ASSOCIATED
-            return;
+            VisitDeclChildren(D, visitedChildren); break;
         case clava::DeclNode::VALUE_DECL:
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
@@ -58,7 +57,20 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
 }
 
 
+void ClangAstDumper::VisitDeclChildren(const Decl *D, std::vector<std::string> &children) {
+    // Visit attributes
+    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E;
+         ++I) {
+        Attr* attr = *I;
+        VisitAttrTop(attr);
+        dumpTopLevelAttr(attr);
+    }
+}
+
 void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitDeclChildren(D, children);
+
     // Visit type
     VisitTypeTop(D->getType());
     dumpTopLevelType(D->getType());
@@ -107,7 +119,8 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
 
 
 void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children) {
-
+    // Hierarchy
+    VisitDeclChildren(D, children);
 }
 
 

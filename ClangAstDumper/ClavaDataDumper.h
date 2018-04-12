@@ -31,11 +31,14 @@ using namespace clang;
 
 namespace clava {
 
-
+    /**
+     * Maps what kind of Data dumper each node should use
+     */
     extern const std::map<const std::string, clava::DeclNode > DECL_DATA_MAP;
     extern const std::map<const std::string, clava::StmtNode > STMT_DATA_MAP;
     extern const std::map<const std::string, clava::StmtNode > EXPR_DATA_MAP;
     extern const std::map<const std::string, clava::TypeNode > TYPE_DATA_MAP;
+    extern const std::map<const std::string, clava::AttrNode > ATTR_DATA_MAP;
 
     /**
     * Dumps information about each node
@@ -59,10 +62,12 @@ namespace clava {
         void dump(const Expr* E);
         void dump(const Type* T);
         void dump(const QualType& T);
+        void dump(const Attr* A);
 
         void dump(clava::DeclNode declNode, const Decl* D);
         void dump(clava::StmtNode stmtNode, const Stmt* S);
         void dump(clava::TypeNode typeNode, const Type* T);
+        void dump(clava::AttrNode attrNode, const Attr* A);
 
         //void DumpHeader(const Decl* D);
         //void DumpHeader(const Stmt* S);
@@ -117,9 +122,14 @@ namespace clava {
         void DumpBuiltinTypeData(const BuiltinType *T);
 
 
-            const std::string getDataName(DeclNode node);
+        // ATTRS
+
+        void DumpAttrData(const Attr *A);
+
+        const std::string getDataName(DeclNode node);
         const std::string getDataName(StmtNode node);
         const std::string getDataName(TypeNode node);
+        const std::string getDataName(AttrNode node);
         const std::string getDataName(std::string nodeName);
 
     };

@@ -40,6 +40,14 @@ namespace clava {
     const std::string getClassName(const Type* T);
 
     /**
+     * Returns the name of the class of the given Attribute.
+     *
+     * @param A
+     * @return
+     */
+    const std::string getClassName(const Attr* A);
+
+    /**
      * Dumps the source range.
      *
      * @param Context
@@ -81,7 +89,8 @@ namespace clava {
     void dump(unsigned int integer) ;
     void dump(const std::string& string);
     void dump(const char string[]);
-    void dump(const std::vector<Attr*> &attributes);
+    void dump(const std::vector<std::string> &strings);
+    void dump(const std::vector<Attr*> &attributes, const int id);
     void dump(const QualType& type, int id);
 
 

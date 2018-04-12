@@ -29,6 +29,7 @@ private:
     std::set<const void*> seenTypes;
     std::set<const Stmt*> seenStmts;
     std::set<const Decl*> seenDecls;
+    std::set<const Attr*> seenAttrs;
 
     std::set<const CXXCtorInitializer*> seenInits;
 
@@ -38,6 +39,7 @@ private:
     static const std::map<const std::string, clava::StmtNode > STMT_CHILDREN_MAP;
     static const std::map<const std::string, clava::StmtNode > EXPR_CHILDREN_MAP;
     static const std::map<const std::string, clava::TypeNode > TYPE_CHILDREN_MAP;
+    static const std::map<const std::string, clava::AttrNode > ATTR_CHILDREN_MAP;
 
 
 public:
@@ -47,6 +49,7 @@ public:
     void VisitTypeTop(const QualType& T);
     void VisitStmtTop(const Stmt *Node);
     void VisitDeclTop(const Decl *Node);
+    void VisitAttrTop(const Attr *Node);
 
 
     /*
@@ -99,6 +102,7 @@ public:
 
 
 
+
     /*
      * DELCS
      */
@@ -118,6 +122,10 @@ public:
     void VisitParmVarDecl(const ParmVarDecl *D);
     void VisitTypedefDecl(const TypedefDecl *D);
 
+    /*
+     * ATTR
+     */
+    void VisitAttr(const Attr* A);
 
     // Utility methods
     std::string loc2str(SourceLocation locStart, SourceLocation locEnd);
@@ -129,6 +137,7 @@ public:
     void log(const Decl* D);
     void log(const Stmt* S);
     void log(const Type* T);
+    void log(const Attr* A);
 
 
 
@@ -142,6 +151,7 @@ private:
     void visitChildrenAndData(const Stmt *S);
     void visitChildrenAndData(const Expr *E);
     void visitChildrenAndData(const Type *T);
+    void visitChildrenAndData(const Attr *A);
 
 
     // Children visitors
@@ -151,14 +161,17 @@ private:
     void visitChildren(const Stmt* S);
     void visitChildren(const Expr* E);
     void visitChildren(const Type* T);
+    void visitChildren(const Attr* A);
 
     void visitChildren(clava::DeclNode declNode, const Decl* D);
     void visitChildren(clava::StmtNode stmtNode, const Stmt* S);
     void visitChildren(clava::TypeNode typeNode, const Type* T);
     void visitChildren(const QualType &T);
+    void visitChildren(clava::AttrNode attrNode, const Attr* A);
     void emptyChildren(const void *pointer);
 
     // Children visitors for Decls
+    void VisitDeclChildren(const Decl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
@@ -180,6 +193,7 @@ private:
     // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);
     void dumpTopLevelType(const QualType &type);
+    void dumpTopLevelAttr(const Attr *attr);
 
 
     // Children visitors for Types
@@ -197,7 +211,7 @@ private:
     bool dumpType(const QualType& type);
     bool dumpStmt(const Stmt* stmtAddr);
     bool dumpDecl(const Decl* declAddr);
-
+    bool dumpAttr(const Attr* attrAddr);
 
     /* EXTRA */
     void dumpCXXCtorInitializer(const CXXCtorInitializer *Init);

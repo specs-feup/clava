@@ -88,6 +88,11 @@ const std::string clava::ClavaDataDumper::getDataName(TypeNode node) {
     return getDataName(clava::getName(node));
 }
 
+const std::string clava::ClavaDataDumper::getDataName(AttrNode node) {
+    return getDataName(clava::getName(node));
+}
+
+
 /**
 * Names of DeclData dumpers
 */

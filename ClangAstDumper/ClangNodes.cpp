@@ -24,6 +24,11 @@ const std::string clava::getClassName(const Type* T) {
     return kindName + "Type";
 }
 
+const std::string clava::getClassName(const Attr* A) {
+    const std::string kindName =  clava::ATTRIBUTES[A->getKind()];
+    return kindName + "Attr";
+}
+
 
 void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, SourceLocation endLoc) {
     //llvm::errs() << "<SourceRange Dump>\n";
@@ -126,10 +131,29 @@ void clava::dump(const char string[]) {
     dump(std::string(string));
 }
 
-void clava::dump(const std::vector<Attr*> &attributes) {
+void clava::dump(const std::vector<std::string> &strings) {
+    // Number of attributes
+    dump((unsigned int)strings.size());
+
+    // Dump each attribute address
+    for(auto string : strings) {
+        dump(string);
+    }
+}
+
+void clava::dump(const std::vector<Attr*> &attributes, const int id) {
     // Number of attributes
     dump((unsigned int)attributes.size());
 
+    // Dump each attribute address
+    for(auto attr : attributes) {
+        dump(clava::getId(attr, id));
+        dump(attr->isImplicit());
+        dump(attr->isInherited());
+        dump(attr->isLateParsed());
+        dump(attr->isPackExpansion());
+    }
+/*
     // Dump each attribute
     for(auto attr : attributes) {
         dump(clava::ATTRIBUTES[attr->getKind()]);
@@ -138,6 +162,7 @@ void clava::dump(const std::vector<Attr*> &attributes) {
         dump(attr->isLateParsed());
         dump(attr->isPackExpansion());
     }
+*/
 }
 
 

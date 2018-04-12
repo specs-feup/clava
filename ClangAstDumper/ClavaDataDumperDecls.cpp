@@ -72,14 +72,24 @@ void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     clava::dump(D->isReferenced());
     clava::dump(D->isInvalidDecl());
 
+
     // Attributes
+    std::vector<std::string> attributesIds;
+    for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E;
+         ++I) {
+        attributesIds.push_back(getId(*I));
+    }
+    clava::dump(attributesIds);
+
+    // Attributes
+    /*
     std::vector<Attr*> attributes;
     for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E;
          ++I) {
         attributes.push_back(*I);
     }
-    clava::dump(attributes);
-
+    clava::dump(attributes, id);
+*/
 }
 
 void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
