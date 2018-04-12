@@ -21,7 +21,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
 import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 
-public class OpenCLKernelAttr extends Attr {
+public class OpenCLKernelAttr extends Attribute {
 
     public OpenCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
         this(AttributeKind.OpenCLKernel, attrData, nodeInfo, Collections.emptyList());

@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.lang;
 
-public class Attribute {
+import pt.up.fe.specs.clava.ast.ClavaData;
+
+public class AttributeData extends ClavaData {
 
     private final AttributeKind kind;
     private final boolean isImplicit;
@@ -21,8 +23,10 @@ public class Attribute {
     private final boolean isLateParsed;
     private final boolean isPackExpansion;
 
-    public Attribute(AttributeKind kind, boolean isImplicit, boolean isInherited, boolean isLateParsed,
-            boolean isPackExpansion) {
+    public AttributeData(AttributeKind kind, boolean isImplicit, boolean isInherited, boolean isLateParsed,
+            boolean isPackExpansion, ClavaData data) {
+
+        super(data);
 
         this.kind = kind;
         this.isImplicit = isImplicit;

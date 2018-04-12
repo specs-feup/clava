@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 SPeCS.
+ * Copyright 2018 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -16,29 +16,12 @@ package pt.up.fe.specs.clava.ast.attr;
 import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
-import pt.up.fe.specs.clava.ast.lang.AttributeKind;
+import pt.up.fe.specs.clava.ast.lang.AttributeData;
 
-public abstract class Attr extends ClavaNode {
+public class AlignedAttr extends Attribute {
 
-    private final AttributeKind kind;
-    private final AttrData attrData;
-
-    public Attr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
-            Collection<? extends ClavaNode> children) {
-        super(nodeInfo, children);
-
-        this.kind = kind;
-        this.attrData = attrData;
-    }
-
-    public AttrData getAttrData() {
-        return attrData;
-    }
-
-    public AttributeKind getKind() {
-        return kind;
+    public AlignedAttr(AttributeData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
 }

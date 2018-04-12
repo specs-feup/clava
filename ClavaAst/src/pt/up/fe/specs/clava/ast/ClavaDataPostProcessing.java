@@ -16,9 +16,14 @@ package pt.up.fe.specs.clava.ast;
 import java.util.Collections;
 import java.util.Map;
 
+import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
+import pt.up.fe.specs.clava.ast.lang.AttributeData;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
@@ -59,6 +64,21 @@ public class ClavaDataPostProcessing {
                 () -> "Expected id '" + parsedTypeId + "' to be a Type, is a " + node.getClass().getSimpleName());
 
         return (Type) node;
+    }
+
+    public Attribute getAttr(String parsedAttrId) {
+        Preconditions.checkArgument(!NULLPRT.equals(parsedAttrId), "Did not expect 'nullptr'");
+
+        ClavaNode node = getClavaNode(parsedAttrId);
+
+        if (node instanceof UnsupportedNode) {
+            return new DummyAttr((AttributeData) node.getData(), Collections.emptyList());
+        }
+
+        SpecsCheck.checkArgument(node instanceof Attribute,
+                () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
+
+        return (Attribute) node;
     }
 
 }

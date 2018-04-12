@@ -20,7 +20,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttrData;
 import pt.up.fe.specs.clava.ast.lang.AttributeKind;
 
-public class GenericAttribute extends Attr {
+public class GenericAttribute extends Attribute {
 
     public GenericAttribute(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
             Collection<? extends ClavaNode> children) {

@@ -16,7 +16,7 @@ package pt.up.fe.specs.clava.ast.decl.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.up.fe.specs.clava.ast.attr.Attr;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.language.TagKind;
 
 public class RecordDeclData {
@@ -26,10 +26,10 @@ public class RecordDeclData {
     private final boolean isAnonymous;
     private final boolean isModulePrivate;
     private final boolean isCompleteDefinition;
-    private final List<Attr> attributes;
+    private final List<Attribute> attributes;
 
     public RecordDeclData(TagKind recordKind, String recordName, boolean isAnonymous, boolean isModulePrivate,
-            boolean isCompleteDefinition, List<Attr> attributes) {
+            boolean isCompleteDefinition, List<Attribute> attributes) {
 
         this.recordKind = recordKind;
         this.recordName = recordName;
@@ -64,7 +64,7 @@ public class RecordDeclData {
         return isCompleteDefinition;
     }
 
-    public List<Attr> getAttributes() {
+    public List<Attribute> getAttributes() {
         return attributes;
     }
 
