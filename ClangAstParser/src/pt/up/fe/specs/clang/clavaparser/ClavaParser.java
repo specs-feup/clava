@@ -389,6 +389,10 @@ public class ClavaParser implements AutoCloseable {
         converter.put("InlineCommandComment", InlineCommandCommentParser::new);
 
         /* attributes */
+        // for (AttributeKind kind : AttributeKind.getHelper().values()) {
+        // converter.put(kind.name() + "Attr", GenericAttrParser::new);
+        // }
+
         converter.put("FinalAttr", FinalAttrParser::new);
         converter.put("OpenCLKernelAttr", OpenCLKernelAttrParser::new);
 
