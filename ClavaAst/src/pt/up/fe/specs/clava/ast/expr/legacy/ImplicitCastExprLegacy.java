@@ -11,15 +11,17 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.ast.expr.legacy;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 
@@ -29,35 +31,44 @@ import pt.up.fe.specs.clava.language.CastKind;
  * @author JoaoBispo
  *
  */
-public class ImplicitCastExpr extends CastExpr {
+public class ImplicitCastExprLegacy extends ImplicitCastExpr {
 
-    public ImplicitCastExpr(CastExprData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
+    public ImplicitCastExprLegacy(CastKind castKind, ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+        super(castKind, exprData, info, Arrays.asList(subExpr));
     }
 
     /**
-     * Legacy support.
+     * Constructor for node copy.
      * 
      * @param castKind
-     * @param exprData
-     * @param info
-     * @param subExpr
+     * @param destinationTypes
+     * @param location
      */
-    protected ImplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    private ImplicitCastExprLegacy(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
 
         super(castKind, exprData, info, children);
     }
 
-    // @Override
-    // public Expr getSubExpr() {
-    // return getChild(Expr.class, 0);
-    // }
+    @Override
+    protected ClavaNode copyPrivate() {
+        return new ImplicitCastExprLegacy(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
+    }
+
+    @Override
+    public Expr getSubExpr() {
+        return getChild(Expr.class, 0);
+    }
 
     @Override
     public String getCode() {
         // The code of its only child
         return getSubExpr().getCode();
+    }
+
+    @Override
+    public String toContentString() {
+        return super.toContentString() + " (type:" + getExprType().getCode() + ", CastKind:" + getCastKind() + ")";
     }
 
     /**

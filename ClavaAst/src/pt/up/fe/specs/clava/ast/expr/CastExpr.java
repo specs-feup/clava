@@ -19,6 +19,7 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
@@ -33,9 +34,28 @@ public abstract class CastExpr extends Expr {
 
     private final CastKind castKind;
 
+    public CastExpr(CastExprData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.castKind = null;
+    }
+
+    /**
+     * Legacy support.
+     * 
+     * @param castKind
+     * @param exprData
+     * @param info
+     * @param subExpr
+     */
     public CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
         this(castKind, exprData, info, Arrays.asList(subExpr));
+    }
+
+    @Override
+    public CastExprData getData() {
+        return (CastExprData) super.getData();
     }
 
     // protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
@@ -68,6 +88,9 @@ public abstract class CastExpr extends Expr {
     }
 
     public CastKind getCastKind() {
+        if (hasData()) {
+            return getData().getCastKind();
+        }
         return castKind;
     }
 

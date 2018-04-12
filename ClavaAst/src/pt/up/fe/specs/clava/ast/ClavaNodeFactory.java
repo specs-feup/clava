@@ -148,6 +148,7 @@ import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
@@ -965,7 +966,7 @@ public class ClavaNodeFactory {
     public static ImplicitCastExpr exprImplicitCast(CastKind castKind, ExprData exprData,
             ClavaNodeInfo info, Expr subExpr) {
 
-        return new ImplicitCastExpr(castKind, exprData, info, subExpr);
+        return new ImplicitCastExprLegacy(castKind, exprData, info, subExpr);
     }
 
     public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
