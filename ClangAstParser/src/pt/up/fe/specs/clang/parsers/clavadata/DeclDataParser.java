@@ -39,6 +39,14 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class DeclDataParser {
 
+    // private final DataStore config;
+    // private final Map<String, ClavaData> parsedNodes;
+    //
+    // public DeclDataParser(DataStore config) {
+    // this.config = config;
+    // parsedNodes = config.get(ClavaDataParser.getParsedNodesKey());
+    // }
+
     // public static <D extends ClavaData> BiConsumer<LineStream, Map<String, D>> parseNodeData(
     // Function<LineStream, D> dataParser) {
     //
@@ -55,7 +63,14 @@ public class DeclDataParser {
         boolean isInvalidDecl = GeneralParsers.parseOneOrZero(lines);
 
         // List<Attribute> attributes = GeneralParsers.parseAttributes(lines);
+
+        // GeneralParsers.parseStringList(lines).stream()
+        // .map(attrId -> )
         List<String> attributesIds = GeneralParsers.parseStringList(lines);
+
+        // for (String attributeId : attributesIds) {
+        // System.out.println("ATTRIBUTE:" + config.get(ClavaDataParser.getParsedNodesKey()).get(attributeId));
+        // }
 
         return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, attributesIds, clavaData);
     }

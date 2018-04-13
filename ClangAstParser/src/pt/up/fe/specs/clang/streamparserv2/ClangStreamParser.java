@@ -33,6 +33,7 @@ import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
 import pt.up.fe.specs.clang.parsers.IncludesParser;
+import pt.up.fe.specs.clang.parsers.TopLevelAttributesParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clang.parsers.TopLevelTypesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
@@ -66,11 +67,14 @@ public class ClangStreamParser {
     private final Map<String, ClavaNode> parsedNodes;
     private final ClassesService classesService;
 
+    private final Set<String> missingConstructors;
+
     public ClangStreamParser(DataStore data) {
         this.data = data;
 
         classesService = new ClassesService(new HashMap<>());
         this.parsedNodes = new HashMap<>();
+        this.missingConstructors = new HashSet<>();
     }
 
     public App parse() {
@@ -78,6 +82,7 @@ public class ClangStreamParser {
         Set<String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
         // MultiMap<String, String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
         Set<String> topLevelTypes = data.get(TopLevelTypesParser.getDataKey());
+        Set<String> topLevelAttributes = data.get(TopLevelAttributesParser.getDataKey());
         // Separate into translation units?
 
         // Parse top-level decls
@@ -95,6 +100,9 @@ public class ClangStreamParser {
 
         // Parse top-level types
         topLevelTypes.stream().forEach(this::parse);
+
+        // Parse top-level attributes
+        topLevelAttributes.stream().forEach(this::parse);
 
         // After all ClavaNodes are created, apply post-processing
         ClavaDataPostProcessing postData = new ClavaDataPostProcessing(parsedNodes);
@@ -174,8 +182,12 @@ public class ClangStreamParser {
                 clavaData.getClass());
 
         if (builder == null) {
-            SpecsLogs.msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
-                    + clavaData.getClass().getSimpleName() + " data, Collection<? extends ClavaNode> children)'");
+            if (!missingConstructors.contains(classname)) {
+                missingConstructors.add(classname);
+                SpecsLogs.msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
+                        + clavaData.getClass().getSimpleName() + " data, Collection<? extends ClavaNode> children)'");
+            }
+
             return new UnsupportedNode(classname, clavaData, children);
         }
 
@@ -358,6 +370,7 @@ public class ClangStreamParser {
         // For each enty in MultiMap, create a Translation Unit
         List<TranslationUnit> tUnits = new ArrayList<>();
         for (String path : declarations.keySet()) {
+
             // Set<Decl> decls = new LinkedHashSet<>();
             List<Decl> decls = new ArrayList<>();
 
@@ -376,6 +389,7 @@ public class ClangStreamParser {
 
             // Get corresponding includes
             File declFile = new File(path);
+
             List<Include> sourceIncludes = includesMap.get(SpecsIo.getCanonicalPath(declFile));
 
             if (sourceIncludes == null) {
@@ -386,7 +400,7 @@ public class ClangStreamParser {
 
             // Only add includes that are not in the line number range of the declarations
             if (!uniqueIncludes.isEmpty()) {
-                Set<Integer> lineNumbers = getLineNumbers(declNodes);
+                Set<Integer> lineNumbers = getLineNumbers(declNodes, declFile);
 
                 for (Include include : uniqueIncludes) {
 
@@ -417,10 +431,20 @@ public class ClangStreamParser {
         return app;
     }
 
-    private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes) {
+    private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes, File file) {
         Set<Integer> lineNumbers = new HashSet<>();
 
+        // Only add lines that are part of the same file
         for (ClavaNode node : nodes) {
+
+            if (!file.equals(node.getLocation().getStartFile())) {
+                continue;
+            }
+
+            if (!file.equals(node.getLocation().getEndFile())) {
+                continue;
+            }
+
             int startLine = node.getLocation().getStartLine();
             int endLine = node.getLocation().getEndLine();
 
