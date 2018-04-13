@@ -16,11 +16,11 @@ package pt.up.fe.specs.clava.ast.attr;
 import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
 
-public abstract class AlignedAttr extends Attribute {
+public class AlignedExprAttr extends AlignedAttr {
 
-    public AlignedAttr(AlignedAttrData data, Collection<? extends ClavaNode> children) {
+    public AlignedExprAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

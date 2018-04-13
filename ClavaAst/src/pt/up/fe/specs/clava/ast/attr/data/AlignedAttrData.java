@@ -11,17 +11,24 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.attr;
+package pt.up.fe.specs.clava.ast.attr.data;
 
-import java.util.Collection;
+public class AlignedAttrData extends AttributeData {
 
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
+    private final String spelling;
 
-public abstract class AlignedAttr extends Attribute {
+    public AlignedAttrData(String spelling, AttributeData data) {
+        super(data);
 
-    public AlignedAttr(AlignedAttrData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
+        this.spelling = spelling;
+    }
+
+    public AlignedAttrData(AlignedAttrData data) {
+        this(data.spelling, data);
+    }
+
+    public String getSpelling() {
+        return spelling;
     }
 
 }
