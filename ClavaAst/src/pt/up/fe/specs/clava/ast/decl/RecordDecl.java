@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -138,10 +139,24 @@ public class RecordDecl extends TagDecl {
         code.append(bases);
 
         // Add attributes
-        recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
+        // recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
+
+        String attributesCode = recordDeclData.getAttributes().stream()
+                .map(Attribute::getCode)
+                .collect(Collectors.joining(" "));
+
+        boolean isCxx = getApp().getStandard().isCxx();
+        // If C++, put attributes before definition
+        if (!attributesCode.isEmpty() && isCxx) {
+            code.append(" ").append(attributesCode);
+        }
 
         if (recordDeclData.isCompleteDefinition()) {
             code.append(getDefinitionCode());
+        }
+
+        if (!attributesCode.isEmpty() && !isCxx) {
+            code.append(" ").append(attributesCode);
         }
 
         code.append(";" + ln());

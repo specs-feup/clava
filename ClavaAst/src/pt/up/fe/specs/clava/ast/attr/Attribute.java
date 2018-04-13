@@ -68,4 +68,7 @@ public abstract class Attribute extends ClavaNode {
         return kind;
     }
 
+    protected String getAttributeCode(String attrValue) {
+        return "__attribute__ ((" + attrValue + "))";
+    }
 }

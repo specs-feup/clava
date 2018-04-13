@@ -71,4 +71,12 @@ public class AlignedAttrData extends AttributeData {
 
     }
 
+    public String getCode() {
+        if (isExpr) {
+            return getExpr().getCode();
+        } else {
+            return getType().getCode();
+        }
+    }
+
 }

@@ -24,4 +24,15 @@ public class AlignedAttr extends Attribute {
         super(data, children);
     }
 
+    @Override
+    public AlignedAttrData getData() {
+        return (AlignedAttrData) super.getData();
+    }
+
+    @Override
+    public String getCode() {
+        String attrValue = "aligned (" + getData().getCode() + ")";
+
+        return getAttributeCode(attrValue);
+    }
 }
