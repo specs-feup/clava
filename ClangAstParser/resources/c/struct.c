@@ -39,7 +39,5 @@ union {
 
 typedef struct { int ch1; float ch2; } loic_struct;
 
-/*struct aligned_struct { short f[3]; } __attribute__ ((aligned (8))); */
-
 int main() {
 }
