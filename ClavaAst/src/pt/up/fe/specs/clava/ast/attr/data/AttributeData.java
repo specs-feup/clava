@@ -18,6 +18,14 @@ import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 
 public class AttributeData extends ClavaData {
 
+    public static AttributeData empty(ClavaData data) {
+        if (data instanceof AttributeData) {
+            return (AttributeData) data;
+        }
+
+        return new AttributeData(null, false, false, false, false, data);
+    }
+
     private final AttributeKind kind;
     private final boolean isImplicit;
     private final boolean isInherited;
@@ -34,6 +42,10 @@ public class AttributeData extends ClavaData {
         this.isInherited = isInherited;
         this.isLateParsed = isLateParsed;
         this.isPackExpansion = isPackExpansion;
+    }
+
+    public AttributeData(AttributeData data) {
+        this(data.kind, data.isImplicit, data.isInherited, data.isLateParsed, data.isPackExpansion, data);
     }
 
     public AttributeKind getKind() {

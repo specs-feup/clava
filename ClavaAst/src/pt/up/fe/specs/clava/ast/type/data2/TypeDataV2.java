@@ -22,6 +22,10 @@ public class TypeDataV2 extends ClavaData {
     // }
 
     public static TypeDataV2 empty(ClavaData data) {
+        if (data instanceof TypeDataV2) {
+            return (TypeDataV2) data;
+        }
+
         return new TypeDataV2(data);
     }
 

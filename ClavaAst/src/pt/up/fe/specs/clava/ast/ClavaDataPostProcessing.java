@@ -23,8 +23,11 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.expr.DummyExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
-import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -54,7 +57,8 @@ public class ClavaDataPostProcessing {
         ClavaNode node = getClavaNode(parsedTypeId);
 
         if (node instanceof UnsupportedNode) {
-            return new NullType(TypeDataV2.empty(node.getData()), Collections.emptyList());
+            return new DummyType(((UnsupportedNode) node).getClassname(), TypeDataV2.empty(node.getData()),
+                    Collections.emptyList());
             // NullType nullType = ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
             // nullType.setData(node.getData());
             // return nullType;
@@ -72,13 +76,32 @@ public class ClavaDataPostProcessing {
         ClavaNode node = getClavaNode(parsedAttrId);
 
         if (node instanceof UnsupportedNode) {
-            return new DummyAttr((AttributeData) node.getData(), Collections.emptyList());
+            return new DummyAttr(((UnsupportedNode) node).getClassname(), AttributeData.empty(node.getData()),
+                    Collections.emptyList());
         }
 
         SpecsCheck.checkArgument(node instanceof Attribute,
                 () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
 
         return (Attribute) node;
+    }
+
+    public Expr getExpr(String parsedExprId) {
+        if (NULLPRT.equals(parsedExprId)) {
+            return ClavaNodeFactory.nullExpr();
+        }
+
+        ClavaNode node = getClavaNode(parsedExprId);
+
+        if (node instanceof UnsupportedNode) {
+            return new DummyExpr(((UnsupportedNode) node).getClassname(), ExprDataV2.empty(node.getData()),
+                    Collections.emptyList());
+        }
+
+        SpecsCheck.checkArgument(node instanceof Expr,
+                () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
+
+        return (Expr) node;
     }
 
 }

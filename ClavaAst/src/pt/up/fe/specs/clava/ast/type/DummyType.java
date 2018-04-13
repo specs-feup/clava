@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 
 /**
  * Dummy type, for testing purposes.
@@ -31,6 +32,12 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
 public class DummyType extends Type implements DummyNode {
 
     private final String content;
+
+    public DummyType(String classname, TypeDataV2 data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.content = classname;
+    }
 
     public DummyType(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(new TypeData(content), info, children);

@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 
 /**
  * Dummy statement, for testing purposes.
@@ -31,6 +32,12 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 public class DummyExpr extends Expr implements DummyNode {
 
     private final String content;
+
+    public DummyExpr(String classname, ExprDataV2 data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.content = classname;
+    }
 
     public DummyExpr(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         // Using RVALUE as default

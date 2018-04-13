@@ -28,17 +28,21 @@ import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
  */
 public class DummyAttr extends Attribute implements DummyNode {
 
-    public DummyAttr(AttributeData data, Collection<? extends ClavaNode> children) {
+    private final String classname;
+
+    public DummyAttr(String classname, AttributeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
+
+        this.classname = classname;
     }
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + getData().getKind() + ")";
+        return super.getNodeName() + " (" + classname + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy attribute'" + getData().getKind() + "' */";
+        return "/* Dummy attribute'" + classname + "' */";
     }
 
     @Override
