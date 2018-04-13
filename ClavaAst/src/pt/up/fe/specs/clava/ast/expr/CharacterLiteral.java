@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class CharacterLiteral extends Literal {
 
@@ -60,7 +61,23 @@ public class CharacterLiteral extends Literal {
 
     @Override
     public String getCode() {
-        return getData().getSourceLiteral();
+        String sourceLiteral = getData().getSourceLiteral();
+
+        // If source literal starts with ', then just return
+        if (sourceLiteral.startsWith("'")) {
+            return sourceLiteral;
+        }
+
+        if (sourceLiteral.equals("u") || sourceLiteral.equals("U")) {
+            return getCodeFromUnicode(sourceLiteral);
+        }
+
+        throw new RuntimeException("Case not supported for source literal '" + sourceLiteral + "'");
+    }
+
+    private String getCodeFromUnicode(String sourceLiteralPrefix) {
+        String hexString = SpecsStrings.toHexString(getData().getValue(), 8).substring("0x".length());
+        return sourceLiteralPrefix + "'\\U" + hexString + "'";
     }
 
 }

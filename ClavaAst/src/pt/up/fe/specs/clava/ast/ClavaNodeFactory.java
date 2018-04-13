@@ -113,7 +113,6 @@ import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
@@ -148,6 +147,8 @@ import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -1099,7 +1100,7 @@ public class ClavaNodeFactory {
     public static FloatingLiteral floatingLiteral(FloatKind floatKind, String number, ExprData exprData,
             ClavaNodeInfo info) {
 
-        return new FloatingLiteral(floatKind, number, exprData, info);
+        return new FloatingLiteralLegacy(floatKind, number, exprData, info);
     }
 
     public static BinaryOperator binaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr lhs,

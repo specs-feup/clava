@@ -18,7 +18,6 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -30,7 +29,7 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  */
 public abstract class Literal extends Expr {
 
-    public Literal(ExprDataV2 data, Collection<? extends ClavaNode> children) {
+    public Literal(LiteralData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
