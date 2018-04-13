@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -63,18 +62,24 @@ import pt.up.fe.specs.util.collections.MultiMap;
  */
 public class ClangStreamParser {
     private final DataStore data;
+    private final boolean debug;
 
     private final Map<String, ClavaNode> parsedNodes;
     private final ClassesService classesService;
 
     private final Set<String> missingConstructors;
 
-    public ClangStreamParser(DataStore data) {
+    public ClangStreamParser(DataStore data, boolean debug) {
         this.data = data;
+        this.debug = debug;
 
         classesService = new ClassesService(new HashMap<>());
         this.parsedNodes = new HashMap<>();
         this.missingConstructors = new HashSet<>();
+    }
+
+    public Map<String, ClavaNode> getParsedNodes() {
+        return parsedNodes;
     }
 
     public App parse() {
@@ -148,7 +153,8 @@ public class ClangStreamParser {
         String classname = data.get(IdToClassnameParser.getDataKey()).get(nodeId);
 
         if (classname == null) {
-            SpecsLogs.msgInfo("No classname for node '" + nodeId + "");
+            if (debug)
+                SpecsLogs.msgInfo("No classname for node '" + nodeId + "");
             return new UnsupportedNode("<CLASSNAME NOT FOUND>", ClavaData.empty(), Collections.emptyList());
         }
 
@@ -159,8 +165,9 @@ public class ClangStreamParser {
         ClavaData clavaData = data.get(ClavaDataParser.getDataKey()).get(nodeId);
 
         if (clavaData == null) {
-            SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
-                    + "), data dumper is not being called");
+            if (debug)
+                SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
+                        + "), data dumper is not being called");
             return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
@@ -168,7 +175,8 @@ public class ClangStreamParser {
         List<String> childrenIds = data.get(VisitedChildrenParser.getDataKey()).get(nodeId);
 
         if (childrenIds == null) {
-            SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
+            if (debug)
+                SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
             return new UnsupportedNode(classname, clavaData, Collections.emptyList());
         }
 
@@ -184,8 +192,11 @@ public class ClangStreamParser {
         if (builder == null) {
             if (!missingConstructors.contains(classname)) {
                 missingConstructors.add(classname);
-                SpecsLogs.msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
-                        + clavaData.getClass().getSimpleName() + " data, Collection<? extends ClavaNode> children)'");
+                if (debug)
+                    SpecsLogs
+                            .msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
+                                    + clavaData.getClass().getSimpleName()
+                                    + " data, Collection<? extends ClavaNode> children)'");
             }
 
             return new UnsupportedNode(classname, clavaData, children);
@@ -398,21 +409,26 @@ public class ClangStreamParser {
 
             List<Include> uniqueIncludes = SpecsCollections.filter(sourceIncludes, include -> include.toString());
 
+            // Add includes
+            uniqueIncludes.stream()
+                    .map(include -> ClavaNodeFactory.include(include, path))
+                    .forEach(decls::add);
+            /*
             // Only add includes that are not in the line number range of the declarations
             if (!uniqueIncludes.isEmpty()) {
                 Set<Integer> lineNumbers = getLineNumbers(declNodes, declFile);
-
+            
                 for (Include include : uniqueIncludes) {
-
+            
                     // Only add include if line number of the include is not contained in declaration numbers
                     if (lineNumbers.contains(include.getLine())) {
                         continue;
                     }
-
+            
                     decls.add(ClavaNodeFactory.include(include, path));
                 }
             }
-
+            */
             // Add declarations
             decls.addAll(declNodes);
 
@@ -431,27 +447,29 @@ public class ClangStreamParser {
         return app;
     }
 
+    /*
     private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes, File file) {
         Set<Integer> lineNumbers = new HashSet<>();
-
+    
         // Only add lines that are part of the same file
         for (ClavaNode node : nodes) {
-
+    
             if (!file.equals(node.getLocation().getStartFile())) {
                 continue;
             }
-
+    
             if (!file.equals(node.getLocation().getEndFile())) {
                 continue;
             }
-
+    
             int startLine = node.getLocation().getStartLine();
             int endLine = node.getLocation().getEndLine();
-
+    
             IntStream.range(startLine, endLine + 1).forEach(index -> lineNumbers.add(index));
         }
-
+    
         return lineNumbers;
     }
+    */
 
 }

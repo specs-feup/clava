@@ -46,7 +46,7 @@ public class ExprDataParser {
         ValueKind valueKind = GeneralParsers.enumFromInt(ValueKind.getEnumHelper(), lines);
         ObjectKind objectKind = GeneralParsers.enumFromInt(ObjectKind.getEnumHelper(), lines);
 
-        return new ExprDataV2(typeId, valueKind, objectKind, clavaData);
+        return new ExprDataV2(typeId, null, valueKind, objectKind, clavaData);
     }
 
     public static CastExprData parseCastExprData(LineStream lines) {

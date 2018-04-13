@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.collections.MultiMap;
@@ -57,6 +58,8 @@ public class ClangRootNode extends ClangNode {
         // namespace qualifiers, such as 'std::'
         private final DataStore stdErr;
 
+        private final Map<String, ClavaNode> newParsedNodes;
+
         // new ClangRootData(config, includes, clangTypes, nodeToTypes,
         // stderr.get(StdErrKeys.DECLREFEXPR_QUALS), typeQualifiers, hasTemplateArguments, isTemporary,
         // ompDirectives, enumToIntegerType, stderr.get(StdErrKeys.TEMPLATE_NAMES),
@@ -66,7 +69,7 @@ public class ClangRootNode extends ClangNode {
                 Map<String, String> nodeToTypes,
                 // Set<String> hasTemplateArguments,
                 Set<String> isTemporary, Map<String, OMPDirective> ompDirectives,
-                Map<String, String> enumToIntegerType, DataStore stdErr) {
+                Map<String, String> enumToIntegerType, DataStore stdErr, Map<String, ClavaNode> newParsedNodes) {
 
             this.config = config;
             this.includes = includes;
@@ -77,6 +80,7 @@ public class ClangRootNode extends ClangNode {
             this.ompDirectives = ompDirectives;
             this.enumToIntegerType = enumToIntegerType;
             this.stdErr = stdErr;
+            this.newParsedNodes = newParsedNodes;
         }
 
         public DataStore getStdErr() {
@@ -97,6 +101,10 @@ public class ClangRootNode extends ClangNode {
 
         public Map<String, String> getNodeToTypes() {
             return nodeToTypes;
+        }
+
+        public Map<String, ClavaNode> getNewParsedNodes() {
+            return newParsedNodes;
         }
 
         public Map<String, String> getDeclRefExprQualifiers() {

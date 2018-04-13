@@ -191,8 +191,11 @@ public class ClangAstParser {
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
 
+        ClangStreamParser clangStreamParser = new ClangStreamParser(stderr, SpecsSystem.isDebug());
+        App newApp = clangStreamParser.parse();
+
         if (SpecsSystem.isDebug()) {
-            App newApp = new ClangStreamParser(stderr).parse();
+            // App newApp = new ClangStreamParser(stderr).parse();
             System.out.println("NEW APP CODE:\n" + newApp.getCode());
         }
 
@@ -269,7 +272,7 @@ public class ClangAstParser {
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-                isTemporary, ompDirectives, enumToIntegerType, stderr);
+                isTemporary, ompDirectives, enumToIntegerType, stderr, clangStreamParser.getParsedNodes());
 
         return new ClangRootNode(clangRootData, clangDump);
     }

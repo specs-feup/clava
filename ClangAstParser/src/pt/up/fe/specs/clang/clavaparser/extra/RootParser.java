@@ -161,17 +161,22 @@ public class RootParser extends AClangNodeParser<App> {
 
             // Set<String> addedIncludes = new HashSet<>();
 
+            // Add includes
+            uniqueIncludes.stream()
+                    .map(include -> ClavaNodeFactory.include(include, path))
+                    .forEach(decls::add);
+            /*
             // Only add includes that are not in the line number range of the declarations
             if (!uniqueIncludes.isEmpty()) {
-                // Set<Integer> lineNumbers = getLineNumbers(declNodes);
-
+                Set<Integer> lineNumbers = getLineNumbers(declNodes);
+            
                 for (Include include : uniqueIncludes) {
-
+            
                     // Only add include if line number of the include is not contained in declaration numbers
-                    // if (lineNumbers.contains(include.getLine())) {
-                    // continue;
-                    // }
-
+                    if (lineNumbers.contains(include.getLine())) {
+                        continue;
+                    }
+            
                     // Check if include was not already added
                     // if (addedIncludes.contains(include.toString())) {
                     // continue;
@@ -181,7 +186,7 @@ public class RootParser extends AClangNodeParser<App> {
                     decls.add(ClavaNodeFactory.include(include, path));
                 }
             }
-
+            */
             // Add declarations
             decls.addAll(declNodes);
 

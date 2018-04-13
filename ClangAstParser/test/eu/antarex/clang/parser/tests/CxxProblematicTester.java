@@ -79,7 +79,7 @@ public class CxxProblematicTester {
     @Test
     public void testAttribute() {
         // Attributes not implemented
-        new CxxTester("problematic/attribute.cpp").onePass().test();
+        new CxxTester("problematic/attribute.cpp").onePass().showCode().test();
     }
 
     @Test

@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang.clavaparser;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +40,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaNodeConstructors;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -70,6 +72,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     private final ClangConverterTable converter;
     private final boolean hasContent;
 
+    private final ClavaNodeConstructors constructors;
+
     /**
      * Helper constructor which sets 'hasContent' to true.
      *
@@ -82,9 +86,16 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     public AClangNodeParser(ClangConverterTable converter, boolean hasContent) {
         this.converter = converter;
         this.hasContent = hasContent;
+        this.constructors = new ClavaNodeConstructors();
     }
 
     protected abstract N parse(ClangNode node, StringParser parser);
+
+    public <T extends ClavaNode> T newClavaNode(Class<T> clavaNodeClass, ClavaData clavaData,
+            Collection<? extends ClavaNode> children) {
+
+        return constructors.newClavaNode(clavaNodeClass, clavaData, children);
+    }
 
     @Override
     public ClangConverterTable getConverter() {

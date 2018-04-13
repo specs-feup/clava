@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.parsers.clavadata;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -33,6 +34,16 @@ public class AttrDataParser {
         boolean isPackExpansion = GeneralParsers.parseOneOrZero(lines);
 
         return new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion, clavaData);
+    }
+
+    public static AlignedAttrData parseAlignedAttrData(LineStream lines) {
+        AttributeData data = parseAttributeData(lines);
+
+        String spelling = lines.nextLine();
+        boolean isExpr = GeneralParsers.parseOneOrZero(lines);
+        String nodeId = lines.nextLine();
+
+        return new AlignedAttrData(spelling, isExpr, nodeId, null, null, data);
     }
 
 }

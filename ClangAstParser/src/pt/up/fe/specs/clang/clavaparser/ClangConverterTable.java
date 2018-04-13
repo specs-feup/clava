@@ -54,7 +54,7 @@ public class ClangConverterTable implements AutoCloseable {
     // private List<ClavaNode> parsedNodes;
     private final FileService fileService;
     private final ClassesService classesService;
-    private Map<String, ClavaNode> newParsedNodes;
+    // private Map<String, ClavaNode> newParsedNodes;
 
     public ClangConverterTable(ClangRootData clangRootData) {
         this.converter = new HashMap<>();
@@ -65,7 +65,7 @@ public class ClangConverterTable implements AutoCloseable {
         // parsedNodes = new ArrayList<>();
         fileService = new LineStreamFileService();
         classesService = new ClassesService();
-        newParsedNodes = new HashMap<>();
+        // newParsedNodes = new HashMap<>();
     }
 
     public void setTypesMapping(Map<String, Type> types) {
@@ -89,7 +89,7 @@ public class ClangConverterTable implements AutoCloseable {
     // }
 
     public Map<String, ClavaNode> getNewParsedNodes() {
-        return newParsedNodes;
+        return getClangRootData().getNewParsedNodes();
     }
 
     public void setOriginalTypes(Map<String, Type> originalTypes) {

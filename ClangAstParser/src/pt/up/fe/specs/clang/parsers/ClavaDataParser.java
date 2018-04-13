@@ -108,6 +108,7 @@ public class ClavaDataParser implements LineStreamParser {
 
         // ATTRIBUTES
         STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
+        STATIC_DATA_PARSERS.put("<AlignedAttrData>", AttrDataParser::parseAlignedAttrData);
 
     }
 
