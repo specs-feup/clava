@@ -62,6 +62,8 @@ static const std::string TOP_LEVEL_NODES = "<Top Level Nodes>";
 
 static const std::string TOP_LEVEL_TYPES = "<Top Level Types>";
 
+static const std::string TOP_LEVEL_ATTRIBUTES = "<Top Level Attributes>";
+
 static const std::string INCLUDES = "<Includes>";
 
 static const std::string ID_FILE_MAP = "<Id-File Map>";

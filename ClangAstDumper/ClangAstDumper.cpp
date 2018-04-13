@@ -266,7 +266,7 @@ void ClangAstDumper::dumpTopLevelType(const QualType &type) {
 
 
 void ClangAstDumper::dumpTopLevelAttr(const Attr *attr) {
-    llvm::errs() << TOP_LEVEL_TYPES << "\n";
+    llvm::errs() << TOP_LEVEL_ATTRIBUTES << "\n";
     llvm::errs() << getId(attr) << "\n";
 }
 
