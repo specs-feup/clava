@@ -122,7 +122,7 @@ public class ClangConverterTable implements AutoCloseable {
      * @param nodeName
      * @param nodeParser
      */
-    public void put(String nodeName, Function<ClangConverterTable, ClangNodeParser> nodeParser) {
+    public void put(String nodeName, Function<ClangConverterTable, ClangNodeParser<?>> nodeParser) {
         put(nodeName, nodeParser.apply(this));
     }
 

@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clava.parser.DelayedParsing;
-import pt.up.fe.specs.clang.clavaparser.attr.AlignedAttrParser;
 import pt.up.fe.specs.clang.clavaparser.attr.FinalAttrParser;
 import pt.up.fe.specs.clang.clavaparser.attr.OpenCLKernelAttrParser;
 import pt.up.fe.specs.clang.clavaparser.comment.FullCommentParser;
@@ -180,6 +179,7 @@ import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.DummyNode;
+import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -396,7 +396,7 @@ public class ClavaParser implements AutoCloseable {
 
         converter.put("FinalAttr", FinalAttrParser::new);
         converter.put("OpenCLKernelAttr", OpenCLKernelAttrParser::new);
-        converter.put("AlignedAttr", AlignedAttrParser::new);
+        converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
 
         return converter;
     }
