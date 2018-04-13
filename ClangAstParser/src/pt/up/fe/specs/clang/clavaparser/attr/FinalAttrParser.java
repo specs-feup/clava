@@ -20,7 +20,7 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.attr.FinalAttr;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class FinalAttrParser extends AClangNodeParser<FinalAttr> {

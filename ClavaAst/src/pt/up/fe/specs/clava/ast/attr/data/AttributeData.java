@@ -11,9 +11,10 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.lang;
+package pt.up.fe.specs.clava.ast.attr.data;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 
 public class AttributeData extends ClavaData {
 

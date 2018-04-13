@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.attr.data;
+package pt.up.fe.specs.clava.ast.attr.legacy;
 
 public class AttrData {
 

@@ -19,8 +19,8 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ast.attr.GenericAttribute;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
-import pt.up.fe.specs.clava.ast.lang.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class GenericAttrParser extends AClangNodeParser<GenericAttribute> {

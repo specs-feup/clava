@@ -18,7 +18,7 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.lang.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
 
 /**
  * Dummy declaration, for testing purposes.

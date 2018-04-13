@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import pt.up.fe.specs.clava.ast.lang.AttributeData;
-import pt.up.fe.specs.clava.ast.lang.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.providers.StringProvider;

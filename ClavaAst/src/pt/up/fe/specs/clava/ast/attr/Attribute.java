@@ -17,9 +17,9 @@ import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
-import pt.up.fe.specs.clava.ast.lang.AttributeData;
-import pt.up.fe.specs.clava.ast.lang.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public abstract class Attribute extends ClavaNode {
 

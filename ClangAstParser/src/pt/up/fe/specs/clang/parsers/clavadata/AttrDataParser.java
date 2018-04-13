@@ -16,8 +16,8 @@ package pt.up.fe.specs.clang.parsers.clavadata;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.lang.AttributeData;
-import pt.up.fe.specs.clava.ast.lang.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class AttrDataParser {

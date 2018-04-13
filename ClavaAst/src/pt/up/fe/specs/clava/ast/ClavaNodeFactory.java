@@ -23,7 +23,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.attr.FinalAttr;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.comment.BlockContentComment;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.DummyComment;

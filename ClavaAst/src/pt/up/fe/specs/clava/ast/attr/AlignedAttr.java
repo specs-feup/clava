@@ -16,7 +16,7 @@ package pt.up.fe.specs.clava.ast.attr;
 import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.lang.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
 
 public class AlignedAttr extends Attribute {
 
