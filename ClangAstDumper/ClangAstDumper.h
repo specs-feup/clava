@@ -190,6 +190,12 @@ private:
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
     //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
 
+
+    // Children visitors for Attributes
+    void VisitAlignedAttrChildren(const AlignedAttr * A, std::vector<std::string> &children);
+
+
+
     // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);
     void dumpTopLevelType(const QualType &type);

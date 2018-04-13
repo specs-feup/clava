@@ -63,6 +63,7 @@ const std::string clava::getName(const TypeNode typeNode) {
 const std::string clava::getName(const AttrNode attrNode) {
     switch(attrNode) {
         case clava::AttrNode::ATTR: return "Attribute";
+        case clava::AttrNode::ALIGNED: return "AlignedAttr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<AttrNode>::type>(attrNode));

@@ -125,6 +125,7 @@ namespace clava {
         // ATTRS
 
         void DumpAttrData(const Attr *A);
+        void DumpAlignedAttrData(const AlignedAttr *A);
 
         const std::string getDataName(DeclNode node);
         const std::string getDataName(StmtNode node);

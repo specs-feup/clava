@@ -71,7 +71,8 @@ namespace clava {
      * Represents attribute node classes
     */
     enum class AttrNode {
-        ATTR
+        ATTR,
+        ALIGNED
     };
 
 

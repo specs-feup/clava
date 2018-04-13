@@ -9,7 +9,7 @@
 #include <string>
 
 const std::map<const std::string, clava::AttrNode> ClangAstDumper::ATTR_CHILDREN_MAP = {
-        //{"CXXConstructorDecl", clava::DeclNode::FUNCTION_DECL}
+        {"AlignedAttr", clava::AttrNode::ALIGNED}
 
 };
 
@@ -32,10 +32,24 @@ void ClangAstDumper::visitChildren(clava::AttrNode attrNode, const Attr* A) {
         case clava::AttrNode::ATTR:
             // By default, do nothing
             break;
-//        case clava::DeclNode::VALUE_DECL:
-//            VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
+        case clava::AttrNode::ALIGNED:
+            VisitAlignedAttrChildren(static_cast<const AlignedAttr *>(A), visitedChildren); break;
 //        default: throw std::invalid_argument("ChildrenVisitorAttrs::visitChildren: Case not implemented, '"+clava::getName(attrNode)+"'");
     }
 
     dumpVisitedChildren(A, visitedChildren);
 }
+
+void ClangAstDumper::VisitAlignedAttrChildren(const AlignedAttr * A, std::vector<std::string> &children) {
+    // No hierarchy
+
+    if(A->isAlignmentExpr()) {
+        VisitStmtTop(A->getAlignmentExpr());
+        children.push_back(getId(A->getAlignmentExpr()));
+    } else {
+        VisitTypeTop(A->getAlignmentType()->getType());
+        dumpTopLevelType(A->getAlignmentType()->getType());
+    }
+
+}
+
