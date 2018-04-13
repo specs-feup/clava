@@ -24,6 +24,10 @@ import pt.up.fe.specs.clava.SourceRange;
  * ClavaData instances are mutable for convenience of ClavaNodes, however they should only be modified by the ClavaNodes
  * themselves.
  * 
+ * <p>
+ * It is yet open for discussion if ClavaData instances should have ClavaNodes (e.g., ExprData has a Type, DeclData has
+ * Attribute nodes), or if they all should be children).
+ * 
  * @author JoaoBispo
  *
  */
@@ -174,6 +178,14 @@ public class ClavaData {
 
     public SourceRange getLocation() {
         return location;
+    }
+
+    public boolean isMacro() {
+        return isMacro;
+    }
+
+    public SourceRange getSpellingLocation() {
+        return spellingLocation;
     }
 
     @Override

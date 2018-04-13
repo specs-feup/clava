@@ -58,8 +58,8 @@ public class AttributeData extends ClavaData {
 
     @Override
     public String toString() {
-        return "Attribute [kind=" + kind + ", isImplicit=" + isImplicit + ", isInherited=" + isInherited
-                + ", isLateParsed=" + isLateParsed + ", isPackExpansion=" + isPackExpansion + "]";
+        return toString(super.toString(), "kind=" + kind + ", isImplicit=" + isImplicit + ", isInherited=" + isInherited
+                + ", isLateParsed=" + isLateParsed + ", isPackExpansion=" + isPackExpansion);
     }
 
 }

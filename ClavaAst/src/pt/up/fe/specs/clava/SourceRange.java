@@ -147,6 +147,14 @@ public class SourceRange {
         return new File(start.getFilepath());
     }
 
+    public File getEndFile() {
+        if (end.getFilepath() == null) {
+            return null;
+        }
+
+        return new File(end.getFilepath());
+    }
+
     public int getStartLine() {
         return start.getLine();
     }
