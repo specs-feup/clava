@@ -187,4 +187,9 @@ public class CxxTest {
         new CxxTester("includes.cpp", "includes.h", "includes2.h", "includes2.cpp").test();
     }
 
+    @Test
+    public void testAttribute() {
+        new CxxTester("attribute.cpp").test();
+    }
+
 }
