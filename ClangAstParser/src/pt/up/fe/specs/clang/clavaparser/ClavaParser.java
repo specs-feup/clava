@@ -175,11 +175,7 @@ import pt.up.fe.specs.clang.transforms.RemoveImplicitConstructors;
 import pt.up.fe.specs.clang.transforms.ReplaceClangLabelStmt;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
-import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
-import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -396,7 +392,7 @@ public class ClavaParser implements AutoCloseable {
 
         converter.put("FinalAttr", FinalAttrParser::new);
         converter.put("OpenCLKernelAttr", OpenCLKernelAttrParser::new);
-        converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
+        // converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
 
         return converter;
     }
@@ -473,27 +469,27 @@ public class ClavaParser implements AutoCloseable {
         return app;
     }
 
-    private void clavaDataPostProcessing() {
-        // Build map
-        // Map<String, ClavaNode> nodesMap = converter.getParsedNodes().stream()
-        // .filter(node -> node.getData() != null)
-        // .collect(Collectors.toMap(node -> node.getData().getId(), node -> node));
-
-        // ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(nodesMap);
-        ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(converter.getNewParsedNodes());
-
-        for (ClavaNode node : converter.getNewParsedNodes().values()) {
-            ClavaData data = node.getData();
-
-            // If null, no work to be done
-            if (data == null) {
-                continue;
-            }
-
-            ClavaDataUtils.applyPostProcessing(data, postProcessing);
-        }
-
-    }
+    // private void clavaDataPostProcessing() {
+    // // Build map
+    // // Map<String, ClavaNode> nodesMap = converter.getParsedNodes().stream()
+    // // .filter(node -> node.getData() != null)
+    // // .collect(Collectors.toMap(node -> node.getData().getId(), node -> node));
+    //
+    // // ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(nodesMap);
+    // ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(converter.getNewParsedNodes());
+    //
+    // for (ClavaNode node : converter.getNewParsedNodes().values()) {
+    // ClavaData data = node.getData();
+    //
+    // // If null, no work to be done
+    // if (data == null) {
+    // continue;
+    // }
+    //
+    // ClavaDataUtils.applyPostProcessing(data, postProcessing);
+    // }
+    //
+    // }
 
     public Map<String, Type> getTypes() {
         return converter.getOriginalTypes();

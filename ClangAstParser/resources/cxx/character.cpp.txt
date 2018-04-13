@@ -1,6 +1,7 @@
 
 int main() {
-   char a = 'a';
+   char a = U'\U00000061';
+   char z = 'z';
    char16_t b = u'\U00008C93';
    char16_t c = u'\U00008C93';
    char n2 = 10;
@@ -17,8 +18,8 @@ int main() {
    char singlequote = '\'';
    char doublequote = '\"';
    char nul = '\0';
-   char octal = '\b';
-   char hexa = '\v';
+   char octal = '\010';
+   char hexa = '\x00b';
    
    return 0;
 }

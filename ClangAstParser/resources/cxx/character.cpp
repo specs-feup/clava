@@ -2,6 +2,7 @@
 int main() {
 	
 	char a = U'a';	
+	char z = 'z';
 	char16_t b = u'貓';	
 	char16_t c = u'\U00008C93';	
 	char n2 = 10;	

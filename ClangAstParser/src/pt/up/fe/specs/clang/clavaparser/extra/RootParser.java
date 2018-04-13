@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -124,6 +125,10 @@ public class RootParser extends AClangNodeParser<App> {
 
             declarations.put(canonicalPath, decl);
         }
+
+        double newNodesFraction = (double) getConverter().getNewParsedNodes() / getConverter().getTotalParsedNodes();
+        SpecsLogs.msgInfo("New nodes ratio: " + SpecsStrings.toPercentage(newNodesFraction) + " (from a total of "
+                + getConverter().getTotalParsedNodes() + " parsed nodes)");
 
         // For each enty in MultiMap, create a Translation Unit
         ClangIncludes includes = node.getClangRoot().getIncludes();

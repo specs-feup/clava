@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
+import pt.up.fe.specs.clava.ast.expr.data2.FloatingLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
 import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
@@ -80,6 +81,14 @@ public class ExprDataParser {
         BigInteger value = new BigInteger(lines.nextLine());
 
         return new IntegerLiteralData(value, data);
+    }
+
+    public static FloatingLiteralData parseFloatingLiteralData(LineStream lines) {
+        LiteralData data = parseLiteralData(lines);
+
+        double value = Double.parseDouble(lines.nextLine());
+
+        return new FloatingLiteralData(value, data);
     }
 
 }

@@ -103,6 +103,7 @@ public class ClavaDataParser implements LineStreamParser {
         // EXPRS
         STATIC_DATA_PARSERS.put("<ExprData>", ExprDataParser::parseExprData);
         STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
+        STATIC_DATA_PARSERS.put("<FloatingLiteralData>", ExprDataParser::parseFloatingLiteralData);
         STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
         STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
 

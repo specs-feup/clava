@@ -28,11 +28,11 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clavaparser.extra.UndefinedParser;
-import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.io.FileService;
@@ -53,8 +53,11 @@ public class ClangConverterTable implements AutoCloseable {
     private Map<String, ClavaNode> parsedNodes;
     // private List<ClavaNode> parsedNodes;
     private final FileService fileService;
-    private final ClassesService classesService;
+    // private final ClassesService classesService;
     // private Map<String, ClavaNode> newParsedNodes;
+
+    private int totalParsedNodes;
+    private int newParsedNodes;
 
     public ClangConverterTable(ClangRootData clangRootData) {
         this.converter = new HashMap<>();
@@ -64,8 +67,10 @@ public class ClangConverterTable implements AutoCloseable {
         parsedNodes = new HashMap<>();
         // parsedNodes = new ArrayList<>();
         fileService = new LineStreamFileService();
-        classesService = new ClassesService();
+        // classesService = new ClassesService();
         // newParsedNodes = new HashMap<>();
+        totalParsedNodes = 0;
+        newParsedNodes = 0;
     }
 
     public void setTypesMapping(Map<String, Type> types) {
@@ -88,9 +93,9 @@ public class ClangConverterTable implements AutoCloseable {
     // return parsedNodes;
     // }
 
-    public Map<String, ClavaNode> getNewParsedNodes() {
-        return getClangRootData().getNewParsedNodes();
-    }
+    // public Map<String, ClavaNode> getNewParsedNodes() {
+    // return getClangRootData().getNewParsedNodes();
+    // }
 
     public void setOriginalTypes(Map<String, Type> originalTypes) {
         this.originalTypes = originalTypes;
@@ -130,6 +135,16 @@ public class ClangConverterTable implements AutoCloseable {
 
         // Add node name
         PARSED_NODES.add(clangNode.getNodeName());
+        totalParsedNodes++;
+
+        // Check if parsed nodes contains a valid node
+        ClavaNode newClavaNode = getClangRootData().getNewParsedNodes().get(clangNode.getExtendedId());
+        if (newClavaNode != null && !(newClavaNode instanceof UnsupportedNode)) {
+            // TODO: Replace with map?
+            newParsedNodes++;
+            return NewClavaNodeParser.newInstance(newClavaNode.getClass()).apply(this).parse(clangNode);
+        }
+        // converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
 
         // If map does not have a conversor, stop
         if (!converter.containsKey(clangNode.getName())) {
@@ -287,6 +302,17 @@ public class ClangConverterTable implements AutoCloseable {
     @Override
     public void close() throws Exception {
         fileService.close();
+
     }
 
+    public int getTotalParsedNodes() {
+        return totalParsedNodes;
+    }
+
+    public int getNewParsedNodes() {
+        return newParsedNodes;
+    }
+    // public int getNewNodesCount() {
+    // return newParsedNodes;
+    // }
 }

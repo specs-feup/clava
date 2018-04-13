@@ -1,8 +1,8 @@
 #pragma OPENCL EXTENSION cl_khr_fp16 : enable
 
 __kernel void builtin_types() {
-   __fp16 anHalf;
-   __local __fp16  armHalf;
+   half anHalf;
+   __local half  armHalf;
    sampler_t sampler;
    event_t event;
    //clk_event_t clockEvent;
