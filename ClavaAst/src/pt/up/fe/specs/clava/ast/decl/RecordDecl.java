@@ -141,22 +141,28 @@ public class RecordDecl extends TagDecl {
         // Add attributes
         // recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
 
-        String attributesCode = recordDeclData.getAttributes().stream()
+        String preAttributesCode = recordDeclData.getAttributes().stream()
+                .filter(attr -> !attr.isPostAttr())
                 .map(Attribute::getCode)
                 .collect(Collectors.joining(" "));
 
-        boolean isCxx = getApp().getStandard().isCxx();
-        // If C++, put attributes before definition
-        if (!attributesCode.isEmpty() && isCxx) {
-            code.append(" ").append(attributesCode);
+        // Append pre-attributes
+        if (!preAttributesCode.isEmpty()) {
+            code.append(" ").append(preAttributesCode);
         }
 
         if (recordDeclData.isCompleteDefinition()) {
             code.append(getDefinitionCode());
         }
 
-        if (!attributesCode.isEmpty() && !isCxx) {
-            code.append(" ").append(attributesCode);
+        String postAttributesCode = recordDeclData.getAttributes().stream()
+                .filter(attr -> attr.isPostAttr())
+                .map(Attribute::getCode)
+                .collect(Collectors.joining(" "));
+
+        // Append post-attributes
+        if (!postAttributesCode.isEmpty()) {
+            code.append(" ").append(postAttributesCode);
         }
 
         code.append(";" + ln());

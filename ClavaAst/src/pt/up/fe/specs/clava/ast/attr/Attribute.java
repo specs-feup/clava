@@ -71,4 +71,12 @@ public abstract class Attribute extends ClavaNode {
     protected String getAttributeCode(String attrValue) {
         return "__attribute__ ((" + attrValue + "))";
     }
+
+    /**
+     * 
+     * @return true if the attribute should appear after declarations (e.g., aligned). By default returns false.
+     */
+    public boolean isPostAttr() {
+        return false;
+    }
 }

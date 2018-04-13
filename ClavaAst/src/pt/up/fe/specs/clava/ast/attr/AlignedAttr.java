@@ -35,4 +35,9 @@ public class AlignedAttr extends Attribute {
 
         return getAttributeCode(attrValue);
     }
+
+    @Override
+    public boolean isPostAttr() {
+        return true;
+    }
 }
