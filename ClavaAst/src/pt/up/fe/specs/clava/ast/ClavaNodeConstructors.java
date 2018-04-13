@@ -29,7 +29,9 @@ public class ClavaNodeConstructors {
         this.constructorsCache = new HashMap<>();
     }
 
-    public ClavaNode newClavaNode(Class<? extends ClavaNode> clavaNodeClass, ClavaData clavaData,
+    // public ClavaNode newClavaNode(Class<? extends ClavaNode> clavaNodeClass, ClavaData clavaData,
+    // Collection<? extends ClavaNode> children) {
+    public <T extends ClavaNode> T newClavaNode(Class<T> clavaNodeClass, ClavaData clavaData,
             Collection<? extends ClavaNode> children) {
 
         // // Get required ClavaData class
@@ -70,7 +72,7 @@ public class ClavaNodeConstructors {
 
         }
 
-        return constructor.apply(clavaData, children);
+        return clavaNodeClass.cast(constructor.apply(clavaData, children));
     }
 
     // Constructor<? extends ClavaNode> constructor = clavaNodeClass.getConstructor(clavaDataClass,

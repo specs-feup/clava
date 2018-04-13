@@ -18,7 +18,7 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
 
-public abstract class AlignedAttr extends Attribute {
+public class AlignedAttr extends Attribute {
 
     public AlignedAttr(AlignedAttrData data, Collection<? extends ClavaNode> children) {
         super(data, children);

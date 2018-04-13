@@ -13,22 +13,62 @@
 
 package pt.up.fe.specs.clava.ast.attr.data;
 
+import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCheck;
+
 public class AlignedAttrData extends AttributeData {
 
     private final String spelling;
+    private final boolean isExpr;
+    private final String nodeId;
+    private Expr expr;
+    private Type type;
 
-    public AlignedAttrData(String spelling, AttributeData data) {
+    public AlignedAttrData(String spelling, boolean isExpr, String nodeId, Expr expr, Type type, AttributeData data) {
         super(data);
 
         this.spelling = spelling;
+        this.isExpr = isExpr;
+        this.nodeId = nodeId;
+        this.expr = expr;
+        this.type = type;
     }
 
     public AlignedAttrData(AlignedAttrData data) {
-        this(data.spelling, data);
+        this(data.spelling, data.isExpr, data.nodeId, data.expr, data.type, data);
     }
 
     public String getSpelling() {
         return spelling;
+    }
+
+    public boolean isExpr() {
+        return isExpr;
+    }
+
+    public Expr getExpr() {
+        return expr;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    @Override
+    protected void postProcess(ClavaDataPostProcessing data) {
+        // Call super
+        super.postProcess(data);
+
+        SpecsCheck.checkNotNull(nodeId, () -> "Expected 'nodeId' in node '" + getId() + "' to be non-null");
+
+        if (isExpr) {
+            this.expr = data.getExpr(nodeId);
+        } else {
+            this.type = data.getType(nodeId);
+        }
+
     }
 
 }
