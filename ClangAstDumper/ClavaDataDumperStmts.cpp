@@ -17,6 +17,7 @@ const std::map<const std::string, clava::StmtNode > clava::STMT_DATA_MAP = {
 const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CharacterLiteral", clava::StmtNode::CHARACTER_LITERAL},
         {"IntegerLiteral", clava::StmtNode::INTEGER_LITERAL},
+        {"FloatingLiteral", clava::StmtNode::FLOATING_LITERAL},
         {"CastExpr", clava::StmtNode::CAST_EXPR},
         {"ImplicitCastExpr", clava::StmtNode::CAST_EXPR},
 };
@@ -159,5 +160,13 @@ void clava::ClavaDataDumper::DumpIntegerLiteralData(const IntegerLiteral *E) {
 
 void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
     DumpLiteralData(E);
+
+    clava::dump(E->getValueAsApproximateDouble());
+    /*
+    llvm::errs() << "Source range:" << clava::getSource(Context, E->getSourceRange()) << "\n";
+    llvm::errs() << "Source loc start/end:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getLocEnd())) << "\n";
+    llvm::errs() << "Source expr:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getExprLoc())) << "\n";
+    llvm::errs() << "Source location:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getLocation())) << "\n";
+*/
 }
 

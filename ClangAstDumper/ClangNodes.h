@@ -86,6 +86,7 @@ namespace clava {
     // Value dumpers
     void dump(bool boolean);
     void dump(int integer);
+    void dump(double integer);
     void dump(unsigned int integer) ;
     void dump(const std::string& string);
     void dump(const char string[]);

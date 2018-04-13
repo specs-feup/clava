@@ -119,6 +119,10 @@ void clava::dump(int integer) {
     llvm::errs() << integer << "\n";
 }
 
+void clava::dump(double aDouble) {
+    llvm::errs() << aDouble << "\n";
+}
+
 void clava::dump(unsigned int integer) {
     llvm::errs() << integer << "\n";
 }
