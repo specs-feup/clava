@@ -238,11 +238,6 @@ public class ClavaParser implements AutoCloseable {
         /* extra */
         converter.put("Root", RootParser::new);
         converter.put("NULL", NullNodeParser::new);
-        // converter.put("original Namespace", OriginalNamespaceParser::new);
-        // converter.put("CXXCtorInitializer", CXXCtorInitializerParser::new);
-        // converter.put("CXXCtorInitializer Field",
-        // conv -> new CXXCtorInitializerParser(conv, CXXCtorInitializerType.FIELD));
-        // converter.put("TemplateArgument", TemplateArgumentParser::new);
         converter.put("VariadicType", VariadicTypeParser::new);
         converter.put("AlwaysInlineAttr", AlwaysInlineAttrParser::new);
         converter.put("TemplateArgument", TemplateArgumentParser::new);
@@ -386,13 +381,8 @@ public class ClavaParser implements AutoCloseable {
         converter.put("InlineCommandComment", InlineCommandCommentParser::new);
 
         /* attributes */
-        // for (AttributeKind kind : AttributeKind.getHelper().values()) {
-        // converter.put(kind.name() + "Attr", GenericAttrParser::new);
-        // }
-
         converter.put("FinalAttr", FinalAttrParser::new);
         converter.put("OpenCLKernelAttr", OpenCLKernelAttrParser::new);
-        // converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
 
         return converter;
     }
