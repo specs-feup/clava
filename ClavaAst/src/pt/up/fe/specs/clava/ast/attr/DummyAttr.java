@@ -18,7 +18,7 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
 
 /**
  * Dummy declaration, for testing purposes.
@@ -28,21 +28,22 @@ import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
  */
 public class DummyAttr extends Attribute implements DummyNode {
 
-    private final String classname;
-
-    public DummyAttr(String classname, AttributeData data, Collection<? extends ClavaNode> children) {
+    public DummyAttr(DummyAttributeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
 
-        this.classname = classname;
+    @Override
+    public DummyAttributeData getData() {
+        return (DummyAttributeData) super.getData();
     }
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + classname + ")";
+        return super.getNodeName() + " (" + getData().getClassname() + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy attribute'" + classname + "' */";
+        return "/* Dummy attribute'" + getData().getClassname() + "' */";
     }
 
     @Override
