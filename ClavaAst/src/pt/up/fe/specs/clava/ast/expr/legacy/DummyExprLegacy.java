@@ -11,16 +11,15 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.ast.expr.legacy;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
+import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 
 /**
  * Dummy statement, for testing purposes.
@@ -28,19 +27,15 @@ import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
  * @author JoaoBispo
  *
  */
-public class DummyExpr extends Expr implements DummyNode {
+public class DummyExprLegacy extends DummyExpr {
 
-    public DummyExpr(DummyExprData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
+    private final String content;
 
-    @Override
-    public DummyExprData getData() {
-        return (DummyExprData) super.getData();
-    }
+    public DummyExprLegacy(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        // Using RVALUE as default
+        super(info, children);
 
-    public DummyExpr(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(ExprData.empty(), info, children);
+        this.content = content;
     }
 
     @Override
@@ -48,8 +43,9 @@ public class DummyExpr extends Expr implements DummyNode {
         return super.getNodeName() + " (" + getOriginalType() + ")";
     }
 
+    @Override
     public String getNodeCode() {
-        return "/* Dummy expr '" + getData().getContent() + "'*/";
+        return "/* Dummy expr '" + content + "'*/";
     }
 
     @Override
@@ -58,8 +54,13 @@ public class DummyExpr extends Expr implements DummyNode {
     }
 
     @Override
+    protected ClavaNode copyPrivate() {
+        return new DummyExprLegacy(content, getInfo(), Collections.emptyList());
+    }
+
+    @Override
     public String getContent() {
-        return getData().getContent();
+        return content;
     }
 
 }

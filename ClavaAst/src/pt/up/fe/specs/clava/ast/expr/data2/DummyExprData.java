@@ -11,19 +11,19 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.stmt.data;
+package pt.up.fe.specs.clava.ast.expr.data2;
 
-public class DummyStmtData extends StmtData {
+public class DummyExprData extends ExprDataV2 {
 
     private final String content;
 
-    public DummyStmtData(String content, StmtData data) {
+    public DummyExprData(String content, ExprDataV2 data) {
         super(data);
 
         this.content = content;
     }
 
-    public DummyStmtData(DummyStmtData data) {
+    public DummyExprData(DummyExprData data) {
         this(data.content, data);
     }
 

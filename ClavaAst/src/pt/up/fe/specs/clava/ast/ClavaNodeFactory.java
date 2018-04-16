@@ -147,6 +147,7 @@ import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
@@ -187,6 +188,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
+import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -797,7 +799,7 @@ public class ClavaNodeFactory {
     */
 
     public static DummyStmt dummyStmt(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyStmt(content, info, children);
+        return new DummyStmtLegacy(content, info, children);
     }
 
     public static LiteralType literalType(String literalType) {
@@ -816,7 +818,7 @@ public class ClavaNodeFactory {
      * @return
      */
     public static DummyStmt dummyStmt(ClavaNode node) {
-        return new DummyStmt(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyStmtLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
     public static CompoundStmt compoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
@@ -957,11 +959,11 @@ public class ClavaNodeFactory {
     // }
 
     public static DummyExpr dummyExpr(ClavaNode node) {
-        return new DummyExpr(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyExprLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
     public static DummyExpr dummyExpr(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyExpr(content, info, children);
+        return new DummyExprLegacy(content, info, children);
     }
 
     public static ImplicitCastExpr exprImplicitCast(CastKind castKind, ExprData exprData,
