@@ -17,6 +17,9 @@ void ClangAstDumper::visitChildrenAndData(const Type *T) {
 
     // Dump data
     dataDumper.dump(T);
+
+    // Dump id
+    dumpIdToClassMap(T, clava::getClassName(T));
 }
 
 /*
@@ -43,7 +46,7 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
     typeAddr->dump();
     llvm::errs() << "TYPE_END\n";
 
-    dumpIdToClassMap(typeAddr, clava::getClassName(typeAddr));
+    //dumpIdToClassMap(typeAddr, clava::getClassName(typeAddr));
 
 
     return false;
@@ -71,7 +74,7 @@ bool ClangAstDumper::dumpType(const QualType& type) {
     type.dump();
     llvm::errs() << "TYPE_END\n";
 
-    dumpIdToClassMap(typeAddr, "QualType");
+    //dumpIdToClassMap(typeAddr, "QualType");
 
 
 

@@ -21,6 +21,9 @@ void ClangAstDumper::visitChildrenAndData(const Decl *D) {
 
     // Dump data
     dataDumper.dump(D);
+
+    // Dump id
+    dumpIdToClassMap(D, clava::getClassName(D));
 }
 
 
@@ -101,7 +104,7 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
     }
 
 
-    dumpIdToClassMap(declAddr, clava::getClassName(declAddr));
+    //dumpIdToClassMap(declAddr, clava::getClassName(declAddr));
 
     return false;
 }

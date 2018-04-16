@@ -44,7 +44,7 @@ bool ClangAstDumper::dumpAttr(const Attr* attrAddr) {
     //extendedId << attrAddr << "_" << id;
 
 
-    dumpIdToClassMap(attrAddr, clava::getClassName(attrAddr));
+    //dumpIdToClassMap(attrAddr, clava::getClassName(attrAddr));
 
     return false;
 }
@@ -56,4 +56,8 @@ void ClangAstDumper::visitChildrenAndData(const Attr *A) {
 
     // Dump data
     dataDumper.dump(A);
+
+    // Dump id
+    dumpIdToClassMap(A, clava::getClassName(A));
+
 }

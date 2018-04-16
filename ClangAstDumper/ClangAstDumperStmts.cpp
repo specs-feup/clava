@@ -19,6 +19,9 @@ void ClangAstDumper::visitChildrenAndData(const Stmt *S) {
 
     // Dump data
     dataDumper.dump(S);
+
+    // Dump id
+    dumpIdToClassMap(S, clava::getClassName(S));
 }
 
 void ClangAstDumper::visitChildrenAndData(const Expr *E) {
@@ -27,6 +30,9 @@ void ClangAstDumper::visitChildrenAndData(const Expr *E) {
 
     // Dump data
     dataDumper.dump(E);
+
+    // Dump id
+    dumpIdToClassMap(E, clava::getClassName(E));
 }
 
 /*
@@ -51,7 +57,7 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
     // Dump location
     dumpSourceRange(extendedId.str(), stmtAddr->getLocStart(), stmtAddr->getLocEnd());
 
-    dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));
+    //dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));
 
     return false;
 }

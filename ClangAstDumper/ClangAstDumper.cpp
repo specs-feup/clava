@@ -75,6 +75,7 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 
     visitChildren(T);
     dataDumper.dump(T);
+    dumpIdToClassMap(T.getAsOpaquePtr(), "QualType");
     // Dump data
     //dataDumper.dump(clava::TypeNode::TYPE, T);
 
