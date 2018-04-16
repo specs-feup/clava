@@ -13,17 +13,27 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
 
+/**
+ * Breaks ClavaNode contract of only ClavaData and Collection
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class UnsupportedNode extends ClavaNode {
 
     private final String classname;
 
-    public UnsupportedNode(String classname, ClavaData data, List<ClavaNode> children) {
+    public UnsupportedNode(ClavaData data, Collection<ClavaNode> children) {
+        this("<No classname>", data, children);
+    }
+
+    public UnsupportedNode(String classname, ClavaData data, Collection<ClavaNode> children) {
         super(data, Collections.emptyList());
         // super(ClavaNodeInfo.undefinedInfo(), children);
 

@@ -51,9 +51,22 @@ public class ClavaNodeConstructors {
         // Check if constructor not built yet
         if (constructor == null) {
             try {
+
                 Constructor<? extends ClavaNode> constructorMethod = clavaNodeClass.getConstructor(clavaData.getClass(),
                         Collection.class);
-
+                // Constructor<? extends ClavaNode> constructorMethod = clavaNodeClass.getConstructor(ClavaData.class,
+                // Collection.class);
+                /*
+                if (clavaNodeClass.equals(UnsupportedNode.class)) {
+                    constructorMethod = clavaNodeClass.getConstructor(ClavaData.class,
+                            Collection.class);
+                } else {
+                    constructorMethod = clavaNodeClass.getConstructor(clavaData.getClass(),
+                            Collection.class);
+                }
+                
+                Constructor<? extends ClavaNode> constructorMethod2 = constructorMethod;
+                */
                 constructor = (data, childrenNodes) -> {
                     try {
                         return constructorMethod.newInstance(data, childrenNodes);
