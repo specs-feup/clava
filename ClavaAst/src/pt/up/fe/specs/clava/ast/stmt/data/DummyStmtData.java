@@ -13,31 +13,18 @@
 
 package pt.up.fe.specs.clava.ast.stmt.data;
 
-import pt.up.fe.specs.clava.ast.ClavaData;
+public class DummyStmtData extends StmtData {
 
-public class StmtData extends ClavaData {
+    private final String content;
 
-    public static StmtData empty() {
-        return new StmtData(ClavaData.empty());
-    }
-
-    public StmtData(ClavaData clavaData) {
-        super(clavaData);
-
-    }
-
-    public StmtData(StmtData data) {
+    public DummyStmtData(String content, StmtData data) {
         super(data);
 
+        this.content = content;
     }
 
-    // public StmtData(ExprDataV2 data) {
-    // this(data);
-    // }
-
-    @Override
-    public String toString() {
-
-        return toString(super.toString(), "");
+    public String getContent() {
+        return content;
     }
+
 }

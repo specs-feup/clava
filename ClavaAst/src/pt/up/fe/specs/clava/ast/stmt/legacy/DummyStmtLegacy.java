@@ -11,15 +11,15 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.stmt;
+package pt.up.fe.specs.clava.ast.stmt.legacy;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.stmt.data.DummyStmtData;
+import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 
 /**
  * Dummy statement, for testing purposes.
@@ -27,29 +27,19 @@ import pt.up.fe.specs.clava.ast.stmt.data.DummyStmtData;
  * @author JoaoBispo
  *
  */
-public class DummyStmt extends Stmt implements DummyNode {
+public class DummyStmtLegacy extends DummyStmt {
 
-    public DummyStmt(DummyStmtData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
+    private final String content;
 
-    /**
-     * Legacy support.
-     * 
-     * @param info
-     * @param children
-     */
-    public DummyStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    public DummyStmtLegacy(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
+
+        this.content = content;
     }
 
     @Override
-    public DummyStmtData getData() {
-        return (DummyStmtData) super.getData();
-    }
-
     public String getNodeCode() {
-        return "/* Dummy statement '" + getData().getContent() + "'*/";
+        return "/* Dummy statement '" + content + "'*/";
     }
 
     @Override
@@ -58,8 +48,18 @@ public class DummyStmt extends Stmt implements DummyNode {
     }
 
     @Override
+    protected ClavaNode copyPrivate() {
+        return new DummyStmtLegacy(content, getInfo(), Collections.emptyList());
+    }
+
+    @Override
     public String getContent() {
-        return getData().getContent();
+        return content;
+    }
+
+    @Override
+    public String toContentString() {
+        return super.toContentString() + "location:" + getLocation();
     }
 
 }

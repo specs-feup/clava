@@ -19,6 +19,7 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 
 /**
  * Represents statements.
@@ -27,6 +28,10 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  *
  */
 public abstract class Stmt extends ClavaNode {
+
+    public Stmt(StmtData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public Stmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
