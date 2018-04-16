@@ -229,6 +229,7 @@ import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
+import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
@@ -636,11 +637,11 @@ public class ClavaNodeFactory {
      */
 
     public static DummyType dummyType(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyType(content, info, children);
+        return new DummyTypeLegacy(content, info, children);
     }
 
     public static DummyType dummyType(ClavaNode node) {
-        return new DummyType(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyTypeLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
     // public static BuiltinTypeOld builtinType(List<Type> type, ClavaNodeInfo info) {

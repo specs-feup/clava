@@ -14,14 +14,13 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
+import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
 
 /**
  * Dummy type, for testing purposes.
@@ -31,22 +30,28 @@ import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
  */
 public class DummyType extends Type implements DummyNode {
 
-    private final String content;
-
-    public DummyType(String classname, TypeDataV2 data, Collection<? extends ClavaNode> children) {
+    public DummyType(DummyTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        this.content = classname;
     }
 
-    public DummyType(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(new TypeData(content), info, children);
+    /**
+     * Legacy support.
+     * 
+     * @param typeData
+     * @param info
+     * @param children
+     */
+    public DummyType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(typeData, info, children);
+    }
 
-        this.content = content;
+    @Override
+    public DummyTypeData getData() {
+        return (DummyTypeData) super.getData();
     }
 
     public String getNodeCode() {
-        return "// Dummy type '" + content + "'";
+        return "// Dummy type '" + getData().getContent() + "'";
     }
 
     @Override
@@ -55,13 +60,8 @@ public class DummyType extends Type implements DummyNode {
     }
 
     @Override
-    protected ClavaNode copyPrivate() {
-        return new DummyType(content, getInfo(), Collections.emptyList());
-    }
-
-    @Override
     public String getContent() {
-        return content;
+        return getData().getContent();
     }
 
 }

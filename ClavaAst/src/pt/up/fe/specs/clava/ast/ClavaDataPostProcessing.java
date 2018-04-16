@@ -23,12 +23,15 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.SpecsCheck;
 
@@ -57,8 +60,10 @@ public class ClavaDataPostProcessing {
         ClavaNode node = getClavaNode(parsedTypeId);
 
         if (node instanceof UnsupportedNode) {
-            return new DummyType(((UnsupportedNode) node).getClassname(), TypeDataV2.empty(node.getData()),
-                    Collections.emptyList());
+            DummyTypeData dummyData = new DummyTypeData(((UnsupportedNode) node).getClassname(),
+                    TypeDataV2.empty(node.getData()));
+
+            return new DummyType(dummyData, Collections.emptyList());
             // NullType nullType = ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
             // nullType.setData(node.getData());
             // return nullType;
@@ -76,8 +81,10 @@ public class ClavaDataPostProcessing {
         ClavaNode node = getClavaNode(parsedAttrId);
 
         if (node instanceof UnsupportedNode) {
-            return new DummyAttr(((UnsupportedNode) node).getClassname(), AttributeData.empty(node.getData()),
-                    Collections.emptyList());
+            DummyAttributeData attrData = new DummyAttributeData(((UnsupportedNode) node).getClassname(),
+                    AttributeData.empty(node.getData()));
+
+            return new DummyAttr(attrData, Collections.emptyList());
         }
 
         SpecsCheck.checkArgument(node instanceof Attribute,
@@ -94,8 +101,9 @@ public class ClavaDataPostProcessing {
         ClavaNode node = getClavaNode(parsedExprId);
 
         if (node instanceof UnsupportedNode) {
-            return new DummyExpr(((UnsupportedNode) node).getClassname(), ExprDataV2.empty(node.getData()),
-                    Collections.emptyList());
+            DummyExprData dummyData = new DummyExprData(((UnsupportedNode) node).getClassname(),
+                    ExprDataV2.empty(node.getData()));
+            return new DummyExpr(dummyData, Collections.emptyList());
         }
 
         SpecsCheck.checkArgument(node instanceof Expr,
