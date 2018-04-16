@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 
 import com.google.common.base.Preconditions;
 
@@ -38,6 +39,8 @@ import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
+import pt.up.fe.specs.clang.parsersv2.ClangParserKeys;
+import pt.up.fe.specs.clang.parsersv2.ClangStreamParserV2;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
@@ -184,14 +187,14 @@ public class ClangAstParser {
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-
+        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance();
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                inputStream -> processStdErr(config, inputStream));
+                inputStream -> processStdErr(config, inputStream, lineStreamParser));
 
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
 
-        ClangStreamParser clangStreamParser = new ClangStreamParser(stderr, SpecsSystem.isDebug());
+        ClangStreamParser clangStreamParser = new ClangStreamParser(lineStreamParser.getData(), SpecsSystem.isDebug());
         App newApp = clangStreamParser.parse();
 
         if (SpecsSystem.isDebug()) {
@@ -199,6 +202,15 @@ public class ClangAstParser {
             System.out.println("NEW APP CODE:\n" + newApp.getCode());
         }
 
+        /*
+        ClangStreamParser clangStreamParser = new ClangStreamParser(stderr, SpecsSystem.isDebug());
+        App newApp = clangStreamParser.parse();
+        
+        if (SpecsSystem.isDebug()) {
+            // App newApp = new ClangStreamParser(stderr).parse();
+            System.out.println("NEW APP CODE:\n" + newApp.getCode());
+        }
+        */
         // System.out.println("NUM DECLS:" + stderr.get(ClangNodeParsing.getNodeDataKey(Decl.class)).size());
         // System.out.println("KEYS:" + stderr.get);
         // DataStore stderr = new StdErrParser().parse(output.getStdErr());
@@ -271,8 +283,11 @@ public class ClangAstParser {
         // Get enum integer types
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
+        // ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
+        // isTemporary, ompDirectives, enumToIntegerType, stderr, clangStreamParser.getParsedNodes());
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-                isTemporary, ompDirectives, enumToIntegerType, stderr, clangStreamParser.getParsedNodes());
+                isTemporary, ompDirectives, enumToIntegerType, stderr,
+                lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES));
 
         return new ClangRootNode(clangRootData, clangDump);
     }
@@ -286,11 +301,11 @@ public class ClangAstParser {
         return clangDump;
     }
 
-    private DataStore processStdErr(DataStore clavaData, InputStream inputStream) {
+    private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParserV2 lineStreamParser) {
         File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
 
         // Parse StdErr from ClangAst
-        return new StreamParser(clavaData, dumpfile).parse(inputStream);
+        return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
     }
 
     private void addSourceRanges(List<ClangNode> clangDump, DataStore stderr) {
@@ -486,8 +501,10 @@ public class ClangAstParser {
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
 
+        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance();
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream));
+                inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
+                        clangStreamParser));
 
         boolean foundInclude = !output.getStdOut().isEmpty();
 

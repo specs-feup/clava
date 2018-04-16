@@ -30,9 +30,9 @@ import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clavaparser.extra.UndefinedParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
-import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.io.FileService;
@@ -139,7 +139,8 @@ public class ClangConverterTable implements AutoCloseable {
 
         // Check if parsed nodes contains a valid node
         ClavaNode newClavaNode = getClangRootData().getNewParsedNodes().get(clangNode.getExtendedId());
-        if (newClavaNode != null && !(newClavaNode instanceof UnsupportedNode)) {
+        // if (newClavaNode != null && !(newClavaNode instanceof UnsupportedNode)) {
+        if (newClavaNode != null && !(newClavaNode instanceof DummyNode)) {
             // TODO: Replace with map?
             newParsedNodes++;
             return NewClavaNodeParser.newInstance(newClavaNode.getClass()).apply(this).parse(clangNode);

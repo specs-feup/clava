@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T> {
@@ -54,9 +55,14 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // post-processing and other complications
         ClavaNode clavaNode = getClangRootData().getNewParsedNodes().get(node.getId());
         Preconditions.checkNotNull(clavaNode, "Could not find new ClavaNode for id '" + node.getId() + "'");
+        // System.out.println("NODE:" + node.getContent());
+        // System.out.println("CLAVA DATA:" + clavaNode.getData().getClass());
+        // System.out.println("CLAVA NODE:" + clavaNode);
 
+        boolean isType = clavaNode instanceof Type;
         // Parse children
-        List<ClavaNode> children = parseChildren(node);
+        // List<ClavaNode> children = parseChildren(node);
+        List<ClavaNode> children = parseChildren(node.getChildrenStream(), getClass().getSimpleName(), isType);
 
         return newClavaNode(nodeClass, clavaNode.getData(), children);
     }

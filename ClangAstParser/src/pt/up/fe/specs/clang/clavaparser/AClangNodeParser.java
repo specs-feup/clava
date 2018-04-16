@@ -32,8 +32,10 @@ import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clang.parsers.ClavaDataParser;
-import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
+import pt.up.fe.specs.clang.parsersv2.ClangParserKeys;
+import pt.up.fe.specs.clang.parsersv2.ClavaDataParser;
+// import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+// import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -571,7 +573,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         }
 
         // Compare against new children
-        List<String> newChildren = getStdErr().get(VisitedChildrenParser.getDataKey()).get(parentId);
+        // List<String> newChildren = getStdErr().get(VisitedChildrenParser.getDataKey()).get(parentId);
+        List<String> newChildren = getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(parentId);
 
         if (newChildren == null) {
             throw new RuntimeException("No children visited for node " + parentId);

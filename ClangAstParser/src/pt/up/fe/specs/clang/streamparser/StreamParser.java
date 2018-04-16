@@ -31,6 +31,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
+import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 
 import com.google.common.base.Preconditions;
 
@@ -46,6 +47,7 @@ import pt.up.fe.specs.clang.parsers.TopLevelAttributesParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clang.parsers.TopLevelTypesParser;
 import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
+import pt.up.fe.specs.clang.parsersv2.ClangStreamParserV2;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
@@ -113,14 +115,16 @@ public class StreamParser {
     private final Map<DataKey<?>, SnippetParser<?, ?>> keysToSnippetsMap;
     private final Map<String, SnippetParser<?, ?>> parsers;
 
-    private final Collection<LineStreamParser> linestreamParsers;
-    private final Map<String, LineStreamParser> linestreamParsersMap;
+    // private final Collection<LineStreamParser> linestreamParsers;
+    // private final Map<String, LineStreamParser> linestreamParsersMap;
 
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
+    private final LineStreamParserV2 lineStreamParser;
+
     public StreamParser(DataStore clavaData) {
-        this(clavaData, null);
+        this(clavaData, null, ClangStreamParserV2.newInstance());
     }
 
     // Single map for all the node data dumps
@@ -129,7 +133,7 @@ public class StreamParser {
     /**
      * We need a new instance every time we want to parse a String.
      */
-    public StreamParser(DataStore clavaData, File dumpFile) {
+    public StreamParser(DataStore clavaData, File dumpFile, LineStreamParserV2 lineStreamParser) {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
@@ -139,9 +143,10 @@ public class StreamParser {
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
 
-        linestreamParsers = buildLineStreamParsers(clavaData);
-        linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
+        // linestreamParsers = buildLineStreamParsers(clavaData);
+        // linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
 
+        this.lineStreamParser = lineStreamParser;
     }
 
     private Collection<LineStreamParser> buildLineStreamParsers(DataStore clavaData) {
@@ -366,8 +371,7 @@ public class StreamParser {
             }
 
             // If parser null, check linestream parsers
-            LineStreamParser lineStreamParser = linestreamParsersMap.get(currentLine);
-            if (lineStreamParser != null) {
+            if (lineStreamParser.getIds().contains(currentLine)) {
                 try {
                     lineStreamParser.parse(currentLine, lines);
                 } catch (Exception e) {
@@ -376,6 +380,17 @@ public class StreamParser {
 
                 continue;
             }
+
+            // LineStreamParser lineStreamParser = linestreamParsersMap.get(currentLine);
+            // if (lineStreamParser != null) {
+            // try {
+            // lineStreamParser.parse(currentLine, lines);
+            // } catch (Exception e) {
+            // SpecsLogs.msgWarn("Problems while parsing '" + currentLine + "'", e);
+            // }
+            //
+            // continue;
+            // }
 
             // Add line to the warnings
             warnings.append(currentLine).append("\n");
@@ -409,10 +424,13 @@ public class StreamParser {
             stdErrOutput.setRaw(key, parser.getResult());
         }
 
+        // Add DataStore of line parser
+        stdErrOutput.addAll(lineStreamParser.getData());
+
         // Add DataStores from line parsers
-        for (LineStreamParser parser : linestreamParsers) {
-            stdErrOutput.addAll(parser.buildData());
-        }
+        // for (LineStreamParser parser : linestreamParsers) {
+        // stdErrOutput.addAll(parser.buildData());
+        // }
 
         // System.out.println("ID TO CLASSNAME:" + stdErrOutput.get(IdToClassnameParser.getDataKey()));
 
