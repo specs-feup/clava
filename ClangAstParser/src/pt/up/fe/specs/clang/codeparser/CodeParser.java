@@ -21,12 +21,15 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
+import pt.up.fe.specs.clang.streamparserv2.ClangDumperParser;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class CodeParser {
+
+    private static final boolean ONLY_NEW_PARSE_METHOD = false;
 
     private boolean showClangDump;
     private boolean showClangAst;
@@ -69,6 +72,10 @@ public class CodeParser {
 
     public App parse(List<File> sources, List<String> compilerOptions) {
 
+        if (ONLY_NEW_PARSE_METHOD) {
+            return parseNewMethod(sources, compilerOptions);
+        }
+
         // Collect implementation files
         Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
 
@@ -107,6 +114,39 @@ public class CodeParser {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+    private App parseNewMethod(List<File> sources, List<String> compilerOptions) {
+
+        // Collect implementation files
+        Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
+
+        List<String> implementationFiles = allFiles.keySet().stream()
+                .filter(SourceType.IMPLEMENTATION::hasExtension)
+                .collect(Collectors.toList());
+
+        // Parse files
+        App app = new ClangDumperParser(showClangDump, useCustomResources).parse(implementationFiles,
+                compilerOptions);
+
+        if (showClangDump) {
+            SpecsLogs.msgInfo("Clang Dump not supported in new parse method");
+        }
+
+        if (showClangAst) {
+            SpecsLogs.msgInfo("Clang AST not supported in new parse method");
+        }
+
+        if (showClavaAst) {
+            SpecsLogs.msgInfo("CLAVA AST:\n" + app);
+        }
+
+        if (showCode) {
+            SpecsLogs.msgInfo("Code:\n" + app.getCode());
+        }
+
+        return app;
 
     }
 }

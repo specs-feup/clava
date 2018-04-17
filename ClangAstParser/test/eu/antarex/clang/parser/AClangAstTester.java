@@ -222,6 +222,7 @@ public abstract class AClangAstTester {
 
         // Compare with .txt, if available
         for (ResourceProvider resource : resources) {
+
             // Get .txt resource
             String txtResource = resource.getResource() + ".txt";
 

@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.io.FileService;
 import pt.up.fe.specs.util.io.LineStreamFileService;
+import pt.up.fe.specs.util.utilities.CachedItems;
 
 public class ClangConverterTable implements AutoCloseable {
 
@@ -53,6 +54,7 @@ public class ClangConverterTable implements AutoCloseable {
     private Map<String, ClavaNode> parsedNodes;
     // private List<ClavaNode> parsedNodes;
     private final FileService fileService;
+    private final CachedItems<Class<? extends ClavaNode>, Function<ClangConverterTable, ClangNodeParser<?>>> newNodeParsers;
     // private final ClassesService classesService;
     // private Map<String, ClavaNode> newParsedNodes;
 
@@ -69,6 +71,8 @@ public class ClangConverterTable implements AutoCloseable {
         fileService = new LineStreamFileService();
         // classesService = new ClassesService();
         // newParsedNodes = new HashMap<>();
+        newNodeParsers = new CachedItems<>(NewClavaNodeParser::newInstance);
+
         totalParsedNodes = 0;
         newParsedNodes = 0;
     }
@@ -143,7 +147,8 @@ public class ClangConverterTable implements AutoCloseable {
         if (newClavaNode != null && !(newClavaNode instanceof DummyNode)) {
             // TODO: Replace with map?
             newParsedNodes++;
-            return NewClavaNodeParser.newInstance(newClavaNode.getClass()).apply(this).parse(clangNode);
+            return newNodeParsers.get(newClavaNode.getClass()).apply(this).parse(clangNode);
+            // return NewClavaNodeParser.newInstance(newClavaNode.getClass()).apply(this).parse(clangNode);
         }
         // converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
 
