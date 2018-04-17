@@ -17,10 +17,16 @@ import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
 
 public class AlignedAttr extends Attribute {
 
-    public AlignedAttr(AlignedAttrData data, Collection<? extends ClavaNode> children) {
+    public AlignedAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    public AlignedAttr(AlignedTypeAttrData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

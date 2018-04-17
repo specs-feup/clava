@@ -16,46 +16,29 @@ package pt.up.fe.specs.clava.ast.attr.data;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 
-public class AlignedAttrData extends AttributeData {
+public abstract class AlignedAttrData extends AttributeData {
 
     private final String spelling;
-    private final boolean isExpr;
-    // private final String nodeId;
-    private Expr expr;
-    private Type type;
 
-    // public AlignedAttrData(String spelling, boolean isExpr, String nodeId, Expr expr, Type type, AttributeData data)
-    // {
-    public AlignedAttrData(String spelling, boolean isExpr, Expr expr, Type type, AttributeData data) {
+    public AlignedAttrData(String spelling, AttributeData data) {
         super(data);
 
         this.spelling = spelling;
-        this.isExpr = isExpr;
-        // this.nodeId = nodeId;
-        this.expr = expr;
-        this.type = type;
     }
 
     public AlignedAttrData(AlignedAttrData data) {
-        // this(data.spelling, data.isExpr, data.nodeId, data.expr, data.type, data);
-        this(data.spelling, data.isExpr, data.expr, data.type, data);
+        this(data.spelling, data);
     }
 
     public String getSpelling() {
         return spelling;
     }
 
-    public boolean isExpr() {
-        return isExpr;
-    }
+    public abstract boolean isExpr();
 
-    public Expr getExpr() {
-        return expr;
-    }
+    public abstract Expr getExpr();
 
-    public Type getType() {
-        return type;
-    }
+    public abstract Type getType();
 
     /*
     @Override
@@ -75,7 +58,7 @@ public class AlignedAttrData extends AttributeData {
     */
 
     public String getCode() {
-        if (isExpr) {
+        if (isExpr()) {
             return getExpr().getCode();
         } else {
             return getType().getCode();
