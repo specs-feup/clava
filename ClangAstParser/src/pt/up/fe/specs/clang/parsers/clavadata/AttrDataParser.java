@@ -15,10 +15,9 @@ package pt.up.fe.specs.clang.parsers.clavadata;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
@@ -49,11 +48,14 @@ public class AttrDataParser {
         boolean isExpr = GeneralParsers.parseOneOrZero(lines);
         String nodeId = lines.nextLine();
 
-        ClavaNode node = ClangParserKeys.getNode(dataStore, nodeId);
+        Expr expr = isExpr ? ClavaNodes.getExpr(dataStore, nodeId) : null;
+        Type type = !isExpr ? ClavaNodes.getType(dataStore, nodeId) : null;
+
+        // ClavaNode node = ClavaNodes.getNode(dataStore, nodeId);
         // ClavaNode node = dataStore.get(ClangParserKeys.CLAVA_NODES).get(nodeId);
 
-        Expr expr = isExpr ? (Expr) node : null;
-        Type type = isExpr ? null : (Type) node;
+        // Expr expr = isExpr ? (Expr) node : null;
+        // Type type = isExpr ? null : (Type) node;
 
         return new AlignedAttrData(spelling, isExpr, expr, type, data);
     }

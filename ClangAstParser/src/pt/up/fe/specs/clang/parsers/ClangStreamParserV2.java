@@ -25,7 +25,7 @@ public class ClangStreamParserV2 {
     private static final Map<String, LineStreamWorker> WORKERS;
     static {
         WORKERS = new HashMap<>();
-        addWorker(IdToClavaNodeParser::new);
+        addWorker(ClavaNodeParser::new);
         addWorker(VisitedChildrenParser::new);
         addWorker(IdToFilenameParser::new);
         addWorker(IncludesParser::new);

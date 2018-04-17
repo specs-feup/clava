@@ -34,14 +34,14 @@ import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class IdToClavaNodeParser implements LineStreamWorker {
+public class ClavaNodeParser implements LineStreamWorker {
 
     private static final String PARSER_ID = "<Id to Class Map>";
 
     private final ClassesService classesService;
     private final Set<String> missingConstructors;
 
-    public IdToClavaNodeParser() {
+    public ClavaNodeParser() {
         this.classesService = new ClassesService();
         this.missingConstructors = new HashSet<>();
     }

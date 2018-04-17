@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,6 @@ import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
-import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -95,10 +92,10 @@ public class ClangStreamParser {
         // topLevelAttributes.stream().forEach(this::parse);
 
         // After all ClavaNodes are created, apply post-processing
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
-        ClavaDataPostProcessing postData = new ClavaDataPostProcessing(parsedNodes);
-        parsedNodes.values().stream()
-                .forEach(node -> ClavaDataUtils.applyPostProcessing(node.getData(), postData));
+        // Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
+        // ClavaDataPostProcessing postData = new ClavaDataPostProcessing(parsedNodes);
+        // parsedNodes.values().stream()
+        // .forEach(node -> ClavaDataUtils.applyPostProcessing(node.getData(), postData));
 
         // Create App node
         App app = createApp(topLevelDeclNodes, data.get(ClangParserKeys.INCLUDES));

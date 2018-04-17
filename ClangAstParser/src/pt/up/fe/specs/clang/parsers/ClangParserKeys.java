@@ -22,9 +22,6 @@ import java.util.Set;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
-import org.suikasoft.jOptions.Interfaces.DataStore;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
@@ -65,11 +62,5 @@ public interface ClangParserKeys {
      * Enables debug prints.
      */
     DataKey<Boolean> DEBUG = KeyFactory.bool("clang_parser_stream_debug");
-
-    static ClavaNode getNode(DataStore dataStore, String nodeId) {
-        ClavaNode node = dataStore.get(CLAVA_NODES).get(nodeId);
-        Preconditions.checkNotNull(node, "Could not find ClavaNode with id '" + nodeId + "'");
-        return node;
-    }
 
 }

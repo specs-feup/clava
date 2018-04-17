@@ -14,12 +14,15 @@
 package pt.up.fe.specs.clang.parsers.clavadata;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
@@ -54,13 +57,15 @@ public class DeclDataParser {
 
         // GeneralParsers.parseStringList(lines).stream()
         // .map(attrId -> )
-        List<String> attributesIds = GeneralParsers.parseStringList(lines);
+        List<Attribute> attributes = GeneralParsers.parseStringList(lines).stream()
+                .map(attrId -> ClavaNodes.getAttr(dataStore, attrId))
+                .collect(Collectors.toList());
 
         // for (String attributeId : attributesIds) {
         // System.out.println("ATTRIBUTE:" + config.get(ClavaDataParser.getParsedNodesKey()).get(attributeId));
         // }
 
-        return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, attributesIds, clavaData);
+        return new DeclDataV2(isImplicit, isUsed, isReferenced, isInvalidDecl, attributes, clavaData);
     }
 
     public static NamedDeclData parseNamedDeclData(LineStream lines, DataStore dataStore) {

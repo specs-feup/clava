@@ -17,8 +17,8 @@ import java.math.BigInteger;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
@@ -47,7 +47,8 @@ public class ExprDataParser {
 
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines, dataStore);
 
-        Type type = (Type) ClangParserKeys.getNode(dataStore, lines.nextLine());
+        // Type type = (Type) ClavaNodes.getNode(dataStore, lines.nextLine());
+        Type type = ClavaNodes.getType(dataStore, lines.nextLine());
 
         ValueKind valueKind = GeneralParsers.enumFromInt(ValueKind.getEnumHelper(), lines);
         ObjectKind objectKind = GeneralParsers.enumFromInt(ObjectKind.getEnumHelper(), lines);
