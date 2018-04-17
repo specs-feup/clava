@@ -205,15 +205,6 @@ public class ClavaData {
     }
 
     /**
-     * Package-level method that can be used for any post-processing the node might need.
-     * 
-     * @param data
-     */
-    protected void postProcess(ClavaDataPostProcessing data) {
-        // By default, do nothing
-    }
-
-    /**
      * Sets the id of the current instance.
      * 
      * @param newId

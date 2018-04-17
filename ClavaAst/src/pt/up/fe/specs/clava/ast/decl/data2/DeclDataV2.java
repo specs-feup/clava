@@ -18,9 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class DeclDataV2 extends ClavaData {
 
@@ -32,11 +30,10 @@ public class DeclDataV2 extends ClavaData {
     private final boolean isUsed;
     private final boolean isReferenced;
     private final boolean isInvalidDecl;
-    private final List<String> attributesIds;
     private List<Attribute> attributes;
 
     public DeclDataV2(boolean isImplicit, boolean isUsed, boolean isReferenced,
-            boolean isInvalidDecl, List<String> attributesIds, ClavaData clavaData) {
+            boolean isInvalidDecl, List<Attribute> attributes, ClavaData clavaData) {
 
         super(clavaData);
 
@@ -44,29 +41,12 @@ public class DeclDataV2 extends ClavaData {
         this.isUsed = isUsed;
         this.isReferenced = isReferenced;
         this.isInvalidDecl = isInvalidDecl;
-        this.attributesIds = new ArrayList<>(attributesIds);
-        this.attributes = null;
+        this.attributes = attributes;
     }
 
     public DeclDataV2(DeclDataV2 data) {
-        this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl, data.attributesIds, data);
-    }
-
-    @Override
-    protected void postProcess(ClavaDataPostProcessing data) {
-        // Call super
-        super.postProcess(data);
-
-        List<Attribute> attributes = new ArrayList<>(attributesIds.size());
-
-        for (String attrId : attributesIds) {
-            SpecsCheck.checkNotNull(attrId,
-                    () -> "Expected '" + attrId + "' in node '" + getId() + "' to be non-null");
-
-            attributes.add(data.getAttr(attrId));
-        }
-
-        this.attributes = attributes;
+        this(data.isImplicit, data.isUsed, data.isReferenced, data.isInvalidDecl, new ArrayList<>(data.attributes),
+                data);
     }
 
     public boolean isImplicit() {
@@ -85,10 +65,6 @@ public class DeclDataV2 extends ClavaData {
         return isInvalidDecl;
     }
 
-    public List<String> getAttributesIds() {
-        return attributesIds;
-    }
-
     public List<Attribute> getAttributes() {
         return attributes;
     }
@@ -102,7 +78,7 @@ public class DeclDataV2 extends ClavaData {
         builder.append(", is used: " + isUsed);
         builder.append(", is referenced: " + isReferenced);
         builder.append(", is invalid decl: " + isInvalidDecl);
-        builder.append(", attributes: " + attributesIds);
+        builder.append(", attributes: " + attributes);
 
         return toString(super.toString(), builder.toString());
     }

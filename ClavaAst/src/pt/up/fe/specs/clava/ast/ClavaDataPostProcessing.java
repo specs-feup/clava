@@ -31,6 +31,12 @@ import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.SpecsCheck;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class ClavaDataPostProcessing {
 
     private static final String NULLPRT = "nullptr";
