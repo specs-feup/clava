@@ -23,7 +23,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class TopLevelNodesParser {

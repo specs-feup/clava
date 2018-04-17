@@ -28,7 +28,6 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsersv2.clavadata.AttrDataParser;
 import pt.up.fe.specs.clang.parsersv2.clavadata.DeclDataParser;
 import pt.up.fe.specs.clang.parsersv2.clavadata.ExprDataParser;

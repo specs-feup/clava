@@ -30,22 +30,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.attr.DummyAttr;
-import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
-import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
-import pt.up.fe.specs.clava.ast.decl.DummyDecl;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
-import pt.up.fe.specs.clava.ast.expr.DummyExpr;
-import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
-import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
-import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
-import pt.up.fe.specs.clava.ast.stmt.data.DummyStmtData;
-import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
-import pt.up.fe.specs.clava.ast.type.DummyType;
-import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
-import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
+import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -87,57 +72,59 @@ public class IdToClavaNodeParser implements LineStreamWorker {
         ClavaNode node = parseNode(nodeId, classname, data);
 
         // If UnsupportedNode, transform to DummyNode
-        node = transformUnsupportedNode(node);
+        // node = transformUnsupportedNode(node);
 
         // Store node
         parsedNodes.put(nodeId, node);
     }
 
+    /*
     private ClavaNode transformUnsupportedNode(ClavaNode node) {
         if (!(node instanceof UnsupportedNode)) {
             return node;
         }
-
+    
         UnsupportedNode unsupportedNode = (UnsupportedNode) node;
-
+    
         // Determine DummyNode type based on Data
         ClavaData data = node.getData();
-
+    
         if (data instanceof TypeDataV2) {
             DummyTypeData dummyData = new DummyTypeData(unsupportedNode.getClassname(), (TypeDataV2) data);
             return new DummyType(dummyData, unsupportedNode.getChildren());
         }
-
+    
         if (data instanceof DeclDataV2) {
             DummyDeclData dummyData = new DummyDeclData(unsupportedNode.getClassname(), (DeclDataV2) data);
             return new DummyDecl(dummyData, unsupportedNode.getChildren());
         }
-
+    
         if (data instanceof ExprDataV2) {
             DummyExprData dummyData = new DummyExprData(unsupportedNode.getClassname(), (ExprDataV2) data);
             return new DummyExpr(dummyData, unsupportedNode.getChildren());
         }
-
+    
         if (data instanceof StmtData) {
             DummyStmtData dummyData = new DummyStmtData(unsupportedNode.getClassname(), (StmtData) data);
             return new DummyStmt(dummyData, unsupportedNode.getChildren());
         }
-
+    
         if (data instanceof AttributeData) {
             DummyAttributeData dummyData = new DummyAttributeData(unsupportedNode.getClassname(), (AttributeData) data);
             return new DummyAttr(dummyData, unsupportedNode.getChildren());
         }
-
+    
         throw new RuntimeException("ClavaData class not supported:" + data.getClass());
     }
-
+    */
     private ClavaNode parseNode(String nodeId, String classname, DataStore data) {
         boolean debug = data.get(ClangParserKeys.DEBUG);
 
         if (classname == null) {
-            if (debug)
-                SpecsLogs.msgInfo("No classname for node '" + nodeId + "");
-            return new UnsupportedNode("<CLASSNAME NOT FOUND>", ClavaData.empty(), Collections.emptyList());
+            throw new RuntimeException("No classname for node '" + nodeId + "");
+            // if (debug)
+            // SpecsLogs.msgInfo("No classname for node '" + nodeId + "");
+            // return new UnsupportedNode("<CLASSNAME NOT FOUND>", ClavaData.empty(), Collections.emptyList());
         }
 
         // Get corresponding ClavaNode class
@@ -147,10 +134,12 @@ public class IdToClavaNodeParser implements LineStreamWorker {
         ClavaData clavaData = data.get(ClangParserKeys.CLAVA_DATA).get(nodeId);
 
         if (clavaData == null) {
-            if (debug)
-                SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
-                        + "), data dumper is not being called");
-            return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
+            throw new RuntimeException("No ClavaData for node '" + nodeId + "' (classname: " + classname
+                    + "), data dumper is not being called");
+            // if (debug)
+            // SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
+            // + "), data dumper is not being called");
+            // return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
 
         // Get children ids
@@ -159,7 +148,8 @@ public class IdToClavaNodeParser implements LineStreamWorker {
         if (childrenIds == null) {
             if (debug)
                 SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
-            return new UnsupportedNode(classname, clavaData, Collections.emptyList());
+            return DummyNode.newInstance(classname, clavaData, Collections.emptyList());
+            // return new UnsupportedNode(classname, clavaData, Collections.emptyList());
         }
 
         Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
@@ -186,7 +176,8 @@ public class IdToClavaNodeParser implements LineStreamWorker {
                                     + " data, Collection<? extends ClavaNode> children)'");
             }
 
-            return new UnsupportedNode(classname, clavaData, children);
+            return DummyNode.newInstance(classname, clavaData, children);
+            // return new UnsupportedNode(classname, clavaData, children);
         }
 
         // Build node based on data and children

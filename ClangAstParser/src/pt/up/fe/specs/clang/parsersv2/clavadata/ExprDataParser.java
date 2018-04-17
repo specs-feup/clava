@@ -17,8 +17,9 @@ import java.math.BigInteger;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
+import pt.up.fe.specs.clang.parsersv2.ClangParserKeys;
 import pt.up.fe.specs.clang.parsersv2.ClavaDataParser;
+import pt.up.fe.specs.clang.parsersv2.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
@@ -29,6 +30,7 @@ import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -45,11 +47,12 @@ public class ExprDataParser {
 
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines, dataStore);
 
-        String typeId = lines.nextLine();
+        Type type = (Type) ClangParserKeys.getNode(dataStore, lines.nextLine());
+
         ValueKind valueKind = GeneralParsers.enumFromInt(ValueKind.getEnumHelper(), lines);
         ObjectKind objectKind = GeneralParsers.enumFromInt(ObjectKind.getEnumHelper(), lines);
 
-        return new ExprDataV2(typeId, null, valueKind, objectKind, clavaData);
+        return new ExprDataV2(type, valueKind, objectKind, clavaData);
     }
 
     public static CastExprData parseCastExprData(LineStream lines, DataStore dataStore) {

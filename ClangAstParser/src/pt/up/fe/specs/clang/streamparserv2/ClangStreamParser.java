@@ -34,13 +34,9 @@ import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.ClavaDataUtils;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -152,13 +148,14 @@ public class ClangStreamParser {
             String canonicalPath = SpecsIo.getCanonicalPath(new File(filepath));
 
             // If UnsupportedNode, transform to DummyDecl
-            if (clavaNode instanceof UnsupportedNode) {
-                UnsupportedNode unsupportedNode = (UnsupportedNode) clavaNode;
-                DummyDeclData dummyData = new DummyDeclData(unsupportedNode.getClassname(),
-                        (DeclDataV2) unsupportedNode.getData());
-
-                clavaNode = new DummyDecl(dummyData, unsupportedNode.getChildren());
-            }
+            // if (clavaNode instanceof UnsupportedNode) {
+            // // throw new RuntimeException("ADASDASD");
+            // UnsupportedNode unsupportedNode = (UnsupportedNode) clavaNode;
+            // DummyDeclData dummyData = new DummyDeclData(unsupportedNode.getClassname(),
+            // (DeclDataV2) unsupportedNode.getData());
+            //
+            // clavaNode = new DummyDecl(dummyData, unsupportedNode.getChildren());
+            // }
 
             if (!(clavaNode instanceof Decl)) {
                 throw new RuntimeException(

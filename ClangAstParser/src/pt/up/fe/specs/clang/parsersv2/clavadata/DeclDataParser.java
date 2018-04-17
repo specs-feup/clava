@@ -17,8 +17,8 @@ import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsersv2.ClavaDataParser;
+import pt.up.fe.specs.clang.parsersv2.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;

@@ -16,8 +16,6 @@ package pt.up.fe.specs.clang.streamparser;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,18 +34,9 @@ import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
-import pt.up.fe.specs.clang.linestreamparser.LineStreamParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.clang.parsers.ClavaDataParser;
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
-import pt.up.fe.specs.clang.parsers.IdToClassnameParser;
-import pt.up.fe.specs.clang.parsers.IdToFilenameParser;
-import pt.up.fe.specs.clang.parsers.IncludesParser;
-import pt.up.fe.specs.clang.parsers.TopLevelAttributesParser;
-import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
-import pt.up.fe.specs.clang.parsers.TopLevelTypesParser;
-import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clang.parsersv2.ClangStreamParserV2;
+import pt.up.fe.specs.clang.parsersv2.GeneralParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
@@ -149,27 +138,29 @@ public class StreamParser {
         this.lineStreamParser = lineStreamParser;
     }
 
+    /*
     private Collection<LineStreamParser> buildLineStreamParsers(DataStore clavaData) {
         return Arrays.asList(ClavaDataParser.newInstance(clavaData), VisitedChildrenParser.newInstance(),
                 IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance(),
                 TopLevelTypesParser.newInstance(), TopLevelAttributesParser.newInstance(), IncludesParser.newInstance(),
                 IdToFilenameParser.newInstance());
     }
-
+    */
+    /*
     private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {
-
+    
         Map<String, LineStreamParser> lineStreamParsers = new HashMap<>();
-
+    
         for (LineStreamParser parser : parsers) {
             parser.getIds().stream().forEach(id -> lineStreamParsers.put(id, parser));
         }
-
+    
         // ClavaDataParser clavaDataParser = ClavaDataParser.newInstance();
         // clavaDataParser.getIds().stream().forEach(id -> lineStreamParsers.put(id, clavaDataParser));
-
+    
         return lineStreamParsers;
     }
-
+    */
     public Map<String, ClavaData> getNodeData() {
         return nodeData;
     }
