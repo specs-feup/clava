@@ -11,15 +11,15 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.parsersv2.clavadata;
+package pt.up.fe.specs.clang.parsers.clavadata;
 
 import java.math.BigInteger;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.parsersv2.ClangParserKeys;
-import pt.up.fe.specs.clang.parsersv2.ClavaDataParser;
-import pt.up.fe.specs.clang.parsersv2.GeneralParsers;
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;

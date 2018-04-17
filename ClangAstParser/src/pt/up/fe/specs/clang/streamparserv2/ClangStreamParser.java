@@ -27,7 +27,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
-import pt.up.fe.specs.clang.parsersv2.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;

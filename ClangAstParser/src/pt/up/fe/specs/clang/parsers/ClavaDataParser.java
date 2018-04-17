@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.parsersv2;
+package pt.up.fe.specs.clang.parsers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,11 +28,11 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.parsersv2.clavadata.AttrDataParser;
-import pt.up.fe.specs.clang.parsersv2.clavadata.DeclDataParser;
-import pt.up.fe.specs.clang.parsersv2.clavadata.ExprDataParser;
-import pt.up.fe.specs.clang.parsersv2.clavadata.StmtDataParser;
-import pt.up.fe.specs.clang.parsersv2.clavadata.TypeDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.AttrDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.ExprDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.StmtDataParser;
+import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaData;

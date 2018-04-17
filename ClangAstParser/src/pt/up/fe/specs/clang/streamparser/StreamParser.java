@@ -35,8 +35,8 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.clang.parsersv2.ClangStreamParserV2;
-import pt.up.fe.specs.clang.parsersv2.GeneralParsers;
+import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;

@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.parsersv2;
+package pt.up.fe.specs.clang.parsers;
 
 import java.io.File;
 import java.util.ArrayList;
