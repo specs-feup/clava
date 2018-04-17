@@ -123,18 +123,36 @@ public class CXXMemberCallExpr extends CallExpr {
     }
 
     public Expr getRootBase() {
+        return getCallee().getExprChain().get(0);
+        /*
         Expr currentExpr = this;
-        while (currentExpr instanceof CXXMemberCallExpr) {
-            currentExpr = ((CXXMemberCallExpr) currentExpr).getBase();
+        while (currentExpr != null) {
+            if (currentExpr instanceof DeclRefExpr) {
+                return currentExpr;
+            }
+        
+            if (!(currentExpr.getParent() instanceof Expr)) {
+                throw new RuntimeException("Expected to find a DeclRefExpr:" + this);
+            }
+        
+            currentExpr = (Expr) currentExpr.getParent();
         }
+        
+        throw new RuntimeException("Expected to find a DeclRefExpr:" + this)
+        */
+        // while (currentExpr instanceof CXXMemberCallExpr) {
+        // currentExpr = ((CXXMemberCallExpr) currentExpr).getBase();
+        // }
 
-        return currentExpr;
+        // return currentExpr;
     }
 
     @Override
     protected Optional<FunctionDecl> getFunctionDecl() {
+
         // Get root base
         Expr rootBase = getRootBase();
+
         if (rootBase != getBase()) {
             ClavaLog.warning("Not yet implemented for consecutive chains");
             return Optional.empty();
