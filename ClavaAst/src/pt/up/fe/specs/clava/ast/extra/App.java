@@ -527,8 +527,10 @@ public class App extends ClavaNode {
         }
 
         Optional<ClavaNode> askedNode = getDescendantsAndSelfStream()
-                .filter(node -> node.getId().isPresent())
-                .filter(node -> node.getId().get().getExtendedId().equals(normalizedId))
+                // .filter(node -> node.getId().isPresent())
+                // .filter(node -> node.getId().get().getExtendedId().equals(normalizedId))
+                .filter(node -> node.getExtendedId().isPresent())
+                .filter(node -> node.getExtendedId().get().equals(normalizedId))
                 .findFirst();
 
         askedNode.ifPresent(node -> nodesCache.put(normalizedId, node));
