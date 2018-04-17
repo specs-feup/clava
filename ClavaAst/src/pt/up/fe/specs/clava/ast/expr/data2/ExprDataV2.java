@@ -14,32 +14,29 @@
 package pt.up.fe.specs.clava.ast.expr.data2;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.ClavaDataPostProcessing;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class ExprDataV2 extends ClavaData {
 
-    private final String typeId;
+    // private final String typeId;
+    private Type type;
     private final ValueKind valueKind;
     private final ObjectKind objectKind;
 
-    private Type type;
-
+    /*
     public static ExprDataV2 empty(ClavaData data) {
         if (data instanceof ExprDataV2) {
             return (ExprDataV2) data;
         }
-
-        return new ExprDataV2(null, null, ValueKind.getDefault(), ObjectKind.ORDINARY, ClavaData.empty());
+    
+        return new ExprDataV2(null, ValueKind.getDefault(), ObjectKind.ORDINARY, ClavaData.empty());
     }
-
-    public ExprDataV2(String typeId, Type type, ValueKind valueKind, ObjectKind objectKind, ClavaData clavaData) {
+    */
+    public ExprDataV2(Type type, ValueKind valueKind, ObjectKind objectKind, ClavaData clavaData) {
         super(clavaData);
 
-        this.typeId = typeId;
         this.type = type;
 
         this.valueKind = valueKind;
@@ -47,7 +44,8 @@ public class ExprDataV2 extends ClavaData {
     }
 
     public ExprDataV2(ExprDataV2 data) {
-        this(data.typeId, data.type, data.valueKind, data.objectKind, (ClavaData) data);
+        // Can share type nodes
+        this(data.type, data.valueKind, data.objectKind, (ClavaData) data);
     }
 
     public Type getType() {
@@ -82,17 +80,19 @@ public class ExprDataV2 extends ClavaData {
                 "type: " + typeId + ", valueKind: " + valueKind + ", objectKind: " + objectKind);
     }
 
+    /*
     @Override
     protected void postProcess(ClavaDataPostProcessing data) {
         // Call super
         super.postProcess(data);
-
+    
         SpecsCheck.checkNotNull(typeId, () -> "Expected 'parsedTypeId' in node '" + getId() + "' to be non-null");
         // Copy type, to be able to freely modify it
         // this.type = data.getType(parsedTypeId).copy();
         // Model without copy, where users have to be careful to not modify types but copies of types
         // Model where types are immutable, any set of a type returns a new node
-
+    
         this.type = data.getType(typeId);
     }
+    */
 }

@@ -24,10 +24,6 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
 import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
-import pt.up.fe.specs.clava.ast.expr.DummyExpr;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.extra.UnsupportedNode;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -93,23 +89,25 @@ public class ClavaDataPostProcessing {
         return (Attribute) node;
     }
 
+    /*
     public Expr getExpr(String parsedExprId) {
         if (NULLPRT.equals(parsedExprId)) {
             return ClavaNodeFactory.nullExpr();
         }
-
+    
         ClavaNode node = getClavaNode(parsedExprId);
-
+    
         if (node instanceof UnsupportedNode) {
             DummyExprData dummyData = new DummyExprData(((UnsupportedNode) node).getClassname(),
                     ExprDataV2.empty(node.getData()));
             return new DummyExpr(dummyData, Collections.emptyList());
         }
-
+    
         SpecsCheck.checkArgument(node instanceof Expr,
                 () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
-
+    
         return (Expr) node;
     }
+    */
 
 }
