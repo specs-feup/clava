@@ -188,6 +188,10 @@ public class ClangAstParser {
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
         LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance();
+        if (SpecsSystem.isDebug()) {
+            lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+        }
+
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(config, inputStream, lineStreamParser));
 

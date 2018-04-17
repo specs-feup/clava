@@ -20,6 +20,8 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -48,8 +50,13 @@ public class AttrDataParser {
         boolean isExpr = GeneralParsers.parseOneOrZero(lines);
         String nodeId = lines.nextLine();
 
-        Expr expr = isExpr ? ClavaNodes.getExpr(dataStore, nodeId) : null;
-        Type type = !isExpr ? ClavaNodes.getType(dataStore, nodeId) : null;
+        if (isExpr) {
+            Expr expr = ClavaNodes.getExpr(dataStore, nodeId);
+            return new AlignedExprAttrData(spelling, expr, data);
+        } else {
+            Type type = ClavaNodes.getType(dataStore, nodeId);
+            return new AlignedTypeAttrData(spelling, type, data);
+        }
 
         // ClavaNode node = ClavaNodes.getNode(dataStore, nodeId);
         // ClavaNode node = dataStore.get(ClangParserKeys.CLAVA_NODES).get(nodeId);
@@ -57,7 +64,7 @@ public class AttrDataParser {
         // Expr expr = isExpr ? (Expr) node : null;
         // Type type = isExpr ? null : (Type) node;
 
-        return new AlignedAttrData(spelling, isExpr, expr, type, data);
+        // return new AlignedAttrData(spelling, isExpr, expr, type, data);
     }
 
 }
