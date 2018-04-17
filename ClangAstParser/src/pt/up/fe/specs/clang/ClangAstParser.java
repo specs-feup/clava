@@ -292,6 +292,7 @@ public class ClangAstParser {
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
                 lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES));
+        // new HashMap<>());
 
         return new ClangRootNode(clangRootData, clangDump);
     }
