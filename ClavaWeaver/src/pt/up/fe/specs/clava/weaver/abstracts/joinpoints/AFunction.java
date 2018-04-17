@@ -917,6 +917,7 @@ public abstract class AFunction extends ANamedDecl {
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

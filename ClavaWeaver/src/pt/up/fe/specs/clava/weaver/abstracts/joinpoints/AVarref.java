@@ -479,6 +479,7 @@ public abstract class AVarref extends AExpression {
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

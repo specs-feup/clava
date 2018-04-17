@@ -96,6 +96,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -656,6 +668,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -1306,6 +1330,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -1913,6 +1949,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -2596,6 +2644,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -3264,6 +3324,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -3815,6 +3887,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -4347,6 +4431,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -4861,6 +4957,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -5369,6 +5477,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -6002,6 +6122,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -6577,6 +6709,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -7208,6 +7352,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -8085,6 +8241,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -8835,6 +9003,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -9438,6 +9618,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -10063,6 +10255,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -10697,6 +10901,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -11459,6 +11675,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -12057,6 +12285,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -12740,6 +12980,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -13488,6 +13740,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -14127,6 +14391,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -14848,6 +15124,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -15683,6 +15971,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -16341,6 +16641,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -16906,6 +17218,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -17539,6 +17863,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -18191,6 +18527,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -18761,6 +19109,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -19513,6 +19873,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -20101,6 +20473,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -20648,6 +21032,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -21301,6 +21697,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -21991,6 +22399,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -22643,6 +23063,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -23200,6 +23632,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -23778,6 +24222,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -24347,6 +24803,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {
@@ -24975,6 +25443,18 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "astName"
                            }]
@@ -25533,6 +26013,18 @@
                            {
                               "type": "String",
                               "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
                            }]
                },
                {

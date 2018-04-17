@@ -294,6 +294,7 @@ public abstract class AStruct extends ARecord {
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

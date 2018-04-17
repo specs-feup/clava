@@ -354,6 +354,7 @@ public abstract class AInclude extends ADecl {
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

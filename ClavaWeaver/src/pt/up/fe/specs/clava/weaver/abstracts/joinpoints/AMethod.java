@@ -557,6 +557,7 @@ public abstract class AMethod extends AFunction {
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

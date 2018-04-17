@@ -401,6 +401,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("astChildren");
         attributes.add("astName");
         attributes.add("astChild(Integer index)");
+        attributes.add("astIsInstance(String className)");
         attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
         attributes.add("javaFields");
@@ -1011,6 +1012,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "astChild", e);
+        }
+    }
+
+    /**
+     * 
+     * @param className
+     * @return 
+     */
+    public abstract Boolean astIsInstanceImpl(String className);
+
+    /**
+     * 
+     * @param className
+     * @return 
+     */
+    public final Object astIsInstance(String className) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "astIsInstance", Optional.empty(), className);
+        	}
+        	Boolean result = this.astIsInstanceImpl(className);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "astIsInstance", Optional.ofNullable(result), className);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "astIsInstance", e);
         }
     }
 

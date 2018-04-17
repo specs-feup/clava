@@ -181,4 +181,9 @@ public class CxxTest {
         newTester().test("Function.lara", "function.cpp");
     }
 
+    @Test
+    public void testAstAttributes() {
+        newTester().test("AstAttributes.lara", "ast_attributes.cpp");
+    }
+
 }

@@ -40,6 +40,12 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
+    // private static final String BASE_CLAVA_AST_PACKAGE = "pt.up.fe.specs.clava.ast";
+    //
+    // protected static String getBaseClavaAstPackage() {
+    // return BASE_CLAVA_AST_PACKAGE;
+    // }
+
     private static final Set<Class<? extends ClavaNode>> IGNORE_NODES;
     static {
         IGNORE_NODES = new HashSet<>();
@@ -702,11 +708,44 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return false;
     }
 
+    /**
+     * 
+     * @return the base ClavaAst class for this kind of nodes.
+     */
+    private String getBaseClavaNodePackage() {
+        return getNode().getClass().getPackage().getName();
+    }
+
     // @Override
     // public List<? extends ACxxWeaverJoinPoint> selectDescendant() {
     // return getNode().getDescendantsStream()
     // .map(descendant -> CxxJoinpoints.create(descendant, this))
     // .collect(Collectors.toList());
     // }
+
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        // Assume nodes are in the same package
+        String packageName = getBaseClavaNodePackage();
+
+        // ... unless current node is in a legacy package. Normalize package
+        if (packageName.endsWith(".legacy")) {
+            packageName = packageName.substring(0, packageName.length() - ".legacy".length());
+        }
+
+        // ... or if the given class name if for a legacy node. Add legacy package
+        if (className.endsWith("Legacy")) {
+            packageName = packageName + ".legacy";
+        }
+
+        String fullClassName = packageName + "." + className;
+
+        try {
+            return Class.forName(fullClassName).isInstance(getNode());
+        } catch (ClassNotFoundException e) {
+            SpecsLogs.msgInfo("Could not find class '" + fullClassName + "' to compare against this node");
+            return false;
+        }
+    }
 
 }
