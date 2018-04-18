@@ -1,0 +1,35 @@
+MemberChain:ts,a
+MemberChain:ts,d
+MemberChain:ts,a
+MemberChain:ts,a
+MemberChain:ts2,a
+MemberChain:ts2,a
+MemberChain:classVar,id
+varref:ts
+has decl:true
+varref:ts
+has decl:true
+varref:ts
+has decl:true
+varref:ts
+has decl:true
+varref:ts2
+has decl:true
+varref:ts2
+has decl:true
+varref:a
+has decl:true
+varref:classVar
+has decl:true
+varref:x
+has decl:true
+varref:y
+has decl:true
+varref:x
+has decl:true
+NewExpr: new A
+NewExpr: new A(20)
+NewExpr: new A[3]
+DeleteExpr: delete a1
+DeleteExpr: delete a2
+DeleteExpr: delete[] a3

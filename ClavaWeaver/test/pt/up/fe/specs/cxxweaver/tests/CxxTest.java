@@ -127,7 +127,7 @@ public class CxxTest {
 
     @Test
     public void testExpressions() {
-        newTester().test("Expressions.lara", "expressions.cpp");
+        newTester().test("Expressions.lara", "expressions.cpp", "classA.h");
     }
 
     @Test
@@ -185,5 +185,10 @@ public class CxxTest {
     public void testAstAttributes() {
         newTester().test("AstAttributes.lara", "ast_attributes.cpp");
     }
+
+    // @Test
+    // public void testClass() {
+    // newTester().test("Class.lara", "class.cpp");
+    // }
 
 }
