@@ -140,6 +140,15 @@ public abstract class AWrapperStmt extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select memberAccesss
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberAccess> selectMemberAccess() {
+        return this.aStatement.selectMemberAccess();
+    }
+
+    /**
      * Method used by the lara interpreter to select arrayAccesss
      * @return 
      */
@@ -182,6 +191,24 @@ public abstract class AWrapperStmt extends AStatement {
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
         return this.aStatement.selectUnaryOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select newExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ANewExpr> selectNewExpr() {
+        return this.aStatement.selectNewExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select deleteExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ADeleteExpr> selectDeleteExpr() {
+        return this.aStatement.selectDeleteExpr();
     }
 
     /**
@@ -330,6 +357,9 @@ public abstract class AWrapperStmt extends AStatement {
         	case "memberCall": 
         		joinPointList = selectMemberCall();
         		break;
+        	case "memberAccess": 
+        		joinPointList = selectMemberAccess();
+        		break;
         	case "arrayAccess": 
         		joinPointList = selectArrayAccess();
         		break;
@@ -344,6 +374,12 @@ public abstract class AWrapperStmt extends AStatement {
         		break;
         	case "unaryOp": 
         		joinPointList = selectUnaryOp();
+        		break;
+        	case "newExpr": 
+        		joinPointList = selectNewExpr();
+        		break;
+        	case "deleteExpr": 
+        		joinPointList = selectDeleteExpr();
         		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);

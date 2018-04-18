@@ -145,11 +145,14 @@
 		<select 						class="call"/>
  		<select alias="stmtCall"		class="call"/>
  		<select 						class="memberCall"/>
+		<select							class="memberAccess"/>
  		<select							class="arrayAccess"/>
  		<select 						class="vardecl"/>
 		<select 						class="varref"/>
 		<select							class="binaryOp"/>
 		<select							class="unaryOp"/>
+		<select							class="newExpr"/>
+		<select							class="deleteExpr"/>		
 	</joinpoint>
 	
 
@@ -197,7 +200,15 @@
 	
 	<joinpoint class="unaryOp" 	extends="expression">
 		<select alias="operand"			class="expression"/>
-	</joinpoint>		
+	</joinpoint>	
+	
+	<!-- NEW EXPR -->	
+	<joinpoint class="newExpr" 	extends="expression">
+	</joinpoint>	
+
+	<!-- DELETE EXPR -->	
+	<joinpoint class="deleteExpr" 	extends="expression">
+	</joinpoint>	
 	
 
 	<!-- EXPRESSION -->
