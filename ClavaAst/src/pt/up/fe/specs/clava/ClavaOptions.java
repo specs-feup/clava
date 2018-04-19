@@ -40,8 +40,11 @@ public interface ClavaOptions extends StoreDefinitionProvider {
     DataKey<Boolean> DISABLE_REMOTE_DEPENDENCIES = KeyFactory.bool("Disable Remote Dependencies")
             .setLabel("Disable remote dependencies (e.g., git repositories)");
 
+    DataKey<Boolean> DISABLE_NEW_PARSING_METHOD = KeyFactory.bool("clangast_disable_new_parsing_method")
+            .setLabel("Disables new method for parsing nodes (only uses 'legacy' nodes)");
+
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
-            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES)
+            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES, DISABLE_NEW_PARSING_METHOD)
             .build();
 
     @Override
