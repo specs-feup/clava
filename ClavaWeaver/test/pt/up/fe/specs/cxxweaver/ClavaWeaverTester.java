@@ -195,6 +195,8 @@ public class ClavaWeaverTester {
         data.set(ClavaOptions.FLAGS, compilerFlags);
         data.set(CxxWeaverOption.CHECK_SYNTAX, checkWovenCodeSyntax);
         data.set(CxxWeaverOption.DISABLE_CLAVA_INFO, false);
+        // TEMP
+        // data.set(ClavaOptions.DISABLE_NEW_PARSING_METHOD, true);
 
         if (DEBUG) {
             data.set(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, false);

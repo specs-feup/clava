@@ -36,6 +36,7 @@ public class CodeParser {
     private boolean showClavaAst;
     private boolean showCode;
     private boolean useCustomResources;
+    private boolean disableNewParsingMethod;
 
     public CodeParser() {
         showClangDump = false;
@@ -43,6 +44,7 @@ public class CodeParser {
         showClavaAst = false;
         showCode = false;
         useCustomResources = false;
+        disableNewParsingMethod = false;
     }
 
     public CodeParser setShowClangDump(boolean showClangDump) {
@@ -65,6 +67,11 @@ public class CodeParser {
         return this;
     }
 
+    public CodeParser setDisableNewParsingMethod(boolean disableNewParsingMethod) {
+        this.disableNewParsingMethod = disableNewParsingMethod;
+        return this;
+    }
+
     public CodeParser setUseCustomResources(boolean useCustomResources) {
         this.useCustomResources = useCustomResources;
         return this;
@@ -84,7 +91,8 @@ public class CodeParser {
                 .collect(Collectors.toList());
 
         // Parse files
-        ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(implementationFiles,
+        ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources, disableNewParsingMethod).parse(
+                implementationFiles,
                 compilerOptions);
 
         if (showClangDump) {

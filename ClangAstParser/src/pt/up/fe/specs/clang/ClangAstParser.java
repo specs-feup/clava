@@ -45,6 +45,7 @@ import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.utils.ZipResourceManager;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -110,16 +111,22 @@ public class ClangAstParser {
 
     private final boolean dumpStdout;
     private final boolean useCustomResources;
+    private final boolean disableNewParsingMethod;
     private final FileResourceManager clangAstResources;
 
     public ClangAstParser() {
-        this(false, false);
+        this(false, false, false);
 
     }
 
-    public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
+    // public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
+    // this(dumpStdout, useCustomResources, false);
+    // }
+
+    public ClangAstParser(boolean dumpStdout, boolean useCustomResources, boolean disableNewParsingMethod) {
         this.dumpStdout = dumpStdout;
         this.useCustomResources = useCustomResources;
+        this.disableNewParsingMethod = disableNewParsingMethod;
 
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
 
@@ -287,11 +294,16 @@ public class ClangAstParser {
         // Get enum integer types
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
+        // Check if no new nodes should be used
+        Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
+                : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+
         // ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
         // isTemporary, ompDirectives, enumToIntegerType, stderr, clangStreamParser.getParsedNodes());
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
-                lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES));
+                newNodes);
+        // lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES));
         // new HashMap<>());
 
         return new ClangRootNode(clangRootData, clangDump);
