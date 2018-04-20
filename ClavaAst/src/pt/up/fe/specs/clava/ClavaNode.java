@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.treenode.ATreeNode;
@@ -123,7 +124,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public SourceRange getLocation() {
-        if (getData() != null) {
+        if (hasData()) {
             return getData().getLocation();
         }
 
@@ -137,6 +138,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     /**
+     * TODO: Make method protected when all accesses are "fixed"
+     * 
      * @deprecated use .getExtendedId() instead
      * @return
      */
@@ -158,8 +161,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     /**
      * TODO: Make method protected when all accesses are "fixed"
      * 
+     * @deprecated
      * @return
      */
+    @Deprecated
     public ClavaNodeInfo getInfo() {
         if (hasData()) {
             throw new RuntimeException("Not implemented for nodes with ClavaData");
@@ -295,7 +300,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public Optional<SourceRange> getLocationTry() {
-        if (data != null) {
+        if (hasData()) {
             return Optional.of(data.getLocation());
         }
 
@@ -321,6 +326,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param inlineComment
      */
     public void associateComment(InlineComment inlineComment) {
+        if (hasData()) {
+            data.addInlineComment(inlineComment);
+            return;
+        }
+
         Preconditions.checkArgument(!inlineComment.isStmtComment(),
                 "InlineComment must not be a statement comment:" + inlineComment);
 
@@ -339,6 +349,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public ClavaNode copy() {
+        if (hasData()) {
+            return super.copy();
+        }
+
         // Create copy
         ClavaNode copy = super.copy();
 
@@ -350,7 +364,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     protected ClavaNode copyPrivate() {
-        if (getData() != null) {
+        if (hasData()) {
             return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getData(), Collections.emptyList());
         }
 
@@ -362,6 +376,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public List<InlineComment> getInlineComments() {
+        if (hasData()) {
+            return data.getInlineComments();
+        }
         return inlineComments == null ? Collections.emptyList() : inlineComments;
     }
 
@@ -412,18 +429,19 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return getNodeName().startsWith("CXX");
     }
 
-    public void setInfo(ClavaNodeInfo info) {
-        this.info = info != null ? info : ClavaNodeInfo.undefinedInfo();
-    }
+    // public void setInfo(ClavaNodeInfo info) {
+    // this.info = info != null ? info : ClavaNodeInfo.undefinedInfo();
+    // }
 
     public List<ClavaNode> getChildrenNormalized() {
         return getChildren().stream().map(ClavaNodes::normalize).collect(Collectors.toList());
     }
 
     public void setId(String newId) {
-        if (data != null) {
+        if (hasData()) {
             // data = data.setId(newId);
             data.setId(newId);
+            return;
         }
         info.setId(newId);
     }
@@ -472,5 +490,25 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     public boolean hasData() {
         return data != null;
+    }
+
+    public Optional<String> getIdSuffix() {
+        if (!getExtendedId().isPresent()) {
+            return Optional.empty();
+        }
+
+        String id = getExtendedId().get();
+
+        if (id == null) {
+            return Optional.empty();
+        }
+
+        int startIndex = id.lastIndexOf('_');
+        if (startIndex == -1) {
+            SpecsLogs.msgWarn("Could not find '_' in the id: " + id);
+            return Optional.empty();
+        }
+
+        return Optional.of(id.substring(startIndex));
     }
 }

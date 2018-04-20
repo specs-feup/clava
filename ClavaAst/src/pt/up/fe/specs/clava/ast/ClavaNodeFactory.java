@@ -667,7 +667,7 @@ public class ClavaNodeFactory {
      * @deprecated use BuiltinType(BuiltinKind kind) constructor
      * 
      * @param typeData
-     * @param info
+     * @param infoB
      * @return
      */
     @Deprecated

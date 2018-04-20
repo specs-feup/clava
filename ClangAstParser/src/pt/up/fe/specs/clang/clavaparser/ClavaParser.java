@@ -509,7 +509,8 @@ public class ClavaParser implements AutoCloseable {
     private void completeTemplateSpecializationType(TemplateSpecializationType templateType) {
         // Get args types id
         List<String> typeIds = converter.getClangRootData().getTemplateArgTypes()
-                .get(templateType.getInfo().getExtendedId());
+                // .get(templateType.getInfo().getExtendedId());
+                .get(templateType.getExtendedId().orElse(null));
         // System.out.println("TYPE IDS:" + typeIds);
 
         // Get args types

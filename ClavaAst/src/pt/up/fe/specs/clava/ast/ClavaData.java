@@ -14,8 +14,14 @@
 package pt.up.fe.specs.clava.ast;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.comment.InlineComment;
 
 /**
  * Represents the data of a ClavaNode.
@@ -128,6 +134,9 @@ public class ClavaData {
     private final boolean isMacro;
     private final SourceRange spellingLocation;
 
+    // Optional
+    private List<InlineComment> inlineComments;
+
     /**
      * @deprecated
      */
@@ -144,29 +153,35 @@ public class ClavaData {
      * @param location
      */
     public ClavaData(String id, SourceRange location, boolean isMacro, SourceRange spellingLocation) {
+        this(id, location, isMacro, spellingLocation, Collections.emptyList());
+    }
+
+    private ClavaData(String id, SourceRange location, boolean isMacro, SourceRange spellingLocation,
+            List<InlineComment> inlineComments) {
+
         this.id = id;
         this.location = location;
         this.isMacro = isMacro;
         this.spellingLocation = spellingLocation;
+
+        // Optional
+        this.inlineComments = new ArrayList<>(inlineComments);
     }
 
     public ClavaData(ClavaData data) {
-        this(data.id, data.location, data.isMacro, data.spellingLocation);
+        this(data.id, data.location, data.isMacro, data.spellingLocation, data.inlineComments);
     }
 
-    /**
-     * Makes a deep copy of this object.
-     * 
-     * <p>
-     * Implementation should use the copy constructor, that way what should be copied and what should be reused is
-     * delegated to the constructor.
-     * 
-     * @return
-     */
-    // public ClavaData copy() {
-    // return copy(this);
-    // // return new ClavaData(this);
-    // }
+    public void addInlineComment(InlineComment inlineComment) {
+        Preconditions.checkArgument(!inlineComment.isStmtComment(),
+                "InlineComment must not be a statement comment:" + inlineComment);
+
+        inlineComments.add(inlineComment);
+    }
+
+    public List<InlineComment> getInlineComments() {
+        return inlineComments;
+    }
 
     protected String toString(String superToString, String thisToString) {
 

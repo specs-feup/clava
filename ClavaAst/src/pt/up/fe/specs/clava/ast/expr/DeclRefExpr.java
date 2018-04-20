@@ -126,11 +126,12 @@ public class DeclRefExpr extends Expr {
     public Optional<? extends Decl> getDeclaration() {
 
         // If no id, return
-        if (!getInfo().getId().isPresent()) {
+        // if (!getInfo().getId().isPresent()) {
+        if (!getExtendedId().isPresent()) {
             return Optional.empty();
         }
 
-        Optional<String> idSuffix = getInfo().getIdSuffix();
+        Optional<String> idSuffix = getIdSuffix();
 
         if (!idSuffix.isPresent()) {
             throw new RuntimeException("Could not find id suffix in '" + getExtendedId() + "'");

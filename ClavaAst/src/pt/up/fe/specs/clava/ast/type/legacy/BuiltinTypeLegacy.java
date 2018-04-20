@@ -30,6 +30,12 @@ public class BuiltinTypeLegacy extends BuiltinType {
     private final List<BuiltinTypeKeyword> keywords;
     private final String otherBuiltins;
 
+    /**
+     * @deprecated use BuiltinType class
+     * @param typeData
+     * @param info
+     */
+    @Deprecated
     public BuiltinTypeLegacy(TypeData typeData, ClavaNodeInfo info) {
         super(typeData, info, Collections.emptyList());
 
