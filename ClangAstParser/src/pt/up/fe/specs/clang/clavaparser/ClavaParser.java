@@ -348,7 +348,8 @@ public class ClavaParser implements AutoCloseable {
         /* type */
         converter.put("RecordType", RecordTypeParser::new);
         converter.put("FunctionProtoType", FunctionProtoTypeParser::new);
-        converter.put("BuiltinType", BuiltinTypeParser::new);
+        converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
+        // converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
         converter.put("LValueReferenceType", LValueReferenceTypeParser::new);
         converter.put("RValueReferenceType", RValueReferenceTypeParser::new);
         converter.put("QualType", QualTypeParser::new);

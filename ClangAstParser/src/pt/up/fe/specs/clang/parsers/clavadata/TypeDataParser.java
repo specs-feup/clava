@@ -42,7 +42,10 @@ public class TypeDataParser {
         // Types do not have location
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines, false, dataStore);
 
-        return new TypeDataV2(clavaData);
+        // String typeAsString = lines.nextLine();
+        String typeAsString = "<no value>";
+
+        return new TypeDataV2(typeAsString, clavaData);
     }
 
     public static BuiltinTypeData parseBuiltinTypeData(LineStream lines, DataStore dataStore) {

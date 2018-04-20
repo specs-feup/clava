@@ -126,7 +126,8 @@ public class ClangAstParser {
     public ClangAstParser(boolean dumpStdout, boolean useCustomResources, boolean disableNewParsingMethod) {
         this.dumpStdout = dumpStdout;
         this.useCustomResources = useCustomResources;
-        this.disableNewParsingMethod = disableNewParsingMethod;
+        // this.disableNewParsingMethod = disableNewParsingMethod;
+        this.disableNewParsingMethod = true;
 
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
 
