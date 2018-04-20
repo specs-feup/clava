@@ -48,7 +48,6 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
-import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
@@ -166,10 +165,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                 node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
     }
 
-    public DummyExpr newDummyExpr(ClangNode node) {
-        return ClavaNodeFactory.dummyExpr(node.getDescription(), info(node),
-                node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
-    }
+    // public DummyExpr newDummyExpr(ClangNode node) {
+    // return ClavaNodeFactory.dummyExpr(node.getDescription(), info(node),
+    // node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
+    // }
 
     /**
      * Casts the given node to an Expr. If not possible, throws an Exception.

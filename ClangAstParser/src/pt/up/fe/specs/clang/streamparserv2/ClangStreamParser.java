@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.streamparserv2;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,7 +28,12 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.textparser.TextParser;
+import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
+import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -46,6 +52,20 @@ import pt.up.fe.specs.util.collections.MultiMap;
  *
  */
 public class ClangStreamParser {
+    private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
+            // new DeleteTemplateSpecializations(),
+            // new RemoveExtraNodes(),
+            // new RemoveClangComments(),
+            new CreateDeclStmts(),
+            // new AdaptBoolTypes(),
+            // new AdaptBoolCasts(),
+            // new RemoveBoolOperatorCalls(),
+            // new ReplaceClangLabelStmt(),
+            // new RemoveDefaultInitializers(),
+            // new RemoveImplicitConstructors(),
+            // new RecoverStdMacros(),
+            new MoveImplicitCasts());
+
     private final DataStore data;
 
     public ClangStreamParser(DataStore data, boolean debug) {
@@ -112,6 +132,13 @@ public class ClangStreamParser {
                     .forEach(type -> type.setApp(app));
         }
         */
+
+        // Add text elements (comments, pragmas) to the tree
+        new TextParser().addElements(app);
+
+        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
+        // original clang tree
+        new TreeTransformer(POST_PARSING_RULES).transform(app);
 
         return app;
 

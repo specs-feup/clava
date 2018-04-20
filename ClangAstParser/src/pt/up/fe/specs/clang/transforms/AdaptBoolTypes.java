@@ -13,12 +13,17 @@
 
 package pt.up.fe.specs.clang.transforms;
 
+import java.util.Collections;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
+import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
+import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -63,8 +68,19 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
         // System.out.println("CXX");
 
         // Replace BuiltinType
-        typable.setType(ClavaNodeFactory.builtinType(new TypeData("bool"), node.getInfo()));
+        BuiltinType newBuiltin = newBoolBuiltin(node);
 
+        typable.setType(newBuiltin);
+
+    }
+
+    private BuiltinType newBoolBuiltin(ClavaNode node) {
+        if (node.hasData()) {
+            BuiltinTypeData data = new BuiltinTypeData(BuiltinKind.BOOL, false, (TypeDataV2) node.getData());
+            return new BuiltinType(data, Collections.emptyList());
+        }
+
+        return new BuiltinTypeLegacy(new TypeData("bool"), node.getInfo());
     }
 
 }

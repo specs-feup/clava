@@ -29,10 +29,7 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clavaparser.extra.UndefinedParser;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.io.FileService;
@@ -277,21 +274,24 @@ public class ClangConverterTable implements AutoCloseable {
                 .collect(Collectors.toList());
     }
 
+    /*
     public Expr parseAsExpr(ClangNode node) {
         ClavaNode exprNode = parse(node);
-
+    
         // If Undefined, convert to DummyExpr
         if (exprNode instanceof Undefined) {
             // exprNode = ClavaNodeFactory.dummyExpr((node.getDescription() + " -> " + exprNode.toContentString()),
-            exprNode = ClavaNodeFactory.dummyExpr(exprNode.toContentString(),
-                    exprNode.getInfo(),
-                    exprNode.getChildren());
+            // exprNode = ClavaNodeFactory.dummyExpr(exprNode.toContentString(),
+            // exprNode.getInfo(),
+            // exprNode.getChildren());
+            exprNode = ClavaNodeFactory.dummyExpr(exprNode);
         }
-
+    
         Preconditions.checkArgument(exprNode instanceof Expr, "Expected an expr");
-
+    
         return (Expr) exprNode;
     }
+    */
 
     /**
      * 
