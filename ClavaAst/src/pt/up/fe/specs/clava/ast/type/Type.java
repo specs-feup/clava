@@ -332,6 +332,10 @@ public abstract class Type extends ClavaNode {
     }
 
     protected Type desugarImpl() {
+        if (hasData()) {
+            // If has sugar, first child is always the desugared type
+            return getChild(Type.class, 0);
+        }
         throw new NotImplementedException(getClass());
     }
 
