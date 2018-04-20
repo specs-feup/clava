@@ -165,6 +165,7 @@ import pt.up.fe.specs.clang.transforms.AdaptBoolCasts;
 import pt.up.fe.specs.clang.transforms.AdaptBoolTypes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
+import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RecoverStdMacros;
 import pt.up.fe.specs.clang.transforms.RemoveBoolOperatorCalls;
@@ -192,6 +193,7 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 public class ClavaParser implements AutoCloseable {
 
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
+            new DenanonymizeDecls(),
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
             new RemoveClangComments(),

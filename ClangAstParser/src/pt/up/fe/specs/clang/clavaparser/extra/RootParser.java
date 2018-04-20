@@ -28,7 +28,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
@@ -198,7 +197,7 @@ public class RootParser extends AClangNodeParser<App> {
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
 
             // Clean translation unit
-            ClavaPostProcessing.applyPostPasses(tUnit);
+            // ClavaPostProcessing.applyPostPasses(tUnit);
 
             tUnits.add(tUnit);
         }

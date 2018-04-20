@@ -26,10 +26,10 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -53,6 +53,8 @@ import pt.up.fe.specs.util.collections.MultiMap;
  */
 public class ClangStreamParser {
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
+            new DenanonymizeDecls(),
+
             // new DeleteTemplateSpecializations(),
             // new RemoveExtraNodes(),
             // new RemoveClangComments(),
@@ -253,7 +255,7 @@ public class ClangStreamParser {
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
 
             // Clean translation unit
-            ClavaPostProcessing.applyPostPasses(tUnit);
+            // ClavaPostProcessing.applyPostPasses(tUnit);
 
             tUnits.add(tUnit);
         }
