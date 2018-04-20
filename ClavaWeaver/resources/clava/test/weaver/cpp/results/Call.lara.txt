@@ -2,3 +2,5 @@ foo original:foo(1, 2)
 foo new expr arg:foo(2, 2)
 foo new string arg:foo(2, 10)
 foo op arg:foo(2, 2 + 3)
+Decl:7
+Def:10

@@ -7,6 +7,10 @@ class A {
 	int foo2();
 };
 
+int A::foo2() {
+	return -1;
+}
+
 class B {
 	
 	public:

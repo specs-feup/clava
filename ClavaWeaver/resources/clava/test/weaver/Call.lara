@@ -18,14 +18,14 @@ aspectdef CallTest
 		println("foo op arg:" + $call.code);
 	end
 	
-/*
+
 	// Member access
 	select call{"foo2"} end
 	apply
 		//println("Call: " + $call.code);
 		//println("Call name: " + $call.name);		
-		println("Decl:" + $call.declaration);
-		println("Def:" + $call.definition);
+		println("Decl:" + $call.declaration.line);
+		println("Def:" + $call.definition.line);
 	end
-	*/
+	
 end
