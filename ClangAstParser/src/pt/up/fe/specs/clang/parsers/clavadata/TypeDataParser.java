@@ -42,8 +42,8 @@ public class TypeDataParser {
         // Types do not have location
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines, false, dataStore);
 
-        // String typeAsString = lines.nextLine();
-        String typeAsString = "<no value>";
+        String typeAsString = lines.nextLine();
+        // String typeAsString = "<no value>";
 
         return new TypeDataV2(typeAsString, clavaData);
     }

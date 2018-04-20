@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
@@ -124,7 +125,7 @@ public class CxxCall extends ACall {
             Expr varExpr = ClavaNodeFactory.literalExpr(variableName, returnType);
             BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(returnType),
                     call.getInfo(), varExpr, call);
-            ExprStmt newStmt = ClavaNodeFactory.exprStmt(assign);
+            ExprStmt newStmt = ClavaNodesLegacy.exprStmt(assign);
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, newStmt, true);

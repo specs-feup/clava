@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -386,7 +387,7 @@ public class CallWrap {
         CallExpr callExpr = ClavaNodeFactory.callExpr(function, returnType, args);
 
         if (isVoid) {
-            wrapperStmts.add(ClavaNodeFactory.exprStmt(callExpr));
+            wrapperStmts.add(ClavaNodesLegacy.exprStmt(callExpr));
         } else {
             DeclRefExpr varAssigned = ClavaNodeFactory.declRefExpr(varName, returnType);
             ExprStmt assignment = ClavaNodeFactory.exprStmtAssign(varAssigned, callExpr, returnType);

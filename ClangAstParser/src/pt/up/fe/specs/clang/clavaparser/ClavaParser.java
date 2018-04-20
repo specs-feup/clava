@@ -133,7 +133,6 @@ import pt.up.fe.specs.clang.clavaparser.stmt.SwitchStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.WhileStmtParser;
 import pt.up.fe.specs.clang.clavaparser.type.AttributedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.AutoTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.BuiltinTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ConstantArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecayedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecltypeTypeParser;
@@ -177,6 +176,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -348,8 +348,8 @@ public class ClavaParser implements AutoCloseable {
         /* type */
         converter.put("RecordType", RecordTypeParser::new);
         converter.put("FunctionProtoType", FunctionProtoTypeParser::new);
-        converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
-        // converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
+        // converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
+        converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
         converter.put("LValueReferenceType", LValueReferenceTypeParser::new);
         converter.put("RValueReferenceType", RValueReferenceTypeParser::new);
         converter.put("QualType", QualTypeParser::new);
