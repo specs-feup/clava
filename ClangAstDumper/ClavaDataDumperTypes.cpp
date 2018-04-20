@@ -43,6 +43,18 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 
 
 void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
+    Qualifiers noQualifiers;
+    DumpTypeData(T, noQualifiers);
+}
+
+
+void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers) {
+    //QualType canonicalType = T->getCanonicalTypeInternal();
+    //SplitQualType T_split = canonicalType.split();
+
+
+    clava::dump(QualType::getAsString(T, qualifiers));
+    //clava::dump(QualType::getAsString(T_split));
 
 }
 
@@ -51,8 +63,11 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
 // Dumps the same information as DumpTypeData, and after that, information about QualType
 void clava::ClavaDataDumper::dump(const QualType& T) {
     DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
-
     auto qualifiers = T.getQualifiers();
+
+    // Base type data
+    DumpTypeData(T.getTypePtr(), qualifiers);
+
 
     // Dump C99 qualifiers
     auto c99Qualifiers = qualifiers.getCVRQualifiers();

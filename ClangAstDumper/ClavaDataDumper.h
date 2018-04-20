@@ -118,7 +118,9 @@ namespace clava {
 
         // TYPES
         void DumpTypeData(const Type *T);
-        //void DumpQualTypeData(const QualType *T);
+        void DumpTypeData(const Type *T, Qualifiers &qualifiers);
+
+            //void DumpQualTypeData(const QualType *T);
         void DumpBuiltinTypeData(const BuiltinType *T);
 
 
