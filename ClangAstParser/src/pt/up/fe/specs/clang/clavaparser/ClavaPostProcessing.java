@@ -107,7 +107,16 @@ public class ClavaPostProcessing {
                     .findFirst().get();
 
             String newBareType = lastRecordDecl.getTagKind().getCode() + " " + lastRecordDecl.getDeclName();
-            elaboratedType.getTypeData().setBareType(newBareType);
+
+            // Special case: directly changing the Data object, since we want this change to reflect across
+            // all nodes
+            // TODO: Alternatively, this should be implemented as a ClavaRule and apply as a bottom-up change
+            if (elaboratedType.hasData()) {
+                elaboratedType.getData().setTypeAsString(newBareType);
+            } else {
+                elaboratedType.getTypeData().setBareType(newBareType);
+            }
+
             /*
             System.out.println("PREVIOUS ELABORATED:" + elaboratedType.getCode());
             LiteralType newElaboratedType = ClavaNodeFactory

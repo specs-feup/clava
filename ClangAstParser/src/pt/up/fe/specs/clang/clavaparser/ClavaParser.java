@@ -133,6 +133,7 @@ import pt.up.fe.specs.clang.clavaparser.stmt.SwitchStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.WhileStmtParser;
 import pt.up.fe.specs.clang.clavaparser.type.AttributedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.AutoTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.BuiltinTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ConstantArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecayedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecltypeTypeParser;
@@ -172,11 +173,11 @@ import pt.up.fe.specs.clang.transforms.RemoveDefaultInitializers;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemoveImplicitConstructors;
 import pt.up.fe.specs.clang.transforms.ReplaceClangLabelStmt;
+import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -234,6 +235,9 @@ public class ClavaParser implements AutoCloseable {
      */
     private static ClangConverterTable buildConverter_3_8(ClangRootData clangRootData) {
         ClangConverterTable converter = new ClangConverterTable(clangRootData);
+
+        // Can't replace with NewClavaNodeParser instances because new node coverage
+        // by visitors is not good yet.
 
         /* extra */
         converter.put("Root", RootParser::new);
@@ -348,8 +352,8 @@ public class ClavaParser implements AutoCloseable {
         /* type */
         converter.put("RecordType", RecordTypeParser::new);
         converter.put("FunctionProtoType", FunctionProtoTypeParser::new);
-        // converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
-        converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
+        converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
+        // converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
         converter.put("LValueReferenceType", LValueReferenceTypeParser::new);
         converter.put("RValueReferenceType", RValueReferenceTypeParser::new);
         converter.put("QualType", QualTypeParser::new);
@@ -424,7 +428,8 @@ public class ClavaParser implements AutoCloseable {
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         if (sourceTree) {
-            processSourceTree(app);
+            new TreeTransformer(POST_PARSING_RULES).transform(app);
+            // processSourceTree(app);
         }
 
         // Sets app to all type nodes
@@ -620,24 +625,26 @@ public class ClavaParser implements AutoCloseable {
         }
     }
 
+    /*
     private static void processSourceTree(ClavaNode node) {
-
+    
         POST_PARSING_RULES.stream()
                 .forEach(transform -> transform.visit(node));
-
+    
         // long tic = System.nanoTime();
-
+    
         // TraversalStrategy.POST_ORDER.apply(node, new RemoveTemporaryExpressions());
         // TraversalStrategy.POST_ORDER.apply(node, new RemoveMaterializeTempExpressions());
-
+    
         // TraversalStrategy.POST_ORDER.apply(node, new RemoveExtraNodes());
         // TraversalStrategy.POST_ORDER.apply(node, new ExtractFullComments());
         // TraversalStrategy.POST_ORDER.apply(node, new CreateDeclStmts());
         // TraversalStrategy.POST_ORDER.apply(node, new AdaptBoolTypes());
         // TraversalStrategy.POST_ORDER.apply(node, new AdaptBoolCasts());
-
+    
         // ParseUtils.printTime("Clava AST Post-processing", tic);
     }
+    */
 
     @Override
     public void close() throws Exception {

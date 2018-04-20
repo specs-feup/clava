@@ -43,9 +43,11 @@ public class TypeDataParser {
         ClavaData clavaData = ClavaDataParser.parseClavaData(lines, false, dataStore);
 
         String typeAsString = lines.nextLine();
+        boolean hasSugar = GeneralParsers.parseOneOrZero(lines);
+
         // String typeAsString = "<no value>";
 
-        return new TypeDataV2(typeAsString, clavaData);
+        return new TypeDataV2(typeAsString, hasSugar, clavaData);
     }
 
     public static BuiltinTypeData parseBuiltinTypeData(LineStream lines, DataStore dataStore) {

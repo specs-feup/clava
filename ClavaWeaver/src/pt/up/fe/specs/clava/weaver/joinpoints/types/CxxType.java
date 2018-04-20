@@ -85,7 +85,8 @@ public class CxxType extends AType {
 
     @Override
     public Boolean getHasSugarImpl() {
-        return type.getTypeData().hasSugar();
+        // return type.getTypeData().hasSugar();
+        return type.hasSugar();
     }
 
     @Override
