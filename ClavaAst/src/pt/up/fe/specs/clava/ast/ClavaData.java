@@ -25,8 +25,12 @@ import pt.up.fe.specs.clava.SourceRange;
  * themselves.
  * 
  * <p>
- * It is yet open for discussion if ClavaData instances should have ClavaNodes (e.g., ExprData has a Type, DeclData has
- * Attribute nodes), or if they all should be children).
+ * While in transition between ClavaData nodes and Legacy nodes, ClavaData nodes should not be directly accessed (e.g.,
+ * .getData()). To maintain compatibility, implement getters in the ClavaNode instances.
+ * 
+ * <p>
+ * [closed, ClavaData instances can have ClavaNodes] It is yet open for discussion if ClavaData instances should have
+ * ClavaNodes (e.g., ExprData has a Type, DeclData has Attribute nodes), or if they all should be children).
  * 
  * @author JoaoBispo
  *

@@ -56,7 +56,7 @@ public abstract class Attribute extends ClavaNode {
 
     public AttrData getAttrData() {
         if (hasData()) {
-            throw new RuntimeException("Not implemented for data-based attributes");
+            throw new RuntimeException("Not implemented for ClavaData nodes");
         }
         return attrData;
     }

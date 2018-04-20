@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -25,6 +26,14 @@ public class BuiltinType extends Type {
 
     public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    // public BuiltinType(String builtinType) {
+    //
+    // }
+
+    public BuiltinType(BuiltinKind kind) {
+        this(new BuiltinTypeData(kind), Collections.emptyList());
     }
 
     /**

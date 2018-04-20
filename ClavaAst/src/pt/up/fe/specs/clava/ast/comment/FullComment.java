@@ -13,19 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.comment;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
 
 /**
  * This node extends Expr to be able to interface with Clang structure, which associates FullComments to VarDecls.
@@ -47,11 +42,11 @@ public class FullComment extends Expr {
         super(ExprData.empty(), nodeInfo, children);
     }
 
-    private static List<? extends Type> dummyType(ClavaNodeInfo nodeInfo) {
-        Type type = ClavaNodeFactory.builtinType(new TypeData(BuiltinTypeKeyword.INT.getCode()), nodeInfo);
-        // Type type = ClavaNodeFactory.builtinTypeV2(Arrays.asList(BuiltinKeyword.INT), nodeInfo);
-        return Arrays.asList(type);
-    }
+    // private static List<? extends Type> dummyType(ClavaNodeInfo nodeInfo) {
+    // Type type = ClavaNodeFactory.builtinType(new TypeData(BuiltinTypeKeyword.INT.getCode()), nodeInfo);
+    // // Type type = ClavaNodeFactory.builtinTypeV2(Arrays.asList(BuiltinKeyword.INT), nodeInfo);
+    // return Arrays.asList(type);
+    // }
 
     @Override
     protected ClavaNode copyPrivate() {

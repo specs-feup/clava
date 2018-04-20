@@ -83,7 +83,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public String toContentString() {
-        if (getData() != null) {
+        if (hasData()) {
             return getData().toString();
         }
 
@@ -136,18 +136,34 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return sourceRange;
     }
 
+    /**
+     * @deprecated use .getExtendedId() instead
+     * @return
+     */
+    @Deprecated
     public Optional<ClavaId> getId() {
+        if (hasData()) {
+            throw new RuntimeException("Not implemented for nodes with ClavaData");
+        }
         return info.getId();
     }
 
     public Optional<String> getExtendedId() {
-        if (data != null) {
+        if (hasData()) {
             return Optional.ofNullable(data.getId());
         }
         return info.getId().map(id -> id.getExtendedId());
     }
 
+    /**
+     * TODO: Make method protected when all accesses are "fixed"
+     * 
+     * @return
+     */
     public ClavaNodeInfo getInfo() {
+        if (hasData()) {
+            throw new RuntimeException("Not implemented for nodes with ClavaData");
+        }
         return info;
     }
 
@@ -217,15 +233,17 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return child instanceof NullNode ? Optional.empty() : Optional.of(castTo.cast(child));
     }
 
+    /*
     public ClavaId getParentId() {
         return getId()
                 .orElseThrow(() -> new RuntimeException("There is no ID defined"))
                 .getParent()
                 .orElseThrow(() -> new RuntimeException("Could not find a parent in id '" + getId() + "'"));
-
+    
         // return getParentIdTry()
         // .orElseThrow(() -> new RuntimeException("Could not find a parent in id '" + getId() + "'"));
     }
+    */
 
     // public Optional<ClavaId> getParentIdTry() {
     // if (!getId().isPresent()) {
@@ -430,6 +448,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return Optional.empty();
     }
 
+    /**
+     * The data associated with this node.
+     * 
+     * <p>
+     * While in transition between ClavaData nodes and Legacy nodes, ClavaData nodes should not be directly accessed
+     * (e.g., .getData()). To maintain compatibility, implement getters in the ClavaNode instances.
+     * 
+     * @return
+     */
     public ClavaData getData() {
         return data;
     }

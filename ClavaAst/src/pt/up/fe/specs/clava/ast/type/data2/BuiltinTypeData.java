@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data2;
 
+import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 
 public class BuiltinTypeData extends TypeDataV2 {
@@ -31,6 +32,14 @@ public class BuiltinTypeData extends TypeDataV2 {
         // this(data.kind, data.isSugared, data.standard, data);
         this(data.kind, data.isSugared, data);
     }
+
+    public BuiltinTypeData(BuiltinKind builtinKind) {
+        this(builtinKind, false, TypeDataV2.empty(ClavaData.empty()));
+    }
+
+    // public BuiltinTypeData(String builtinKind) {
+    // this(BuiltinKind.getHelper().valueOf(builtinKind));
+    // }
 
     @Override
     public String toString() {

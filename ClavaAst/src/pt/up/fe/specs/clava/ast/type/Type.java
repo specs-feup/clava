@@ -29,7 +29,7 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  * The base class of the type hierarchy.
  *
  * <p>
- * Type instances are immutable, setters should return a copy of the node with the modified attribute.
+ * TODO: Type instances should be immutable, setters should return a copy of the node with the modified attribute.
  *
  * @author JoaoBispo
  *
@@ -40,16 +40,23 @@ public abstract class Type extends ClavaNode {
     // private Supplier<App> app;
     // private App app;
 
+    public Type(TypeDataV2 dataV2, Collection<? extends ClavaNode> children) {
+        super(dataV2, children);
+    }
+
+    /**
+     * For legacy.
+     * 
+     * @param data
+     * @param info
+     * @param children
+     */
     public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
         this.data = data;
         // app = () -> null;
         // app = null;
-    }
-
-    public Type(TypeDataV2 dataV2, Collection<? extends ClavaNode> children) {
-        super(dataV2, children);
     }
 
     @Override

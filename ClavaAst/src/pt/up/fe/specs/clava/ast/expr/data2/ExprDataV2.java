@@ -13,7 +13,10 @@
 
 package pt.up.fe.specs.clava.ast.expr.data2;
 
+import java.util.Optional;
+
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -25,6 +28,9 @@ public class ExprDataV2 extends ClavaData {
     private final ValueKind valueKind;
     private final ObjectKind objectKind;
 
+    // Optional
+    private ImplicitCastExpr implicitCast;
+
     /*
     public static ExprDataV2 empty(ClavaData data) {
         if (data instanceof ExprDataV2) {
@@ -35,17 +41,26 @@ public class ExprDataV2 extends ClavaData {
     }
     */
     public ExprDataV2(Type type, ValueKind valueKind, ObjectKind objectKind, ClavaData clavaData) {
+        this(type, valueKind, objectKind, null, clavaData);
+    }
+
+    private ExprDataV2(Type type, ValueKind valueKind, ObjectKind objectKind, ImplicitCastExpr implicitCast,
+            ClavaData clavaData) {
+
         super(clavaData);
 
         this.type = type;
 
         this.valueKind = valueKind;
         this.objectKind = objectKind;
+
+        // Optional
+        this.implicitCast = implicitCast;
     }
 
     public ExprDataV2(ExprDataV2 data) {
         // Can share type nodes
-        this(data.type, data.valueKind, data.objectKind, (ClavaData) data);
+        this(data.type, data.valueKind, data.objectKind, data.implicitCast, (ClavaData) data);
     }
 
     public Type getType() {
@@ -64,6 +79,14 @@ public class ExprDataV2 extends ClavaData {
         return objectKind;
     }
 
+    public Optional<ImplicitCastExpr> getImplicitCast() {
+        return Optional.ofNullable(implicitCast);
+    }
+
+    public void setImplicitCast(ImplicitCastExpr implicitCast) {
+        this.implicitCast = implicitCast;
+    }
+
     // public ExprDataV2(ExprDataV2 data) {
     // this(data);
     // }
@@ -76,8 +99,11 @@ public class ExprDataV2 extends ClavaData {
     @Override
     public String toString() {
         String typeId = getType() == null ? "null" : getType().getExtendedId().orElse("no_id");
+        // String implicitCastId = implicitCast == null ? "null" : implicitCast.getExtendedId().orElse("no_id");
+        String implicitCastId = getImplicitCast().map(cast -> cast.getExtendedId().orElse("no_id")).orElse("null");
         return toString(super.toString(),
-                "type: " + typeId + ", valueKind: " + valueKind + ", objectKind: " + objectKind);
+                "type: " + typeId + ", valueKind: " + valueKind + ", objectKind: " + objectKind + ", implicitCast: "
+                        + implicitCastId);
     }
 
     /*

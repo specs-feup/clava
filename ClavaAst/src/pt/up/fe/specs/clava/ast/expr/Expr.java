@@ -60,7 +60,7 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public Type getType() {
-        if (getData() != null) {
+        if (hasData()) {
             return getData().getType();
         }
 
@@ -69,7 +69,7 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public void setType(Type type) {
-        if (getData() != null) {
+        if (hasData()) {
             getData().setType(type);
             return;
         }
@@ -93,6 +93,9 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public ExprData getExprData() {
+        if (hasData()) {
+            throw new RuntimeException("This is a ClavaData node, .getExprData should not be used");
+        }
         return exprData;
     }
 
@@ -136,10 +139,19 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public void setImplicitCast(ImplicitCastExpr implicitCast) {
+        if (hasData()) {
+            getData().setImplicitCast(implicitCast);
+            return;
+        }
+
         this.implicitCast = implicitCast;
     }
 
     public Optional<ImplicitCastExpr> getImplicitCast() {
+        if (hasData()) {
+            return getData().getImplicitCast();
+        }
+
         return Optional.ofNullable(implicitCast);
     }
 

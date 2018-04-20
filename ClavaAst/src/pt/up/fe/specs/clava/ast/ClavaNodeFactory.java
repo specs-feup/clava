@@ -648,11 +648,29 @@ public class ClavaNodeFactory {
     // return new BuiltinTypeOld(type, info);
     // }
 
+    /**
+     * FIXED
+     * 
+     * @deprecated use BuiltinType(BuiltinKind kind) constructor
+     * @param type
+     * @return
+     */
+    @Deprecated
     public static BuiltinType builtinType(String type) {
         return ClavaNodeFactory.builtinType(new TypeData(type.toLowerCase()),
                 ClavaNodeInfo.undefinedInfo());
     }
 
+    /**
+     * FIXED
+     * 
+     * @deprecated use BuiltinType(BuiltinKind kind) constructor
+     * 
+     * @param typeData
+     * @param info
+     * @return
+     */
+    @Deprecated
     public static BuiltinType builtinType(TypeData typeData, ClavaNodeInfo info) {
         return new BuiltinTypeLegacy(typeData, info);
     }
@@ -959,13 +977,19 @@ public class ClavaNodeFactory {
     // return new LiteralExpr(literalCode, type, info);
     // }
 
+    /**
+     * @deprecated use DummyExpr constructor.
+     * @param node
+     * @return
+     */
+    @Deprecated
     public static DummyExpr dummyExpr(ClavaNode node) {
         return new DummyExprLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
-    public static DummyExpr dummyExpr(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyExprLegacy(content, info, children);
-    }
+    // public static DummyExpr dummyExpr(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // return new DummyExprLegacy(content, info, children);
+    // }
 
     public static ImplicitCastExpr exprImplicitCast(CastKind castKind, ExprData exprData,
             ClavaNodeInfo info, Expr subExpr) {
