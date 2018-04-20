@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
@@ -158,18 +159,20 @@ public class AstFactory {
     }
 
     public static ACxxWeaverJoinPoint longType() {
-        BuiltinType type = ClavaNodeFactory.builtinType(new TypeData("long"), ClavaNodeInfo.undefinedInfo());
+        BuiltinType type = new BuiltinType(BuiltinKind.LONG);
         return CxxJoinpoints.create(type, null);
     }
 
     public static ACxxWeaverJoinPoint builtinType(String typeCode) {
-        BuiltinType type = ClavaNodeFactory.builtinType(typeCode);
+        BuiltinKind kind = BuiltinKind.getHelper().valueOf(typeCode);
+
+        BuiltinType type = new BuiltinType(kind);
 
         return CxxJoinpoints.create(type, null);
     }
 
     public static CxxFunction functionVoid(String name) {
-        BuiltinType voidType = ClavaNodeFactory.builtinType("void");
+        BuiltinType voidType = new BuiltinType(BuiltinKind.VOID);
         FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
                 new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
                 Collections.emptyList());
@@ -182,7 +185,7 @@ public class AstFactory {
     }
 
     public static AExpression integerLiteral(int integer) {
-        Type intType = ClavaNodeFactory.builtinType(new TypeData("int"), ClavaNodeInfo.undefinedInfo());
+        Type intType = new BuiltinType(BuiltinKind.INT);
         IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
                 ClavaNodeInfo.undefinedInfo());
 
@@ -207,7 +210,8 @@ public class AstFactory {
     }
 
     public static AExpression doubleLiteral(double floating) {
-        Type type = ClavaNodeFactory.builtinType(new TypeData("double"), ClavaNodeInfo.undefinedInfo());
+        // Type type = ClavaNodeFactory.builtinType(new TypeData("double"), ClavaNodeInfo.undefinedInfo());
+        Type type = new BuiltinType(BuiltinKind.DOUBLE);
         FloatingLiteral intLiteral = ClavaNodeFactory.floatingLiteral(FloatKind.DOUBLE, Double.toString(floating),
                 new ExprData(type), ClavaNodeInfo.undefinedInfo());
 
