@@ -32,6 +32,7 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
     switch(typeNode) {
         case clava::TypeNode::TYPE:
             DumpTypeData(T); break;
+            //DumpTypeData(T->getCanonicalTypeUnqualified()); break;
 //        case clava::TypeNode::QUAL_TYPE:
 //            DumpQualTypeData(static_cast<const QualType *>(T)); break;
         case clava::TypeNode::BUILTIN_TYPE:
@@ -42,20 +43,42 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 
 
 
+
 void clava::ClavaDataDumper::DumpTypeData(const Type *T) {
     Qualifiers noQualifiers;
     DumpTypeData(T, noQualifiers);
 }
 
 
+
+//void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers) {
+/**
+ * Data dumper for Type. To be used by both top-level QualType nodes and unqualified types.
+ * @param T
+ */
+//void clava::ClavaDataDumper::DumpTypeData(const QualType &T) {
+//void clava::ClavaDataDumper::DumpTypeData(const QualType &T) {
 void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers) {
     //QualType canonicalType = T->getCanonicalTypeInternal();
     //SplitQualType T_split = canonicalType.split();
 
-
-    clava::dump(QualType::getAsString(T, qualifiers));
+    //clava::dump(QualType::getAsString(T, qualifiers));
     //clava::dump(QualType::getAsString(T_split));
 
+    // typeAsString
+    //SplitQualType T_split = T.split();
+    //clava::dump(QualType::getAsString(T_split));
+    clava::dump(QualType::getAsString(T, qualifiers));
+
+    // sugar
+    //QualType SingleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
+    //bool hasSugar = SingleStepDesugar != T->unqu;
+    const Type *singleStepDesugar = T->getUnqualifiedDesugaredType();
+    bool hasSugar = singleStepDesugar != T;
+    clava::dump(hasSugar);
+
+
+    //clava::dump(QualType::getAsString(T, T.getQualifiers()));
 }
 
 
@@ -63,10 +86,13 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
 // Dumps the same information as DumpTypeData, and after that, information about QualType
 void clava::ClavaDataDumper::dump(const QualType& T) {
     DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
+
     auto qualifiers = T.getQualifiers();
 
     // Base type data
+    //DumpTypeData(T.getCanonicalType());
     DumpTypeData(T.getTypePtr(), qualifiers);
+
 
 
     // Dump C99 qualifiers
@@ -122,6 +148,7 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
 
 void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
     DumpTypeData(T);
+    //DumpTypeData(T->getCanonicalTypeUnqualified());
 
     clava::dump(T->getName(Context->getPrintingPolicy()));
     clava::dump(T->isSugared());
