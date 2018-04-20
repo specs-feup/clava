@@ -40,6 +40,15 @@ public class CXXFunctionalCastExpr extends CastExpr {
         // this.targetType = targetType;
     }
 
+    public static CXXFunctionalCastExpr newInstance(String targetType, CastExpr cast, Expr subExpr) {
+        if (cast.hasData()) {
+            throw new RuntimeException("Not implemented for ClavaData nodes");
+        }
+
+        return new CXXFunctionalCastExpr(targetType, cast.getCastKind(), cast.getExprData(), cast.getInfo(),
+                subExpr);
+    }
+
     /**
      * Constructor for node copy.
      * 

@@ -15,11 +15,12 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.stmt.data.ExprStmtData;
+import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 
 /**
  * Encapsulates an Expr that is being used as a statement.
@@ -29,26 +30,66 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
  */
 public class ExprStmt extends Stmt {
 
-    private final boolean hasSemicolon;
+    // private final boolean hasSemicolon;
 
-    public ExprStmt(ClavaNodeInfo info, Expr expr) {
-        this(true, info, Arrays.asList(expr));
+    public ExprStmt(ExprStmtData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    public ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Expr expr) {
-        this(hasSemicolon, info, Arrays.asList(expr));
+    public ExprStmt(boolean hasSemicolon, Expr expr) {
+        this(new ExprStmtData(hasSemicolon, new StmtData(expr.getData())), Arrays.asList(expr));
     }
 
-    private ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-
-        this.hasSemicolon = hasSemicolon;
+    public ExprStmt(Expr expr) {
+        this(true, expr);
     }
 
     @Override
-    protected ClavaNode copyPrivate() {
-        return new ExprStmt(hasSemicolon, getInfo(), Collections.emptyList());
+    public ExprStmtData getData() {
+        return (ExprStmtData) super.getData();
     }
+
+    /**
+     * For legacy.
+     * 
+     * @param info
+     * @param expr
+     */
+    /*
+    public ExprStmt(ClavaNodeInfo info, Expr expr) {
+        this(true, info, Arrays.asList(expr));
+    }
+    */
+
+    /**
+     * For legacy.
+     * 
+     * @param hasSemicolon
+     * @param info
+     * @param expr
+     */
+    /*
+    public ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Expr expr) {
+        this(hasSemicolon, info, Arrays.asList(expr));
+    }
+    */
+
+    /**
+     * Legacy.
+     * 
+     * @param info
+     * @param children
+     */
+    protected ExprStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(info, children);
+
+        // this.hasSemicolon = hasSemicolon;
+    }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ExprStmt(hasSemicolon, getInfo(), Collections.emptyList());
+    // }
 
     public Expr getExpr() {
         return getChild(Expr.class, 0);
@@ -56,7 +97,7 @@ public class ExprStmt extends Stmt {
 
     @Override
     public String getCode() {
-        String suffix = hasSemicolon ? ";" : "";
+        String suffix = getData().hasSemicolon() ? ";" : "";
         return getExpr().getCode() + suffix;
     }
 

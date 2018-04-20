@@ -189,6 +189,7 @@ import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
+import pt.up.fe.specs.clava.ast.stmt.legacy.ExprStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -880,14 +881,28 @@ public class ClavaNodeFactory {
         return new DeclStmt(false, info, decl);
     }
 
+    /**
+     * @deprecated use ClavaNodesLegacy.exprStmt() instead.
+     * @param expr
+     * @return
+     */
+    @Deprecated
     public static ExprStmt exprStmt(Expr expr) {
-        return new ExprStmt(expr.getInfo(), expr);
+        return new ExprStmtLegacy(expr.getInfo(), expr);
     }
 
-    public static ExprStmt exprStmtWithoutSemicolon(Expr expr) {
-        return new ExprStmt(false, expr.getInfo(), expr);
-    }
+    /**
+     * @deprecated use ClavaNodesLegacy.exprStmt() instead.
+     * 
+     * @param expr
+     * @return
+     */
+    // @Deprecated
+    // public static ExprStmt exprStmtWithoutSemicolon(Expr expr) {
+    // return new ExprStmtLegacy(false, expr.getInfo(), expr);
+    // }
 
+    @Deprecated
     public static ExprStmt exprStmtAssign(Expr lhs, Expr rhs, Type returnType) {
         ExprData exprData = new ExprData(returnType);
 
