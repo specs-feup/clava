@@ -26,22 +26,29 @@ public class TypeDataV2 extends ClavaData {
             return (TypeDataV2) data;
         }
 
-        return new TypeDataV2(data);
+        return new TypeDataV2("<no type>", data);
     }
 
-    public TypeDataV2(ClavaData clavaData) {
+    private final String typeAsString;
+
+    public TypeDataV2(String typeAsString, ClavaData clavaData) {
         super(clavaData);
 
+        this.typeAsString = typeAsString;
+
     }
 
-    // public TypeDataV2(TypeDataV2 data) {
-    // this(data);
-    // }
+    public TypeDataV2(TypeDataV2 data) {
+        this(data.typeAsString, data);
+    }
+
+    public String getTypeAsString() {
+        return typeAsString;
+    }
 
     @Override
     public String toString() {
-
-        return toString(super.toString(), "");
+        return toString(super.toString(), "typeAsString: " + typeAsString);
     }
 
     /**

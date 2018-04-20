@@ -20,7 +20,7 @@ public class DummyTypeData extends TypeDataV2 {
     private final String content;
 
     public DummyTypeData(String content, ClavaData clavaData) {
-        super(clavaData);
+        super(content, clavaData);
 
         this.content = content;
     }
