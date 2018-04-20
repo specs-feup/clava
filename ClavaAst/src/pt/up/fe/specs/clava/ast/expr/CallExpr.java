@@ -215,7 +215,6 @@ public class CallExpr extends Expr {
      */
     public Optional<FunctionDecl> getDefinition() {
         Optional<FunctionDecl> functionDecl = getFunctionDecl();
-        System.out.println("FunctionDecl:" + functionDecl);
 
         if (!functionDecl.isPresent()) {
             return Optional.empty();

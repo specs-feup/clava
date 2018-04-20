@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 /**
@@ -150,18 +151,38 @@ public class CXXMemberCallExpr extends CallExpr {
     @Override
     protected Optional<FunctionDecl> getFunctionDecl() {
 
+        // Get base
+        Expr base = getBase();
+
+        if (base instanceof MemberExpr) {
+            Type baseType = base.getType();
+
+            if (!(baseType instanceof RecordType)) {
+                SpecsLogs.msgInfo("Expected type of member access to be a record type: " + baseType);
+                return Optional.empty();
+            }
+
+            return getFunctionDeclFromRecord((RecordType) baseType);
+        }
+
+        /*
         // Get root base
         Expr rootBase = getRootBase();
-
+        
         if (rootBase != getBase()) {
+            // Base should be a MemberExpr
+            System.out.println("ROOT BASE:" + rootBase);
+            System.out.println("BASE:" + getBase());
+            System.out.println("BASE TYPE:" + getBase().getType());
             ClavaLog.warning("Not yet implemented for consecutive chains");
             return Optional.empty();
         }
+        */
 
-        DeclRefExpr rootDeclRef = rootBase.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
+        DeclRefExpr rootDeclRef = base.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
 
         if (rootDeclRef == null) {
-            ClavaLog.warning("Expected a DeclRefExpr, got:\n" + rootBase);
+            ClavaLog.warning("Expected a DeclRefExpr, got:\n" + base);
             return Optional.empty();
         }
 
@@ -181,6 +202,34 @@ public class CXXMemberCallExpr extends CallExpr {
 
         RecordType recordType = (RecordType) rootDeclRef.getType();
 
+        return getFunctionDeclFromRecord(recordType);
+        /*
+        Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+        
+        System.out.println("VARDECL:" + varDecl);
+        
+        if (!varDecl.isPresent()) {
+            return Optional.empty();
+        }
+        
+        DeclaratorDecl declarator = varDecl.get();
+        if (declarator instanceof FunctionDecl) {
+            return Optional.of((FunctionDecl) declarator);
+        }
+        
+        SpecsLogs.msgLib("Could not extract function from member call callee decl, check if ok:\n" + declarator);
+        return Optional.empty();
+        
+        // if (!(declarator instanceof FunctionDecl)) {
+        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of((FunctionDecl) declarator);
+        */
+    }
+
+    private Optional<FunctionDecl> getFunctionDeclFromRecord(RecordType recordType) {
         // RecordType recordType = initExpr.getType().desugarTo(RecordType.class);
         CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
 
@@ -237,29 +286,5 @@ public class CXXMemberCallExpr extends CallExpr {
         // System.out.println("Decl ref expr:" + declRefExpr);
 
         return Optional.empty();
-        /*
-        Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
-        
-        System.out.println("VARDECL:" + varDecl);
-        
-        if (!varDecl.isPresent()) {
-            return Optional.empty();
-        }
-        
-        DeclaratorDecl declarator = varDecl.get();
-        if (declarator instanceof FunctionDecl) {
-            return Optional.of((FunctionDecl) declarator);
-        }
-        
-        SpecsLogs.msgLib("Could not extract function from member call callee decl, check if ok:\n" + declarator);
-        return Optional.empty();
-        
-        // if (!(declarator instanceof FunctionDecl)) {
-        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of((FunctionDecl) declarator);
-        */
     }
 }
