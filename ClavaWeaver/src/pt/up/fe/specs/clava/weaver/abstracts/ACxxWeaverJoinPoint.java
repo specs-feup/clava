@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -553,7 +554,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getAstNameImpl() {
-        return getNodeNormalized().getNodeName();
+        String nodeName = getNodeNormalized().getNodeName();
+        if (nodeName.endsWith("Legacy")) {
+            nodeName = SpecsStrings.removeSuffix(nodeName, "Legacy");
+        }
+
+        return nodeName;
+
     }
 
     @Override
