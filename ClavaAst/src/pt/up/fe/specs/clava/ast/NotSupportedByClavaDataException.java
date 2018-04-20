@@ -11,22 +11,16 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.type.data2;
+package pt.up.fe.specs.clava.ast;
 
-import pt.up.fe.specs.clava.ast.ClavaData;
+public class NotSupportedByClavaDataException extends RuntimeException {
 
-public class DummyTypeData extends TypeDataV2 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-    private final String content;
-
-    public DummyTypeData(String content, ClavaData clavaData) {
-        super(TypeDataV2.empty(clavaData));
-
-        this.content = content;
+    public NotSupportedByClavaDataException() {
+        super("Not supported by ClavaData nodes");
     }
-
-    public String getContent() {
-        return content;
-    }
-
 }

@@ -21,6 +21,7 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.NotSupportedByClavaDataException;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -64,7 +65,15 @@ public abstract class Type extends ClavaNode {
         return (TypeDataV2) super.getData();
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public TypeData getTypeData() {
+        if (hasData()) {
+            throw new NotSupportedByClavaDataException();
+        }
         return data;
     }
 
@@ -113,12 +122,39 @@ public abstract class Type extends ClavaNode {
         // return getType() + " " + nameString;
     }
 
-    public void setStringType(String stringType) {
-        data = new TypeData(stringType, data);
+    // public void setStringType(String stringType) {
+    // data = new TypeData(stringType, data);
+    // }
+
+    /**
+     * TODO: rename to getTypeAsString
+     * 
+     * @return
+     */
+    public String getBareType() {
+        if (hasData()) {
+            return getData().getTypeAsString();
+        }
+
+        return data.getBareType();
     }
 
-    public String getBareType() {
-        return data.getBareType();
+    /**
+     * TODO: rename to setTypeAsString
+     * 
+     * @param type
+     * @return
+     */
+    public Type setBareType(String type) {
+        if (hasData()) {
+            Type copy = copy();
+            copy.getData().setTypeAsString(type);
+            return copy;
+        }
+
+        Type copy = copy();
+        copy.data.setBareType(type);
+        return copy;
     }
 
     @Override
@@ -231,7 +267,16 @@ public abstract class Type extends ClavaNode {
         return desugar().hasUpdatedTemplateArgTypes();
     }
 
+    /**
+     * 
+     * @return true if the type has some kind of 'sugar' (e.g., typedef). Qualifiers (e.g., const) do not count as
+     *         sugar.
+     */
     public boolean hasSugar() {
+        if (hasData()) {
+            return getData().hasSugar();
+        }
+
         return getTypeData().hasSugar();
     }
 
@@ -279,7 +324,7 @@ public abstract class Type extends ClavaNode {
     }
 
     public final Type desugar() {
-        if (!getTypeData().hasSugar()) {
+        if (!hasSugar()) {
             return this;
         }
 
