@@ -25,8 +25,6 @@ import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
-import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -60,6 +58,7 @@ public class FunctionDecl extends DeclaratorDecl {
     private final FunctionDeclData functionDeclData;
 
     private Lazy<FunctionDecl> declaration;
+    private Lazy<FunctionDecl> definition;
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
     // prevents direct transformations in the tree (e.g., if we remove a parameter, the value needs to be updated)
     // Solutions:
@@ -113,7 +112,8 @@ public class FunctionDecl extends DeclaratorDecl {
         super(declName, functionType, declData, info, children);
 
         this.functionDeclData = functionDeclData;
-        this.declaration = Lazy.newInstance(this::findDeclaration);
+        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
+        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
 
     }
 
@@ -217,7 +217,21 @@ public class FunctionDecl extends DeclaratorDecl {
         return Optional.ofNullable(declaration.get());
     }
 
-    private FunctionDecl findDeclaration() {
+    public Optional<FunctionDecl> getFunctionDefinition() {
+        // If has body, this node is already the definition
+        if (hasBody()) {
+            return Optional.of(this);
+        }
+
+        // Get 'cached' value
+        return Optional.ofNullable(definition.get());
+    }
+
+    // private FunctionDecl findDeclaration() {
+    //
+    // }
+
+    private FunctionDecl findDeclOrDef(boolean findDecl) {
         App app = getAppTry().orElse(null);
 
         if (app == null) {
@@ -228,7 +242,7 @@ public class FunctionDecl extends DeclaratorDecl {
         List<FunctionDecl> decls = getApp().getDescendantsStream()
                 .filter(FunctionDecl.class::isInstance)
                 .map(FunctionDecl.class::cast)
-                .filter(fdecl -> !fdecl.hasBody())
+                .filter(fdecl -> findDecl ? !fdecl.hasBody() : fdecl.hasBody())
                 .filter(fdecl -> fdecl.getDeclName().equals(getDeclName()))
                 .filter(fdecl -> fdecl.getDeclarationId(false).equals(getDeclarationId(false)))
                 .collect(Collectors.toList());
@@ -382,6 +396,11 @@ public class FunctionDecl extends DeclaratorDecl {
         return getParameters().size();
     }
 
+    /**
+     * TODO: Replace uses with .getBody(). This should be function definition
+     * 
+     * @return
+     */
     public Optional<Stmt> getDefinition() {
         if (!hasBody()) {
             return Optional.empty();
@@ -422,24 +441,159 @@ public class FunctionDecl extends DeclaratorDecl {
         boolean isStatic = getFunctionDeclData().getStorageClass() == StorageClass.STATIC;
         ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
 
+        Optional<FunctionDecl> decl = getDeclaration();
+        Optional<FunctionDecl> def = getFunctionDefinition();
+
         // Find all calls of this function
         if (root != null) {
+            for (CallExpr callExpr : root.getDescendants(CallExpr.class)) {
+                testAndSetCallName(callExpr, name);
+            }
+
+            /*
             root.getDescendantsStream()
                     .filter(node -> node instanceof CallExpr && !(node instanceof CXXMemberCallExpr)
                             && !(node instanceof CXXOperatorCallExpr))
                     .map(node -> CallExpr.class.cast(node))
                     .filter(node -> functionName.equals(node.getCalleeName()))
                     .forEach(callExpr -> callExpr.setCallName(name));
+                    */
         }
 
-        // Change name of itself
-        setDeclName(name);
-
+        // Change name of itself, both definition and declaration
+        // setDeclName(name);
+        // if (name.equals("declAndDefNew")) {
+        // System.out.println("BEFORE");
+        // System.out.println("DECL:" + getDeclaration());
+        // System.out.println("DEF:" + getFunctionDefinition());
+        // }
+        decl.ifPresent(node -> node.setDeclName(name));
+        def.ifPresent(node -> node.setDeclName(name));
+        // if (name.equals("declAndDefNew")) {
+        // System.out.println("AFTER");
+        // System.out.println("DECL:" + getDeclaration());
+        // System.out.println("DEF:" + getFunctionDefinition());
+        // }
         // Change name of declaration
         getDeclaration()
                 .filter(functionDecl -> functionDecl != this)
                 .ifPresent(functionDecl -> functionDecl.setDeclName(name));
 
+    }
+
+    /**
+     * Sets the name of call if the corresponding definition, declaration or both refer to the function represented by
+     * this node.
+     * 
+     * @param name
+     * @param original
+     * @param tentative
+     */
+    private void testAndSetCallName(CallExpr call, String newName) {
+        if (isCorrespondingCall(call)) {
+            call.setCallName(newName);
+        }
+    }
+
+    private boolean isCorrespondingCall(CallExpr call) {
+        // If declaration exists, declaration of call must exist too, if call refers to this function
+
+        Optional<Boolean> result = getDeclaration().map(decl -> match(decl, call.getDeclaration()));
+        if (result.isPresent()) {
+            return result.get();
+        }
+
+        result = getFunctionDefinition().map(def -> match(def, call.getDefinition()));
+        if (result.isPresent()) {
+            return result.get();
+        }
+
+        System.out.println("DECL:" + getDeclaration());
+        System.out.println("DEF:" + getFunctionDefinition());
+
+        throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
+        /*
+        return getDeclaration().map(decl -> match(decl, call.getDeclaration()))
+                // If no declaration, try definition
+                .orElse(getFunctionDefinition().map(def -> match(def, call.getDefinition()))
+                        .orElseThrow(() -> new RuntimeException(
+                                "Should not arrive here, either function declaration or definition must be defined")));
+        */
+        // Optional<FunctionDecl> functionDecl = getDeclaration();
+        // Optional<FunctionDecl> callDecl = call.getDeclaration();
+
+        /*
+        Optional<Boolean> declMatch = match(getDeclaration(), call.getDeclaration());
+        if (declMatch.isPresent()) {
+            return declMatch.get();
+        }
+        
+        Optional<Boolean> defMatch = match(getFunctionDefinition(), call.getDefinition());
+        if (defMatch.isPresent()) {
+            return defMatch.get();
+        }
+        
+        throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
+        */
+        /*
+        if (functionDecl.isPresent()) {
+            FunctionDecl decl = functionDecl.get();
+        
+            if (!callDecl.isPresent()) {
+                return;
+            }
+        
+            boolean isFunction = decl == callDecl.get();
+        
+            if (isFunction) {
+                call.setCallName(newName);
+            }
+        
+            return;
+        }
+        */
+        /*
+        boolean isDeclOfCall;
+        // If declaration exists, check if declaration of call is the 
+        getDeclaration();
+        call.getDeclaration()
+        */
+    }
+
+    /**
+     * True if both objects match, false if they don't match, or empty if the first argument (functionDecl) is not
+     * present.
+     * 
+     * @param function
+     * @param call
+     * @return
+     */
+    /*
+    private static Optional<Boolean> match(Optional<FunctionDecl> functionDecl, Optional<FunctionDecl> callDecl) {
+        if (!functionDecl.isPresent()) {
+            return Optional.empty();
+        }
+    
+        FunctionDecl decl = functionDecl.get();
+    
+        if (!callDecl.isPresent()) {
+            return Optional.of(false);
+        }
+    
+        return Optional.of(decl == callDecl.get());
+    }
+    */
+
+    private static boolean match(FunctionDecl decl, Optional<FunctionDecl> callDecl) {
+
+        return callDecl.map(cDecl -> decl == cDecl).orElse(false);
+        /*
+        if (!callDecl.isPresent()) {
+            return false;
+        }
+        
+        return decl == callDecl.get();
+        */
     }
 
 }
