@@ -178,7 +178,7 @@ public class CxxTest {
 
     @Test
     public void testFunction() {
-        newTester().test("Function.lara", "function.cpp");
+        newTester().test("Function.lara", "function.cpp", "function.h");
     }
 
     @Test
