@@ -122,9 +122,13 @@ public class CallExpr extends Expr {
     }
 
     public DeclRefExpr getCalleeDeclRef() {
-        return getCallee().getFirstDescendantsAndSelf(DeclRefExpr.class).orElseThrow(
+        return getCalleeDeclRefTry().orElseThrow(
                 () -> new RuntimeException(
                         "Expected callee tree to have at least one DeclRefExpr:\n" + getCallee()));
+    }
+
+    public Optional<DeclRefExpr> getCalleeDeclRefTry() {
+        return getCallee().getFirstDescendantsAndSelf(DeclRefExpr.class);
     }
 
     /**
@@ -161,7 +165,13 @@ public class CallExpr extends Expr {
     }
 
     protected Optional<FunctionDecl> getFunctionDecl() {
-        Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+        DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
+        if (declRef == null) {
+            return Optional.empty();
+        }
+
+        // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+        Optional<DeclaratorDecl> varDecl = declRef.getVariableDeclaration();
 
         if (!varDecl.isPresent()) {
             return Optional.empty();

@@ -440,7 +440,7 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     public void setName(String name) {
-        String functionName = getDeclName();
+        // String functionName = getDeclName();
 
         // Determine scope of change. If static, only change calls inside the file
         boolean isStatic = getFunctionDeclData().getStorageClass() == StorageClass.STATIC;
@@ -466,23 +466,25 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         // Change name of itself, both definition and declaration
+        decl.ifPresent(node -> node.setDeclName(name));
+        def.ifPresent(node -> node.setDeclName(name));
+
         // setDeclName(name);
         // if (name.equals("declAndDefNew")) {
         // System.out.println("BEFORE");
         // System.out.println("DECL:" + getDeclaration());
         // System.out.println("DEF:" + getFunctionDefinition());
         // }
-        decl.ifPresent(node -> node.setDeclName(name));
-        def.ifPresent(node -> node.setDeclName(name));
+
         // if (name.equals("declAndDefNew")) {
         // System.out.println("AFTER");
         // System.out.println("DECL:" + getDeclaration());
         // System.out.println("DEF:" + getFunctionDefinition());
         // }
         // Change name of declaration
-        getDeclaration()
-                .filter(functionDecl -> functionDecl != this)
-                .ifPresent(functionDecl -> functionDecl.setDeclName(name));
+        // getDeclaration()
+        // .filter(functionDecl -> functionDecl != this)
+        // .ifPresent(functionDecl -> functionDecl.setDeclName(name));
 
     }
 
