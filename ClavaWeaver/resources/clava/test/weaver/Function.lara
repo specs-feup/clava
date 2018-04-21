@@ -14,7 +14,7 @@ aspectdef FunctionTest
 	select file{"function.cpp"}.function end
 	apply
 		var fName = $function.name;
-		if(fName != "defOnly" && fName != "declOnly" && fName != "declAndDef") {
+		if(fName != "defOnly" && fName != "declOnly" && fName != "declAndDef" && fName != "notCalled") {
 			continue;
 		}
 		

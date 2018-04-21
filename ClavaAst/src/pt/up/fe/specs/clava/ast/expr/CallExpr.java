@@ -165,13 +165,15 @@ public class CallExpr extends Expr {
     }
 
     protected Optional<FunctionDecl> getFunctionDecl() {
+
         DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
         if (declRef == null) {
             return Optional.empty();
         }
 
-        // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
         Optional<DeclaratorDecl> varDecl = declRef.getVariableDeclaration();
+
+        // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
 
         if (!varDecl.isPresent()) {
             return Optional.empty();

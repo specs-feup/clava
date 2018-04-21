@@ -20,7 +20,7 @@ int declAndDef() {
 	return 2;
 }
 
-
+int notCalled();
 
 void caller() {
 	declOnly();
