@@ -307,3 +307,6 @@ const std::string clava::ATTRIBUTES[] = {
         "Thread"
 };
 
+
+
+//const std::string BUILTIN_KIND[] {};

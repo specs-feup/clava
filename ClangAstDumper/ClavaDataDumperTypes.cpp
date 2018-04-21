@@ -148,7 +148,6 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
 
 void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
     DumpTypeData(T);
-    //DumpTypeData(T->getCanonicalTypeUnqualified());
 
     clava::dump(T->getName(Context->getPrintingPolicy()));
     clava::dump(T->isSugared());

@@ -15,7 +15,7 @@ namespace clava {
     //extern const std::string BUILTIN_KIND[];
     extern const std::string CAST_KIND[];
     extern const std::string ATTRIBUTES[];
-
+    //extern const std::string BUILTIN_KIND[];
 };
 
 #endif //CLANGASTDUMPER_CLANGENUMS_H
