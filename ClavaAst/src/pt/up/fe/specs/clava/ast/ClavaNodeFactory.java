@@ -368,7 +368,7 @@ public class ClavaNodeFactory {
     // public static DummyDecl dummyDecl(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
     // return new DummyDeclLegacy(content, info, children);
     // }
-
+    //
     // public static DummyDecl dummyDecl(ClavaNode node) {
     // return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     // }

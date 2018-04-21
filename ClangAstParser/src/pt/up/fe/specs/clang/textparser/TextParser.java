@@ -276,16 +276,18 @@ public class TextParser {
         // Guard nodes for the translation unit
         SourceRange dummyStartLoc = new SourceRange(tu.getFilepath(), 0, 0, 0, 0);
         // ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
-
+        //
         // DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
         // Collections.emptyList());
+
         // DummyDeclData startData = new DummyDeclData("Textparser_StartGuard",
         // DeclDataV2.empty(ClavaData.newInstance(dummyStartLoc)));
+
         DummyDeclData startData = DummyDeclData.empty();
         startData.setClassname("Textparser_StartGuard")
                 .setLocation(dummyStartLoc);
-
         DummyDecl startGuard = new DummyDecl(startData, Collections.emptyList());
+
         // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
         // Get last end line
@@ -296,7 +298,7 @@ public class TextParser {
         // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
         // Collections.emptyList());
         DummyDeclData endData = DummyDeclData.empty();
-        startData.setClassname("Textparser_EndGuard")
+        endData.setClassname("Textparser_EndGuard")
                 .setLocation(dummyEndLoc);
         DummyDecl endGuard = new DummyDecl(endData, Collections.emptyList());
 
