@@ -217,7 +217,12 @@ public class FunctionDecl extends DeclaratorDecl {
         return Optional.ofNullable(declaration.get());
     }
 
-    public Optional<FunctionDecl> getFunctionDefinition() {
+    /**
+     * The function declaration corresponding to the definition of the function represented by this node.
+     * 
+     * @return
+     */
+    public Optional<FunctionDecl> getDefinitionDeclaration() {
         // If has body, this node is already the definition
         if (hasBody()) {
             return Optional.of(this);
@@ -379,7 +384,7 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         // Translate code of the only child
-        Stmt body = getDefinition().orElseThrow(() -> new RuntimeException("Expected a body"));
+        Stmt body = getFunctionDefinition().orElseThrow(() -> new RuntimeException("Expected a body"));
         if (body instanceof CXXTryStmt) {
             code.append(" ");
         }
@@ -397,11 +402,11 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     /**
-     * TODO: Replace uses with .getBody(). This should be function definition
+     * TODO: Make it protected
      * 
      * @return
      */
-    public Optional<Stmt> getDefinition() {
+    public Optional<Stmt> getFunctionDefinition() {
         if (!hasBody()) {
             return Optional.empty();
         }
@@ -411,7 +416,7 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     public Optional<CompoundStmt> getBody() {
-        return getDefinition().map(this::getCompoundStmt);
+        return getFunctionDefinition().map(this::getCompoundStmt);
     }
 
     private CompoundStmt getCompoundStmt(Stmt body) {
@@ -442,7 +447,7 @@ public class FunctionDecl extends DeclaratorDecl {
         ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
 
         Optional<FunctionDecl> decl = getDeclaration();
-        Optional<FunctionDecl> def = getFunctionDefinition();
+        Optional<FunctionDecl> def = getDefinitionDeclaration();
 
         // Find all calls of this function
         if (root != null) {
@@ -503,13 +508,13 @@ public class FunctionDecl extends DeclaratorDecl {
             return result.get();
         }
 
-        result = getFunctionDefinition().map(def -> match(def, call.getDefinition()));
+        result = getDefinitionDeclaration().map(def -> match(def, call.getDefinition()));
         if (result.isPresent()) {
             return result.get();
         }
 
         System.out.println("DECL:" + getDeclaration());
-        System.out.println("DEF:" + getFunctionDefinition());
+        System.out.println("DEF:" + getDefinitionDeclaration());
 
         throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
         /*

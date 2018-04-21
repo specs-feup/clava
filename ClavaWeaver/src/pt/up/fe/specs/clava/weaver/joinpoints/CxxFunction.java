@@ -226,7 +226,7 @@ public class CxxFunction extends AFunction {
 
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
-        Stmt definition = function.getDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
+        Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
 
         // make a new function declaration with the new name
         FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
