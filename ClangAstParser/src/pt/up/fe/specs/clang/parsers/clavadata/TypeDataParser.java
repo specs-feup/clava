@@ -55,6 +55,7 @@ public class TypeDataParser {
         TypeDataV2 data = parseTypeData(lines, dataStore);
 
         BuiltinKind kind = GeneralParsers.enumFromValue(BuiltinKind.getHelper(), lines);
+
         boolean isSugared = GeneralParsers.parseOneOrZero(lines);
         // Standard standard = config.get(ClavaOptions.STANDARD);
 

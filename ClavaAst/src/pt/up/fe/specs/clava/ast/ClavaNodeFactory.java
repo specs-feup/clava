@@ -42,7 +42,6 @@ import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
@@ -78,7 +77,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
-import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
@@ -367,13 +365,13 @@ public class ClavaNodeFactory {
     // return new LiteralDecl(code, info);
     // }
 
-    public static DummyDecl dummyDecl(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyDeclLegacy(content, info, children);
-    }
+    // public static DummyDecl dummyDecl(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // return new DummyDeclLegacy(content, info, children);
+    // }
 
-    public static DummyDecl dummyDecl(ClavaNode node) {
-        return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
-    }
+    // public static DummyDecl dummyDecl(ClavaNode node) {
+    // return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
+    // }
 
     public static LinkageSpecDecl linkageSpecialDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
             List<ClavaNode> declarations) {

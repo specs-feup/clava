@@ -23,7 +23,11 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 public class DeclDataV2 extends ClavaData {
 
     public static DeclDataV2 empty() {
-        return new DeclDataV2(false, false, false, false, Collections.emptyList(), ClavaData.empty());
+        return empty(ClavaData.empty());
+    }
+
+    public static DeclDataV2 empty(ClavaData clavaData) {
+        return new DeclDataV2(false, false, false, false, Collections.emptyList(), clavaData);
     }
 
     private final boolean isImplicit;
@@ -82,4 +86,5 @@ public class DeclDataV2 extends ClavaData {
 
         return toString(super.toString(), builder.toString());
     }
+
 }

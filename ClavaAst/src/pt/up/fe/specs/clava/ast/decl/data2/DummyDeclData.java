@@ -15,7 +15,11 @@ package pt.up.fe.specs.clava.ast.decl.data2;
 
 public class DummyDeclData extends DeclDataV2 {
 
-    private final String classname;
+    public static DummyDeclData empty() {
+        return new DummyDeclData(null, DeclDataV2.empty());
+    }
+
+    private String classname;
 
     public DummyDeclData(String classname, DeclDataV2 data) {
         super(data);
@@ -25,6 +29,11 @@ public class DummyDeclData extends DeclDataV2 {
 
     public String getClassname() {
         return classname;
+    }
+
+    public DummyDeclData setClassname(String classname) {
+        this.classname = classname;
+        return this;
     }
 
 }

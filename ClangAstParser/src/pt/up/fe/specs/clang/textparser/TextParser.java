@@ -44,6 +44,7 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -274,17 +275,30 @@ public class TextParser {
     private static List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
         // Guard nodes for the translation unit
         SourceRange dummyStartLoc = new SourceRange(tu.getFilepath(), 0, 0, 0, 0);
-        ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
-        DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
-                Collections.emptyList());
+        // ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
+
+        // DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
+        // Collections.emptyList());
+        // DummyDeclData startData = new DummyDeclData("Textparser_StartGuard",
+        // DeclDataV2.empty(ClavaData.newInstance(dummyStartLoc)));
+        DummyDeclData startData = DummyDeclData.empty();
+        startData.setClassname("Textparser_StartGuard")
+                .setLocation(dummyStartLoc);
+
+        DummyDecl startGuard = new DummyDecl(startData, Collections.emptyList());
+        // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
         // Get last end line
         int endLine = SpecsCollections.last(tu.getChildren()).getLocation().getEndLine();
 
         SourceRange dummyEndLoc = new SourceRange(tu.getFilepath(), endLine + 1, 0, endLine + 1, 0);
-        ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
-        DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
-                Collections.emptyList());
+        // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
+        // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
+        // Collections.emptyList());
+        DummyDeclData endData = DummyDeclData.empty();
+        startData.setClassname("Textparser_EndGuard")
+                .setLocation(dummyEndLoc);
+        DummyDecl endGuard = new DummyDecl(endData, Collections.emptyList());
 
         tu.addChild(0, startGuard);
         tu.addChild(tu.getNumChildren(), endGuard);

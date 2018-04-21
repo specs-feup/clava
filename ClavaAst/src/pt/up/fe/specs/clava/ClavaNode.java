@@ -138,7 +138,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     /**
-     * TODO: Make method protected when all accesses are "fixed"
+     * TODO: Make method private when all accesses are "fixed"
      * 
      * @deprecated use .getExtendedId() instead
      * @return

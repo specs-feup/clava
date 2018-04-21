@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,12 +54,13 @@ public class ClavaData {
     // }
     // }
 
+    /*
     public static <T extends ClavaData> T copy(T clavaData) {
-
+    
         // Get ClavaData class
         @SuppressWarnings("unchecked")
         Class<T> clavaDataClass = (Class<T>) clavaData.getClass();
-
+    
         Constructor<T> constructorMethod = null;
         try {
             // Create copy constructor: new T(T data)
@@ -71,7 +71,7 @@ public class ClavaData {
                             + "'. Check if class contains a constructor of the form 'new T(T data)'.",
                     e);
         }
-
+    
         // Invoke constructor
         try {
             return constructorMethod.newInstance(clavaData);
@@ -79,7 +79,7 @@ public class ClavaData {
             throw new RuntimeException(
                     "Could not call constructor for ClavaNode '" + clavaData.getClass().getSimpleName() + "'", e);
         }
-
+    
         /*
         
         
@@ -123,16 +123,20 @@ public class ClavaData {
         
         return constructor.apply(clavaData, children);
         */
-    }
+    // }
 
     public static ClavaData empty() {
         return new ClavaData(null, SourceRange.invalidRange(), false, SourceRange.invalidRange());
     }
 
+    public static ClavaData newInstance(SourceRange location) {
+        return new ClavaData(null, location, false, location);
+    }
+
     private String id;
-    private final SourceRange location;
-    private final boolean isMacro;
-    private final SourceRange spellingLocation;
+    private SourceRange location;
+    private boolean isMacro;
+    private SourceRange spellingLocation;
 
     // Optional
     private List<InlineComment> inlineComments;
@@ -237,6 +241,26 @@ public class ClavaData {
         // copy.id = newId;
         //
         // return copy;
+    }
+
+    public ClavaData setLocation(SourceRange location) {
+        this.location = location;
+        return this;
+    }
+
+    public ClavaData setMacro(boolean isMacro) {
+        this.isMacro = isMacro;
+        return this;
+    }
+
+    public ClavaData setSpellingLocation(SourceRange spellingLocation) {
+        this.spellingLocation = spellingLocation;
+        return this;
+    }
+
+    public ClavaData setInlineComments(List<InlineComment> inlineComments) {
+        this.inlineComments = inlineComments;
+        return this;
     }
 
 }
