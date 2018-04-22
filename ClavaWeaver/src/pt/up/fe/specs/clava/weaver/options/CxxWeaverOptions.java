@@ -27,6 +27,12 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 
 public class CxxWeaverOptions {
 
+    private static String UNIT_TESTING_FLAG = "ut";
+
+    public static String getUnitTestFlag() {
+        return UNIT_TESTING_FLAG;
+    }
+
     private static final Map<String, WeaverOption> WEAVER_OPTIONS;
     static {
         WEAVER_OPTIONS = new HashMap<>();
@@ -80,6 +86,10 @@ public class CxxWeaverOptions {
 
         addBooleanOption(ClavaOptions.DISABLE_CLAVA_DATA_NODES, "dnp", "disable-new-parsing",
                 "Disables new method for parsing nodes (only uses 'legacy' nodes)");
+
+        addBooleanOption(CxxWeaverOption.UNIT_TESTING_MODE, getUnitTestFlag(), "unit-test",
+                "Starts Clava in unit-testing mode");
+
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
