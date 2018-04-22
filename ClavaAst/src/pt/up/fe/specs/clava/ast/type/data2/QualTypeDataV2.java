@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.type.data2;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
@@ -38,6 +40,18 @@ public class QualTypeDataV2 extends TypeDataV2 {
     public QualTypeDataV2(QualTypeDataV2 data) {
         // this(data.standard, data.c99Qualifiers, data);
         this(data.c99Qualifiers, data.addressSpaceQualifier, data.addressSpace, data);
+    }
+
+    public List<C99Qualifier> getC99Qualifiers() {
+        return c99Qualifiers;
+    }
+
+    public List<String> getQualifiers() {
+        List<String> qualifiers = new ArrayList<>();
+
+        qualifiers.addAll(getC99Qualifiers().stream().map(C99Qualifier::getCode).collect(Collectors.toList()));
+
+        return qualifiers;
     }
 
     @Override

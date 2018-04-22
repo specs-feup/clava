@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -24,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.QualTypeDataV2;
 import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 
 /**
@@ -46,6 +48,11 @@ public class QualType extends Type {
         super(typeData, info, children);
 
         this.qualTypeData = qualTypeData;
+    }
+
+    @Override
+    public QualTypeDataV2 getData() {
+        return (QualTypeDataV2) super.getData();
     }
 
     @Override
@@ -201,6 +208,14 @@ public class QualType extends Type {
         }
 
         return getQualifiedType().isConst();
+    }
+
+    public List<String> getQualifierStrings() {
+        if (hasData()) {
+            return getData().getQualifiers();
+        }
+
+        return qualTypeData.getQualifiers().stream().map(Qualifier::name).collect(Collectors.toList());
     }
 
 }

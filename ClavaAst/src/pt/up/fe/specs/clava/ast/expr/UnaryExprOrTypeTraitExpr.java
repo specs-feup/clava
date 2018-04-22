@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents an expression with a type or with an unevaluated expression operand.
@@ -37,7 +38,7 @@ import pt.up.fe.specs.util.SpecsCollections;
 public class UnaryExprOrTypeTraitExpr extends Expr {
 
     private final UnaryExprOrTypeTrait uettKind;
-    private final Type argType;
+    private Type argType;
 
     // private final String exprName;
     // private final String argType;
@@ -142,4 +143,43 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         return toContentString(super.toContentString(),
                 "uett kind: " + uettKind + ", arg type: " + argTypeString);
     }
+
+    public void setArgType(Type argType) {
+        if (this.argType == null) {
+            SpecsLogs.msgInfo("Cannot set type when kind is '" + uettKind + "'");
+            return;
+        }
+
+        this.argType = argType;
+
+    }
+
+    /**
+     * Special case: if sizeof, returns argument type.
+     */
+    /*
+    @Override
+    public Type getType() {
+        if (uettKind == UnaryExprOrTypeTrait.SIZE_OF) {
+            return argType;
+        }
+    
+        return super.getType();
+    }
+    */
+
+    /**
+     * Special case: if sizeof, sets argument type.
+     */
+    /*
+    @Override
+    public void setType(Type type) {
+        if (uettKind == UnaryExprOrTypeTrait.SIZE_OF) {
+            this.argType = type;
+            return;
+        }
+    
+        super.setType(type);
+    }
+    */
 }
