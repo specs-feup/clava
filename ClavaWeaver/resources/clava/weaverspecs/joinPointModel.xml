@@ -233,6 +233,8 @@
 	<!-- MemberAccess -->
 	<joinpoint class="memberAccess" extends="expression"/>	
 
+	<!-- UnaryExprOrType -->
+	<joinpoint class="unaryExprOrType" extends="expression"/>	
 
 	<!-- COMMENT -->
 	<joinpoint class="comment"/>
@@ -269,5 +271,8 @@
 	<joinpoint class="tagType" extends="type">
 	</joinpoint>
 		
+	<!--  QUAL TYPE -->
+	<joinpoint class="qualType" extends="type">
+	</joinpoint>
 	 	
 </joinpoints>

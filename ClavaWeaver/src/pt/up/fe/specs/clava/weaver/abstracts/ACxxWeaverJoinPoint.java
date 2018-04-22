@@ -153,22 +153,24 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] descendantsArrayImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'ancestor'");
+        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
-                .filter(jp -> jp.getJoinpointType().equals(type))
+                .filter(jp -> jp.instanceOf(type))
+                // .filter(jp -> jp.getJoinpointType().equals(type))
                 .toArray(AJoinPoint[]::new);
 
     }
 
     @Override
     public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'ancestor'");
+        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return getNode().getDescendantsAndSelfStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
-                .filter(jp -> jp.getJoinpointType().equals(type))
+                .filter(jp -> jp.instanceOf(type))
+                // .filter(jp -> jp.getJoinpointType().equals(type))
                 .toArray(AJoinPoint[]::new);
     }
 

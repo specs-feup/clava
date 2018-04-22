@@ -369,6 +369,10 @@
 
 
 	
+	<!-- UnaryExprOrType -->
+	<action name="setArgType" class="unaryExprOrType" >
+		<parameter name="argType" type="type" />
+	</action>
 	
 	
 </actions>

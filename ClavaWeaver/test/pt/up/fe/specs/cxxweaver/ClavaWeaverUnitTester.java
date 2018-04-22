@@ -30,17 +30,18 @@ public class ClavaWeaverUnitTester {
     @Test
     public void test() {
         SpecsSystem.programStandardInit();
-        LaraUnitTester laraUnitTester = new LaraUnitTester(new CxxWeaver());
+        LaraUnitTester laraUnitTester = new LaraUnitTester(new CxxWeaver(), false);
 
         // String baseFolder = "C:\\Users\\JoaoBispo\\Documents\\MEGA\\Work\\Tasks\\2018-02-19 LaraUnit Test With
         // Clava";
-        String baseFolder = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\specs-lara\\2018 DSD";
+        // String baseFolder = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\specs-lara\\2018 DSD";
+        String baseFolder = "C:\\Users\\JoaoBispo\\Desktop\\shared\\repositories-programming\\specs-lara\\2018-ASE";
 
         // String testFolder = "C:\\Users\\JoaoBispo\\Documents\\MEGA\\Work\\Tasks\\2018-02-19 LaraUnit Test With
         // Clava\\test";
 
         LaraUnitReport results = laraUnitTester.testFolder(new File(baseFolder),
-                new File(baseFolder, "test/SimpleExamonTest.lara"));
+                new File(baseFolder, "test/ChangePrecisionTest.lara"));
 
         SpecsLogs.msgInfo(results.getReport());
         assertTrue("Did not pass the tests", results.isSuccess());

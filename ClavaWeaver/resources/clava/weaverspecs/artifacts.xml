@@ -374,6 +374,17 @@
 	</artifact>
 
 
+	<!-- UnaryExprOrType -->
+	<artifact class="unaryExprOrType">
+		<attribute name="kind" type="String" />
+		<attribute name="hasTypeExpr" type="Boolean" />
+		<attribute name="hasArgExpr" type="Boolean" />
+		<attribute name="argType" type="type">
+			<def/>
+		</attribute>
+		<attribute name="argExpr" type="expression" />
+	</artifact>
+
 	<!-- COMMENT -->
 	<artifact class="comment">
 		<attribute name="text" type="String" />
@@ -442,6 +453,14 @@
 	<artifact class="tagType">
 		<attribute name="name" type="String" />
 	</artifact>
+
+	<!-- QUAL TYPE -->
+	<artifact class="qualType">
+		<attribute name="qualifiers" type="String[]" />
+		<attribute name="unqualifiedType" type="type" />
+	</artifact>
+	
+	
 
 
 	<!-- OPENMP -->
