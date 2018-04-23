@@ -227,6 +227,7 @@ import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
@@ -1365,6 +1366,10 @@ public class ClavaNodeFactory {
         return compoundStmt(info, Arrays.asList(literalStmt(code)));
     }
 
+    /***** NEW METHODS WITH HIGHER LEVEL CONSTRUCTORS *****/
+
+    /** EXPR **/
+
     /**
      * Builds a DeclRefExpr for a variable named 'varName' and with a BuiltinType with the given kind.
      * 
@@ -1375,7 +1380,7 @@ public class ClavaNodeFactory {
     public static DeclRefExpr declRefExpr(String varName, BuiltinKind kind) {
 
         // BuiltinKind kind = BuiltinKind.getHelper().valueOf(builtinTypeAsString);
-        BuiltinType builtinType = new BuiltinType(kind);
+        BuiltinType builtinType = builtinType(kind);
 
         DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(varName, builtinType);
 
@@ -1389,10 +1394,21 @@ public class ClavaNodeFactory {
      * @return
      */
     public static IntegerLiteral integerLiteral(int integer) {
-        Type intType = new BuiltinType(BuiltinKind.INT);
+        Type intType = builtinType(BuiltinKind.INT);
 
         return ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
                 ClavaNodeInfo.undefinedInfo());
+    }
+
+    /** TYPE **/
+
+    /**
+     * 
+     * @param kind
+     * @return
+     */
+    public static BuiltinType builtinType(BuiltinKind kind) {
+        return new BuiltinType(new BuiltinTypeData(kind), Collections.emptyList());
     }
 
 }
