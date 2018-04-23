@@ -72,14 +72,15 @@ public class CXXMemberCallExpr extends CallExpr {
     }
 
     @Override
-    public String getCalleeName() {
+    // public String getCalleeName() {
+    public Optional<String> getCalleeNameTry() {
         ClavaNode callee = getCallee();
 
         if (!(callee instanceof MemberExpr)) {
             throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);
         }
 
-        return ((MemberExpr) callee).getMemberName();
+        return Optional.of(((MemberExpr) callee).getMemberName());
     }
 
     @Override

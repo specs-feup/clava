@@ -66,7 +66,10 @@ public class CxxCall extends ACall {
 
     @Override
     public String getNameImpl() {
+        // System.out.println("CALL NAME:" + call.getCalleeName());
+        // System.out.println("CALL NAME TRY:" + call.getCalleeNameTry());
         return call.getCalleeNameTry().orElse(null);
+        // return call.getCalleeName();
     }
 
     @Override
