@@ -66,7 +66,7 @@ public class CxxCall extends ACall {
 
     @Override
     public String getNameImpl() {
-        return call.getCalleeName();
+        return call.getCalleeNameTry().orElse(null);
     }
 
     @Override
