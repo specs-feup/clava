@@ -20,7 +20,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 
 /**
@@ -35,9 +34,9 @@ public class DummyDecl extends Decl implements DummyNode {
         super(clavaData, children);
     }
 
-    public DummyDecl(ClavaNode node) {
-        this(new DummyDeclData(node.getClass().getSimpleName(), DeclDataV2.empty(node.getData())), node.getChildren());
-    }
+    // public DummyDecl(ClavaNode node) {
+    // this(new DummyDeclData(node.getClass().getSimpleName(), DeclDataV2.empty(node.getData())), node.getChildren());
+    // }
 
     /**
      * For legacy support.

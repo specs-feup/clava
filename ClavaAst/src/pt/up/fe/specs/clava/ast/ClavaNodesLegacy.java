@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
+import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
+import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -52,7 +54,8 @@ public class ClavaNodesLegacy {
 
     public static DummyDecl dummyDecl(ClavaNode node) {
         if (node.hasData()) {
-            return new DummyDecl(node);
+            return new DummyDecl(new DummyDeclData(node.getClass().getSimpleName(), DeclDataV2.empty(node.getData())),
+                    node.getChildren());
         }
 
         return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
