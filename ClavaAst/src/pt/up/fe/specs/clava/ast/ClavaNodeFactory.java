@@ -143,6 +143,7 @@ import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
@@ -1362,6 +1363,36 @@ public class ClavaNodeFactory {
 
     public static CompoundStmt compoundStmt(ClavaNodeInfo info, String code) {
         return compoundStmt(info, Arrays.asList(literalStmt(code)));
+    }
+
+    /**
+     * Builds a DeclRefExpr for a variable named 'varName' and with a BuiltinType with the given kind.
+     * 
+     * @param varName
+     * @param kind
+     * @return
+     */
+    public static DeclRefExpr declRefExpr(String varName, BuiltinKind kind) {
+
+        // BuiltinKind kind = BuiltinKind.getHelper().valueOf(builtinTypeAsString);
+        BuiltinType builtinType = new BuiltinType(kind);
+
+        DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(varName, builtinType);
+
+        return declRef;
+    }
+
+    /**
+     * Builds an IntegerLiteral from the given integer.
+     * 
+     * @param integer
+     * @return
+     */
+    public static IntegerLiteral integerLiteral(int integer) {
+        Type intType = new BuiltinType(BuiltinKind.INT);
+
+        return ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
+                ClavaNodeInfo.undefinedInfo());
     }
 
 }
