@@ -180,7 +180,7 @@ public class LoopAnalysisUtils {
         }
 
         // inc has to be an expression statement
-        Stmt inc = targetFor.getCond().get();
+        Stmt inc = targetFor.getInc().get();
 
         if (!(inc instanceof ExprStmt)) {
 
