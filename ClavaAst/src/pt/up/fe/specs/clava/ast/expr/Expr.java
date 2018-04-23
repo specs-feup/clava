@@ -42,6 +42,8 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     /**
+     * For legacy.
+     * 
      * @param exprData
      * @param info
      * @param children

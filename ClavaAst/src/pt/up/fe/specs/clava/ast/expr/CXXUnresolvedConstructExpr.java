@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
  * @author JoaoBispo
  *
  */
+// public class CXXUnresolvedConstructExpr extends Expr implements Nameable {
 public class CXXUnresolvedConstructExpr extends Expr {
 
     private final Type typeAsWritten;
@@ -64,5 +65,18 @@ public class CXXUnresolvedConstructExpr extends Expr {
         return getTypeAsWritten().getCode() + "("
                 + getArguments().stream().map(ClavaNode::getCode).collect(Collectors.joining(", ")) + ")";
     }
+
+    /*
+    @Override
+    public String getName() {
+        System.out.println("CXXUNRESOLVED:" + typeAsWritten.getCode());
+        return typeAsWritten.getCode();
+    }
+    
+    @Override
+    public void setName(String name) {
+        SpecsLogs.msgInfo("setName() not supported for node '" + getClass().getSimpleName() + "'");
+    }
+    */
 
 }

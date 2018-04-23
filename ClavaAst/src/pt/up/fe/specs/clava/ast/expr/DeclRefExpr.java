@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.language.CXXOperator;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 /**
@@ -42,7 +43,7 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
  * @author JoaoBispo
  *
  */
-public class DeclRefExpr extends Expr {
+public class DeclRefExpr extends Expr implements Nameable {
     private final String qualifier;
     private final List<String> templateArguments;
     private final BareDeclData declData;
@@ -382,5 +383,15 @@ public class DeclRefExpr extends Expr {
             throw new CaseNotDefinedException(kind);
         }
 
+    }
+
+    @Override
+    public String getName() {
+        return getRefName();
+    }
+
+    @Override
+    public void setName(String name) {
+        setRefName(name);
     }
 }

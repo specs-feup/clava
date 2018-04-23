@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -241,8 +242,45 @@ public class CallExpr extends Expr {
         return getApp().getFunctionDefinition(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
     }
 
+    /**
+     * 
+     * @return can return
+     */
     public String getCalleeName() {
-        return getCalleeDeclRef().getRefName();
+        return getCalleeNameTry()
+                .orElseThrow(() -> new RuntimeException("Could not find callee name for node:" + getCallee()));
+    }
+
+    public Optional<String> getCalleeNameTry() {
+
+        Optional<Nameable> nameable = getCallee().getDescendantsAndSelfStream()
+                .filter(Nameable.class::isInstance)
+                .findFirst()
+                .map(Nameable.class::cast);
+
+        if (nameable.isPresent()) {
+            return nameable.map(Nameable::getName);
+        }
+
+        // throw new RuntimeException("Could not find a node that implements the interface 'Nameable':" + getCallee());
+
+        // SpecsLogs.debug(() -> "Could not find callee name for node:" + getCallee());
+        return Optional.empty();
+
+        /*
+        // Try DeclRef
+        Optional<DeclRefExpr> declRefExpr = getCalleeDeclRefTry();
+        if (declRefExpr.isPresent()) {
+            return declRefExpr.get().getRefName();
+        }
+        
+        // Special case: UnresolvedLookupExpr
+        Optional<UnresolvedLookupExpr> unresolvedLookup = getCallee()
+                .getFirstDescendantsAndSelf(UnresolvedLookupExpr.class);
+        if (unresolvedLookup.isPresent()) {
+            return unresolvedLookup.get().getName();
+        }
+        */
     }
 
     /**

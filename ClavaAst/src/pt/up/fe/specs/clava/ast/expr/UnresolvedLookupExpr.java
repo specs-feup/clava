@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.language.CXXOperator;
+import pt.up.fe.specs.clava.utils.Nameable;
 
 /**
  * A reference to a name which we were able to look up during parsing but could not resolve to a specific declaration.
@@ -28,10 +29,10 @@ import pt.up.fe.specs.clava.language.CXXOperator;
  * @author JoaoBispo
  *
  */
-public class UnresolvedLookupExpr extends OverloadExpr {
+public class UnresolvedLookupExpr extends OverloadExpr implements Nameable {
 
     private final boolean requiresAdl;
-    private final String name;
+    private String name;
     private final List<String> decls;
 
     public UnresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls, String qualifier,
@@ -68,6 +69,17 @@ public class UnresolvedLookupExpr extends OverloadExpr {
         code.append(name);
 
         return code.toString();
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+
     }
 
 }

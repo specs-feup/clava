@@ -480,6 +480,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @return
      */
     public ClavaData getData() {
+        if (data == null) {
+            throw new RuntimeException("ClavaData is not defined");
+        }
         return data;
     }
 
