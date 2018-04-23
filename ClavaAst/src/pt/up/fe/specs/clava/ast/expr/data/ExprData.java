@@ -42,6 +42,10 @@ public class ExprData {
         this.objectKind = objectKind;
     }
 
+    public ExprData copy() {
+        return new ExprData(type, valueKind, objectKind);
+    }
+
     public Type getType() {
         return type;
     }

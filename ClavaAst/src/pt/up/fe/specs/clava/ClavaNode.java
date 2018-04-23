@@ -446,6 +446,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         info.setId(newId);
     }
 
+    public void setData(ClavaData data) {
+        this.data = data;
+    }
+
     /**
      * 
      * @return the CompoundStmt this node belongs to, or TranslationUnit if the scope is global. A node might not have

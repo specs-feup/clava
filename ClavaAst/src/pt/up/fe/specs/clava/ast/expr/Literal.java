@@ -50,7 +50,7 @@ public abstract class Literal extends Expr {
 
     // public abstract String getLiteral();
     public String getLiteral() {
-        if (getData() != null) {
+        if (hasData()) {
             return getData().getSourceLiteral();
         }
 
