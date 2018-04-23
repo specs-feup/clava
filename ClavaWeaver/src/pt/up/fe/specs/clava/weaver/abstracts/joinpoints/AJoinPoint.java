@@ -382,6 +382,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("root");
         attributes.add("parent");
         attributes.add("ancestor(String type)");
+        attributes.add("descendants");
         attributes.add("descendants(String type)");
         attributes.add("descendantsAndSelf(String type)");
         attributes.add("chainAncestor(String type)");
@@ -486,6 +487,39 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ancestor", e);
+        }
+    }
+
+    /**
+     * Get value on attribute descendants
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getDescendantsArrayImpl();
+
+    /**
+     * Retrieves all descendants of the join point
+     */
+    public Bindings getDescendantsImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getDescendantsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Retrieves all descendants of the join point
+     */
+    public final Object getDescendants() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "descendants", Optional.empty());
+        	}
+        	Bindings result = this.getDescendantsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "descendants", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "descendants", e);
         }
     }
 

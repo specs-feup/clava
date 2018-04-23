@@ -16,6 +16,9 @@
 			<parameter name="type" type="String" />
 		</attribute>
 		<attribute name="descendants" type="joinpoint[]"
+			tooltip="Retrieves all descendants of the join point">
+		</attribute>
+		<attribute name="descendants" type="joinpoint[]"
 			tooltip="Retrieves the descendants of the given type">
 			<parameter name="type" type="String" />
 		</attribute>

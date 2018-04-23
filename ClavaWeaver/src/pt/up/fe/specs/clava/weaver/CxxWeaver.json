@@ -179,6 +179,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -753,6 +762,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -1413,6 +1431,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -2034,6 +2061,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -2727,6 +2763,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -3407,6 +3452,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -3970,6 +4024,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -4514,6 +4577,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -5036,6 +5108,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -5600,6 +5681,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -6127,6 +6217,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -6770,6 +6869,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -7359,6 +7467,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -8002,6 +8119,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -8889,6 +9015,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -9651,6 +9786,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -10268,6 +10412,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -10924,6 +11077,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -11566,6 +11728,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -12353,6 +12524,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -12965,6 +13145,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -13660,6 +13849,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -14418,6 +14616,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -15075,6 +15282,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -15631,6 +15847,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -16369,6 +16594,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -17214,6 +17448,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -17884,6 +18127,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -18463,6 +18715,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -19108,6 +19369,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -19867,6 +20137,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -20446,6 +20725,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -21034,6 +21322,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -21811,6 +22108,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -22426,6 +22732,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -22987,6 +23302,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -23652,6 +23976,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -24352,6 +24685,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -25016,6 +25358,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -25587,6 +25938,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -26187,6 +26547,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -26793,6 +27162,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -27376,6 +27754,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {
@@ -28014,6 +28401,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves the descendants of the given type",
                   "children": [
                            {
@@ -28586,6 +28982,15 @@
                            {
                               "type": "joinpoint",
                               "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
                            }]
                },
                {

@@ -228,6 +228,28 @@ public class CxxFunction extends AFunction {
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
         Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
 
+        // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
+        // .getDescendants();
+        //
+        // List<ClavaNode> copiedCasts = definition.getDescendants();
+        /*
+        System.out.println("ORIGINAL CAST:" + originalCasts.get(0));
+        System.out.println("COPIED CAST:" + copiedCasts.get(0));
+        copiedCasts.get(0).setType(new BuiltinType(BuiltinKind.FLOAT));
+        System.out.println("ORIGINAL CAST 2:" + originalCasts.get(0));
+        System.out.println("COPIED CAST 2:" + copiedCasts.get(0));
+        
+        System.out.println("ORIGINAL CAST 2 code:" + originalCasts.get(0).getCode());
+        System.out.println("COPIED CAST 2 code:" + copiedCasts.get(0).getCode());
+        */
+        // for (int i = 0; i < originalCasts.size(); i++) {
+        // if (originalCasts.get(i) == copiedCasts.get(i)) {
+        // System.out.println("FOUND SAME");
+        // }
+        // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
+        // }
+        // System.out.println("FINISH");
+
         // make a new function declaration with the new name
         FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
                 function.getParameters(),
