@@ -460,6 +460,14 @@ public abstract class Type extends ClavaNode {
         */
     }
 
+    public Type unqualifiedType() {
+        if (this instanceof QualType) {
+            return ((QualType) this).getQualifiedType();
+        }
+
+        return this;
+    }
+
     /*
     @Override
     protected void setData(ClavaData data) {
