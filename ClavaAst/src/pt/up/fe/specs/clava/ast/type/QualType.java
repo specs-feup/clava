@@ -70,7 +70,7 @@ public class QualType extends Type {
 
     @Override
     public String getCode(String name) {
-        String type = getQualifiedType().getCode(name);
+        String type = getUnqualifiedType().getCode(name);
 
         // System.out.println("QUAL:" + getExtendedId());
         // If not a top-level qualifier, has to be put after the type, but before the name
@@ -197,7 +197,7 @@ public class QualType extends Type {
     
     }
     */
-    public Type getQualifiedType() {
+    public Type getUnqualifiedType() {
         return getChild(Type.class, 0);
     }
 
@@ -207,7 +207,7 @@ public class QualType extends Type {
             return true;
         }
 
-        return getQualifiedType().isConst();
+        return getUnqualifiedType().isConst();
     }
 
     public List<String> getQualifierStrings() {

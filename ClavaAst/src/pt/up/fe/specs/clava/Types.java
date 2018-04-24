@@ -181,7 +181,7 @@ public class Types {
         }
 
         if (type instanceof QualType) {
-            return ((QualType) type).getQualifiedType();
+            return ((QualType) type).getUnqualifiedType();
         }
 
         if (type instanceof TypedefType) {

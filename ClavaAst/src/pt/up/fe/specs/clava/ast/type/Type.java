@@ -462,7 +462,7 @@ public abstract class Type extends ClavaNode {
 
     public Type unqualifiedType() {
         if (this instanceof QualType) {
-            return ((QualType) this).getQualifiedType();
+            return ((QualType) this).getUnqualifiedType();
         }
 
         return this;

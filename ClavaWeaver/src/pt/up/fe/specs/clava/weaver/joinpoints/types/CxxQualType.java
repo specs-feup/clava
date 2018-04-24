@@ -49,6 +49,6 @@ public class CxxQualType extends AQualType {
 
     @Override
     public AType getUnqualifiedTypeImpl() {
-        return CxxJoinpoints.create(qualType.getQualifiedType(), this, AType.class);
+        return CxxJoinpoints.create(qualType.getUnqualifiedType(), this, AType.class);
     }
 }
