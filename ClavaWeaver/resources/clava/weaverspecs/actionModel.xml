@@ -261,6 +261,11 @@
 		<parameter name="reference" type="loop" />
 	</action>
 	
+	<action name="tile" class="loop" tooltip="Applies loop tiling to target loop.">
+		<parameter name="blockSize" type="String" />
+		<parameter name="reference" type="loop" />
+		<parameter name="useTernary" type="Boolean"/>
+	</action>
 	
 	
 	<!-- OMP -->

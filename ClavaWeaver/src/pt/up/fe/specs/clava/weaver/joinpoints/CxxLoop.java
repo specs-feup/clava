@@ -502,7 +502,13 @@ public class CxxLoop extends ALoop {
     @Override
     public void tileImpl(String blockSize, ALoop reference) {
 
-        boolean success = LoopTiling.apply(loop, (LoopStmt) reference.getNode(), blockSize.toString());
+        tileImpl(blockSize, reference, true);
+    }
+
+    @Override
+    public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
+
+        boolean success = LoopTiling.apply(loop, (LoopStmt) reference.getNode(), blockSize.toString(), useTernary);
 
         if (!success) {
 

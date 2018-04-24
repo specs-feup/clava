@@ -616,6 +616,36 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Applies loop tiling to target loop.
+     * @param blockSize 
+     * @param reference 
+     * @param useTernary 
+     */
+    public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
+        throw new UnsupportedOperationException(get_class()+": Action tile not implemented ");
+    }
+
+    /**
+     * Applies loop tiling to target loop.
+     * @param blockSize 
+     * @param reference 
+     * @param useTernary 
+     */
+    public final void tile(String blockSize, ALoop reference, Boolean useTernary) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference, useTernary);
+        	}
+        	this.tileImpl(blockSize, reference, useTernary);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.empty(), blockSize, reference, useTernary);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "tile", e);
+        }
+    }
+
+    /**
      * Get value on attribute isFirst
      * @return the attribute's value
      */
@@ -1021,6 +1051,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void setIsParallel(Boolean)");
         actions.add("void interchange(loop)");
         actions.add("void tile(String, loop)");
+        actions.add("void tile(String, loop, Boolean)");
     }
 
     /**
