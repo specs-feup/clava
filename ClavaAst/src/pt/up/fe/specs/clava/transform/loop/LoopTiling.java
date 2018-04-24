@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.transform.loop;
 
 import java.util.Collections;
+import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -40,17 +41,22 @@ public class LoopTiling {
 
     public static boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize) {
 
+        return apply(targetLoop, referenceLoop, blockSize, true);
+    }
+
+    public static boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
+
         if (!test(targetLoop, referenceLoop)) {
 
             return false;
         }
 
-        tile(targetLoop, referenceLoop, blockSize);
+        tile(targetLoop, referenceLoop, blockSize, useTernary);
 
         return true;
     }
 
-    private static void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize) {
+    private static void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
 
         ForStmt targetFor = (ForStmt) targetLoop;
         ForStmt referenceFor = (ForStmt) referenceLoop;
@@ -64,7 +70,7 @@ public class LoopTiling {
         // test guarantees there is an upper bound
         Expr oldUpperBound = LoopAnalysisUtils.getUpperBound(targetFor).get();
 
-        changeTarget(targetFor, blockSize, blockVarName, oldUpperBound);
+        changeTarget(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
         addBlockLoop(targetFor, referenceFor, blockSize, blockVarName, oldLowerBound, oldUpperBound);
     }
 
@@ -96,23 +102,54 @@ public class LoopTiling {
         newFor.getBody().addChild(referenceFor);
     }
 
-    private static void changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound) {
+    private static void changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
+            boolean useTernary) {
 
         changeInit(targetFor, blockVarName);
-        changeCond(targetFor, blockSize, blockVarName, oldUpperBound);
+        changeCond(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
     }
 
-    private static void changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound) {
+    private static void changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
+            boolean useTernary) {
 
         Type oldUpperBoundType = oldUpperBound.getType();
         String oldUpperBoundCode = oldUpperBound.getCode();
+
+        Expr newLimit = null;
         String blockLimit = blockVarName + " + " + blockSize;
 
-        String newLimitCode = "(" + oldUpperBoundCode + " < " + blockLimit + " ? " + oldUpperBoundCode + " : "
-                + blockLimit + ")";
-        Expr newLimit = ClavaNodeFactory.literalExpr(newLimitCode, oldUpperBoundType);
+        if (useTernary) {
+
+            String newLimitCode = "(" + oldUpperBoundCode + " < " + blockLimit + " ? " + oldUpperBoundCode + " : "
+                    + blockLimit + ")";
+            newLimit = ClavaNodeFactory.literalExpr(newLimitCode, oldUpperBoundType);
+        } else {
+
+            // add limit check and limit variable before the target loop
+            String limitVar = makeLimitCheck(targetFor, oldUpperBoundType, oldUpperBoundCode, blockLimit);
+
+            // change the limit code in the target loop
+            newLimit = ClavaNodeFactory.literalExpr(limitVar, oldUpperBoundType);
+        }
 
         NodeInsertUtils.replace(oldUpperBound, newLimit);
+    }
+
+    private static String makeLimitCheck(ForStmt targetFor, Type oldUpperBoundType, String oldUpperBoundCode,
+            String blockLimit) {
+
+        List<String> controlVars = LoopAnalysisUtils.getControlVarNames(targetFor);
+        String controlVar = controlVars.get(0);
+        String limitVar = controlVar + "_limit";
+        String limitVarDecl = oldUpperBoundType.unqualifiedType().getCode() + " " + limitVar + " = " + blockLimit + ";";
+        String limitCheck = "if(" + limitVar + " > " + oldUpperBoundCode + ")" + limitVar + " = "
+                + oldUpperBoundCode + ";";
+
+        String limitDeclCode = limitVarDecl + limitCheck;
+        Stmt limitDecl = ClavaNodeFactory.literalStmt(limitDeclCode);
+        NodeInsertUtils.insertBefore(targetFor, limitDecl);
+
+        return limitVar;
     }
 
     /**
