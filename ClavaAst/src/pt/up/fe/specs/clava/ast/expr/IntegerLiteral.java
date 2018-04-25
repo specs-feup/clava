@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -50,6 +51,10 @@ public class IntegerLiteral extends Literal {
     @Override
     public IntegerLiteralData getData() {
         return (IntegerLiteralData) super.getData();
+    }
+
+    public BigInteger getValue() {
+        return getData().getValue();
     }
 
 }

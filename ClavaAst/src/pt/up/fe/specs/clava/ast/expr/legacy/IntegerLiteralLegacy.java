@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.expr.legacy;
 
+import java.math.BigInteger;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
@@ -58,6 +60,11 @@ public class IntegerLiteralLegacy extends IntegerLiteral {
     @Override
     public String toContentString() {
         return super.toContentString() + ", literal:" + literal;
+    }
+
+    @Override
+    public BigInteger getValue() {
+        return new BigInteger(literal);
     }
 
 }
