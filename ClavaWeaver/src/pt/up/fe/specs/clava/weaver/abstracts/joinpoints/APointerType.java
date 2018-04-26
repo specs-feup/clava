@@ -52,6 +52,29 @@ public abstract class APointerType extends AType {
     }
 
     /**
+     * Number of pointer levels from this pointer
+     */
+    public abstract Integer getPointerLevelsImpl();
+
+    /**
+     * Number of pointer levels from this pointer
+     */
+    public final Object getPointerLevels() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointerLevels", Optional.empty());
+        	}
+        	Integer result = this.getPointerLevelsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "pointerLevels", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "pointerLevels", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -363,6 +386,7 @@ public abstract class APointerType extends AType {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("pointee");
+        attributes.add("pointerLevels");
     }
 
     /**
@@ -407,6 +431,7 @@ public abstract class APointerType extends AType {
      */
     protected enum PointerTypeAttributes {
         POINTEE("pointee"),
+        POINTERLEVELS("pointerLevels"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),

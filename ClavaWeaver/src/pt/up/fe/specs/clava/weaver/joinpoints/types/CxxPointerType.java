@@ -46,4 +46,9 @@ public class CxxPointerType extends APointerType {
     public AType getPointeeImpl() {
         return CxxJoinpoints.create(pointerType.getPointeeType(), this, AType.class);
     }
+
+    @Override
+    public Integer getPointerLevelsImpl() {
+        return pointerType.getPointerLevels();
+    }
 }

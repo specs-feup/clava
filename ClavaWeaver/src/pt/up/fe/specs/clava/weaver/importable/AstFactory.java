@@ -316,11 +316,15 @@ public class AstFactory {
     // ClavaNodeFactory.whileStmt(info, condition, thenStmt)
     // }
 
-    public static ACxxWeaverJoinPoint constArrayType(String typeCode, Standard standard, List<Integer> dims) {
+    // public static ACxxWeaverJoinPoint constArrayType(String typeCode, Standard standard, List<Integer> dims) {
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, List<Integer> dims) {
         return constArrayType(ClavaNodeFactory.literalType(typeCode), standard, dims);
     }
 
-    public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
+    // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
+
+        Standard standard = Standard.getEnumHelper().valueOf(standardString);
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);

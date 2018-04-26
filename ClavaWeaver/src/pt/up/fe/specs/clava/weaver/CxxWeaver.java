@@ -1032,4 +1032,38 @@ public class CxxWeaver extends ACxxWeaver {
     // public static String getRelativeFolderpath(TranslationUnit tunit) {
     // return tunit.getRelativeFolderpath(CxxWeaver.getCxxWeaver().getBaseSourceFolder());
     // }
+
+    @Override
+    public boolean executeUnitTestMode(List<String> unitTestArgs) {
+        // Add flag "-ut" to unit test args
+        String[] args = new String[unitTestArgs.size() + 1];
+        args[0] = "-" + LaraiKeys.getUnitTestFlag();
+
+        for (int i = 0; i < unitTestArgs.size(); i++) {
+            args[i + 1] = unitTestArgs.get(i);
+        }
+
+        // System.out.println("ARGS:" + Arrays.asList(args));
+
+        return ClavaWeaverLauncher.execute(args);
+
+        // if (!unitTestArgs.get(0).equals("-" + LaraiKeys.getUnitTestFlag())) {
+        // unitTestArgs = new ArrayList<>(unitTestArgs);
+        // unitTestArgs.add(0, "-" + LaraiKeys.getUnitTestFlag());
+        // }
+        // return ClavaWeaverLauncher.execute(unitTestArgs.toArray(new String[0]));
+
+        /*
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> result = executor.submit(() -> ClavaWeaverLauncher.execute(args));
+        try {
+           return result.get();
+        } catch (InterruptedException | ExecutionException e) {
+           SpecsLogs.msgWarn("Error message:\n", e);
+           return false;
+        }
+        */
+        // SpecsSystem.executeOnProcessAndWait(aClass, args)
+
+    }
 }

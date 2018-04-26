@@ -7,7 +7,7 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-c &quot;C:\Users\JoaoBispo\Documents\MEGA\Work\Tasks\2018-04-12 Clava bug - Missing Includes\miniapp_define.clava&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-c &quot;H:\Work_Shared\2018-04-25 Loic found UC1 Clava bug\test.clava&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:ClavaWeaver}/run/weaver"/>
 </launchConfiguration>

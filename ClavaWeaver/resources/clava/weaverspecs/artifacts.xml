@@ -421,6 +421,7 @@
 	<!-- POINTER TYPE -->
 	<artifact class="pointerType">
 		<attribute name="pointee" type="type" />
+		<attribute name="pointerLevels" type="Integer" tooltip="Number of pointer levels from this pointer" />
 	</artifact>
 	
 	

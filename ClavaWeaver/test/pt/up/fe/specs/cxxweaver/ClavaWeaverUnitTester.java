@@ -41,7 +41,7 @@ public class ClavaWeaverUnitTester {
         // Clava\\test";
 
         LaraUnitReport results = laraUnitTester.testFolder(new File(baseFolder),
-                new File(baseFolder, "test/MultiversionTest.lara"));
+                new File(baseFolder, "test/ParallelizationTest.lara"));
 
         SpecsLogs.msgInfo(results.getReport());
         assertTrue("Did not pass the tests", results.isSuccess());

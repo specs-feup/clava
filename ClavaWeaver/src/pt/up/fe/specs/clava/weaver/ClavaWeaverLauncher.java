@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.joptions.gui.LaraLauncher;
 
-import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -62,7 +62,7 @@ public class ClavaWeaverLauncher {
 
     private static Optional<Boolean> runUnitTester(String[] args) {
         // Look for flag
-        String unitTestingFlag = "-" + CxxWeaverOptions.getUnitTestFlag();
+        String unitTestingFlag = "-" + LaraiKeys.getUnitTestFlag();
 
         int flagIndex = IntStream.range(0, args.length)
                 .filter(index -> unitTestingFlag.equals(args[index]))

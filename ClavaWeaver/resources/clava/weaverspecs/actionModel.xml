@@ -360,7 +360,13 @@
 	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">
 		<parameter name="newType" type="type" />
 	</action>
-	
+	<!-- 
+	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
+		<parameter name="index" type="Integer" />
+		<parameter name="newType" type="type" />
+	</action>	
+	 -->
+	 
 	<!-- TYPE -->
 	<action name="setTemplateArgsTypes" class="type" tooltip="Sets the template argument types of a template type">
 		<parameter name="templateArgTypes" type="type[]" />

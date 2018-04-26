@@ -17875,6 +17875,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Number of pointer levels from this pointer",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "pointerLevels"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Integer",
