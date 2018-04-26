@@ -1,7 +1,7 @@
 GET:true
 TYPE:class java.lang.Boolean
 GET AFTER PUT:false
-Keys:aspect,main,argv,workspace,output,include,external_dependencies,tools,report,metrics,verbose,log,javascript,debug,stack trace,bundle_tags,restrict mode,C/C++ Standard,Compiler Flags,Clava Custom Resources,Disable Remote Dependencies,Disable Clava Data nodes,Weaved code foldername,Disable Clava Info,Check C/CXX Syntax,Clean intermediate files,header includes,library includes,Disable Weaving,Disable Code Generation,Generate Modified Code Only,Flatten woven code folder structure,Unit Testing Mode
+Keys:aspect,main,argv,workspace,output,include,external_dependencies,tools,report,metrics,verbose,log,javascript,debug,stack trace,bundle_tags,restrict mode,C/C++ Standard,Compiler Flags,Clava Custom Resources,Disable Remote Dependencies,Disable Clava Data nodes,Weaved code foldername,Disable Clava Info,Check C/CXX Syntax,Clean intermediate files,header includes,library includes,Disable Weaving,Disable Code Generation,Generate Modified Code Only,Flatten woven code folder structure
 Disable info:false
 System includes:[]
 System includes after:[extra_system_include]

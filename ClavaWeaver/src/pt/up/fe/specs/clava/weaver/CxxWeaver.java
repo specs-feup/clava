@@ -54,7 +54,6 @@ import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
-import pt.up.fe.specs.lara.unit.LaraUnitOptions;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -1037,61 +1036,8 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public boolean executeUnitTestMode(DataStore dataStore) {
+        int unitResults = LaraUnitLauncher.execute(dataStore, getClass().getName());
 
-        DataStore laraUnitData = DataStore.newInstance("LaraUnitData");
-
-        laraUnitData.add(LaraUnitOptions.WEAVER_CLASS, getClass().getName());
-
-        File testFile = dataStore.get(LaraiKeys.LARA_FILE);
-
-        laraUnitData.add(LaraUnitOptions.TEST_FOLDER, testFile);
-
-        List<File> includes = dataStore.get(LaraiKeys.INCLUDES_FOLDER).getFiles();
-        if (includes.isEmpty()) {
-            SpecsLogs.msgInfo("Expected one include, the base folder of the tests");
-            return false;
-        }
-        laraUnitData.add(LaraUnitOptions.BASE_FOLDER, includes.get(0));
-
-        SpecsLogs.debug("Launching lara-unit with the following options: " + laraUnitData);
-
-        int unitResults = LaraUnitLauncher.execute(laraUnitData);
         return unitResults == 0;
-        // int unitResults = LaraUnitLauncher.execute(laraUnitArgs.toArray(new String[0]));
-
-        // return Optional.of(unitResults != -1);
-
-        /*      
-        // Add flag "-ut" to unit test args
-        String[] args = new String[unitTestArgs.size() + 1];
-        args[0] = "-" + LaraiKeys.getUnitTestFlag();
-        
-        for (int i = 0; i < unitTestArgs.size(); i++) {
-            args[i + 1] = unitTestArgs.get(i);
-        }
-        
-        // System.out.println("ARGS:" + Arrays.asList(args));
-        
-        return ClavaWeaverLauncher.execute(args);
-        */
-
-        // if (!unitTestArgs.get(0).equals("-" + LaraiKeys.getUnitTestFlag())) {
-        // unitTestArgs = new ArrayList<>(unitTestArgs);
-        // unitTestArgs.add(0, "-" + LaraiKeys.getUnitTestFlag());
-        // }
-        // return ClavaWeaverLauncher.execute(unitTestArgs.toArray(new String[0]));
-
-        /*
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Boolean> result = executor.submit(() -> ClavaWeaverLauncher.execute(args));
-        try {
-           return result.get();
-        } catch (InterruptedException | ExecutionException e) {
-           SpecsLogs.msgWarn("Error message:\n", e);
-           return false;
-        }
-        */
-        // SpecsSystem.executeOnProcessAndWait(aClass, args)
-
     }
 }
