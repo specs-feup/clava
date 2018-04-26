@@ -73,6 +73,19 @@ public class PointerType extends Type {
         return pointerType.getPointeeType() instanceof ParenType;
     }
 
+    /**
+     * 
+     * @return the number of levels of this pointer. If the pointee is not a pointer, returns 1.
+     */
+    public int getPointerLevels() {
+        Type pointee = getPointeeType();
+        if (!(pointee instanceof PointerType)) {
+            return 1;
+        }
+
+        return 1 + ((PointerType) pointee).getPointerLevels();
+    }
+
     /*
     @Override
     public int hashCode() {

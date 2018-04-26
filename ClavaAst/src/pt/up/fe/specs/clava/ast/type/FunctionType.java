@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -151,6 +152,24 @@ public abstract class FunctionType extends Type {
 
     public FunctionTypeData getFunctionTypeData() {
         return functionTypeData;
+    }
+
+    public int getNumParams() {
+        // First child is the return type, remaining children are the param types
+        return getNumChildren() - 1;
+    }
+
+    public void setReturnType(Type returnType) {
+        setChild(0, returnType);
+    }
+
+    public void setParamType(int paramIndex, Type paramType) {
+        if (paramIndex >= getNumParams()) {
+            SpecsLogs.msgInfo("Cannot set param '', function has only '" + getNumParams() + "' params");
+            return;
+        }
+
+        setChild(paramIndex + 1, paramType);
     }
 
     @Override

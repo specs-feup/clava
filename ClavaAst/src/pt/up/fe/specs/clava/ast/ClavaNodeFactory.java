@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -228,6 +229,8 @@ import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
@@ -755,6 +758,12 @@ public class ClavaNodeFactory {
             ClavaNodeInfo info,
             Type elementType) {
         return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
+    }
+
+    public static ConstantArrayType constantArrayType(int constant, Type elementType, Standard standard) {
+        ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, new ArrayList<Qualifier>(), standard);
+        return new ConstantArrayType(constant, arrayTypeData, null, null, elementType);
+        // return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
     }
 
     public static IncompleteArrayType incompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
