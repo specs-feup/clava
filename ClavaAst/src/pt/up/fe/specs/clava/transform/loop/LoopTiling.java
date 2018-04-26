@@ -89,7 +89,8 @@ public class LoopTiling {
             Expr oldLowerBound, Expr oldUpperBound) {
 
         // make header parts
-        Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        // Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        Stmt init = ClavaNodeFactory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
         Stmt cond = ClavaNodeFactory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
         Stmt inc = ClavaNodeFactory.literalStmt(blockVarName + " += " + blockSize);
 
