@@ -44,7 +44,7 @@ public class DeclStmt extends Stmt {
     }
 
     public DeclStmt(boolean hasSemicolon, ClavaNodeInfo info, NamedDecl decl) {
-        this(DeclStmtType.DECL_LIST, false, info, Arrays.asList(decl));
+        this(DeclStmtType.DECL_LIST, hasSemicolon, info, Arrays.asList(decl));
     }
 
     public DeclStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
