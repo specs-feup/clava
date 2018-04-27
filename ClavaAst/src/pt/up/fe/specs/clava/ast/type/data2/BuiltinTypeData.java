@@ -32,6 +32,18 @@ public class BuiltinTypeData extends TypeDataV2 {
         // System.out.println("BUILTIN TYPE:" + toString());
     }
 
+    /**
+     *
+     * TODO:TEMPORARY
+     * 
+     * @param kind
+     * @param isSugared
+     * @param data
+     */
+    public BuiltinTypeData(BuiltinKind kind, boolean isSugared, TypeDataV2 data) {
+        this(-1, kind, isSugared, data);
+    }
+
     public BuiltinTypeData(BuiltinTypeData data) {
         // this(data.kind, data.isSugared, data.standard, data);
         this(data.kindOrdinal, data.kind, data.isSugared, data);
