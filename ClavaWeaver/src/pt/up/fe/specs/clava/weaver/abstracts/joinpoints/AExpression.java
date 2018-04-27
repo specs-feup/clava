@@ -22,7 +22,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      * Get value on attribute vardecl
      * @return the attribute's value
      */
-    public abstract AJoinPoint getVardeclImpl();
+    public abstract AVardecl getVardeclImpl();
 
     /**
      * Get value on attribute vardecl
@@ -33,7 +33,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "vardecl", Optional.empty());
         	}
-        	AJoinPoint result = this.getVardeclImpl();
+        	AVardecl result = this.getVardeclImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "vardecl", Optional.ofNullable(result));
         	}

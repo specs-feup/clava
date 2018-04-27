@@ -66,7 +66,7 @@ public class CxxCast extends ACast {
     }
 
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         return ((AExpression) CxxJoinpoints.create(cast.getSubExpr(), this)).getVardeclImpl();
     }
 

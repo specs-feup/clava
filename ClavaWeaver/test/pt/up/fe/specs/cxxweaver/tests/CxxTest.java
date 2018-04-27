@@ -77,7 +77,7 @@ public class CxxTest {
 
     @Test
     public void testArrayAccess() {
-        newTester().test("ArrayAccess.lara", "array_access.cpp");
+        newTester().test("ArrayAccess.lara", "array_access.cpp", "array_access.h");
     }
 
     @Test

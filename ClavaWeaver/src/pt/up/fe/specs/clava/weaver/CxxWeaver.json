@@ -543,10 +543,10 @@
          "children": [
                {
                   "type": "attribute",
-                  "tooltip": "varref to the variable of the array access",
+                  "tooltip": "expression representing the variable of the array access (can be a varref, memberAccess...)",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "arrayVar"
                            }]
                },
@@ -589,7 +589,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -952,14 +952,14 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "subscript",
-                  "tooltip": "expression of the array access subscript"
+                  "alias": "arrayVar",
+                  "tooltip": "varref to the variable of the array access"
                },
                {
                   "type": "select",
-                  "clazz": "varref",
-                  "alias": "arrayVar",
-                  "tooltip": "varref to the variable of the array access"
+                  "clazz": "expression",
+                  "alias": "subscript",
+                  "tooltip": "expression of the array access subscript"
                },
                {
                   "type": "select",
@@ -1888,7 +1888,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -2586,7 +2586,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -3275,7 +3275,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -5504,7 +5504,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -7294,7 +7294,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -12996,7 +12996,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -13700,7 +13700,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -15698,7 +15698,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -26407,7 +26407,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -27018,7 +27018,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },
@@ -28257,7 +28257,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "vardecl"
                            }]
                },

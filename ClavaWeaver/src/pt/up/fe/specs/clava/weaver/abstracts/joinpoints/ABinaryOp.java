@@ -143,7 +143,7 @@ public abstract class ABinaryOp extends AExpression {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         return this.aExpression.getVardeclImpl();
     }
 

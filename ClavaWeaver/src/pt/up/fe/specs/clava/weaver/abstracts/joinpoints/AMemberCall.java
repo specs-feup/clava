@@ -217,7 +217,7 @@ public abstract class AMemberCall extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         return this.aCall.getVardeclImpl();
     }
 

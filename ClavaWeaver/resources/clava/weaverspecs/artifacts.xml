@@ -211,7 +211,7 @@
 		<!-- <attribute name="refname" type="String"/> -->
 		<!-- If this expression represents a declared variable, returns a joinpoint 
 			representing the declaration of the variable -->
-		<attribute name="vardecl" type="joinpoint" />
+		<attribute name="vardecl" type="vardecl" />
 		<attribute name="use" type="{read,write,readwrite}" />
 		<attribute name="isFunctionArgument" type="Boolean" 
 			tooltip="true if the expression is part of an argument of a function call"/>
@@ -361,8 +361,8 @@
 
 	<!-- ARRAY ACCESS -->
 	<artifact class="arrayAccess">
-		<attribute name="arrayVar" type="joinpoint"
-			tooltip="varref to the variable of the array access" />
+		<attribute name="arrayVar" type="expression"
+			tooltip="expression representing the variable of the array access (can be a varref, memberAccess...)" />
 		<attribute name="subscript" type="joinpoint[]"
 			tooltip="expression of the array access subscript" />	
 	</artifact>

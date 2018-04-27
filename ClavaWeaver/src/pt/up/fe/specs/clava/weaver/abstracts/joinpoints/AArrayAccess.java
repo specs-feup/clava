@@ -28,19 +28,19 @@ public abstract class AArrayAccess extends AExpression {
         this.aExpression = aExpression;
     }
     /**
-     * varref to the variable of the array access
+     * expression representing the variable of the array access (can be a varref, memberAccess...)
      */
-    public abstract AJoinPoint getArrayVarImpl();
+    public abstract AExpression getArrayVarImpl();
 
     /**
-     * varref to the variable of the array access
+     * expression representing the variable of the array access (can be a varref, memberAccess...)
      */
     public final Object getArrayVar() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrayVar", Optional.empty());
         	}
-        	AJoinPoint result = this.getArrayVarImpl();
+        	AExpression result = this.getArrayVarImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "arrayVar", Optional.ofNullable(result));
         	}
@@ -87,7 +87,7 @@ public abstract class AArrayAccess extends AExpression {
      * varref to the variable of the array access
      * @return 
      */
-    public abstract List<? extends AVarref> selectArrayVar();
+    public abstract List<? extends AExpression> selectArrayVar();
 
     /**
      * expression of the array access subscript
@@ -100,7 +100,7 @@ public abstract class AArrayAccess extends AExpression {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         return this.aExpression.getVardeclImpl();
     }
 
