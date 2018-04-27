@@ -18,23 +18,32 @@ import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 
 public class BuiltinTypeData extends TypeDataV2 {
 
+    private final int kindOrdinal;
     private final BuiltinKind kind;
     private final boolean isSugared;
 
-    public BuiltinTypeData(BuiltinKind kind, boolean isSugared, TypeDataV2 data) {
+    public BuiltinTypeData(int kindOrdinal, BuiltinKind kind, boolean isSugared, TypeDataV2 data) {
         super(data);
 
+        this.kindOrdinal = kindOrdinal;
         this.kind = kind;
         this.isSugared = isSugared;
+
+        // System.out.println("BUILTIN TYPE:" + toString());
     }
 
     public BuiltinTypeData(BuiltinTypeData data) {
         // this(data.kind, data.isSugared, data.standard, data);
-        this(data.kind, data.isSugared, data);
+        this(data.kindOrdinal, data.kind, data.isSugared, data);
     }
 
+    /**
+     * @deprecated Instead implement .empty(), and use set
+     * @param builtinKind
+     */
+    @Deprecated
     public BuiltinTypeData(BuiltinKind builtinKind) {
-        this(builtinKind, false, TypeDataV2.empty(ClavaData.empty()));
+        this(-1, builtinKind, false, TypeDataV2.empty(ClavaData.empty()));
     }
 
     // public BuiltinTypeData(String builtinKind) {
@@ -43,7 +52,8 @@ public class BuiltinTypeData extends TypeDataV2 {
 
     @Override
     public String toString() {
-        return toString(super.toString(), "kind: " + kind + ", isSugared: " + isSugared);
+        return toString(super.toString(),
+                "kindOrdinal: " + kindOrdinal + ", kind: " + kind + ", isSugared: " + isSugared);
     }
 
     public BuiltinKind getKind() {
