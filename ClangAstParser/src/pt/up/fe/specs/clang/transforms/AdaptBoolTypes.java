@@ -76,7 +76,7 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
 
     private BuiltinType newBoolBuiltin(ClavaNode node) {
         if (node.hasData()) {
-            BuiltinTypeData data = new BuiltinTypeData(BuiltinKind.BOOL, false, (TypeDataV2) node.getData());
+            BuiltinTypeData data = new BuiltinTypeData(-1, BuiltinKind.BOOL, false, (TypeDataV2) node.getData());
             return new BuiltinType(data, Collections.emptyList());
         }
 
