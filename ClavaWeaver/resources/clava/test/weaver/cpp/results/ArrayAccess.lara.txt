@@ -1,11 +1,36 @@
+Array var: a
 a[b[a[0]]]->write
+Array var: b
 b[a[0]]->read
+Array var: a
 a[0]->read
+Array var: a
 a[0]->read
+Array var: a2
 a2[b2[1][1]][a2[1][2]]->write
+Array var: b2
 b2[1][1]->read
+Array var: a2
 a2[1][2]->read
+Array var: b2
 b2[0][0]->read
+Array var: a3
 a3[b3[3][4][5]][2][3]->write
+Array var: b3
 b3[3][4][5]->read
+Array var: a4
 (*a4)[i][*j]->write
+Array var: b
+aArray[0].b[0]->read
+Array var: aArray
+aArray[0]->read
+Array var: b
+aArray[0].b[1]->write
+Array var: aArray
+aArray[0]->read
+Array var: b
+aInstance.b[2]->read
+Array var: b
+aInstance.b[3]->write
+Array var: value
+aInstance.value[0]->write

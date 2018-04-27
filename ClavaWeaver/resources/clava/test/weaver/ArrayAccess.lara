@@ -8,6 +8,7 @@ aspectdef ArrayAccess
 	*/
 	select stmt.arrayAccess end
 	apply
+		println("Array var: " + $arrayAccess.arrayVar.name);
 		println($arrayAccess.code + "->" + $arrayAccess.use);
 	end
 
