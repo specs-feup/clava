@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
@@ -257,6 +258,10 @@ public class ClavaNodes {
             return isPostOrPre ? ExprUse.READWRITE : ExprUse.READ;
         }
 
+        if (parent instanceof CXXOperatorCallExpr) {
+            return useOperatorCall((CXXOperatorCallExpr) parent, node);
+        }
+
         if (!(parent instanceof BinaryOperator)) {
             return ExprUse.READ;
         }
@@ -288,6 +293,20 @@ public class ClavaNodes {
         Preconditions.checkArgument(isCompoundAssign, "Must be compount assignment: " + op);
 
         return ExprUse.READWRITE;
+    }
+
+    private static ExprUse useOperatorCall(CXXOperatorCallExpr parent, Expr node) {
+
+        if (!parent.getCalleeDeclRef().getRefName().equals("operator=")) {
+            return ExprUse.READ;
+        }
+
+        // Check if node is on the first argument
+        return parent.getArgs().get(0).getDescendantsAndSelfStream()
+                .filter(descendant -> descendant == node)
+                .findFirst()
+                .map(expr -> ExprUse.WRITE)
+                .orElse(ExprUse.READ);
     }
 
     /**
