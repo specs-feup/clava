@@ -27,7 +27,10 @@ void clava::ClavaDataDumper::dump(const Type* T) {
 
 
 void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
-    DumpHeader(getDataName(typeNode), T);
+    // Dump header
+    llvm::errs() << getDataName(typeNode) << "\n";
+    llvm::errs() << clava::getId(T, id) << "\n";
+    //DumpHeader(getDataName(typeNode), T);
 
     switch(typeNode) {
         case clava::TypeNode::TYPE:
@@ -85,7 +88,10 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
 
 // Dumps the same information as DumpTypeData, and after that, information about QualType
 void clava::ClavaDataDumper::dump(const QualType& T) {
-    DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
+    // Dump header
+    llvm::errs() << "<QualTypeData>" << "\n";
+    llvm::errs() << clava::getId(T, id) << "\n";
+    //DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
 
     auto qualifiers = T.getQualifiers();
 
@@ -149,6 +155,7 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
 void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
     DumpTypeData(T);
 
+    clava::dump(T->getKind());
     clava::dump(T->getName(Context->getPrintingPolicy()));
     clava::dump(T->isSugared());
 }

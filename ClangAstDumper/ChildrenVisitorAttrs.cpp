@@ -45,7 +45,7 @@ void ClangAstDumper::VisitAlignedAttrChildren(const AlignedAttr * A, std::vector
 
     if(A->isAlignmentExpr()) {
         VisitStmtTop(A->getAlignmentExpr());
-        children.push_back(getId(A->getAlignmentExpr()));
+        children.push_back(clava::getId(A->getAlignmentExpr(), id));
     } else {
         VisitTypeTop(A->getAlignmentType()->getType());
         dumpTopLevelType(A->getAlignmentType()->getType());

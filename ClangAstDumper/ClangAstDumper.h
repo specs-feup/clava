@@ -129,7 +129,15 @@ public:
 
     // Utility methods
     std::string loc2str(SourceLocation locStart, SourceLocation locEnd);
-    std::string getId(const void* addr);
+    //std::string getId(const void* addr);
+    /*
+    std::string getId(const Decl* addr);
+    std::string getId(const Stmt* addr);
+    std::string getId(const Expr* addr);
+    std::string getId(const Type* addr);
+    std::string getId(const Attr* addr);
+    */
+
     std::string toBoolString(int value);
     const Type* getTypePtr(QualType T, std::string source);
 

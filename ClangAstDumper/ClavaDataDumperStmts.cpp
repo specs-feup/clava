@@ -46,7 +46,10 @@ void clava::ClavaDataDumper::dump(const Expr* E) {
 }
 
 void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
-    DumpHeader(getDataName(stmtNode), S);
+    // Dump header
+    llvm::errs() << getDataName(stmtNode) << "\n";
+    llvm::errs() << clava::getId(S, id) << "\n";
+    //DumpHeader(getDataName(stmtNode), S);
 
     switch(stmtNode) {
         case clava::StmtNode::STMT:

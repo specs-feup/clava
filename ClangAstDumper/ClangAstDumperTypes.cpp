@@ -227,7 +227,7 @@ void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
 
     // Dump template names
     llvm::errs() << FUNCTION_PROTO_TYPE_EXCEPTION << "\n";
-    llvm::errs() << getId(T) << "\n";
+    llvm::errs() << clava::getId(T, id) << "\n";
     auto EPI = T->getExtProtoInfo();
 
     llvm::errs() << EPI.ExceptionSpec.Type << "\n";

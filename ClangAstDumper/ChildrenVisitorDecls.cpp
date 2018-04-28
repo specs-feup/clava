@@ -86,7 +86,7 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     // Visit parameters
     for(auto param : D->parameters()) {
         VisitDeclTop(param);
-        children.push_back(getId(param));
+        children.push_back(clava::getId(param, id));
     }
     /*
     for (auto I = D->param_begin(), E = D->param_end(); I != E; ++I) {
@@ -102,7 +102,7 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     for (ArrayRef<NamedDecl *>::iterator I = D->getDeclsInPrototypeScope().begin(),
                  E = D->getDeclsInPrototypeScope().end(); I != E; ++I) {
         VisitDeclTop(*I);
-        children.push_back(getId(I));
+        children.push_back(clava::getId(*I, id));
     }
 
     // Visit body
@@ -110,7 +110,7 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     if (D->doesThisDeclarationHaveABody()) {
         //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
         VisitStmtTop(D->getBody());
-        children.push_back(getId(D->getBody()));
+        children.push_back(clava::getId(D->getBody(), id));
     }
 
 }
@@ -140,7 +140,7 @@ void ClangAstDumper::VisitVarDeclChildren(const VarDecl *D, std::vector<std::str
 
     if (D->hasInit()) {
         VisitStmtTop(D->getInit());
-        children.push_back(getId(D->getInit()));
+        children.push_back(clava::getId(D->getInit(), id));
     }
 
 }

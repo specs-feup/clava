@@ -11,10 +11,12 @@
 
 clava::ClavaDataDumper::ClavaDataDumper(ASTContext *Context, int id) : Context(Context), id(id)  {};
 
+/*
 void clava::ClavaDataDumper::DumpHeader(const std::string tag, const void *pointer) {
     llvm::errs() << tag << "\n";
     llvm::errs() << getId(pointer) << "\n";
 }
+*/
 
 /*
 void InfoDumper::DumpHeader(const Decl* D) {
@@ -32,16 +34,11 @@ void InfoDumper::DumpHeader(const Type* T) {
 }
  */
 
+/*
 const std::string clava::ClavaDataDumper::getId(const void* addr) {
     return clava::getId(addr, id);
-    /*
-    std::stringstream ss;
-    ss <<  addr << "_" << id;
-
-    return ss.str();
-     */
 }
-
+*/
 /*
 void clava::ClavaDataDumper::dump(bool boolean) {
     llvm::errs() << boolean << "\n";

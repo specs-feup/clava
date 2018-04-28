@@ -44,7 +44,7 @@ void ClangAstDumper::visitChildren(const QualType &T) {
     // Visit underlying (unqualified) type
     //TypeVisitor::Visit(T.getTypePtr());
     VisitTypeTop(T.getTypePtr());
-    visitedChildren.push_back(getId(T.getTypePtr()));
+    visitedChildren.push_back(clava::getId(T.getTypePtr(), id));
 
     dumpVisitedChildren(T.getAsOpaquePtr(), visitedChildren);
 }
@@ -56,7 +56,7 @@ void ClangAstDumper::VisitTypeChildren(const Type *T, std::vector<std::string> &
     const Type *singleStepDesugar = T->getUnqualifiedDesugaredType();
     if(singleStepDesugar != T) {
         VisitTypeTop(singleStepDesugar);
-        children.push_back(getId(singleStepDesugar));
+        children.push_back(clava::getId(singleStepDesugar, id));
     }
 }
 

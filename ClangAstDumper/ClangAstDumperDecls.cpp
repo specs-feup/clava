@@ -98,7 +98,7 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
         // Check if has decl name, and decl name is not empty
         if (ND->getDeclName() && ND->getNameAsString().length() > 0) {
             llvm::errs() << DUMP_NAMED_DECL_WITHOUT_NAME << "\n";
-            llvm::errs() << getId(ND) << "\n";
+            llvm::errs() << clava::getId(ND, id) << "\n";
             llvm::errs() << ND->getNameAsString() << "\n";
         }
     }
@@ -340,7 +340,7 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
         llvm::errs() << CXX_CTOR_INITIALIZER_BEGIN << "\n";
 
         // Dump address of decl
-        llvm::errs() << getId(D) << "\n";
+        llvm::errs() << clava::getId(D, id) << "\n";
 
         // Dump initializers info
         for (CXXConstructorDecl::init_const_iterator I = D->init_begin(), E = D->init_end(); I != E; ++I) {
@@ -450,7 +450,7 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
 
     // Dump nested namespace prefix
     llvm::errs() << DUMP_NAMESPACE_ALIAS_PREFIX << "\n";
-    llvm::errs() << getId(D) << "\n";
+    llvm::errs() << clava::getId(D, id) << "\n";
     llvm::errs() << loc2str(D->getQualifierLoc().getBeginLoc(), D->getQualifierLoc().getEndLoc()) << "\n";
 
 }
@@ -469,7 +469,7 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
 
     // Dump nested namespace prefix
     llvm::errs() << DUMP_FIELD_DECL_INFO << "\n";
-    llvm::errs() << getId(D) << "\n";
+    llvm::errs() << clava::getId(D, id) << "\n";
     llvm::errs() << toBoolString(D->isBitField()) << "\n";
     llvm::errs() << toBoolString(D->getInClassInitializer() != nullptr) << "\n";
 
@@ -495,7 +495,7 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
 
     if(D->hasInheritedDefaultArg()) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";
-        llvm::errs() << getId(D) << "\n";
+        llvm::errs() << clava::getId(D, id) << "\n";
     }
 
 }
@@ -512,7 +512,7 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
 
     // Dump typedef source
     llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";
-    llvm::errs() << getId(D) << "\n";
+    llvm::errs() << clava::getId(D, id) << "\n";
     llvm::errs() << loc2str(D->getLocStart(), D->getLocEnd()) << "\n";
 }
 

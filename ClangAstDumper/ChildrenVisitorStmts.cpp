@@ -69,7 +69,7 @@ void ClangAstDumper::VisitStmtChildren(const Stmt *S, std::vector<std::string> &
     for (const Stmt *SubStmt : S->children()) {
         if (SubStmt) {
             VisitStmtTop(SubStmt);
-            children.push_back(getId(SubStmt));
+            children.push_back(clava::getId(SubStmt, id));
         }
     }
 }
@@ -95,7 +95,7 @@ void ClangAstDumper::VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::s
     for (DeclStmt::const_decl_iterator I = S->decl_begin(), E = S->decl_end(); I != E; ++I) {
 
         VisitDeclTop(*I);
-        children.push_back(getId(*I));
+        children.push_back(clava::getId(*I, id));
     }
 
 }

@@ -45,7 +45,7 @@ void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
     const Type* constructorType = Node->getConstructor()->getType().getTypePtrOrNull();
     if(constructorType != nullptr) {
         llvm::errs() << "CONSTRUCTOR_TYPE\n";
-        llvm::errs() << getId(Node) << "->" << getId(constructorType) << "\n";
+        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "->" << clava::getId(constructorType, id) << "\n";
         //llvm::errs() << Node << "_" << id << "->" << constructorType << "_" << id << "\n";
         //VisitTypeTop(Node->getConstructor()->getType().getTypePtr());
         VisitTypeTop(constructorType);
@@ -85,7 +85,7 @@ void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
     if(Node->getQualifier() != nullptr) {
         // Can use the stream processor of decl ref expression qualifiers
         llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-        llvm::errs() << getId(Node) << "\n";
+        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
@@ -102,7 +102,7 @@ void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
         llvm::errs() << DUMP_TEMPLATE_ARGS << "\n";
 
         // Node id
-        llvm::errs() << getId(Node) << "\n";
+        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
 
         // Number of template args
         llvm::errs() << Node->getNumTemplateArgs() << "\n";
@@ -131,12 +131,12 @@ void ClangAstDumper::VisitOffsetOfExpr(const OffsetOfExpr *Node) {
     llvm::errs() << DUMP_OFFSET_OF_INFO<< "\n";
 
     // Node id
-    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
 
 
 
     // Offset type
-    llvm::errs() << getId(offsetType) << "\n";
+    llvm::errs() << clava::getId(offsetType, id) << "\n";
 
     // Number of expressions
     llvm::errs() << Node->getNumExpressions() << "\n";
@@ -186,7 +186,7 @@ void ClangAstDumper::VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMem
     llvm::errs() << CXX_MEMBER_EXPR_INFO << "\n";
 
     // Node id
-    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
 
     // Is arrow
     llvm::errs() << Node->isArrow() << "\n";
@@ -208,7 +208,7 @@ void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node, bool isTopCall)
     if(Node->getQualifier() != nullptr) {
         // Can use the stream processor of decl ref expression qualifiers
         llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-        llvm::errs() << getId(Node) << "\n";
+        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
@@ -230,7 +230,7 @@ void ClangAstDumper::VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node)
     if(Node->getQualifier() != nullptr) {
         // Can use the stream processor of decl ref expression qualifiers
         llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-        llvm::errs() << getId(Node) << "\n";
+        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
@@ -272,7 +272,7 @@ void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
 
     // Dump lambda data
     llvm::errs() << LAMBDA_EXPR_DATA << "\n";
-    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
     llvm::errs() << Node->isGenericLambda() << "\n";
     llvm::errs() << Node->isMutable() << "\n";
     llvm::errs() << Node->hasExplicitParameters() << "\n";
@@ -314,8 +314,8 @@ void ClangAstDumper::VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstruc
 
     // Map current address to address of 'type as written'
     llvm::errs() << TYPE_AS_WRITTEN << "\n";
-    llvm::errs() << getId(Node) << "\n";
-    llvm::errs() << getId(Node->getTypeAsWritten().getTypePtr()) << "\n";
+    llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
+    llvm::errs() << clava::getId(Node->getTypeAsWritten().getTypePtr(), id) << "\n";
 }
 
 void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
@@ -327,7 +327,7 @@ void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
 
     bool isTypeOperand = Node->isTypeOperand();
     llvm::errs() << TYPEID_DATA << "\n";
-    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
 
     llvm::errs() << isTypeOperand << "\n"; // True if is a type operand, false if it is an expression
 
@@ -337,10 +337,10 @@ void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
         // QUALTYPE EXP
         //llvm::errs() << getId(Node->getTypeOperand(*Context).getTypePtr()) << "\n";
         //llvm::errs() << getId(&typeOperand) << "\n";
-        llvm::errs() << getId(typeOperand.getAsOpaquePtr()) << "\n";
+        llvm::errs() << clava::getId(typeOperand, id) << "\n";
         VisitTypeTop(typeOperand);
     } else {
-        llvm::errs() << getId(Node->getExprOperand()) << "\n";
+        llvm::errs() << clava::getId(Node->getExprOperand(), id) << "\n";
         VisitStmtTop(Node->getExprOperand());
     }
 }
@@ -353,7 +353,7 @@ void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
     visitChildrenAndData(static_cast<const Expr*>(Node));
 
     llvm::errs() << INIT_LIST_EXPR_INFO << "\n";
-    llvm::errs() << getId(Node) << "\n";
+    llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
 
     // InitListExpr has method isExplicit(), but is not const
     bool isExplicit = Node->getLBraceLoc().isValid() && Node->getRBraceLoc().isValid();

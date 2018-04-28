@@ -225,13 +225,35 @@ void ClangAstDumper::dumpSourceRange(std::string id, SourceLocation startLoc, So
     llvm::errs() << endCol << "\n";
 }
 
-
+/*
 std::string ClangAstDumper::getId(const void* addr) {
     std::stringstream ss;
     ss <<  addr << "_" << id;
 
     return ss.str();
 }
+*/
+/*
+std::string ClangAstDumper::getId(const Decl* addr) {
+
+}
+
+std::string ClangAstDumper::getId(const Stmt* addr) {
+
+}
+
+std::string ClangAstDumper::getId(const Expr* addr) {
+
+}
+
+std::string ClangAstDumper::getId(const Type* addr) {
+
+}
+
+std::string ClangAstDumper::getId(const Attr* addr) {
+
+}
+*/
 
 std::string ClangAstDumper::toBoolString(int value) {
     return value ? "true" : "false";
@@ -246,7 +268,8 @@ const Type* getTypePtr(QualType T, std::string source)  {
 
 void ClangAstDumper::dumpVisitedChildren(const void *pointer, std::vector<std::string> children) {
     llvm::errs() << VISITED_CHILDREN << "\n";
-    llvm::errs() << getId(pointer) << "\n";
+    // If node has children, pointer will not be null
+    llvm::errs() << clava::getId(pointer, id) << "\n";
     llvm::errs() << children.size() << "\n";
 
     for(auto child : children) {
@@ -256,7 +279,7 @@ void ClangAstDumper::dumpVisitedChildren(const void *pointer, std::vector<std::s
 
 void ClangAstDumper::dumpIdToClassMap(const void* pointer, std::string className) {
     llvm::errs() << ID_TO_CLASS_MAP << "\n";
-    llvm::errs() << getId(pointer) << "\n";
+    llvm::errs() << clava::getId(pointer, id) << "\n";
     llvm::errs() << className << "\n";
 }
 
@@ -268,7 +291,7 @@ void ClangAstDumper::dumpTopLevelType(const QualType &type) {
 
 void ClangAstDumper::dumpTopLevelAttr(const Attr *attr) {
     llvm::errs() << TOP_LEVEL_ATTRIBUTES << "\n";
-    llvm::errs() << getId(attr) << "\n";
+    llvm::errs() << clava::getId(attr, id) << "\n";
 }
 
 

@@ -104,10 +104,62 @@ void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLoca
 
 
 const std::string clava::getId(const void* addr, int id) {
+    //if(addr == nullptr || addr == 0) {
+    //    return "nullptr";
+    //}
+
     std::stringstream ss;
     ss <<  addr << "_" << id;
 
     return ss.str();
+}
+
+const std::string clava::getId(const Decl* addr, int id) {
+    if(addr == nullptr) {
+        return "nullptr_decl";
+    }
+
+    return getId((void*) addr, id);
+}
+
+const std::string clava::getId(const Stmt* addr, int id) {
+    if(addr == nullptr) {
+        return "nullptr_stmt";
+    }
+
+    return getId((void*) addr, id);
+}
+
+const std::string clava::getId(const Expr* addr, int id) {
+    if(addr == nullptr) {
+        return "nullptr_expr";
+    }
+
+    return getId((void*) addr, id);
+}
+
+const std::string clava::getId(const Type* addr, int id) {
+    if(addr == nullptr) {
+        return "nullptr_type";
+    }
+
+    return getId((void*) addr, id);
+}
+
+const std::string clava::getId(const QualType &addr, int id) {
+    if(addr.isNull()) {
+        return "nullptr_type";
+    }
+
+    return getId(addr.getAsOpaquePtr(), id);
+}
+
+const std::string clava::getId(const Attr* addr, int id) {
+    if(addr == nullptr) {
+        return "nullptr_attr";
+    }
+
+    return getId((void*) addr, id);
 }
 
 
@@ -171,14 +223,15 @@ void clava::dump(const std::vector<Attr*> &attributes, const int id) {
 
 
 void clava::dump(const QualType& type, int id) {
+/*
     if(type.isNull()) {
         dump("nullptr");
     }
-
+*/
     //dump(getId(type.getTypePtr(), id));
     // QUALTYPE EXP
     //dump(getId(type.getAsOpaquePtr(), id));
-    dump(getId(type.getAsOpaquePtr(), id));
+    dump(getId(type, id));
 
     // Check if QualType is the same as the underlying type
     /*

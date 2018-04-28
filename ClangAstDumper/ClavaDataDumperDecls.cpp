@@ -39,7 +39,10 @@ void clava::ClavaDataDumper::dump(const Decl* D) {
 }
 
 void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
-    DumpHeader(getDataName(declNode), D);
+    // Dump header
+    llvm::errs() << getDataName(declNode) << "\n";
+    llvm::errs() << clava::getId(D, id) << "\n";
+    //DumpHeader(getDataName(declNode), D);
 
     switch(declNode) {
         case clava::DeclNode::DECL:
@@ -77,7 +80,7 @@ void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     std::vector<std::string> attributesIds;
     for (Decl::attr_iterator I = D->attr_begin(), E = D->attr_end(); I != E;
          ++I) {
-        attributesIds.push_back(getId(*I));
+        attributesIds.push_back(clava::getId(*I, id));
     }
     clava::dump(attributesIds);
 
@@ -136,7 +139,7 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
     // Hierarchy
     DumpFunctionDeclData(D);
 
-    clava::dump(getId(D->getParent()));
+    clava::dump(clava::getId(D->getParent(), id));
     // Dump the corresponding CXXRecordDecl
 //    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
 //    llvm::errs() << getId(D) << "\n";

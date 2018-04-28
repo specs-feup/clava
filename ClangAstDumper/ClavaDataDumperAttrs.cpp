@@ -28,7 +28,10 @@ void clava::ClavaDataDumper::dump(const Attr* A) {
 
 
 void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
-    DumpHeader(getDataName(attrNode), A);
+    // Dump header
+    llvm::errs() << getDataName(attrNode) << "\n";
+    llvm::errs() << clava::getId(A, id) << "\n";
+    //DumpHeader(getDataName(attrNode), A);
 
     switch(attrNode) {
         case clava::AttrNode::ATTR:

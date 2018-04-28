@@ -71,6 +71,19 @@ namespace clava {
      * @param id
      * @return
      */
+    const std::string getId(const Decl* addr, int id);
+    const std::string getId(const Stmt* addr, int id);
+    const std::string getId(const Expr* addr, int id);
+    const std::string getId(const Type* addr, int id);
+    const std::string getId(const QualType &addr, int id);
+    const std::string getId(const Attr* addr, int id);
+
+    /**
+     * Should only be used internally by functions of this include.
+     * @param addr
+     * @param id
+     * @return
+     */
     const std::string getId(const void* addr, int id);
 
     /**
