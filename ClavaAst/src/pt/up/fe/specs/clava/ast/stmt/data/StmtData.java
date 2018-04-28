@@ -17,18 +17,26 @@ import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class StmtData extends ClavaData {
 
-    public static StmtData empty() {
-        return new StmtData(ClavaData.empty());
-    }
+    // public static StmtData newInstance() {
+    // return new StmtData(ClavaData.newInstance(id));
+    // }
 
     public StmtData(ClavaData clavaData) {
         super(clavaData);
-
     }
 
     public StmtData(StmtData data) {
         super(data);
 
+        setData(data);
+    }
+
+    public StmtData() {
+        super(new ClavaData());
+    }
+
+    public StmtData setData(StmtData data) {
+        return this;
     }
 
     // public StmtData(ExprDataV2 data) {

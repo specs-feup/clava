@@ -18,16 +18,43 @@ import pt.up.fe.specs.clava.ast.type.Type;
 
 public abstract class AlignedAttrData extends AttributeData {
 
-    private final String spelling;
+    private String spelling;
 
+    /**
+     * Full constructor.
+     * 
+     * @param spelling
+     * @param data
+     */
     public AlignedAttrData(String spelling, AttributeData data) {
         super(data);
 
         this.spelling = spelling;
     }
 
+    /**
+     * Copy constructor.
+     * 
+     * @param data
+     */
     public AlignedAttrData(AlignedAttrData data) {
-        this(data.spelling, data);
+        super(data);
+
+        setData(data);
+        // this(data.spelling, data);
+    }
+
+    /**
+     * Empty constructor.
+     */
+    public AlignedAttrData() {
+        this(null, new AttributeData());
+    }
+
+    public AlignedAttrData setData(AlignedAttrData data) {
+        this.spelling = data.spelling;
+
+        return this;
     }
 
     public String getSpelling() {

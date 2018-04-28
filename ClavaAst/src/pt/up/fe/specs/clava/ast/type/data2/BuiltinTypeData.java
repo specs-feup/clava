@@ -55,7 +55,7 @@ public class BuiltinTypeData extends TypeDataV2 {
      */
     @Deprecated
     public BuiltinTypeData(BuiltinKind builtinKind) {
-        this(-1, builtinKind, false, TypeDataV2.empty(ClavaData.empty()));
+        this(-1, builtinKind, false, TypeDataV2.empty(new ClavaData()));
     }
 
     // public BuiltinTypeData(String builtinKind) {

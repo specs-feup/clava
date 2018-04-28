@@ -14,35 +14,57 @@
 package pt.up.fe.specs.clava.ast.attr.data;
 
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.Type;
 
-public class AlignedExprAttrData extends AlignedAttrData {
+public class AlignedExprAttrData extends AttributeData {
 
+    private String spelling;
     private Expr expr;
 
+    /**
+     * Full constructor.
+     * 
+     * @param spelling
+     * @param expr
+     * @param data
+     */
     public AlignedExprAttrData(String spelling, Expr expr, AttributeData data) {
-        super(spelling, data);
+        super(data);
 
+        this.spelling = spelling;
         this.expr = expr;
     }
 
+    /**
+     * Copy constructor.
+     * 
+     * @param data
+     */
     public AlignedExprAttrData(AlignedExprAttrData data) {
-        this(data.getSpelling(), data.expr, data);
+        super(data);
+        setData(data);
     }
 
-    @Override
-    public boolean isExpr() {
-        return true;
+    /**
+     * Empty constructor.
+     */
+    public AlignedExprAttrData() {
+        this(null, null, new AttributeData());
     }
 
-    @Override
+    public AlignedExprAttrData setData(AlignedExprAttrData data) {
+        super.setData(data);
+
+        this.expr = data.expr;
+
+        return this;
+    }
+
+    public String getSpelling() {
+        return spelling;
+    }
+
     public Expr getExpr() {
         return expr;
-    }
-
-    @Override
-    public Type getType() {
-        return null;
     }
 
 }

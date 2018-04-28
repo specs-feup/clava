@@ -23,7 +23,7 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 public class DeclDataV2 extends ClavaData {
 
     public static DeclDataV2 empty() {
-        return empty(ClavaData.empty());
+        return empty(new ClavaData());
     }
 
     public static DeclDataV2 empty(ClavaData clavaData) {

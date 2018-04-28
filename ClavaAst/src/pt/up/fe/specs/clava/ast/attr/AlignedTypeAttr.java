@@ -16,28 +16,23 @@ package pt.up.fe.specs.clava.ast.attr;
 import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
 
-public class AlignedAttr extends Attribute {
+public class AlignedTypeAttr extends Attribute {
 
-    public AlignedAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    public AlignedAttr(AlignedTypeAttrData data, Collection<? extends ClavaNode> children) {
+    public AlignedTypeAttr(AlignedTypeAttrData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     @Override
-    public AlignedAttrData getData() {
-        return (AlignedAttrData) super.getData();
+    public AlignedTypeAttrData getData() {
+        return (AlignedTypeAttrData) super.getData();
     }
 
     @Override
     public String getCode() {
-        String attrValue = "aligned (" + getData().getCode() + ")";
+        String typeCode = getData().getType().getCode();
+        String attrValue = "aligned (" + typeCode + ")";
 
         return getAttributeCode(attrValue);
     }
