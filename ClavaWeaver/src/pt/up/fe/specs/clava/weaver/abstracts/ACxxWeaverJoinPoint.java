@@ -241,7 +241,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getAstImpl() {
-        return getNode().toString();
+        return getNode().toTree();
     }
 
     @Override
