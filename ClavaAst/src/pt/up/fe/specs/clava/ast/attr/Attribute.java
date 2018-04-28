@@ -15,9 +15,12 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeI;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
@@ -27,6 +30,13 @@ public abstract class Attribute extends ClavaNode {
     private final AttrData attrData;
 
     public Attribute(AttributeData data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.kind = null;
+        this.attrData = null;
+    }
+
+    public Attribute(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
         this.kind = null;
@@ -55,13 +65,17 @@ public abstract class Attribute extends ClavaNode {
     }
 
     public AttrData getAttrData() {
-        if (hasData()) {
-            throw new RuntimeException("Not implemented for ClavaData nodes");
+        if (hasData() || hasDataI()) {
+            throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
         }
         return attrData;
     }
 
     public AttributeKind getKind() {
+        if (hasDataI()) {
+            return getDataI().get(AttributeI.KIND);
+        }
+
         if (hasData()) {
             return getData().getKind();
         }

@@ -57,6 +57,11 @@ public class SourceRange {
         this.end = end;
     }
 
+    public SourceRange(SourceRange sourceRange) {
+        this.start = sourceRange.start;
+        this.end = sourceRange.end;
+    }
+
     public SourceLocation getStart() {
         return start;
     }

@@ -13,7 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.attr;
 
+import static pt.up.fe.specs.clava.ast.attr.data.DummyAttrI.*;
+
 import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -28,6 +32,10 @@ import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
  */
 public class DummyAttr extends Attribute implements DummyNode {
 
+    public DummyAttr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     public DummyAttr(DummyAttributeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
@@ -39,11 +47,11 @@ public class DummyAttr extends Attribute implements DummyNode {
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + getData().getClassname() + ")";
+        return super.getNodeName() + " (" + getDataI().get(CLASSNAME) + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy attribute'" + getData().getClassname() + "' */";
+        return "/* Dummy attribute'" + getDataI().get(CLASSNAME) + "' */";
     }
 
     @Override

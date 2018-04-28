@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.attr.data;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class DummyAttributeData extends AttributeData {
 
     private String classname;

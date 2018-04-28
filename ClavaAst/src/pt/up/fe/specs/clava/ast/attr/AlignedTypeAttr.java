@@ -17,19 +17,24 @@ import static pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrI.*;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
 
 public class AlignedTypeAttr extends Attribute {
 
-    public AlignedTypeAttr(AlignedTypeAttrData data, Collection<? extends ClavaNode> children) {
+    public AlignedTypeAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    @Override
-    public AlignedTypeAttrData getData() {
-        return (AlignedTypeAttrData) super.getData();
-    }
+    // public AlignedTypeAttr(AlignedTypeAttrData data, Collection<? extends ClavaNode> children) {
+    // super(data, children);
+    // }
+    //
+    // @Override
+    // public AlignedTypeAttrData getData() {
+    // return (AlignedTypeAttrData) super.getData();
+    // }
 
     @Override
     public String getCode() {

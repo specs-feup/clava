@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.attr.data;
 
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
+/**
+ * @deprecated replaced by alignedExprAttrI
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class AlignedExprAttrData extends AttributeData {
 
     private String spelling;

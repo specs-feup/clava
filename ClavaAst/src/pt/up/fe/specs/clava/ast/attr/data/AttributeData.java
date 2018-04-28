@@ -16,6 +16,12 @@ package pt.up.fe.specs.clava.ast.attr.data;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class AttributeData extends ClavaData {
 
     /*

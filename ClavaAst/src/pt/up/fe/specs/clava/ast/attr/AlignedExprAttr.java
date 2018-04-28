@@ -15,21 +15,26 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrI;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class AlignedExprAttr extends Attribute {
 
-    public AlignedExprAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
+    public AlignedExprAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    @Override
-    public AlignedExprAttrData getData() {
-        return (AlignedExprAttrData) super.getData();
-    }
+    // public AlignedExprAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
+    // super(data, children);
+    // }
+    //
+    // @Override
+    // public AlignedExprAttrData getData() {
+    // return (AlignedExprAttrData) super.getData();
+    // }
 
     @Override
     public String getCode() {

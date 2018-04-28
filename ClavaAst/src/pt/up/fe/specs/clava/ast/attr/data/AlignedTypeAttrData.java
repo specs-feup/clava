@@ -15,6 +15,13 @@ package pt.up.fe.specs.clava.ast.attr.data;
 
 import pt.up.fe.specs.clava.ast.type.Type;
 
+/**
+ * * @deprecated replaced by AlignedTypeAttrI
+ * 
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class AlignedTypeAttrData extends AttributeData {
 
     private String spelling;

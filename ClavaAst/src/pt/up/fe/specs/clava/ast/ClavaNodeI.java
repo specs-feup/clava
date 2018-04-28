@@ -29,6 +29,11 @@ public interface ClavaNodeI {
     static DataKey<String> ID = KeyFactory.string("id");
 
     /**
+     * The kind of ClavaNode class this DataStore is associated with. TODO: Not sure if is necessary.
+     */
+    // static DataKey<Class<? extends ClavaNode>> NODE_CLASS = KeyFactory.generic("nodeClass", ClavaNode.class);
+
+    /**
      * Location of this node. Might not be available (e.g., type nodes).
      */
     static DataKey<SourceRange> LOCATION = KeyFactory.object("location", SourceRange.class);

@@ -63,6 +63,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     private ClavaData data;
 
+    private DataStore dataI;
+
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
         super(children);
 
@@ -77,6 +79,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         info = null;
         inlineComments = null;
         this.data = data;
+    }
+
+    public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
+        super(children);
+
+        info = null;
+        inlineComments = null;
+        this.data = null;
+        this.dataI = dataI;
     }
 
     // private ClavaNode(ClavaId id, Location location, Collection<? extends ClavaNode> children) {
@@ -96,6 +107,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public String toContentString() {
+        if (hasDataI()) {
+            return getDataI().toInlinedString();
+        }
+
         if (hasData()) {
             return getData().toString();
         }
@@ -500,11 +515,17 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public DataStore getDataI() {
-        if (data == null) {
-            throw new RuntimeException("ClavaData is not defined");
+        if (dataI != null) {
+            return dataI;
         }
 
-        return data.getData();
+        // Try data
+        if (data != null) {
+            return data.getData();
+        }
+
+        throw new RuntimeException("DataStore is not defined");
+
     }
 
     // protected void setData(ClavaData data) {
@@ -518,6 +539,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     public boolean hasData() {
         return data != null;
+    }
+
+    public boolean hasDataI() {
+        return dataI != null;
     }
 
     public Optional<String> getIdSuffix() {
@@ -542,6 +567,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     public boolean isNullNode() {
         return this instanceof NullNode;
+    }
+
+    public String toTree() {
+        return super.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toContentString();
     }
 
 }
