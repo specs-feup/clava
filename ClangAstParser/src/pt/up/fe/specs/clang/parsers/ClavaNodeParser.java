@@ -146,9 +146,13 @@ public class ClavaNodeParser implements LineStreamWorker {
         List<String> childrenIds = data.get(ClangParserKeys.VISITED_CHILDREN).get(nodeId);
 
         if (childrenIds == null) {
-            if (debug)
-                SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
-            return DummyNode.newInstance(classname, clavaData, Collections.emptyList());
+            SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
+            // if (debug) {
+            // SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
+            // }
+
+            childrenIds = Collections.emptyList();
+            // return DummyNode.newInstance(classname, clavaData, Collections.emptyList());
             // return new UnsupportedNode(classname, clavaData, Collections.emptyList());
         }
 
@@ -168,6 +172,15 @@ public class ClavaNodeParser implements LineStreamWorker {
             children.add(child);
         }
 
+        // Get constructor based on DataStore
+        BiFunction<DataStore, List<ClavaNode>, ClavaNode> dataStoreBuilder = classesService
+                .getDataStoreBuilder(clavaNodeClass);
+
+        if (dataStoreBuilder != null) {
+            // Build node based on data and children
+            return dataStoreBuilder.apply(clavaData.getData(), children);
+        }
+
         // Get ClavaNode constructor
         BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = classesService.getBuilder(clavaNodeClass,
                 clavaData.getClass());
@@ -182,7 +195,7 @@ public class ClavaNodeParser implements LineStreamWorker {
                                     + " data, Collection<? extends ClavaNode> children)'");
             }
 
-            return DummyNode.newInstance(classname, clavaData, children);
+            return DummyNode.newInstance(clavaNodeClass, clavaData, children);
             // return new UnsupportedNode(classname, clavaData, children);
         }
 

@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
-import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.enums.EnumHelper;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -195,9 +193,10 @@ public class GeneralParsers {
         return strings;
     }
 
+    /*
     public static List<AttributeData> parseAttributes(LineStream lines) {
         int numAttrs = parseInt(lines);
-
+    
         List<AttributeData> attributes = new ArrayList<>(numAttrs);
         for (int i = 0; i < numAttrs; i++) {
             AttributeKind kind = GeneralParsers.enumFromName(AttributeKind.getHelper(), lines);
@@ -205,11 +204,12 @@ public class GeneralParsers {
             boolean isInherited = parseOneOrZero(lines);
             boolean isLateParsed = parseOneOrZero(lines);
             boolean isPackExpansion = parseOneOrZero(lines);
-
+    
             // attributes.add(new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion));
         }
-
+    
         return attributes;
     }
+    */
 
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -45,6 +47,7 @@ public class ClassesService {
 
     public BiFunction<ClavaData, List<ClavaNode>, ClavaNode> getBuilder(Class<? extends ClavaNode> clavaNodeClass,
             Class<? extends ClavaData> clavaDataClass) {
+
         // Check if builder is ready
         BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = builders.get(clavaNodeClass);
         if (builder != null) {
@@ -144,6 +147,30 @@ public class ClassesService {
 
         // By default, if none of the above, try expression
         return CLAVA_AST_PACKAGE + ".expr." + nodeClassname;
+    }
+
+    public BiFunction<DataStore, List<ClavaNode>, ClavaNode> getDataStoreBuilder(
+            Class<? extends ClavaNode> clavaNodeClass) {
+
+        // Create builder
+        try {
+
+            Constructor<? extends ClavaNode> constructor = clavaNodeClass.getConstructor(DataStore.class,
+                    Collection.class);
+
+            return (data, children) -> {
+                try {
+                    return constructor.newInstance(data, children);
+                } catch (Exception e) {
+                    throw new RuntimeException("Could not call constructor for ClavaNode", e);
+                }
+            };
+
+        } catch (Exception e) {
+            SpecsLogs.msgLib("Could not create constructor for ClavaNode:" + e.getMessage());
+            return null;
+        }
+
     }
 
 }

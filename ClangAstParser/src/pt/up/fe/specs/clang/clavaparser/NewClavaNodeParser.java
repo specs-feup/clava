@@ -64,6 +64,10 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // List<ClavaNode> children = parseChildren(node);
         List<ClavaNode> children = parseChildren(node.getChildrenStream(), getClass().getSimpleName(), isType);
 
+        if (clavaNode.hasDataI()) {
+            return newClavaNode(nodeClass, clavaNode.getDataI(), children);
+        }
+
         return newClavaNode(nodeClass, clavaNode.getData(), children);
     }
 

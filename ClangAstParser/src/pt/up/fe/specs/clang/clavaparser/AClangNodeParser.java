@@ -100,6 +100,12 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         return constructors.newClavaNode(clavaNodeClass, clavaData, children);
     }
 
+    public <T extends ClavaNode> T newClavaNode(Class<T> nodeClass, DataStore data,
+            Collection<? extends ClavaNode> children) {
+
+        return constructors.newClavaNode(nodeClass, data, children);
+    }
+
     @Override
     public ClangConverterTable getConverter() {
         return converter;
