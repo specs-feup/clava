@@ -18,6 +18,7 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
  * Represents a non-existent declaration, where could have been one.
@@ -25,7 +26,7 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
  * @author JoaoBispo
  *
  */
-public class NullDecl extends Decl {
+public class NullDecl extends Decl implements NullNode {
 
     public static NullDecl create(ClavaNode node) {
         return create(node.getInfo());

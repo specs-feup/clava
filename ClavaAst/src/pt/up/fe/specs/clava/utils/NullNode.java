@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 SPeCS.
+ * Copyright 2018 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,24 +11,14 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.utils;
 
-import java.util.Collections;
-
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.utils.NullNode;
-
-public class NullExpr extends Expr implements NullNode {
-
-    public NullExpr() {
-        super(ExprData.empty(), ClavaNodeInfo.undefinedInfo(), Collections.emptyList());
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new NullExpr();
-    }
+/**
+ * Marker interface.
+ * 
+ * @author JoaoBispo
+ *
+ */
+public interface NullNode {
 
 }

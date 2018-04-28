@@ -30,9 +30,9 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -235,7 +235,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         // ClavaNode child = getChild(index);
 
         // If NullNode return empty Optional, otherwise cast and return optional
-        return child instanceof NullNode ? Optional.empty() : Optional.of(castTo.cast(child));
+        return child instanceof pt.up.fe.specs.clava.ast.extra.NullNode ? Optional.empty()
+                : Optional.of(castTo.cast(child));
     }
 
     /*
@@ -517,5 +518,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         }
 
         return Optional.of(id.substring(startIndex));
+    }
+
+    public boolean isNullNode() {
+        return this instanceof NullNode;
     }
 }

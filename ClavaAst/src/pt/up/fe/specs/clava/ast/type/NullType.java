@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
+import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
  * Represents an 'empty' node type, to be used, for instance, in cases where type is optional, or when type could not be
@@ -30,7 +31,7 @@ import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
  * @author JoaoBispo
  *
  */
-public class NullType extends Type {
+public class NullType extends Type implements NullNode {
 
     public NullType(ClavaNodeInfo info) {
         super(new TypeData("<null type>"), info, Collections.emptyList());

@@ -18,6 +18,7 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
  * Represents an empty statement.
@@ -27,7 +28,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  * @author JoaoBispo
  *
  */
-public class NullStmt extends Stmt {
+public class NullStmt extends Stmt implements NullNode {
 
     public NullStmt(ClavaNodeInfo info) {
         this(info, Collections.emptyList());
