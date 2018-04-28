@@ -15,7 +15,6 @@ package pt.up.fe.specs.clang.streamparserv2;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,19 +28,19 @@ public class ClassesService {
 
     private static final String CLAVA_AST_PACKAGE = "pt.up.fe.specs.clava.ast";
 
-    private final Map<String, Class<? extends ClavaNode>> customClassMap;
+    private final CustomClassnameMapper customClassMap;
     private final Map<String, Class<? extends ClavaNode>> autoClassMap;
 
     private final Map<Class<? extends ClavaNode>, BiFunction<ClavaData, List<ClavaNode>, ClavaNode>> builders;
 
-    public ClassesService(Map<String, Class<? extends ClavaNode>> customClassMap) {
+    public ClassesService(CustomClassnameMapper customClassMap) {
         this.customClassMap = customClassMap;
         this.autoClassMap = new HashMap<>();
         builders = new HashMap<>();
     }
 
     public ClassesService() {
-        this(Collections.emptyMap());
+        this(new CustomClassnameMapper());
     }
 
     public BiFunction<ClavaData, List<ClavaNode>, ClavaNode> getBuilder(Class<? extends ClavaNode> clavaNodeClass,
@@ -75,10 +74,10 @@ public class ClassesService {
 
     }
 
-    public Class<? extends ClavaNode> getClass(String classname) {
+    public Class<? extends ClavaNode> getClass(String classname, ClavaData clavaData) {
 
         // Try custom map
-        Class<? extends ClavaNode> clavaNodeClass = customClassMap.get(classname);
+        Class<? extends ClavaNode> clavaNodeClass = customClassMap.getClass(classname, clavaData);
         if (clavaNodeClass != null) {
             return clavaNodeClass;
         }

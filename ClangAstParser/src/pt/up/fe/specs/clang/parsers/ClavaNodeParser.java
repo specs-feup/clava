@@ -41,8 +41,8 @@ public class ClavaNodeParser implements LineStreamWorker {
     private final ClassesService classesService;
     private final Set<String> missingConstructors;
 
-    public ClavaNodeParser() {
-        this.classesService = new ClassesService();
+    public ClavaNodeParser(ClassesService classesService) {
+        this.classesService = classesService;
         this.missingConstructors = new HashSet<>();
     }
 
@@ -127,9 +127,6 @@ public class ClavaNodeParser implements LineStreamWorker {
             // return new UnsupportedNode("<CLASSNAME NOT FOUND>", ClavaData.empty(), Collections.emptyList());
         }
 
-        // Get corresponding ClavaNode class
-        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname);
-
         // Get ClavaData mapped to the node id
         ClavaData clavaData = data.get(ClangParserKeys.CLAVA_DATA).get(nodeId);
 
@@ -141,6 +138,9 @@ public class ClavaNodeParser implements LineStreamWorker {
             // + "), data dumper is not being called");
             // return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
         }
+
+        // Get corresponding ClavaNode class
+        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, clavaData);
 
         // Get children ids
         List<String> childrenIds = data.get(ClangParserKeys.VISITED_CHILDREN).get(nodeId);

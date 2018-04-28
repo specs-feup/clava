@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parsers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -273,7 +274,7 @@ public class ClavaDataParser {
         boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? parseLocation(lines) : SourceRange.invalidRange();
 
-        return new ClavaData(id, location, isMacro, spellingLocation);
+        return new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
     }
 
     /*

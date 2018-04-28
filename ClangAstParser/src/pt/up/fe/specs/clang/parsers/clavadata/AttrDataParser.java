@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
@@ -43,7 +42,7 @@ public class AttrDataParser {
         return new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion, clavaData);
     }
 
-    public static AlignedAttrData parseAlignedAttrData(LineStream lines, DataStore dataStore) {
+    public static AttributeData parseAlignedAttrData(LineStream lines, DataStore dataStore) {
         AttributeData data = parseAttributeData(lines, dataStore);
 
         String spelling = lines.nextLine();

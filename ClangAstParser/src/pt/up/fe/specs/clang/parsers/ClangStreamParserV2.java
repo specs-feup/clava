@@ -20,12 +20,14 @@ import java.util.function.Supplier;
 import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
+import pt.up.fe.specs.clang.version.Clang_3_8;
+
 public class ClangStreamParserV2 {
 
     private static final Map<String, LineStreamWorker> WORKERS;
     static {
         WORKERS = new HashMap<>();
-        addWorker(ClavaNodeParser::new);
+        addWorker(() -> new ClavaNodeParser(Clang_3_8.getClassesService()));
         addWorker(VisitedChildrenParser::new);
         addWorker(IdToFilenameParser::new);
         addWorker(IncludesParser::new);
