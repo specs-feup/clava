@@ -19,9 +19,13 @@ import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrI;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrI;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrI;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
+import pt.up.fe.specs.clava.ast.attr.data.AttributeI;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -39,6 +43,12 @@ public class AttrDataParser {
         boolean isLateParsed = GeneralParsers.parseOneOrZero(lines);
         boolean isPackExpansion = GeneralParsers.parseOneOrZero(lines);
 
+        clavaData.getData().add(AttributeI.KIND, kind);
+        clavaData.getData().add(AttributeI.IS_IMPLICIT, isImplicit);
+        clavaData.getData().add(AttributeI.IS_INHERITED, isInherited);
+        clavaData.getData().add(AttributeI.IS_LATE_PARSED, isLateParsed);
+        clavaData.getData().add(AttributeI.IS_PACK_EXPANSION, isPackExpansion);
+
         return new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion, clavaData);
     }
 
@@ -49,11 +59,15 @@ public class AttrDataParser {
         boolean isExpr = GeneralParsers.parseOneOrZero(lines);
         String nodeId = lines.nextLine();
 
+        data.getData().add(AlignedAttrI.SPELLING, spelling);
+
         if (isExpr) {
             Expr expr = ClavaNodes.getExpr(dataStore, nodeId);
+            data.getData().add(AlignedExprAttrI.EXPR, expr);
             return new AlignedExprAttrData(spelling, expr, data);
         } else {
             Type type = ClavaNodes.getType(dataStore, nodeId);
+            data.getData().add(AlignedTypeAttrI.TYPE, type);
             return new AlignedTypeAttrData(spelling, type, data);
         }
 

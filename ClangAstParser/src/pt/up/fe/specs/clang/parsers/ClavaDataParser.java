@@ -37,6 +37,7 @@ import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaData;
+import pt.up.fe.specs.clava.ast.ClavaNodeI;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -274,7 +275,17 @@ public class ClavaDataParser {
         boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? parseLocation(lines) : SourceRange.invalidRange();
 
-        return new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
+        ClavaData clavaData = new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
+
+        DataStore data = DataStore.newInstance("ClavaData");
+        data.add(ClavaNodeI.ID, id);
+        data.add(ClavaNodeI.LOCATION, location);
+        data.add(ClavaNodeI.IS_MACRO, isMacro);
+        data.add(ClavaNodeI.SPELLING_LOCATION, spellingLocation);
+
+        clavaData.setData(data);
+
+        return clavaData;
     }
 
     /*
