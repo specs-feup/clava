@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.attr;
 
+import static pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrI.*;
+
 import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -31,7 +33,7 @@ public class AlignedTypeAttr extends Attribute {
 
     @Override
     public String getCode() {
-        String typeCode = getData().getType().getCode();
+        String typeCode = getDataI().get(TYPE).getCode();
         String attrValue = "aligned (" + typeCode + ")";
 
         return getAttributeCode(attrValue);

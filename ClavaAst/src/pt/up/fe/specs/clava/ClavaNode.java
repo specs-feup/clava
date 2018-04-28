@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
@@ -42,6 +44,16 @@ import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     private static final ClavaNodeConstructors CLAVA_NODE_CONSTRUCTORS = new ClavaNodeConstructors();
+
+    /*
+    private String id;
+    private SourceRange location;
+    private boolean isMacro;
+    private SourceRange spellingLocation;
+    
+    // Optional
+    private List<InlineComment> inlineComments;
+    */
 
     private List<InlineComment> inlineComments;
 
@@ -487,6 +499,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return data;
     }
 
+    public DataStore getDataI() {
+        if (data == null) {
+            throw new RuntimeException("ClavaData is not defined");
+        }
+
+        return data.getData();
+    }
+
     // protected void setData(ClavaData data) {
     // this.data = data;
     // }
@@ -523,4 +543,5 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     public boolean isNullNode() {
         return this instanceof NullNode;
     }
+
 }

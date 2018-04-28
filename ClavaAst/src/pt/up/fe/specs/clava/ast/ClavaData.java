@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.SourceRange;
@@ -41,6 +43,9 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
  *
  */
 public class ClavaData {
+
+    // ONGOING: Experiment to check if this object can replace all ClavaData instances
+    private DataStore data;
 
     private String id;
     private SourceRange location;
@@ -101,6 +106,8 @@ public class ClavaData {
         this.isMacro = data.isMacro;
         this.spellingLocation = data.spellingLocation;
         this.inlineComments = data.inlineComments;
+
+        this.data = data.data;
 
         return this;
     }
@@ -192,4 +199,11 @@ public class ClavaData {
         return this;
     }
 
+    public DataStore getData() {
+        return data;
+    }
+
+    public void setData(DataStore data) {
+        this.data = data;
+    }
 }

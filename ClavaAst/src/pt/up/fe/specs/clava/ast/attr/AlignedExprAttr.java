@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
+import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrI;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class AlignedExprAttr extends Attribute {
@@ -33,7 +34,7 @@ public class AlignedExprAttr extends Attribute {
     @Override
     public String getCode() {
 
-        Expr expr = getData().getExpr();
+        Expr expr = getDataI().get(AlignedExprAttrI.EXPR);
 
         String exprCode = expr.isNullNode() ? "" : " (" + expr.getCode() + ")";
         String attrValue = "aligned" + exprCode;
