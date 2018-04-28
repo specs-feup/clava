@@ -13,6 +13,10 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -24,10 +28,19 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 public class ClavaNodes {
 
-    private static final String NULLPRT = "nullptr";
+    // private static final String NULLPRT = "nullptr";
+    private static final String NULLPRT_DECL = "nullptr_decl";
+    private static final String NULLPRT_STMT = "nullptr_stmt";
+    private static final String NULLPRT_EXPR = "nullptr_expr";
+    private static final String NULLPRT_TYPE = "nullptr_type";
+    private static final String NULLPRT_ATTR = "nullptr_attr";
+
+    private static final Set<String> NULL_IDS = new HashSet<>(
+            Arrays.asList(NULLPRT_DECL, NULLPRT_STMT, NULLPRT_EXPR, NULLPRT_TYPE, NULLPRT_ATTR));
 
     public static ClavaNode getNode(DataStore data, String id) {
         ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
@@ -48,7 +61,8 @@ public class ClavaNodes {
     // }
 
     public static Type getType(DataStore data, String parsedTypeId) {
-        if (NULLPRT.equals(parsedTypeId)) {
+        // if (NULLPRT.equals(parsedTypeId)) {
+        if (NULLPRT_TYPE.equals(parsedTypeId)) {
             return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
         }
 
@@ -61,18 +75,17 @@ public class ClavaNodes {
     }
 
     public static Attribute getAttr(DataStore data, String parsedAttrId) {
-        Preconditions.checkArgument(!NULLPRT.equals(parsedAttrId), "Did not expect 'nullptr'");
+        Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
 
         ClavaNode node = getNode(data, parsedAttrId);
 
         SpecsCheck.checkArgument(node instanceof Attribute,
                 () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
-
         return (Attribute) node;
     }
 
     public static Expr getExpr(DataStore data, String parsedExprId) {
-        if (NULLPRT.equals(parsedExprId)) {
+        if (NULLPRT_EXPR.equals(parsedExprId)) {
             return ClavaNodeFactory.nullExpr();
         }
 
@@ -82,6 +95,25 @@ public class ClavaNodes {
                 () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
 
         return (Expr) node;
+    }
+
+    public static boolean isNullId(String nullId) {
+        return NULL_IDS.contains(nullId);
+    }
+
+    public static ClavaNode nullNode(String nullId) {
+        switch (nullId) {
+        case NULLPRT_DECL:
+            return ClavaNodeFactory.nullDecl(ClavaNodeInfo.undefinedInfo());
+        case NULLPRT_STMT:
+            return ClavaNodeFactory.nullStmt(ClavaNodeInfo.undefinedInfo());
+        case NULLPRT_EXPR:
+            return ClavaNodeFactory.nullExpr();
+        case NULLPRT_TYPE:
+            return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+        default:
+            throw new CaseNotDefinedException(nullId);
+        }
     }
 
 }

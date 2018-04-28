@@ -158,6 +158,12 @@ public class ClavaNodeParser implements LineStreamWorker {
         List<ClavaNode> children = new ArrayList<>(childrenIds.size());
         for (String childId : childrenIds) {
             ClavaNode child = parsedNodes.get(childId);
+
+            // Check if nullptr
+            if (child == null && ClavaNodes.isNullId(childId)) {
+                child = ClavaNodes.nullNode(childId);
+            }
+
             Preconditions.checkNotNull(child, "Did not find ClavaNode for child with id '" + childId + "'");
             children.add(child);
         }
