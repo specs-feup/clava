@@ -15,16 +15,40 @@ package pt.up.fe.specs.clava.ast.attr.data;
 
 public class DummyAttributeData extends AttributeData {
 
-    private final String classname;
+    private String classname;
 
+    /**
+     * Full constructor.
+     * 
+     * @param classname
+     * @param data
+     */
     public DummyAttributeData(String classname, AttributeData data) {
         super(data);
 
         this.classname = classname;
     }
 
+    /**
+     * Copy construtor.
+     * 
+     * @param data
+     */
     public DummyAttributeData(DummyAttributeData data) {
         this(data.classname, data);
+    }
+
+    /**
+     * Empty constructor.
+     */
+    public DummyAttributeData() {
+        this(null, new AttributeData());
+    }
+
+    public DummyAttributeData setData(DummyAttributeData data) {
+        this.classname = data.classname;
+
+        return this;
     }
 
     public String getClassname() {
