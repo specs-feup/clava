@@ -111,7 +111,10 @@ public class ClavaPostProcessing {
             // Special case: directly changing the Data object, since we want this change to reflect across
             // all nodes
             // TODO: Alternatively, this should be implemented as a ClavaRule and apply as a bottom-up change
-            if (elaboratedType.hasData()) {
+
+            if (elaboratedType.hasDataI()) {
+                elaboratedType.getDataI().set(ElaboratedType.TYPE_AS_STRING, newBareType);
+            } else if (elaboratedType.hasData()) {
                 elaboratedType.getData().setTypeAsString(newBareType);
             } else {
                 elaboratedType.getTypeData().setBareType(newBareType);

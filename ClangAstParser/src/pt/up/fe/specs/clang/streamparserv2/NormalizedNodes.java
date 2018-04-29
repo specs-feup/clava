@@ -54,7 +54,7 @@ public class NormalizedNodes {
 
             // If location is not mapped to a normalized node yet, add to map;
             if (normalizedId == null) {
-                fileLocationToId.put(locationString, node.getData().getId());
+                fileLocationToId.put(locationString, node.getId());
                 uniqueNodes.add(node);
                 return;
             }

@@ -86,7 +86,7 @@ public abstract class Type extends ClavaNode {
      */
     @Deprecated
     public TypeData getTypeData() {
-        if (hasData()) {
+        if (hasData() || hasDataI()) {
             throw new NotSupportedByClavaDataException();
         }
         return data;
@@ -147,6 +147,9 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public String getBareType() {
+        if (hasDataI()) {
+            return getDataI().get(TYPE_AS_STRING);
+        }
         if (hasData()) {
             return getData().getTypeAsString();
         }
@@ -161,6 +164,12 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public Type setBareType(String type) {
+        if (hasDataI()) {
+            Type copy = copy();
+            copy.getDataI().put(TYPE_AS_STRING, type);
+            return copy;
+        }
+
         if (hasData()) {
             Type copy = copy();
             copy.getData().setTypeAsString(type);
@@ -174,7 +183,7 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public String toContentString() {
-        if (hasData()) {
+        if (hasData() || hasDataI()) {
             return super.toContentString();
         }
         return super.toContentString() + getCode();
@@ -288,6 +297,10 @@ public abstract class Type extends ClavaNode {
      *         sugar.
      */
     public boolean hasSugar() {
+        if (hasDataI()) {
+            return getDataI().get(HAS_SUGAR);
+        }
+
         if (hasData()) {
             return getData().hasSugar();
         }
@@ -347,7 +360,7 @@ public abstract class Type extends ClavaNode {
     }
 
     protected Type desugarImpl() {
-        if (hasData()) {
+        if (hasData() || hasDataI()) {
             // If has sugar, first child is always the desugared type
             return getChild(Type.class, 0);
         }

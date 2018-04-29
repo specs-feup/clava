@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -33,6 +34,10 @@ public class BuiltinType extends Type {
     public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
 
     /// DATAKEYS END
+
+    public BuiltinType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -66,10 +71,18 @@ public class BuiltinType extends Type {
     public String getCode(String name) {
         // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
         // boolean isCxx = getData().getStandard().isCxx();
-        String type = getData().getKind().getCode();
+        String type = getKind().getCode();
 
         String varName = name == null ? "" : " " + name;
         return type + varName;
+    }
+
+    public BuiltinKind getKind() {
+        if (hasData()) {
+            return getData().getKind();
+        }
+
+        return getDataI().get(KIND);
     }
 
     /**

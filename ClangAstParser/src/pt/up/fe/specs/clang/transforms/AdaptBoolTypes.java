@@ -15,6 +15,8 @@ package pt.up.fe.specs.clang.transforms;
 
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -75,6 +77,13 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
     }
 
     private BuiltinType newBoolBuiltin(ClavaNode node) {
+        if (node.hasDataI()) {
+            DataStore builtinData = node.getDataI().copy()
+                    .put(BuiltinType.KIND, BuiltinKind.BOOL);
+
+            return new BuiltinType(builtinData, Collections.emptyList());
+        }
+
         if (node.hasData()) {
             BuiltinTypeData data = new BuiltinTypeData(-1, BuiltinKind.BOOL, false, (TypeDataV2) node.getData());
             return new BuiltinType(data, Collections.emptyList());

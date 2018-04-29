@@ -97,6 +97,10 @@ public abstract class CastExpr extends Expr {
     }
 
     public CastKind getCastKind() {
+        if (hasDataI()) {
+            return getDataI().get(CAST_KIND);
+        }
+
         if (hasData()) {
             return getData().getCastKind();
         }

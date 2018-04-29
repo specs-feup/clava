@@ -13,6 +13,10 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.Arrays;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
@@ -40,6 +44,15 @@ public class ClavaNodesLegacy {
     }
 
     public static ExprStmt exprStmt(boolean hasSemicolon, Expr expr) {
+        if (expr.hasDataI()) {
+            // TODO: Replace with factory?
+
+            DataStore exprStmtData = DataStore.newInstance("ExprStmt")
+                    .put(ExprStmt.HAS_SEMICOLON, hasSemicolon);
+
+            return new ExprStmt(exprStmtData, Arrays.asList(expr));
+        }
+
         if (expr.hasData()) {
             return new ExprStmt(hasSemicolon, expr);
         }
@@ -53,6 +66,13 @@ public class ClavaNodesLegacy {
     }
 
     public static DummyDecl dummyDecl(ClavaNode node) {
+        if (node.hasDataI()) {
+            DataStore dummyData = node.getDataI().copy()
+                    .put(DummyNode.DUMMY_CONTENT, node.getClass().getSimpleName());
+
+            return new DummyDecl(dummyData, node.getChildren());
+        }
+
         if (node.hasData()) {
             return new DummyDecl(new DummyDeclData(node.getClass().getSimpleName(), DeclDataV2.empty(node.getData())),
                     node.getChildren());

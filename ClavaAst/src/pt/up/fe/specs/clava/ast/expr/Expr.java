@@ -86,6 +86,9 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public Type getType() {
+        if (hasDataI()) {
+            return getDataI().get(TYPE);
+        }
         if (hasData()) {
             // System.out.println(getClass().getSimpleName() + ": DATA");
             return getData().getType();
@@ -96,6 +99,11 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public void setType(Type type) {
+        if (hasDataI()) {
+            getDataI().put(TYPE, type);
+            return;
+        }
+
         if (hasData()) {
             getData().setType(type);
 
@@ -120,6 +128,10 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public ValueKind getValueKind() {
+        if (hasDataI()) {
+            return getDataI().get(VALUE_KIND);
+        }
+
         if (hasData()) {
             return getData().getValueKind();
         }
@@ -127,7 +139,7 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public ExprData getExprData() {
-        if (hasData()) {
+        if (hasData() || hasDataI()) {
             throw new RuntimeException("This is a ClavaData node, .getExprData should not be used");
         }
         return exprData;
@@ -135,7 +147,7 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public String toContentString() {
-        if (hasData()) {
+        if (hasData() || hasDataI()) {
             return super.toContentString();
         }
 
@@ -173,6 +185,11 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public void setImplicitCast(ImplicitCastExpr implicitCast) {
+        if (hasDataI()) {
+            getDataI().put(IMPLICIT_CAST, implicitCast);
+            return;
+        }
+
         if (hasData()) {
             getData().setImplicitCast(implicitCast);
             return;
@@ -182,6 +199,10 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public Optional<ImplicitCastExpr> getImplicitCast() {
+        if (hasDataI()) {
+            return Optional.ofNullable(getDataI().get(IMPLICIT_CAST));
+        }
+
         if (hasData()) {
             return getData().getImplicitCast();
         }

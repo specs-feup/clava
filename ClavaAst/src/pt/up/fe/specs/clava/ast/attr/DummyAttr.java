@@ -20,7 +20,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
 
 /**
  * Dummy declaration, for testing purposes.
@@ -32,15 +31,6 @@ public class DummyAttr extends Attribute implements DummyNode {
 
     public DummyAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    public DummyAttr(DummyAttributeData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    @Override
-    public DummyAttributeData getData() {
-        return (DummyAttributeData) super.getData();
     }
 
     @Override

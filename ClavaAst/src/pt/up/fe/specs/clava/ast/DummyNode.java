@@ -119,6 +119,13 @@ public interface DummyNode {
     }
     */
 
+    /**
+     * 
+     * @param clavaNodeClass
+     * @param data
+     * @param children
+     * @return
+     */
     static ClavaNode newInstance(Class<? extends ClavaNode> clavaNodeClass, DataStore data,
             Collection<? extends ClavaNode> children) {
 

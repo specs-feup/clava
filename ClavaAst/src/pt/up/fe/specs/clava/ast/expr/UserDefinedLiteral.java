@@ -58,6 +58,10 @@ public class UserDefinedLiteral extends CallExpr {
 
     @Override
     public String getCode() {
+        if (getCookedLiteralExpr().hasDataI()) {
+            return getLiteral();
+        }
+
         if (getCookedLiteralExpr().hasData()) {
             return getLiteral();
         }
