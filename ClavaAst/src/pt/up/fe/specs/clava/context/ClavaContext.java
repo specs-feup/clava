@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.context;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -49,7 +48,7 @@ public class ClavaContext {
         this.data = DataStore.newInstance(getClass());
 
         // Set arguments
-        this.data.set(ARGUMENTS, Collections.unmodifiableList(arguments));
+        this.data.set(ARGUMENTS, new ArrayList<>(arguments));
 
         // Initialize factory
         this.data.add(FACTORY, new ClavaFactory(this));

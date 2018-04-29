@@ -128,12 +128,26 @@ public interface DummyNode {
      */
     static ClavaNode newInstance(Class<? extends ClavaNode> clavaNodeClass, DataStore data,
             Collection<? extends ClavaNode> children) {
+        return newInstance(clavaNodeClass, data, children, false);
+    }
+
+    static ClavaNode newInstance(Class<? extends ClavaNode> clavaNodeClass, DataStore data,
+            Collection<? extends ClavaNode> children, boolean copy) {
+
+        // TODO: Move this to ClavaFactory?
+        // Passing directly a DataStore, it is ambiguous if it has a store definition or not (if it comes from a node or
+        // if it was not associated yet with a node)
 
         // Determine DummyNode type based on ClavaNode class
 
         String classname = clavaNodeClass.getName();
 
-        DataStore dummyData = data.copy().add(DummyNode.DUMMY_CONTENT, classname);
+        DataStore dummyData = data;
+        if (copy) {
+            dummyData = dummyData.copy();
+        }
+
+        dummyData.add(DummyNode.DUMMY_CONTENT, classname);
 
         if (Type.class.isAssignableFrom(clavaNodeClass)) {
             // DummyTypeData dummyData = new DummyTypeData(classname, data);
