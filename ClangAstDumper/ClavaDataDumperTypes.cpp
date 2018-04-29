@@ -157,5 +157,5 @@ void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
 
     clava::dump(T->getKind());
     clava::dump(T->getName(Context->getPrintingPolicy()));
-    clava::dump(T->isSugared());
+    //clava::dump(T->isSugared());
 }
