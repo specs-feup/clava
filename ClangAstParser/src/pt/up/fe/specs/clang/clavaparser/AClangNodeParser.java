@@ -546,32 +546,6 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     protected <T extends ClavaData> Optional<T> getDataTry(Class<T> clavaDataClass, ClangNode node) {
         return ClavaDataParser.getClavaData(getStdErr(), clavaDataClass, node.getExtendedId());
 
-        /*
-        DataKey<Map<String, ClavaData>> key = ClavaDataParser.getDataKey();
-        
-        // DataKey<Map<String, T>> key = ClavaDataParser.getDataKey(clavaDataClass);
-        // DataKey<Map<String, T>> key = ClangNodeParsing.getNodeDataKey(clavaDataClass);
-        
-        if (!getStdErr().hasValue(key)) {
-            return Optional.empty();
-        }
-        
-        // T data = getStdErr().get(key).get(node.getExtendedId());
-        ClavaData data = getStdErr().get(key).get(node.getExtendedId());
-        
-        if (data == null) {
-            return Optional.empty();
-        }
-        
-        // Check if class is compatible
-        if (!clavaDataClass.isInstance(data)) {
-            throw new RuntimeException("Node with id '" + node.getExtendedId() + "' has ClavaData with class '"
-                    + data.getClass().getSimpleName() + "' that is not compatible with the requested ClavaData class '"
-                    + clavaDataClass.getSimpleName() + "'");
-        }
-        
-        return Optional.of(clavaDataClass.cast(data));
-        */
     }
 
     protected void checkNewChildren(String parentId, List<ClavaNode> previousChildren) {

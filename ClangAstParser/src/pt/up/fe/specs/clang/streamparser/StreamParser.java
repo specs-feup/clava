@@ -35,7 +35,6 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
@@ -112,9 +111,9 @@ public class StreamParser {
 
     private final LineStreamParserV2 lineStreamParser;
 
-    public StreamParser(DataStore clavaData) {
-        this(clavaData, null, ClangStreamParserV2.newInstance());
-    }
+    // public StreamParser(DataStore clavaData) {
+    // this(clavaData, null, ClangStreamParserV2.newInstance());
+    // }
 
     // Single map for all the node data dumps
     Map<String, ClavaData> nodeData;

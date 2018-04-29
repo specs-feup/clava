@@ -195,7 +195,7 @@ public class ClangAstParser {
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance();
+        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(arguments);
         if (SpecsSystem.isDebug()) {
             lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
         }
@@ -519,7 +519,7 @@ public class ClangAstParser {
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
 
-        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance();
+        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance(arguments);
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
                         clangStreamParser));

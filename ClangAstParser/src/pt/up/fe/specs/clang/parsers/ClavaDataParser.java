@@ -198,9 +198,11 @@ public class ClavaDataParser {
     /**
      * Private constructor.
      * 
+     * @param dataStore
+     * 
      * @param parsers
      */
-    public static SourceRange parseLocation(LineStream lines) {
+    public static SourceRange parseLocation(LineStream lines, DataStore dataStore) {
         // Next line will tell if is an invalid location or if to continue parsing
         String firstPart = lines.nextLine();
 
@@ -271,9 +273,9 @@ public class ClavaDataParser {
 
         String id = lines.nextLine();
 
-        SourceRange location = hasLocation ? parseLocation(lines) : SourceRange.invalidRange();
+        SourceRange location = hasLocation ? parseLocation(lines, dataStore) : SourceRange.invalidRange();
         boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
-        SourceRange spellingLocation = isMacro ? parseLocation(lines) : SourceRange.invalidRange();
+        SourceRange spellingLocation = isMacro ? parseLocation(lines, dataStore) : SourceRange.invalidRange();
 
         ClavaData clavaData = new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
 

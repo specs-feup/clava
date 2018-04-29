@@ -139,7 +139,7 @@ public class ClangDumperParser {
         // }
 
         ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                this::processStdErr);
+                inputStream -> processStdErr(inputStream, arguments));
 
         String warnings = output.getStdErr().get(LINES_NOT_PARSED);
 
@@ -160,9 +160,9 @@ public class ClangDumperParser {
         return clangStreamParser.parse();
     }
 
-    private DataStore processStdErr(InputStream inputStream) {
+    private DataStore processStdErr(InputStream inputStream, List<String> arguments) {
         // Create LineStreamParser
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance();
+        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(arguments);
 
         // Set debug
         if (SpecsSystem.isDebug()) {
@@ -359,7 +359,7 @@ public class ClangDumperParser {
 
         // LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance();
         ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments,
-                this::processOutput, this::processStdErr);
+                this::processOutput, inputStream -> processStdErr(inputStream, arguments));
 
         boolean foundInclude = !output.getStdOut().isEmpty();
 
