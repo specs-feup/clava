@@ -28,6 +28,9 @@ import pt.up.fe.specs.util.utilities.LineStream;
  *
  * Utility methods for parsing general-purpose information (e.g., a boolean, an enum) from a LineStream.
  *
+ * <p>
+ * TODO: Move to project jOptions, rename to LineStreamParsers.
+ * 
  * @author JoaoBispo
  *
  */
@@ -192,24 +195,5 @@ public class GeneralParsers {
 
         return strings;
     }
-
-    /*
-    public static List<AttributeData> parseAttributes(LineStream lines) {
-        int numAttrs = parseInt(lines);
-    
-        List<AttributeData> attributes = new ArrayList<>(numAttrs);
-        for (int i = 0; i < numAttrs; i++) {
-            AttributeKind kind = GeneralParsers.enumFromName(AttributeKind.getHelper(), lines);
-            boolean isImplicit = parseOneOrZero(lines);
-            boolean isInherited = parseOneOrZero(lines);
-            boolean isLateParsed = parseOneOrZero(lines);
-            boolean isPackExpansion = parseOneOrZero(lines);
-    
-            // attributes.add(new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion));
-        }
-    
-        return attributes;
-    }
-    */
 
 }

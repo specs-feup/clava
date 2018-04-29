@@ -27,15 +27,12 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import com.google.common.base.Preconditions;
-
-import pt.up.fe.specs.clang.parsers.clavadata.AttrDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.ExprDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.StmtDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
+import pt.up.fe.specs.clang.parsers.data.ClavaDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -44,8 +41,9 @@ import pt.up.fe.specs.util.utilities.LineStream;
  * Utility methods for parsing ClavaData instances from a LineStream.
  * 
  * @author JoaoBispo
- *
+ * @deprecated
  */
+@Deprecated
 public class ClavaDataParser {
 
     private static final Map<String, BiFunction<LineStream, DataStore, ClavaData>> STATIC_DATA_PARSERS;
@@ -76,8 +74,8 @@ public class ClavaDataParser {
         STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
 
         // ATTRIBUTES
-        STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
-        STATIC_DATA_PARSERS.put("<AlignedAttrData>", AttrDataParser::parseAlignedAttrData);
+        // STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
+        // STATIC_DATA_PARSERS.put("<AlignedAttrData>", AttrDataParser::parseAlignedAttrData);
 
     }
 
@@ -169,79 +167,6 @@ public class ClavaDataParser {
      * @return
      */
 
-    /*
-    private static SimpleSnippetParser<Map<String, ClavaData>> newSnippetParser(
-            String id, Function<LineStream, ? extends ClavaData> dataParser, Map<String, ClavaData> clavaDataMap) {
-    
-        BiConsumer<LineStream, Map<String, ClavaData>> parser = (lineStream, map) -> ClavaDataParser
-                .parseClavaDataTop(
-                        dataParser,
-                        lineStream, map);
-    
-        return SimpleSnippetParser.newInstance(id, clavaDataMap, parser);
-    }
-    */
-    /*
-    // Map with parsed ClavaData instances
-    private final Map<String, ClavaData> clavaData;
-    // ClavaData parsers
-    private final Map<String, SimpleSnippetParser<Map<String, ClavaData>>> clavaDataParsers;
-    
-    public ClavaDataParser(Map<String, ClavaData> clavaData,
-            Map<String, SimpleSnippetParser<Map<String, ClavaData>>> clavaDataParsers) {
-    
-        this.clavaData = clavaData;
-        this.clavaDataParsers = clavaDataParsers;
-    }
-    
-      */
-    /**
-     * Private constructor.
-     * 
-     * @param dataStore
-     * 
-     * @param parsers
-     */
-    public static SourceRange parseLocation(LineStream lines, DataStore dataStore) {
-        // Next line will tell if is an invalid location or if to continue parsing
-        String firstPart = lines.nextLine();
-
-        if (firstPart.equals("<invalid>")) {
-            return SourceRange.invalidRange();
-        }
-
-        // Filepaths will be shared between most nodes, intern them
-
-        String startFilepath = firstPart.intern();
-        // String startFilepath = firstPart;
-        int startLine = Integer.parseInt(lines.nextLine());
-        int startColumn = Integer.parseInt(lines.nextLine());
-
-        SourceLocation startLocation = new SourceLocation(startFilepath, startLine, startColumn);
-
-        // Check if start is the same as the end
-        String secondPart = lines.nextLine();
-
-        if (startFilepath.equals("<built-in>")) {
-            Preconditions.checkArgument(secondPart.equals("<end>"));
-            return SourceRange.invalidRange();
-        }
-
-        if (secondPart.equals("<end>")) {
-            return new SourceRange(startLocation);
-        }
-
-        // Parser end location
-        String endFilepath = secondPart.intern();
-        // String endFilepath = secondPart;
-
-        int endLine = Integer.parseInt(lines.nextLine());
-        int endColumn = Integer.parseInt(lines.nextLine());
-
-        SourceLocation endLocation = new SourceLocation(endFilepath, endLine, endColumn);
-        return new SourceRange(startLocation, endLocation);
-    }
-
     private static void clavaDataInit(DataStore data) {
         // If already initialized, return
         if (data.hasValue(ClangParserKeys.CLAVA_DATA)) {
@@ -273,9 +198,11 @@ public class ClavaDataParser {
 
         String id = lines.nextLine();
 
-        SourceRange location = hasLocation ? parseLocation(lines, dataStore) : SourceRange.invalidRange();
+        SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
+                : SourceRange.invalidRange();
         boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
-        SourceRange spellingLocation = isMacro ? parseLocation(lines, dataStore) : SourceRange.invalidRange();
+        SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
+                : SourceRange.invalidRange();
 
         ClavaData clavaData = new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
 

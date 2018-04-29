@@ -60,7 +60,7 @@ public class NormalizedNodes {
             }
 
             // Otherwise, map node to already normalized node in the table
-            repeatedIdsMap.put(node.getData().getId(), normalizedId);
+            repeatedIdsMap.put(node.getId(), normalizedId);
         });
 
         return new NormalizedNodes(uniqueNodes, repeatedIdsMap);

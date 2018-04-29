@@ -36,6 +36,7 @@ public class ClangStreamParserV2 {
         addWorker(IncludesParser::new);
         TopLevelNodesParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
         ClavaDataParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
+        NodeDataParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
     }
 
     private static void addWorker(Supplier<LineStreamWorker> workerSupplier) {
