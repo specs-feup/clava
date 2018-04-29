@@ -13,6 +13,10 @@
 
 package pt.up.fe.specs.clava.context;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -20,6 +24,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 public class ClavaContext {
 
     /// DATAKEYS BEGIN
+
+    /**
+     * The arguments used to call the parser.
+     */
+    public final static DataKey<List<String>> ARGUMENTS = KeyFactory
+            .generic("arguments", new ArrayList<>());
 
     /**
      * IDs generator
@@ -35,8 +45,11 @@ public class ClavaContext {
 
     private final DataStore data;
 
-    public ClavaContext() {
+    public ClavaContext(List<String> arguments) {
         this.data = DataStore.newInstance(getClass());
+
+        // Set arguments
+        this.data.set(ARGUMENTS, Collections.unmodifiableList(arguments));
 
         // Initialize factory
         this.data.add(FACTORY, new ClavaFactory(this));
