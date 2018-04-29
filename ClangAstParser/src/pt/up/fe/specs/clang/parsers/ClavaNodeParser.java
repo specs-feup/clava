@@ -140,7 +140,7 @@ public class ClavaNodeParser implements LineStreamWorker {
         }
 
         // Get corresponding ClavaNode class
-        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, clavaData);
+        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, clavaData.getData());
 
         // Get children ids
         List<String> childrenIds = data.get(ClangParserKeys.VISITED_CHILDREN).get(nodeId);
@@ -195,7 +195,7 @@ public class ClavaNodeParser implements LineStreamWorker {
                                     + " data, Collection<? extends ClavaNode> children)'");
             }
 
-            return DummyNode.newInstance(clavaNodeClass, clavaData, children);
+            return DummyNode.newInstance(clavaNodeClass, clavaData.getData(), children);
             // return new UnsupportedNode(classname, clavaData, children);
         }
 

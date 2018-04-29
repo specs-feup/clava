@@ -19,14 +19,13 @@ import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedAttrI;
+import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
+import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
+import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrData;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedExprAttrI;
 import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrData;
-import pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrI;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
-import pt.up.fe.specs.clava.ast.attr.data.AttributeI;
-import pt.up.fe.specs.clava.ast.attr.data.DummyAttrI;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -44,11 +43,11 @@ public class AttrDataParser {
         boolean isLateParsed = GeneralParsers.parseOneOrZero(lines);
         boolean isPackExpansion = GeneralParsers.parseOneOrZero(lines);
 
-        clavaData.getData().add(AttributeI.KIND, kind);
-        clavaData.getData().add(AttributeI.IS_IMPLICIT, isImplicit);
-        clavaData.getData().add(AttributeI.IS_INHERITED, isInherited);
-        clavaData.getData().add(AttributeI.IS_LATE_PARSED, isLateParsed);
-        clavaData.getData().add(AttributeI.IS_PACK_EXPANSION, isPackExpansion);
+        clavaData.getData().add(Attribute.KIND, kind);
+        clavaData.getData().add(Attribute.IS_IMPLICIT, isImplicit);
+        clavaData.getData().add(Attribute.IS_INHERITED, isInherited);
+        clavaData.getData().add(Attribute.IS_LATE_PARSED, isLateParsed);
+        clavaData.getData().add(Attribute.IS_PACK_EXPANSION, isPackExpansion);
 
         return new AttributeData(kind, isImplicit, isInherited, isLateParsed, isPackExpansion, clavaData);
     }
@@ -60,24 +59,24 @@ public class AttrDataParser {
         boolean isExpr = GeneralParsers.parseOneOrZero(lines);
         String nodeId = lines.nextLine();
 
-        data.getData().add(AlignedAttrI.SPELLING, spelling);
+        data.getData().add(AlignedAttr.SPELLING, spelling);
 
         if (isExpr) {
             Expr expr = ClavaNodes.getExpr(dataStore, nodeId);
-            data.getData().add(AlignedExprAttrI.EXPR, expr);
+            data.getData().add(AlignedExprAttr.EXPR, expr);
             // data.getData().add(ClavaNodeI.NODE_CLASS, AlignedExprAttr.class);
 
-            data.getData().setDefinition(AlignedExprAttrI.class);
-            DataStore dummyData = data.getData().copy();
-            dummyData.setDefinition(DummyAttrI.class);
-            dummyData.set(DummyAttrI.CLASSNAME, "<classname>");
-            System.out.println("DUMMY DATA:" + dummyData);
+            // data.getData().setDefinition(AlignedExprAttr.class);
+            // DataStore dummyData = data.getData().copy();
+            // dummyData.setDefinition(DummyAttr.class);
+            // dummyData.set(DummyAttr.CLASSNAME, "<classname>");
+            // System.out.println("DUMMY DATA:" + dummyData);
 
             return new AlignedExprAttrData(spelling, expr, data);
         } else {
             Type type = ClavaNodes.getType(dataStore, nodeId);
-            data.getData().add(AlignedTypeAttrI.TYPE, type);
-            data.getData().setDefinition(AlignedTypeAttrI.class);
+            data.getData().add(AlignedTypeAttr.TYPE, type);
+            // data.getData().setDefinition(AlignedTypeAttr.class);
             // data.getData().setStoreDefinition(StoreDefinition.fromInterface(AlignedTypeAttrI.class));
             // data.getData().add(ClavaNodeI.NODE_CLASS, AlignedTypeAttr.class);
             return new AlignedTypeAttrData(spelling, type, data);

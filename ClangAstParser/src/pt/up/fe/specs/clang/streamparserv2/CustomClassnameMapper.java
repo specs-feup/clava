@@ -17,18 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaData;
 
 public class CustomClassnameMapper {
 
-    private final Map<String, Function<ClavaData, Class<? extends ClavaNode>>> customMaps;
+    private final Map<String, Function<DataStore, Class<? extends ClavaNode>>> customMaps;
 
     public CustomClassnameMapper() {
         this.customMaps = new HashMap<>();
     }
 
-    public Class<? extends ClavaNode> getClass(String classname, ClavaData data) {
+    public Class<? extends ClavaNode> getClass(String classname, DataStore data) {
         if (!customMaps.containsKey(classname)) {
             return null;
         }
@@ -36,7 +37,7 @@ public class CustomClassnameMapper {
         return customMaps.get(classname).apply(data);
     }
 
-    public CustomClassnameMapper add(String classname, Function<ClavaData, Class<? extends ClavaNode>> mapper) {
+    public CustomClassnameMapper add(String classname, Function<DataStore, Class<? extends ClavaNode>> mapper) {
 
         customMaps.put(classname, mapper);
 

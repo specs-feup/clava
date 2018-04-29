@@ -34,10 +34,10 @@ import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.ExprDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.StmtDataParser;
 import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.ClavaNodeI;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -278,10 +278,10 @@ public class ClavaDataParser {
         ClavaData clavaData = new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
 
         DataStore data = DataStore.newInstance("ClavaData");
-        data.add(ClavaNodeI.ID, id);
-        data.add(ClavaNodeI.LOCATION, location);
-        data.add(ClavaNodeI.IS_MACRO, isMacro);
-        data.add(ClavaNodeI.SPELLING_LOCATION, spellingLocation);
+        data.add(ClavaNode.ID, id);
+        data.add(ClavaNode.LOCATION, location);
+        data.add(ClavaNode.IS_MACRO, isMacro);
+        data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
 
         clavaData.setData(data);
 

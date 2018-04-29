@@ -77,10 +77,10 @@ public class ClassesService {
 
     }
 
-    public Class<? extends ClavaNode> getClass(String classname, ClavaData clavaData) {
+    public Class<? extends ClavaNode> getClass(String classname, DataStore data) {
 
         // Try custom map
-        Class<? extends ClavaNode> clavaNodeClass = customClassMap.getClass(classname, clavaData);
+        Class<? extends ClavaNode> clavaNodeClass = customClassMap.getClass(classname, data);
         if (clavaNodeClass != null) {
             return clavaNodeClass;
         }
