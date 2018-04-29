@@ -13,12 +13,46 @@
 
 package pt.up.fe.specs.clava.context;
 
+import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.BuiltinType;
+
 public class ClavaFactory {
 
     private final ClavaContext context;
+    private final DataStore baseData;
 
     public ClavaFactory(ClavaContext context) {
+        this(context, null);
+    }
+
+    public ClavaFactory(ClavaContext context, DataStore baseData) {
         this.context = context;
+        this.baseData = baseData;
+    }
+
+    private DataStore newDataStore() {
+        DataStore data = DataStore.newInstance("ClavaFactory Node");
+
+        // Add base node, if present
+        if (baseData != null) {
+            data.addAll(baseData);
+        }
+
+        data.set(ClavaNode.CONTEXT, context);
+
+        return data;
+    }
+
+    /// TYPES
+
+    public BuiltinType builtinType(BuiltinKind kind) {
+        DataStore data = newDataStore().put(BuiltinType.KIND, kind);
+        return new BuiltinType(data, Collections.emptyList());
     }
 
 }
