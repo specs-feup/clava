@@ -36,6 +36,7 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -46,6 +47,11 @@ import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     /// DATAKEYS BEGIN
+
+    /**
+     * Id of the node.
+     */
+    public final static DataKey<ClavaContext> CONTEXT = KeyFactory.object("context", ClavaContext.class);
 
     /**
      * Id of the node.
