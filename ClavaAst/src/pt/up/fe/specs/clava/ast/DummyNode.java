@@ -15,27 +15,21 @@ package pt.up.fe.specs.clava.ast;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
-import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
-import pt.up.fe.specs.clava.ast.attr.data.DummyAttributeData;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.data.DummyStmtData;
-import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
-import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 
 /**
  * Interface for dummy nodes.
@@ -48,7 +42,18 @@ import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
  */
 public interface DummyNode {
 
-    String getContent();
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> DUMMY_CONTENT = KeyFactory.string("dummyContent");
+
+    /// DATAKEYS END
+
+    DataStore getDataI();
+
+    // String getContent();
+    default String getContent() {
+        return getDataI().get(DUMMY_CONTENT);
+    }
 
     default String getOriginalType() {
         String content = getContent();
@@ -68,37 +73,86 @@ public interface DummyNode {
         return content;
     }
 
+    /**
+     * @deprecated replaced by DataStore version.
+     * @param clavaNodeClass
+     * @param data
+     * @param children
+     * @return
+     */
+    @Deprecated
+    /*
     static ClavaNode newInstance(Class<? extends ClavaNode> clavaNodeClass, ClavaData data,
             Collection<? extends ClavaNode> children) {
-        // Determine DummyNode type based on Data
-
+    
+        // Determine DummyNode type based on ClavaNode class
         String classname = clavaNodeClass.getName();
-
+    
         if (Type.class.isAssignableFrom(clavaNodeClass)) {
             DummyTypeData dummyData = new DummyTypeData(classname, (TypeDataV2) data);
             return new DummyType(dummyData, children);
         }
-
+    
         if (Decl.class.isAssignableFrom(clavaNodeClass)) {
             DummyDeclData dummyData = new DummyDeclData(classname, (DeclDataV2) data);
             return new DummyDecl(dummyData, children);
         }
-
+    
         if (Expr.class.isAssignableFrom(clavaNodeClass)) {
             DummyExprData dummyData = new DummyExprData(classname, (ExprDataV2) data);
             return new DummyExpr(dummyData, children);
         }
-
+    
         if (Stmt.class.isAssignableFrom(clavaNodeClass)) {
             DummyStmtData dummyData = new DummyStmtData(classname, (StmtData) data);
             return new DummyStmt(dummyData, children);
         }
-
+    
         if (Attribute.class.isAssignableFrom(clavaNodeClass)) {
-
+    
             DummyAttributeData dummyData = new DummyAttributeData(classname, (AttributeData) data);
             // data.getData().
             return new DummyAttr(data.getData(), children);
+        }
+    
+        throw new RuntimeException("ClavaNode class not supported:" + clavaNodeClass);
+    }
+    */
+
+    static ClavaNode newInstance(Class<? extends ClavaNode> clavaNodeClass, DataStore data,
+            Collection<? extends ClavaNode> children) {
+
+        // Determine DummyNode type based on ClavaNode class
+
+        String classname = clavaNodeClass.getName();
+
+        DataStore dummyData = data.copy().add(DummyNode.DUMMY_CONTENT, classname);
+
+        if (Type.class.isAssignableFrom(clavaNodeClass)) {
+            // DummyTypeData dummyData = new DummyTypeData(classname, data);
+            return new DummyType(dummyData, children);
+        }
+
+        if (Decl.class.isAssignableFrom(clavaNodeClass)) {
+            // DummyDeclData dummyData = new DummyDeclData(classname, data);
+            return new DummyDecl(dummyData, children);
+        }
+
+        if (Expr.class.isAssignableFrom(clavaNodeClass)) {
+            // DummyExprData dummyData = new DummyExprData(classname, data);
+            return new DummyExpr(dummyData, children);
+        }
+
+        if (Stmt.class.isAssignableFrom(clavaNodeClass)) {
+            // DummyStmtData dummyData = new DummyStmtData(classname, data);
+            return new DummyStmt(dummyData, children);
+        }
+
+        if (Attribute.class.isAssignableFrom(clavaNodeClass)) {
+            // DummyAttributeData dummyData = new DummyAttributeData(classname, (AttributeData) data);
+            // DataStore dummyAttrData = data.copy().add(DummyNode.DUMMY_CONTENT, classname);
+
+            return new DummyAttr(data, children);
         }
 
         throw new RuntimeException("ClavaNode class not supported:" + clavaNodeClass);

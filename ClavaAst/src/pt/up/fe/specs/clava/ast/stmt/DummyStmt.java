@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -28,6 +30,10 @@ import pt.up.fe.specs.clava.ast.stmt.data.DummyStmtData;
  *
  */
 public class DummyStmt extends Stmt implements DummyNode {
+
+    public DummyStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public DummyStmt(DummyStmtData data, Collection<? extends ClavaNode> children) {
         super(data, children);

@@ -13,15 +13,23 @@
 
 package pt.up.fe.specs.clava.ast.attr;
 
-import static pt.up.fe.specs.clava.ast.attr.data.AlignedTypeAttrI.*;
-
 import java.util.Collection;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.Type;
 
-public class AlignedTypeAttr extends Attribute {
+public class AlignedTypeAttr extends AlignedAttr {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+
+    /// DATAKEYS END
 
     public AlignedTypeAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -37,15 +45,7 @@ public class AlignedTypeAttr extends Attribute {
     // }
 
     @Override
-    public String getCode() {
-        String typeCode = getDataI().get(TYPE).getCode();
-        String attrValue = "aligned (" + typeCode + ")";
-
-        return getAttributeCode(attrValue);
-    }
-
-    @Override
-    public boolean isPostAttr() {
-        return true;
+    protected Optional<String> getValueCode() {
+        return Optional.of(getDataI().get(TYPE).getCode());
     }
 }

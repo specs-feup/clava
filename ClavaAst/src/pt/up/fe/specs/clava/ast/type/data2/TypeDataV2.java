@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.type.data2;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class TypeDataV2 extends ClavaData {
 
     // public static TypeDataV2 empty() {

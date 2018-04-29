@@ -16,6 +16,9 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -31,6 +34,12 @@ import pt.up.fe.specs.clava.language.CastKind;
  *
  */
 public abstract class CastExpr extends Expr {
+
+    /// DATAKEY BEGIN
+
+    public final static DataKey<CastKind> CAST_KIND = KeyFactory.enumeration("castKind", CastKind.class);
+
+    /// DATAKEY END
 
     private final CastKind castKind;
 

@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.expr.data2;
 
 import java.math.BigInteger;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class IntegerLiteralData extends LiteralData {
 
     private final BigInteger value;

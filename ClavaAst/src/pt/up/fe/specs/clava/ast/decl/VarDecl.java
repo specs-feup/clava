@@ -17,6 +17,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -31,6 +34,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 
@@ -41,6 +45,34 @@ import pt.up.fe.specs.util.SpecsCollections;
  *
  */
 public class VarDecl extends DeclaratorDecl {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
+            .enumeration("storageClass", StorageClass.class)
+            .setDefault(() -> StorageClass.NONE);
+
+    public final static DataKey<TLSKind> TLS_KIND = KeyFactory
+            .enumeration("tlsKind", TLSKind.class)
+            .setDefault(() -> TLSKind.NONE);
+
+    public final static DataKey<Boolean> IS_MODULE_PRIVATE = KeyFactory.bool("isModulePrivate");
+
+    public final static DataKey<Boolean> IS_NRVO_VARIABLE = KeyFactory.bool("isNRVOVariable");
+
+    public final static DataKey<InitializationStyle> INIT_STYLE = KeyFactory
+            .enumeration("initStyle", InitializationStyle.class)
+            .setDefault(() -> InitializationStyle.NO_INIT);
+
+    public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
+
+    public final static DataKey<Boolean> IS_STATIC_DATA_MEMBER = KeyFactory.bool("isStaticDataMember");
+
+    public final static DataKey<Boolean> IS_OUT_OF_LINE = KeyFactory.bool("isOutOfLine");
+
+    public final static DataKey<Boolean> HAS_GLOBAL_STORAGE = KeyFactory.bool("hasGlobalStorage");
+
+    /// DATAKEYS END
 
     private final VarDeclData data;
 

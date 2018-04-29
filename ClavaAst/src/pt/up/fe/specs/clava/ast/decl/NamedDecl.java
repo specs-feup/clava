@@ -15,10 +15,14 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 
@@ -31,6 +35,17 @@ import pt.up.fe.specs.clava.utils.Typable;
  *
  */
 public abstract class NamedDecl extends Decl implements Typable {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> QUALIFIED_NAME = KeyFactory.string("qualifiedName");
+
+    public final static DataKey<NameKind> NAME_KIND = KeyFactory.enumeration("nameKind", NameKind.class)
+            .setDefault(() -> NameKind.IDENTIFIER);
+
+    public final static DataKey<Boolean> IS_HIDDEN = KeyFactory.bool("isHidden");
+
+    /// DATAKEYS END
 
     private String declName;
     private Type type;

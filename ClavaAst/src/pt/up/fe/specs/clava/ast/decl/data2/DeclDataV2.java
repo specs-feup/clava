@@ -20,6 +20,13 @@ import java.util.List;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 
+/**
+ * @deprecated
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class DeclDataV2 extends ClavaData {
 
     public static DeclDataV2 empty() {

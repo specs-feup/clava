@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class ParmVarDeclData extends VarDeclDataV2 {
 
     private boolean hasInheritedDefaultArg;

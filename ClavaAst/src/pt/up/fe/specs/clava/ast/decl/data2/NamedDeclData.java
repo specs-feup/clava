@@ -17,6 +17,12 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class NamedDeclData extends DeclDataV2 {
 
     public static NamedDeclData empty() {

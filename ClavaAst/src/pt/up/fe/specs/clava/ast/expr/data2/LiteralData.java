@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.expr.data2;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class LiteralData extends ExprDataV2 {
 
     private String sourceLiteral;

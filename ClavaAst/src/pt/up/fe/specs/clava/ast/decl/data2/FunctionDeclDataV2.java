@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.decl.data2;
 
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class FunctionDeclDataV2 extends NamedDeclData {
 
     private final boolean isConstexpr;

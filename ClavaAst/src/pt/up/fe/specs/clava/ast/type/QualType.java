@@ -13,11 +13,15 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -26,6 +30,8 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.QualTypeDataV2;
+import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 
 /**
@@ -35,6 +41,18 @@ import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
  *
  */
 public class QualType extends Type {
+
+    /// DATAKEYs BEGIN
+
+    public final static DataKey<List<C99Qualifier>> C99_QUALIFIERS = KeyFactory
+            .generic("c99Qualifiers", new ArrayList<>());
+
+    public final static DataKey<AddressSpaceQualifierV2> ADDRESS_SPACE_QUALIFIER = KeyFactory
+            .enumeration("addressSpaceQualifier", AddressSpaceQualifierV2.class);
+
+    public final static DataKey<Long> ADDRESS_SPACE = KeyFactory.longInt("addressSpace");
+
+    /// DATAKEYS END
 
     private final QualTypeData qualTypeData;
     // private final List<Qualifier> qualifiers;

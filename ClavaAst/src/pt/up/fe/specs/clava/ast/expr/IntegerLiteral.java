@@ -17,6 +17,9 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -29,6 +32,12 @@ import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
  *
  */
 public class IntegerLiteral extends Literal {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<BigInteger> VALUE = KeyFactory.bigInteger("value");
+
+    /// DATAKEYS END
 
     // private final String literal;
 

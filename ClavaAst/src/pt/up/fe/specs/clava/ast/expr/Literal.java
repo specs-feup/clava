@@ -15,6 +15,9 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -28,6 +31,12 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  *
  */
 public abstract class Literal extends Expr {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> SOURCE_LITERAL = KeyFactory.string("sourceLiteral");
+
+    /// DATAKEYS END
 
     public Literal(LiteralData data, Collection<? extends ClavaNode> children) {
         super(data, children);

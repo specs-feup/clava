@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -29,6 +31,10 @@ import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
  *
  */
 public class DummyType extends Type implements DummyNode {
+
+    public DummyType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public DummyType(DummyTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);

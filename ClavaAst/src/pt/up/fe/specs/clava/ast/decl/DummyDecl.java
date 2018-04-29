@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -29,6 +31,10 @@ import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
  *
  */
 public class DummyDecl extends Decl implements DummyNode {
+
+    public DummyDecl(DataStore clavaData, Collection<? extends ClavaNode> children) {
+        super(clavaData, children);
+    }
 
     public DummyDecl(DummyDeclData clavaData, Collection<? extends ClavaNode> children) {
         super(clavaData, children);

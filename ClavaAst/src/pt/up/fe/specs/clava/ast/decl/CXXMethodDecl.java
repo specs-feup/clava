@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
@@ -39,6 +42,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public class CXXMethodDecl extends FunctionDecl {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> RECORD_ID = KeyFactory.string("recordId");
+
+    /// DATAKEYS END
 
     private static final long NULL_EXCEPT_ADDRESS = 0;
 

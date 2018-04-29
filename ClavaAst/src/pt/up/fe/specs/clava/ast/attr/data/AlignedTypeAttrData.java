@@ -16,8 +16,7 @@ package pt.up.fe.specs.clava.ast.attr.data;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
- * * @deprecated replaced by AlignedTypeAttrI
- * 
+ * @deprecated
  * @author JoaoBispo
  *
  */

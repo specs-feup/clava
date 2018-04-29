@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.stmt.data;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class StmtData extends ClavaData {
 
     // public static StmtData newInstance() {

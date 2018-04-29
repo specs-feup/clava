@@ -21,34 +21,39 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 
-public class AlignedExprAttr extends AlignedAttr {
+public abstract class AlignedAttr extends Attribute {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Expr> EXPR = KeyFactory.object("expr", Expr.class);
+    public final static DataKey<String> SPELLING = KeyFactory.string("spelling");
 
     /// DATAKEYS END
 
-    public AlignedExprAttr(DataStore data, Collection<? extends ClavaNode> children) {
+    public AlignedAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    // public AlignedExprAttr(AlignedExprAttrData data, Collection<? extends ClavaNode> children) {
-    // super(data, children);
-    // }
-    //
-    // @Override
-    // public AlignedExprAttrData getData() {
-    // return (AlignedExprAttrData) super.getData();
-    // }
-
     @Override
-    protected Optional<String> getValueCode() {
-        Expr expr = getDataI().get(EXPR);
-
-        return expr.isNullNode() ? Optional.empty() : Optional.of(expr.getCode());
+    public boolean isPostAttr() {
+        return true;
     }
 
+    /**
+     * 
+     * @return the value of the aligned value
+     */
+    protected abstract Optional<String> getValueCode();
+
+    @Override
+    public String getCode() {
+
+        String value = getValueCode()
+                .map(code -> " (" + code + ")")
+                .orElse("");
+
+        String alignedCode = "aligned" + value;
+
+        return getAttributeCode(alignedCode);
+    }
 }

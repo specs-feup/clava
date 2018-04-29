@@ -16,12 +16,17 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
+import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
@@ -34,8 +39,27 @@ import pt.up.fe.specs.clava.utils.Typable;
  */
 public abstract class Expr extends ClavaNode implements Typable {
 
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+
+    public final static DataKey<ValueKind> VALUE_KIND = KeyFactory.enumeration("valueKind", ValueKind.class)
+            .setDefault(() -> ValueKind.getDefault());
+
+    public final static DataKey<ObjectKind> OBJECT_KIND = KeyFactory.enumeration("objectKind", ObjectKind.class)
+            .setDefault(() -> ObjectKind.ORDINARY);
+
+    public final static DataKey<ImplicitCastExpr> IMPLICIT_CAST = KeyFactory
+            .object("implicitCast", ImplicitCastExpr.class);
+
+    /// DATAKEYS END
+
     private ExprData exprData;
     private ImplicitCastExpr implicitCast;
+
+    public Expr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public Expr(ExprDataV2 data, Collection<? extends ClavaNode> children) {
         super(data, children);

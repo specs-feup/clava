@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -42,6 +44,35 @@ import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
 public abstract class ClavaNode extends ATreeNode<ClavaNode> {
+
+    /// DATAKEYS BEGIN
+
+    /**
+     * Id of the node.
+     */
+    public final static DataKey<String> ID = KeyFactory.string("id");
+
+    /**
+     * Location of this node. Might not be available (e.g., type nodes).
+     */
+    public final static DataKey<SourceRange> LOCATION = KeyFactory
+            .object("location", SourceRange.class)
+            .setDefault(() -> SourceRange.invalidRange());
+
+    /**
+     * If this node is part of a macro.
+     */
+    public final static DataKey<Boolean> IS_MACRO = KeyFactory.bool("isMacro");
+
+    public final static DataKey<SourceRange> SPELLING_LOCATION = KeyFactory
+            .object("spellingLocation", SourceRange.class)
+            .setDefault(() -> SourceRange.invalidRange());
+
+    public final static DataKey<List<InlineComment>> INLINE_COMMENTS = KeyFactory
+            .generic("inlineComments", (List<InlineComment>) new ArrayList<InlineComment>())
+            .setDefault(() -> new ArrayList<>());
+
+    /// DATAKEYS END
 
     private static final ClavaNodeConstructors CLAVA_NODE_CONSTRUCTORS = new ClavaNodeConstructors();
 
@@ -88,6 +119,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         inlineComments = null;
         this.data = null;
         this.dataI = dataI;
+
+        // Set definition of DataStore
+        this.dataI.setDefinition(getClass());
+
     }
 
     // private ClavaNode(ClavaId id, Location location, Collection<? extends ClavaNode> children) {

@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -25,6 +28,7 @@ import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -54,6 +58,16 @@ import pt.up.fe.specs.util.lazy.Lazy;
  *
  */
 public class FunctionDecl extends DeclaratorDecl {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
+
+    public final static DataKey<TemplateKind> TEMPLATE_KIND = KeyFactory.enumeration("templateKind",
+            TemplateKind.class)
+            .setDefault(() -> TemplateKind.NON_TEMPLATE);
+
+    /// DATAKEYS END
 
     private final FunctionDeclData functionDeclData;
 

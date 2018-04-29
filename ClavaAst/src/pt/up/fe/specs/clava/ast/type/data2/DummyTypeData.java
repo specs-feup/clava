@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.type.data2;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class DummyTypeData extends TypeDataV2 {
 
     private final String content;

@@ -16,6 +16,9 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -23,6 +26,12 @@ import pt.up.fe.specs.clava.ast.expr.data2.FloatingLiteralData;
 import pt.up.fe.specs.util.SpecsStrings;
 
 public class FloatingLiteral extends Literal {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Double> VALUE = KeyFactory.double64("value");
+
+    /// DATAKEYS END
 
     private static final double ERROR_THRESHOLD = 1e-6;
 

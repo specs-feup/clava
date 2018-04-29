@@ -16,6 +16,9 @@ package pt.up.fe.specs.clava.ast.stmt;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -29,6 +32,12 @@ import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
  *
  */
 public class ExprStmt extends Stmt {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Boolean> HAS_SEMICOLON = KeyFactory.bool("hasSemicolon");
+
+    /// DATAKEYS END
 
     // private final boolean hasSemicolon;
 

@@ -15,16 +15,31 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.data.AttributeData;
-import pt.up.fe.specs.clava.ast.attr.data.AttributeI;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public abstract class Attribute extends ClavaNode {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<AttributeKind> KIND = KeyFactory.enumeration("attributeKind", AttributeKind.class);
+
+    public final static DataKey<Boolean> IS_IMPLICIT = KeyFactory.bool("isImplicit");
+
+    public final static DataKey<Boolean> IS_INHERITED = KeyFactory.bool("isInherited");
+
+    public final static DataKey<Boolean> IS_LATE_PARSED = KeyFactory.bool("isLateParsed");
+
+    public final static DataKey<Boolean> IS_PACK_EXPANSION = KeyFactory.bool("isPackExpansion");
+
+    /// DATAKEYS END
 
     private final AttributeKind kind;
     private final AttrData attrData;
@@ -73,7 +88,7 @@ public abstract class Attribute extends ClavaNode {
 
     public AttributeKind getKind() {
         if (hasDataI()) {
-            return getDataI().get(AttributeI.KIND);
+            return getDataI().get(Attribute.KIND);
         }
 
         if (hasData()) {

@@ -16,6 +16,9 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -25,6 +28,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class ParmVarDecl extends VarDecl {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Boolean> HAS_INHERITED_DEFAULT_ARG = KeyFactory.bool("hasInheritedDefaultArg");
+
+    /// DATAKEYS END
 
     private final boolean hasInheritedDefaultArg;
 

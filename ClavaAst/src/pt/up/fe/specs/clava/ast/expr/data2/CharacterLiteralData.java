@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.expr.data2;
 
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class CharacterLiteralData extends LiteralData {
 
     private final long value;

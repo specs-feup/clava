@@ -40,8 +40,9 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
  * ClavaNodes (e.g., ExprData has a Type, DeclData has Attribute nodes), or if they all should be children).
  * 
  * @author JoaoBispo
- *
+ * @deprecated
  */
+@Deprecated
 public class ClavaData {
 
     // ONGOING: Experiment to check if this object can replace all ClavaData instances

@@ -16,6 +16,12 @@ package pt.up.fe.specs.clava.ast.type.data2;
 import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class BuiltinTypeData extends TypeDataV2 {
 
     private final int kindOrdinal;

@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -29,6 +31,10 @@ import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
  *
  */
 public class DummyExpr extends Expr implements DummyNode {
+
+    public DummyExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public DummyExpr(DummyExprData data, Collection<? extends ClavaNode> children) {
         super(data, children);

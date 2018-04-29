@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.stmt.data;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class ExprStmtData extends StmtData {
 
     private final boolean hasSemicolon;

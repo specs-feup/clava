@@ -15,6 +15,12 @@ package pt.up.fe.specs.clava.ast.expr.data2;
 
 import pt.up.fe.specs.clava.language.CastKind;
 
+/***
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class CastExprData extends ExprDataV2 {
 
     private final CastKind castKind;

@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class QualTypeDataV2 extends TypeDataV2 {
 
     private final List<C99Qualifier> c99Qualifiers;

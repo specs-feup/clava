@@ -16,6 +16,9 @@ package pt.up.fe.specs.clava.ast.extra;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -28,6 +31,12 @@ import pt.up.fe.specs.clava.ast.DummyNode;
  *
  */
 public class Undefined extends ClavaNode implements DummyNode {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> NAME = KeyFactory.string("name");
+
+    /// DATAKEYS END
 
     private final String name;
     private final String content;

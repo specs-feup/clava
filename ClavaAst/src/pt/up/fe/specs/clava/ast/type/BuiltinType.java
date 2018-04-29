@@ -15,6 +15,9 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
@@ -22,6 +25,14 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 
 public class BuiltinType extends Type {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Integer> KIND_ORDINAL = KeyFactory.integer("kindOrdinal", -1);
+    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("kind", BuiltinKind.class);
+    public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
+
+    /// DATAKEYS END
 
     public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);

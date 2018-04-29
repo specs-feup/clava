@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.decl.data2;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class DummyDeclData extends DeclDataV2 {
 
     public static DummyDeclData empty() {

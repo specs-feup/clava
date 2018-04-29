@@ -13,10 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 
@@ -28,7 +35,27 @@ import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
  */
 public abstract class Decl extends ClavaNode {
 
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Boolean> IS_IMPLICIT = KeyFactory.bool("isImplicit");
+
+    public final static DataKey<Boolean> IS_USED = KeyFactory.bool("isUsed");
+
+    public final static DataKey<Boolean> IS_REFERENCED = KeyFactory.bool("isReferenced");
+
+    public final static DataKey<Boolean> IS_INVALID_DECL = KeyFactory.bool("isInvalidDecl");
+
+    public final static DataKey<List<Attribute>> ATTRIBUTES = KeyFactory.generic("attributes", new ArrayList<>());
+
+    /// DATAKEYS END
+
     private final DeclData data;
+
+    public Decl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.data = null;
+    }
 
     public Decl(DeclDataV2 data, Collection<? extends ClavaNode> children) {
         super(data, children);
