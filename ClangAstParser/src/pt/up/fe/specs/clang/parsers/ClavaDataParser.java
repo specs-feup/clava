@@ -27,10 +27,6 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.parsers.clavadata.DeclDataParser;
-import pt.up.fe.specs.clang.parsers.clavadata.ExprDataParser;
-import pt.up.fe.specs.clang.parsers.clavadata.StmtDataParser;
-import pt.up.fe.specs.clang.parsers.clavadata.TypeDataParser;
 import pt.up.fe.specs.clang.parsers.data.ClavaDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
@@ -51,27 +47,27 @@ public class ClavaDataParser {
         STATIC_DATA_PARSERS = new HashMap<>();
 
         // DECLS
-        STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
-        STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
-        STATIC_DATA_PARSERS.put("<FunctionDeclData>", DeclDataParser::parseFunctionDeclData);
-        STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
-        STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);
-        STATIC_DATA_PARSERS.put("<ParmVarDeclData>", DeclDataParser::parseParmVarDeclData);
+        // STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
+        // STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
+        // STATIC_DATA_PARSERS.put("<FunctionDeclData>", DeclDataParser::parseFunctionDeclData);
+        // STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
+        // STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);
+        // STATIC_DATA_PARSERS.put("<ParmVarDeclData>", DeclDataParser::parseParmVarDeclData);
 
         // STMTS
-        STATIC_DATA_PARSERS.put("<StmtData>", StmtDataParser::parseStmtData);
+        // STATIC_DATA_PARSERS.put("<StmtData>", StmtDataParser::parseStmtData);
 
         // EXPRS
-        STATIC_DATA_PARSERS.put("<ExprData>", ExprDataParser::parseExprData);
-        STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
-        STATIC_DATA_PARSERS.put("<FloatingLiteralData>", ExprDataParser::parseFloatingLiteralData);
-        STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
-        STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
+        // STATIC_DATA_PARSERS.put("<ExprData>", ExprDataParser::parseExprData);
+        // STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
+        // STATIC_DATA_PARSERS.put("<FloatingLiteralData>", ExprDataParser::parseFloatingLiteralData);
+        // STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
+        // STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
 
         // TYPES
-        STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
-        STATIC_DATA_PARSERS.put("<BuiltinTypeData>", TypeDataParser::parseBuiltinTypeData);
-        STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
+        // STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
+        // STATIC_DATA_PARSERS.put("<BuiltinTypeData>", TypeDataParser::parseBuiltinTypeData);
+        // STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
 
         // ATTRIBUTES
         // STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
