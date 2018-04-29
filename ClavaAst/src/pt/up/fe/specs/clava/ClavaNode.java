@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -621,6 +622,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     }
 
+    public void setData(DataStore data) {
+        this.dataI.addAll(data);
+    }
+
     // protected void setData(ClavaData data) {
     // this.data = data;
     // }
@@ -669,6 +674,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Override
     public String toString() {
         return toContentString();
+    }
+
+    /**
+     * 
+     * @return a ClavaFactory where the builders will use the data of this node as the base for new nodes.
+     */
+    public ClavaFactory getFactoryWithNode() {
+        return new ClavaFactory(get(CONTEXT), dataI);
+    }
+
+    /**
+     * General getter for ClavaNode fields.
+     * 
+     * @param key
+     * @return
+     */
+    public <T> T get(DataKey<T> key) {
+        return dataI.get(key);
     }
 
 }

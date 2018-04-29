@@ -49,8 +49,6 @@ public abstract class Type extends ClavaNode {
     /// DATAKEYS END
 
     private TypeData data;
-    // private Supplier<App> app;
-    // private App app;
 
     public Type(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -71,8 +69,6 @@ public abstract class Type extends ClavaNode {
         super(info, children);
 
         this.data = data;
-        // app = () -> null;
-        // app = null;
     }
 
     @Override
@@ -91,15 +87,6 @@ public abstract class Type extends ClavaNode {
         }
         return data;
     }
-
-    // public void setApp(App app) {
-    // // setApp(() -> app);
-    // this.app = app;
-    // }
-
-    // public void setApp(Supplier<App> app) {
-    // this.app = app;
-    // }
 
     @Override
     public Type copy() {

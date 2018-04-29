@@ -31,7 +31,7 @@ public class BuiltinType extends Type {
 
     public final static DataKey<Integer> KIND_ORDINAL = KeyFactory.integer("kindOrdinal", -1);
     public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("kind", BuiltinKind.class);
-    public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
+    // public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
 
     /// DATAKEYS END
 
@@ -42,14 +42,6 @@ public class BuiltinType extends Type {
     public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // public BuiltinType(String builtinType) {
-    //
-    // }
-
-    // public BuiltinType(BuiltinKind kind) {
-    // this(new BuiltinTypeData(kind), Collections.emptyList());
-    // }
 
     /**
      * @deprecated for legacy support
@@ -78,6 +70,10 @@ public class BuiltinType extends Type {
     }
 
     public BuiltinKind getKind() {
+        if (hasDataI()) {
+            return getDataI().get(KIND);
+        }
+
         if (hasData()) {
             return getData().getKind();
         }
@@ -90,7 +86,7 @@ public class BuiltinType extends Type {
      */
     @Override
     public String getConstantCode(String constant) {
-        boolean isUnsigned = getData().getKind().isUnsigned();
+        boolean isUnsigned = getKind().isUnsigned();
 
         if (isUnsigned) {
             // if (getBareType().startsWith("unsigned")) {
@@ -102,7 +98,7 @@ public class BuiltinType extends Type {
     }
 
     public boolean isVoid() {
-        return getData().getKind() == BuiltinKind.VOID;
+        return getKind() == BuiltinKind.VOID;
     }
 
 }
