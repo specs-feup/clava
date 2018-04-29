@@ -21,6 +21,8 @@ import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.version.Clang_3_8;
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.context.ClavaContext;
 
 public class ClangStreamParserV2 {
 
@@ -45,7 +47,13 @@ public class ClangStreamParserV2 {
     }
 
     public static LineStreamParserV2 newInstance() {
-        return LineStreamParserV2.newInstance(WORKERS);
+        LineStreamParserV2 streamParser = LineStreamParserV2.newInstance(WORKERS);
+
+        // Create ClavaContext
+        streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext());
+
+        return streamParser;
+        // return LineStreamParserV2.newInstance(WORKERS);
         // LineStreamParserV2 lineStreamParser = LineStreamParserV2.newInstance(WORKERS);
         //
         // // Initialize some keys

@@ -277,7 +277,9 @@ public class ClavaDataParser {
 
         ClavaData clavaData = new ClavaData(id, location, isMacro, spellingLocation, Collections.emptyList());
 
-        DataStore data = DataStore.newInstance("ClavaData");
+        DataStore data = DataStore.newInstance("Data from Parser");
+
+        data.add(ClavaNode.CONTEXT, dataStore.get(ClavaNode.CONTEXT));
         data.add(ClavaNode.ID, id);
         data.add(ClavaNode.LOCATION, location);
         data.add(ClavaNode.IS_MACRO, isMacro);
