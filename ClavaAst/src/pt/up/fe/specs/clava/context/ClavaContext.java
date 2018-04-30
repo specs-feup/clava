@@ -53,4 +53,16 @@ public class ClavaContext {
         // Initialize factory
         this.data.add(FACTORY, new ClavaFactory(this));
     }
+
+    public ClavaIdGenerator getIds() {
+        return data.get(ID_GENERATOR);
+    }
+
+    public ClavaFactory getFactory() {
+        return data.get(FACTORY);
+    }
+
+    public List<String> getParsingArguments() {
+        return data.get(ARGUMENTS);
+    }
 }

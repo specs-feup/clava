@@ -17,8 +17,8 @@ import pt.up.fe.specs.util.collections.AccumulatorMap;
 
 public class ClavaIdGenerator {
 
-    private static final String TYPE_ID_PREFIX = "type_";
-    private static final String DECL_ID_PREFIX = "decl_";
+    // private static final String TYPE_ID_PREFIX = "type_";
+    // private static final String DECL_ID_PREFIX = "decl_";
 
     private final AccumulatorMap<String> acc;
 
@@ -26,17 +26,19 @@ public class ClavaIdGenerator {
         this.acc = new AccumulatorMap<>();
     }
 
-    private String next(String prefix) {
+    public String next(String prefix) {
         Integer suffixValue = acc.add(prefix);
 
         return prefix + suffixValue;
     }
 
+    /*
     public String nextTypeId() {
         return next(TYPE_ID_PREFIX);
     }
-
+    
     public String nextDeclId() {
         return next(DECL_ID_PREFIX);
     }
+    */
 }

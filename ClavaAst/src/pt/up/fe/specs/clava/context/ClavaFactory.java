@@ -23,6 +23,9 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 
 public class ClavaFactory {
 
+    private static final String TYPE_ID_PREFIX = "type_";
+    // private static final String DECL_ID_PREFIX = "decl_";
+
     private final ClavaContext context;
     private final DataStore baseData;
 
@@ -35,7 +38,7 @@ public class ClavaFactory {
         this.baseData = baseData;
     }
 
-    private DataStore newDataStore() {
+    private DataStore newDataStore(String idPrefix) {
         DataStore data = DataStore.newInstance("ClavaFactory Node");
 
         // Add base node, if present
@@ -43,15 +46,22 @@ public class ClavaFactory {
             data.addAll(baseData);
         }
 
+        // Set context
         data.set(ClavaNode.CONTEXT, context);
+        // Set id
+        data.set(ClavaNode.ID, context.getIds().next(idPrefix));
 
         return data;
+    }
+
+    private DataStore newTypeDataStore() {
+        return newDataStore(TYPE_ID_PREFIX);
     }
 
     /// TYPES
 
     public BuiltinType builtinType(BuiltinKind kind) {
-        DataStore data = newDataStore().put(BuiltinType.KIND, kind);
+        DataStore data = newTypeDataStore().put(BuiltinType.KIND, kind);
         return new BuiltinType(data, Collections.emptyList());
     }
 
