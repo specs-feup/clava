@@ -22,6 +22,7 @@ ClavaJoinPoints.equals = function(jp1, jp2) {
 }
 
 ClavaJoinPoints.builtinType = function(code) {
+	//return Clava.getFactory().builtinType(code);
 	return AstFactory.builtinType(code);
 }
 

@@ -159,3 +159,17 @@ Clava.getProgram = function() {
 Clava.getAvailableIncludes = function() {	
 	return CxxWeaverApi.getAvailableUserIncludes();
 }
+
+/*
+ *
+ */
+ /*
+Clava.getContext = function() {	
+	return Clava.getProgram().getContext();
+}
+*/
+/*
+Clava.getFactory = function() {
+	return new AstFactory(Clava.getContext());
+}
+*/
