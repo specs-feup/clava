@@ -24,18 +24,18 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
-import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.NodeDataParser;
 // import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.FunctionDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.enums.ExceptionType;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
@@ -125,8 +125,7 @@ public class ClangDataParsers {
     }
 
     public static ParserResult<FunctionDeclParserResult> parseFunctionDecl(StringSlice string,
-            ListParser<ClavaNode> children, ClangNode node, DataStore streamData,
-            Class<? extends FunctionDeclDataV2> nodeClass) {
+            ListParser<ClavaNode> children, ClangNode node, DataStore streamData) {
 
         StringParser parser = new StringParser(string);
 
@@ -178,7 +177,7 @@ public class ClangDataParsers {
         // .get(ClangNodeParsing.getNodeDataKey(nodeClass)).keySet());
 
         // Get stream information
-        FunctionDeclDataV2 functionData = ClavaDataParser.getClavaData(streamData, nodeClass, node.getExtendedId())
+        DataStore functionData = NodeDataParser.getNodeData(streamData, node.getExtendedId())
                 .orElse(null);
         // FunctionDeclDataV2 functionData = ClavaDataParser.getClavaData(clavaDataClass, nodeId,
         // dataStore)streamData.get(ClavaDataParser.getDataKey(nodeClass))
@@ -197,7 +196,8 @@ public class ClangDataParsers {
 
         // Add information from the stream parser
         // TemplateKind templateKind = streamInfo != null ? streamInfo.getTemplateKind() : TemplateKind.NON_TEMPLATE;
-        TemplateKind templateKind = functionData != null ? functionData.getTemplateKind() : TemplateKind.NON_TEMPLATE;
+        TemplateKind templateKind = functionData != null ? functionData.get(FunctionDecl.TEMPLATE_KIND)
+                : TemplateKind.NON_TEMPLATE;
         // TemplateKind templateKind = functionData.getTemplateKind();
 
         FunctionDeclData data = new FunctionDeclData(storageClass, isInline, isVirtual, isModulePrivate, isPure,
@@ -443,7 +443,7 @@ public class ClangDataParsers {
 
         // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
 
-        VarDeclDataV2 varDeclData2 = ClavaDataParser.getClavaData(streamData, varDeclClass, node.getExtendedId())
+        DataStore varDeclData2 = NodeDataParser.getNodeData(streamData, node.getExtendedId())
                 .orElse(null);
 
         // VarDeclDataV2 varDeclData2 = streamData.get(ClavaDataParser.getDataKey(varDeclClass))

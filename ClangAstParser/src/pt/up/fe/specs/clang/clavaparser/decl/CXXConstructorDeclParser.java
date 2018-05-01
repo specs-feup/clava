@@ -16,6 +16,8 @@ package pt.up.fe.specs.clang.clavaparser.decl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
@@ -31,7 +33,6 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
@@ -58,7 +59,7 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         // col:4 MCSimulation 'void (const std::string, const std::string)'
         // line:304:24 MCSimulation 'void (const std::string, const std::string)' namespace Routing record CSVReader
 
-        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
+        DataStore data = getData(node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -89,7 +90,7 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         checkNewChildren(node.getExtendedId(), children.getList());
 
         FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children, node,
-                getStdErr(), CXXMethodDeclDataV2.class);
+                getStdErr());
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");
@@ -98,7 +99,7 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = data.getRecordId();
+        String recordId = data.get(CXXConstructorDecl.RECORD_ID);
         // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         CXXMethodDeclData methodData = new CXXMethodDeclData(namespace, record, recordId);

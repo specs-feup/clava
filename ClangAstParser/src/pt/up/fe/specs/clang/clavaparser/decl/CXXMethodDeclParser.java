@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.clavaparser.decl;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
@@ -24,7 +26,6 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -50,7 +51,7 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
         // WriteResultSingle 'void (std::vector<float> &, std::string &&, float)' static namespace Routing record Data
         // PARSER:col:14 AreEqual '_Bool (double, double)' static
 
-        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
+        DataStore data = getData(node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -72,20 +73,7 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
         checkNewChildren(node.getExtendedId(), children.getList());
 
         FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
-                node, getStdErr(), CXXMethodDeclDataV2.class);
-        // boolean isStatic = parser.apply(string -> ClangParseWorkers.checkWord(string, "static"));
-
-        // boolean isInline = parser.apply(string -> ClangParseWorkers.checkWord(string, "inline"));
-        /*
-        	ExceptionType exceptionType = parser.apply(string -> ClangParseWorkers.parseEnum(string, ExceptionType.class,
-        		ExceptionType.NONE, getExceptionTypeMappings()));
-        
-        
-        	long exceptionAddress = CXXMethodDecl.getNullExceptAddress();
-        	if (exceptionType != ExceptionType.NONE) {
-        	    exceptionAddress = parser.apply(ClangParseWorkers::parseHex);
-        	}
-        */
+                node, getStdErr());
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");
@@ -94,7 +82,7 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = data.getRecordId();
+        String recordId = data.get(CXXMethodDecl.RECORD_ID);
         // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         CXXMethodDeclData methodData = new CXXMethodDeclData(namespace, record, recordId);

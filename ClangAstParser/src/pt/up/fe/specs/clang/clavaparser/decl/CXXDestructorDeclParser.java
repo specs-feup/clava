@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.clavaparser.decl;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
@@ -24,9 +26,9 @@ import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.CXXMethodDeclDataV2;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -47,7 +49,7 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         // line:285:24 ~MCSimulation 'void (void) noexcept' namespace Routing record CSVReader
         // col:13 ~Exception 'void (void) noexcept' virtual
 
-        CXXMethodDeclDataV2 data = getData(CXXMethodDeclDataV2.class, node);
+        DataStore data = getData(node);
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
@@ -66,8 +68,7 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         checkNewChildren(node.getExtendedId(), children.getList());
 
         FunctionDeclParserResult functionDeclParserdata = parser.apply(ClangDataParsers::parseFunctionDecl, children,
-                node, getStdErr(),
-                CXXMethodDeclDataV2.class);
+                node, getStdErr());
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");
@@ -76,7 +77,7 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = data.getRecordId();
+        String recordId = data.get(CXXMethodDecl.RECORD_ID);
         // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         // TODO: Do not know yet position of virtual, check Clang dumper

@@ -33,7 +33,7 @@ import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
-import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+import pt.up.fe.specs.clang.parsers.NodeDataParser;
 // import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 // import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
@@ -531,20 +531,24 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     // return dataClass.cast(getData(clavaNodeClass, node));
     // }
 
-    protected <T extends ClavaData> T getData(Class<T> clavaDataClass, ClangNode node) {
-        return getDataTry(clavaDataClass, node).orElseThrow(() -> new RuntimeException(
-                "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent()));
+    // protected <T extends ClavaData> T getData(Class<T> clavaDataClass, ClangNode node) {
+    // return getDataTry(clavaDataClass, node).orElseThrow(() -> new RuntimeException(
+    // "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent()));
+    //
+    // }
 
-        // if (data == null) {
-        // // SpecsLogs.msgWarn("Could not find data for node '" + node.getName() + "':\n" + node);
-        // throw new
-        // }
-        //
-        // return data;
+    // protected <T extends ClavaData> Optional<T> getDataTry(Class<T> clavaDataClass, ClangNode node) {
+    // return ClavaDataParser.getClavaData(getStdErr(), clavaDataClass, node.getExtendedId());
+    //
+    // }
+
+    protected DataStore getData(ClangNode node) {
+        return getDataTry(node).orElseThrow(() -> new RuntimeException(
+                "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent()));
     }
 
-    protected <T extends ClavaData> Optional<T> getDataTry(Class<T> clavaDataClass, ClangNode node) {
-        return ClavaDataParser.getClavaData(getStdErr(), clavaDataClass, node.getExtendedId());
+    protected Optional<DataStore> getDataTry(ClangNode node) {
+        return NodeDataParser.getNodeData(getStdErr(), node.getExtendedId());
 
     }
 
