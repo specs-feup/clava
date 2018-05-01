@@ -13,12 +13,7 @@
 
 package pt.up.fe.specs.clava.context;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 public class ClavaContext {
 
@@ -27,42 +22,52 @@ public class ClavaContext {
     /**
      * The arguments used to call the parser.
      */
-    public final static DataKey<List<String>> ARGUMENTS = KeyFactory
-            .generic("arguments", new ArrayList<>());
+    // public final static DataKey<List<String>> ARGUMENTS = KeyFactory
+    // .generic("arguments", new ArrayList<>());
 
     /**
      * IDs generator
      */
-    public final static DataKey<ClavaIdGenerator> ID_GENERATOR = KeyFactory
-            .object("idGenerator", ClavaIdGenerator.class)
-            .setDefault(() -> new ClavaIdGenerator());
+    // public final static DataKey<ClavaIdGenerator> ID_GENERATOR = KeyFactory
+    // .object("idGenerator", ClavaIdGenerator.class)
+    // .setDefault(() -> new ClavaIdGenerator());
 
-    public final static DataKey<ClavaFactory> FACTORY = KeyFactory
-            .object("factory", ClavaFactory.class);
+    // public final static DataKey<ClavaFactory> FACTORY = KeyFactory
+    // .object("factory", ClavaFactory.class);
 
     /// DATAKEYS END
 
-    private final DataStore data;
+    // private final DataStore data;
+    private final List<String> arguments;
+    private final ClavaIdGenerator idGenerator;
+    private final ClavaFactory factory;
 
     public ClavaContext(List<String> arguments) {
-        this.data = DataStore.newInstance(getClass());
+        this.arguments = arguments;
+        this.idGenerator = new ClavaIdGenerator();
+        this.factory = new ClavaFactory(this);
 
-        // Set arguments
-        this.data.set(ARGUMENTS, new ArrayList<>(arguments));
-
-        // Initialize factory
-        this.data.add(FACTORY, new ClavaFactory(this));
+        // this.data = DataStore.newInstance(getClass());
+        //
+        // // Set arguments
+        // this.data.set(ARGUMENTS, new ArrayList<>(arguments));
+        //
+        // // Initialize factory
+        // this.data.add(FACTORY, new ClavaFactory(this));
     }
 
     public ClavaIdGenerator getIds() {
-        return data.get(ID_GENERATOR);
+        return idGenerator;
+        // return data.get(ID_GENERATOR);
     }
 
     public ClavaFactory getFactory() {
-        return data.get(FACTORY);
+        return factory;
+        // return data.get(FACTORY);
     }
 
     public List<String> getParsingArguments() {
-        return data.get(ARGUMENTS);
+        return arguments;
+        // return data.get(ARGUMENTS);
     }
 }
