@@ -152,7 +152,6 @@ import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
-import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
@@ -263,9 +262,9 @@ public class ClavaNodeFactory {
         return new Undefined(name, content, info, children);
     }
 
-    public static App app(Collection<TranslationUnit> translationUnits) {
-        return new App(translationUnits);
-    }
+    // public static App app(Collection<TranslationUnit> translationUnits) {
+    // return new App(translationUnits);
+    // }
 
     public static TranslationUnit translationUnit(String filename, String path, Collection<Decl> declarations) {
         return new TranslationUnit(filename, path, declarations);

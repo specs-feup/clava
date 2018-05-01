@@ -13,17 +13,25 @@
 
 package pt.up.fe.specs.clava.context;
 
+import java.math.BigInteger;
 import java.util.Collections;
+import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 
 public class ClavaFactory {
 
     private static final String TYPE_ID_PREFIX = "type_";
+    private static final String EXPR_ID_PREFIX = "expr_";
+    private static final String EXTRA_ID_PREFIX = "extra_";
     // private static final String DECL_ID_PREFIX = "decl_";
 
     private final ClavaContext context;
@@ -49,7 +57,7 @@ public class ClavaFactory {
         // Set context
         data.set(ClavaNode.CONTEXT, context);
         // Set id
-        data.set(ClavaNode.ID, context.getIds().next(idPrefix));
+        data.set(ClavaNode.ID, context.get(ClavaContext.ID_GENERATOR).next(idPrefix));
 
         return data;
     }
@@ -58,11 +66,36 @@ public class ClavaFactory {
         return newDataStore(TYPE_ID_PREFIX);
     }
 
+    private DataStore newExprDataStore() {
+        return newDataStore(EXPR_ID_PREFIX);
+    }
+
+    private DataStore newExtraDataStore() {
+        return newDataStore(EXTRA_ID_PREFIX);
+    }
+
+    /// EXTRA
+
+    public App app(List<TranslationUnit> tUnits) {
+        DataStore data = newExtraDataStore();
+        return new App(data, tUnits);
+    }
+
     /// TYPES
 
     public BuiltinType builtinType(BuiltinKind kind) {
         DataStore data = newTypeDataStore().put(BuiltinType.KIND, kind);
         return new BuiltinType(data, Collections.emptyList());
+    }
+
+    /// EXPRS
+
+    public IntegerLiteral integerLiteral(int integer) {
+        DataStore data = newExprDataStore()
+                .put(IntegerLiteral.VALUE, BigInteger.valueOf(integer))
+                .put(Expr.TYPE, builtinType(BuiltinKind.INT));
+
+        return new IntegerLiteral(data, Collections.emptyList());
     }
 
 }

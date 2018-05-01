@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaNode;
 
 public class ClavaNodeConstructors {
@@ -99,24 +97,26 @@ public class ClavaNodeConstructors {
     // throw new RuntimeException("Could not call constructor for ClavaNode", e);
     // }
     // };
-
+    /*
     public <T extends ClavaNode> T newClavaNode(Class<T> clavaNodeClass, DataStore data,
             Collection<? extends ClavaNode> children) {
-
+    
         try {
-
+    
             Constructor<? extends ClavaNode> constructorMethod = clavaNodeClass.getConstructor(DataStore.class,
                     Collection.class);
-
+    
             try {
                 return clavaNodeClass.cast(constructorMethod.newInstance(data, children));
             } catch (Exception e) {
                 throw new RuntimeException("Could not call constructor for ClavaNode", e);
             }
-
+    
         } catch (Exception e) {
             throw new RuntimeException("Could not create constructor for ClavaNode:" + e.getMessage());
         }
-
+    
     }
+    
+    */
 }

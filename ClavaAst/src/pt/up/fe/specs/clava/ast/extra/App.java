@@ -26,10 +26,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -55,48 +56,25 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public class App extends ClavaNode {
 
-    // This limits the number of App objects to one per thread
-    // This is being used because o Qualifier needs to generate different code for restrict
-    // depending on the current compilation standard
-    // private static final ThreadLocal<Standard> CURRENT_STANDARD = new ThreadLocal<>();
+    /// DATAKEYS BEGIN
 
-    // public static Standard getCurrentStandard() {
-    // Standard standard = CURRENT_STANDARD.get();
-    // if (standard == null) {
-    // SpecsLogs.msgLib("App.getCurrentStandard: App object has not been initialized");
-    // }
-    //
-    // return standard;
-    // }
+    /**
+     * External dependencies of this application.
+     */
+    public final static DataKey<ExternalDependencies> EXTERNAL_DEPENDENCIES = KeyFactory
+            .object("externalDependencies", ExternalDependencies.class)
+            .setDefault(() -> new ExternalDependencies())
+            .setCopyFunction(dependencies -> dependencies.copy());
 
-    // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList("c", "cpp", "cl"));
-    // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
-    // private static final Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
-    // SpecsCollections.concat(EXTENSIONS_IMPLEMENTATION, EXTENSIONS_HEADERS));
+    /**
+     * Can be used to store arbitrary information that should be accessible through the application
+     * 
+     */
+    public final static DataKey<DataStore> APP_DATA = KeyFactory.object("appData", DataStore.class)
+            .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
+            .setCopyFunction(dataStore -> dataStore.copy());
 
-    // public static Set<String> getExtensionsHeaders() {
-    // return EXTENSIONS_HEADERS;
-    // }
-
-    // public static Set<String> getExtensionsImplementation() {
-    // return EXTENSIONS_IMPLEMENTATION;
-    // }
-
-    // public static Set<String> getPermittedExtensions() {
-    // return PERMITTED_EXTENSIONS;
-    // }
-
-    // public static SourceType getSourceType(String filepath) {
-    // return
-    // }
-
-    // public static boolean isImplementationFile(String filepath) {
-    // return EXTENSIONS_IMPLEMENTATION.contains(SpecsIo.getExtension(filepath));
-    // }
-    //
-    // public static boolean isHeaderFile(String filepath) {
-    // return EXTENSIONS_HEADERS.contains(SpecsIo.getExtension(filepath));
-    // }
+    /// DATAKEYS END
 
     private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
 
@@ -111,16 +89,24 @@ public class App extends ClavaNode {
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
 
-    private ExternalDependencies externalDependencies;
+    // private ExternalDependencies externalDependencies;
     // private Map<String, String> idsAlias;
     // private Map<String, List<Stmt>> inlineCache;
 
     // Can be used to store information that should be accessible through the application
-    private DataStore appData;
+    // private DataStore appData;
 
+    /**
+     * Legacy.
+     * 
+     * @deprecated
+     * @param children
+     */
+    /*
+    @Deprecated
     public App(Collection<TranslationUnit> children) {
         super(ClavaNodeInfo.undefinedInfo(), children);
-
+    
         // sources = Collections.emptyList();
         sourceFiles = new HashMap<>();
         globalManager = new GlobalManager();
@@ -128,11 +114,42 @@ public class App extends ClavaNode {
         functionDeclarationCache = new HashMap<>();
         functionDefinitionCache = new HashMap<>();
         appData = DataStore.newInstance("Clava App Data");
+    
+        idNormalizer = new IdNormalizer();
+        callInliner = new CallInliner(idNormalizer);
+    
+        externalDependencies = new ExternalDependencies();
+        // this.idsAlias = Collections.emptyMap();
+        // this.inlineCache = new HashMap<>();
+    
+        // System.out.println("SETTING STANDARD:" + appData.get(ClavaOptions.STANDARD));
+    
+        // CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
+    }
+    */
+
+    /**
+     * 
+     * @param dataStore
+     * @param children
+     */
+    public App(DataStore dataStore, Collection<? extends ClavaNode> children) {
+        super(dataStore, children);
+        // super(ClavaNodeInfo.undefinedInfo(), children);
+
+        // sources = Collections.emptyList();
+        sourceFiles = new HashMap<>();
+        globalManager = new GlobalManager();
+        nodesCache = new HashMap<>();
+        functionDeclarationCache = new HashMap<>();
+        functionDefinitionCache = new HashMap<>();
+        // appData = DataStore.newInstance("Clava App Data");
 
         idNormalizer = new IdNormalizer();
         callInliner = new CallInliner(idNormalizer);
 
-        externalDependencies = new ExternalDependencies();
+        // getDataI().add(EXTERNAL_DEPENDENCIES, new ExternalDependencies());
+        // externalDependencies = new ExternalDependencies();
         // this.idsAlias = Collections.emptyMap();
         // this.inlineCache = new HashMap<>();
 
@@ -141,28 +158,32 @@ public class App extends ClavaNode {
         // CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
     }
 
+    /*
     @Override
     protected ClavaNode copyPrivate() {
         App appCopy = new App(Collections.emptyList());
-
+    
         // Copy fields of App DataStore
         appCopy.appData.addAll(appData);
-
+    
         appCopy.externalDependencies = externalDependencies.copy();
         // Fields that might need to be copied:
         // globalManager
         // idNormalizer
         // callInliner
-
+    
         return appCopy;
     }
+    */
 
     public DataStore getAppData() {
-        return appData;
+        return get(APP_DATA);
+        // return appData;
     }
 
     public ExternalDependencies getExternalDependencies() {
-        return externalDependencies;
+        return get(EXTERNAL_DEPENDENCIES);
+        // return externalDependencies;
     }
 
     public void setIdsAlias(Map<String, String> idsAlias) {
@@ -720,11 +741,14 @@ public class App extends ClavaNode {
     }
 
     public void addConfig(DataStore config) {
-        appData.addAll(config);
+        get(APP_DATA).addAll(config);
+        // appData.addAll(config);
     }
 
     public Standard getStandard() {
-        return appData.get(ClavaOptions.STANDARD);
+        // TODO: Should standard be in Context instead?
+        return get(APP_DATA).get(ClavaOptions.STANDARD);
+        // return appData.get(ClavaOptions.STANDARD);
     }
 
 }

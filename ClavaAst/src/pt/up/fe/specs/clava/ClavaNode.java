@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +29,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaData;
-import pt.up.fe.specs.clava.ast.ClavaNodeConstructors;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -50,7 +50,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     /// DATAKEYS BEGIN
 
     /**
-     * Id of the node.
+     * Global object with information about the program.
+     * 
+     * TODO: Should this key be moved to another class?
      */
     public final static DataKey<ClavaContext> CONTEXT = KeyFactory.object("context", ClavaContext.class);
 
@@ -81,7 +83,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     /// DATAKEYS END
 
-    private static final ClavaNodeConstructors CLAVA_NODE_CONSTRUCTORS = new ClavaNodeConstructors();
+    // private static final ClavaNodeConstructors CLAVA_NODE_CONSTRUCTORS = new ClavaNodeConstructors();
 
     /*
     private String id;
@@ -474,11 +476,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Override
     protected ClavaNode copyPrivate() {
         if (hasDataI()) {
-            return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getDataI(), Collections.emptyList());
-        }
-
-        if (hasData()) {
-            return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getData(), Collections.emptyList());
+            return newInstance(getClass(), Collections.emptyList());
+            // return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getDataI().copy(), Collections.emptyList());
         }
 
         throw new NotImplementedException(this);
@@ -692,6 +691,40 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     public <T> T get(DataKey<T> key) {
         return dataI.get(key);
+    }
+
+    public ClavaContext getContext() {
+        return get(CONTEXT);
+    }
+
+    /**
+     * Creates a new node using the same data as this node.
+     * 
+     * @param nodeClass
+     * @param children
+     * @return
+     */
+    public <T extends ClavaNode> T newInstance(Class<T> nodeClass, List<ClavaNode> children) {
+
+        DataStore newDataStore = dataI.copy();
+
+        // Set id
+        String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
+        newDataStore.put(ID, newId);
+
+        try {
+            Constructor<? extends ClavaNode> constructorMethod = nodeClass.getConstructor(DataStore.class,
+                    Collection.class);
+
+            try {
+                return nodeClass.cast(constructorMethod.newInstance(newDataStore, children));
+            } catch (Exception e) {
+                throw new RuntimeException("Could not call constructor for ClavaNode", e);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Could not create constructor for ClavaNode:" + e.getMessage());
+        }
     }
 
 }
