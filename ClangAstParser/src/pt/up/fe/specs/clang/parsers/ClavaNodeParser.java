@@ -29,7 +29,6 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -127,23 +126,16 @@ public class ClavaNodeParser implements LineStreamWorker {
             // return new UnsupportedNode("<CLASSNAME NOT FOUND>", ClavaData.empty(), Collections.emptyList());
         }
 
-        // Get ClavaData mapped to the node id
-        ClavaData clavaData = data.get(ClangParserKeys.CLAVA_DATA).get(nodeId);
-
         // DataStore mapped to the node id
         DataStore nodeData = data.get(ClangParserKeys.NODE_DATA).get(nodeId);
 
-        if (clavaData == null && nodeData == null) {
+        if (nodeData == null) {
             throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
                     + "), data dumper is not being called");
             // if (debug)
             // SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
             // + "), data dumper is not being called");
             // return new UnsupportedNode(classname, ClavaData.empty(), Collections.emptyList());
-        }
-
-        if (clavaData != null) {
-            return parseNodeClavaData(nodeId, classname, data, clavaData, debug);
         }
 
         // Get corresponding ClavaNode class
@@ -195,59 +187,6 @@ public class ClavaNodeParser implements LineStreamWorker {
         return DummyNode.newInstance(clavaNodeClass, nodeData, children, false);
         // return new UnsupportedNode(classname, clavaData, children);
 
-    }
-
-    private ClavaNode parseNodeClavaData(String nodeId, String classname, DataStore data, ClavaData clavaData,
-            boolean debug) {
-        // Get corresponding ClavaNode class
-        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, clavaData.getData());
-
-        // Get children ids
-        List<String> childrenIds = data.get(ClangParserKeys.VISITED_CHILDREN).get(nodeId);
-
-        if (childrenIds == null) {
-            SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
-
-            childrenIds = Collections.emptyList();
-
-        }
-
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
-
-        // Get the children nodes
-        List<ClavaNode> children = new ArrayList<>(childrenIds.size());
-        for (String childId : childrenIds) {
-            ClavaNode child = parsedNodes.get(childId);
-
-            // Check if nullptr
-            if (child == null && ClavaNodes.isNullId(childId)) {
-                child = ClavaNodes.nullNode(childId);
-            }
-
-            Preconditions.checkNotNull(child, "Did not find ClavaNode for child with id '" + childId + "'");
-            children.add(child);
-        }
-
-        // Get ClavaNode constructor
-        BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = classesService.getBuilder(clavaNodeClass,
-                clavaData.getClass());
-
-        if (builder == null) {
-            if (!missingConstructors.contains(classname)) {
-                missingConstructors.add(classname);
-                if (debug)
-                    SpecsLogs
-                            .msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
-                                    + clavaData.getClass().getSimpleName()
-                                    + " data, Collection<? extends ClavaNode> children)'");
-            }
-
-            return DummyNode.newInstance(clavaNodeClass, clavaData.getData(), children, false);
-            // return new UnsupportedNode(classname, clavaData, children);
-        }
-
-        // Build node based on data and children
-        return builder.apply(clavaData, children);
     }
 
 }
