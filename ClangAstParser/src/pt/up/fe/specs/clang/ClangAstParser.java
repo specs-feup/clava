@@ -49,6 +49,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -194,8 +195,13 @@ public class ClangAstParser {
 
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
+        ClavaContext context = new ClavaContext(arguments);
+
+        // Add context to config
+        config.add(ClavaNode.CONTEXT, context);
+
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(arguments);
+        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(context);
         if (SpecsSystem.isDebug()) {
             lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
         }
@@ -518,8 +524,8 @@ public class ClangAstParser {
         File testFile = testResource.write(testFolder);
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
-
-        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance(arguments);
+        ClavaContext context = new ClavaContext(arguments);
+        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance(context);
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
                         clangStreamParser));

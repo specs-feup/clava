@@ -44,7 +44,6 @@ import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
@@ -115,9 +114,6 @@ public class StreamParser {
     // this(clavaData, null, ClangStreamParserV2.newInstance());
     // }
 
-    // Single map for all the node data dumps
-    Map<String, ClavaData> nodeData;
-
     /**
      * We need a new instance every time we want to parse a String.
      */
@@ -125,8 +121,7 @@ public class StreamParser {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
-        nodeData = new HashMap<>();
-        keysToSnippetsMap = buildDatakeysToSnippetsMap(nodeData);
+        keysToSnippetsMap = buildDatakeysToSnippetsMap();
         parsers = keysToSnippetsMap.values().stream()
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
@@ -160,11 +155,8 @@ public class StreamParser {
         return lineStreamParsers;
     }
     */
-    public Map<String, ClavaData> getNodeData() {
-        return nodeData;
-    }
 
-    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap(Map<String, ClavaData> nodeData) {
+    private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
 
         // Single map for all the node data dumps

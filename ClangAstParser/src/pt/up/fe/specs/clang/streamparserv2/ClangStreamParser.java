@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -260,7 +261,8 @@ public class ClangStreamParser {
             tUnits.add(tUnit);
         }
 
-        App app = ClavaNodeFactory.app(tUnits);
+        // App app = ClavaNodeFactory.app(tUnits);
+        App app = data.get(ClavaNode.CONTEXT).get(ClavaContext.FACTORY).app(tUnits);
 
         app.setIdsAlias(normalizedNodes.getRepeatedIdsMap());
 

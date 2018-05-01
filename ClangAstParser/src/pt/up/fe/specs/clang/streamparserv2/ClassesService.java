@@ -23,7 +23,6 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class ClassesService {
@@ -33,48 +32,13 @@ public class ClassesService {
     private final CustomClassnameMapper customClassMap;
     private final Map<String, Class<? extends ClavaNode>> autoClassMap;
 
-    private final Map<Class<? extends ClavaNode>, BiFunction<ClavaData, List<ClavaNode>, ClavaNode>> builders;
-
     public ClassesService(CustomClassnameMapper customClassMap) {
         this.customClassMap = customClassMap;
         this.autoClassMap = new HashMap<>();
-        builders = new HashMap<>();
     }
 
     public ClassesService() {
         this(new CustomClassnameMapper());
-    }
-
-    public BiFunction<ClavaData, List<ClavaNode>, ClavaNode> getBuilder(Class<? extends ClavaNode> clavaNodeClass,
-            Class<? extends ClavaData> clavaDataClass) {
-
-        // Check if builder is ready
-        BiFunction<ClavaData, List<ClavaNode>, ClavaNode> builder = builders.get(clavaNodeClass);
-        if (builder != null) {
-            return builder;
-        }
-
-        // Create and store builder
-        try {
-
-            Constructor<? extends ClavaNode> constructor = clavaNodeClass.getConstructor(clavaDataClass,
-                    Collection.class);
-            builder = (node, children) -> {
-                try {
-                    return constructor.newInstance(node, children);
-                } catch (Exception e) {
-                    throw new RuntimeException("Could not call constructor for ClavaNode", e);
-                }
-            };
-
-            builders.put(clavaNodeClass, builder);
-
-            return builder;
-        } catch (Exception e) {
-            SpecsLogs.msgLib("Could not create constructor for ClavaNode:" + e.getMessage());
-            return null;
-        }
-
     }
 
     public Class<? extends ClavaNode> getClass(String classname, DataStore data) {

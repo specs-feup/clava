@@ -41,6 +41,7 @@ import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.utils.ZipResourceManager;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -132,6 +133,8 @@ public class ClangDumperParser {
 
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
+        ClavaContext context = new ClavaContext(arguments);
+
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
         // LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance();
         // if (SpecsSystem.isDebug()) {
@@ -139,7 +142,7 @@ public class ClangDumperParser {
         // }
 
         ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                inputStream -> processStdErr(inputStream, arguments));
+                inputStream -> processStdErr(inputStream, context));
 
         String warnings = output.getStdErr().get(LINES_NOT_PARSED);
 
@@ -160,9 +163,9 @@ public class ClangDumperParser {
         return clangStreamParser.parse();
     }
 
-    private DataStore processStdErr(InputStream inputStream, List<String> arguments) {
+    private DataStore processStdErr(InputStream inputStream, ClavaContext context) {
         // Create LineStreamParser
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(arguments);
+        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(context);
 
         // Set debug
         if (SpecsSystem.isDebug()) {
@@ -356,10 +359,11 @@ public class ClangDumperParser {
         File testFile = testResource.write(testFolder);
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
+        ClavaContext context = new ClavaContext(arguments);
 
         // LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance();
         ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments,
-                this::processOutput, inputStream -> processStdErr(inputStream, arguments));
+                this::processOutput, inputStream -> processStdErr(inputStream, context));
 
         boolean foundInclude = !output.getStdOut().isEmpty();
 

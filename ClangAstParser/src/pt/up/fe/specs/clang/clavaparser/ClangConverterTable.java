@@ -140,14 +140,11 @@ public class ClangConverterTable implements AutoCloseable {
 
         // Check if parsed nodes contains a valid node
         ClavaNode newClavaNode = getClangRootData().getNewParsedNodes().get(clangNode.getExtendedId());
-        // if (newClavaNode != null && !(newClavaNode instanceof UnsupportedNode)) {
         if (newClavaNode != null && !(newClavaNode instanceof DummyNode)) {
             // TODO: Replace with map?
             newParsedNodes++;
             return newNodeParsers.get(newClavaNode.getClass()).apply(this).parse(clangNode);
-            // return NewClavaNodeParser.newInstance(newClavaNode.getClass()).apply(this).parse(clangNode);
         }
-        // converter.put("AlignedAttr", NewClavaNodeParser.newInstance(AlignedAttr.class));
 
         // If map does not have a conversor, stop
         if (!converter.containsKey(clangNode.getName())) {

@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clang.parsers;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -47,11 +46,13 @@ public class ClangStreamParserV2 {
         WORKERS.put(worker.getId(), worker);
     }
 
-    public static LineStreamParserV2 newInstance(List<String> arguments) {
+    // public static LineStreamParserV2 newInstance(List<String> arguments) {
+    public static LineStreamParserV2 newInstance(ClavaContext context) {
         LineStreamParserV2 streamParser = LineStreamParserV2.newInstance(WORKERS);
 
         // Create ClavaContext
-        streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
+        // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
+        streamParser.getData().add(ClavaNode.CONTEXT, context);
 
         return streamParser;
         // return LineStreamParserV2.newInstance(WORKERS);

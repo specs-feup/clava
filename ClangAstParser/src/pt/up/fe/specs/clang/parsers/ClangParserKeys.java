@@ -26,7 +26,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.ClavaData;
 
 public interface ClangParserKeys {
 
@@ -35,15 +34,6 @@ public interface ClangParserKeys {
      */
     DataKey<Map<String, ClavaNode>> CLAVA_NODES = KeyFactory.generic("clang_parser_stream_clava_nodes",
             new HashMap<>());
-
-    /**
-     * Currently parsed ClavaData instances.
-     * 
-     * @deprecated replaced by NODE_DATA
-     */
-    @Deprecated
-    DataKey<Map<String, ClavaData>> CLAVA_DATA = KeyFactory.generic("clang_parser_stream_clava_data",
-            new HashMap<String, ClavaData>());
 
     DataKey<Map<String, DataStore>> NODE_DATA = KeyFactory.generic("clang_parser_stream_node_data",
             new HashMap<String, DataStore>());

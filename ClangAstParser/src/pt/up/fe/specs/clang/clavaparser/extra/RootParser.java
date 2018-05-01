@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -204,8 +205,11 @@ public class RootParser extends AClangNodeParser<App> {
         }
 
         // Create App
-
-        App app = ClavaNodeFactory.app(tUnits);
+        // App app = ClavaNodeFactory.app(tUnits);
+        App app = getConfig()
+                .get(ClavaNode.CONTEXT)
+                .get(ClavaContext.FACTORY)
+                .app(tUnits);
 
         app.setIdsAlias(normalizedClangNodes.getRepeatedIdsMap());
 
