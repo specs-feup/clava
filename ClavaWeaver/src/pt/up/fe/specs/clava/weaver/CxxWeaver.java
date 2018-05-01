@@ -38,6 +38,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
@@ -1039,5 +1041,9 @@ public class CxxWeaver extends ACxxWeaver {
         int unitResults = LaraUnitLauncher.execute(dataStore, getClass().getName());
 
         return unitResults == 0;
+    }
+
+    public static ClavaFactory getFactory() {
+        return getCxxWeaver().getApp().getContext().get(ClavaContext.FACTORY);
     }
 }

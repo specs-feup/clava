@@ -164,14 +164,6 @@ public class AstFactory {
         return CxxJoinpoints.create(type, null);
     }
 
-    public static ACxxWeaverJoinPoint builtinType(String typeCode) {
-        BuiltinKind kind = BuiltinKind.getHelper().valueOf(typeCode);
-
-        BuiltinType type = ClavaNodeFactory.builtinType(kind);
-
-        return CxxJoinpoints.create(type, null);
-    }
-
     public static CxxFunction functionVoid(String name) {
         BuiltinType voidType = ClavaNodeFactory.builtinType(BuiltinKind.VOID);
         FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
@@ -186,6 +178,7 @@ public class AstFactory {
     }
 
     public static AExpression integerLiteral(int integer) {
+
         Type intType = ClavaNodeFactory.builtinType(BuiltinKind.INT);
         IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
                 ClavaNodeInfo.undefinedInfo());
@@ -432,6 +425,16 @@ public class AstFactory {
         Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(), body);
 
         return CxxJoinpoints.create(switchStmt, null, AStatement.class);
+    }
+
+    ////// Methods that use ClavaFactory
+
+    public static ACxxWeaverJoinPoint builtinType(String typeCode) {
+        BuiltinKind kind = BuiltinKind.getHelper().valueOf(typeCode);
+
+        BuiltinType type = CxxWeaver.getFactory().builtinType(kind);
+
+        return CxxJoinpoints.create(type, null);
     }
 
 }
