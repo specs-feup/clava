@@ -14,10 +14,10 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -35,15 +35,8 @@ public class CharacterLiteral extends Literal {
 
     /// DATAKEYS END
 
-    public CharacterLiteral(CharacterLiteralData data, Collection<? extends ClavaNode> children) {
-        super(data, Collections.emptyList());
-        //
-        // if (!getCode().equals(getLiteral())) {
-        // System.out.println("CHAR CODE:" + getCode());
-        // System.out.println("CHAR LITERAL:" + getLiteral());
-        // throw new RuntimeException("STOP");
-        // }
-
+    public CharacterLiteral(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     /**
@@ -72,7 +65,7 @@ public class CharacterLiteral extends Literal {
 
     @Override
     public String getCode() {
-        String sourceLiteral = getData().getSourceLiteral();
+        String sourceLiteral = get(SOURCE_LITERAL);
 
         // If source literal starts with ', then just return
         if (sourceLiteral.startsWith("'")) {
@@ -87,7 +80,7 @@ public class CharacterLiteral extends Literal {
     }
 
     private String getCodeFromUnicode(String sourceLiteralPrefix) {
-        String hexString = SpecsStrings.toHexString(getData().getValue(), 8).substring("0x".length());
+        String hexString = SpecsStrings.toHexString(get(VALUE), 8).substring("0x".length());
         return sourceLiteralPrefix + "'\\U" + hexString + "'";
     }
 

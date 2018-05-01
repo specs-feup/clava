@@ -18,6 +18,7 @@ import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -35,7 +36,7 @@ public class FloatingLiteral extends Literal {
 
     private static final double ERROR_THRESHOLD = 1e-6;
 
-    public FloatingLiteral(FloatingLiteralData data, Collection<? extends ClavaNode> children) {
+    public FloatingLiteral(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
     }
@@ -73,7 +74,7 @@ public class FloatingLiteral extends Literal {
             // System.out.println("COULD NOT PARSE: " + literal);
         }
 
-        double diff = Math.abs((parsedDouble - getData().getValue()));
+        double diff = Math.abs((parsedDouble - get(VALUE)));
 
         // There is no difference, return literal
         if (diff == 0.0) {
@@ -86,7 +87,7 @@ public class FloatingLiteral extends Literal {
         }
 
         // Return approximate value
-        return Double.toString(getData().getValue());
+        return Double.toString(get(VALUE));
 
         // System.out.println("LITERAL VALUE:" + getLiteral());
         // System.out.println("APPROXIMATE VALUE:" + getData().getValue());
