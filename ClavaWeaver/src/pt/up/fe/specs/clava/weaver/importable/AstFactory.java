@@ -105,6 +105,8 @@ public class AstFactory {
         }
 
         Expr initExpr = (Expr) expr;
+        System.out.println("Init expr:" + initExpr);
+        System.out.println("Init expr code:" + initExpr.getCode());
 
         boolean isUsed = true;
         boolean isImplicit = false;
@@ -122,7 +124,8 @@ public class AstFactory {
         VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
                 InitializationStyle.CINIT, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
-        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, initExpr.getInfo(), initExpr);
+        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, ClavaNodeInfo.undefinedInfo(),
+                initExpr);
 
         return CxxJoinpoints.create(varDecl, null, AVardecl.class);
     }
