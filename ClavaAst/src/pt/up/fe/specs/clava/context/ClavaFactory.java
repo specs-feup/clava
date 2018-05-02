@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -100,6 +101,7 @@ public class ClavaFactory {
 
     public IntegerLiteral integerLiteral(int integer) {
         DataStore data = newExprDataStore()
+                .put(Literal.SOURCE_LITERAL, Integer.toString(integer))
                 .put(IntegerLiteral.VALUE, BigInteger.valueOf(integer))
                 .put(Expr.TYPE, builtinType(BuiltinKind.INT));
 
@@ -108,6 +110,7 @@ public class ClavaFactory {
 
     public FloatingLiteral floatingLiteral(FloatKind floatKind, double value) {
         DataStore data = newExprDataStore()
+                .put(Literal.SOURCE_LITERAL, Double.toString(value))
                 .put(FloatingLiteral.VALUE, value)
                 .put(Expr.TYPE, builtinType(floatKind.getBuiltinKind()));
 
