@@ -36,7 +36,6 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.enums.ExceptionType;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
@@ -426,8 +425,8 @@ public class ClangDataParsers {
         return new ParserResult<>(parser.getCurrentString(), cxxNamedCastExprData);
     }
 
-    public static <T extends VarDeclDataV2> ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node,
-            DataStore streamData, Class<? extends VarDeclDataV2> varDeclClass) {
+    public static ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node,
+            DataStore streamData) {
         // DataStore streamData, DataKey<Map<String, T>> key) {
         StringParser parser = new StringParser(string);
 

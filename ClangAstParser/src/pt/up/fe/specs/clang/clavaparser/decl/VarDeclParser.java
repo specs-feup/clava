@@ -28,7 +28,6 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.VarDeclDataV2;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.QualType;
@@ -57,7 +56,7 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         String varName = parser.apply(StringParsers::parseWord);
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
-        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr(), VarDeclDataV2.class);
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr());
 
         // System.out.println("NAME: " + varName);
         // System.out.println(

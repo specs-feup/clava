@@ -28,7 +28,6 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.ParmVarDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -65,8 +64,7 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
 
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
-        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr(),
-                ParmVarDeclData.class);
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr());
         List<ClavaNode> children = parseChildren(node);
         checkNewChildren(node.getExtendedId(), children);
 
