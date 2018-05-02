@@ -137,7 +137,7 @@ public class ClangStreamParser {
         */
 
         // Add text elements (comments, pragmas) to the tree
-        new TextParser().addElements(app);
+        new TextParser(app.getContext()).addElements(app);
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree

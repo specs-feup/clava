@@ -114,8 +114,6 @@ public class ClavaPostProcessing {
 
             if (elaboratedType.hasDataI()) {
                 elaboratedType.getDataI().set(ElaboratedType.TYPE_AS_STRING, newBareType);
-            } else if (elaboratedType.hasData()) {
-                elaboratedType.getData().setTypeAsString(newBareType);
             } else {
                 elaboratedType.getTypeData().setBareType(newBareType);
             }

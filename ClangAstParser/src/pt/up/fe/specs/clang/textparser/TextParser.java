@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.textparser;
 
+import static pt.up.fe.specs.clava.context.ClavaContext.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,12 +46,12 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -66,6 +68,13 @@ public class TextParser {
     private static final List<TextParserRule> RULES = Arrays.asList(
             new InlineCommentRule(), new MultiLineCommentRule(), new PragmaRule(), new PragmaMacroRule());
 
+    private final ClavaContext context;
+
+    public TextParser(ClavaContext context) {
+
+        this.context = context;
+    }
+
     /**
      * Adds text elements to the App tree.
      * 
@@ -77,7 +86,7 @@ public class TextParser {
         }
     }
 
-    private static void addElements(TranslationUnit tu) {
+    private void addElements(TranslationUnit tu) {
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
 
@@ -272,7 +281,7 @@ public class TextParser {
         }
     }
 
-    private static List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
+    private List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
         // Guard nodes for the translation unit
         SourceRange dummyStartLoc = new SourceRange(tu.getFilepath(), 0, 0, 0, 0);
         // ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
@@ -283,10 +292,12 @@ public class TextParser {
         // DummyDeclData startData = new DummyDeclData("Textparser_StartGuard",
         // DeclDataV2.empty(ClavaData.newInstance(dummyStartLoc)));
 
-        DummyDeclData startData = DummyDeclData.empty();
-        startData.setClassname("Textparser_StartGuard")
-                .setLocation(dummyStartLoc);
-        DummyDecl startGuard = new DummyDecl(startData, Collections.emptyList());
+        DummyDecl startGuard = context.get(FACTORY).dummyDecl("Textparser_StartGuard");
+        startGuard.setLocation(dummyStartLoc);
+        // DummyDeclData startData = DummyDeclData.empty();
+        // startData.setClassname("Textparser_StartGuard")
+        // .setLocation(dummyStartLoc);
+        // DummyDecl startGuard = new DummyDecl(startData, Collections.emptyList());
 
         // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
@@ -297,10 +308,13 @@ public class TextParser {
         // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
         // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
         // Collections.emptyList());
-        DummyDeclData endData = DummyDeclData.empty();
-        endData.setClassname("Textparser_EndGuard")
-                .setLocation(dummyEndLoc);
-        DummyDecl endGuard = new DummyDecl(endData, Collections.emptyList());
+        DummyDecl endGuard = context.get(FACTORY).dummyDecl("Textparser_EndGuard");
+        endGuard.setLocation(dummyEndLoc);
+
+        // DummyDeclData endData = DummyDeclData.empty();
+        // endData.setClassname("Textparser_EndGuard")
+        // .setLocation(dummyEndLoc);
+        // DummyDecl endGuard = new DummyDecl(endData, Collections.emptyList());
 
         tu.addChild(0, startGuard);
         tu.addChild(tu.getNumChildren(), endGuard);
