@@ -54,6 +54,8 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class StreamParser {
 
+    private static final boolean STOP_ON_UNEXPECTED_OUTPUT = false;
+
     private static final String TRANSLATION_UNIT_SET_PREFIX = "COUNTER";
 
     public static String getTranslationUnitSetPrefix() {
@@ -375,6 +377,10 @@ public class StreamParser {
             // }
 
             // Add line to the warnings
+            if (STOP_ON_UNEXPECTED_OUTPUT) {
+                throw new RuntimeException("Unexpected output: '" + currentLine + "'");
+            }
+
             warnings.append(currentLine).append("\n");
             SpecsLogs.msgInfo(currentLine);
         }
