@@ -62,6 +62,7 @@ public class TypeDataParser {
         data.add(QualType.C99_QUALIFIERS, GeneralParsers.enumListFromName(C99Qualifier.getHelper(), lines));
         data.add(QualType.ADDRESS_SPACE_QUALIFIER, GeneralParsers.enumFromName(AddressSpaceQualifierV2.getHelper(),
                 lines));
+        data.add(QualType.ADDRESS_SPACE, GeneralParsers.parseLong(lines));
 
         return data;
 
