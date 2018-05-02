@@ -28,7 +28,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ast.ClavaData;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -101,8 +100,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     // private final Location location;
     private ClavaNodeInfo info;
 
-    private ClavaData data;
-
     private DataStore dataI;
 
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
@@ -110,15 +107,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
         info = nodeInfo != null ? nodeInfo : ClavaNodeInfo.undefinedInfo();
         inlineComments = null;
-        data = null;
-    }
-
-    public ClavaNode(ClavaData data, Collection<? extends ClavaNode> children) {
-        super(children);
-
-        info = null;
-        inlineComments = null;
-        this.data = data;
     }
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
@@ -126,7 +114,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
         info = null;
         inlineComments = null;
-        this.data = null;
         this.dataI = dataI;
 
         // Set definition of DataStore
@@ -153,10 +140,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     public String toContentString() {
         if (hasDataI()) {
             return getDataI().toInlinedString();
-        }
-
-        if (hasData()) {
-            return getData().toString();
         }
 
         if (getClavaId().isPresent()) {
@@ -199,10 +182,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return getDataI().get(LOCATION);
         }
 
-        if (hasData()) {
-            return getData().getLocation();
-        }
-
         SourceRange sourceRange = info.getLocation();
 
         if (sourceRange == null) {
@@ -220,7 +199,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     @Deprecated
     public Optional<ClavaId> getClavaId() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             throw new RuntimeException("Not implemented for nodes with ClavaData");
         }
         return info.getId();
@@ -231,9 +210,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return Optional.ofNullable(getDataI().get(ID));
         }
 
-        if (hasData()) {
-            return Optional.ofNullable(data.getId());
-        }
         return info.getId().map(id -> id.getExtendedId());
     }
 
@@ -242,9 +218,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return getDataI().get(ID);
         }
 
-        if (hasData()) {
-            return data.getId();
-        }
         return info.getId().map(id -> id.getExtendedId()).orElse(null);
     }
 
@@ -256,7 +229,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     @Deprecated
     public ClavaNodeInfo getInfo() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             throw new RuntimeException("Not implemented for nodes with ClavaData");
         }
         return info;
@@ -395,10 +368,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return Optional.of(getDataI().get(LOCATION));
         }
 
-        if (hasData()) {
-            return Optional.of(data.getLocation());
-        }
-
         return info.getLocationTry();
     }
 
@@ -423,11 +392,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     public void associateComment(InlineComment inlineComment) {
         if (hasDataI()) {
             addInlineComment(inlineComment);
-            return;
-        }
-
-        if (hasData()) {
-            data.addInlineComment(inlineComment);
             return;
         }
 
@@ -460,10 +424,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return super.copy();
         }
 
-        if (hasData()) {
-            return super.copy();
-        }
-
         // Create copy
         ClavaNode copy = super.copy();
 
@@ -492,9 +452,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return getDataI().get(INLINE_COMMENTS);
         }
 
-        if (hasData()) {
-            return data.getInlineComments();
-        }
         return inlineComments == null ? Collections.emptyList() : inlineComments;
     }
 
@@ -559,16 +516,25 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return;
         }
 
-        if (hasData()) {
-            // data = data.setId(newId);
-            data.setId(newId);
-            return;
-        }
         info.setId(newId);
     }
 
-    public void setData(ClavaData data) {
-        this.data = data;
+    public ClavaNode setLocation(SourceRange location) {
+        checkDataStore();
+
+        getDataI().set(LOCATION, location);
+
+        return this;
+    }
+
+    /**
+     * Throws exception if this node does not have a DataStore defined.
+     */
+    private void checkDataStore() {
+        if (!hasDataI()) {
+            throw new RuntimeException("This method is only supported by DataStore-based ClavaNodes");
+        }
+
     }
 
     /**
@@ -591,30 +557,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return Optional.empty();
     }
 
-    /**
-     * The data associated with this node.
-     * 
-     * <p>
-     * While in transition between ClavaData nodes and Legacy nodes, ClavaData nodes should not be directly accessed
-     * (e.g., .getData()). To maintain compatibility, implement getters in the ClavaNode instances.
-     * 
-     * @return
-     */
-    public ClavaData getData() {
-        if (data == null) {
-            throw new RuntimeException("ClavaData is not defined");
-        }
-        return data;
-    }
-
     public DataStore getDataI() {
         if (dataI != null) {
             return dataI;
-        }
-
-        // Try data
-        if (data != null) {
-            return data.getData();
         }
 
         throw new RuntimeException("DataStore is not defined");
@@ -628,15 +573,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     // protected void setData(ClavaData data) {
     // this.data = data;
     // }
-
-    /**
-     * TODO: If legacy code is removed, this method becomes obsolete.
-     * 
-     * @return
-     */
-    public boolean hasData() {
-        return data != null;
-    }
 
     public boolean hasDataI() {
         return dataI != null;

@@ -24,7 +24,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.IntegerLiteralData;
 
 /**
  * Represents an implicit type conversion which has no direct representation in the original source code.
@@ -56,11 +55,6 @@ public class IntegerLiteral extends Literal {
         // According to CPP reference, all literals (except for string literal) are rvalues
         // http://en.cppreference.com/w/cpp/language/value_category
         super(exprData, info, Collections.emptyList());
-    }
-
-    @Override
-    public IntegerLiteralData getData() {
-        return (IntegerLiteralData) super.getData();
     }
 
     public BigInteger getValue() {

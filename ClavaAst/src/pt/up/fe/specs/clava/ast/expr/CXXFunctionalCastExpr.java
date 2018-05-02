@@ -41,7 +41,7 @@ public class CXXFunctionalCastExpr extends CastExpr {
     }
 
     public static CXXFunctionalCastExpr newInstance(String targetType, CastExpr cast, Expr subExpr) {
-        if (cast.hasData() || cast.hasDataI()) {
+        if (cast.hasDataI()) {
             throw new RuntimeException("Not implemented for ClavaData nodes");
         }
 

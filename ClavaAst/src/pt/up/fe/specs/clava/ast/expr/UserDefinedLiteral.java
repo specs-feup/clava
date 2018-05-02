@@ -62,10 +62,6 @@ public class UserDefinedLiteral extends CallExpr {
             return getLiteral();
         }
 
-        if (getCookedLiteralExpr().hasData()) {
-            return getLiteral();
-        }
-
         StringBuilder code = new StringBuilder();
 
         code.append(getLiteral());

@@ -23,7 +23,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data2.BuiltinTypeData;
 
 public class BuiltinType extends Type {
 
@@ -39,10 +38,6 @@ public class BuiltinType extends Type {
         super(data, children);
     }
 
-    public BuiltinType(BuiltinTypeData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
     /**
      * @deprecated for legacy support
      * @param data
@@ -52,11 +47,6 @@ public class BuiltinType extends Type {
     @Deprecated
     protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(data, info, children);
-    }
-
-    @Override
-    public BuiltinTypeData getData() {
-        return (BuiltinTypeData) super.getData();
     }
 
     @Override
@@ -72,10 +62,6 @@ public class BuiltinType extends Type {
     public BuiltinKind getKind() {
         if (hasDataI()) {
             return getDataI().get(KIND);
-        }
-
-        if (hasData()) {
-            return getData().getKind();
         }
 
         return getDataI().get(KIND);

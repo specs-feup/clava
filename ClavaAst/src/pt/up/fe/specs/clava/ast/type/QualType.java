@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
@@ -29,7 +30,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data2.QualTypeDataV2;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
@@ -57,6 +57,12 @@ public class QualType extends Type {
     private final QualTypeData qualTypeData;
     // private final List<Qualifier> qualifiers;
 
+    public QualType(DataStore data, List<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.qualTypeData = null;
+    }
+
     public QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info, Type qualifiedType) {
         this(qualTypeData, typeData, info, Arrays.asList(qualifiedType));
     }
@@ -66,11 +72,6 @@ public class QualType extends Type {
         super(typeData, info, children);
 
         this.qualTypeData = qualTypeData;
-    }
-
-    @Override
-    public QualTypeDataV2 getData() {
-        return (QualTypeDataV2) super.getData();
     }
 
     @Override
@@ -231,10 +232,6 @@ public class QualType extends Type {
     public List<String> getQualifierStrings() {
         if (hasDataI()) {
             return getQualifiersPrivate();
-        }
-
-        if (hasData()) {
-            return getData().getQualifiers();
         }
 
         return qualTypeData.getQualifiers().stream().map(Qualifier::name).collect(Collectors.toList());

@@ -25,7 +25,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
 
 /**
  * Represents one declaration (or definition).
@@ -55,17 +54,6 @@ public abstract class Decl extends ClavaNode {
         super(data, children);
 
         this.data = null;
-    }
-
-    public Decl(DeclDataV2 data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-
-        this.data = null;
-    }
-
-    @Override
-    public DeclDataV2 getData() {
-        return (DeclDataV2) super.getData();
     }
 
     /**

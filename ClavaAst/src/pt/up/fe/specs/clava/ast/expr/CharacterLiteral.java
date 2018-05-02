@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.CharacterLiteralData;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.util.SpecsStrings;
 
@@ -54,13 +53,8 @@ public class CharacterLiteral extends Literal {
         super(exprData, info, children);
     }
 
-    @Override
-    public CharacterLiteralData getData() {
-        return (CharacterLiteralData) super.getData();
-    }
-
     public long getCharValue() {
-        return getData().getValue();
+        return get(VALUE);
     }
 
     @Override

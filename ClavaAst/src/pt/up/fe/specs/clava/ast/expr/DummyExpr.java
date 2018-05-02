@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.DummyExprData;
 
 /**
  * Dummy statement, for testing purposes.
@@ -36,15 +35,6 @@ public class DummyExpr extends Expr implements DummyNode {
         super(data, children);
     }
 
-    public DummyExpr(DummyExprData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    @Override
-    public DummyExprData getData() {
-        return (DummyExprData) super.getData();
-    }
-
     public DummyExpr(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(ExprData.empty(), info, children);
     }
@@ -55,17 +45,12 @@ public class DummyExpr extends Expr implements DummyNode {
     }
 
     public String getNodeCode() {
-        return "/* Dummy expr '" + getData().getContent() + "'*/";
+        return "/* Dummy expr '" + getContent() + "'*/";
     }
 
     @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    public String getContent() {
-        return getData().getContent();
     }
 
 }

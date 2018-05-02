@@ -19,8 +19,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
-import pt.up.fe.specs.clava.ast.decl.data2.DeclDataV2;
-import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -53,10 +51,6 @@ public class ClavaNodesLegacy {
             return new ExprStmt(exprStmtData, Arrays.asList(expr));
         }
 
-        if (expr.hasData()) {
-            return new ExprStmt(hasSemicolon, expr);
-        }
-
         if (hasSemicolon) {
             return new ExprStmtLegacy(expr.getInfo(), expr);
         } else {
@@ -71,11 +65,6 @@ public class ClavaNodesLegacy {
                     .put(DummyNode.DUMMY_CONTENT, node.getClass().getSimpleName());
 
             return new DummyDecl(dummyData, node.getChildren());
-        }
-
-        if (node.hasData()) {
-            return new DummyDecl(new DummyDeclData(node.getClass().getSimpleName(), DeclDataV2.empty(node.getData())),
-                    node.getChildren());
         }
 
         return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());

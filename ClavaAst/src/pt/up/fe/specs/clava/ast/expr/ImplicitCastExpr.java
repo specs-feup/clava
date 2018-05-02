@@ -16,10 +16,11 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.CastExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 
@@ -31,7 +32,7 @@ import pt.up.fe.specs.clava.language.CastKind;
  */
 public class ImplicitCastExpr extends CastExpr {
 
-    public ImplicitCastExpr(CastExprData data, Collection<? extends ClavaNode> children) {
+    public ImplicitCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

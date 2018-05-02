@@ -21,7 +21,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 
 /**
  * Represents statements.
@@ -32,10 +31,6 @@ import pt.up.fe.specs.clava.ast.stmt.data.StmtData;
 public abstract class Stmt extends ClavaNode {
 
     public Stmt(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    public Stmt(StmtData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

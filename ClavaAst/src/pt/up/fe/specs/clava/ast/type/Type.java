@@ -27,7 +27,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.NotSupportedByClavaDataException;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
@@ -54,10 +53,6 @@ public abstract class Type extends ClavaNode {
         super(data, children);
     }
 
-    public Type(TypeDataV2 dataV2, Collection<? extends ClavaNode> children) {
-        super(dataV2, children);
-    }
-
     /**
      * For legacy.
      * 
@@ -71,18 +66,13 @@ public abstract class Type extends ClavaNode {
         this.data = data;
     }
 
-    @Override
-    public TypeDataV2 getData() {
-        return (TypeDataV2) super.getData();
-    }
-
     /**
      * @deprecated
      * @return
      */
     @Deprecated
     public TypeData getTypeData() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             throw new NotSupportedByClavaDataException();
         }
         return data;
@@ -137,9 +127,6 @@ public abstract class Type extends ClavaNode {
         if (hasDataI()) {
             return getDataI().get(TYPE_AS_STRING);
         }
-        if (hasData()) {
-            return getData().getTypeAsString();
-        }
 
         return data.getBareType();
     }
@@ -157,12 +144,6 @@ public abstract class Type extends ClavaNode {
             return copy;
         }
 
-        if (hasData()) {
-            Type copy = copy();
-            copy.getData().setTypeAsString(type);
-            return copy;
-        }
-
         Type copy = copy();
         copy.data.setBareType(type);
         return copy;
@@ -170,7 +151,7 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public String toContentString() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             return super.toContentString();
         }
         return super.toContentString() + getCode();
@@ -288,10 +269,6 @@ public abstract class Type extends ClavaNode {
             return getDataI().get(HAS_SUGAR);
         }
 
-        if (hasData()) {
-            return getData().hasSugar();
-        }
-
         return getTypeData().hasSugar();
     }
 
@@ -347,7 +324,7 @@ public abstract class Type extends ClavaNode {
     }
 
     protected Type desugarImpl() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             // If has sugar, first child is always the desugared type
             return getChild(Type.class, 0);
         }

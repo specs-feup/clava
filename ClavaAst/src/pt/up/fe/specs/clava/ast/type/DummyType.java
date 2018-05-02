@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
 
 /**
  * Dummy type, for testing purposes.
@@ -33,10 +32,6 @@ import pt.up.fe.specs.clava.ast.type.data2.DummyTypeData;
 public class DummyType extends Type implements DummyNode {
 
     public DummyType(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    public DummyType(DummyTypeData data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
@@ -51,23 +46,13 @@ public class DummyType extends Type implements DummyNode {
         super(typeData, info, children);
     }
 
-    @Override
-    public DummyTypeData getData() {
-        return (DummyTypeData) super.getData();
-    }
-
     public String getNodeCode() {
-        return "// Dummy type '" + getData().getContent() + "'";
+        return "// Dummy type '" + getContent() + "'";
     }
 
     @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    public String getContent() {
-        return getData().getContent();
     }
 
 }

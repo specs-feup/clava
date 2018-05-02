@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data2.DummyDeclData;
 
 /**
  * Dummy declaration, for testing purposes.
@@ -36,14 +35,6 @@ public class DummyDecl extends Decl implements DummyNode {
         super(clavaData, children);
     }
 
-    public DummyDecl(DummyDeclData clavaData, Collection<? extends ClavaNode> children) {
-        super(clavaData, children);
-    }
-
-    // public DummyDecl(ClavaNode node) {
-    // this(new DummyDeclData(node.getClass().getSimpleName(), DeclDataV2.empty(node.getData())), node.getChildren());
-    // }
-
     /**
      * For legacy support.
      * 
@@ -55,27 +46,17 @@ public class DummyDecl extends Decl implements DummyNode {
     }
 
     @Override
-    public DummyDeclData getData() {
-        return (DummyDeclData) super.getData();
-    }
-
-    @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + getData().getClassname() + ")";
+        return super.getNodeName() + " (" + getContent() + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy declaration '" + getData().getClassname() + "' */";
+        return "/* Dummy declaration '" + getContent() + "' */";
     }
 
     @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    public String getContent() {
-        return getData().toString();
     }
 
 }

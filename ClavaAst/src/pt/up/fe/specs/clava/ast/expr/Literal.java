@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.LiteralData;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
@@ -53,19 +52,10 @@ public abstract class Literal extends Expr {
         super(exprData, info, children);
     }
 
-    @Override
-    public LiteralData getData() {
-        return (LiteralData) super.getData();
-    }
-
     // public abstract String getLiteral();
     public String getLiteral() {
         if (hasDataI()) {
             return getDataI().get(SOURCE_LITERAL);
-        }
-
-        if (hasData()) {
-            return getData().getSourceLiteral();
         }
 
         throw new NotImplementedException(this);

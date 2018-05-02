@@ -23,7 +23,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.FloatingLiteralData;
 import pt.up.fe.specs.util.SpecsStrings;
 
 public class FloatingLiteral extends Literal {
@@ -51,11 +50,6 @@ public class FloatingLiteral extends Literal {
      */
     public FloatingLiteral(ExprData exprData, ClavaNodeInfo info) {
         super(exprData, info, Collections.emptyList());
-    }
-
-    @Override
-    public FloatingLiteralData getData() {
-        return (FloatingLiteralData) super.getData();
     }
 
     @Override

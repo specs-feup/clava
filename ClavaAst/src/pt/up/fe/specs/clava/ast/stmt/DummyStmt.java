@@ -21,7 +21,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.stmt.data.DummyStmtData;
 
 /**
  * Dummy statement, for testing purposes.
@@ -35,10 +34,6 @@ public class DummyStmt extends Stmt implements DummyNode {
         super(data, children);
     }
 
-    public DummyStmt(DummyStmtData data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
     /**
      * Legacy support.
      * 
@@ -49,23 +44,13 @@ public class DummyStmt extends Stmt implements DummyNode {
         super(info, children);
     }
 
-    @Override
-    public DummyStmtData getData() {
-        return (DummyStmtData) super.getData();
-    }
-
     public String getNodeCode() {
-        return "/* Dummy statement '" + getData().getContent() + "'*/";
+        return "/* Dummy statement '" + getContent() + "'*/";
     }
 
     @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    public String getContent() {
-        return getData().getContent();
     }
 
 }

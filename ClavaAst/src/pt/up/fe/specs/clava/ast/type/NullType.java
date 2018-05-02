@@ -16,10 +16,11 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data2.TypeDataV2;
 import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
@@ -37,7 +38,7 @@ public class NullType extends Type implements NullNode {
         super(new TypeData("<null type>"), info, Collections.emptyList());
     }
 
-    public NullType(TypeDataV2 data, Collection<? extends ClavaNode> children) {
+    public NullType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

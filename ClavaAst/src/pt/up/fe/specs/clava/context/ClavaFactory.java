@@ -20,9 +20,12 @@ import java.util.List;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -31,6 +34,7 @@ public class ClavaFactory {
 
     private static final String TYPE_ID_PREFIX = "type_";
     private static final String EXPR_ID_PREFIX = "expr_";
+    private static final String DECL_ID_PREFIX = "decl_";
     private static final String EXTRA_ID_PREFIX = "extra_";
     // private static final String DECL_ID_PREFIX = "decl_";
 
@@ -74,6 +78,10 @@ public class ClavaFactory {
         return newDataStore(EXTRA_ID_PREFIX);
     }
 
+    private DataStore newDeclDataStore() {
+        return newDataStore(DECL_ID_PREFIX);
+    }
+
     /// EXTRA
 
     public App app(List<TranslationUnit> tUnits) {
@@ -96,6 +104,23 @@ public class ClavaFactory {
                 .put(Expr.TYPE, builtinType(BuiltinKind.INT));
 
         return new IntegerLiteral(data, Collections.emptyList());
+    }
+
+    public FloatingLiteral floatingLiteral(FloatKind floatKind, double value) {
+        DataStore data = newExprDataStore()
+                .put(FloatingLiteral.VALUE, value)
+                .put(Expr.TYPE, builtinType(floatKind.getBuiltinKind()));
+
+        return new FloatingLiteral(data, Collections.emptyList());
+    }
+
+    /// DECLS
+
+    public DummyDecl dummyDecl(String dummyContent) {
+        DataStore data = newDeclDataStore()
+                .put(DummyDecl.DUMMY_CONTENT, dummyContent);
+
+        return new DummyDecl(data, Collections.emptyList());
     }
 
 }

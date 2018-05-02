@@ -178,10 +178,6 @@ public class BuiltinTypeLegacy extends BuiltinType {
 
     @Override
     public String toContentString() {
-        if (getData() != null) {
-            // toContentString(super.toContentString(), "kind: " + getData().getKind());
-            return getData().toString();
-        }
         return super.toContentString() + ", keywords: " + getKeywords();
     }
 

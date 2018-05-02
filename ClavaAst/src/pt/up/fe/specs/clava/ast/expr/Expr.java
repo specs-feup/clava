@@ -24,7 +24,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data2.ExprDataV2;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -61,10 +60,6 @@ public abstract class Expr extends ClavaNode implements Typable {
         super(data, children);
     }
 
-    public Expr(ExprDataV2 data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
     /**
      * For legacy.
      * 
@@ -80,19 +75,11 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     @Override
-    public ExprDataV2 getData() {
-        return (ExprDataV2) super.getData();
-    }
-
-    @Override
     public Type getType() {
         if (hasDataI()) {
             return getDataI().get(TYPE);
         }
-        if (hasData()) {
-            // System.out.println(getClass().getSimpleName() + ": DATA");
-            return getData().getType();
-        }
+
         // System.out.println(getClass().getSimpleName() + ": Legacy");
         return exprData.getType();
     }
@@ -101,17 +88,6 @@ public abstract class Expr extends ClavaNode implements Typable {
     public void setType(Type type) {
         if (hasDataI()) {
             getDataI().put(TYPE, type);
-            return;
-        }
-
-        if (hasData()) {
-            getData().setType(type);
-
-            /*
-            ExprDataV2 copy = SpecsSystem.copy(getData());
-            copy.setType(type);
-            setData(copy);
-            */
             return;
         }
 
@@ -132,14 +108,11 @@ public abstract class Expr extends ClavaNode implements Typable {
             return getDataI().get(VALUE_KIND);
         }
 
-        if (hasData()) {
-            return getData().getValueKind();
-        }
         return exprData.getValueKind();
     }
 
     public ExprData getExprData() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             throw new RuntimeException("This is a ClavaData node, .getExprData should not be used");
         }
         return exprData;
@@ -147,7 +120,7 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public String toContentString() {
-        if (hasData() || hasDataI()) {
+        if (hasDataI()) {
             return super.toContentString();
         }
 
@@ -190,21 +163,12 @@ public abstract class Expr extends ClavaNode implements Typable {
             return;
         }
 
-        if (hasData()) {
-            getData().setImplicitCast(implicitCast);
-            return;
-        }
-
         this.implicitCast = implicitCast;
     }
 
     public Optional<ImplicitCastExpr> getImplicitCast() {
         if (hasDataI()) {
             return Optional.ofNullable(getDataI().get(IMPLICIT_CAST));
-        }
-
-        if (hasData()) {
-            return getData().getImplicitCast();
         }
 
         return Optional.ofNullable(implicitCast);
