@@ -1044,6 +1044,10 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public static ClavaFactory getFactory() {
-        return getCxxWeaver().getApp().getContext().get(ClavaContext.FACTORY);
+        return getContex().get(ClavaContext.FACTORY);
+    }
+
+    public static ClavaContext getContex() {
+        return getCxxWeaver().getApp().getContext();
     }
 }

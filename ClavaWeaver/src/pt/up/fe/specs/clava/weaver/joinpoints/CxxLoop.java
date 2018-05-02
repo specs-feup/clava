@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
 import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
@@ -508,7 +509,8 @@ public class CxxLoop extends ALoop {
     @Override
     public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
 
-        boolean success = LoopTiling.apply(loop, (LoopStmt) reference.getNode(), blockSize.toString(), useTernary);
+        boolean success = new LoopTiling(CxxWeaver.getContex()).apply(loop, (LoopStmt) reference.getNode(),
+                blockSize.toString(), useTernary);
 
         if (!success) {
 

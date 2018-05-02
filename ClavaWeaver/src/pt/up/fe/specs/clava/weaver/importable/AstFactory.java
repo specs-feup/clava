@@ -159,13 +159,8 @@ public class AstFactory {
         return ClavaNodeFactory.literalType(autoCode);
     }
 
-    public static ACxxWeaverJoinPoint longType() {
-        BuiltinType type = ClavaNodeFactory.builtinType(BuiltinKind.LONG);
-        return CxxJoinpoints.create(type, null);
-    }
-
     public static CxxFunction functionVoid(String name) {
-        BuiltinType voidType = ClavaNodeFactory.builtinType(BuiltinKind.VOID);
+        BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKind.VOID);
         FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
                 new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
                 Collections.emptyList());
@@ -175,15 +170,6 @@ public class AstFactory {
                 ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), Collections.emptyList()));
 
         return (CxxFunction) CxxJoinpoints.create(functionDecl, null);
-    }
-
-    public static AExpression integerLiteral(int integer) {
-
-        Type intType = ClavaNodeFactory.builtinType(BuiltinKind.INT);
-        IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
-                ClavaNodeInfo.undefinedInfo());
-
-        return CxxJoinpoints.create(intLiteral, null, AExpression.class);
     }
 
     public static AStatement stmtLiteral(String code) {
@@ -201,15 +187,6 @@ public class AstFactory {
 
     public static ADecl declLiteral(String code) {
         return CxxJoinpoints.create(ClavaNodeFactory.literalDecl(code), null, ADecl.class);
-    }
-
-    public static AExpression doubleLiteral(double floating) {
-        // Type type = ClavaNodeFactory.builtinType(new TypeData("double"), ClavaNodeInfo.undefinedInfo());
-        Type type = ClavaNodeFactory.builtinType(BuiltinKind.DOUBLE);
-        FloatingLiteral intLiteral = ClavaNodeFactory.floatingLiteral(FloatKind.DOUBLE, Double.toString(floating),
-                new ExprData(type), ClavaNodeInfo.undefinedInfo());
-
-        return CxxJoinpoints.create(intLiteral, null, AExpression.class);
     }
 
     public static AExpression exprLiteral(String code) {
@@ -427,7 +404,7 @@ public class AstFactory {
         return CxxJoinpoints.create(switchStmt, null, AStatement.class);
     }
 
-    ////// Methods that use ClavaFactory
+    ////// Methods that only use ClavaFactory
 
     public static ACxxWeaverJoinPoint builtinType(String typeCode) {
         BuiltinKind kind = BuiltinKind.getHelper().valueOf(typeCode);
@@ -437,4 +414,27 @@ public class AstFactory {
         return CxxJoinpoints.create(type, null);
     }
 
+    public static AExpression doubleLiteral(double floating) {
+        FloatingLiteral floatingLiteral = CxxWeaver.getFactory()
+                .floatingLiteral(FloatKind.DOUBLE, floating);
+        // Type type = CxxWeaver.getFactory().builtinType(BuiltinKind.DOUBLE);
+        // FloatingLiteral intLiteral = ClavaNodeFactory.floatingLiteral(FloatKind.DOUBLE, Double.toString(floating),
+        // new ExprData(type), ClavaNodeInfo.undefinedInfo());
+
+        return CxxJoinpoints.create(floatingLiteral, null, AExpression.class);
+    }
+
+    public static ACxxWeaverJoinPoint longType() {
+        BuiltinType type = CxxWeaver.getFactory().builtinType(BuiltinKind.LONG);
+        return CxxJoinpoints.create(type, null);
+    }
+
+    public static AExpression integerLiteral(int integer) {
+        IntegerLiteral intLiteral = CxxWeaver.getFactory().integerLiteral(integer);
+        // Type intType = ClavaNodeFactory.builtinType(BuiltinKind.INT);
+        // IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
+        // ClavaNodeInfo.undefinedInfo());
+
+        return CxxJoinpoints.create(intLiteral, null, AExpression.class);
+    }
 }
