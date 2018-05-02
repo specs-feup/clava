@@ -23,9 +23,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.enums.EnumHelper;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
 
 /**
  * Represents the type of a Function.
@@ -35,49 +32,7 @@ import pt.up.fe.specs.util.providers.StringProvider;
  */
 public abstract class FunctionType extends Type {
 
-    /**
-     * Calling conventions.
-     * 
-     * @author JoaoBispo
-     *
-     */
-    public enum CallingConv implements StringProvider {
-
-        C("cdecl"),
-        X86_STD_CALL("stdcall"),
-        X86_FAST_CALL("fastcall"),
-        X86_THIS_CALL("thiscall"),
-        X86_VECTOR_CALL("vectorcall"),
-        X86_PASCAL("pascal"),
-        X86_64_WIN_64("ms_abi"),
-        X86_64_SYS_V("sysv_abi"),
-        AAPCS("pcs(\"aapcs\")"),
-        AAPCS_VFP("pcs(\"aapcs-vfp\")"),
-        INTEL_OC_BICC("intel_ocl_bicc"),
-        SPIR_FUNCTION("opencl default for SPIR"),
-        SPIR_KERNEL("opencl default for SPIR kernels");
-
-        private static final Lazy<EnumHelper<CallingConv>> HELPER = EnumHelper.newLazyHelper(CallingConv.class);
-
-        public static EnumHelper<CallingConv> getEnumHelper() {
-            return HELPER.get();
-        }
-
-        private final String attribute;
-
-        private CallingConv(String attribute) {
-            this.attribute = attribute;
-        }
-
-        public String getAttribute() {
-            return attribute;
-        }
-
-        @Override
-        public String getString() {
-            return getAttribute();
-        }
-    }
+    
 
     /**
      * Data class for Function Type.

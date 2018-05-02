@@ -149,4 +149,14 @@ public class ElaboratedType extends TypeWithKeyword {
         setNamedType(desugaredType);
     }
 
+    /**
+     * 
+     * @param typeAsString
+     * @return
+     */
+    public ElaboratedType setTypeAsString(String typeAsString) {
+        getDataI().set(ElaboratedType.TYPE_AS_STRING, typeAsString);
+        return this;
+    }
+
 }
