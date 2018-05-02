@@ -81,6 +81,7 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
 
     log(declAddr);
 
+
     // A StmtDumper is created for each context,
     // no need to use id to disambiguate
     seenDecls.insert(declAddr);

@@ -18,7 +18,7 @@ void clava::ClavaDataDumper::dump(const Type* T) {
     // Get classname
     const std::string classname = clava::getClassName(T);
 
-    // Get corresponding DeclNode
+    // Get corresponding TypeNode
     TypeNode typeNode = TYPE_DATA_MAP.count(classname) == 1 ? TYPE_DATA_MAP.find(classname)->second : TypeNode::TYPE;
 
     dump(typeNode, T);
