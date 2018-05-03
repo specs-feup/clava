@@ -72,7 +72,7 @@ public enum CXXOperator implements StringProvider {
     private final String operatorCode;
     private final BiFunction<String, List<Expr>, String> toCode;
 
-    private static final Lazy<EnumHelperWithValue<CXXOperator>> HELPER = EnumHelperWithValue.newLazyHelper(CXXOperator.class);
+    private static final Lazy<EnumHelperWithValue<CXXOperator>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(CXXOperator.class);
 
     public static EnumHelperWithValue<CXXOperator> getHelper() {
         return HELPER.get();
@@ -90,7 +90,7 @@ public enum CXXOperator implements StringProvider {
             workString = workString.substring("operator".length());
         }
 
-        CXXOperator operator = getHelper().getTranslationMap().get(workString);
+        CXXOperator operator = getHelper().getValuesTranslationMap().get(workString);
 
         return Optional.ofNullable(operator);
     }

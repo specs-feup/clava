@@ -29,7 +29,7 @@ public enum ExceptionType implements StringProvider {
     UNINSTANTIATED("noexcept-uninstantiated");
 
     private static final Lazy<EnumHelperWithValue<ExceptionType>> HELPER = EnumHelperWithValue
-	    .newLazyHelper(ExceptionType.class, NONE);
+	    .newLazyHelperWithValue(ExceptionType.class, NONE);
 
     public static EnumHelperWithValue<ExceptionType> getHelper() {
 	return HELPER.get();

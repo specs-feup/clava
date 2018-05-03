@@ -23,7 +23,7 @@ public enum TypeDependency implements StringProvider {
     INSTANTIATION_DEPENDENT,
     NONE;
 
-    private static final Lazy<EnumHelperWithValue<TypeDependency>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(TypeDependency.class,
+    private static final Lazy<EnumHelperWithValue<TypeDependency>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(TypeDependency.class,
             NONE);
 
     public static EnumHelperWithValue<TypeDependency> getHelper() {

@@ -24,7 +24,7 @@ public enum ObjectKind implements StringProvider {
     OBJ_C_SUBSCRIPT("objcsubscript"),
     VECTOR_COMPONENT("vectorcomponent");
 
-    private static final Lazy<EnumHelperWithValue<ObjectKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(ObjectKind.class,
+    private static final Lazy<EnumHelperWithValue<ObjectKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(ObjectKind.class,
             ORDINARY);
 
     public static EnumHelperWithValue<ObjectKind> getEnumHelper() {

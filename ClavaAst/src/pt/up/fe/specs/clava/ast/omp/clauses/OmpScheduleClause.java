@@ -38,7 +38,7 @@ public class OmpScheduleClause implements OmpClause {
         AUTO,
         RUNTIME;
 
-        private static final Lazy<EnumHelperWithValue<ScheduleKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(ScheduleKind.class);
+        private static final Lazy<EnumHelperWithValue<ScheduleKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(ScheduleKind.class);
 
         public static EnumHelperWithValue<ScheduleKind> getHelper() {
             return ENUM_HELPER.get();
@@ -56,7 +56,7 @@ public class OmpScheduleClause implements OmpClause {
         SIMD;
 
         private static final Lazy<EnumHelperWithValue<ScheduleModifier>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(ScheduleModifier.class);
+                .newLazyHelperWithValue(ScheduleModifier.class);
 
         public static EnumHelperWithValue<ScheduleModifier> getHelper() {
             return ENUM_HELPER.get();

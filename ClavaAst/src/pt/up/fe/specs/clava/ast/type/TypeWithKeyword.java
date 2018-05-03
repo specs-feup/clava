@@ -40,7 +40,7 @@ public abstract class TypeWithKeyword extends Type {
         NONE;
 
         private static final Lazy<EnumHelperWithValue<ElaboratedTypeKeyword>> HELPER = EnumHelperWithValue
-                .newLazyHelper(ElaboratedTypeKeyword.class, NONE);
+                .newLazyHelperWithValue(ElaboratedTypeKeyword.class, NONE);
 
         public static EnumHelperWithValue<ElaboratedTypeKeyword> getHelper() {
             return HELPER.get();

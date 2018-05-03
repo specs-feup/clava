@@ -113,7 +113,7 @@ public class UnaryOperator extends Expr {
         COAWAIT("co_await");
 
         private static final Lazy<EnumHelperWithValue<UnaryOperatorKind>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(UnaryOperatorKind.class);
+                .newLazyHelperWithValue(UnaryOperatorKind.class);
 
         public static EnumHelperWithValue<UnaryOperatorKind> getEnumHelper() {
             return ENUM_HELPER.get();
@@ -145,7 +145,7 @@ public class UnaryOperator extends Expr {
         POSTFIX;
 
         private static final Lazy<EnumHelperWithValue<UnaryOperatorPosition>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(UnaryOperatorPosition.class);
+                .newLazyHelperWithValue(UnaryOperatorPosition.class);
 
         public static EnumHelperWithValue<UnaryOperatorPosition> getEnumHelper() {
             return ENUM_HELPER.get();

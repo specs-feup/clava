@@ -33,7 +33,7 @@ public class CxxWeaverOptions {
         WEAVER_OPTIONS.put(ClavaOptions.STANDARD.getName(),
                 WeaverOptionBuilder.build("std", "standard", OptionArguments.ONE_ARG, "C/C++ standard",
                         "What C/C++ standard should be used. Currently supported standards: "
-                                + Standard.getEnumHelper().getAvailableOptions(),
+                                + Standard.getEnumHelper().getAvailableValues(),
                         ClavaOptions.STANDARD));
 
         addOneArgOption(ClavaOptions.FLAGS, "fs", "flags", "flags string",

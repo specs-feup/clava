@@ -28,7 +28,7 @@ public enum NestedNamedSpecifier implements StringProvider {
     NONE("");
 
     private static final Lazy<EnumHelperWithValue<NestedNamedSpecifier>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelper(NestedNamedSpecifier.class, NONE);
+            .newLazyHelperWithValue(NestedNamedSpecifier.class, NONE);
 
     public static EnumHelperWithValue<NestedNamedSpecifier> getEnumHelper() {
         return ENUM_HELPER.get();

@@ -152,7 +152,7 @@ public enum BuiltinKind implements StringProvider {
     ARC_UNBRIDGED_CAST,
     OMP_ARRAY_SECTION;
     */
-    private static final Lazy<EnumHelperWithValue<BuiltinKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(BuiltinKind.class);
+    private static final Lazy<EnumHelperWithValue<BuiltinKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(BuiltinKind.class);
 
     public static EnumHelperWithValue<BuiltinKind> getHelper() {
         return ENUM_HELPER.get();

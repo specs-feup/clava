@@ -73,7 +73,7 @@ public enum OmpClauseKind implements StringProvider {
         this.hasParameters = hasParameters;
     }
 
-    private static final Lazy<EnumHelperWithValue<OmpClauseKind>> HELPER = EnumHelperWithValue.newLazyHelper(OmpClauseKind.class);
+    private static final Lazy<EnumHelperWithValue<OmpClauseKind>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(OmpClauseKind.class);
 
     public static EnumHelperWithValue<OmpClauseKind> getHelper() {
         return HELPER.get();

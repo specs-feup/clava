@@ -139,7 +139,7 @@ public class EnumDecl extends TagDecl {
         STRUCT,
         NO_SCOPE;
 
-        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(EnumScopeType.class,
+        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(EnumScopeType.class,
                 NO_SCOPE);
 
         public static EnumHelperWithValue<EnumScopeType> getEnumHelper() {

@@ -32,7 +32,7 @@ public enum UnaryTransformTypeKind implements StringProvider {
         this.string = string;
     }
 
-    private static final Lazy<EnumHelperWithValue<UnaryTransformTypeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(
+    private static final Lazy<EnumHelperWithValue<UnaryTransformTypeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(
             UnaryTransformTypeKind.class,
             NONE);
 

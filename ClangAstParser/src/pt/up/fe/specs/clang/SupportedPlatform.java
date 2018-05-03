@@ -35,7 +35,7 @@ public enum SupportedPlatform implements StringProvider {
     MAC_OS;
 
     private static final Lazy<EnumHelperWithValue<SupportedPlatform>> HELPER = EnumHelperWithValue
-            .newLazyHelper(SupportedPlatform.class);
+            .newLazyHelperWithValue(SupportedPlatform.class);
 
     public static EnumHelperWithValue<SupportedPlatform> getHelper() {
         return HELPER.get();

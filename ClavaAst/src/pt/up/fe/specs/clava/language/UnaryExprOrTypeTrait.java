@@ -25,7 +25,7 @@ public enum UnaryExprOrTypeTrait implements StringProvider {
     OPEN_MP_REQUIRED_SIMD_ALIGN("__builtin_omp_required_simd_align");
 
     private static final Lazy<EnumHelperWithValue<UnaryExprOrTypeTrait>> HELPER = EnumHelperWithValue
-            .newLazyHelper(UnaryExprOrTypeTrait.class);
+            .newLazyHelperWithValue(UnaryExprOrTypeTrait.class);
 
     public static EnumHelperWithValue<UnaryExprOrTypeTrait> getHelper() {
         return HELPER.get();

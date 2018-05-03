@@ -28,7 +28,7 @@ public enum AddressSpaceQualifierV2 implements StringProvider {
     // PRIVATE;
 
     private static final Lazy<EnumHelperWithValue<AddressSpaceQualifierV2>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelper(AddressSpaceQualifierV2.class, NONE);
+            .newLazyHelperWithValue(AddressSpaceQualifierV2.class, NONE);
 
     public static EnumHelperWithValue<AddressSpaceQualifierV2> getHelper() {
         return ENUM_HELPER.get();

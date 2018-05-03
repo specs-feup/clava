@@ -77,7 +77,7 @@ public enum CastKind implements StringProvider {
     ZERO_TO_OCL_EVENT("ZeroToOCLEvent"),
     ADDRESS_SPACE_CONVERSION;
 
-    private static final Lazy<EnumHelperWithValue<CastKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(CastKind.class);
+    private static final Lazy<EnumHelperWithValue<CastKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(CastKind.class);
 
     public static EnumHelperWithValue<CastKind> getHelper() {
         return ENUM_HELPER.get();

@@ -23,7 +23,7 @@ public enum AccessSpecifier implements StringProvider {
     PRIVATE,
     NONE;
 
-    private static final Lazy<EnumHelperWithValue<AccessSpecifier>> HELPER = EnumHelperWithValue.newLazyHelper(AccessSpecifier.class,
+    private static final Lazy<EnumHelperWithValue<AccessSpecifier>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(AccessSpecifier.class,
             NONE);
 
     public static EnumHelperWithValue<AccessSpecifier> getHelper() {

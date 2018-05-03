@@ -25,7 +25,7 @@ public class OmpProcBindClause implements OmpClause {
         SPREAD;
 
         private static final Lazy<EnumHelperWithValue<ProcBindKind>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(ProcBindKind.class);
+                .newLazyHelperWithValue(ProcBindKind.class);
 
         public static EnumHelperWithValue<ProcBindKind> getHelper() {
             return ENUM_HELPER.get();

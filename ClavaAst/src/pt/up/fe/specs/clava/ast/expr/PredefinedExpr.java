@@ -75,7 +75,7 @@ public class PredefinedExpr extends Expr {
         PRETTY_FUNCTION_NO_VIRTUAL("<not implemented for PRETTY_FUNCTION_NO_VIRTUAL>");
 
         private static final Lazy<EnumHelperWithValue<PredefinedIdType>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(PredefinedIdType.class);
+                .newLazyHelperWithValue(PredefinedIdType.class);
 
         public static EnumHelperWithValue<PredefinedIdType> getEnumHelper() {
             return ENUM_HELPER.get();

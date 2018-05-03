@@ -33,7 +33,7 @@ public enum CallingConvention implements StringProvider {
     SpirFunction(null), // default for OpenCL functions on SPIR target
     SpirKernel(null); // inferred for OpenCL kernels on SPIR target
 
-    private static final Lazy<EnumHelperWithValue<CallingConvention>> HELPER = EnumHelperWithValue.newLazyHelper(CallingConvention.class);
+    private static final Lazy<EnumHelperWithValue<CallingConvention>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(CallingConvention.class);
 
     public static EnumHelperWithValue<CallingConvention> getHelper() {
         return HELPER.get();

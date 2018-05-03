@@ -37,7 +37,7 @@ public class OmpReductionClause implements OmpClause {
         MAX("max");
 
         private static final Lazy<EnumHelperWithValue<ReductionKind>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(ReductionKind.class);
+                .newLazyHelperWithValue(ReductionKind.class);
 
         public static EnumHelperWithValue<ReductionKind> getHelper() {
             return ENUM_HELPER.get();

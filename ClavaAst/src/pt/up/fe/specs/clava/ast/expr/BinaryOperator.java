@@ -68,7 +68,7 @@ public class BinaryOperator extends Expr {
         COMMA(",");
 
         private static final Lazy<EnumHelperWithValue<BinaryOperatorKind>> HELPER = EnumHelperWithValue
-                .newLazyHelper(BinaryOperatorKind.class);
+                .newLazyHelperWithValue(BinaryOperatorKind.class);
 
         public static EnumHelperWithValue<BinaryOperatorKind> getHelper() {
             return HELPER.get();

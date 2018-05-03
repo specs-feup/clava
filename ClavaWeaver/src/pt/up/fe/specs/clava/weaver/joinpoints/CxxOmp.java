@@ -108,7 +108,7 @@ public class CxxOmp extends AOmp {
     public void setProcBindImpl(String newBind) {
         ProcBindKind kind = ProcBindKind.getHelper().fromValueTry(newBind)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + newBind
-                        + "' as a proc bind value, valid values: " + ProcBindKind.getHelper().getAvailableOptions()));
+                        + "' as a proc bind value, valid values: " + ProcBindKind.getHelper().getAvailableValues()));
         ompPragma.clauses().setProcBind(kind);
         // ProcBindKind kind = ProcBindKind.getHelper().valueOfTry(newBind).orElse(null);
         // if (kind == null) {
@@ -178,7 +178,7 @@ public class CxxOmp extends AOmp {
     public void setDefaultImpl(String newDefault) {
         DefaultKind kind = DefaultKind.getHelper().fromValueTry(newDefault)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + newDefault
-                        + "' as a 'default' value, valid values: " + DefaultKind.getHelper().getAvailableOptions()));
+                        + "' as a 'default' value, valid values: " + DefaultKind.getHelper().getAvailableValues()));
         ompPragma.clauses().setDefault(kind);
     }
 
@@ -231,7 +231,7 @@ public class CxxOmp extends AOmp {
     public void setScheduleKindImpl(String scheduleKindString) {
         ScheduleKind kind = ScheduleKind.getHelper().fromValueTry(scheduleKindString)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + scheduleKindString
-                        + "' as a schedule kind, valid values: " + ScheduleKind.getHelper().getAvailableOptions()));
+                        + "' as a schedule kind, valid values: " + ScheduleKind.getHelper().getAvailableValues()));
 
         ompPragma.clauses().setScheduleKind(kind);
     }
@@ -289,7 +289,7 @@ public class CxxOmp extends AOmp {
         OmpClauseKind clauseKind = OmpClauseKind.getHelper().fromValueTry(clauseKindString)
                 .orElseThrow(() -> new RuntimeException("Can't remove clause '" + clauseKindString
                         + "', name is not valid. Valid clause names: "
-                        + OmpClauseKind.getHelper().getAvailableOptions()));
+                        + OmpClauseKind.getHelper().getAvailableValues()));
 
         ompPragma.removeClause(clauseKind);
     }
@@ -299,7 +299,7 @@ public class CxxOmp extends AOmp {
         OmpDirectiveKind directiveKind = OmpDirectiveKind.getHelper().fromValueTry(directiveKindString)
                 .orElseThrow(() -> new RuntimeException("Can't set directive kind '" + directiveKindString
                         + "', name is not valid. Valid directive names: "
-                        + OmpDirectiveKind.getHelper().getAvailableOptions()));
+                        + OmpDirectiveKind.getHelper().getAvailableValues()));
 
         // Create new pragma based on the previous pragma
         OmpPragma newOmpPragma = OmpParser.newOmpPragma(directiveKind, ompPragma);

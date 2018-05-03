@@ -24,7 +24,7 @@ public enum InitializationStyle implements StringProvider {
     LIST_INIT("listinit"); // Direct list-initialization (C++11)
 
     private static Lazy<EnumHelperWithValue<InitializationStyle>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelper(InitializationStyle.class, NO_INIT);
+            .newLazyHelperWithValue(InitializationStyle.class, NO_INIT);
 
     public static EnumHelperWithValue<InitializationStyle> getHelper() {
         return ENUM_HELPER.get();

@@ -23,7 +23,7 @@ public enum TemplateTypeParmKind implements StringProvider {
     CLASS;
 
     private static final Lazy<EnumHelperWithValue<TemplateTypeParmKind>> HELPER = EnumHelperWithValue
-            .newLazyHelper(TemplateTypeParmKind.class);
+            .newLazyHelperWithValue(TemplateTypeParmKind.class);
 
     public static EnumHelperWithValue<TemplateTypeParmKind> getHelper() {
         return HELPER.get();

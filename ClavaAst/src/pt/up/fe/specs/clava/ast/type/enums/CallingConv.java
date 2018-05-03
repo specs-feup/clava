@@ -39,7 +39,7 @@ public enum CallingConv implements StringProvider {
     SPIR_FUNCTION("opencl default for SPIR"),
     SPIR_KERNEL("opencl default for SPIR kernels");
 
-    private static final Lazy<EnumHelperWithValue<CallingConv>> HELPER = EnumHelperWithValue.newLazyHelper(CallingConv.class);
+    private static final Lazy<EnumHelperWithValue<CallingConv>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(CallingConv.class);
 
     public static EnumHelperWithValue<CallingConv> getEnumHelper() {
         return HELPER.get();

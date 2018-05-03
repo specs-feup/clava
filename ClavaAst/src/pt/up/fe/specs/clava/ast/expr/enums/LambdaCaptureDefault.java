@@ -32,7 +32,7 @@ public enum LambdaCaptureDefault implements StringProvider {
     }
 
     private static final Lazy<EnumHelperWithValue<LambdaCaptureDefault>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelper(LambdaCaptureDefault.class);
+            .newLazyHelperWithValue(LambdaCaptureDefault.class);
 
     public static EnumHelperWithValue<LambdaCaptureDefault> getHelper() {
         return ENUM_HELPER.get();

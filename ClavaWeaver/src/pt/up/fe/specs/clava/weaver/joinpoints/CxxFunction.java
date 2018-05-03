@@ -58,7 +58,7 @@ import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 public class CxxFunction extends AFunction {
 
     // TODO: Move this to generated enums
-    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue.newLazyHelper(StorageClass.class);
+    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue.newLazyHelperWithValue(StorageClass.class);
 
     private final FunctionDecl function;
     private final ACxxWeaverJoinPoint parent;

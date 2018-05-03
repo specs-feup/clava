@@ -24,7 +24,7 @@ public enum CharacterKind implements StringProvider {
     UTF16,
     UTF32;
 
-    private static final Lazy<EnumHelperWithValue<CharacterKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(CharacterKind.class);
+    private static final Lazy<EnumHelperWithValue<CharacterKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(CharacterKind.class);
 
     public static EnumHelperWithValue<CharacterKind> getEnumHelper() {
         return ENUM_HELPER.get();

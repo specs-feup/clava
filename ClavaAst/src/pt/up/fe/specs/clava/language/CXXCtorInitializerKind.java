@@ -25,7 +25,7 @@ public enum CXXCtorInitializerKind implements StringProvider {
     DELEGATING_INITIALIZER;
 
     private static final Lazy<EnumHelperWithValue<CXXCtorInitializerKind>> HELPER = EnumHelperWithValue
-            .newLazyHelper(CXXCtorInitializerKind.class);
+            .newLazyHelperWithValue(CXXCtorInitializerKind.class);
 
     public static EnumHelperWithValue<CXXCtorInitializerKind> getHelper() {
         return HELPER.get();

@@ -23,7 +23,7 @@ public enum Insert implements StringProvider {
     REPLACE,
     AROUND;
 
-    private static final Lazy<EnumHelperWithValue<Insert>> HELPER = EnumHelperWithValue.newLazyHelper(Insert.class);
+    private static final Lazy<EnumHelperWithValue<Insert>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(Insert.class);
 
     public static EnumHelperWithValue<Insert> getHelper() {
 	return HELPER.get();

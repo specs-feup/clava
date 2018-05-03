@@ -823,7 +823,7 @@ public class ClangGenericParsers {
         throw new RuntimeException(
                 "Could not convert string '" + StringParsers.parseWord(new StringSlice(string)).getResult()
                         + "' to enum '"
-                        + enumHelper.getTranslationMap() + "'");
+                        + enumHelper.getValuesTranslationMap() + "'");
 
     }
 

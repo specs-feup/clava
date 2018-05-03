@@ -25,7 +25,7 @@ public enum LambdaCaptureKind implements StringProvider {
     VLA_TYPE;
 
     private static final Lazy<EnumHelperWithValue<LambdaCaptureKind>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelper(LambdaCaptureKind.class);
+            .newLazyHelperWithValue(LambdaCaptureKind.class);
 
     public static EnumHelperWithValue<LambdaCaptureKind> getHelper() {
         return ENUM_HELPER.get();

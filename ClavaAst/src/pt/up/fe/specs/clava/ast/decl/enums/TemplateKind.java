@@ -24,7 +24,7 @@ public enum TemplateKind implements StringProvider {
     FUNCTION_TEMPLATE_SPECIALIZATION,
     DEPENDENT_FUNCTION_TEMPLATE_SPECIALIZATION;
 
-    private static final Lazy<EnumHelperWithValue<TemplateKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(TemplateKind.class);
+    private static final Lazy<EnumHelperWithValue<TemplateKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(TemplateKind.class);
 
     public static EnumHelperWithValue<TemplateKind> getHelper() {
         return ENUM_HELPER.get();

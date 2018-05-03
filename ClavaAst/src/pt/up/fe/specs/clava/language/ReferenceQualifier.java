@@ -24,7 +24,7 @@ public enum ReferenceQualifier implements StringProvider {
     None("");
 
     private static final Lazy<EnumHelperWithValue<ReferenceQualifier>> HELPER = EnumHelperWithValue
-            .newLazyHelper(ReferenceQualifier.class, None);
+            .newLazyHelperWithValue(ReferenceQualifier.class, None);
 
     public static EnumHelperWithValue<ReferenceQualifier> getHelper() {
         return HELPER.get();

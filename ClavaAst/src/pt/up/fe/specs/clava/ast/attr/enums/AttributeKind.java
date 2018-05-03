@@ -201,7 +201,7 @@ public enum AttributeKind implements StringProvider {
     Overloadable,
     Thread;
 
-    private static final Lazy<EnumHelperWithValue<AttributeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(AttributeKind.class);
+    private static final Lazy<EnumHelperWithValue<AttributeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(AttributeKind.class);
 
     public static EnumHelperWithValue<AttributeKind> getHelper() {
         return ENUM_HELPER.get();

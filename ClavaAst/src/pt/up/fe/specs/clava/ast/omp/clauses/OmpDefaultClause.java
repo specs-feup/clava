@@ -24,7 +24,7 @@ public class OmpDefaultClause implements OmpClause {
         NONE;
 
         private static final Lazy<EnumHelperWithValue<DefaultKind>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelper(DefaultKind.class);
+                .newLazyHelperWithValue(DefaultKind.class);
 
         public static EnumHelperWithValue<DefaultKind> getHelper() {
             return ENUM_HELPER.get();

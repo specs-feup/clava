@@ -32,7 +32,7 @@ public enum ValueKind implements StringProvider {
      */
     X_VALUE("xvalue");
 
-    private static final Lazy<EnumHelperWithValue<ValueKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(ValueKind.class);
+    private static final Lazy<EnumHelperWithValue<ValueKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(ValueKind.class);
 
     public static EnumHelperWithValue<ValueKind> getEnumHelper() {
         return ENUM_HELPER.get();

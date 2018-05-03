@@ -63,7 +63,7 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
             // If standard flag, add option
             if (flag.startsWith(stdPrefix)) {
-                Standard standard = Standard.getEnumHelper().getTranslationMap()
+                Standard standard = Standard.getEnumHelper().getValuesTranslationMap()
                         .get(flag.substring(stdPrefix.length()));
                 // config.add(ClavaOptions.STANDARD, standard);
                 Optional<Standard> previousStd = config.set(ClavaOptions.STANDARD, standard);

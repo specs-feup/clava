@@ -37,7 +37,7 @@ public enum Standard implements StringProvider {
     GNUXX11("gnu++11", true),
     GNUXX14("gnu++14", true);
 
-    private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(Standard.class);
+    private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(Standard.class);
 
     private static final Set<Standard> GNU_STANDARDS = SpecsCollections.asSet(GNU90, GNU99, GNU11, GNUXX98, GNUXX11,
             GNUXX14);

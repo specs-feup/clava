@@ -22,7 +22,7 @@ public enum TLSKind implements StringProvider {
     STATIC("tls"),
     DYNAMIC("tls_dynamic");
 
-    private static final Lazy<EnumHelperWithValue<TLSKind>> HELPER = EnumHelperWithValue.newLazyHelper(TLSKind.class, NONE);
+    private static final Lazy<EnumHelperWithValue<TLSKind>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(TLSKind.class, NONE);
 
     public static EnumHelperWithValue<TLSKind> getHelper() {
         return HELPER.get();

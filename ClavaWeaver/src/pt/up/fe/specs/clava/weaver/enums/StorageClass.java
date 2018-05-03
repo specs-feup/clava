@@ -17,7 +17,7 @@ public enum StorageClass  implements NamedEnum{
     REGISTER("register"),
     STATIC("static");
     private String name;
-    private static final Lazy<EnumHelperWithValue<StorageClass>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(StorageClass.class);
+    private static final Lazy<EnumHelperWithValue<StorageClass>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(StorageClass.class);
 
     /**
      * 

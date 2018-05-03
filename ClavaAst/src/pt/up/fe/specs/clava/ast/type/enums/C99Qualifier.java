@@ -24,7 +24,7 @@ public enum C99Qualifier implements StringProvider {
     RESTRICT_C99,
     VOLATILE;
 
-    private static final Lazy<EnumHelperWithValue<C99Qualifier>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(C99Qualifier.class);
+    private static final Lazy<EnumHelperWithValue<C99Qualifier>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(C99Qualifier.class);
 
     public static EnumHelperWithValue<C99Qualifier> getHelper() {
         return ENUM_HELPER.get();

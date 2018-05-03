@@ -30,7 +30,7 @@ public enum NameKind implements StringProvider {
     CXX_LITERAL_OPERATOR_NAME,
     CXX_USING_DIRECTIVE;
 
-    private static final Lazy<EnumHelperWithValue<NameKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(NameKind.class);
+    private static final Lazy<EnumHelperWithValue<NameKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(NameKind.class);
 
     public static EnumHelperWithValue<NameKind> getHelper() {
         return ENUM_HELPER.get();
