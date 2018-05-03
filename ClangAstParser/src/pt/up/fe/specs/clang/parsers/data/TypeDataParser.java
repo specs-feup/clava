@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
+import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -89,6 +90,30 @@ public class TypeDataParser {
         DataStore data = parseFunctionTypeData(lines, dataStore);
 
         data.add(FunctionProtoType.NUM_PARAMETERS, GeneralParsers.parseInt(lines));
+
+        data.add(FunctionProtoType.HAS_TRAILING_RETURNS, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_VARIADIC, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_CONST, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_VOLATILE, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_RESTRICT, GeneralParsers.parseOneOrZero(lines));
+
+        data.add(FunctionProtoType.REFERENCE_QUALIFIER,
+                GeneralParsers.enumFromName(ReferenceQualifier.getHelper(), lines));
+
+        // data.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
+        // GeneralParsers.enumFromName(ExceptionSpecificationType.getHelper(), lines));
+
+        /*
+        
+        
+        public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
+                .enumeration("referenceQualifier", ReferenceQualifier.class);
+        
+        public final static DataKey<ExceptionSpecificationType> EXCEPTION_SPECIFICATION_TYPE = KeyFactory
+                .enumeration("exceptionSpecificationType", ExceptionSpecificationType.class);
+        
+        public final static DataKey<Expr> NOEXCEPT_EXPR = KeyFactory.object("noexceptExpr", Expr.class);
+        */
 
         return data;
     }
