@@ -40,7 +40,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
-import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecifier;
+import pt.up.fe.specs.clava.ast.type.legacy.ExceptionSpecifier;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;

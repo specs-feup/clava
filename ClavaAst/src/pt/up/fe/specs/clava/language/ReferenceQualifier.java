@@ -19,12 +19,12 @@ import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum ReferenceQualifier implements StringProvider {
 
-    LVALUE("&"),
-    RVALUE("&&"),
-    NONE("");
+    LValue("&"),
+    RValue("&&"),
+    None("");
 
     private static final Lazy<EnumHelper<ReferenceQualifier>> HELPER = EnumHelper
-            .newLazyHelper(ReferenceQualifier.class, NONE);
+            .newLazyHelper(ReferenceQualifier.class, None);
 
     public static EnumHelper<ReferenceQualifier> getHelper() {
         return HELPER.get();

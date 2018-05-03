@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
-import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecifier;
+import pt.up.fe.specs.clava.ast.type.legacy.ExceptionSpecifier;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 
 public class FunctionProtoTypeData {
@@ -27,7 +27,7 @@ public class FunctionProtoTypeData {
     private String noexceptExpr;
 
     public FunctionProtoTypeData() {
-        this(false, false, false, false, ReferenceQualifier.NONE);
+        this(false, false, false, false, ReferenceQualifier.None);
     }
 
     public FunctionProtoTypeData(boolean hasTrailingReturn, boolean isConst, boolean isVolatile, boolean isRestrict,
