@@ -15,6 +15,8 @@ namespace clava {
     //extern const std::string BUILTIN_KIND[];
     extern const std::string CAST_KIND[];
     extern const std::string ATTRIBUTES[];
+    extern const std::string CALLING_CONVENTION[];
+
     //extern const std::string BUILTIN_KIND[];
 };
 

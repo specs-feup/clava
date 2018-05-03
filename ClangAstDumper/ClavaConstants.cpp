@@ -53,6 +53,8 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TYPE: return "Type";
         case clava::TypeNode::QUAL_TYPE: return "QualType";
         case clava::TypeNode::BUILTIN_TYPE: return "BuiltinType";
+        case clava::TypeNode::FUNCTION_TYPE: return "FunctionType";
+        case clava::TypeNode::FUNCTION_PROTO_TYPE: return "FunctionProtoType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

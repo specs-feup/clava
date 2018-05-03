@@ -8,7 +8,7 @@
 #include <string>
 
 const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDREN_MAP = {
-
+        {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -29,6 +29,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
     switch(typeNode) {
         case clava::TypeNode::TYPE:
             VisitTypeChildren(T, visitedChildren); break;
+        case clava::TypeNode::FUNCTION_PROTO_TYPE:
+            VisitFunctionProtoTypeChildren(static_cast<const FunctionProtoType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -50,14 +52,34 @@ void ClangAstDumper::visitChildren(const QualType &T) {
 }
 
 
-void ClangAstDumper::VisitTypeChildren(const Type *T, std::vector<std::string> &children) {
+void ClangAstDumper::VisitTypeChildren(const Type *T, std::vector<std::string> &visitedChildren) {
 
     // If has sugar, visit desugared type
     const Type *singleStepDesugar = T->getUnqualifiedDesugaredType();
     if(singleStepDesugar != T) {
         VisitTypeTop(singleStepDesugar);
-        children.push_back(clava::getId(singleStepDesugar, id));
+        visitedChildren.push_back(clava::getId(singleStepDesugar, id));
     }
 }
 
 //     TypeVisitor::Visit(T.getTypePtr());
+
+void ClangAstDumper::VisitFunctionTypeChildren(const FunctionType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    // Return type
+    VisitTypeTop(T->getReturnType());
+    visitedChildren.push_back(clava::getId(T->getReturnType(), id));
+}
+
+void ClangAstDumper::VisitFunctionProtoTypeChildren(const FunctionProtoType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitFunctionTypeChildren(T, visitedChildren);
+
+    // Parameters types
+    for (QualType paramType : T->getParamTypes()) {
+        VisitTypeTop(paramType);
+        visitedChildren.push_back(clava::getId(paramType, id));
+    }
+}

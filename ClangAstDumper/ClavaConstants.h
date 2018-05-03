@@ -64,7 +64,9 @@ namespace clava {
     enum class TypeNode {
         TYPE,
         QUAL_TYPE,
-        BUILTIN_TYPE
+        BUILTIN_TYPE,
+        FUNCTION_TYPE,
+        FUNCTION_PROTO_TYPE
     };
 
 

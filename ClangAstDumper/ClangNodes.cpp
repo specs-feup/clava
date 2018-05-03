@@ -179,6 +179,10 @@ void clava::dump(unsigned int integer) {
     llvm::errs() << integer << "\n";
 }
 
+void clava::dump(size_t integer) {
+    llvm::errs() << integer << "\n";
+}
+
 void clava::dump(const std::string& string) {
     llvm::errs() << string << "\n";
 }

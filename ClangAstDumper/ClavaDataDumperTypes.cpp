@@ -10,7 +10,8 @@
 #include <limits>
 
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
-        {"BuiltinType", clava::TypeNode::BUILTIN_TYPE}
+        {"BuiltinType", clava::TypeNode::BUILTIN_TYPE},
+        {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE}
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -40,6 +41,10 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 //            DumpQualTypeData(static_cast<const QualType *>(T)); break;
         case clava::TypeNode::BUILTIN_TYPE:
             DumpBuiltinTypeData(static_cast<const BuiltinType *>(T)); break;
+        case clava::TypeNode::FUNCTION_TYPE:
+            DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
+        case clava::TypeNode::FUNCTION_PROTO_TYPE:
+            DumpFunctionProtoTypeData(static_cast<const FunctionProtoType *>(T)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump(TypeNode): Case not implemented, '"+ getName(typeNode) +"'");
     }
 }
@@ -157,5 +162,25 @@ void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
 
     clava::dump(T->getKind());
     clava::dump(T->getName(Context->getPrintingPolicy()));
-    //clava::dump(T->isSugared());
+
+}
+
+void clava::ClavaDataDumper::DumpFunctionTypeData(const FunctionType *T) {
+    DumpTypeData(T);
+
+    auto extInfo = T->getExtInfo();
+    clava::dump(extInfo.getNoReturn());
+    clava::dump(extInfo.getProducesResult());
+    clava::dump(extInfo.getHasRegParm());
+    clava::dump(extInfo.getHasRegParm() ? extInfo.getRegParm() : 0);
+    clava::dump(clava::CALLING_CONVENTION[extInfo.getCC()]);
+
+}
+
+void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *T) {
+    DumpFunctionTypeData(T);
+
+    // Num parameters
+    clava::dump(T->getParamTypes().size());
+
 }

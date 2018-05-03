@@ -123,6 +123,8 @@ namespace clava {
 
             //void DumpQualTypeData(const QualType *T);
         void DumpBuiltinTypeData(const BuiltinType *T);
+        void DumpFunctionTypeData(const FunctionType *T);
+        void DumpFunctionProtoTypeData(const FunctionProtoType *T);
 
 
         // ATTRS

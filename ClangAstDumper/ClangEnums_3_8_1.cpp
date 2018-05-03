@@ -309,4 +309,20 @@ const std::string clava::ATTRIBUTES[] = {
 
 
 
+const std::string clava::CALLING_CONVENTION[] {
+        "C",
+        "X86StdCall",
+        "X86FastCall",
+        "X86ThisCall",
+        "X86VectorCall",
+        "X86Pascal",
+        "X86_64Win64",
+        "X86_64SysV",
+        "AAPCS",
+        "AAPCS_VFP",
+        "IntelOclBicc",
+        "SpirFunction",
+        "SpirKernel"
+};
+
 //const std::string BUILTIN_KIND[] {};
