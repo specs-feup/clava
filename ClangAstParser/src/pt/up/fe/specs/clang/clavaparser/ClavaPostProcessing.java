@@ -113,7 +113,8 @@ public class ClavaPostProcessing {
             // TODO: Alternatively, this should be implemented as a ClavaRule and apply as a bottom-up change
 
             if (elaboratedType.hasDataI()) {
-                elaboratedType.getDataI().set(ElaboratedType.TYPE_AS_STRING, newBareType);
+                // elaboratedType.getDataI().set(ElaboratedType.TYPE_AS_STRING, newBareType);
+                elaboratedType.setTypeAsString(newBareType);
             } else {
                 elaboratedType.getTypeData().setBareType(newBareType);
             }
