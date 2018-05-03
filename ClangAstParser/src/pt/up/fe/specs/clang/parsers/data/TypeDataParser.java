@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parsers.data;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
@@ -26,6 +27,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
+import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -72,9 +74,9 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseFunctionTypeData(LineStream lines, DataStore dataStore) {
+    public static DataStore parseFunctionTypeData(LineStream lines, DataStore parserData) {
 
-        DataStore data = parseTypeData(lines, dataStore);
+        DataStore data = parseTypeData(lines, parserData);
 
         data.add(FunctionType.NO_RETURN, GeneralParsers.parseOneOrZero(lines));
         data.add(FunctionType.PRODUCES_RESULT, GeneralParsers.parseOneOrZero(lines));
@@ -85,9 +87,9 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseFunctionProtoTypeData(LineStream lines, DataStore dataStore) {
+    public static DataStore parseFunctionProtoTypeData(LineStream lines, DataStore parserData) {
 
-        DataStore data = parseFunctionTypeData(lines, dataStore);
+        DataStore data = parseFunctionTypeData(lines, parserData);
 
         data.add(FunctionProtoType.NUM_PARAMETERS, GeneralParsers.parseInt(lines));
 
@@ -97,20 +99,15 @@ public class TypeDataParser {
         data.add(FunctionProtoType.IS_VOLATILE, GeneralParsers.parseOneOrZero(lines));
         data.add(FunctionProtoType.IS_RESTRICT, GeneralParsers.parseOneOrZero(lines));
 
-        data.add(FunctionProtoType.REFERENCE_QUALIFIER,
-                GeneralParsers.enumFromName(ReferenceQualifier.getHelper(), lines));
+        data.add(FunctionProtoType.REFERENCE_QUALIFIER, GeneralParsers.enumFromName(ReferenceQualifier.class, lines));
 
-        // data.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
-        // GeneralParsers.enumFromName(ExceptionSpecificationType.getHelper(), lines));
+        data.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
+                GeneralParsers.enumFromName(ExceptionSpecificationType.class, lines));
 
+        data.add(FunctionProtoType.NOEXCEPT_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
         /*
         
         
-        public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
-                .enumeration("referenceQualifier", ReferenceQualifier.class);
-        
-        public final static DataKey<ExceptionSpecificationType> EXCEPTION_SPECIFICATION_TYPE = KeyFactory
-                .enumeration("exceptionSpecificationType", ExceptionSpecificationType.class);
         
         public final static DataKey<Expr> NOEXCEPT_EXPR = KeyFactory.object("noexceptExpr", Expr.class);
         */

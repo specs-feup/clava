@@ -97,8 +97,9 @@ public class ClangDataParsers {
         boolean isConst = parser.apply(ClangGenericParsers::checkWord, "const");
         boolean isVolatile = parser.apply(ClangGenericParsers::checkWord, "volatile");
         boolean isRestrict = parser.apply(ClangGenericParsers::checkWord, "restrict");
+
         ReferenceQualifier referenceQualifier = parser.apply(ClangGenericParsers::parseEnum,
-                ReferenceQualifier.getHelper(), ReferenceQualifier.None);
+                ReferenceQualifier.class, ReferenceQualifier.None);
 
         FunctionProtoTypeData data = new FunctionProtoTypeData(hasTrailingReturn, isConst, isVolatile, isRestrict,
                 referenceQualifier);

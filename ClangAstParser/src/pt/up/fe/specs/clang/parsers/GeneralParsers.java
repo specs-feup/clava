@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -73,6 +74,13 @@ public class GeneralParsers {
         return helper.valueOf(index);
     }
     */
+    public static <T extends Enum<T>> T enumFromOrdinal(Class<T> enumClass, LineStream lines) {
+        return SpecsEnums.fromOrdinal(enumClass, parseInt(lines));
+    }
+
+    public static <T extends Enum<T>> T enumFromName(Class<T> enumClass, LineStream lines) {
+        return SpecsEnums.fromName(enumClass, lines.nextLine());
+    }
 
     public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelperWithValue<T> helper,
             LineStream lines) {
