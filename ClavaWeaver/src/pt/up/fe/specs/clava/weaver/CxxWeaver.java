@@ -226,10 +226,15 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App getApp() {
+        if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+            throw new RuntimeException("Tried to access top-level node, but weaving is disabled");
+        }
+
         return getAppTry().get();
     }
 
     public Optional<App> getAppTry() {
+
         if (weaverData == null) {
             return Optional.empty();
         }
