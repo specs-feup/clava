@@ -19,10 +19,13 @@ import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
+import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
+import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -66,6 +69,28 @@ public class TypeDataParser {
 
         return data;
 
+    }
+
+    public static DataStore parseFunctionTypeData(LineStream lines, DataStore dataStore) {
+
+        DataStore data = parseTypeData(lines, dataStore);
+
+        data.add(FunctionType.NO_RETURN, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionType.PRODUCES_RESULT, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionType.HAS_REG_PARM, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionType.REG_PARM, GeneralParsers.parseLong(lines));
+        data.add(FunctionType.CALLING_CONVENTION, GeneralParsers.enumFromName(CallingConvention.getHelper(), lines));
+
+        return data;
+    }
+
+    public static DataStore parseFunctionProtoTypeData(LineStream lines, DataStore dataStore) {
+
+        DataStore data = parseFunctionTypeData(lines, dataStore);
+
+        data.add(FunctionProtoType.NUM_PARAMETERS, GeneralParsers.parseInt(lines));
+
+        return data;
     }
 
 }
