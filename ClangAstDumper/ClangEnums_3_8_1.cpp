@@ -325,4 +325,25 @@ const std::string clava::CALLING_CONVENTION[] {
         "SpirKernel"
 };
 
+const std::string clava::REFERENCE_QUALIFIER[] {
+    "None",
+    "LValue",
+    "RValue"
+};
+
+
+extern const std::string clava::EXCEPTION_SPECIFICATION_TYPE[] {
+
+"None",             ///< no exception specification
+"DynamicNone",      ///< throw()
+"Dynamic",          ///< throw(T1, T2)
+"MSAny",            ///< Microsoft throw(...) extension
+"BasicNoexcept",    ///< noexcept
+"ComputedNoexcept", ///< noexcept(expression)
+"Unevaluated",      ///< not evaluated yet, for special member function
+"Uninstantiated",   ///< not instantiated yet
+"Unparsed"          ///< not parsed yet
+
+};
+
 //const std::string BUILTIN_KIND[] {};

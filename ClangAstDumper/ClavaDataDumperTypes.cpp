@@ -183,4 +183,16 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
     // Num parameters
     clava::dump(T->getParamTypes().size());
 
+    auto info = T->getExtProtoInfo();
+    clava::dump(info.HasTrailingReturn);
+    clava::dump(info.Variadic);
+
+    clava::dump(T->isConst());
+    clava::dump(T->isVolatile());
+    clava::dump(T->isRestrict());
+    clava::dump(clava::REFERENCE_QUALIFIER[info.RefQualifier]);
+
+    clava::dump(clava::EXCEPTION_SPECIFICATION_TYPE[info.ExceptionSpec.Type]);
+    clava::getId(info.ExceptionSpec.NoexceptExpr, id);
+
 }

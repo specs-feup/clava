@@ -35,6 +35,7 @@ static const std::string DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = "<ParmVa
 static const std::string DUMP_OFFSET_OF_INFO = "<OFFSET_OF_INFO>";
 
 // Exception information from FunctionProtoType
+// NOTE: information in DataStore
 static const std::string FUNCTION_PROTO_TYPE_EXCEPTION = "<FUNCTION_PROTO_TYPE_EXCEPTION>";
 
 static const std::string TYPEDEF_DECL_SOURCE = "<TypedefDecl Source>";
