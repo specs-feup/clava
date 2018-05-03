@@ -114,6 +114,7 @@ namespace clava {
         void DumpCharacterLiteralData(const CharacterLiteral *E);
         void DumpIntegerLiteralData(const IntegerLiteral *E);
         void DumpFloatingLiteralData(const FloatingLiteral *E);
+        void DumpCXXBoolLiteralExprData(const CXXBoolLiteralExpr *E);
 
 
         // TYPES

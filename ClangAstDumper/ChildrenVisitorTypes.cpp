@@ -82,4 +82,9 @@ void ClangAstDumper::VisitFunctionProtoTypeChildren(const FunctionProtoType *T, 
         VisitTypeTop(paramType);
         visitedChildren.push_back(clava::getId(paramType, id));
     }
+
+    // Just visit noexcept expression, if present
+    VisitStmtTop(T->getExtProtoInfo().ExceptionSpec.NoexceptExpr);
+
+    //llvm::errs() << "TEST:" << clava::getClassName(T->getExtProtoInfo().ExceptionSpec.NoexceptExpr);
 }

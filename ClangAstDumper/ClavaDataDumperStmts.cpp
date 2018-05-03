@@ -18,8 +18,9 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CharacterLiteral", clava::StmtNode::CHARACTER_LITERAL},
         {"IntegerLiteral", clava::StmtNode::INTEGER_LITERAL},
         {"FloatingLiteral", clava::StmtNode::FLOATING_LITERAL},
+        {"FloatingLiteral", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CastExpr", clava::StmtNode::CAST_EXPR},
-        {"ImplicitCastExpr", clava::StmtNode::CAST_EXPR},
+        {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
 };
 
 
@@ -64,6 +65,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpIntegerLiteralData(static_cast<const IntegerLiteral *>(S)); break;
         case clava::StmtNode ::FLOATING_LITERAL:
             DumpFloatingLiteralData(static_cast<const FloatingLiteral *>(S)); break;
+        case clava::StmtNode ::CXX_BOOL_LITERAL_EXPR:
+            DumpCXXBoolLiteralExprData(static_cast<const CXXBoolLiteralExpr *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
@@ -172,4 +175,12 @@ void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
     llvm::errs() << "Source location:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getLocation())) << "\n";
 */
 }
+
+
+void clava::ClavaDataDumper::DumpCXXBoolLiteralExprData(const CXXBoolLiteralExpr *E) {
+    DumpLiteralData(E);
+
+    clava::dump(E->getValue());
+}
+
 

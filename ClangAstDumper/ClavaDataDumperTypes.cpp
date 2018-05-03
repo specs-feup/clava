@@ -193,6 +193,6 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
     clava::dump(clava::REFERENCE_QUALIFIER[info.RefQualifier]);
 
     clava::dump(clava::EXCEPTION_SPECIFICATION_TYPE[info.ExceptionSpec.Type]);
-    clava::getId(info.ExceptionSpec.NoexceptExpr, id);
+    clava::dump(clava::getId(info.ExceptionSpec.NoexceptExpr, id));
 
 }
