@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -118,8 +118,8 @@ public enum OmpDirectiveKind implements StringProvider {
     TARGET_SIMD(IF, DEVICE, PRIVATE, FIRSTPRIVATE, MAP, IS_DEVICE_PTR, DEFAULTMAP, NOWAIT, DEPEND, SAFELEN, SIMDLEN,
             LINEAR, ALIGNED, LASTPRIVATE, REDUCTION, COLLAPSE);
 
-    private static final Lazy<EnumHelper<OmpDirectiveKind>> HELPER = new ThreadSafeLazy<>(
-            () -> new EnumHelper<>(OmpDirectiveKind.class));
+    private static final Lazy<EnumHelperWithValue<OmpDirectiveKind>> HELPER = new ThreadSafeLazy<>(
+            () -> new EnumHelperWithValue<>(OmpDirectiveKind.class));
 
     // the set of clause kinds that each directive can have
     private final Set<OmpClauseKind> legalClauses;
@@ -134,7 +134,7 @@ public enum OmpDirectiveKind implements StringProvider {
         return legalClauses.contains(clause);
     }
 
-    public static EnumHelper<OmpDirectiveKind> getHelper() {
+    public static EnumHelperWithValue<OmpDirectiveKind> getHelper() {
         return HELPER.get();
     }
 
@@ -160,7 +160,7 @@ public enum OmpDirectiveKind implements StringProvider {
             }
 
             // OmpDirectiveKind ompDirective = getHelper().valueOf(ompDirectiveString.replace(' ', '_').toUpperCase());
-            OmpDirectiveKind ompDirective = getHelper().valueOf(ompDirectiveString);
+            OmpDirectiveKind ompDirective = getHelper().fromValue(ompDirectiveString);
 
             StringSlice parsedString = string.substring(ompDirectiveString.length()).trim();
 

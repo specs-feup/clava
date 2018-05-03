@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -23,10 +23,10 @@ public enum TypeDependency implements StringProvider {
     INSTANTIATION_DEPENDENT,
     NONE;
 
-    private static final Lazy<EnumHelper<TypeDependency>> ENUM_HELPER = EnumHelper.newLazyHelper(TypeDependency.class,
+    private static final Lazy<EnumHelperWithValue<TypeDependency>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(TypeDependency.class,
             NONE);
 
-    public static EnumHelper<TypeDependency> getHelper() {
+    public static EnumHelperWithValue<TypeDependency> getHelper() {
         return ENUM_HELPER.get();
     }
 

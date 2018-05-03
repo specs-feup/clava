@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -23,10 +23,10 @@ public enum InitializationStyle implements StringProvider {
     CALL_INIT("callinit"), // Call-style initialization (C++98)
     LIST_INIT("listinit"); // Direct list-initialization (C++11)
 
-    private static Lazy<EnumHelper<InitializationStyle>> ENUM_HELPER = EnumHelper
+    private static Lazy<EnumHelperWithValue<InitializationStyle>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelper(InitializationStyle.class, NO_INIT);
 
-    public static EnumHelper<InitializationStyle> getHelper() {
+    public static EnumHelperWithValue<InitializationStyle> getHelper() {
         return ENUM_HELPER.get();
     }
 

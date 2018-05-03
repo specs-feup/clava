@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -26,9 +26,9 @@ public enum TagKind implements StringProvider {
     ENUM(),
     NO_KIND("<no_kind_tag>");
 
-    private static final Lazy<EnumHelper<TagKind>> HELPER = EnumHelper.newLazyHelper(TagKind.class, NO_KIND);
+    private static final Lazy<EnumHelperWithValue<TagKind>> HELPER = EnumHelperWithValue.newLazyHelper(TagKind.class, NO_KIND);
 
-    public static EnumHelper<TagKind> getHelper() {
+    public static EnumHelperWithValue<TagKind> getHelper() {
 	return HELPER.get();
     }
 

@@ -166,7 +166,7 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
                 Preconditions.checkNotNull(initType, "No type found: " + initKind[1]);
             }
 
-            CXXCtorInitializerKind kind = CXXCtorInitializerKind.getHelper().valueOf(initKind[0]);
+            CXXCtorInitializerKind kind = CXXCtorInitializerKind.getHelper().fromValue(initKind[0]);
             CXXCtorInitializer init = new CXXCtorInitializerParser(getConverter(), kind, initType)
                     .parse(ctorInit.get(i));
 

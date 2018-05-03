@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -39,9 +39,9 @@ public enum CallingConv implements StringProvider {
     SPIR_FUNCTION("opencl default for SPIR"),
     SPIR_KERNEL("opencl default for SPIR kernels");
 
-    private static final Lazy<EnumHelper<CallingConv>> HELPER = EnumHelper.newLazyHelper(CallingConv.class);
+    private static final Lazy<EnumHelperWithValue<CallingConv>> HELPER = EnumHelperWithValue.newLazyHelper(CallingConv.class);
 
-    public static EnumHelper<CallingConv> getEnumHelper() {
+    public static EnumHelperWithValue<CallingConv> getEnumHelper() {
         return HELPER.get();
     }
 

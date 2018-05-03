@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clava.language;
 
 import pt.up.fe.specs.util.SpecsStrings;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,10 +24,10 @@ public enum CXXCtorInitializerKind implements StringProvider {
     BASE_INITIALIZER,
     DELEGATING_INITIALIZER;
 
-    private static final Lazy<EnumHelper<CXXCtorInitializerKind>> HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<CXXCtorInitializerKind>> HELPER = EnumHelperWithValue
             .newLazyHelper(CXXCtorInitializerKind.class);
 
-    public static EnumHelper<CXXCtorInitializerKind> getHelper() {
+    public static EnumHelperWithValue<CXXCtorInitializerKind> getHelper() {
         return HELPER.get();
     }
 

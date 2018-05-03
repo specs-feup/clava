@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,10 +24,10 @@ public enum ObjectKind implements StringProvider {
     OBJ_C_SUBSCRIPT("objcsubscript"),
     VECTOR_COMPONENT("vectorcomponent");
 
-    private static final Lazy<EnumHelper<ObjectKind>> ENUM_HELPER = EnumHelper.newLazyHelper(ObjectKind.class,
+    private static final Lazy<EnumHelperWithValue<ObjectKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(ObjectKind.class,
             ORDINARY);
 
-    public static EnumHelper<ObjectKind> getEnumHelper() {
+    public static EnumHelperWithValue<ObjectKind> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 

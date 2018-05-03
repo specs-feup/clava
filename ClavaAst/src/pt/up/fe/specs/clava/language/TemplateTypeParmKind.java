@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -22,10 +22,10 @@ public enum TemplateTypeParmKind implements StringProvider {
     TYPENAME,
     CLASS;
 
-    private static final Lazy<EnumHelper<TemplateTypeParmKind>> HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<TemplateTypeParmKind>> HELPER = EnumHelperWithValue
             .newLazyHelper(TemplateTypeParmKind.class);
 
-    public static EnumHelper<TemplateTypeParmKind> getHelper() {
+    public static EnumHelperWithValue<TemplateTypeParmKind> getHelper() {
         return HELPER.get();
     }
 

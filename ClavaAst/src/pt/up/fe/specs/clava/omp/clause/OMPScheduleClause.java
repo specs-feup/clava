@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -39,9 +39,9 @@ public class OMPScheduleClause implements OMPClause {
         AUTO,
         RUNTIME;
 
-        private static final Lazy<EnumHelper<ScheduleKind>> ENUM_HELPER = EnumHelper.newLazyHelper(ScheduleKind.class);
+        private static final Lazy<EnumHelperWithValue<ScheduleKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(ScheduleKind.class);
 
-        public static EnumHelper<ScheduleKind> getHelper() {
+        public static EnumHelperWithValue<ScheduleKind> getHelper() {
             return ENUM_HELPER.get();
         }
 
@@ -56,10 +56,10 @@ public class OMPScheduleClause implements OMPClause {
         NONMONOTONIC,
         SIMD;
 
-        private static final Lazy<EnumHelper<ScheduleModifier>> ENUM_HELPER = EnumHelper
+        private static final Lazy<EnumHelperWithValue<ScheduleModifier>> ENUM_HELPER = EnumHelperWithValue
                 .newLazyHelper(ScheduleModifier.class);
 
-        public static EnumHelper<ScheduleModifier> getHelper() {
+        public static EnumHelperWithValue<ScheduleModifier> getHelper() {
             return ENUM_HELPER.get();
         }
 

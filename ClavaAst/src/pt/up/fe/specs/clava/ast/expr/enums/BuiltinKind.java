@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -152,9 +152,9 @@ public enum BuiltinKind implements StringProvider {
     ARC_UNBRIDGED_CAST,
     OMP_ARRAY_SECTION;
     */
-    private static final Lazy<EnumHelper<BuiltinKind>> ENUM_HELPER = EnumHelper.newLazyHelper(BuiltinKind.class);
+    private static final Lazy<EnumHelperWithValue<BuiltinKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(BuiltinKind.class);
 
-    public static EnumHelper<BuiltinKind> getHelper() {
+    public static EnumHelperWithValue<BuiltinKind> getHelper() {
         return ENUM_HELPER.get();
     }
 

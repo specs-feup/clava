@@ -109,7 +109,7 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
         }
 
         // Treat it as a normal operator
-        return UnaryOperatorKind.getEnumHelper().valueOf(opcodeString);
+        return UnaryOperatorKind.getEnumHelper().fromValue(opcodeString);
 
         // // Check base opcodes
         // if(position == UnaryOperatorPosition.)

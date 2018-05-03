@@ -67,7 +67,7 @@ public class DeclDataParser {
         DataStore data = parseDeclData(lines, dataStore);
 
         data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
-        data.add(NamedDecl.NAME_KIND, NameKind.getHelper().valueOf(GeneralParsers.parseInt(lines)));
+        data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
         data.add(NamedDecl.IS_HIDDEN, GeneralParsers.parseOneOrZero(lines));
 
         return data;
@@ -79,7 +79,7 @@ public class DeclDataParser {
         DataStore data = parseNamedDeclData(lines, dataStore);
 
         data.add(FunctionDecl.IS_CONSTEXPR, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().valueOf(GeneralParsers.parseInt(lines)));
+        data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
 
         return data;
     }

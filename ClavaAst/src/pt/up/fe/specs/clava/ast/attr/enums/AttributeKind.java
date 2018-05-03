@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.attr.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -201,9 +201,9 @@ public enum AttributeKind implements StringProvider {
     Overloadable,
     Thread;
 
-    private static final Lazy<EnumHelper<AttributeKind>> ENUM_HELPER = EnumHelper.newLazyHelper(AttributeKind.class);
+    private static final Lazy<EnumHelperWithValue<AttributeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(AttributeKind.class);
 
-    public static EnumHelper<AttributeKind> getHelper() {
+    public static EnumHelperWithValue<AttributeKind> getHelper() {
         return ENUM_HELPER.get();
     }
 

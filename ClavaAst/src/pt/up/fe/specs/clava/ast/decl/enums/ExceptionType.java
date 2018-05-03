@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -28,10 +28,10 @@ public enum ExceptionType implements StringProvider {
     UNEVALUATED("noexcept-unevaluated"),
     UNINSTANTIATED("noexcept-uninstantiated");
 
-    private static final Lazy<EnumHelper<ExceptionType>> HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<ExceptionType>> HELPER = EnumHelperWithValue
 	    .newLazyHelper(ExceptionType.class, NONE);
 
-    public static EnumHelper<ExceptionType> getHelper() {
+    public static EnumHelperWithValue<ExceptionType> getHelper() {
 	return HELPER.get();
     }
 

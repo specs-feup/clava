@@ -2,7 +2,7 @@ package pt.up.fe.specs.clava.weaver.enums;
 
 import org.lara.interpreter.weaver.interf.NamedEnum;
 import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 
 /**
  * 
@@ -17,7 +17,7 @@ public enum StorageClass  implements NamedEnum{
     REGISTER("register"),
     STATIC("static");
     private String name;
-    private static final Lazy<EnumHelper<StorageClass>> ENUM_HELPER = EnumHelper.newLazyHelper(StorageClass.class);
+    private static final Lazy<EnumHelperWithValue<StorageClass>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(StorageClass.class);
 
     /**
      * 
@@ -42,7 +42,7 @@ public enum StorageClass  implements NamedEnum{
     /**
      * 
      */
-    public static EnumHelper<StorageClass> getHelper() {
+    public static EnumHelperWithValue<StorageClass> getHelper() {
         return ENUM_HELPER.get();
     }
 }

@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -27,10 +27,10 @@ public enum NestedNamedSpecifier implements StringProvider {
     SUPER("Super"),
     NONE("");
 
-    private static final Lazy<EnumHelper<NestedNamedSpecifier>> ENUM_HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<NestedNamedSpecifier>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelper(NestedNamedSpecifier.class, NONE);
 
-    public static EnumHelper<NestedNamedSpecifier> getEnumHelper() {
+    public static EnumHelperWithValue<NestedNamedSpecifier> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 

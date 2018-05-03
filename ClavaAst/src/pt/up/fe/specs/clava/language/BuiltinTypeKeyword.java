@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -55,10 +55,10 @@ public enum BuiltinTypeKeyword implements StringProvider {
 
     // private static final Lazy<EnumHelper<BuiltinTypeKeyword>> HELPER = EnumHelper
     // .newLazyHelper(BuiltinTypeKeyword.class);
-    private static final Lazy<EnumHelper<BuiltinTypeKeyword>> HELPER = Lazy.newInstance(
-            () -> new EnumHelper<>(BuiltinTypeKeyword.class).addAlias("half", HALF));
+    private static final Lazy<EnumHelperWithValue<BuiltinTypeKeyword>> HELPER = Lazy.newInstance(
+            () -> new EnumHelperWithValue<>(BuiltinTypeKeyword.class).addAlias("half", HALF));
 
-    public static EnumHelper<BuiltinTypeKeyword> getHelper() {
+    public static EnumHelperWithValue<BuiltinTypeKeyword> getHelper() {
         return HELPER.get();
     }
 

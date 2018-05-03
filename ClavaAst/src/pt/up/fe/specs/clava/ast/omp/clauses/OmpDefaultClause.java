@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -23,10 +23,10 @@ public class OmpDefaultClause implements OmpClause {
         SHARED,
         NONE;
 
-        private static final Lazy<EnumHelper<DefaultKind>> ENUM_HELPER = EnumHelper
+        private static final Lazy<EnumHelperWithValue<DefaultKind>> ENUM_HELPER = EnumHelperWithValue
                 .newLazyHelper(DefaultKind.class);
 
-        public static EnumHelper<DefaultKind> getHelper() {
+        public static EnumHelperWithValue<DefaultKind> getHelper() {
             return ENUM_HELPER.get();
         }
 

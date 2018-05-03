@@ -45,7 +45,7 @@ public class CXXOperatorCallExpr extends CallExpr {
         // Should return string representing the operator
         String operatorRefname = getCallee().getCode();
 
-        CXXOperator cxxOperator = CXXOperator.getHelper().valueOf(operatorRefname);
+        CXXOperator cxxOperator = CXXOperator.getHelper().fromValue(operatorRefname);
 
         // String code = cxxOperator.getCode(getArgs());
         // if (code.startsWith("it ++")) {

@@ -34,7 +34,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -529,7 +529,7 @@ public class ClangGenericParsers {
             castKindString = castKindString.substring(0, whitespaceIndex);
         }
 
-        CastKind castKind = CastKind.getHelper().valueOf(castKindString);
+        CastKind castKind = CastKind.getHelper().fromValue(castKindString);
 
         return new ParserResult<>(string, castKind);
     }
@@ -766,7 +766,7 @@ public class ClangGenericParsers {
     // }
 
     public static <K extends Enum<K> & StringProvider> ParserResult<List<K>> parseElements(StringSlice string,
-            EnumHelper<K> enumHelper) {
+            EnumHelperWithValue<K> enumHelper) {
 
         List<K> parsedElements = new ArrayList<>();
 
@@ -792,7 +792,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<K> parseEnum(
-            StringSlice string, EnumHelper<K> enumHelper) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper) {
 
         return parseEnum(string, enumHelper, null);
     }
@@ -806,7 +806,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<K> parseEnum(
-            StringSlice string, EnumHelper<K> enumHelper, K defaultValue) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper, K defaultValue) {
 
         // Try parsing the enum
         ParserResult<Optional<K>> result = checkEnum(string, enumHelper);
@@ -836,7 +836,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<K> checkEnum(
-            StringSlice string, EnumHelper<K> enumHelper, K defaultValue) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper, K defaultValue) {
 
         ParserResult<Optional<K>> result = checkEnum(string, enumHelper);
         K value = result.getResult().orElse(defaultValue);
@@ -851,13 +851,13 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<Optional<K>> checkEnum(
-            StringSlice string, EnumHelper<K> enumHelper) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper) {
 
         // Copy StringSlice, in case the function does not found the enum
         ParserResult<String> word = StringParsers.parseWord(new StringSlice(string));
 
         // Check if there are any custom mappings for the word
-        Optional<K> result = enumHelper.valueOfTry(word.getResult());
+        Optional<K> result = enumHelper.fromValueTry(word.getResult());
 
         // Prepare return value
         StringSlice modifiedString = result.isPresent() ? word.getModifiedString() : string;

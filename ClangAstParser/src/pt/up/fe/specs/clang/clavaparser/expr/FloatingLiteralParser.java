@@ -109,7 +109,7 @@ public class FloatingLiteralParser extends AClangNodeParser<FloatingLiteral> {
     }
 
     private static FloatKind getFloatKind(Type type) {
-        BuiltinTypeKeyword keyword = BuiltinTypeKeyword.getHelper().valueOf(type.getCode());
+        BuiltinTypeKeyword keyword = BuiltinTypeKeyword.getHelper().fromValue(type.getCode());
 
         if (keyword != null) {
             FloatKind kind = FLOAT_KINDS.get(keyword);

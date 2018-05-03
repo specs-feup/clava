@@ -97,7 +97,7 @@ public class OmpClauses {
 
     public List<String> getReduction(String kindString) {
         ReductionKind kind = ReductionKind.getHelper()
-                .valueOfTry(kindString.toLowerCase())
+                .fromValueTry(kindString.toLowerCase())
                 .orElseThrow(() -> new RuntimeException(
                         "'" + kindString + "' is not a valid reduction. Available reductions: "
                                 + ReductionKind.getHelper().getAvailableOptions()));

@@ -755,11 +755,11 @@ public class StreamParser {
         boolean hasExplicitParameters = GeneralParsers.parseOneOrZero(lines.nextLine());
         boolean hasExplicitResultType = GeneralParsers.parseOneOrZero(lines.nextLine());
 
-        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().valueOf(GeneralParsers.parseInt(lines));
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(GeneralParsers.parseInt(lines));
         int numCaptures = GeneralParsers.parseInt(lines);
         List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
         for (int i = 0; i < numCaptures; i++) {
-            captureKinds.add(LambdaCaptureKind.getHelper().valueOf(GeneralParsers.parseInt(lines)));
+            captureKinds.add(LambdaCaptureKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
         }
 
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,

@@ -16,7 +16,7 @@ package pt.up.fe.specs.clava.language;
 import java.util.Set;
 
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -37,12 +37,12 @@ public enum Standard implements StringProvider {
     GNUXX11("gnu++11", true),
     GNUXX14("gnu++14", true);
 
-    private static final Lazy<EnumHelper<Standard>> ENUM_HELPER = EnumHelper.newLazyHelper(Standard.class);
+    private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(Standard.class);
 
     private static final Set<Standard> GNU_STANDARDS = SpecsCollections.asSet(GNU90, GNU99, GNU11, GNUXX98, GNUXX11,
             GNUXX14);
 
-    public static EnumHelper<Standard> getEnumHelper() {
+    public static EnumHelperWithValue<Standard> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 

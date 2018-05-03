@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -72,9 +72,9 @@ public enum CXXOperator implements StringProvider {
     private final String operatorCode;
     private final BiFunction<String, List<Expr>, String> toCode;
 
-    private static final Lazy<EnumHelper<CXXOperator>> HELPER = EnumHelper.newLazyHelper(CXXOperator.class);
+    private static final Lazy<EnumHelperWithValue<CXXOperator>> HELPER = EnumHelperWithValue.newLazyHelper(CXXOperator.class);
 
-    public static EnumHelper<CXXOperator> getHelper() {
+    public static EnumHelperWithValue<CXXOperator> getHelper() {
         return HELPER.get();
     }
 

@@ -27,7 +27,7 @@ import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -139,10 +139,10 @@ public class EnumDecl extends TagDecl {
         STRUCT,
         NO_SCOPE;
 
-        private static final Lazy<EnumHelper<EnumScopeType>> ENUM_HELPER = EnumHelper.newLazyHelper(EnumScopeType.class,
+        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(EnumScopeType.class,
                 NO_SCOPE);
 
-        public static EnumHelper<EnumScopeType> getEnumHelper() {
+        public static EnumHelperWithValue<EnumScopeType> getEnumHelper() {
             return ENUM_HELPER.get();
         }
 

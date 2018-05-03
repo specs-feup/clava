@@ -276,7 +276,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public void insertImpl(String position, String code) {
-        Insert insert = Insert.getHelper().valueOf(position);
+        Insert insert = Insert.getHelper().fromValue(position);
         CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine());
         //
         // if (insert == Insert.AFTER || insert == Insert.BEFORE) {

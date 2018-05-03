@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -32,9 +32,9 @@ public enum ValueKind implements StringProvider {
      */
     X_VALUE("xvalue");
 
-    private static final Lazy<EnumHelper<ValueKind>> ENUM_HELPER = EnumHelper.newLazyHelper(ValueKind.class);
+    private static final Lazy<EnumHelperWithValue<ValueKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(ValueKind.class);
 
-    public static EnumHelper<ValueKind> getEnumHelper() {
+    public static EnumHelperWithValue<ValueKind> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 

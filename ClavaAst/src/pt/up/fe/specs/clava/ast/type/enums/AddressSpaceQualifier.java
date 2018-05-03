@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -25,10 +25,10 @@ public enum AddressSpaceQualifier implements StringProvider {
     CONSTANT,
     PRIVATE;
 
-    private static final Lazy<EnumHelper<AddressSpaceQualifier>> ENUM_HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<AddressSpaceQualifier>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelper(AddressSpaceQualifier.class, NONE);
 
-    public static EnumHelper<AddressSpaceQualifier> getEnumHelper() {
+    public static EnumHelperWithValue<AddressSpaceQualifier> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 

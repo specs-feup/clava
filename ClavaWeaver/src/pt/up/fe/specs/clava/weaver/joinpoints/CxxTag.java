@@ -48,7 +48,7 @@ public class CxxTag extends ATag {
     @Override
     public void insertImpl(String position, String code) {
 
-        Insert insert = Insert.getHelper().valueOf(position);
+        Insert insert = Insert.getHelper().fromValue(position);
         if (insert == Insert.AFTER) {
 
             getTargetImpl().insert(position, code);

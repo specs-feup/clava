@@ -15,7 +15,7 @@ package pt.up.fe.specs.clava.ast.expr.enums;
 
 import java.util.Optional;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -31,10 +31,10 @@ public enum LambdaCaptureDefault implements StringProvider {
         this.code = code;
     }
 
-    private static final Lazy<EnumHelper<LambdaCaptureDefault>> ENUM_HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<LambdaCaptureDefault>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelper(LambdaCaptureDefault.class);
 
-    public static EnumHelper<LambdaCaptureDefault> getHelper() {
+    public static EnumHelperWithValue<LambdaCaptureDefault> getHelper() {
         return ENUM_HELPER.get();
     }
 

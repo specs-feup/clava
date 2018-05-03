@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,9 +24,9 @@ public enum CharacterKind implements StringProvider {
     UTF16,
     UTF32;
 
-    private static final Lazy<EnumHelper<CharacterKind>> ENUM_HELPER = EnumHelper.newLazyHelper(CharacterKind.class);
+    private static final Lazy<EnumHelperWithValue<CharacterKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(CharacterKind.class);
 
-    public static EnumHelper<CharacterKind> getEnumHelper() {
+    public static EnumHelperWithValue<CharacterKind> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 

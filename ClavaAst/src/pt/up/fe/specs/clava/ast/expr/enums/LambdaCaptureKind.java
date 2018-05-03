@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.expr.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,10 +24,10 @@ public enum LambdaCaptureKind implements StringProvider {
     BY_REF,
     VLA_TYPE;
 
-    private static final Lazy<EnumHelper<LambdaCaptureKind>> ENUM_HELPER = EnumHelper
+    private static final Lazy<EnumHelperWithValue<LambdaCaptureKind>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelper(LambdaCaptureKind.class);
 
-    public static EnumHelper<LambdaCaptureKind> getHelper() {
+    public static EnumHelperWithValue<LambdaCaptureKind> getHelper() {
         return ENUM_HELPER.get();
     }
 

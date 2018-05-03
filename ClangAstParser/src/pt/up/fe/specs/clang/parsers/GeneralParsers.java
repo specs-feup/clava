@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import pt.up.fe.specs.util.collections.MultiMap;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -74,23 +74,23 @@ public class GeneralParsers {
     }
     */
 
-    public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelper<T> helper,
+    public static <T extends Enum<T> & StringProvider> T enumFromInt(EnumHelperWithValue<T> helper,
             LineStream lines) {
 
-        return helper.valueOf(parseInt(lines));
+        return helper.fromValue(parseInt(lines));
     }
 
-    public static <T extends Enum<T> & StringProvider> T enumFromName(EnumHelper<T> helper,
+    public static <T extends Enum<T> & StringProvider> T enumFromName(EnumHelperWithValue<T> helper,
             LineStream lines) {
 
         return helper.fromName(lines.nextLine());
     }
 
-    public static <T extends Enum<T> & StringProvider> T enumFromValue(EnumHelper<T> helper,
+    public static <T extends Enum<T> & StringProvider> T enumFromValue(EnumHelperWithValue<T> helper,
             LineStream lines) {
 
         String value = lines.nextLine();
-        return helper.valueOf(value);
+        return helper.fromValue(value);
     }
 
     /**
@@ -100,7 +100,7 @@ public class GeneralParsers {
      * @param lines
      * @return
      */
-    public static <T extends Enum<T> & StringProvider> List<T> enumListFromName(EnumHelper<T> helper,
+    public static <T extends Enum<T> & StringProvider> List<T> enumListFromName(EnumHelperWithValue<T> helper,
             LineStream lines) {
 
         int numEnums = parseInt(lines);

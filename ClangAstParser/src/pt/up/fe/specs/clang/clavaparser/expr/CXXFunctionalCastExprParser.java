@@ -55,7 +55,7 @@ public class CXXFunctionalCastExprParser extends AClangNodeParser<CXXFunctionalC
         // CastKind castKind = parser.apply(ClangGenericParsers::parseCastKind);
         String castKindString = parser.apply(string -> ClangGenericParsers.reverseNested(string, '<', '>'));
         String typeAsWritten = parser.apply(ClangGenericParsers::parseRemaining);
-        CastKind castKind = CastKind.getHelper().valueOf(castKindString);
+        CastKind castKind = CastKind.getHelper().fromValue(castKindString);
 
         List<ClavaNode> children = parseChildren(node);
 

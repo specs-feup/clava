@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -31,9 +31,9 @@ public enum StorageClass implements StringProvider {
     REGISTER,
     STATIC;
 
-    private static final Lazy<EnumHelper<StorageClass>> HELPER = EnumHelper.newLazyHelper(StorageClass.class, NONE);
+    private static final Lazy<EnumHelperWithValue<StorageClass>> HELPER = EnumHelperWithValue.newLazyHelper(StorageClass.class, NONE);
 
-    public static EnumHelper<StorageClass> getHelper() {
+    public static EnumHelperWithValue<StorageClass> getHelper() {
         return HELPER.get();
     }
 

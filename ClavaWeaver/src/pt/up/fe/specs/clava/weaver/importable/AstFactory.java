@@ -297,7 +297,7 @@ public class AstFactory {
     // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
     public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
 
-        Standard standard = Standard.getEnumHelper().valueOf(standardString);
+        Standard standard = Standard.getEnumHelper().fromValue(standardString);
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -320,7 +320,7 @@ public class AstFactory {
 
     public static AJoinPoint omp(String directiveName) {
         // Get directive
-        OmpDirectiveKind kind = OmpDirectiveKind.getHelper().valueOf(directiveName);
+        OmpDirectiveKind kind = OmpDirectiveKind.getHelper().fromValue(directiveName);
         return CxxJoinpoints.create(OmpParser.newOmpPragma(kind), null);
 
         // ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(),
@@ -410,7 +410,7 @@ public class AstFactory {
     ////// Methods that only use ClavaFactory
 
     public static ACxxWeaverJoinPoint builtinType(String typeCode) {
-        BuiltinKind kind = BuiltinKind.getHelper().valueOf(typeCode);
+        BuiltinKind kind = BuiltinKind.getHelper().fromValue(typeCode);
 
         BuiltinType type = CxxWeaver.getFactory().builtinType(kind);
 

@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -23,9 +23,9 @@ public enum Insert implements StringProvider {
     REPLACE,
     AROUND;
 
-    private static final Lazy<EnumHelper<Insert>> HELPER = EnumHelper.newLazyHelper(Insert.class);
+    private static final Lazy<EnumHelperWithValue<Insert>> HELPER = EnumHelperWithValue.newLazyHelper(Insert.class);
 
-    public static EnumHelper<Insert> getHelper() {
+    public static EnumHelperWithValue<Insert> getHelper() {
 	return HELPER.get();
     }
 

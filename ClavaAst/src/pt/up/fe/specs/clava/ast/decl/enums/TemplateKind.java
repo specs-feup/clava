@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,9 +24,9 @@ public enum TemplateKind implements StringProvider {
     FUNCTION_TEMPLATE_SPECIALIZATION,
     DEPENDENT_FUNCTION_TEMPLATE_SPECIALIZATION;
 
-    private static final Lazy<EnumHelper<TemplateKind>> ENUM_HELPER = EnumHelper.newLazyHelper(TemplateKind.class);
+    private static final Lazy<EnumHelperWithValue<TemplateKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(TemplateKind.class);
 
-    public static EnumHelper<TemplateKind> getHelper() {
+    public static EnumHelperWithValue<TemplateKind> getHelper() {
         return ENUM_HELPER.get();
     }
 

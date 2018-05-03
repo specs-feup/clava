@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,9 +24,9 @@ public enum C99Qualifier implements StringProvider {
     RESTRICT_C99,
     VOLATILE;
 
-    private static final Lazy<EnumHelper<C99Qualifier>> ENUM_HELPER = EnumHelper.newLazyHelper(C99Qualifier.class);
+    private static final Lazy<EnumHelperWithValue<C99Qualifier>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(C99Qualifier.class);
 
-    public static EnumHelper<C99Qualifier> getHelper() {
+    public static EnumHelperWithValue<C99Qualifier> getHelper() {
         return ENUM_HELPER.get();
     }
 

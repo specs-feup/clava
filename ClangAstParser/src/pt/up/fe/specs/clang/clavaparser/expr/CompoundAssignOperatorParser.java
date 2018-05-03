@@ -53,7 +53,7 @@ public class CompoundAssignOperatorParser extends AClangNodeParser<CompoundAssig
             throw new RuntimeException("Expected string '" + compountOperator + "' to end with '='");
         }
         String operatorString = compountOperator.substring(0, compountOperator.length() - 1);
-        BinaryOperatorKind op = BinaryOperatorKind.getHelper().valueOf(operatorString);
+        BinaryOperatorKind op = BinaryOperatorKind.getHelper().fromValue(operatorString);
 
         List<ClavaNode> children = parseChildren(node);
         checkNumChildren(children, 2);

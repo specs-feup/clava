@@ -52,7 +52,7 @@ public class BuiltinTypeLegacy extends BuiltinType {
         try {
             List<BuiltinTypeKeyword> keywords = Arrays.stream(bareType.split(" "))
                     .filter(type -> !type.isEmpty())
-                    .map(type -> BuiltinTypeKeyword.getHelper().valueOf(type))
+                    .map(type -> BuiltinTypeKeyword.getHelper().fromValue(type))
                     .collect(Collectors.toList());
             return keywords;
         } catch (Exception e) {

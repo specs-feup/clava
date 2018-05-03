@@ -147,7 +147,7 @@ public class OmpClauseParsers {
 
         String clauseName = indexOfPar == -1 ? currentPragmaPrefix : currentPragmaPrefix.substring(0, indexOfPar);
 
-        return getHelper().valueOf(clauseName.toLowerCase().trim());
+        return getHelper().fromValue(clauseName.toLowerCase().trim());
     }
 
     /**
@@ -236,14 +236,14 @@ public class OmpClauseParsers {
         List<String> modifiersStrings = colonIndex == -1 ? Collections.emptyList()
                 : parseList(args.substring(0, colonIndex));
 
-        List<ScheduleModifier> modifiers = ScheduleModifier.getHelper().valueOf(modifiersStrings);
+        List<ScheduleModifier> modifiers = ScheduleModifier.getHelper().fromValue(modifiersStrings);
 
         args = colonIndex == -1 ? args : args.substring(colonIndex + 1);
 
         int commaIndex = args.indexOf(',');
 
         String scheduleString = commaIndex == -1 ? args : args.substring(0, commaIndex);
-        ScheduleKind schedule = ScheduleKind.getHelper().valueOf(scheduleString.trim());
+        ScheduleKind schedule = ScheduleKind.getHelper().fromValue(scheduleString.trim());
 
         String chunkSize = commaIndex == -1 ? null : args.substring(commaIndex + 1).trim();
         // Integer chunkSize = commaIndex == -1 ? null : Integer.decode(args.substring(commaIndex + 1).trim());
@@ -288,7 +288,7 @@ public class OmpClauseParsers {
         }
 
         String kindString = args.substring(0, colonIndex).trim();
-        ReductionKind reductionKind = ReductionKind.getHelper().valueOf(kindString);
+        ReductionKind reductionKind = ReductionKind.getHelper().fromValue(kindString);
 
         // variable list
         List<String> variables = parseList(args.substring(colonIndex + 1));
@@ -325,7 +325,7 @@ public class OmpClauseParsers {
         StringParser clause = parseClauseName(PROC_BIND, clauses);
 
         String arg = clause.toString().trim();
-        ProcBindKind kind = ProcBindKind.getHelper().valueOf(arg);
+        ProcBindKind kind = ProcBindKind.getHelper().fromValue(arg);
 
         return new OmpProcBindClause(kind);
     }
@@ -335,7 +335,7 @@ public class OmpClauseParsers {
         StringParser clause = parseClauseName(DEFAULT, clauses);
 
         String arg = clause.toString().trim();
-        DefaultKind kind = DefaultKind.getHelper().valueOf(arg);
+        DefaultKind kind = DefaultKind.getHelper().fromValue(arg);
 
         return new OmpDefaultClause(kind);
     }

@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -30,9 +30,9 @@ public enum NameKind implements StringProvider {
     CXX_LITERAL_OPERATOR_NAME,
     CXX_USING_DIRECTIVE;
 
-    private static final Lazy<EnumHelper<NameKind>> ENUM_HELPER = EnumHelper.newLazyHelper(NameKind.class);
+    private static final Lazy<EnumHelperWithValue<NameKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelper(NameKind.class);
 
-    public static EnumHelper<NameKind> getHelper() {
+    public static EnumHelperWithValue<NameKind> getHelper() {
         return ENUM_HELPER.get();
     }
 
