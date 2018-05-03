@@ -151,6 +151,7 @@ import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.LiteralExprLegacy;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
@@ -231,7 +232,6 @@ import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
-import pt.up.fe.specs.clava.ast.type.legacy.FunctionProtoTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
@@ -700,7 +700,7 @@ public class ClavaNodeFactory {
             FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info, Type returnType,
             Collection<? extends Type> arguments) {
 
-        return new FunctionProtoTypeLegacy(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
+        return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
     }
 
     public static FunctionNoProtoType functionNoProtoType(FunctionTypeData functionTypeData, TypeData typeData,
@@ -992,7 +992,7 @@ public class ClavaNodeFactory {
      */
 
     public static LiteralExpr literalExpr(String literalCode, Type type) {
-        return new LiteralExpr(literalCode, type);
+        return new LiteralExprLegacy(literalCode, type);
     }
 
     // public static LiteralExpr literalExpr(String literalCode, Type type, ClavaNodeInfo info) {

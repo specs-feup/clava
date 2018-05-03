@@ -332,6 +332,11 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         FunctionProtoType functionProtoType = (FunctionProtoType) functionType;
+
+        if (functionProtoType.hasDataI()) {
+            return functionProtoType.getCodeAfterParams();
+        }
+
         FunctionProtoTypeData ptData = functionProtoType.getFunctionProtoTypeData();
         StringBuilder code = new StringBuilder();
 

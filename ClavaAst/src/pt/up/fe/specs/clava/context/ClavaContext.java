@@ -20,6 +20,8 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+
 public class ClavaContext {
 
     /// DATAKEYS BEGIN
@@ -59,6 +61,10 @@ public class ClavaContext {
 
         // Initialize factory
         this.data.add(FACTORY, new ClavaFactory(this));
+
+        // Set ClavaNodeFactory
+        // TODO: Temporary transition measure
+        LegacyToDataStore.CLAVA_CONTEXT.set(this);
     }
 
     public <T> T get(DataKey<T> key) {

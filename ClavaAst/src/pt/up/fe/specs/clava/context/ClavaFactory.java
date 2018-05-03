@@ -20,16 +20,20 @@ import java.util.List;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.LiteralNode;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
+import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.DummyType;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 public class ClavaFactory {
 
@@ -51,7 +55,7 @@ public class ClavaFactory {
         this.baseData = baseData;
     }
 
-    private DataStore newDataStore(String idPrefix) {
+    public DataStore newDataStore(String idPrefix) {
         DataStore data = DataStore.newInstance("ClavaFactory Node");
 
         // Add base node, if present
@@ -97,6 +101,13 @@ public class ClavaFactory {
         return new BuiltinType(data, Collections.emptyList());
     }
 
+    public DummyType dummyType(String dummyContent) {
+        DataStore data = newTypeDataStore()
+                .put(DummyType.DUMMY_CONTENT, dummyContent);
+
+        return new DummyType(data, Collections.emptyList());
+    }
+
     /// EXPRS
 
     public IntegerLiteral integerLiteral(int integer) {
@@ -115,6 +126,14 @@ public class ClavaFactory {
                 .put(Expr.TYPE, builtinType(floatKind.getBuiltinKind()));
 
         return new FloatingLiteral(data, Collections.emptyList());
+    }
+
+    public LiteralExpr literalExpr(String code, Type type) {
+        DataStore data = newExprDataStore()
+                .put(LiteralNode.LITERAL_CODE, code)
+                .put(Expr.TYPE, type);
+
+        return new LiteralExpr(data, Collections.emptyList());
     }
 
     /// DECLS
