@@ -62,4 +62,16 @@ public class AutoType extends Type {
     protected void setDesugarImpl(Type desugaredType) {
         setDeducedType(desugaredType);
     }
+
+    /*
+    @Override
+    public int hashCode() {
+        return getDeducedType().hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        return getDeducedType().equals(obj);
+    }
+    */
 }

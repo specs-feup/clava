@@ -18,10 +18,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
@@ -32,44 +37,31 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public abstract class FunctionType extends Type {
 
-    
+    /// DATAKEYS BEGIN
 
-    /**
-     * Data class for Function Type.
-     * 
-     * @author JoaoBispo
-     *
-     */
-    /*
-    static public class FunctionTypeData {
-        private final boolean hasNoReturn;
-        private final boolean isConst;
-        private final CallingConv callingConv;
-    
-        public FunctionTypeData(boolean hasNoReturn, boolean isConst, CallingConv callingConv) {
-            this.hasNoReturn = hasNoReturn;
-            this.isConst = isConst;
-            this.callingConv = callingConv;
-        }
-    
-        public boolean getHasNoReturn() {
-            return hasNoReturn;
-        }
-    
-        public boolean isConst() {
-            return isConst;
-        }
-    
-        public CallingConv getCallingConv() {
-            return callingConv;
-        }
-    }
-    */
+    public final static DataKey<Boolean> NO_RETURN = KeyFactory.bool("noReturn");
+
+    public final static DataKey<Boolean> PRODUCES_RESULT = KeyFactory.bool("producesResult");
+
+    public final static DataKey<Boolean> HAS_REG_PARM = KeyFactory.bool("hasRegParm");
+
+    public final static DataKey<Long> REG_PARM = KeyFactory.longInt("regParm");
+
+    public final static DataKey<CallingConvention> CALLING_CONVENTION = KeyFactory.enumeration("callingConvention",
+            CallingConvention.class);
+
+    /// DATAKEYS END
 
     /**
      * FunctionType fields
      */
     private final FunctionTypeData functionTypeData;
+
+    public FunctionType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        this.functionTypeData = null;
+    }
 
     /**
      * 
@@ -91,10 +83,21 @@ public abstract class FunctionType extends Type {
         // Preconditions.checkArgument(children.size() > 0, "Expected at least one child, the return argument");
 
         this.functionTypeData = functionTypeData;
+
+        // TODO: replace functionTypeData with DataStore (do the same to the other non-leaf types)
     }
 
     public Type getReturnType() {
         return getChild(Type.class, 0);
+    }
+
+    /**
+     * Return type comes after desugared type, if present.
+     * 
+     * @return
+     */
+    public int getIndexReturnType() {
+        return getIndexDesugar() + 1;
     }
 
     public List<Type> getParamTypes() {

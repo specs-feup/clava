@@ -13,14 +13,14 @@
 
 package pt.up.fe.specs.clava.ast;
 
-public class NotSupportedByClavaDataException extends RuntimeException {
+public class NotSupportedByDataStoreException extends RuntimeException {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    public NotSupportedByClavaDataException() {
-        super("Not supported by ClavaData nodes");
+    public NotSupportedByDataStoreException() {
+        super("Not supported by ClavaNodes that use DataStores");
     }
 }

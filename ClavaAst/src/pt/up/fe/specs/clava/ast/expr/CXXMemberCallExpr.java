@@ -158,12 +158,14 @@ public class CXXMemberCallExpr extends CallExpr {
         if (base instanceof MemberExpr) {
             Type baseType = base.getType();
 
-            if (!(baseType instanceof RecordType)) {
-                SpecsLogs.msgInfo("Expected type of member access to be a record type: " + baseType);
+            Optional<RecordType> recordType = baseType.toTry(RecordType.class);
+
+            if (!recordType.isPresent()) {
+                SpecsLogs.msgInfo("Expected type of member access to have a record type: " + baseType.toTree());
                 return Optional.empty();
             }
 
-            return getFunctionDeclFromRecord((RecordType) baseType);
+            return getFunctionDeclFromRecord(recordType.get());
         }
 
         /*
@@ -241,6 +243,7 @@ public class CXXMemberCallExpr extends CallExpr {
         // System.out.println("RECORD DECL:" + recordDecl);
 
         // Get methods with same name
+
         List<CXXMethodDecl> methods = recordDecl.getMethod(getCalleeName());
 
         List<Type> argTypes = getArgs().stream()

@@ -18,6 +18,7 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
+import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -230,4 +231,28 @@ public class Types {
 
     }
 
+    public static boolean isEqual(Type type1, Type type2) {
+
+        if (type1 == null && type2 == null) {
+            return true;
+        }
+
+        if (type1 == null || type2 == null) {
+            return false;
+        }
+
+        type1 = toComparable(type1);
+        type2 = toComparable(type2);
+
+        return type1.getCode().equals(type2.getCode());
+
+    }
+
+    private static Type toComparable(Type type) {
+        if (type instanceof AutoType) {
+            return toComparable(((AutoType) type).getDeducedType());
+        }
+
+        return type;
+    }
 }

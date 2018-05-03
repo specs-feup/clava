@@ -25,7 +25,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.NotSupportedByClavaDataException;
+import pt.up.fe.specs.clava.ast.NotSupportedByDataStoreException;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -73,7 +73,7 @@ public abstract class Type extends ClavaNode {
     @Deprecated
     public TypeData getTypeData() {
         if (hasDataI()) {
-            throw new NotSupportedByClavaDataException();
+            throw new NotSupportedByDataStoreException();
         }
         return data;
     }
@@ -315,6 +315,11 @@ public abstract class Type extends ClavaNode {
                 .orElseThrow(() -> new RuntimeException("Could not desugar to type '" + typeClass + "':\n" + this));
     }
 
+    /**
+     * TODO: Should not return 'this' if it does not have sugar?
+     * 
+     * @return
+     */
     public final Type desugar() {
         if (!hasSugar()) {
             return this;
@@ -329,6 +334,18 @@ public abstract class Type extends ClavaNode {
             return getChild(Type.class, 0);
         }
         throw new NotImplementedException(getClass());
+    }
+
+    /**
+     * 
+     * @return 0 if has sugar, -1 if it does not
+     */
+    public int getIndexDesugar() {
+        if (hasSugar()) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 
     public final void setDesugar(Type desugaredType) {
@@ -436,9 +453,11 @@ public abstract class Type extends ClavaNode {
         if (!(obj instanceof Type)) {
             return false;
         }
+
+        return Types.isEqual(this, ((Type) obj));
         // System.out.println("THIS CODE:" + getCode());
         // System.out.println("OTHER CODE:" + ((Type) obj).getCode());
-        return getCode().equals(((Type) obj).getCode());
+        // return getCode().equals(((Type) obj).getCode());
         /*
         
         if (data == null) {

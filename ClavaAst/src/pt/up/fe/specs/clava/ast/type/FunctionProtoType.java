@@ -14,39 +14,84 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.NotSupportedByDataStoreException;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.SpecsCollections;
 
 public class FunctionProtoType extends FunctionType {
 
-    private final FunctionProtoTypeData functionProtoTypeData;
+    /// DATAKEYS BEGIN
 
-    public FunctionProtoType(FunctionProtoTypeData functionProtoTypeData, FunctionTypeData functionTypeData,
-            TypeData typeData, ClavaNodeInfo info, Type returnType, Collection<? extends Type> arguments) {
-        this(functionProtoTypeData, functionTypeData, typeData, info, SpecsCollections.concat(returnType, arguments));
-    }
+    public final static DataKey<Integer> NUM_PARAMETERS = KeyFactory.integer("numParameters");
 
-    private FunctionProtoType(FunctionProtoTypeData functionProtoTypeData, FunctionTypeData functionTypeData,
+    /// DATAKEYS END
+
+    // public FunctionProtoType(DataStore data, Collection<? extends ClavaNode> children) {
+    // super(data, children);
+    // }
+
+    /**
+     * Legacy support.
+     * 
+     * @param functionTypeData
+     * @param typeData
+     * @param info
+     * @param children
+     */
+    protected FunctionProtoType(FunctionTypeData functionTypeData,
             TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(functionTypeData, typeData, info, children);
-
-        this.functionProtoTypeData = functionProtoTypeData;
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FunctionProtoType(functionProtoTypeData, getFunctionTypeData(), getTypeData(), getInfo(),
-                Collections.emptyList());
-    }
-
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public FunctionProtoTypeData getFunctionProtoTypeData() {
-        return functionProtoTypeData;
+        throw new NotSupportedByDataStoreException();
     }
 
+    /**
+     * Inclusive index.
+     * 
+     * @return
+     */
+    public int getIndexParamStart() {
+        return getIndexReturnType() + 1;
+    }
+
+    /**
+     * Exclusive index.
+     * 
+     * @return
+     */
+    public int getIndexParamEnd() {
+        return getIndexParamStart() + get(NUM_PARAMETERS);
+    }
+
+    /*
+    public String getCodeAfterParams() {
+        StringBuilder code = new StringBuilder();
+    
+        // Add const/volatile
+        if (ptData.isConst()) {
+            code.append(" const");
+        }
+        if (ptData.isVolatile()) {
+            code.append(" volatile");
+        }
+    
+        code.append(getCodeExcept(ptData));
+    
+        return code.toString();
+    }
+    */
 }

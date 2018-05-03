@@ -13,7 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
-public enum CallingConvention {
+import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.providers.StringProvider;
+
+public enum CallingConvention implements StringProvider {
+
     C("cdecl"), // __attribute__((cdecl))
     X86StdCall("stdcall"), // __attribute__((stdcall))
     X86FastCall("fastcall"), // __attribute__((fastcall))
@@ -27,6 +32,12 @@ public enum CallingConvention {
     IntelOclBicc("intel_ocl_bicc"), // __attribute__((intel_ocl_bicc))
     SpirFunction(null), // default for OpenCL functions on SPIR target
     SpirKernel(null); // inferred for OpenCL kernels on SPIR target
+
+    private static final Lazy<EnumHelper<CallingConvention>> HELPER = EnumHelper.newLazyHelper(CallingConvention.class);
+
+    public static EnumHelper<CallingConvention> getHelper() {
+        return HELPER.get();
+    }
 
     private final String attribute;
 
@@ -44,6 +55,11 @@ public enum CallingConvention {
         }
 
         return "__attribute__((" + attribute + "))";
+    }
+
+    @Override
+    public String getString() {
+        return name();
     }
 
 }
