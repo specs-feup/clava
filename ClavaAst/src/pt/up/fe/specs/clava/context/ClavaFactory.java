@@ -126,7 +126,8 @@ public class ClavaFactory {
     /// EXPRS
 
     public NullExpr nullExpr() {
-        DataStore data = newExprDataStore();
+        DataStore data = newExprDataStore()
+                .put(Expr.TYPE, nullType());
 
         return new NullExpr(data, Collections.emptyList());
     }
