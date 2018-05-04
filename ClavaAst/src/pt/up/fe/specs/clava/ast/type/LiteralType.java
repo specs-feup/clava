@@ -25,4 +25,9 @@ public class LiteralType extends Type implements LiteralNode {
     public LiteralType(DataStore nodeData, Collection<? extends ClavaNode> children) {
         super(nodeData, children);
     }
+
+    @Override
+    public String getCode() {
+        return getLiteralCode();
+    }
 }
