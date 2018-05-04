@@ -48,6 +48,7 @@ import pt.up.fe.specs.clang.utils.ZipResourceManager;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.omp.OMPDirective;
@@ -327,6 +328,9 @@ public class ClangAstParser {
 
     private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParserV2 lineStreamParser) {
         File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
+
+        // TODO: Temporary, needs to be set again, since this will run in a separate thread
+        LegacyToDataStore.CLAVA_CONTEXT.set(lineStreamParser.getData().get(ClavaNode.CONTEXT));
 
         // Parse StdErr from ClangAst
         return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
