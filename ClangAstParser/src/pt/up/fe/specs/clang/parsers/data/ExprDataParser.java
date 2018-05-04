@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
+import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -89,6 +90,14 @@ public class ExprDataParser {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(FloatingLiteral.VALUE, Double.parseDouble(lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseCXXBoolLiteralExprData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseLiteralData(lines, dataStore);
+
+        data.add(CXXBoolLiteralExpr.VALUE, GeneralParsers.parseOneOrZero(lines.nextLine()));
 
         return data;
     }
