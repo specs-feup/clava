@@ -27,7 +27,8 @@ public class LiteralType extends Type implements LiteralNode {
     }
 
     @Override
-    public String getCode() {
-        return getLiteralCode();
+    public String getCode(String name) {
+        return getLiteralCode() + " " + name;
     }
+
 }

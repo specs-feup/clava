@@ -707,6 +707,12 @@ public class ClavaNodeFactory {
         return new FunctionNoProtoType(functionTypeData, typeData, info, returnType);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param info
+     * @return
+     */
+    @Deprecated
     public static NullType nullType(ClavaNodeInfo info) {
         return new NullType(info);
     }
@@ -996,10 +1002,11 @@ public class ClavaNodeFactory {
         return new NullStmt(info);
     }
 
-    /*
-     * 'expr' nodes
+    /**
+     * @deprecated use ClavaFactory 'expr' nodes
      */
 
+    @Deprecated
     public static LiteralExpr literalExpr(String literalCode, Type type) {
         return LegacyToDataStore.getFactory().literalExpr(literalCode, type);
         // return new LiteralExprLegacy(literalCode, type);
@@ -1305,8 +1312,14 @@ public class ClavaNodeFactory {
         return new GNUNullExpr(exprData, info);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @return
+     */
+    @Deprecated
     public static NullExpr nullExpr() {
-        return new NullExpr();
+        return LegacyToDataStore.getFactory().nullExpr();
+        // return new NullExpr();
     }
 
     public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(boolean isArrow, String memberName,

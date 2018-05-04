@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
+import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -34,6 +35,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
+import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class ClavaFactory {
@@ -97,6 +99,11 @@ public class ClavaFactory {
 
     /// TYPES
 
+    public NullType nullType() {
+        DataStore data = newTypeDataStore();
+        return new NullType(data, Collections.emptyList());
+    }
+
     public BuiltinType builtinType(BuiltinKind kind) {
         DataStore data = newTypeDataStore().put(BuiltinType.KIND, kind);
         return new BuiltinType(data, Collections.emptyList());
@@ -117,6 +124,12 @@ public class ClavaFactory {
     }
 
     /// EXPRS
+
+    public NullExpr nullExpr() {
+        DataStore data = newExprDataStore();
+
+        return new NullExpr(data, Collections.emptyList());
+    }
 
     public IntegerLiteral integerLiteral(int integer) {
         DataStore data = newExprDataStore()

@@ -95,6 +95,7 @@ public class VarDecl extends DeclaratorDecl {
 
     @Override
     public String getCode() {
+
         StringBuilder code = new StringBuilder();
 
         StorageClass storageClass = getVarDeclData().getStorageClass();

@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.utils.NullNode;
 
@@ -35,20 +36,29 @@ import pt.up.fe.specs.clava.utils.NullNode;
 public class NullType extends Type implements NullNode {
 
     public NullType(ClavaNodeInfo info) {
-        super(new TypeData("<null type>"), info, Collections.emptyList());
+        this(new LegacyToDataStore()
+                .setType(new TypeData("<null type>"))
+                .setNodeInfo(info)
+                .getData(),
+                Collections.emptyList());
+        // super(new TypeData("<null type>"), info, Collections.emptyList());
     }
 
     public NullType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new NullType(getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new NullType(getInfo());
+    // }
 
     @Override
-    public String getCode() {
+    public String getCode(String name) {
+        if (name != null) {
+            return getBareType() + " " + name;
+        }
+
         return getBareType();
     }
 

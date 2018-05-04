@@ -51,6 +51,7 @@ public class BuiltinType extends Type {
 
     @Override
     public String getCode(String name) {
+
         // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
         // boolean isCxx = getData().getStandard().isCxx();
         String type = getKind().getCode();

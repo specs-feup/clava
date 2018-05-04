@@ -29,9 +29,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -371,8 +371,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return info.getLocationTry();
     }
 
+    /**
+     * @deprecated
+     * @param expr
+     * @return
+     */
+    @Deprecated
     protected static Expr nullable(Expr expr) {
-        return expr == null ? new NullExpr() : expr;
+        return expr == null ? LegacyToDataStore.getFactory().nullExpr() : expr;
     }
 
     protected void throwNoCodeGeneration() {
@@ -617,6 +623,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     public ClavaFactory getFactoryWithNode() {
         return new ClavaFactory(get(CONTEXT), dataI);
+    }
+
+    public ClavaFactory getFactory() {
+        return get(CONTEXT).get(ClavaContext.FACTORY);
     }
 
     /**

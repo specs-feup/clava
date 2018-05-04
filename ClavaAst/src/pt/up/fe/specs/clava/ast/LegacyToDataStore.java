@@ -80,7 +80,9 @@ public class LegacyToDataStore {
         nodeData.add(FunctionType.NO_RETURN, data.hasNoReturn());
         nodeData.add(FunctionType.PRODUCES_RESULT, data.producesResult());
         nodeData.add(FunctionType.HAS_REG_PARM, data.hasRegParm());
-        nodeData.add(FunctionType.REG_PARM, (long) data.getRegParm());
+
+        Long regParm = data.getRegParm() == null ? 0 : (long) data.getRegParm();
+        nodeData.add(FunctionType.REG_PARM, regParm);
         nodeData.add(FunctionType.CALLING_CONVENTION,
                 SpecsEnums.values(CallingConvention.class)[data.getCallingConv().ordinal()]);
 
@@ -96,8 +98,10 @@ public class LegacyToDataStore {
         nodeData.add(FunctionProtoType.REFERENCE_QUALIFIER, data.getReferenceQualifier());
         nodeData.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
                 SpecsEnums.values(ExceptionSpecificationType.class)[data.getSpecifier().ordinal()]);
+
+        String noexpectExpr = data.getNoexceptExpr() == null ? "<null noexcept expr>" : data.getNoexceptExpr();
         nodeData.add(FunctionProtoType.NOEXCEPT_EXPR,
-                getFactory().literalExpr(data.getNoexceptExpr(), getFactory().dummyType("<no type>")));
+                getFactory().literalExpr(noexpectExpr, getFactory().dummyType("<no type>")));
 
         return this;
     }
