@@ -106,7 +106,7 @@ public class ClangStreamParser {
         // Parse top-level attributes
         for (String topLevelAttributeId : topLevelAttributes) {
             ClavaNode parsedNode = data.get(ClangParserKeys.CLAVA_NODES).get(topLevelAttributeId);
-            Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelAttributeId + "'");
+            Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
         }
 
         // topLevelTypes.stream().forEach(this::parse);
