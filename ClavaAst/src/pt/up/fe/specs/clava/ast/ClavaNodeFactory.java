@@ -828,6 +828,12 @@ public class ClavaNodeFactory {
         return new DummyStmtLegacy(content, info, children);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param literalType
+     * @return
+     */
+    @Deprecated
     public static LiteralType literalType(String literalType) {
         return LegacyToDataStore.getFactory().literalType(literalType);
         // return new LiteralType(literalType);
@@ -840,10 +846,13 @@ public class ClavaNodeFactory {
 
     /**
      * Helper method that receives a ClavaNode.
-     *
+     * 
+     * @deprecated use ClavaFactory
+     * 
      * @param node
      * @return
      */
+    @Deprecated
     public static DummyStmt dummyStmt(ClavaNode node) {
         return new DummyStmtLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
