@@ -830,7 +830,8 @@ public class ClavaNodeFactory {
     }
 
     public static LiteralType literalType(String literalType) {
-        return new LiteralType(literalType);
+        return LegacyToDataStore.getFactory().literalType(literalType);
+        // return new LiteralType(literalType);
     }
 
     public static SubstTemplateTypeParmType substTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info,

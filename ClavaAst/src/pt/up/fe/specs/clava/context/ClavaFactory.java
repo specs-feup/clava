@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
+import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class ClavaFactory {
@@ -106,6 +107,13 @@ public class ClavaFactory {
                 .put(DummyType.DUMMY_CONTENT, dummyContent);
 
         return new DummyType(data, Collections.emptyList());
+    }
+
+    public LiteralType literalType(String code) {
+        DataStore data = newTypeDataStore()
+                .put(LiteralNode.LITERAL_CODE, code);
+
+        return new LiteralType(data, Collections.emptyList());
     }
 
     /// EXPRS

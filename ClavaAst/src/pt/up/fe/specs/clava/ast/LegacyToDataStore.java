@@ -18,6 +18,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -43,7 +45,7 @@ public class LegacyToDataStore {
         nodeData.add(ClavaNode.CONTEXT, CLAVA_CONTEXT.get());
     }
 
-    private ClavaFactory getFactory() {
+    public static ClavaFactory getFactory() {
         return CLAVA_CONTEXT.get().get(ClavaContext.FACTORY);
     }
 
@@ -96,6 +98,17 @@ public class LegacyToDataStore {
                 SpecsEnums.values(ExceptionSpecificationType.class)[data.getSpecifier().ordinal()]);
         nodeData.add(FunctionProtoType.NOEXCEPT_EXPR,
                 getFactory().literalExpr(data.getNoexceptExpr(), getFactory().dummyType("<no type>")));
+
+        return this;
+    }
+
+    /// EXPRS
+
+    public LegacyToDataStore setExpr(ExprData data) {
+
+        nodeData.add(Expr.TYPE, data.getType());
+        nodeData.add(Expr.VALUE_KIND, data.getValueKind());
+        nodeData.add(Expr.OBJECT_KIND, data.getObjectKind());
 
         return this;
     }
