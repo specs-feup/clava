@@ -66,7 +66,7 @@ public class CxxActions {
         case REPLACE:
             // Has to replace with a node of the same "kind" (e.g., Expr, Stmt...)
             weaver.clearUserField(target);
-            NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, null, target));
+            NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, CxxWeaver.getFactory().nullType(), target));
             break;
         default:
             throw new RuntimeException("Case not defined:" + insert);

@@ -105,8 +105,6 @@ public class AstFactory {
         }
 
         Expr initExpr = (Expr) expr;
-        System.out.println("Init expr:" + initExpr);
-        System.out.println("Init expr code:" + initExpr.getCode());
 
         boolean isUsed = true;
         boolean isImplicit = false;
