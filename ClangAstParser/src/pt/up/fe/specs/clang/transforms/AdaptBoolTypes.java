@@ -14,12 +14,12 @@
 package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -41,7 +41,7 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
         // System.out.println("TYPABLE");
         Typable typable = (Typable) node;
         Type type = typable.getType();
-        if (type == null) {
+        if (type == null || type instanceof NullType) {
             return;
         }
 
@@ -71,21 +71,34 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
     }
 
     private BuiltinType newBoolBuiltin(ClavaNode node) {
+        BuiltinType boolType = LegacyToDataStore.getFactory()
+                .builtinType(BuiltinKind.BOOL);
+
+        // Legacy support
+        // If all types had DataStore, we could have used node.getFactoryWithNode()
+        // In any case, this transformation is deprecated for the new parser
+        boolType.setId(node.getExtendedId().get());
+        boolType.setLocation(node.getLocation());
+
+        return boolType;
+
+        /*
         if (node.hasDataI()) {
             return node.getFactoryWithNode().builtinType(BuiltinKind.BOOL);
-
+        
             // DataStore builtinData = node.getDataI().copy()
             // .put(BuiltinType.KIND, BuiltinKind.BOOL);
-
+        
             // return new BuiltinType(builtinData, Collections.emptyList());
         }
-
+        
         // if (node.hasData()) {
         // BuiltinTypeData data = new BuiltinTypeData(-1, BuiltinKind.BOOL, false, (TypeDataV2) node.getData());
         // return new BuiltinType(data, Collections.emptyList());
         // }
-
+        
         return new BuiltinTypeLegacy(new TypeData("bool"), node.getInfo());
+        */
     }
 
 }
