@@ -112,31 +112,14 @@ public class ClavaPostProcessing {
             // all nodes
             // TODO: Alternatively, this should be implemented as a ClavaRule and apply as a bottom-up change
 
-            if (elaboratedType.hasDataI()) {
-                // elaboratedType.getDataI().set(ElaboratedType.TYPE_AS_STRING, newBareType);
-                elaboratedType.setTypeAsString(newBareType);
-            } else {
-                elaboratedType.getTypeData().setBareType(newBareType);
-            }
+            elaboratedType.setTypeAsString(newBareType);
+            // if (elaboratedType.hasDataI()) {
+            // // elaboratedType.getDataI().set(ElaboratedType.TYPE_AS_STRING, newBareType);
+            // elaboratedType.setTypeAsString(newBareType);
+            // } else {
+            // elaboratedType.getTypeData().setBareType(newBareType);
+            // }
 
-            /*
-            System.out.println("PREVIOUS ELABORATED:" + elaboratedType.getCode());
-            LiteralType newElaboratedType = ClavaNodeFactory
-                    .literalType(lastRecordDecl.getTagKind().getCode() + " " + lastRecordDecl.getDeclName());
-            System.out.println("NEW ELABORATED:" + newElaboratedType.getCode());
-            if (elaboratedType.hasParent()) {
-                ClavaNode parent = elaboratedType.getParent();
-                System.out.println("REPLACE BEFORE:" + parent);
-                NodeInsertUtils.replace(elaboratedType, newElaboratedType);
-                System.out.println("REPLACE AFTER:" + parent);
-            } else {
-                // No parent means it is top-level type
-                anonymousDecl.setType(newElaboratedType);
-                System.out.println("SET");
-            }
-            */
-
-            // System.out.println("NEW TYPE:" + declaratorDecl.getType());
         }
 
     }
