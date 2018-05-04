@@ -151,7 +151,6 @@ import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
-import pt.up.fe.specs.clava.ast.expr.legacy.LiteralExprLegacy;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
@@ -993,7 +992,8 @@ public class ClavaNodeFactory {
      */
 
     public static LiteralExpr literalExpr(String literalCode, Type type) {
-        return new LiteralExprLegacy(literalCode, type);
+        return LegacyToDataStore.getFactory().literalExpr(literalCode, type);
+        // return new LiteralExprLegacy(literalCode, type);
     }
 
     // public static LiteralExpr literalExpr(String literalCode, Type type, ClavaNodeInfo info) {

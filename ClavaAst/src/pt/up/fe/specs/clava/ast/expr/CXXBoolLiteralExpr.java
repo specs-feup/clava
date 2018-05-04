@@ -39,6 +39,13 @@ public class CXXBoolLiteralExpr extends Expr {
         super(data, children);
     }
 
+    /**
+     * Legacy support.
+     * 
+     * @param value
+     * @param exprData
+     * @param info
+     */
     public CXXBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
         this(new LegacyToDataStore().setNodeInfo(info).setExpr(exprData).getData(), Collections.emptyList());
         // this(value, exprData, info, Collections.emptyList());

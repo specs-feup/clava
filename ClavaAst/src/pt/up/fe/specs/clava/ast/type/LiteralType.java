@@ -25,32 +25,4 @@ public class LiteralType extends Type implements LiteralNode {
     public LiteralType(DataStore nodeData, Collection<? extends ClavaNode> children) {
         super(nodeData, children);
     }
-
-    /*
-    public LiteralType(String literalType) {
-        this(new LegacyToDataStore()
-                .setNodeInfo(ClavaNodeInfo.undefinedInfo())
-                .setType(new TypeData(literalType))
-                .getData(),
-    
-                Collections.emptyList());
-    
-        getDataI().add(LiteralNode.LITERAL_CODE, literalType);
-    }
-    */
-    /*
-    private LiteralType(String literalType, ClavaNodeInfo info) {
-        super(new TypeData(literalType), info, Collections.emptyList());
-    }
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LiteralType(getBareType(), getInfo());
-    }
-    
-    @Override
-    public String getCode() {
-        return getBareType();
-    }
-    */
 }
