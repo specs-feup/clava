@@ -736,9 +736,27 @@ public class ClavaNodeFactory {
         // return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param functionTypeData
+     * @param typeData
+     * @param info
+     * @param returnType
+     * @return
+     */
+    @Deprecated
     public static FunctionNoProtoType functionNoProtoType(FunctionTypeData functionTypeData, TypeData typeData,
             ClavaNodeInfo info, Type returnType) {
-        return new FunctionNoProtoType(functionTypeData, typeData, info, returnType);
+
+        DataStore data = new LegacyToDataStore()
+                .setNodeInfo(info)
+                .setType(typeData)
+                .setFunctionType(functionTypeData)
+                .getData();
+
+        data.add(FunctionProtoType.NUM_PARAMETERS, 0);
+
+        return new FunctionNoProtoType(data, Arrays.asList(returnType));
     }
 
     /**

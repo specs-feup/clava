@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +22,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -55,40 +51,18 @@ public abstract class FunctionType extends Type {
     /**
      * FunctionType fields
      */
-    private final FunctionTypeData functionTypeData;
 
     public FunctionType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        this.functionTypeData = null;
-    }
-
-    /**
-     * 
-     * @param functionTypeData
-     * @param type
-     * @param info
-     * @param children
-     */
-    public FunctionType(FunctionTypeData functionTypeData, String type, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        this(functionTypeData, new TypeData(type), info, children);
-    }
-
-    public FunctionType(FunctionTypeData functionTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-
-        // Cannot do this check, because copies of the node are done without children
-        // Preconditions.checkArgument(children.size() > 0, "Expected at least one child, the return argument");
-
-        this.functionTypeData = functionTypeData;
-
-        // TODO: replace functionTypeData with DataStore (do the same to the other non-leaf types)
     }
 
     public Type getReturnType() {
-        return getChild(Type.class, 0);
+        int indexReturnType = getIndexReturnType();
+        if (indexReturnType < 0) {
+            return null;
+        }
+
+        return getChild(Type.class, indexReturnType);
     }
 
     /**
@@ -100,25 +74,52 @@ public abstract class FunctionType extends Type {
         return getIndexDesugar() + 1;
     }
 
+    /**
+     * Inclusive index.
+     * 
+     * @return
+     */
+    public int getIndexParamStart() {
+
+        return getIndexReturnType() + 1;
+    }
+
+    /**
+     * Exclusive index.
+     * 
+     * @return
+     */
+    public int getIndexParamEnd() {
+        return getIndexParamStart() + getNumParams();
+    }
+
     public List<Type> getParamTypes() {
+
+        return getChildren().subList(getIndexParamStart(), getIndexParamEnd()).stream()
+                .map(child -> (Type) child)
+                .collect(Collectors.toList());
+
+        /*
         if (getNumChildren() == 1) {
             Collections.emptyList();
         }
-
+        
         return getChildren(Type.class, 1);
+        */
     }
 
-    public FunctionTypeData getFunctionTypeData() {
-        return functionTypeData;
-    }
-
-    public int getNumParams() {
-        // First child is the return type, remaining children are the param types
-        return getNumChildren() - 1;
-    }
+    /**
+     * 
+     * @return the number of parameters of this function
+     */
+    abstract public int getNumParams();
+    // public int getNumParams() {
+    // // First child is the return type, remaining children are the param types
+    // return getNumChildren() - 1;
+    // }
 
     public void setReturnType(Type returnType) {
-        setChild(0, returnType);
+        setChild(getIndexReturnType(), returnType);
     }
 
     public void setParamType(int paramIndex, Type paramType) {
@@ -127,7 +128,8 @@ public abstract class FunctionType extends Type {
             return;
         }
 
-        setChild(paramIndex + 1, paramType);
+        // setChild(paramIndex + 1, paramType);
+        setChild(getIndexParamStart() + paramIndex, paramType);
     }
 
     @Override

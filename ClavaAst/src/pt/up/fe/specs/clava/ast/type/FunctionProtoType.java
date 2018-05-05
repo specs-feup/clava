@@ -55,20 +55,12 @@ public class FunctionProtoType extends FunctionType {
         super(data, children);
     }
 
-    /**
-     * Inclusive index.
-     * 
-     * @return
-     */
+    @Override
     public int getIndexParamStart() {
         return getIndexReturnType() + 1;
     }
 
-    /**
-     * Exclusive index.
-     * 
-     * @return
-     */
+    @Override
     public int getIndexParamEnd() {
         return getIndexParamStart() + get(NUM_PARAMETERS);
     }
@@ -88,6 +80,11 @@ public class FunctionProtoType extends FunctionType {
         code.append(exceptCode);
 
         return code.toString();
+    }
+
+    @Override
+    public int getNumParams() {
+        return get(NUM_PARAMETERS);
     }
 
 }
