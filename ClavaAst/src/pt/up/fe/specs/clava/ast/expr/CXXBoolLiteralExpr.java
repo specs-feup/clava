@@ -14,16 +14,12 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXBoolLiteralExpr extends Expr {
 
@@ -46,12 +42,14 @@ public class CXXBoolLiteralExpr extends Expr {
      * @param exprData
      * @param info
      */
+    /*
     public CXXBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
         this(new LegacyToDataStore().setNodeInfo(info).setExpr(exprData).getData(), Collections.emptyList());
         // this(value, exprData, info, Collections.emptyList());
-
+    
         getDataI().add(VALUE, value);
     }
+    */
 
     // private CXXBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info,
     // Collection<? extends ClavaNode> children) {

@@ -243,6 +243,7 @@ import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
+import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Contains methods to create Clava nodes.
@@ -697,11 +698,42 @@ public class ClavaNodeFactory {
         return new EnumType(declInfo, typeData, info);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param functionProtoTypeData
+     * @param functionTypeData
+     * @param type
+     * @param info
+     * @param returnType
+     * @param arguments
+     * @return
+     */
+    @Deprecated
     public static FunctionProtoType functionProtoType(FunctionProtoTypeData functionProtoTypeData,
             FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info, Type returnType,
             Collection<? extends Type> arguments) {
 
-        return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
+        DataStore data = new LegacyToDataStore()
+                .setNodeInfo(info)
+                .setType(type)
+                .setFunctionType(functionTypeData)
+                .setFunctionProtoType(functionProtoTypeData)
+                .getData();
+
+        // Has to check if last argument is of variadic type, and adjust number of arguments accordingly
+        int numParams = arguments.size();
+        boolean isVariadic = arguments.stream().filter(argType -> argType instanceof VariadicType)
+                .findFirst().isPresent();
+        if (isVariadic) {
+            --numParams;
+        }
+
+        data.add(FunctionProtoType.NUM_PARAMETERS, numParams);
+        data.add(FunctionProtoType.IS_VARIADIC, isVariadic);
+
+        return new FunctionProtoType(data, SpecsCollections.concat(returnType, arguments));
+
+        // return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
     }
 
     public static FunctionNoProtoType functionNoProtoType(FunctionTypeData functionTypeData, TypeData typeData,
@@ -1207,7 +1239,14 @@ public class ClavaNodeFactory {
     }
 
     public static CXXBoolLiteralExpr cxxBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
-        return new CXXBoolLiteralExpr(value, exprData, info);
+        DataStore data = new LegacyToDataStore().setNodeInfo(info).setExpr(exprData).getData();
+        data.add(CXXBoolLiteralExpr.VALUE, value);
+
+        return new CXXBoolLiteralExpr(data, Collections.emptyList());
+        // Collections.emptyList());
+        // this(value, exprData, info, Collections.emptyList());
+
+        // return new CXXBoolLiteralExpr(value, exprData, info);
     }
 
     public static CXXNewExpr cxxNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData exprData,

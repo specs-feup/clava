@@ -21,17 +21,9 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.NotSupportedByDataStoreException;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.VariadicType;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
-import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
-import pt.up.fe.specs.util.SpecsCollections;
 
 public class FunctionProtoType extends FunctionType {
 
@@ -61,54 +53,6 @@ public class FunctionProtoType extends FunctionType {
 
     public FunctionProtoType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    public FunctionProtoType(FunctionProtoTypeData functionProtoTypeData, FunctionTypeData functionTypeData,
-            TypeData typeData, ClavaNodeInfo info, Type returnType, Collection<? extends Type> arguments) {
-
-        this(new LegacyToDataStore()
-                .setNodeInfo(info)
-                .setType(typeData)
-                .setFunctionType(functionTypeData)
-                .setFunctionProtoType(functionProtoTypeData)
-                .getData(),
-
-                SpecsCollections.concat(returnType, arguments));
-
-        // Has to check if last argument is of variadic type, and adjust number of arguments accordingly
-        int numParams = arguments.size();
-        boolean isVariadic = arguments.stream().filter(type -> type instanceof VariadicType)
-                .findFirst().isPresent();
-        if (isVariadic) {
-            --numParams;
-        }
-
-        getDataI().add(NUM_PARAMETERS, numParams);
-        getDataI().add(IS_VARIADIC, isVariadic);
-
-    }
-
-    /**
-     * Legacy support.
-     * 
-     * @param functionTypeData
-     * @param typeData
-     * @param info
-     * @param children
-     */
-    protected FunctionProtoType(FunctionTypeData functionTypeData,
-            TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(functionTypeData, typeData, info, children);
-
-    }
-
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public FunctionProtoTypeData getFunctionProtoTypeData() {
-        throw new NotSupportedByDataStoreException();
     }
 
     /**

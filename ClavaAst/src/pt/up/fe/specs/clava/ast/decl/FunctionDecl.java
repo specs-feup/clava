@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
@@ -39,8 +38,6 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
-import pt.up.fe.specs.clava.ast.type.legacy.ExceptionSpecifier;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -333,65 +330,8 @@ public class FunctionDecl extends DeclaratorDecl {
 
         FunctionProtoType functionProtoType = (FunctionProtoType) functionType;
 
-        if (functionProtoType.hasDataI()) {
-            return functionProtoType.getCodeAfterParams();
-        }
+        return functionProtoType.getCodeAfterParams();
 
-        FunctionProtoTypeData ptData = functionProtoType.getFunctionProtoTypeData();
-        StringBuilder code = new StringBuilder();
-
-        // Add const/volatile
-        if (ptData.isConst()) {
-            code.append(" const");
-        }
-        if (ptData.isVolatile()) {
-            code.append(" volatile");
-        }
-
-        code.append(getCodeExcept(ptData));
-
-        return code.toString();
-    }
-
-    private String getCodeExcept(FunctionProtoTypeData ptData) {
-        // FunctionType functionType = getFunctionType();
-        // if (!(functionType instanceof FunctionProtoType)) {
-        // return "";
-        // }
-        //
-        // FunctionProtoType functionProtoType = (FunctionProtoType) functionType;
-        ExceptionSpecifier specifier = ptData.getSpecifier();
-        switch (specifier) {
-        case NONE:
-            return "";
-        case MS_ANY:
-            return " throw(...)";
-        case DYNAMIC_NONE:
-            return " throw()";
-        case BASIC_NOEXCEPT:
-            return " noexcept";
-        case COMPUTED_NOEXCEPT:
-            return " noexcept(" + ptData.getNoexceptExpr() + ")";
-        case UNEVALUATED:
-            // Appears to be used in cases like
-            // ~A(), ~A() = delete and ~A() = 0
-            // where there is no exception specifier.
-
-            // However, declarations can later have an implicit noexcept
-            // that is made explicit by the parser and, by extension, Clava's code output
-            // Returning "" would make this incompatible with the later noexcept definition,
-            // so we also specify noexcept here
-            // There are cases where the definition has throw() instead, but definitions with
-            // noexcept appear to be compatible with throw().
-            return " noexcept";
-        default:
-            ClavaLog.info("Code generation not implemented yet for Exception Specifier '" + specifier + "'");
-            return "\n#if 0\nNOT IMPLEMENTED: " + specifier + "\n#endif\n";
-        /*
-        throw new RuntimeException(
-                "Code generation not implemented yet for Exception Specifier '" + specifier + "': "
-                        + getLocation());*/
-        }
     }
 
     protected String getCodeBody() {
