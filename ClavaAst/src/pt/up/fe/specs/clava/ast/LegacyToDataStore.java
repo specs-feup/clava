@@ -18,6 +18,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -113,6 +115,16 @@ public class LegacyToDataStore {
         nodeData.add(Expr.TYPE, data.getType());
         nodeData.add(Expr.VALUE_KIND, data.getValueKind());
         nodeData.add(Expr.OBJECT_KIND, data.getObjectKind());
+
+        return this;
+    }
+
+    /// ATTRS
+
+    public LegacyToDataStore setAttribute(AttrData data) {
+
+        nodeData.add(Attribute.IS_IMPLICIT, data.isImplicit());
+        nodeData.add(Attribute.IS_INHERITED, data.isInherited());
 
         return this;
     }
