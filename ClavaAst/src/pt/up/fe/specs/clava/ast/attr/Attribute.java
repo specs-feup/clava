@@ -21,6 +21,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
@@ -40,14 +42,8 @@ public abstract class Attribute extends ClavaNode {
 
     /// DATAKEYS END
 
-    private final AttributeKind kind;
-    private final AttrData attrData;
-
     public Attribute(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        this.kind = null;
-        this.attrData = null;
     }
 
     /**
@@ -60,25 +56,29 @@ public abstract class Attribute extends ClavaNode {
      */
     public Attribute(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
             Collection<? extends ClavaNode> children) {
-        super(nodeInfo, children);
+        this(new LegacyToDataStore()
+                .setAttribute(attrData)
+                .setNodeInfo(nodeInfo)
+                .getData(), children);
 
-        this.kind = kind;
-        this.attrData = attrData;
+        getDataI().set(KIND, kind);
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public AttrData getAttrData() {
-        if (hasDataI()) {
-            throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
-        }
-        return attrData;
+        return DataStoreToLegacy.getAttribute(getDataI());
+        // if (hasDataI()) {
+        // throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
+        // }
+        // return attrData;
     }
 
     public AttributeKind getKind() {
-        if (hasDataI()) {
-            return getDataI().get(Attribute.KIND);
-        }
-
-        return kind;
+        return get(Attribute.KIND);
     }
 
     protected String getAttributeCode(String attrValue) {
