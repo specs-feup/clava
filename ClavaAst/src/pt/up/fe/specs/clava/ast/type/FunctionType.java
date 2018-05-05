@@ -118,6 +118,8 @@ public abstract class FunctionType extends Type {
     // return getNumChildren() - 1;
     // }
 
+    abstract public boolean isVariadic();
+
     public void setReturnType(Type returnType) {
         setChild(getIndexReturnType(), returnType);
     }
@@ -147,7 +149,13 @@ public abstract class FunctionType extends Type {
 
         String paramsCode = getParamTypes().stream()
                 .map(type -> type.getCode())
-                .collect(Collectors.joining(", ", " (", ")"));
+                .collect(Collectors.joining(", "));
+
+        if (isVariadic()) {
+            paramsCode = paramsCode + ", ...";
+        }
+
+        paramsCode = " (" + paramsCode + ")";
 
         code.append(paramsCode);
 

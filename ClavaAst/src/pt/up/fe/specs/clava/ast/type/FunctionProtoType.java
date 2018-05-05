@@ -87,4 +87,9 @@ public class FunctionProtoType extends FunctionType {
         return get(NUM_PARAMETERS);
     }
 
+    @Override
+    public boolean isVariadic() {
+        return get(IS_VARIADIC);
+    }
+
 }

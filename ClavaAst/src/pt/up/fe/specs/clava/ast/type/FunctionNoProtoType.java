@@ -36,4 +36,9 @@ public class FunctionNoProtoType extends FunctionType {
         return 0;
     }
 
+    @Override
+    public boolean isVariadic() {
+        return false;
+    }
+
 }

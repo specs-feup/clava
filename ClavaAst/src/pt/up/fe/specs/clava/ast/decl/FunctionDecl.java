@@ -31,7 +31,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -197,6 +196,7 @@ public class FunctionDecl extends DeclaratorDecl {
         code.append(ln());
 
         code.append(getDeclarationId(true));
+
         /*
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");
@@ -303,16 +303,14 @@ public class FunctionDecl extends DeclaratorDecl {
         String parameters = getParametersCode();
 
         // if (!getFunctionTypeTry().isPresent()) {
-        if (Types.getFunctionType(getType()) == null) {
-            return "<no function type>";
-        }
+        // if (Types.getFunctionType(getType()) == null) {
+        // throw new RuntimeException("Expected type to be a function type: " + getType().toTree());
+        // // return "<no function type>";
+        // }
 
-        Optional<Type> lastParamType = SpecsCollections.lastTry(getFunctionType().getParamTypes());
-        boolean hasVariadicArguments = lastParamType.map(type -> type instanceof VariadicType).orElse(false);
-        // lastParamType == null ? false : lastParamType instanceof VariadicType;
-
-        // boolean hasVariadicArguments = getFunctionType().getCode().endsWith(", ...)");
-        parameters = hasVariadicArguments ? parameters + ", ..." : parameters;
+        // Optional<Type> lastParamType = SpecsCollections.lastTry(getFunctionType().getParamTypes());
+        // boolean hasVariadicArguments = lastParamType.map(type -> type instanceof VariadicType).orElse(false);
+        // parameters = hasVariadicArguments ? parameters + ", ..." : parameters;
 
         code.append("(").append(parameters).append(")");
 
@@ -392,10 +390,13 @@ public class FunctionDecl extends DeclaratorDecl {
 
     protected String getParametersCode() {
 
-        return getParameters().stream()
+        String params = getParameters().stream()
                 // .map(param -> parseTypes(param.getType()) + param.getDeclName())
                 .map(param -> param.getCode())
                 .collect(Collectors.joining(", "));
+
+        return getFunctionType().isVariadic() ? params + ", ..." : params;
+
     }
 
     public void setName(String name) {
