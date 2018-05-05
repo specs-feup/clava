@@ -74,11 +74,12 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
         BuiltinType boolType = LegacyToDataStore.getFactory()
                 .builtinType(BuiltinKind.BOOL);
 
+        boolType.setNodeData(node);
         // Legacy support
         // If all types had DataStore, we could have used node.getFactoryWithNode()
         // In any case, this transformation is deprecated for the new parser
-        boolType.setId(node.getExtendedId().get());
-        boolType.setLocation(node.getLocation());
+        // boolType.setId(node.getExtendedId().get());
+        // boolType.setLocation(node.getLocation());
 
         return boolType;
 

@@ -224,6 +224,9 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
      * @return
      */
     public Decl toDecl(ClavaNode node) {
+        // DummyDecl dummyDecl = LegacyToDataStore.getFactory().dummyDecl(node.getClass().getSimpleName());
+        // dummyDecl.setLocation(node.getLocation());
+
         return ClavaParserUtils.cast(node, Decl.class, ClavaNodesLegacy::dummyDecl);
     }
 

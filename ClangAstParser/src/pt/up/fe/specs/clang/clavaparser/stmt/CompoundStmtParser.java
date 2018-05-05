@@ -21,7 +21,7 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -50,7 +50,9 @@ public class CompoundStmtParser extends AClangNodeParser<CompoundStmt> {
                 // Transform Undefined nodes into DummyStmt nodes
                 .map(child -> child instanceof Undefined ? ClavaNodeFactory.dummyStmt(child) : child)
                 // Transform Expr nodes into ExprStmt nodes
-                .map(child -> child instanceof Expr ? ClavaNodesLegacy.exprStmt((Expr) child) : child)
+                // .map(child -> child instanceof Expr ? ClavaNodesLegacy.exprStmt((Expr) child) : child)
+                .map(child -> child instanceof Expr ? LegacyToDataStore.getFactory().exprStmt((Expr) child)
+                        : child)
                 // Map all nodes to Stmt
                 .map(stmt -> (Stmt) stmt)
                 .collect(Collectors.toList());

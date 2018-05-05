@@ -21,7 +21,7 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -91,7 +91,8 @@ public interface ClangNodeParser<T extends ClavaNode> {
     static Stmt toStmt(ClavaNode node) {
         // If node is an Expr, create statement
         if (node instanceof Expr) {
-            return ClavaNodesLegacy.exprStmt((Expr) node);
+            return LegacyToDataStore.getFactory().exprStmt((Expr) node);
+            // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof NullNode) {
@@ -115,7 +116,9 @@ public interface ClangNodeParser<T extends ClavaNode> {
         }
 
         if (node instanceof Expr) {
-            return ClavaNodesLegacy.exprStmt(false, (Expr) node);
+            return LegacyToDataStore.getFactory().exprStmt((Expr) node)
+                    .setHasSemicolon(false);
+            // return ClavaNodesLegacy.exprStmt(false, (Expr) node);
         }
 
         if (node instanceof NamedDecl) {
