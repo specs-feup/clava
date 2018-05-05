@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -339,7 +338,7 @@ public class AstFactory {
      */
     public static List<AStatement> caseFromExpr(AExpression value, AExpression expr) {
         // Create compound stmt
-        ExprStmt exprStmt = ClavaNodesLegacy.exprStmt((Expr) expr.getNode());
+        ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
         BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
 
         CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),

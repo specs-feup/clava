@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
@@ -40,6 +39,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -125,10 +125,10 @@ public class CxxCall extends ACall {
         // If assignment to already existing variable, use the following tree:
         // ExprStmt -> BinaryOperator -> DeclRefExpr, Call
         else {
-            Expr varExpr = ClavaNodeFactory.literalExpr(variableName, returnType);
+            Expr varExpr = CxxWeaver.getFactory().literalExpr(variableName, returnType);
             BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(returnType),
                     call.getInfo(), varExpr, call);
-            ExprStmt newStmt = ClavaNodesLegacy.exprStmt(assign);
+            ExprStmt newStmt = CxxWeaver.getFactory().exprStmt(assign);
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, newStmt, true);
