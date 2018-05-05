@@ -639,6 +639,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return dataI.get(key);
     }
 
+    /**
+     * Internal method for setting values.
+     * 
+     * @param key
+     * @param value
+     */
+    protected <T, E extends T> void put(DataKey<T> key, E value) {
+        dataI.put(key, value);
+    }
+
     public ClavaContext getContext() {
         return get(CONTEXT);
     }
@@ -671,6 +681,20 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         } catch (Exception e) {
             throw new RuntimeException("Could not create constructor for ClavaNode:" + e.getMessage());
         }
+    }
+
+    /**
+     * Legacy support.
+     * 
+     * When all types have DataStore, we can use node.getFactoryWithNode()
+     * 
+     * @deprecated getFactoryWithNode()
+     * @param node
+     */
+    @Deprecated
+    public void setNodeData(ClavaNode node) {
+        node.setId(getExtendedId().get());
+        node.setLocation(getLocation());
     }
 
 }

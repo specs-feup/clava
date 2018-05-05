@@ -13,16 +13,8 @@
 
 package pt.up.fe.specs.clava.ast;
 
-import java.util.Arrays;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
-import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
-import pt.up.fe.specs.clava.ast.stmt.legacy.ExprStmtLegacy;
 
 /**
  * Utility class with methods that need to take into account both nodes that use ClavaData and legacy nodes.
@@ -37,37 +29,56 @@ public class ClavaNodesLegacy {
     // castExpr.getInfo(), subExpr);
     // }
 
-    public static ExprStmt exprStmt(Expr expr) {
-        return exprStmt(true, expr);
-    }
+    // public static ExprStmt exprStmt(Expr expr) {
+    // return exprStmt(true, expr);
+    // }
 
+    /*
     public static ExprStmt exprStmt(boolean hasSemicolon, Expr expr) {
+    
+        // ExprStmt exprStmt = LegacyToDataStore.getFactory().exprStmt(node.getClass().getSimpleName());
+    
         if (expr.hasDataI()) {
             // TODO: Replace with factory?
-
+    
             DataStore exprStmtData = DataStore.newInstance("ExprStmt")
                     .put(ExprStmt.HAS_SEMICOLON, hasSemicolon);
-
+    
             return new ExprStmt(exprStmtData, Arrays.asList(expr));
         }
-
+    
         if (hasSemicolon) {
             return new ExprStmtLegacy(expr.getInfo(), expr);
         } else {
             return new ExprStmtLegacy(false, expr.getInfo(), expr);
         }
-
+    
     }
-
+    */
     public static DummyDecl dummyDecl(ClavaNode node) {
+        // BuiltinType boolType = LegacyToDataStore.getFactory()
+        // .builtinType(BuiltinKind.BOOL);
+        //
+        // // Legacy support
+        // // If all types had DataStore, we could have used node.getFactoryWithNode()
+        // // In any case, this transformation is deprecated for the new parser
+        // boolType.setId(node.getExtendedId().get());
+        // boolType.setLocation(node.getLocation());
+
+        DummyDecl dummyDecl = LegacyToDataStore.getFactory().dummyDecl(node.getClass().getSimpleName());
+        dummyDecl.setLocation(node.getLocation());
+
+        return dummyDecl;
+        /*
         if (node.hasDataI()) {
             DataStore dummyData = node.getDataI().copy()
                     .put(DummyNode.DUMMY_CONTENT, node.getClass().getSimpleName());
-
+        
             return new DummyDecl(dummyData, node.getChildren());
         }
-
+        
         return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
+        */
     }
 
 }

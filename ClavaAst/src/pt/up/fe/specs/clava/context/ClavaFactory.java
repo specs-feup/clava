@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.context;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
@@ -44,7 +46,7 @@ public class ClavaFactory {
     private static final String EXPR_ID_PREFIX = "expr_";
     private static final String DECL_ID_PREFIX = "decl_";
     private static final String EXTRA_ID_PREFIX = "extra_";
-    // private static final String DECL_ID_PREFIX = "decl_";
+    private static final String STMT_ID_PREFIX = "stmt_";
 
     private final ClavaContext context;
     private final DataStore baseData;
@@ -88,6 +90,10 @@ public class ClavaFactory {
 
     private DataStore newDeclDataStore() {
         return newDataStore(DECL_ID_PREFIX);
+    }
+
+    private DataStore newStmtDataStore() {
+        return newDataStore(STMT_ID_PREFIX);
     }
 
     /// EXTRA
@@ -165,6 +171,22 @@ public class ClavaFactory {
                 .put(DummyDecl.DUMMY_CONTENT, dummyContent);
 
         return new DummyDecl(data, Collections.emptyList());
+    }
+
+    /// STMTS
+
+    /**
+     * Creates an ExprStmt with semicolon.
+     * 
+     * @param expr
+     * @return
+     */
+    public ExprStmt exprStmt(Expr expr) {
+        DataStore exprStmtData = newStmtDataStore()
+                .put(ExprStmt.HAS_SEMICOLON, true)
+                .put(ClavaNode.LOCATION, expr.getLocation());
+
+        return new ExprStmt(exprStmtData, Arrays.asList(expr));
     }
 
 }

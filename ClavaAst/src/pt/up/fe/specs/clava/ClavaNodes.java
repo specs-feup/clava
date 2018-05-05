@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -73,7 +73,8 @@ public class ClavaNodes {
         }
 
         if (node instanceof Expr) {
-            return ClavaNodesLegacy.exprStmt((Expr) node);
+            return LegacyToDataStore.getFactory().exprStmt((Expr) node);
+            // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof VarDecl) {
