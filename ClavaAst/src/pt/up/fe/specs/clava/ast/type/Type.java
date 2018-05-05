@@ -25,7 +25,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.NotSupportedByDataStoreException;
+import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -47,7 +48,7 @@ public abstract class Type extends ClavaNode {
 
     /// DATAKEYS END
 
-    private TypeData data;
+    // private TypeData data;
 
     public Type(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -61,9 +62,12 @@ public abstract class Type extends ClavaNode {
      * @param children
      */
     public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
+        /*
         super(info, children);
-
+        
         this.data = data;
+        */
     }
 
     /**
@@ -72,10 +76,11 @@ public abstract class Type extends ClavaNode {
      */
     @Deprecated
     public TypeData getTypeData() {
-        if (hasDataI()) {
-            throw new NotSupportedByDataStoreException();
-        }
-        return data;
+        return DataStoreToLegacy.getType(getDataI());
+        // if (hasDataI()) {
+        // throw new NotSupportedByDataStoreException();
+        // }
+        // return data;
     }
 
     @Override
@@ -124,11 +129,14 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public String getBareType() {
+        return getDataI().get(TYPE_AS_STRING);
+        /*
         if (hasDataI()) {
             return getDataI().get(TYPE_AS_STRING);
         }
-
+        
         return data.getBareType();
+        */
     }
 
     /**
@@ -138,15 +146,19 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public Type setBareType(String type) {
+        return (Type) copy().put(TYPE_AS_STRING, type);
+
+        /*
         if (hasDataI()) {
             Type copy = copy();
             copy.getDataI().put(TYPE_AS_STRING, type);
             return copy;
         }
-
+        
         Type copy = copy();
         copy.data.setBareType(type);
         return copy;
+        */
     }
 
     @Override

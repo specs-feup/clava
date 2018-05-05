@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
@@ -46,7 +47,9 @@ public class BuiltinType extends Type {
      */
     @Deprecated
     protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(data, info, children);
+        this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
+
+        put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
     }
 
     @Override
@@ -61,11 +64,7 @@ public class BuiltinType extends Type {
     }
 
     public BuiltinKind getKind() {
-        if (hasDataI()) {
-            return getDataI().get(KIND);
-        }
-
-        return getDataI().get(KIND);
+        return get(KIND);
     }
 
     /**

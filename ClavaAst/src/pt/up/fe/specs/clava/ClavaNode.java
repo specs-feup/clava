@@ -29,6 +29,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -40,7 +41,6 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
@@ -98,22 +98,23 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     // private final ClavaId id;
     // private final Location location;
-    private ClavaNodeInfo info;
+    // private ClavaNodeInfo info;
 
     private DataStore dataI;
 
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
-        super(children);
-
-        info = nodeInfo != null ? nodeInfo : ClavaNodeInfo.undefinedInfo();
-        inlineComments = null;
+        this(new LegacyToDataStore().setNodeInfo(nodeInfo).getData(), children);
+        // super(children);
+        //
+        // info = nodeInfo != null ? nodeInfo : ClavaNodeInfo.undefinedInfo();
+        // inlineComments = null;
     }
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
 
-        info = null;
-        inlineComments = null;
+        // info = null;
+        // inlineComments = null;
         this.dataI = dataI;
 
         // Set definition of DataStore
@@ -138,10 +139,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public String toContentString() {
+        return getDataI().toInlinedString();
+        /*
         if (hasDataI()) {
             return getDataI().toInlinedString();
         }
-
+        
         if (getClavaId().isPresent()) {
             // return "(0x" + Long.toHexString(getId().get().getId()) + ") ";
             // String location = getLocation().isValid() ? getLocation().toString() + " " : "";
@@ -149,7 +152,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
             return location + "(" + getClavaId().get().getId() + ") ";
         }
         return "";
-
+        */
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -178,17 +181,21 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public SourceRange getLocation() {
+        return get(LOCATION);
+        /*
+        
         if (hasDataI()) {
             return getDataI().get(LOCATION);
         }
-
+        
         SourceRange sourceRange = info.getLocation();
-
+        
         if (sourceRange == null) {
             return SourceRange.invalidRange();
         }
-
+        
         return sourceRange;
+        */
     }
 
     /**
@@ -199,26 +206,35 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     @Deprecated
     public Optional<ClavaId> getClavaId() {
+        return getInfo().getId();
+        /*
         if (hasDataI()) {
             throw new RuntimeException("Not implemented for nodes with ClavaData");
         }
         return info.getId();
+        */
     }
 
     public Optional<String> getExtendedId() {
+        return Optional.of(getId());
+        /*
         if (hasDataI()) {
             return Optional.ofNullable(getDataI().get(ID));
         }
-
+        
         return info.getId().map(id -> id.getExtendedId());
+        */
     }
 
     public String getId() {
+        return get(ID);
+        /*
         if (hasDataI()) {
             return getDataI().get(ID);
         }
-
+        
         return info.getId().map(id -> id.getExtendedId()).orElse(null);
+        */
     }
 
     /**
@@ -229,10 +245,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     @Deprecated
     public ClavaNodeInfo getInfo() {
-        if (hasDataI()) {
-            throw new RuntimeException("Not implemented for nodes with ClavaData");
-        }
-        return info;
+        return DataStoreToLegacy.getNodeInfo(getDataI());
+        // if (hasDataI()) {
+        // throw new RuntimeException("Not implemented for nodes with ClavaData");
+        // }
+        // return info;
     }
 
     @Override
@@ -364,11 +381,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public Optional<SourceRange> getLocationTry() {
+        return Optional.of(get(LOCATION));
+        /*
         if (hasDataI()) {
             return Optional.of(getDataI().get(LOCATION));
         }
-
+        
         return info.getLocationTry();
+        */
     }
 
     /**
@@ -396,25 +416,30 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param inlineComment
      */
     public void associateComment(InlineComment inlineComment) {
+        addInlineComment(inlineComment);
+
+        /*
         if (hasDataI()) {
             addInlineComment(inlineComment);
             return;
         }
-
+        
         Preconditions.checkArgument(!inlineComment.isStmtComment(),
                 "InlineComment must not be a statement comment:" + inlineComment);
-
+        
         if (inlineComments == null) {
             inlineComments = new ArrayList<>();
             inlineComments.add(inlineComment);
             return;
         }
-
+        
         // If there is already an inline comment, add
         inlineComments.add(inlineComment);
         // Preconditions.checkArgument(this.inlineComment == null, "Node already has an inline comment");
         //
         // this.inlineComment = inlineComment;
+         * 
+         */
     }
 
     private void addInlineComment(InlineComment inlineComment) {
@@ -426,27 +451,33 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public ClavaNode copy() {
+        return super.copy();
+        /*
         if (hasDataI()) {
             return super.copy();
         }
-
+        
         // Create copy
         ClavaNode copy = super.copy();
-
+        
         // Associate inline comment
         copy.inlineComments = new ArrayList<>(getInlineComments());
-
+        
         return copy;
+        */
     }
 
     @Override
     protected ClavaNode copyPrivate() {
+        return newInstance(getClass(), Collections.emptyList());
+        /*
         if (hasDataI()) {
             return newInstance(getClass(), Collections.emptyList());
             // return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getDataI().copy(), Collections.emptyList());
         }
-
+        
         throw new NotImplementedException(this);
+        */
     }
 
     public boolean hasInlineComments() {
@@ -516,32 +547,38 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return getChildren().stream().map(ClavaNodes::normalize).collect(Collectors.toList());
     }
 
-    public void setId(String newId) {
+    public ClavaNode setId(String newId) {
+        put(ID, newId);
+        return this;
+        /*
         if (hasDataI()) {
             getDataI().put(ID, newId);
             return;
         }
-
+        
         info.setId(newId);
+        */
     }
 
     public ClavaNode setLocation(SourceRange location) {
+        put(LOCATION, location);
+        /*   
         checkDataStore();
-
+        
         getDataI().set(LOCATION, location);
-
+        */
         return this;
     }
 
     /**
      * Throws exception if this node does not have a DataStore defined.
      */
-    private void checkDataStore() {
-        if (!hasDataI()) {
-            throw new RuntimeException("This method is only supported by DataStore-based ClavaNodes");
-        }
-
-    }
+    // private void checkDataStore() {
+    // if (!hasDataI()) {
+    // throw new RuntimeException("This method is only supported by DataStore-based ClavaNodes");
+    // }
+    //
+    // }
 
     /**
      * 
@@ -564,12 +601,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public DataStore getDataI() {
+        return dataI;
+        /*
         if (dataI != null) {
             return dataI;
         }
-
+        
         throw new RuntimeException("DataStore is not defined");
-
+        */
     }
 
     public void setData(DataStore data) {
@@ -645,8 +684,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param key
      * @param value
      */
-    protected <T, E extends T> void put(DataKey<T> key, E value) {
+    protected <T, E extends T> ClavaNode put(DataKey<T> key, E value) {
         dataI.put(key, value);
+
+        return this;
     }
 
     public ClavaContext getContext() {

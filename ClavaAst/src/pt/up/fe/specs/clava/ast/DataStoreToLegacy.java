@@ -15,14 +15,36 @@ package pt.up.fe.specs.clava.ast;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaId;
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 
 public class DataStoreToLegacy {
+
+    /// EXTRAS
+
+    public static ClavaNodeInfo getNodeInfo(DataStore data) {
+        return new ClavaNodeInfo(
+                new ClavaId(data.get(ClavaNode.ID)),
+                data.get(ClavaNode.LOCATION));
+    }
+
+    /// TYPE
+
+    public static TypeData getType(DataStore data) {
+        return new TypeData(data.get(Type.TYPE_AS_STRING), data.get(Type.HAS_SUGAR), false, TypeDependency.NONE, false,
+                false, false);
+    }
 
     /// ATTRS
 
     public static AttrData getAttribute(DataStore data) {
         return new AttrData(data.get(Attribute.IS_INHERITED), data.get(Attribute.IS_IMPLICIT));
     }
+
 }
