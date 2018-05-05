@@ -173,6 +173,11 @@ public class ClavaFactory {
         return new DummyDecl(data, Collections.emptyList());
     }
 
+    public DummyDecl dummyDecl(ClavaNode node) {
+        return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
+                .setLocation(node.getLocation());
+    }
+
     /// STMTS
 
     /**
