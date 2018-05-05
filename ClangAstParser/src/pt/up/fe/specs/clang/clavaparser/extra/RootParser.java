@@ -32,7 +32,7 @@ import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -114,7 +114,7 @@ public class RootParser extends AClangNodeParser<App> {
 
             // If Undefined, transform to DummyDecl
             if (clavaNode instanceof Undefined) {
-                clavaNode = ClavaNodesLegacy.dummyDecl(clavaNode);
+                clavaNode = LegacyToDataStore.getFactory().dummyDecl(clavaNode);
             }
 
             if (!(clavaNode instanceof Decl)) {

@@ -41,7 +41,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.ClavaNodesLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
@@ -227,7 +227,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         // DummyDecl dummyDecl = LegacyToDataStore.getFactory().dummyDecl(node.getClass().getSimpleName());
         // dummyDecl.setLocation(node.getLocation());
 
-        return ClavaParserUtils.cast(node, Decl.class, ClavaNodesLegacy::dummyDecl);
+        // return ClavaParserUtils.cast(node, Decl.class, ClavaNodesLegacy::dummyDecl);
+        return ClavaParserUtils.cast(node, Decl.class, LegacyToDataStore.getFactory()::dummyDecl);
     }
 
     /**
