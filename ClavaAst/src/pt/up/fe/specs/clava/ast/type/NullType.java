@@ -14,14 +14,10 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
@@ -35,14 +31,14 @@ import pt.up.fe.specs.clava.utils.NullNode;
  */
 public class NullType extends Type implements NullNode {
 
-    public NullType(ClavaNodeInfo info) {
-        this(new LegacyToDataStore()
-                .setType(new TypeData("<null type>"))
-                .setNodeInfo(info)
-                .getData(),
-                Collections.emptyList());
-        // super(new TypeData("<null type>"), info, Collections.emptyList());
-    }
+    // public NullType(ClavaNodeInfo info) {
+    // this(new LegacyToDataStore()
+    // .setType(new TypeData("<null type>"))
+    // .setNodeInfo(info)
+    // .getData(),
+    // Collections.emptyList());
+    // // super(new TypeData("<null type>"), info, Collections.emptyList());
+    // }
 
     public NullType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Include;
@@ -714,7 +716,16 @@ public class ClavaNodeFactory {
      */
     @Deprecated
     public static NullType nullType(ClavaNodeInfo info) {
-        return new NullType(info);
+        if (info == null) {
+            return LegacyToDataStore.getFactory().nullType();
+        }
+
+        DataStore data = new LegacyToDataStore()
+                .setType(new TypeData("<null type>"))
+                .setNodeInfo(info)
+                .getData();
+
+        return new NullType(data, Collections.emptyList());
     }
 
     public static RecordType recordType(String recordName, DeclRef declInfo, TagKind tagKind,
