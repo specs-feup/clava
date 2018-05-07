@@ -25,6 +25,7 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
@@ -101,8 +102,10 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         }
 
         QualType qualType = (QualType) type;
+
         QualType copy = (QualType) qualType.copy();
-        copy.setId(null);
+        // copy.setId(null);
+        copy.setId(LegacyToDataStore.getIdGenerator().next("legacy_"));
 
         // System.out.println("For " + name + ": " + copy.getQualifiers());
         copy.setQualifiers(copy.getQualifiers().stream()
