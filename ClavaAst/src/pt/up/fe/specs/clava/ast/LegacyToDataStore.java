@@ -73,6 +73,9 @@ public class LegacyToDataStore {
         }
 
         nodeData.add(ClavaNode.LOCATION, nodeInfo.getLocationTry().orElse(SourceRange.invalidRange()));
+        nodeData.add(ClavaNode.ID, nodeInfo.getId()
+                .map(id -> id.getExtendedId())
+                .orElse(CLAVA_CONTEXT.get().get(ClavaContext.ID_GENERATOR).next("legacy_")));
 
         return this;
     }

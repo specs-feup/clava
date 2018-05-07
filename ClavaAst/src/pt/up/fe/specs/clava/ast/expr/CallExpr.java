@@ -168,6 +168,7 @@ public class CallExpr extends Expr {
     protected Optional<FunctionDecl> getFunctionDecl() {
 
         DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
+
         if (declRef == null) {
             return Optional.empty();
         }

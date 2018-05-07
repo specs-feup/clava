@@ -122,7 +122,7 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     /**
      * 
-     * @return can
+     * @return
      */
     public Optional<? extends Decl> getDeclaration() {
 
@@ -139,7 +139,6 @@ public class DeclRefExpr extends Expr implements Nameable {
         }
 
         String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
-
         Optional<ClavaNode> declTry = getApp().getNodeTry(varDeclId);
 
         // If not present, probably declaration is outside of parsed files
@@ -169,6 +168,7 @@ public class DeclRefExpr extends Expr implements Nameable {
     }
 
     public Optional<DeclaratorDecl> getVariableDeclaration() {
+
         Optional<? extends Decl> declTry = getDeclaration();
 
         if (!declTry.isPresent()) {
