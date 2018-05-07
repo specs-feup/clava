@@ -59,7 +59,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.ReferenceType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
@@ -160,10 +159,12 @@ public class AstFactory {
     }
 
     public static CxxFunction functionVoid(String name) {
+
         BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKind.VOID);
-        FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
-                new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
-                Collections.emptyList());
+        FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(voidType);
+        // FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
+        // new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
+        // Collections.emptyList());
         FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
                 new FunctionDeclData(), new DeclData(),
                 ClavaNodeInfo.undefinedInfo(),
@@ -208,6 +209,7 @@ public class AstFactory {
     }
 
     public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
+
         Type returnType = (Type) typeJp.getNode();
 
         DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(functionName, ValueKind.L_VALUE, returnType,
@@ -218,8 +220,10 @@ public class AstFactory {
                 .collect(Collectors.toList());
 
         FunctionTypeData fData = new FunctionTypeData(Types.isVoid(returnType), false, false, null, CallingConv.C);
-        FunctionProtoType type = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(), fData,
-                new TypeData(""), ClavaNodeInfo.undefinedInfo(), returnType, argTypes);
+        // FunctionProtoType type = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(), fData,
+        // new TypeData(""), ClavaNodeInfo.undefinedInfo(), returnType, argTypes);
+
+        FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
 
         List<Expr> exprArgs = Arrays.stream(args)
                 .map(arg -> (Expr) arg.getNode())
