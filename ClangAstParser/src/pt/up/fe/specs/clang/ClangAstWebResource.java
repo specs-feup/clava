@@ -30,12 +30,12 @@ public interface ClangAstWebResource {
     WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v2.1");
     WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v3.0.6");
+    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v3.0.7");
     WebResourceProvider WIN_DLL1 = create("windows/libgcc_s_seh-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/libstdc++-6.dll");
     WebResourceProvider WIN_DLL3 = create("windows/libwinpthread-1.dll");
 
-    WebResourceProvider LINUX_EXE = create("linux_ubuntu_14/clang_ast", "v3.0.6");
+    WebResourceProvider LINUX_EXE = create("linux_ubuntu_14/clang_ast", "v3.0.7");
 
     WebResourceProvider CENTOS6_EXE = create("centos6/clang_ast", "v3.0");
 
