@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.clava.context.ClavaIdGenerator;
 import pt.up.fe.specs.util.SpecsEnums;
 
 public class LegacyToDataStore {
@@ -53,6 +54,10 @@ public class LegacyToDataStore {
         return CLAVA_CONTEXT.get().get(ClavaContext.FACTORY);
     }
 
+    public static ClavaIdGenerator getIdGenerator() {
+        return CLAVA_CONTEXT.get().get(ClavaContext.ID_GENERATOR);
+    }
+
     public DataStore getData() {
         // If id is not set, add a custom one
         if (!nodeData.hasValue(ClavaNode.ID)) {
@@ -63,6 +68,9 @@ public class LegacyToDataStore {
     }
 
     public LegacyToDataStore setNodeInfo(ClavaNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            nodeInfo = ClavaNodeInfo.undefinedInfo();
+        }
 
         nodeData.add(ClavaNode.LOCATION, nodeInfo.getLocationTry().orElse(SourceRange.invalidRange()));
 

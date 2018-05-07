@@ -499,7 +499,8 @@ public class ClavaNodeFactory {
     }
 
     public static ParmVarDecl parmVarDecl(String varName, Type type) {
-        return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), null, null);
+        return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), ClavaNodeInfo.undefinedInfo(),
+                null);
     }
 
     public static ParmVarDecl parmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type type,

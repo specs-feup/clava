@@ -88,7 +88,7 @@ public class SourceLocation {
 
     @Override
     public String toString() {
-        return filepath + ":" + line + ":" + column;
+        return new File(filepath).getName() + ":" + line + ":" + column;
     }
 
     public boolean isValid() {

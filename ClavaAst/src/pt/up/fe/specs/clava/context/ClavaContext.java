@@ -87,4 +87,9 @@ public class ClavaContext {
         // return data.get(ARGUMENTS);
     }
     */
+
+    @Override
+    public String toString() {
+        return Integer.toString(hashCode());
+    }
 }

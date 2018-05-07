@@ -14,10 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -41,9 +38,9 @@ public class CXXFunctionalCastExpr extends CastExpr {
 
     // private final String targetType;
 
-    public CXXFunctionalCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
+    // public CXXFunctionalCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    // super(data, children);
+    // }
 
     public CXXFunctionalCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
@@ -79,6 +76,7 @@ public class CXXFunctionalCastExpr extends CastExpr {
         super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
         put(CastExpr.CAST_KIND, castKind);
+
         // super(castKind, exprData, info, children);
 
         // this.targetType = description;
