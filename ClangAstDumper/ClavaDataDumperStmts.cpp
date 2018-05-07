@@ -20,6 +20,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"FloatingLiteral", clava::StmtNode::FLOATING_LITERAL},
         {"FloatingLiteral", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CastExpr", clava::StmtNode::CAST_EXPR},
+        //{"CXXFunctionalCastExpr", clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR},
         {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
 };
 
@@ -59,6 +60,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpExprData(static_cast<const Expr *>(S)); break;
         case clava::StmtNode::CAST_EXPR:
             DumpCastExprData(static_cast<const CastExpr *>(S)); break;
+//        case clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR:
+//            DumpCXXFunctionalCastExprData(static_cast<const CXXFunctionalCastExpr *>(S)); break;
         case clava::StmtNode ::CHARACTER_LITERAL:
             DumpCharacterLiteralData(static_cast<const CharacterLiteral *>(S)); break;
         case clava::StmtNode ::INTEGER_LITERAL:
@@ -102,6 +105,14 @@ void clava::ClavaDataDumper::DumpCastExprData(const CastExpr *E) {
 
     clava::dump(clava::CAST_KIND[E->getCastKind()]);
 }
+
+/*
+void clava::ClavaDataDumper::DumpCXXFunctionalCastExprData(const CXXFunctionalCastExpr *E) {
+    DumpCastExprData(E);
+
+    clava::dump(clava::getId(E->get));
+}
+ */
 
 void clava::ClavaDataDumper::DumpLiteralData(const Expr *E) {
     DumpExprData(E);

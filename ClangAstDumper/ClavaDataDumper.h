@@ -110,6 +110,7 @@ namespace clava {
         // EXPRS
         void DumpExprData(const Expr *E);
         void DumpCastExprData(const CastExpr *E);
+        //void DumpCXXFunctionalCastExprData(const CXXFunctionalCastExpr *E);
         void DumpLiteralData(const Expr *E);
         void DumpCharacterLiteralData(const CharacterLiteral *E);
         void DumpIntegerLiteralData(const IntegerLiteral *E);

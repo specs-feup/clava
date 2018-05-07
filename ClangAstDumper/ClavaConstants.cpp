@@ -36,6 +36,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         // EXPRS
         case clava::StmtNode::EXPR: return "Expr";
         case clava::StmtNode::CAST_EXPR: return "CastExpr";
+        //case clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR: return "CXXFunctionalCastExpr";
         case clava::StmtNode::LITERAL: return "Literal";
         case clava::StmtNode::CHARACTER_LITERAL: return "CharacterLiteral";
         case clava::StmtNode::INTEGER_LITERAL: return "IntegerLiteral";

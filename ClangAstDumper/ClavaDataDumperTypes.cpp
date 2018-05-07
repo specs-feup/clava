@@ -85,8 +85,18 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     bool hasSugar = singleStepDesugar != T;
     clava::dump(hasSugar);
 
+    if(T->isDependentType()) {
+        clava::dump("DEPENDENT");
+    } else if (T->isInstantiationDependentType()) {
+        clava::dump("INSTANTIATION_DEPENDENT");
+    } else {
+        clava::dump("NONE");
+    }
 
-    //clava::dump(QualType::getAsString(T, T.getQualifiers()));
+    clava::dump(T->isVariablyModifiedType());
+    clava::dump(T->containsUnexpandedParameterPack());
+    clava::dump(T->isFromAST());
+
 }
 
 
