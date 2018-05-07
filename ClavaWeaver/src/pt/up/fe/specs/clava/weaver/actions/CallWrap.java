@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -252,7 +253,7 @@ public class CallWrap {
         FunctionDeclData functionDeclData = new FunctionDeclData();
         DeclData declData = new DeclData();
         FunctionDecl declaration = ClavaNodeFactory.functionDecl(name, inputs, functionType, functionDeclData, declData,
-                null, null);
+                ClavaNodeInfo.undefinedInfo(), null);
 
         addWrapperFunction(name, declaration);
 
