@@ -44,4 +44,8 @@ int main() {
    foo_with_1darray_input_array[0] = 1;
    int (*foo_with_2darray_input_array)[2] = (int (*)[2]) k[0];
    foo_with_2darray_input_array[0][0] = 1;
+   double const atom1[3] = {1, 2, 3};
+   double const atom2[3] = {4, 5, 6};
+   double Distance2_return = (atom1[0] - atom2[0]) * (atom1[0] - atom2[0]) + (atom1[1] - atom2[1]) * (atom1[1] - atom2[1]) + (atom1[2] - atom2[2]) * (atom1[2] - atom2[2]);
+   double distResult = Distance2_return;
 }
