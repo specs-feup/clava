@@ -44,4 +44,19 @@ public enum AddressSpaceQualifier implements StringProvider {
     public String getString() {
         return getCode();
     }
+
+    public AddressSpaceQualifierV2 toV2() {
+        switch (this) {
+        case CONSTANT:
+            return AddressSpaceQualifierV2.CONSTANT;
+        case NONE:
+            return AddressSpaceQualifierV2.NONE;
+        case GLOBAL:
+            return AddressSpaceQualifierV2.GLOBAL;
+        case LOCAL:
+            return AddressSpaceQualifierV2.LOCAL;
+        default:
+            throw new RuntimeException("Case not defined:" + this);
+        }
+    }
 }

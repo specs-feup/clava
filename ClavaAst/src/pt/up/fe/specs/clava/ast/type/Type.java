@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
@@ -44,7 +45,18 @@ public abstract class Type extends ClavaNode {
     /// DATAKEYS BEGIN
 
     public final static DataKey<String> TYPE_AS_STRING = KeyFactory.string("typeAsString");
+
     public final static DataKey<Boolean> HAS_SUGAR = KeyFactory.bool("hasSugar");
+
+    public final static DataKey<TypeDependency> TYPE_DEPENDENCY = KeyFactory.enumeration("typeDependency",
+            TypeDependency.class);
+
+    public final static DataKey<Boolean> IS_VARIABLY_MODIFIED = KeyFactory.bool("isVariablyModified");
+
+    public final static DataKey<Boolean> CONTAINS_UNEXPANDED_PARAMETER_PACK = KeyFactory
+            .bool("containsUnexpandedParameterPack");
+
+    public final static DataKey<Boolean> IS_FROM_AST = KeyFactory.bool("isFromAst");
 
     /// DATAKEYS END
 
@@ -161,6 +173,7 @@ public abstract class Type extends ClavaNode {
         */
     }
 
+    /*
     @Override
     public String toContentString() {
         if (hasDataI()) {
@@ -168,6 +181,7 @@ public abstract class Type extends ClavaNode {
         }
         return super.toContentString() + getCode();
     }
+    */
 
     /**
      * By default returns false.
@@ -277,11 +291,14 @@ public abstract class Type extends ClavaNode {
      *         sugar.
      */
     public boolean hasSugar() {
+        return get(HAS_SUGAR);
+        /*
         if (hasDataI()) {
             return getDataI().get(HAS_SUGAR);
         }
-
+        
         return getTypeData().hasSugar();
+        */
     }
 
     /**
@@ -341,11 +358,15 @@ public abstract class Type extends ClavaNode {
     }
 
     protected Type desugarImpl() {
+        return getChild(Type.class, 0);
+
+        /*
         if (hasDataI()) {
             // If has sugar, first child is always the desugared type
             return getChild(Type.class, 0);
         }
         throw new NotImplementedException(getClass());
+        */
     }
 
     /**

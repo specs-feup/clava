@@ -14,11 +14,14 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.language.CastKind;
 
@@ -30,23 +33,36 @@ import pt.up.fe.specs.clava.language.CastKind;
  */
 public class CXXFunctionalCastExpr extends CastExpr {
 
-    private final String targetType;
+    /// DATAKEYS BEGIN
 
-    public CXXFunctionalCastExpr(String targetType, CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // public final static DataKey<Type>
+
+    /// DATAKEYS END
+
+    // private final String targetType;
+
+    public CXXFunctionalCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    public CXXFunctionalCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
 
-        this(targetType, castKind, exprData, info, Arrays.asList(subExpr));
+        this(castKind, exprData, info, Arrays.asList(subExpr));
 
         // this.targetType = targetType;
     }
 
-    public static CXXFunctionalCastExpr newInstance(String targetType, CastExpr cast, Expr subExpr) {
-        if (cast.hasDataI()) {
-            throw new RuntimeException("Not implemented for ClavaData nodes");
-        }
-
-        return new CXXFunctionalCastExpr(targetType, cast.getCastKind(), cast.getExprData(), cast.getInfo(),
+    public static CXXFunctionalCastExpr newInstance(CastExpr cast, Expr subExpr) {
+        return new CXXFunctionalCastExpr(cast.getCastKind(), cast.getExprData(), cast.getInfo(),
                 subExpr);
+
+        // if (cast.hasDataI()) {
+        // throw new RuntimeException("Not implemented for ClavaData nodes");
+        // }
+        //
+        // return new CXXFunctionalCastExpr(cast.getCastKind(), cast.getExprData(), cast.getInfo(),
+        // subExpr);
     }
 
     /**
@@ -57,25 +73,28 @@ public class CXXFunctionalCastExpr extends CastExpr {
      * @param description
      * @param location
      */
-    private CXXFunctionalCastExpr(String description, CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    private CXXFunctionalCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
 
-        super(castKind, exprData, info, children);
+        super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        this.targetType = description;
+        put(CastExpr.CAST_KIND, castKind);
+        // super(castKind, exprData, info, children);
+
+        // this.targetType = description;
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXFunctionalCastExpr(targetType, getCastKind(), getExprData(), getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXFunctionalCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
         return getType().getCode() + "(" + getSubExpr().getCode() + ")";
     }
 
-    public String getTargetType() {
-        return targetType;
-    }
+    // public String getTargetType() {
+    // return targetType;
+    // }
 }

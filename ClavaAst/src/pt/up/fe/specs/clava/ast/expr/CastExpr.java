@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -41,12 +42,12 @@ public abstract class CastExpr extends Expr {
 
     /// DATAKEY END
 
-    private final CastKind castKind;
+    // private final CastKind castKind;
 
     public CastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-        this.castKind = null;
+        // this.castKind = null;
     }
 
     /**
@@ -78,12 +79,21 @@ public abstract class CastExpr extends Expr {
     // this(castKind, exprData, info, Collections.emptyList());
     // }
 
+    /**
+     * @deprecated
+     * @param castKind
+     * @param exprData
+     * @param info
+     * @param children
+     */
+    @Deprecated
     protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
 
-        super(exprData, info, children);
+        this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        this.castKind = castKind;
+        put(CAST_KIND, castKind);
+        // this.castKind = castKind;
     }
 
     @Override
@@ -92,11 +102,12 @@ public abstract class CastExpr extends Expr {
     }
 
     public CastKind getCastKind() {
-        if (hasDataI()) {
-            return getDataI().get(CAST_KIND);
-        }
-
-        return castKind;
+        return get(CAST_KIND);
+        // if (hasDataI()) {
+        // return getDataI().get(CAST_KIND);
+        // }
+        //
+        // return castKind;
     }
 
     public Expr getSubExpr() {

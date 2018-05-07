@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
+import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Set;
 
 public enum Qualifier {
 
@@ -22,6 +24,9 @@ public enum Qualifier {
     VOLATILE,
     GLOBAL,
     CONSTEXPR;
+
+    private static final Set<Qualifier> C99_QUALIFIERS = EnumSet.of(Qualifier.CONST, Qualifier.RESTRICT,
+            Qualifier.VOLATILE);
 
     public String getCode(boolean isCxx) {
         if (this == RESTRICT) {
@@ -40,5 +45,22 @@ public enum Qualifier {
         }
 
         return name().toLowerCase(Locale.UK);
+    }
+
+    public boolean isC99Qualifier() {
+        return C99_QUALIFIERS.contains(this);
+    }
+
+    public C99Qualifier toC99Qualifier() {
+        switch (this) {
+        case CONST:
+            return C99Qualifier.CONST;
+        case RESTRICT:
+            return C99Qualifier.RESTRICT;
+        case VOLATILE:
+            return C99Qualifier.VOLATILE;
+        default:
+            throw new RuntimeException("Not a C99 Qualifier:" + this);
+        }
     }
 }

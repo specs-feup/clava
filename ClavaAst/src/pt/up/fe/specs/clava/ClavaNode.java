@@ -82,52 +82,21 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     /// DATAKEYS END
 
-    // private static final ClavaNodeConstructors CLAVA_NODE_CONSTRUCTORS = new ClavaNodeConstructors();
-
-    /*
-    private String id;
-    private SourceRange location;
-    private boolean isMacro;
-    private SourceRange spellingLocation;
-    
-    // Optional
-    private List<InlineComment> inlineComments;
-    */
-
-    private List<InlineComment> inlineComments;
-
-    // private final ClavaId id;
-    // private final Location location;
-    // private ClavaNodeInfo info;
-
     private DataStore dataI;
 
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
         this(new LegacyToDataStore().setNodeInfo(nodeInfo).getData(), children);
-        // super(children);
-        //
-        // info = nodeInfo != null ? nodeInfo : ClavaNodeInfo.undefinedInfo();
-        // inlineComments = null;
     }
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
 
-        // info = null;
-        // inlineComments = null;
         this.dataI = dataI;
 
         // Set definition of DataStore
         this.dataI.setDefinition(getClass());
 
     }
-
-    // private ClavaNode(ClavaId id, Location location, Collection<? extends ClavaNode> children) {
-    // super(children);
-    //
-    // this.id = id;
-    // this.location = location;
-    // }
 
     protected String getTab() {
         return "   ";
@@ -140,19 +109,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Override
     public String toContentString() {
         return getDataI().toInlinedString();
-        /*
-        if (hasDataI()) {
-            return getDataI().toInlinedString();
-        }
-        
-        if (getClavaId().isPresent()) {
-            // return "(0x" + Long.toHexString(getId().get().getId()) + ") ";
-            // String location = getLocation().isValid() ? getLocation().toString() + " " : "";
-            String location = "";
-            return location + "(" + getClavaId().get().getId() + ") ";
-        }
-        return "";
-        */
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -162,40 +118,18 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
         return previousContentString + bridge + suffix;
     }
-    // protected String toContentString(ClavaNode node, String suffix) {
-    // String previousContentString = node.super.toContentString();
-    // // Use bridge if there is content and a suffix
-    // String bridge = !suffix.isEmpty() && !previousContentString.isEmpty() ? "; " : "";
-    //
-    // return previousContentString + bridge + suffix;
-    // }
 
     @Override
     public ClavaNode getThis() {
         return this;
     }
 
-    // public abstract String getCode();
     public String getCode() {
         return toUnimplementedCode();
     }
 
     public SourceRange getLocation() {
         return get(LOCATION);
-        /*
-        
-        if (hasDataI()) {
-            return getDataI().get(LOCATION);
-        }
-        
-        SourceRange sourceRange = info.getLocation();
-        
-        if (sourceRange == null) {
-            return SourceRange.invalidRange();
-        }
-        
-        return sourceRange;
-        */
     }
 
     /**
@@ -207,34 +141,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Deprecated
     public Optional<ClavaId> getClavaId() {
         return getInfo().getId();
-        /*
-        if (hasDataI()) {
-            throw new RuntimeException("Not implemented for nodes with ClavaData");
-        }
-        return info.getId();
-        */
     }
 
     public Optional<String> getExtendedId() {
         return Optional.of(getId());
-        /*
-        if (hasDataI()) {
-            return Optional.ofNullable(getDataI().get(ID));
-        }
-        
-        return info.getId().map(id -> id.getExtendedId());
-        */
     }
 
     public String getId() {
         return get(ID);
-        /*
-        if (hasDataI()) {
-            return getDataI().get(ID);
-        }
-        
-        return info.getId().map(id -> id.getExtendedId()).orElse(null);
-        */
     }
 
     /**
@@ -246,10 +160,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Deprecated
     public ClavaNodeInfo getInfo() {
         return DataStoreToLegacy.getNodeInfo(getDataI());
-        // if (hasDataI()) {
-        // throw new RuntimeException("Not implemented for nodes with ClavaData");
-        // }
-        // return info;
     }
 
     @Override
@@ -312,33 +222,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     protected <T extends ClavaNode> Optional<T> getNullable(int index, Class<T> castTo) {
         // Get child
         ClavaNode child = ClavaNodes.getChild(this, index);
-        // ClavaNode child = getChild(index);
 
         // If NullNode return empty Optional, otherwise cast and return optional
         return child instanceof pt.up.fe.specs.clava.ast.extra.NullNode ? Optional.empty()
                 : Optional.of(castTo.cast(child));
     }
-
-    /*
-    public ClavaId getParentId() {
-        return getId()
-                .orElseThrow(() -> new RuntimeException("There is no ID defined"))
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Could not find a parent in id '" + getId() + "'"));
-    
-        // return getParentIdTry()
-        // .orElseThrow(() -> new RuntimeException("Could not find a parent in id '" + getId() + "'"));
-    }
-    */
-
-    // public Optional<ClavaId> getParentIdTry() {
-    // if (!getId().isPresent()) {
-    // return Optional.empty();
-    // }
-    //
-    // return getId().get().getParent();
-    //
-    // }
 
     @Override
     public int hashCode() {
@@ -382,13 +270,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     public Optional<SourceRange> getLocationTry() {
         return Optional.of(get(LOCATION));
-        /*
-        if (hasDataI()) {
-            return Optional.of(getDataI().get(LOCATION));
-        }
-        
-        return info.getLocationTry();
-        */
     }
 
     /**
@@ -417,29 +298,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     public void associateComment(InlineComment inlineComment) {
         addInlineComment(inlineComment);
-
-        /*
-        if (hasDataI()) {
-            addInlineComment(inlineComment);
-            return;
-        }
-        
-        Preconditions.checkArgument(!inlineComment.isStmtComment(),
-                "InlineComment must not be a statement comment:" + inlineComment);
-        
-        if (inlineComments == null) {
-            inlineComments = new ArrayList<>();
-            inlineComments.add(inlineComment);
-            return;
-        }
-        
-        // If there is already an inline comment, add
-        inlineComments.add(inlineComment);
-        // Preconditions.checkArgument(this.inlineComment == null, "Node already has an inline comment");
-        //
-        // this.inlineComment = inlineComment;
-         * 
-         */
     }
 
     private void addInlineComment(InlineComment inlineComment) {
@@ -452,32 +310,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Override
     public ClavaNode copy() {
         return super.copy();
-        /*
-        if (hasDataI()) {
-            return super.copy();
-        }
-        
-        // Create copy
-        ClavaNode copy = super.copy();
-        
-        // Associate inline comment
-        copy.inlineComments = new ArrayList<>(getInlineComments());
-        
-        return copy;
-        */
     }
 
     @Override
     protected ClavaNode copyPrivate() {
         return newInstance(getClass(), Collections.emptyList());
-        /*
-        if (hasDataI()) {
-            return newInstance(getClass(), Collections.emptyList());
-            // return CLAVA_NODE_CONSTRUCTORS.newClavaNode(getClass(), getDataI().copy(), Collections.emptyList());
-        }
-        
-        throw new NotImplementedException(this);
-        */
     }
 
     public boolean hasInlineComments() {
@@ -485,11 +322,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public List<InlineComment> getInlineComments() {
-        if (hasDataI()) {
-            return getDataI().get(INLINE_COMMENTS);
-        }
-
-        return inlineComments == null ? Collections.emptyList() : inlineComments;
+        return get(INLINE_COMMENTS);
     }
 
     /**
@@ -502,14 +335,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         List<InlineComment> copy = new ArrayList<>(comments);
         comments.clear();
         return copy;
-        // if (inlineComments == null) {
-        // return Collections.emptyList();
-        // }
-        //
-        // List<InlineComment> detachedComments = inlineComments;
-        // inlineComments = null;
-        //
-        // return detachedComments;
     }
 
     public String getInlineCommentsCode() {
@@ -521,11 +346,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         String code = getInlineComments().stream()
                 .map(InlineComment::getCode)
                 .collect(Collectors.joining(" ", " ", ""));
-        // if (code.equals(" // const object with mutable member (duplicates comment)")) {
-        // System.out.println("STACK:");
-        // System.out.println(Arrays.toString(Thread.currentThread().getStackTrace()));
-        // }
-        // System.out.println("COMMENT:" + code);
 
         return code;
     }
@@ -539,10 +359,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return getNodeName().startsWith("CXX");
     }
 
-    // public void setInfo(ClavaNodeInfo info) {
-    // this.info = info != null ? info : ClavaNodeInfo.undefinedInfo();
-    // }
-
     public List<ClavaNode> getChildrenNormalized() {
         return getChildren().stream().map(ClavaNodes::normalize).collect(Collectors.toList());
     }
@@ -550,35 +366,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     public ClavaNode setId(String newId) {
         put(ID, newId);
         return this;
-        /*
-        if (hasDataI()) {
-            getDataI().put(ID, newId);
-            return;
-        }
-        
-        info.setId(newId);
-        */
     }
 
     public ClavaNode setLocation(SourceRange location) {
         put(LOCATION, location);
-        /*   
-        checkDataStore();
-        
-        getDataI().set(LOCATION, location);
-        */
         return this;
     }
-
-    /**
-     * Throws exception if this node does not have a DataStore defined.
-     */
-    // private void checkDataStore() {
-    // if (!hasDataI()) {
-    // throw new RuntimeException("This method is only supported by DataStore-based ClavaNodes");
-    // }
-    //
-    // }
 
     /**
      * 
@@ -602,22 +395,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     public DataStore getDataI() {
         return dataI;
-        /*
-        if (dataI != null) {
-            return dataI;
-        }
-        
-        throw new RuntimeException("DataStore is not defined");
-        */
     }
 
     public void setData(DataStore data) {
         this.dataI.addAll(data);
     }
-
-    // protected void setData(ClavaData data) {
-    // this.data = data;
-    // }
 
     public boolean hasDataI() {
         return dataI != null;

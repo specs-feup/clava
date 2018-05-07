@@ -1083,10 +1083,10 @@ public class ClavaNodeFactory {
         return new IntegerLiteralLegacy(literal, exprData, info);
     }
 
-    public static CXXFunctionalCastExpr cxxFunctionalCastExpr(String targetType, CastKind castKind,
+    public static CXXFunctionalCastExpr cxxFunctionalCastExpr(CastKind castKind,
             ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
 
-        return new CXXFunctionalCastExpr(targetType, castKind, exprData, info, subExpr);
+        return new CXXFunctionalCastExpr(castKind, exprData, info, subExpr);
     }
 
     /**

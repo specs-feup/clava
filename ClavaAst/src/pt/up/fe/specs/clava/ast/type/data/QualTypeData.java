@@ -15,9 +15,11 @@ package pt.up.fe.specs.clava.ast.type.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifier;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.language.Standard;
 
@@ -47,6 +49,13 @@ public class QualTypeData {
 
     public String getQualifiersCode() {
         return ClavaCode.getQualifiersCode(qualifiers, standard.isCxx());
+    }
+
+    public List<C99Qualifier> getC99Qualifiers() {
+        return getQualifiers().stream()
+                .filter(Qualifier::isC99Qualifier)
+                .map(Qualifier::toC99Qualifier)
+                .collect(Collectors.toList());
     }
 
     public void setQualifiers(List<Qualifier> qualifiers) {

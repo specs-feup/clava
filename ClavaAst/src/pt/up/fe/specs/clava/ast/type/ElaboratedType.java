@@ -155,13 +155,16 @@ public class ElaboratedType extends TypeWithKeyword {
      * @return
      */
     public ElaboratedType setTypeAsString(String typeAsString) {
+        put(ElaboratedType.TYPE_AS_STRING, typeAsString);
+        /*
         if (hasDataI()) {
             getDataI().set(ElaboratedType.TYPE_AS_STRING, typeAsString);
         } else {
             getTypeData().setBareType(typeAsString);
         }
-
+        */
         return this;
+
     }
 
 }

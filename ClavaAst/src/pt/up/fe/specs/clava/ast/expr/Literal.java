@@ -21,8 +21,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * Represents a literal node.
@@ -49,16 +49,12 @@ public abstract class Literal extends Expr {
      * @param children
      */
     public Literal(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
+        super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
     }
 
     // public abstract String getLiteral();
     public String getLiteral() {
-        if (hasDataI()) {
-            return getDataI().get(SOURCE_LITERAL);
-        }
-
-        throw new NotImplementedException(this);
+        return get(SOURCE_LITERAL);
     }
 
     @Override

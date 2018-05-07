@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
@@ -69,7 +70,8 @@ public class QualType extends Type {
 
     private QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
+        super(new LegacyToDataStore().setQualType(qualTypeData).setType(typeData).setNodeInfo(info).getData(),
+                children);
 
         this.qualTypeData = qualTypeData;
     }
@@ -230,11 +232,15 @@ public class QualType extends Type {
     }
 
     public List<String> getQualifierStrings() {
+        return getQualifiersPrivate();
+
+        /*
         if (hasDataI()) {
             return getQualifiersPrivate();
         }
-
+        
         return qualTypeData.getQualifiers().stream().map(Qualifier::name).collect(Collectors.toList());
+        */
     }
 
     private List<String> getQualifiersPrivate() {

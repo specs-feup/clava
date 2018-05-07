@@ -20,6 +20,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
@@ -34,11 +36,25 @@ public class DataStoreToLegacy {
                 data.get(ClavaNode.LOCATION));
     }
 
+    /// EXPRS
+
+    public static ExprData getExpr(DataStore data) {
+        return new ExprData(
+                data.get(Expr.TYPE),
+                data.get(Expr.VALUE_KIND),
+                data.get(Expr.OBJECT_KIND));
+    }
+
     /// TYPE
 
     public static TypeData getType(DataStore data) {
-        return new TypeData(data.get(Type.TYPE_AS_STRING), data.get(Type.HAS_SUGAR), false, TypeDependency.NONE, false,
-                false, false);
+        return new TypeData(data.get(Type.TYPE_AS_STRING),
+                data.get(Type.HAS_SUGAR),
+                data.get(Type.TYPE_DEPENDENCY) != TypeDependency.NONE,
+                data.get(Type.TYPE_DEPENDENCY),
+                data.get(Type.IS_VARIABLY_MODIFIED),
+                data.get(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK),
+                data.get(Type.IS_FROM_AST));
     }
 
     /// ATTRS

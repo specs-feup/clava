@@ -24,9 +24,11 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
+import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
@@ -73,6 +75,10 @@ public class LegacyToDataStore {
 
         nodeData.add(Type.TYPE_AS_STRING, data.getBareType());
         nodeData.add(Type.HAS_SUGAR, data.hasSugar());
+        nodeData.add(Type.TYPE_DEPENDENCY, data.getTypeDependency());
+        nodeData.add(Type.IS_VARIABLY_MODIFIED, data.isVariablyModified());
+        nodeData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, data.containsUnexpandedParameterPack());
+        nodeData.add(Type.IS_FROM_AST, data.isFromAst());
 
         return this;
     }
@@ -104,6 +110,13 @@ public class LegacyToDataStore {
         String noexpectExpr = data.getNoexceptExpr() == null ? "<null noexcept expr>" : data.getNoexceptExpr();
         nodeData.add(FunctionProtoType.NOEXCEPT_EXPR,
                 getFactory().literalExpr(noexpectExpr, getFactory().dummyType("<no type>")));
+
+        return this;
+    }
+
+    public LegacyToDataStore setQualType(QualTypeData data) {
+        nodeData.add(QualType.ADDRESS_SPACE_QUALIFIER, data.getAddressSpaceQualifier().toV2());
+        nodeData.add(QualType.C99_QUALIFIERS, data.getC99Qualifiers());
 
         return this;
     }
