@@ -100,7 +100,7 @@ public abstract class Expr extends ClavaNode implements Typable {
      */
     @Deprecated
     public ExprData getExprData() {
-        return DataStoreToLegacy.getExpr(getDataI());
+        return DataStoreToLegacy.getExpr(getData());
     }
 
     /*

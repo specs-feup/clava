@@ -34,10 +34,10 @@ public interface LiteralNode {
 
     /// DATAKEYS END
 
-    DataStore getDataI();
+    DataStore getData();
 
     default String getLiteralCode() {
-        return getDataI().get(LITERAL_CODE);
+        return getData().get(LITERAL_CODE);
     }
 
     // default String getCode() {

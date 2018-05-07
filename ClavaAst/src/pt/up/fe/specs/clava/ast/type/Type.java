@@ -88,7 +88,7 @@ public abstract class Type extends ClavaNode {
      */
     @Deprecated
     public TypeData getTypeData() {
-        return DataStoreToLegacy.getType(getDataI());
+        return DataStoreToLegacy.getType(getData());
         // if (hasDataI()) {
         // throw new NotSupportedByDataStoreException();
         // }
@@ -141,7 +141,7 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public String getBareType() {
-        return getDataI().get(TYPE_AS_STRING);
+        return getData().get(TYPE_AS_STRING);
         /*
         if (hasDataI()) {
             return getDataI().get(TYPE_AS_STRING);

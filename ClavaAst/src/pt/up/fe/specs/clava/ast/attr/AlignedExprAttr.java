@@ -46,7 +46,7 @@ public class AlignedExprAttr extends AlignedAttr {
 
     @Override
     protected Optional<String> getValueCode() {
-        Expr expr = getDataI().get(EXPR);
+        Expr expr = getData().get(EXPR);
 
         return expr.isNullNode() ? Optional.empty() : Optional.of(expr.getCode());
     }

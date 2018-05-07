@@ -48,11 +48,11 @@ public interface DummyNode {
 
     /// DATAKEYS END
 
-    DataStore getDataI();
+    DataStore getData();
 
     // String getContent();
     default String getContent() {
-        return getDataI().get(DUMMY_CONTENT);
+        return getData().get(DUMMY_CONTENT);
     }
 
     default String getOriginalType() {

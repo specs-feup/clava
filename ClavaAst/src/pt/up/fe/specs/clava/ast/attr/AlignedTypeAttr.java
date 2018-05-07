@@ -46,6 +46,6 @@ public class AlignedTypeAttr extends AlignedAttr {
 
     @Override
     protected Optional<String> getValueCode() {
-        return Optional.of(getDataI().get(TYPE).getCode());
+        return Optional.of(getData().get(TYPE).getCode());
     }
 }

@@ -246,7 +246,7 @@ public class QualType extends Type {
     private List<String> getQualifiersPrivate() {
         List<String> qualifiers = new ArrayList<>();
 
-        qualifiers.addAll(getDataI().get(C99_QUALIFIERS).stream()
+        qualifiers.addAll(getData().get(C99_QUALIFIERS).stream()
                 .map(C99Qualifier::getCode)
                 .collect(Collectors.toList()));
 

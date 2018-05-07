@@ -108,7 +108,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     @Override
     public String toContentString() {
-        return getDataI().toInlinedString();
+        return getData().toInlinedString();
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -159,7 +159,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      */
     @Deprecated
     public ClavaNodeInfo getInfo() {
-        return DataStoreToLegacy.getNodeInfo(getDataI());
+        return DataStoreToLegacy.getNodeInfo(getData());
     }
 
     @Override
@@ -304,7 +304,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         Preconditions.checkArgument(!inlineComment.isStmtComment(),
                 "InlineComment must not be a statement comment:" + inlineComment);
 
-        getDataI().get(INLINE_COMMENTS).add(inlineComment);
+        getData().get(INLINE_COMMENTS).add(inlineComment);
     }
 
     @Override
@@ -393,7 +393,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return Optional.empty();
     }
 
-    public DataStore getDataI() {
+    public DataStore getData() {
         return dataI;
     }
 

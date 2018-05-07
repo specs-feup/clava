@@ -35,11 +35,11 @@ public class DummyAttr extends Attribute implements DummyNode {
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + getDataI().get(DUMMY_CONTENT) + ")";
+        return super.getNodeName() + " (" + getData().get(DUMMY_CONTENT) + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy attribute'" + getDataI().get(DUMMY_CONTENT) + "' */";
+        return "/* Dummy attribute'" + getData().get(DUMMY_CONTENT) + "' */";
     }
 
     @Override

@@ -61,7 +61,7 @@ public abstract class Attribute extends ClavaNode {
                 .setNodeInfo(nodeInfo)
                 .getData(), children);
 
-        getDataI().set(KIND, kind);
+        getData().set(KIND, kind);
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class Attribute extends ClavaNode {
      */
     @Deprecated
     public AttrData getAttrData() {
-        return DataStoreToLegacy.getAttribute(getDataI());
+        return DataStoreToLegacy.getAttribute(getData());
         // if (hasDataI()) {
         // throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
         // }
