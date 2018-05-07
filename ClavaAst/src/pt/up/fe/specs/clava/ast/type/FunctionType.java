@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -35,6 +36,10 @@ public abstract class FunctionType extends Type {
 
     /// DATAKEYS BEGIN
 
+    /**
+     * @deprecated No need to be stored in a field, can be calculated. Use FunctionType.hasNoReturn() instead
+     */
+    @Deprecated
     public final static DataKey<Boolean> NO_RETURN = KeyFactory.bool("noReturn");
 
     public final static DataKey<Boolean> PRODUCES_RESULT = KeyFactory.bool("producesResult");
@@ -160,6 +165,21 @@ public abstract class FunctionType extends Type {
         code.append(paramsCode);
 
         return code.toString();
+    }
+
+    /**
+     * 
+     * @return true if return type is a void type.
+     */
+    public boolean hasNoReturn() {
+
+        Type returnType = getReturnType();
+
+        if (!(returnType instanceof BuiltinType)) {
+            return false;
+        }
+
+        return returnType.get(BuiltinType.KIND) == BuiltinKind.VOID;
     }
 
 }

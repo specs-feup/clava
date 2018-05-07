@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.context;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LiteralNode;
+import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -36,9 +38,11 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
+import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCollections;
 
 public class ClavaFactory {
 
@@ -47,6 +51,7 @@ public class ClavaFactory {
     private static final String DECL_ID_PREFIX = "decl_";
     private static final String EXTRA_ID_PREFIX = "extra_";
     private static final String STMT_ID_PREFIX = "stmt_";
+    private static final String ATTR_ID_PREFIX = "attr_";
 
     private final ClavaContext context;
     private final DataStore baseData;
@@ -96,6 +101,10 @@ public class ClavaFactory {
         return newDataStore(STMT_ID_PREFIX);
     }
 
+    private DataStore newAttrDataStore() {
+        return newDataStore(ATTR_ID_PREFIX);
+    }
+
     /// EXTRA
 
     public App app(List<TranslationUnit> tUnits) {
@@ -104,6 +113,15 @@ public class ClavaFactory {
     }
 
     /// TYPES
+
+    public FunctionProtoType functionProtoType(Type returnType, Type... argTypes) {
+        return functionProtoType(returnType, Arrays.asList(argTypes));
+    }
+
+    public FunctionProtoType functionProtoType(Type returnType, Collection<Type> argTypes) {
+        DataStore data = newTypeDataStore().put(FunctionProtoType.NUM_PARAMETERS, argTypes.size());
+        return new FunctionProtoType(data, SpecsCollections.concat(returnType, argTypes));
+    }
 
     public NullType nullType() {
         DataStore data = newTypeDataStore();
@@ -192,6 +210,15 @@ public class ClavaFactory {
                 .put(ClavaNode.LOCATION, expr.getLocation());
 
         return new ExprStmt(exprStmtData, Arrays.asList(expr));
+    }
+
+    /// ATTRIBUTES
+
+    public DummyAttr dummyAttr(String dummyContent) {
+        DataStore data = newAttrDataStore()
+                .put(DummyDecl.DUMMY_CONTENT, dummyContent);
+
+        return new DummyAttr(data, Collections.emptyList());
     }
 
 }
