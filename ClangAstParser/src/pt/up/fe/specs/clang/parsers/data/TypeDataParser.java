@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -47,6 +48,10 @@ public class TypeDataParser {
 
         clavaData.add(Type.TYPE_AS_STRING, lines.nextLine());
         clavaData.add(Type.HAS_SUGAR, GeneralParsers.parseOneOrZero(lines));
+        clavaData.add(Type.TYPE_DEPENDENCY, GeneralParsers.enumFromName(TypeDependency.class, lines));
+        clavaData.add(Type.IS_VARIABLY_MODIFIED, GeneralParsers.parseOneOrZero(lines));
+        clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, GeneralParsers.parseOneOrZero(lines));
+        clavaData.add(Type.IS_FROM_AST, GeneralParsers.parseOneOrZero(lines));
 
         return clavaData;
     }

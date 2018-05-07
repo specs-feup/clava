@@ -48,7 +48,7 @@ public class AdaptBoolCasts implements SimplePostClavaRule {
 
         // CXXFunctionalCastExpr newCastExpr = ClavaNodeFactory.cxxFunctionalCastExpr("bool",
         // castExpr.getCastKind(), castExpr.getExprData(), castExpr.getInfo(), subExpr);
-        CXXFunctionalCastExpr newCastExpr = CXXFunctionalCastExpr.newInstance("bool", castExpr, subExpr);
+        CXXFunctionalCastExpr newCastExpr = CXXFunctionalCastExpr.newInstance(castExpr, subExpr);
 
         // Expr newSubExpr = newCastExpr.getSubExpr();
         // System.out.println("old sub expr == new sub expr? " + (subExpr == newSubExpr));
