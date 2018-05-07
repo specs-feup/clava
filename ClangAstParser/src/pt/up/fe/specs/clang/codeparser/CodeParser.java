@@ -110,7 +110,7 @@ public class CodeParser {
             clavaAst.addConfig(ast.getConfig());
 
             if (showClavaAst) {
-                SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst);
+                SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst.toTree());
             }
 
             if (showCode) {
@@ -147,7 +147,7 @@ public class CodeParser {
         }
 
         if (showClavaAst) {
-            SpecsLogs.msgInfo("CLAVA AST:\n" + app);
+            SpecsLogs.msgInfo("CLAVA AST:\n" + app.toTree());
         }
 
         if (showCode) {
