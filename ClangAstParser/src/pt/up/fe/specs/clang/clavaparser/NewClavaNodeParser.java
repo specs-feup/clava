@@ -25,21 +25,22 @@ import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T> {
 
-    public static <T extends ClavaNode> Function<ClangConverterTable, ClangNodeParser<?>> newInstanceNoContent(
-            Class<T> nodeClass) {
-
-        return (converter) -> new NewClavaNodeParser<>(converter, false, nodeClass);
-    }
+    // public static <T extends ClavaNode> Function<ClangConverterTable, ClangNodeParser<?>> newInstanceNoContent(
+    // Class<T> nodeClass) {
+    //
+    // return (converter) -> new NewClavaNodeParser<>(converter, false, nodeClass);
+    // }
 
     public static <T extends ClavaNode> Function<ClangConverterTable, ClangNodeParser<?>> newInstance(
             Class<T> nodeClass) {
-        return (converter) -> new NewClavaNodeParser<>(converter, true, nodeClass);
+        return (converter) -> new NewClavaNodeParser<>(converter, nodeClass);
     }
 
     private final Class<T> nodeClass;
 
-    public NewClavaNodeParser(ClangConverterTable converter, boolean hasContent, Class<T> nodeClass) {
-        super(converter, hasContent);
+    // public NewClavaNodeParser(ClangConverterTable converter, boolean hasContent, Class<T> nodeClass) {
+    public NewClavaNodeParser(ClangConverterTable converter, Class<T> nodeClass) {
+        super(converter, false, true);
 
         this.nodeClass = nodeClass;
     }

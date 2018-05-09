@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
@@ -86,7 +85,9 @@ public class CreateDeclStmts implements SimplePostClavaRule {
             if (DECL_CLASSES.contains(child.getClass())) {
                 // Nodes on the set are NamedDecls
                 NamedDecl namedDecl = (NamedDecl) child;
-                DeclStmt stmt = ClavaNodeFactory.declStmt(namedDecl.getInfo(), Arrays.asList(namedDecl));
+                DeclStmt stmt = namedDecl.getFactoryWithNode()
+                        .declStmt(namedDecl);
+                // DeclStmt stmt = ClavaNodeFactory.declStmt(namedDecl.getInfo(), Arrays.asList(namedDecl));
 
                 queue.replace(child, stmt);
             }

@@ -19,10 +19,10 @@ import java.util.stream.Stream;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -122,7 +122,9 @@ public interface ClangNodeParser<T extends ClavaNode> {
         }
 
         if (node instanceof NamedDecl) {
-            return ClavaNodeFactory.declStmtWithoutSemicolon(ClavaNodeInfo.undefinedInfo(), (NamedDecl) node);
+            return LegacyToDataStore.getFactory().declStmt((Decl) node)
+                    .setHasSemicolon(false);
+            // return ClavaNodeFactory.declStmtWithoutSemicolon(ClavaNodeInfo.undefinedInfo(), (NamedDecl) node);
         }
 
         throw new RuntimeException("Case not implemented yet:" + node.getClass());

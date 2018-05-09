@@ -71,6 +71,7 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     private final ClangConverterTable converter;
     private final boolean hasContent;
+    private final boolean ignoreContent;
 
     // private final ClavaNodeConstructors constructors;
 
@@ -84,8 +85,13 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     }
 
     public AClangNodeParser(ClangConverterTable converter, boolean hasContent) {
+        this(converter, hasContent, false);
+    }
+
+    public AClangNodeParser(ClangConverterTable converter, boolean hasContent, boolean ignoreContent) {
         this.converter = converter;
         this.hasContent = hasContent;
+        this.ignoreContent = ignoreContent;
         // this.constructors = new ClavaNodeConstructors();
     }
 
@@ -125,13 +131,15 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         // Create StringParser from node content
         StringParser parser = new StringParser(node.getContentTry().orElse("").trim());
 
-        // No content
-        if (!hasContent) {
-            Preconditions.checkArgument(parser.isEmpty(),
-                    "Expected no content for parser '" + getClass().getSimpleName() + "', found '" + parser + "'");
-        } else {
-            Preconditions.checkArgument(!parser.isEmpty(),
-                    "Expected content for parser '" + getClass().getSimpleName() + "', but is empty");
+        if (!ignoreContent) {
+            // No content
+            if (!hasContent) {
+                Preconditions.checkArgument(parser.isEmpty(),
+                        "Expected no content for parser '" + getClass().getSimpleName() + "', found '" + parser + "'");
+            } else {
+                Preconditions.checkArgument(!parser.isEmpty(),
+                        "Expected content for parser '" + getClass().getSimpleName() + "', but is empty");
+            }
         }
 
         // Store original string of parser, for debugging
