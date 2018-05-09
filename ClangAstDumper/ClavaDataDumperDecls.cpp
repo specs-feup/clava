@@ -5,6 +5,7 @@
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
 #include "ClavaConstants.h"
+#include "ClangEnums.h"
 
 #include <map>
 
@@ -101,11 +102,27 @@ void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
 
     // Print information about NamedDecl
     clava::dump(D->getQualifiedNameAsString());
+    clava::dump(D->getDeclName().getAsString());
     clava::dump(D->getDeclName().getNameKind());
     clava::dump(D->isHidden());
     //llvm::errs() << D->getQualifiedNameAsString() << "\n";
     //llvm::errs() << D->getDeclName().getNameKind() << "\n";
     //llvm::errs() << D->isHidden() << "\n";
+
+    clava::dump(D->isCXXClassMember());
+    clava::dump(D->isCXXInstanceMember());
+    clava::dump(clava::LINKAGE[D->getFormalLinkage()]);
+    clava::dump(clava::VISIBILITY[D->getVisibility()]);
+    //clava::dump(clava::getId(D->getUnderlyingDecl(), id));
+
+    // hasLinkage () const
+    // isCXXClassMember ()
+    // isCXXInstanceMember ()
+    // getFormalLinkage()
+    // getVisibility ()
+    //
+    //
+    // getUnderlyingDecl ()
 
 }
 

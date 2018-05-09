@@ -63,7 +63,7 @@ const std::string clava::BUILTIN_KIND[] = {
 };
 */
 
-const std::string clava::CAST_KIND[] {
+const std::string clava::CAST_KIND[]{
         "DEPENDENT",
         "BIT_CAST",
         "L_VALUE_BIT_CAST",
@@ -308,8 +308,7 @@ const std::string clava::ATTRIBUTES[] = {
 };
 
 
-
-const std::string clava::CALLING_CONVENTION[] {
+const std::string clava::CALLING_CONVENTION[]{
         "C",
         "X86StdCall",
         "X86FastCall",
@@ -325,25 +324,43 @@ const std::string clava::CALLING_CONVENTION[] {
         "SpirKernel"
 };
 
-const std::string clava::REFERENCE_QUALIFIER[] {
-    "None",
-    "LValue",
-    "RValue"
+const std::string clava::REFERENCE_QUALIFIER[]{
+        "None",
+        "LValue",
+        "RValue"
 };
 
 
-extern const std::string clava::EXCEPTION_SPECIFICATION_TYPE[] {
+extern const std::string clava::EXCEPTION_SPECIFICATION_TYPE[]{
 
-"None",             ///< no exception specification
-"DynamicNone",      ///< throw()
-"Dynamic",          ///< throw(T1, T2)
-"MSAny",            ///< Microsoft throw(...) extension
-"BasicNoexcept",    ///< noexcept
-"ComputedNoexcept", ///< noexcept(expression)
-"Unevaluated",      ///< not evaluated yet, for special member function
-"Uninstantiated",   ///< not instantiated yet
-"Unparsed"          ///< not parsed yet
+        "None",             ///< no exception specification
+        "DynamicNone",      ///< throw()
+        "Dynamic",          ///< throw(T1, T2)
+        "MSAny",            ///< Microsoft throw(...) extension
+        "BasicNoexcept",    ///< noexcept
+        "ComputedNoexcept", ///< noexcept(expression)
+        "Unevaluated",      ///< not evaluated yet, for special member function
+        "Uninstantiated",   ///< not instantiated yet
+        "Unparsed"          ///< not parsed yet
 
 };
+
+
+extern const std::string clava::LINKAGE[]{
+        "NoLinkage",
+        "InternalLinkage",
+        "UniqueExternalLinkage",
+        "VisibleNoLinkage",
+        "ExternalLinkage"
+};
+
+
+extern const std::string clava::VISIBILITY[]{
+        "Hidden",
+        "Protected",
+        "Default"
+};
+
+
 
 //const std::string BUILTIN_KIND[] {};

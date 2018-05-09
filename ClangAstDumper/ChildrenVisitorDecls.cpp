@@ -40,6 +40,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
     switch(declNode) {
         case clava::DeclNode::DECL:
             VisitDeclChildren(D, visitedChildren); break;
+        case clava::DeclNode::NAMED_DECL:
+            VisitNamedDeclChildren(static_cast<const NamedDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VALUE_DECL:
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
@@ -67,9 +69,19 @@ void ClangAstDumper::VisitDeclChildren(const Decl *D, std::vector<std::string> &
     }
 }
 
-void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
+void ClangAstDumper::VisitNamedDeclChildren(const NamedDecl *D, std::vector<std::string> &children) {
     // Hierarchy
     VisitDeclChildren(D, children);
+
+    // Just visit underlying decl
+    //VisitDeclTop(D->getUnderlyingDecl());
+    //llvm::errs() << "VISITING " << clava::getId(D->getUnderlyingDecl(), id) << " -> " << clava::getClassName(D->getUnderlyingDecl()) << "\n";
+
+}
+
+void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
 
     // Visit type
     VisitTypeTop(D->getType());
