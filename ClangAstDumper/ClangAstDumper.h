@@ -214,6 +214,7 @@ private:
     void VisitTypeChildren(const Type *T, std::vector<std::string> &children);
     void VisitFunctionTypeChildren(const FunctionType *T, std::vector<std::string> &visitedChildren);
     void VisitFunctionProtoTypeChildren(const FunctionProtoType *T, std::vector<std::string> &visitedChildren);
+    void VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren);
 
 
     /* Utility methods for DECLS */

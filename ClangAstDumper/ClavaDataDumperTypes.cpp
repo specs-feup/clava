@@ -206,3 +206,8 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
     clava::dump(clava::getId(info.ExceptionSpec.NoexceptExpr, id));
 
 }
+
+
+void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
+    clava::dump(clava::getId(T->getDecl(), id));
+}

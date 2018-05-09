@@ -88,8 +88,8 @@ void ClangAstDumper::VisitCompoundStmtChildren(const CompoundStmt *S, std::vecto
 
 
 void ClangAstDumper::VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::string> &children) {
-    // Visit sub-statements
-    VisitStmtChildren(S, children);
+    // Do not visit sub-statements, only decls
+    //VisitStmtChildren(S, children);
 
     // Visit decls
     for (DeclStmt::const_decl_iterator I = S->decl_begin(), E = S->decl_end(); I != E; ++I) {

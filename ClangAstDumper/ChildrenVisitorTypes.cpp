@@ -88,3 +88,8 @@ void ClangAstDumper::VisitFunctionProtoTypeChildren(const FunctionProtoType *T, 
 
     //llvm::errs() << "TEST:" << clava::getClassName(T->getExtProtoInfo().ExceptionSpec.NoexceptExpr);
 }
+
+void ClangAstDumper::VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren) {
+    // Just visit decl
+    VisitDeclTop(T->getDecl());
+}

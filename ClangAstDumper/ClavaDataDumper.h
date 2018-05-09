@@ -127,7 +127,7 @@ namespace clava {
         void DumpBuiltinTypeData(const BuiltinType *T);
         void DumpFunctionTypeData(const FunctionType *T);
         void DumpFunctionProtoTypeData(const FunctionProtoType *T);
-
+        void DumpTagTypeData(const TagType *T);
 
         // ATTRS
 

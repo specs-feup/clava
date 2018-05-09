@@ -68,7 +68,8 @@ namespace clava {
         QUAL_TYPE,
         BUILTIN_TYPE,
         FUNCTION_TYPE,
-        FUNCTION_PROTO_TYPE
+        FUNCTION_PROTO_TYPE,
+        TAG_TYPE
     };
 
 
