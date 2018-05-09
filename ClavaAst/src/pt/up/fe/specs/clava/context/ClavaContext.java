@@ -42,6 +42,12 @@ public class ClavaContext {
     public final static DataKey<ClavaFactory> FACTORY = KeyFactory
             .object("factory", ClavaFactory.class);
 
+    /**
+     * Temporary measure due to TextParser being called more than once over the same nodes.
+     */
+    // public final static DataKey<Set<ClavaNode>> ASSOCIATED_COMMENTS = KeyFactory.generic(
+    // "associatedComments", (Set<ClavaNode>) new HashSet<ClavaNode>());
+
     /// DATAKEYS END
 
     private final DataStore data;
@@ -61,6 +67,9 @@ public class ClavaContext {
 
         // Initialize factory
         this.data.add(FACTORY, new ClavaFactory(this));
+
+        // Initialize factory
+        // this.data.add(ASSOCIATED_COMMENTS, new HashSet<>());
 
         // Set ClavaNodeFactory
         // TODO: Temporary transition measure

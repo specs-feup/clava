@@ -178,4 +178,8 @@ public interface DummyNode {
 
         throw new RuntimeException("ClavaNode class not supported:" + clavaNodeClass);
     }
+
+    default String toStringHelper() {
+        return "content: " + getContent();
+    }
 }

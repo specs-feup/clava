@@ -22,7 +22,9 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
+import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 
@@ -40,10 +42,42 @@ public abstract class NamedDecl extends Decl implements Typable {
 
     public final static DataKey<String> QUALIFIED_NAME = KeyFactory.string("qualifiedName");
 
+    public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
+
     public final static DataKey<NameKind> NAME_KIND = KeyFactory.enumeration("nameKind", NameKind.class)
             .setDefault(() -> NameKind.IDENTIFIER);
 
+    /**
+     * True if this declaration is hidden from name lookup.
+     */
     public final static DataKey<Boolean> IS_HIDDEN = KeyFactory.bool("isHidden");
+
+    /**
+     * True if this declaration is a C++ class member.
+     */
+    public final static DataKey<Boolean> IS_CXX_CLASS_MEMBER = KeyFactory.bool("isCXXClassMember");
+
+    /**
+     * True if this declaration is an instance member of a C++ class.
+     */
+    public final static DataKey<Boolean> IS_CXX_INSTANCE_MEMBER = KeyFactory.bool("isCXXInstanceMember");
+
+    /**
+     * The linkage of the declaration from a semantic point of view.
+     * <p>
+     * Entities in anonymous namespaces are external (in c++98).
+     */
+    public final static DataKey<Linkage> LINKAGE = KeyFactory.enumeration("linkage", Linkage.class);
+
+    /**
+     * The visibility of this entity.
+     */
+    public final static DataKey<Visibility> VISIBILITY = KeyFactory.enumeration("visibility", Visibility.class);
+
+    /**
+     * Looks through UsingDecls and ObjCCompatibleAliasDecls for the underlying named decl.
+     */
+    // public final static DataKey<Decl> UNDERLYING_DECL = KeyFactory.object("underlyingDecl", Decl.class);
 
     /// DATAKEYS END
 

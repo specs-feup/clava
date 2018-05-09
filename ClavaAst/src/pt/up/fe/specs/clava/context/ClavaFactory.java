@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
@@ -153,6 +154,13 @@ public class ClavaFactory {
     }
 
     /// EXPRS
+
+    public DummyExpr dummyExpr(String dummyContent) {
+        DataStore data = newExprDataStore()
+                .put(DummyExpr.DUMMY_CONTENT, dummyContent);
+
+        return new DummyExpr(data, Collections.emptyList());
+    }
 
     public NullExpr nullExpr() {
         DataStore data = newExprDataStore()

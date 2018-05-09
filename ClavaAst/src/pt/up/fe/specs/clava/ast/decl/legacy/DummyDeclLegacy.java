@@ -62,8 +62,8 @@ public class DummyDeclLegacy extends DummyDecl {
         return content;
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + " " + getLocation();
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + " " + getLocation();
+    // }
 }

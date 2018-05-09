@@ -78,7 +78,13 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     public final static DataKey<List<InlineComment>> INLINE_COMMENTS = KeyFactory
             .generic("inlineComments", (List<InlineComment>) new ArrayList<InlineComment>())
-            .setDefault(() -> new ArrayList<>());
+            .setDefault(() -> new ArrayList<>())
+            .setCopyFunction(inlineComments -> new ArrayList<>(inlineComments));
+
+    /**
+     * True if this node was created using legacy parser classes.
+     */
+    public final static DataKey<Boolean> IS_LEGACY_NODE = KeyFactory.bool("isLegacyNode");
 
     /// DATAKEYS END
 
@@ -524,4 +530,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         node.setLocation(getLocation());
     }
 
+    public ClavaNode setIsLegacyNode(boolean isLegacyNode) {
+        getData().set(IS_LEGACY_NODE, isLegacyNode);
+        return this;
+    }
 }
