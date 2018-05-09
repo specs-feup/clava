@@ -82,6 +82,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
 
     /// DATAKEYS END
 
+    public static String toTree(Collection<? extends ClavaNode> nodes) {
+        return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
+    }
+
     private DataStore dataI;
 
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {

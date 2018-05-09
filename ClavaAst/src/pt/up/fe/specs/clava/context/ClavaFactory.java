@@ -24,7 +24,10 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LiteralNode;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
+import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
@@ -35,6 +38,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
@@ -183,6 +187,20 @@ public class ClavaFactory {
     }
 
     /// DECLS
+
+    public DeclStmt declStmt(Decl... decls) {
+        return declStmt(Arrays.asList(decls));
+    }
+
+    public DeclStmt declStmt(List<Decl> decls) {
+        DataStore data = newDeclDataStore();
+        return new DeclStmt(data, decls);
+    }
+
+    public DeclStmt declStmt(RecordDecl recordDecl, List<VarDecl> varDecls) {
+        DataStore data = newDeclDataStore();
+        return new DeclStmt(data, SpecsCollections.concat(recordDecl, varDecls));
+    }
 
     public DummyDecl dummyDecl(String dummyContent) {
         DataStore data = newDeclDataStore()

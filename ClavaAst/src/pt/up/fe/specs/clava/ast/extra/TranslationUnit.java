@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.extra;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -335,7 +334,8 @@ public class TranslationUnit extends ClavaNode {
                 .filter(child -> child instanceof FunctionDecl)
                 .findFirst();
 
-        DeclStmt stmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt stmt = getFactory().declStmt(varDecl);
+        // DeclStmt stmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
 
         if (firstFunction.isPresent()) {
             NodeInsertUtils.insertBefore(firstFunction.get(), stmt);
@@ -374,7 +374,7 @@ public class TranslationUnit extends ClavaNode {
         // return getAppTry()
         // .map(app -> app.getRelativeFolderPath(baseSourceFolder, this))
         // .orElse(getFolderpath());
-
+    
     }
     */
 

@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.transform.call;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +43,7 @@ import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.BiConsumerClassMap;
@@ -67,6 +67,7 @@ public class InlineRenamer {
     private Expr callReplacement;
 
     private AccumulatorMap<String> newNamesCounter;
+    private ClavaFactory factory;
 
     public InlineRenamer(CallExpr call, FunctionDecl functionDecl, List<Stmt> stmts, Set<String> usedNames) {
         this.call = call;
@@ -83,6 +84,9 @@ public class InlineRenamer {
         this.callReplacement = null;
 
         this.newNamesCounter = new AccumulatorMap<>();
+
+        // Store reference to factory
+        this.factory = call.getFactory();
     }
 
     private BiConsumerClassMap<Expr, ParmVarDecl> buildArgumentsRenamers() {
@@ -248,7 +252,8 @@ public class InlineRenamer {
         VarDecl varDecl = ClavaNodeFactory.varDecl(returnVarName, retValue);
 
         // Replace return with an DeclStmt to the return expression
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt declStmt = factory.declStmt(varDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
         stmts.set(returnIndex, declStmt);
 
         // Save new name expression in callReplacement
@@ -346,7 +351,8 @@ public class InlineRenamer {
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, newName, newType,
                 parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), exprWithCast);
 
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt declStmt = factory.declStmt(varDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
         prefixStmts.add(declStmt);
 
     }
@@ -371,7 +377,8 @@ public class InlineRenamer {
         VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDeclType,
                 varDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), expr);
 
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(newVarDecl));
+        DeclStmt declStmt = factory.declStmt(newVarDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(newVarDecl));
         prefixStmts.add(declStmt);
 
         // System.out.println("ARRAY SUB");
@@ -434,7 +441,8 @@ public class InlineRenamer {
         VarDecl varDecl = ClavaNodeFactory.varDecl(parmVarDecl.getVarDeclData(), newName, parmVarDecl.getType(),
                 parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), parmVarDecl.getInit().orElse(null));
 
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt declStmt = factory.declStmt(varDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
         prefixStmts.add(declStmt);
     }
 

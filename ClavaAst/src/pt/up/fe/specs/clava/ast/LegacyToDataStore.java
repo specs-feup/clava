@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -76,6 +77,12 @@ public class LegacyToDataStore {
         nodeData.add(ClavaNode.ID, nodeInfo.getId()
                 .map(id -> id.getExtendedId())
                 .orElse(CLAVA_CONTEXT.get().get(ClavaContext.ID_GENERATOR).next("legacy_")));
+
+        return this;
+    }
+
+    public <T, E extends T> LegacyToDataStore set(DataKey<T> key, E value) {
+        nodeData.set(key, value);
 
         return this;
     }

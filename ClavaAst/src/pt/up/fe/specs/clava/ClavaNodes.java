@@ -78,7 +78,8 @@ public class ClavaNodes {
         }
 
         if (node instanceof VarDecl) {
-            return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
+            return node.getFactoryWithNode().declStmt((VarDecl) node);
+            // return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
         }
 
         if (node instanceof Comment || node instanceof Pragma) {

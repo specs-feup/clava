@@ -952,17 +952,17 @@ public class ClavaNodeFactory {
         return new ReturnStmt(info);
     }
 
-    public static DeclStmt declStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
-        return new DeclStmt(info, decls);
-    }
+    // public static DeclStmt declStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
+    // return new DeclStmt(info, decls);
+    // }
 
-    public static DeclStmt declStmt(ClavaNodeInfo info, RecordDecl recordDecl, List<VarDecl> varDecls) {
-        return new DeclStmt(info, recordDecl, varDecls);
-    }
+    // public static DeclStmt declStmt(ClavaNodeInfo info, RecordDecl recordDecl, List<VarDecl> varDecls) {
+    // return new DeclStmt(info, recordDecl, varDecls);
+    // }
 
-    public static DeclStmt declStmtWithoutSemicolon(ClavaNodeInfo info, NamedDecl decl) {
-        return new DeclStmt(false, info, decl);
-    }
+    // public static DeclStmt declStmtWithoutSemicolon(ClavaNodeInfo info, NamedDecl decl) {
+    // return new DeclStmt(false, info, decl);
+    // }
 
     public static ExprStmt exprStmtAssign(Expr lhs, Expr rhs, Type returnType) {
         ExprData exprData = new ExprData(returnType);
