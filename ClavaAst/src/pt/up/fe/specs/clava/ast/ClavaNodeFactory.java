@@ -183,7 +183,6 @@ import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
-import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
@@ -944,13 +943,13 @@ public class ClavaNodeFactory {
         return new DefaultStmt(info, subStmt);
     }
 
-    public static ReturnStmt returnStmt(ClavaNodeInfo info, Expr retValue) {
-        return new ReturnStmt(info, retValue);
-    }
+    // public static ReturnStmt returnStmt(ClavaNodeInfo info, Expr retValue) {
+    // return new ReturnStmt(info, retValue);
+    // }
 
-    public static ReturnStmt returnStmt(ClavaNodeInfo info) {
-        return new ReturnStmt(info);
-    }
+    // public static ReturnStmt returnStmt(ClavaNodeInfo info) {
+    // return new ReturnStmt(info);
+    // }
 
     // public static DeclStmt declStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
     // return new DeclStmt(info, decls);

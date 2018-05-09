@@ -13,13 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 /**
@@ -30,21 +29,8 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
  */
 public class ReturnStmt extends Stmt {
 
-    public ReturnStmt(ClavaNodeInfo info, Expr retValue) {
-        this(info, Arrays.asList(retValue));
-    }
-
-    public ReturnStmt(ClavaNodeInfo info) {
-        this(info, Collections.emptyList());
-    }
-
-    private ReturnStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ReturnStmt(getInfo(), Collections.emptyList());
+    public ReturnStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     @Override

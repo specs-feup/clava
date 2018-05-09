@@ -401,8 +401,9 @@ public class CallWrap {
         }
 
         if (!isVoid) {
-            wrapperStmts.add(
-                    ClavaNodeFactory.returnStmt(null, ClavaNodeFactory.literalExpr(varName, ftype.getReturnType())));
+            wrapperStmts.add(factory.returnStmt(factory.literalExpr(varName, ftype.getReturnType())));
+            // wrapperStmts.add(
+            // ClavaNodeFactory.returnStmt(null, ClavaNodeFactory.literalExpr(varName, ftype.getReturnType())));
         }
 
         code.append(call.getCalleeName()).append("(");

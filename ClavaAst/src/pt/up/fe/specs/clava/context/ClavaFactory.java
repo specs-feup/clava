@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -215,6 +216,14 @@ public class ClavaFactory {
     }
 
     /// STMTS
+
+    public ReturnStmt returnStmt(Expr retValue) {
+        return new ReturnStmt(newStmtDataStore(), Arrays.asList(retValue));
+    }
+
+    public ReturnStmt returnStmt() {
+        return new ReturnStmt(newStmtDataStore(), Collections.emptyList());
+    }
 
     /**
      * Creates an ExprStmt with semicolon.
