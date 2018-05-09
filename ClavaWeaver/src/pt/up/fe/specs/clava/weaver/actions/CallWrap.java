@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.weaver.actions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +45,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
@@ -70,9 +70,13 @@ public class CallWrap {
     private final CxxCall cxxCall;
     private final CxxProgram app;
 
+    private final ClavaFactory factory;
+
     public CallWrap(CxxCall cxxCall) {
         this.cxxCall = cxxCall;
         app = cxxCall.getRootImpl();
+
+        factory = app.getNode().getFactory();
     }
 
     public void addWrapper(String name) {
@@ -375,7 +379,9 @@ public class CallWrap {
         String varName = "result";
         if (!isVoid) {
             VarDecl varDecl = ClavaNodeFactory.varDecl(varName, ftype.getReturnType());
-            wrapperStmts.add(ClavaNodeFactory.declStmt(null, Arrays.asList(varDecl)));
+
+            wrapperStmts.add(factory.declStmt(varDecl));
+            // wrapperStmts.add(ClavaNodeFactory.declStmt(null, Arrays.asList(varDecl)));
         }
 
         Expr function = call.getCallee();

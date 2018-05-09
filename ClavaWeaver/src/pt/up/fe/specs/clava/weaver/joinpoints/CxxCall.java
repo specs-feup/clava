@@ -117,7 +117,8 @@ public class CxxCall extends ACall {
             VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, variableName, returnType, declData, call.getInfo(),
                     call);
 
-            DeclStmt declStmt = ClavaNodeFactory.declStmt(call.getInfo(), Arrays.asList(varDecl));
+            DeclStmt declStmt = call.getFactoryWithNode().declStmt(varDecl);
+            // DeclStmt declStmt = ClavaNodeFactory.declStmt(call.getInfo(), Arrays.asList(varDecl));
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, declStmt, true);
