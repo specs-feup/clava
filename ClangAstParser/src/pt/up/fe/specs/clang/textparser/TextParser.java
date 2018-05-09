@@ -65,6 +65,20 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class TextParser {
 
+    /**
+     * Stores the ids of nodes whose corresponding inline comments have already been associated with.
+     * 
+     * <p>
+     * This is required in case the TextParse is applied over the same nodes twice or more. This can happen while there
+     * are two parsings performed separately.
+     */
+    // private final static DataKey<Set<String>> IDS_WITH_COMMENTS_ASSOCIATED = KeyFactory.generic(
+    // "idsWithCommentsAssociated", (Set<String>) new HashSet<String>())
+    // .setDefault(() -> new HashSet<String>());
+    // private final static DataKey<Set<String>> IDS_WITH_COMMENTS_ASSOCIATED = KeyFactory.generic(
+    // "idsWithCommentsAssociated", (Set<String>) new HashSet<String>())
+    // .setDefault(() -> new HashSet<String>());
+
     private static final List<TextParserRule> RULES = Arrays.asList(
             new InlineCommentRule(), new MultiLineCommentRule(), new PragmaRule(), new PragmaMacroRule());
 
@@ -218,7 +232,7 @@ public class TextParser {
     // return true;
     // }
 
-    private static void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
+    private void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
         // If empty, do nothing
         if (associatedInlineComments.isEmpty()) {
             return;
@@ -273,8 +287,55 @@ public class TextParser {
             SpecsLogs.msgInfo("Could not associate the following comments:" + missingComments);
         }
 
+        // Set<String> idsWithInlinedComments = context.get(IDS_WITH_COMMENTS_ASSOCIATED);
+        // Set<ClavaNode> associatedComments = context.get(ClavaContext.ASSOCIATED_COMMENTS);
         for (InlineComment comment : associatedNodes.keySet()) {
+            // System.out.println("COMMENT:" + comment.hashCode());
+            // System.out.println("NODE:" + associatedNodes.get(comment).hashCode());
             associatedNodes.get(comment).associateComment(comment);
+
+            /*
+            ClavaNode node = associatedNodes.get(comment);
+            
+            if (associatedComments.contains(node)) {
+                continue;
+            }
+            
+            associatedComments.add(node);
+            node.associateComment(comment);
+            */
+            /*
+            ClavaNode node = associatedNodes.get(comment);
+            
+            // If legacy parser and node is not legacy, skip it, was already processed
+            if (isLegacyParser && !node.get(ClavaNode.IS_LEGACY_NODE)) {
+                continue;
+            }
+            
+            associatedNodes.get(comment).associateComment(comment);
+            */
+            /*
+            // TODO: Doing this because TextParser currently is being called two times over the same nodes
+            // Remove the test after legacy parsing is no longer used
+            
+            
+            if (node.get(ClavaNode.INLINE_COMMENTS).isEmpty()) {
+               node.associateComment(comment);
+            }
+            // associatedNodes.get(comment).associateComment(comment);
+            */
+            /*
+            ClavaNode node = associatedNodes.get(comment);
+            System.out.println("NODE:" + node.get(ClavaNode.ID));
+            System.out.println("ASSOCIATED NODES:" + idsWithInlinedComments);
+            // Check if node already has inline comments
+            if (idsWithInlinedComments.contains(node.get(ClavaNode.ID))) {
+                continue;
+            }
+            
+            idsWithInlinedComments.add(node.get(ClavaNode.ID));
+            node.associateComment(comment);
+            */
             // System.out.println("COMMENT:" + comment.getCode());
             // System.out.println("CORRESPONDING STMT:" + associatedNodes.get(comment).getCode());
             // System.out.println("CORRESPONDING STMT TYPE:" + associatedNodes.get(comment).getNodeName());

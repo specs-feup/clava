@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -114,6 +115,19 @@ public class ClavaNodes {
         default:
             throw new CaseNotDefinedException(nullId);
         }
+    }
+
+    public static Decl getDecl(DataStore data, String parsedDeclId) {
+        if (NULLPRT_DECL.equals(parsedDeclId)) {
+            return ClavaNodeFactory.nullDecl(ClavaNodeInfo.undefinedInfo());
+        }
+
+        ClavaNode node = getNode(data, parsedDeclId);
+
+        SpecsCheck.checkArgument(node instanceof Decl,
+                () -> "Expected id '" + parsedDeclId + "' to be a Decl, is a " + node.getClass().getSimpleName());
+
+        return (Decl) node;
     }
 
 }

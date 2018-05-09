@@ -29,9 +29,11 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -67,8 +69,17 @@ public class DeclDataParser {
         DataStore data = parseDeclData(lines, dataStore);
 
         data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
+        data.add(NamedDecl.DECL_NAME, lines.nextLine());
         data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
+
         data.add(NamedDecl.IS_HIDDEN, GeneralParsers.parseOneOrZero(lines));
+        data.add(NamedDecl.IS_CXX_CLASS_MEMBER, GeneralParsers.parseOneOrZero(lines));
+        data.add(NamedDecl.IS_CXX_INSTANCE_MEMBER, GeneralParsers.parseOneOrZero(lines));
+
+        data.add(NamedDecl.LINKAGE, GeneralParsers.enumFromName(Linkage.class, lines));
+        data.add(NamedDecl.VISIBILITY, GeneralParsers.enumFromName(Visibility.class, lines));
+
+        // data.add(NamedDecl.UNDERLYING_DECL, ClavaNodes.getDecl(dataStore, lines.nextLine()));
 
         return data;
     }

@@ -155,6 +155,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                     + "'.\nOriginal string was:" + originalContent + "\nLocation:" + node.getLocation());
         }
 
+        // Mark node
+        if (isLegacyParser()) {
+            clavaNode.setIsLegacyNode(true);
+        }
+
         return clavaNode;
     }
 
@@ -603,5 +608,9 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     protected DataStore getConfig() {
         return getClangRootData().getConfig();
+    }
+
+    protected boolean isLegacyParser() {
+        return true;
     }
 }

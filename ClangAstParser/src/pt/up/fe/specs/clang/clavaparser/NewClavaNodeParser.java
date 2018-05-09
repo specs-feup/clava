@@ -79,4 +79,9 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         */
     }
 
+    @Override
+    protected boolean isLegacyParser() {
+        return false;
+    }
+
 }
