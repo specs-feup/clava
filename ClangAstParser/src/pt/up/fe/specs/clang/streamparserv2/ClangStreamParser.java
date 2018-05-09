@@ -27,7 +27,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
-import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
@@ -136,8 +135,9 @@ public class ClangStreamParser {
         }
         */
 
+        // TODO: Currently disabled, to avoid conflicts with legacy parser
         // Add text elements (comments, pragmas) to the tree
-        new TextParser(app.getContext()).addElements(app);
+        // new TextParser(app.getContext()).addElements(app);
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
