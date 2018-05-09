@@ -35,7 +35,6 @@ import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -48,6 +47,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class ClavaFactory {

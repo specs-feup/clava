@@ -17,7 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 
 public class FloatingLiteralLegacy extends FloatingLiteral {
 

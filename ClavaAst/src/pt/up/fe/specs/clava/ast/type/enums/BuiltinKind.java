@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr.enums;
+package pt.up.fe.specs.clava.ast.type.enums;
 
 import java.util.Arrays;
 import java.util.HashSet;

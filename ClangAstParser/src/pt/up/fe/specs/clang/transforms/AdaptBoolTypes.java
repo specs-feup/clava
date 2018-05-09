@@ -15,11 +15,11 @@ package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;

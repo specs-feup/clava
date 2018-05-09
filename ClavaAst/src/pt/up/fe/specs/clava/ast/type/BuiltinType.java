@@ -22,8 +22,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.expr.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 
 public class BuiltinType extends Type {
 
@@ -37,6 +37,9 @@ public class BuiltinType extends Type {
 
     public BuiltinType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+
+        System.out.println("KIND:" + get(KIND));
+        System.out.println("KIND ORDINAL:" + (get(KIND_ORDINAL) + 1));
     }
 
     /**
