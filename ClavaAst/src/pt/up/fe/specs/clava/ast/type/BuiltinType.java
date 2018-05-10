@@ -74,6 +74,11 @@ public class BuiltinType extends Type {
         return type + varName;
     }
 
+    public BuiltinType setKindLiteral(String literalKind) {
+        getData().put(KIND_LITERAL, literalKind);
+        return this;
+    }
+
     // public BuiltinKind getKind() {
     // public BuiltinKindV2 getKind() {
     // return get(KIND);

@@ -135,8 +135,11 @@ public class ClavaFactory {
     }
 
     public BuiltinType builtinType(String literalKind) {
-        DataStore data = newTypeDataStore().put(BuiltinType.KIND_LITERAL, literalKind);
-        return new BuiltinType(data, Collections.emptyList());
+        BuiltinKindV2 kind = BuiltinKindV2.newInstance(literalKind);
+        BuiltinType type = builtinType(kind);
+        type.setKindLiteral(literalKind);
+
+        return type;
     }
 
     public BuiltinType builtinType(BuiltinKindV2 kind) {
