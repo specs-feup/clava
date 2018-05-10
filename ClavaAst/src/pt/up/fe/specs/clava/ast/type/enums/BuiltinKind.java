@@ -18,7 +18,7 @@ import java.util.Map;
 
 import pt.up.fe.specs.clava.context.ClavaContext;
 
-public enum BuiltinKindV2 {
+public enum BuiltinKind {
     Void,
     Bool,
     Char_U,
@@ -72,7 +72,7 @@ public enum BuiltinKindV2 {
     UnknownAny,
     BuiltinFn;
 
-    private static final Map<String, BuiltinKindV2> LITERAL_KINDS;
+    private static final Map<String, BuiltinKind> LITERAL_KINDS;
     static {
         LITERAL_KINDS = new LinkedHashMap<>();
         LITERAL_KINDS.put("void", Void);
@@ -129,8 +129,8 @@ public enum BuiltinKindV2 {
         }
     }
 
-    public static BuiltinKindV2 newInstance(String literalKind) {
-        BuiltinKindV2 builtinKind = LITERAL_KINDS.get(literalKind);
+    public static BuiltinKind newInstance(String literalKind) {
+        BuiltinKind builtinKind = LITERAL_KINDS.get(literalKind);
         if (builtinKind == null) {
             throw new RuntimeException("Literal '" + literalKind
                     + "' not supported as a BuiltinKind. Supported literals: " + LITERAL_KINDS.keySet());

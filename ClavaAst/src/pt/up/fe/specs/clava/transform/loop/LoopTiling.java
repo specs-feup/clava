@@ -29,7 +29,7 @@ import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -175,7 +175,7 @@ public class LoopTiling {
         // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName,
         // ClavaNodeFactory.builtinType(BuiltinKind.INT));
 
-        LiteralExpr newRHS = factory.literalExpr(blockVarName, factory.builtinType(BuiltinKindV2.Int));
+        LiteralExpr newRHS = factory.literalExpr(blockVarName, factory.builtinType(BuiltinKind.Int));
 
         if (init instanceof ExprStmt) {
 

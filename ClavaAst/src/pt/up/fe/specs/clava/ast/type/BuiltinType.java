@@ -23,7 +23,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 
 public class BuiltinType extends Type {
 
@@ -33,7 +33,7 @@ public class BuiltinType extends Type {
     /**
      * The kind of the built-in.
      */
-    public final static DataKey<BuiltinKindV2> KIND = KeyFactory.enumeration("builtinKind", BuiltinKindV2.class);
+    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class);
 
     /**
      * Optional, the literal code for this built-in type.

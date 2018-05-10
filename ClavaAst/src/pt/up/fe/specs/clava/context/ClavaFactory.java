@@ -47,7 +47,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class ClavaFactory {
@@ -135,14 +135,14 @@ public class ClavaFactory {
     }
 
     public BuiltinType builtinType(String literalKind) {
-        BuiltinKindV2 kind = BuiltinKindV2.newInstance(literalKind);
+        BuiltinKind kind = BuiltinKind.newInstance(literalKind);
         BuiltinType type = builtinType(kind);
         type.setKindLiteral(literalKind);
 
         return type;
     }
 
-    public BuiltinType builtinType(BuiltinKindV2 kind) {
+    public BuiltinType builtinType(BuiltinKind kind) {
         DataStore data = newTypeDataStore().put(BuiltinType.KIND, kind);
         return new BuiltinType(data, Collections.emptyList());
     }
@@ -181,7 +181,7 @@ public class ClavaFactory {
         DataStore data = newExprDataStore()
                 .put(Literal.SOURCE_LITERAL, Integer.toString(integer))
                 .put(IntegerLiteral.VALUE, BigInteger.valueOf(integer))
-                .put(Expr.TYPE, builtinType(BuiltinKindV2.Int));
+                .put(Expr.TYPE, builtinType(BuiltinKind.Int));
 
         return new IntegerLiteral(data, Collections.emptyList());
     }

@@ -19,7 +19,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -72,7 +72,7 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
 
     private BuiltinType newBoolBuiltin(ClavaNode node) {
         BuiltinType boolType = LegacyToDataStore.getFactory()
-                .builtinType(BuiltinKindV2.Bool);
+                .builtinType(BuiltinKind.Bool);
 
         boolType.setNodeData(node);
         // Legacy support

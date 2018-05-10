@@ -45,7 +45,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
@@ -420,7 +420,7 @@ public class CallWrap {
         }
 
         // return ((BuiltinType) returnType).isVoid();
-        return ((BuiltinType) returnType).get(BuiltinType.KIND) == BuiltinKindV2.Void;
+        return ((BuiltinType) returnType).get(BuiltinType.KIND) == BuiltinKind.Void;
     }
 
     private TranslationUnit getImplementationFile() {

@@ -24,7 +24,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
@@ -62,7 +62,7 @@ public class TypeDataParser {
 
         // data.add(BuiltinType.KIND_ORDINAL, GeneralParsers.parseInt(lines));
         // data.add(BuiltinType.KIND, GeneralParsers.enumFromValue(BuiltinKind.getHelper(), lines));
-        data.add(BuiltinType.KIND, GeneralParsers.enumFromName(BuiltinKindV2.class, lines));
+        data.add(BuiltinType.KIND, GeneralParsers.enumFromName(BuiltinKind.class, lines));
         data.add(BuiltinType.KIND_LITERAL, lines.nextLine());
 
         return data;

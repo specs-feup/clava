@@ -61,7 +61,7 @@ import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
@@ -160,7 +160,7 @@ public class AstFactory {
 
     public static CxxFunction functionVoid(String name) {
 
-        BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKindV2.Void);
+        BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKind.Void);
         FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(voidType);
         // FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
         // new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
@@ -429,7 +429,7 @@ public class AstFactory {
     }
 
     public static ACxxWeaverJoinPoint longType() {
-        BuiltinType type = CxxWeaver.getFactory().builtinType(BuiltinKindV2.Long);
+        BuiltinType type = CxxWeaver.getFactory().builtinType(BuiltinKind.Long);
         return CxxJoinpoints.create(type, null);
     }
 

@@ -17,22 +17,22 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 
 public class FloatingLiteralLegacy extends FloatingLiteral {
 
     public static enum FloatKind {
-        DOUBLE(BuiltinKindV2.Double),
-        FLOAT(BuiltinKindV2.Long),
-        LONG_DOUBLE(BuiltinKindV2.LongDouble);
+        DOUBLE(BuiltinKind.Double),
+        FLOAT(BuiltinKind.Long),
+        LONG_DOUBLE(BuiltinKind.LongDouble);
 
-        private final BuiltinKindV2 builtinKind;
+        private final BuiltinKind builtinKind;
 
-        private FloatKind(BuiltinKindV2 builtinKind) {
+        private FloatKind(BuiltinKind builtinKind) {
             this.builtinKind = builtinKind;
         }
 
-        public BuiltinKindV2 getBuiltinKind() {
+        public BuiltinKind getBuiltinKind() {
             return builtinKind;
         }
     }
