@@ -28220,10 +28220,10 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "expression where this reference is used",
+                  "tooltip": "expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "useExpr"
                            }]
                },

@@ -85,19 +85,19 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
-     * expression where this reference is used
+     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
-    public abstract AJoinPoint getUseExprImpl();
+    public abstract AExpression getUseExprImpl();
 
     /**
-     * expression where this reference is used
+     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
     public final Object getUseExpr() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "useExpr", Optional.empty());
         	}
-        	AJoinPoint result = this.getUseExprImpl();
+        	AExpression result = this.getUseExprImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "useExpr", Optional.ofNullable(result));
         	}

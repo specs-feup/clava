@@ -262,8 +262,8 @@
 			<def/>
 		</attribute>
 		<attribute name="kind" type="String" />
-		<attribute name="useExpr" type="joinpoint"
-			tooltip="expression where this reference is used" />
+		<attribute name="useExpr" type="expression"
+			tooltip="expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node" />
 		<attribute name="isFunctionCall" type="Boolean" 
 			tooltip="true if this varref represents a function call" />
 		<attribute name="declaration" type="vardecl" />
