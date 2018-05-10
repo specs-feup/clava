@@ -76,7 +76,7 @@ void ClangAstDumper::VisitNamedDeclChildren(const NamedDecl *D, std::vector<std:
     // Just visit underlying decl
     //VisitDeclTop(D->getUnderlyingDecl());
     //llvm::errs() << "VISITING " << clava::getId(D->getUnderlyingDecl(), id) << " -> " << clava::getClassName(D->getUnderlyingDecl()) << "\n";
-
+    //llvm::errs() << "ORIGINAL " << clava::getId(D, id) << "\n";
 }
 
 void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {

@@ -20,8 +20,7 @@ namespace clava {
     extern const std::string EXCEPTION_SPECIFICATION_TYPE[];
     extern const std::string LINKAGE[];
     extern const std::string VISIBILITY[];
-
-    //extern const std::string BUILTIN_KIND[];
+    extern const std::string BUILTIN_KIND[];
 };
 
 #endif //CLANGASTDUMPER_CLANGENUMS_H
