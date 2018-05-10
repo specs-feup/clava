@@ -22,7 +22,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -179,7 +179,7 @@ public abstract class FunctionType extends Type {
             return false;
         }
 
-        return returnType.get(BuiltinType.KIND) == BuiltinKind.VOID;
+        return returnType.get(BuiltinType.KIND) == BuiltinKindV2.Void;
     }
 
 }

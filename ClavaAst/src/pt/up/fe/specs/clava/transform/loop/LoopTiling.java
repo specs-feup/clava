@@ -29,16 +29,19 @@ import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class LoopTiling {
 
     private final ClavaContext context;
+    private final ClavaFactory factory;
 
     public LoopTiling(ClavaContext context) {
         this.context = context;
+        this.factory = context.get(ClavaContext.FACTORY);
     }
 
     public boolean apply(LoopStmt targetLoop, String blockSize) {
@@ -171,8 +174,8 @@ public class LoopTiling {
         // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName, ClavaNodeFactory.builtinType("int"));
         // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName,
         // ClavaNodeFactory.builtinType(BuiltinKind.INT));
-        LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName,
-                context.get(ClavaContext.FACTORY).builtinType(BuiltinKind.INT));
+
+        LiteralExpr newRHS = factory.literalExpr(blockVarName, factory.builtinType(BuiltinKindV2.Int));
 
         if (init instanceof ExprStmt) {
 

@@ -23,7 +23,6 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
-import pt.up.fe.specs.util.SpecsLogs;
 
 public class BuiltinTypeLegacy extends BuiltinType {
 
@@ -100,15 +99,16 @@ public class BuiltinTypeLegacy extends BuiltinType {
     // return Optional.of(otherBuiltins);
     // }
 
+    /*
     @Override
     public String getConstantCode(String constant) {
         boolean isUnsigned = keywords.contains(BuiltinTypeKeyword.UNSIGNED);
-
+    
         if (isUnsigned) {
             // if (getBareType().startsWith("unsigned")) {
             return constant + "u";
         }
-
+    
         return constant;
         // System.out.println("TYPE:" + getType());
         // switch (getType()) {
@@ -119,9 +119,10 @@ public class BuiltinTypeLegacy extends BuiltinType {
         // default:
         // return constant;
         // }
-
+    
     }
-
+    */
+    /*
     @Override
     public boolean isVoid() {
         // If return type is not void, add return
@@ -129,14 +130,14 @@ public class BuiltinTypeLegacy extends BuiltinType {
                 .filter(keyword -> keyword == BuiltinTypeKeyword.VOID)
                 .findAny()
                 .isPresent();
-
+    
         if (getKeywords().size() > 1) {
             SpecsLogs.msgInfo("'void' type has more than one keyword, check if ok: " + getKeywords());
         }
-
+    
         return hasVoid;
     }
-
+    */
     /*
     @Override
     public int hashCode() {

@@ -199,9 +199,11 @@ public abstract class Type extends ClavaNode {
      * @param constant
      * @return
      */
+    /*
     public String getConstantCode(String constant) {
         return constant;
     }
+    */
 
     /**
      * By default, if has sugar, returns the desugared implementation of template args. Otherwise, returns an empty

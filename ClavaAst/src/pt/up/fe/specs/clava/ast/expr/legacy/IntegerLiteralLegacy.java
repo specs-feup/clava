@@ -19,6 +19,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents an implicit type conversion which has no direct representation in the original source code.
@@ -46,10 +48,24 @@ public class IntegerLiteralLegacy extends IntegerLiteral {
     @Override
     public String getCode() {
 
-        return getType().getConstantCode(literal);
+        String suffix = getTypeSuffix();
+
+        return literal + suffix;
+        // return getType().getConstantCode(literal);
         // // Check if literal needs "U" or "UL" postfix
         // String unsigned = Types.getUnsignedPostfix(getType());
         // return literal + unsigned;
+    }
+
+    private String getTypeSuffix() {
+        Type type = getType();
+        if (type instanceof BuiltinType) {
+            if (((BuiltinType) type).get(BuiltinType.KIND).isUnsignedInteger()) {
+                return "u";
+            }
+        }
+
+        return "";
     }
 
     @Override

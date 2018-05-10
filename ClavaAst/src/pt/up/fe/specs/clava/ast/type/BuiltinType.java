@@ -23,23 +23,27 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKindV2;
 
 public class BuiltinType extends Type {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Integer> KIND_ORDINAL = KeyFactory.integer("kindOrdinal", -1);
-    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("kind", BuiltinKind.class);
-    // public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
+    // public final static DataKey<Integer> KIND_ORDINAL = KeyFactory.integer("kindOrdinal", -1);
+    /**
+     * The kind of the built-in.
+     */
+    public final static DataKey<BuiltinKindV2> KIND = KeyFactory.enumeration("builtinKind", BuiltinKindV2.class);
+
+    /**
+     * Optional, the literal code for this built-in type.
+     */
+    public final static DataKey<String> KIND_LITERAL = KeyFactory.string("kindLiteral");
 
     /// DATAKEYS END
 
     public BuiltinType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        System.out.println("KIND:" + get(KIND));
-        System.out.println("KIND ORDINAL:" + (get(KIND_ORDINAL) + 1));
     }
 
     /**
@@ -52,42 +56,49 @@ public class BuiltinType extends Type {
     protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
 
-        put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
+        // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
+        put(KIND_LITERAL, data.getBareType());
     }
 
     @Override
     public String getCode(String name) {
 
+        // Give priority to kind literal
+        String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
+
         // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
         // boolean isCxx = getData().getStandard().isCxx();
-        String type = getKind().getCode();
+        // String type = getKind().getCode();
 
         String varName = name == null ? "" : " " + name;
         return type + varName;
     }
 
-    public BuiltinKind getKind() {
-        return get(KIND);
-    }
+    // public BuiltinKind getKind() {
+    // public BuiltinKindV2 getKind() {
+    // return get(KIND);
+    // }
 
     /**
      * TODO: Remove this method, move to IntegerLiteral (only use), used BuiltinKind
      */
+    /*
     @Override
     public String getConstantCode(String constant) {
         boolean isUnsigned = getKind().isUnsigned();
-
+    
         if (isUnsigned) {
             // if (getBareType().startsWith("unsigned")) {
             return constant + "u";
         }
-
+    
         return constant;
-
+    
     }
+    */
 
-    public boolean isVoid() {
-        return getKind() == BuiltinKind.VOID;
-    }
+    // public boolean isVoid() {
+    // return getKind() == BuiltinKind.VOID;
+    // }
 
 }
