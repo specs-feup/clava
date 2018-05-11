@@ -71,10 +71,14 @@ public class CxxVarref extends AVarref {
         return CxxJoinpoints.create(refExpr.getUseExpr(), this, AExpression.class);
     }
 
+    /*
     @Override
     public String getUseImpl() {
-        return getUseExprImpl().getUseImpl();
+        ExprUse use = ((Expr) getUseExprImpl().getNode()).use();
+    
+        return CxxAttributes.convertUse(use);
     }
+    */
 
     @Override
     public AVardecl getVardeclImpl() {

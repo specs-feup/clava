@@ -19,10 +19,12 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AExpressionUseEnum;
 
 public class CxxAttributes {
 
@@ -161,5 +163,18 @@ public class CxxAttributes {
 
         return getCurrentRegion(currentRegion.getParent());
         // return CxxJoinpoints.create(getCurrentRegion(currentRegion.getParent()), this);
+    }
+
+    public static String convertUse(ExprUse use) {
+        switch (use) {
+        case READ:
+            return AExpressionUseEnum.READ.getName();
+        case WRITE:
+            return AExpressionUseEnum.WRITE.getName();
+        case READWRITE:
+            return AExpressionUseEnum.READWRITE.getName();
+        default:
+            throw new RuntimeException("Case not defined:" + use);
+        }
     }
 }

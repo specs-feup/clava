@@ -106,8 +106,4 @@ public class CTest {
         newTester().test("Detach.lara", "detach.c");
     }
 
-    @Test
-    public void testParenRegionV2() {
-        newTester().test("ParenRegionV2.lara", "paren_region_v2.c");
-    }
 }
