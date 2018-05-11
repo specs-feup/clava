@@ -403,6 +403,18 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return Optional.empty();
     }
 
+    /**
+     * Returns the DataStore associated with this node.
+     * 
+     * <p>
+     * Generically, it is not recommended that this method is used outside of ClavaNode classes. <br>
+     * Instead, the method .get() / specific setters should be used. <br>
+     * However, there might be situations where access this object is needed (e.g., a setter that is not implemented
+     * yet).
+     * 
+     * 
+     * @return the underlying DataStore of this node
+     */
     public DataStore getData() {
         return dataI;
     }

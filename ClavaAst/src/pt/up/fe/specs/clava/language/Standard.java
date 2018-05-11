@@ -13,8 +13,11 @@
 
 package pt.up.fe.specs.clava.language;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -37,7 +40,8 @@ public enum Standard implements StringProvider {
     GNUXX11("gnu++11", true),
     GNUXX14("gnu++14", true);
 
-    private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(Standard.class);
+    private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(Standard.class);
 
     private static final Set<Standard> GNU_STANDARDS = SpecsCollections.asSet(GNU90, GNU99, GNU11, GNUXX98, GNUXX11,
             GNUXX14);
@@ -45,6 +49,8 @@ public enum Standard implements StringProvider {
     public static EnumHelperWithValue<Standard> getEnumHelper() {
         return ENUM_HELPER.get();
     }
+
+    private static final String STD_PREFIX = "-std=";
 
     private final String standard;
     private final boolean isCxx;
@@ -91,5 +97,36 @@ public enum Standard implements StringProvider {
 
     public boolean isGnu() {
         return GNU_STANDARDS.contains(this);
+    }
+
+    /**
+     * Extracts a C/C++ standard from the given list of arguments.
+     * 
+     * @param arguments
+     * @return
+     */
+    public static Optional<Standard> parseStandard(List<String> arguments) {
+
+        Standard previousStandard = null;
+
+        // Search options
+
+        for (String arg : arguments) {
+
+            if (!arg.startsWith(STD_PREFIX)) {
+                continue;
+            }
+
+            Standard standard = getEnumHelper().fromValue(arg.substring(STD_PREFIX.length()));
+
+            if (previousStandard != null) {
+                ClavaLog.info("Overriding previous standard " + previousStandard + " with " + standard);
+            }
+
+            previousStandard = standard;
+
+        }
+
+        return Optional.ofNullable(previousStandard);
     }
 }

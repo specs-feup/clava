@@ -124,6 +124,8 @@ public enum BuiltinKind {
         switch (this) {
         case Void:
             return "void";
+        case Int:
+            return "int";
         default:
             throw new RuntimeException("Case not defined:" + this);
         }

@@ -51,6 +51,7 @@ public class ClavaContext {
     /// DATAKEYS END
 
     private final DataStore data;
+    // private final Standard standard;
     // private final List<String> arguments;
     // private final ClavaIdGenerator idGenerator;
     // private final ClavaFactory factory;
@@ -68,6 +69,11 @@ public class ClavaContext {
         // Initialize factory
         this.data.add(FACTORY, new ClavaFactory(this));
 
+        // Optional<Standard> argsStandard = Standard.parseStandard(arguments);
+        // if (!argsStandard.isPresent()) {
+        // ClavaLog.info("Standard not defined in the arguments, setting to std=c++11 as default");
+        // }
+        // this.standard = argsStandard.orElse(Standard.CXX11);
         // Initialize factory
         // this.data.add(ASSOCIATED_COMMENTS, new HashSet<>());
 
@@ -79,6 +85,10 @@ public class ClavaContext {
     public <T> T get(DataKey<T> key) {
         return this.data.get(key);
     }
+
+    // public Standard getStandard() {
+    // return standard;
+    // }
 
     /*
     public ClavaIdGenerator getIds() {
