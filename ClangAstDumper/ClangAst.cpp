@@ -396,6 +396,16 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         int counter = GLOBAL_COUNTER.fetch_add(1);
         DumpResources::writeCounter(counter);
 
+        //llvm::errs() << "C++?\n";
+        //clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus);
+
+        //llvm::errs() << "OpenCL?\n";
+        //clava::dump(CI.getInvocation().getLangOpts()->OpenCL);
+
+        //llvm::errs() << "File\n";
+        //clava::dump(file.str());
+
+
         // Dump id->file data
         llvm::errs() << ID_FILE_MAP << "\n";
         llvm::errs() << counter << "\n";
