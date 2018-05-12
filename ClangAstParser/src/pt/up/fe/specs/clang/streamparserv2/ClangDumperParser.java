@@ -107,8 +107,10 @@ public class ClangDumperParser {
 
         arguments.add("--");
 
-        // Add standard
-        arguments.add(config.get(ClavaOptions.STANDARD).getFlag());
+        // Add standard if present
+        if (config.hasValue(ClavaOptions.STANDARD)) {
+            arguments.add(config.get(ClavaOptions.STANDARD).getFlag());
+        }
 
         List<String> systemIncludes = new ArrayList<>();
 
