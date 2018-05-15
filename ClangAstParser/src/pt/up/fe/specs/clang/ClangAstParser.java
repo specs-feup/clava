@@ -196,7 +196,7 @@ public class ClangAstParser {
 
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
-        ClavaContext context = new ClavaContext(arguments);
+        ClavaContext context = new ClavaContext();
 
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
@@ -528,7 +528,7 @@ public class ClangAstParser {
         File testFile = testResource.write(testFolder);
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
-        ClavaContext context = new ClavaContext(arguments);
+        ClavaContext context = new ClavaContext();
         LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance(context);
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,

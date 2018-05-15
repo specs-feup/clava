@@ -91,6 +91,8 @@ public class ClangDumperParser {
 
     public App parse(Collection<String> files, DataStore config) {
 
+        ClavaContext context = new ClavaContext();
+
         DataStore localData = JOptionsUtils.loadDataStore(LOCAL_OPTIONS_FILE, getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
@@ -134,8 +136,6 @@ public class ClangDumperParser {
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
 
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
-
-        ClavaContext context = new ClavaContext(arguments);
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
         // LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance();
@@ -361,7 +361,7 @@ public class ClangDumperParser {
         File testFile = testResource.write(testFolder);
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
-        ClavaContext context = new ClavaContext(arguments);
+        ClavaContext context = new ClavaContext();
 
         // LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance();
         ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments,
