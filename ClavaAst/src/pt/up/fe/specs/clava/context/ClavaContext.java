@@ -13,24 +13,26 @@
 
 package pt.up.fe.specs.clava.context;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 
-public class ClavaContext {
+public class ClavaContext extends DataClass<ClavaContext> {
 
     /// DATAKEYS BEGIN
 
     /**
      * The arguments used to call the parser.
      */
-    public final static DataKey<List<String>> ARGUMENTS = KeyFactory
-            .generic("arguments", new ArrayList<>());
+    public final static DataKey<Map<File, List<String>>> ARGUMENTS = KeyFactory
+            .generic("arguments", new HashMap<>());
 
     /**
      * IDs generator
@@ -50,41 +52,35 @@ public class ClavaContext {
 
     /// DATAKEYS END
 
-    private final DataStore data;
+    // private final DataStore data;
     // private final Standard standard;
     // private final List<String> arguments;
     // private final ClavaIdGenerator idGenerator;
     // private final ClavaFactory factory;
 
-    public ClavaContext(List<String> arguments) {
-        // this.arguments = arguments;
-        // this.idGenerator = new ClavaIdGenerator();
-        // this.factory = new ClavaFactory(this);
+    public ClavaContext() {
 
-        this.data = DataStore.newInstance(getClass());
+        // this.data = DataStore.newInstance(getClass());
 
         // Set arguments
-        this.data.set(ARGUMENTS, new ArrayList<>(arguments));
+        set(ARGUMENTS, new HashMap<>());
 
         // Initialize factory
-        this.data.add(FACTORY, new ClavaFactory(this));
-
-        // Optional<Standard> argsStandard = Standard.parseStandard(arguments);
-        // if (!argsStandard.isPresent()) {
-        // ClavaLog.info("Standard not defined in the arguments, setting to std=c++11 as default");
-        // }
-        // this.standard = argsStandard.orElse(Standard.CXX11);
-        // Initialize factory
-        // this.data.add(ASSOCIATED_COMMENTS, new HashSet<>());
+        set(FACTORY, new ClavaFactory(this));
 
         // Set ClavaNodeFactory
         // TODO: Temporary transition measure
         LegacyToDataStore.CLAVA_CONTEXT.set(this);
     }
 
-    public <T> T get(DataKey<T> key) {
-        return this.data.get(key);
+    public ClavaContext addArguments(File sourceFile, List<String> arguments) {
+        get(ARGUMENTS).put(sourceFile, arguments);
+        return this;
     }
+
+    // public <T> T get(DataKey<T> key) {
+    // return this.data.get(key);
+    // }
 
     // public Standard getStandard() {
     // return standard;
@@ -109,6 +105,6 @@ public class ClavaContext {
 
     @Override
     public String toString() {
-        return Integer.toString(hashCode());
+        return "ClavaContext:" + Integer.toString(hashCode());
     }
 }
