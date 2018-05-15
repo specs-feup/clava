@@ -132,6 +132,8 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 	if(this.print) {
 		logger.log($timingResultDecl);
 	}
+	
+	return timeIntervalVar;
 }
 
 Timer.prototype._time_c = function($start, prefix, $end) {
@@ -254,6 +256,8 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 	if(this.print) {
 		logger.log($timingResultDecl);
 	}
+	
+	return timeIntervalVar;
 }
 
 //C codedefs 
