@@ -129,7 +129,9 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 
 
     // Log time information
-    logger.log($timingResultDecl);
+	if(this.print) {
+		logger.log($timingResultDecl);
+	}
 }
 
 Timer.prototype._time_c = function($start, prefix, $end) {
@@ -249,7 +251,9 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 
 
     // Log time information
-    logger.log($timingResultDecl);
+	if(this.print) {
+		logger.log($timingResultDecl);
+	}
 }
 
 //C codedefs 
