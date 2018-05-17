@@ -316,7 +316,7 @@
 
 
 	<!-- PRAGMA -->
-	<artifact class="pragma">
+	<artifact class="pragma" default="name">
 		<attribute name="name" type="String"/>
 		<attribute name="target" type="joinpoint" />
 		<attribute name="content" type="String"/>
