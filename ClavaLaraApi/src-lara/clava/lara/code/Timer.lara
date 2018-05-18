@@ -30,12 +30,12 @@ Timer.prototype.time = function($start, prefix, $end) {
 		println("Could not find the corresponding file of the given joinpoint: " + $jp);
 		return;
 	}else if ($file.isCxx) {
-        this._time_cpp($start, prefix, $end);
+        return this._time_cpp($start, prefix, $end);
     } else {
-        this._time_c($start, prefix, $end);
+        return this._time_c($start, prefix, $end);
     }
 
-    return this;
+    //return this;
     //PrintOnce.message("Timer.time: not implemented yet for C");
 }
 
@@ -94,14 +94,16 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 		$start.insertBefore(codeTic);
 	}
 	
+	var afterJp = undefined;
+	
 	// Check if $end is a scope
 	if($end.instanceOf("scope")) {
 		// 'insertEnd' insertions must be done in sequential order		
 		$end.insertEnd(codeToc);
-		$end.insertEnd($timingResultDecl);
+		afterJp = $end.insertEnd($timingResultDecl);
 	} else {
 		// 'insertAfter' insertions must be done in reverse order		
-		$end.insertAfter($timingResultDecl);
+		afterJp = $end.insertAfter($timingResultDecl);
 		$end.insertAfter(codeToc);
 	}
 	/*
@@ -131,7 +133,10 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
     // Log time information
 	if(this.print) {
 		logger.log($timingResultDecl);
+		afterJp = logger.getAfterJp();
 	}
+	
+	this._setAfterJp(afterJp);
 	
 	return timeIntervalVar;
 }
@@ -220,14 +225,17 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 		$start.insertBefore(codeBefore);
 	}
 	
+	
+	var afterJp = undefined;
+	
 	// Check if $end is a scope
 	if($end.instanceOf("scope")) {
 		// 'insertEnd' insertions must be done in sequential order		
 		$end.insertEnd(codeAfter);
-		$end.insertEnd($timingResultDecl);
+		afterJp = $end.insertEnd($timingResultDecl);
 	} else {
 		// 'insertAfter' insertions must be done in reverse order		
-		$end.insertAfter($timingResultDecl);
+		afterJp = $end.insertAfter($timingResultDecl);
 		$end.insertAfter(codeAfter);
 	}
 /*	
@@ -255,9 +263,13 @@ Timer.prototype._time_c = function($start, prefix, $end) {
     // Log time information
 	if(this.print) {
 		logger.log($timingResultDecl);
+		afterJp = logger.getAfterJp();
 	}
 	
+	this._setAfterJp(afterJp);
+	
 	return timeIntervalVar;
+
 }
 
 //C codedefs 
