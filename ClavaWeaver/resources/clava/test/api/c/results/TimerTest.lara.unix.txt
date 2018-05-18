@@ -7,7 +7,7 @@ double bar() {
    return 1.0;
 }
 
-double [bar2() {
+double bar2() {
    return 1.0;
 }
 
@@ -51,5 +51,5 @@ int main() {
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_3);
    double clava_timing_duration_3 = ((clava_timing_end_3.tv_sec + ((double) clava_timing_end_3.tv_nsec / 1000000000)) - (clava_timing_start_3.tv_sec + ((double) clava_timing_start_3.tv_nsec / 1000000000))) * (1000);
    printf("%fms\n", clava_timing_duration_3);
-   printf("This should appear after the timer print\n"]);
+   printf("This should appear after the timer print\n");
 }
