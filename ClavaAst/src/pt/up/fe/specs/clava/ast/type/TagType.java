@@ -46,4 +46,24 @@ public abstract class TagType extends Type {
     public String toContentString() {
         return "tagKind: " + getTagKind();
     }
+
+    @Override
+    public String getCode(String name) {
+        // System.out.println("TAGTYPE:" + getTagKind());
+        // System.out.println("DECL INFO:" + getDeclInfo());
+        // System.out.println("TAG KIND:" + getTagKind());
+        // System.out.println("TYPE DATA:" + getTypeData());
+        String baseType = getDeclInfo().getDeclType();
+        if (baseType.isEmpty()) {
+            baseType = getBareType();
+        }
+
+        String enumType = getTagKind().getCode() + " " + baseType;
+        if (name == null) {
+            return enumType;
+        }
+
+        return enumType + " " + name;
+    }
+
 }

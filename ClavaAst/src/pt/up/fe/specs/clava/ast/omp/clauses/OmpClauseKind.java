@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -73,9 +73,9 @@ public enum OmpClauseKind implements StringProvider {
         this.hasParameters = hasParameters;
     }
 
-    private static final Lazy<EnumHelper<OmpClauseKind>> HELPER = EnumHelper.newLazyHelper(OmpClauseKind.class);
+    private static final Lazy<EnumHelperWithValue<OmpClauseKind>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(OmpClauseKind.class);
 
-    public static EnumHelper<OmpClauseKind> getHelper() {
+    public static EnumHelperWithValue<OmpClauseKind> getHelper() {
         return HELPER.get();
     }
 

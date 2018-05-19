@@ -46,3 +46,18 @@ int foo_with_var_shadowing() {
 	
 	return i;
 }
+
+void foo_with_1darray_input(int array[]) {
+	array[0] = 1;
+}
+
+void foo_with_2darray_input(int array[2][2]) {
+	array[0][0] = 1;
+}
+
+double Distance2(const double a[3], const double b[3])
+{
+  return (a[0] - b[0]) * (a[0] - b[0]) +
+         (a[1] - b[1]) * (a[1] - b[1]) +
+         (a[2] - b[2]) * (a[2] - b[2]);
+}

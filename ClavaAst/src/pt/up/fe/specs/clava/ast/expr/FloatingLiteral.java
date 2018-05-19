@@ -13,53 +13,91 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.Collection;
 import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class FloatingLiteral extends Literal {
 
-    public static enum FloatKind {
-        DOUBLE,
-        FLOAT,
-        LONG_DOUBLE
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Double> VALUE = KeyFactory.double64("value");
+
+    /// DATAKEYS END
+
+    private static final double ERROR_THRESHOLD = 1e-6;
+
+    public FloatingLiteral(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
     }
 
-    private final FloatKind floatKind;
-    private final String number;
-
-    public FloatingLiteral(FloatKind floatKind, String number, ExprData exprData,
-            ClavaNodeInfo info) {
-
+    /**
+     * Legacy support.
+     * 
+     * @param floatKind
+     * @param number
+     * @param exprData
+     * @param info
+     */
+    public FloatingLiteral(ExprData exprData, ClavaNodeInfo info) {
         super(exprData, info, Collections.emptyList());
-
-        this.floatKind = floatKind;
-        this.number = number;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FloatingLiteral(floatKind, number, getExprData(), getInfo());
-    }
-
-    public FloatKind getFloatKind() {
-        return floatKind;
-    }
-
-    @Override
-    public String getLiteral() {
-        return number;
     }
 
     @Override
     public String getCode() {
-        return number;
+        // Current parser (Clang 3.8) does not correctly return the literal of FloatingLiterals
+        // when they use C++14 single quotes. As a temporary fix, tries to measure the difference
+        // between the value of the literal and the approximate value given by Clang, and if
+        // above a certain threshold, returns the approximate value
+
+        String literal = getLiteral();
+        Double parsedDouble = SpecsStrings.parseDouble(literal, false);
+
+        // Could not parse, return literal
+        if (parsedDouble == null) {
+            return literal;
+            // System.out.println("COULD NOT PARSE: " + literal);
+        }
+
+        double diff = Math.abs((parsedDouble - get(VALUE)));
+
+        // There is no difference, return literal
+        if (diff == 0.0) {
+            return literal;
+        }
+
+        // Difference is below threshold, return literal
+        if (diff < ERROR_THRESHOLD) {
+            return literal;
+        }
+
+        // Return approximate value
+        return Double.toString(get(VALUE));
+
+        // System.out.println("LITERAL VALUE:" + getLiteral());
+        // System.out.println("APPROXIMATE VALUE:" + getData().getValue());
+        // System.out.println("DIFF:" + diff);
+        // System.out.println("ULP LITERAL:" + Math.ulp(parsedDouble));
+        // System.out.println("ULP APPROXIMATE:" + Math.ulp(getData().getValue()));
+
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + ", literal:" + number + ", kind:" + floatKind;
+    /**
+     * @return
+     */
+    /*
+    public FloatKind getFloatKind() {
+        return floatKind;
     }
+    */
+
 }

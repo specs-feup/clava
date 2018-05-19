@@ -34,8 +34,17 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     DataKey<String> FLAGS = KeyFactory.string("Compiler Flags", "");
 
+    DataKey<Boolean> CUSTOM_RESOURCES = KeyFactory.bool("Clava Custom Resources")
+            .setLabel("Enable custom resource files");
+
+    DataKey<Boolean> DISABLE_REMOTE_DEPENDENCIES = KeyFactory.bool("Disable Remote Dependencies")
+            .setLabel("Disable remote dependencies (e.g., git repositories)");
+
+    DataKey<Boolean> DISABLE_CLAVA_DATA_NODES = KeyFactory.bool("Disable Clava Data nodes")
+            .setLabel("Disables new method for parsing nodes (only uses 'legacy' nodes)");
+
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
-            .addKeys(STANDARD, FLAGS)
+            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES, DISABLE_CLAVA_DATA_NODES)
             .build();
 
     @Override
@@ -54,7 +63,7 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
             // If standard flag, add option
             if (flag.startsWith(stdPrefix)) {
-                Standard standard = Standard.getEnumHelper().getTranslationMap()
+                Standard standard = Standard.getEnumHelper().getValuesTranslationMap()
                         .get(flag.substring(stdPrefix.length()));
                 // config.add(ClavaOptions.STANDARD, standard);
                 Optional<Standard> previousStd = config.set(ClavaOptions.STANDARD, standard);

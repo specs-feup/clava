@@ -4,6 +4,8 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -52,6 +54,13 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
+     * 
+     */
+    public void defReturnTypeImpl(AJoinPoint value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AJoinPoint not implemented ");
+    }
+
+    /**
      * Get value on attribute paramTypes
      * @return the attribute's value
      */
@@ -87,12 +96,47 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
+     * Sets the return type of the FunctionType
+     * @param newType 
+     */
+    public void setReturnTypeImpl(AType newType) {
+        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
+    }
+
+    /**
+     * Sets the return type of the FunctionType
+     * @param newType 
+     */
+    public final void setReturnType(AType newType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), newType);
+        	}
+        	this.setReturnTypeImpl(newType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), newType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReturnType", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
     @Override
     public String getKindImpl() {
         return this.aType.getKindImpl();
+    }
+
+    /**
+     * Get value on attribute isTopLevel
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsTopLevelImpl() {
+        return this.aType.getIsTopLevelImpl();
     }
 
     /**
@@ -123,15 +167,6 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
-     * Get value on attribute elementType
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getElementTypeImpl() {
-        return this.aType.getElementTypeImpl();
-    }
-
-    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -141,12 +176,21 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
-     * Get value on attribute templateArgsArrayImpl
+     * Get value on attribute templateArgsStringsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public String[] getTemplateArgsArrayImpl() {
-        return this.aType.getTemplateArgsArrayImpl();
+    public String[] getTemplateArgsStringsArrayImpl() {
+        return this.aType.getTemplateArgsStringsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute templateArgsTypesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AType[] getTemplateArgsTypesArrayImpl() {
+        return this.aType.getTemplateArgsTypesArrayImpl();
     }
 
     /**
@@ -183,6 +227,22 @@ public abstract class AFunctionType extends AType {
     @Override
     public Boolean getConstantImpl() {
         return this.aType.getConstantImpl();
+    }
+
+    /**
+     * Get value on attribute unwrap
+     * @return the attribute's value
+     */
+    @Override
+    public AType getUnwrapImpl() {
+        return this.aType.getUnwrapImpl();
+    }
+
+    /**
+     * 
+     */
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        this.aType.defTemplateArgsTypesImpl(value);
     }
 
     /**
@@ -249,11 +309,57 @@ public abstract class AFunctionType extends AType {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aType.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aType.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aType.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
     public void messageToUserImpl(String message) {
         this.aType.messageToUserImpl(message);
+    }
+
+    /**
+     * Sets the template argument types of a template type
+     * @param templateArgTypes 
+     */
+    @Override
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        this.aType.setTemplateArgsTypesImpl(templateArgTypes);
+    }
+
+    /**
+     * Sets a single template argument type of a template type
+     * @param index 
+     * @param templateArgType 
+     */
+    @Override
+    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
+        this.aType.setTemplateArgsTypesImpl(index, templateArgType);
     }
 
     /**
@@ -264,16 +370,6 @@ public abstract class AFunctionType extends AType {
     @Override
     public void insertImpl(String position, String code) {
         this.aType.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aType.defImpl(attribute, value);
     }
 
     /**
@@ -310,6 +406,37 @@ public abstract class AFunctionType extends AType {
      * 
      */
     @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "returnType": {
+        	if(value instanceof AJoinPoint){
+        		this.defReturnTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "templateArgsTypes": {
+        	if(value instanceof AType[]){
+        		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("returnType");
@@ -330,6 +457,7 @@ public abstract class AFunctionType extends AType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
+        actions.add("void setReturnType(type)");
     }
 
     /**
@@ -360,24 +488,29 @@ public abstract class AFunctionType extends AType {
         RETURNTYPE("returnType"),
         PARAMTYPES("paramTypes"),
         KIND("kind"),
+        ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
-        ELEMENTTYPE("elementType"),
         HASTEMPLATEARGS("hasTemplateArgs"),
-        TEMPLATEARGS("templateArgs"),
+        TEMPLATEARGSSTRINGS("templateArgsStrings"),
+        TEMPLATEARGSTYPES("templateArgsTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
+        UNWRAP("unwrap"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -385,16 +518,19 @@ public abstract class AFunctionType extends AType {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

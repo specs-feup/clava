@@ -50,7 +50,8 @@ public class CXXForRangeStmtParser extends AClangNodeParser<CXXForRangeStmt> {
         */
 
         DeclStmt range = (DeclStmt) toStmt(children.get(0));
-        DeclStmt beginEnd = (DeclStmt) toStmt(children.get(1));
+        // Begin end is optional, it can either return a DeclStmt or a NullStmt
+        Stmt beginEnd = toStmt(children.get(1));
         Expr cond = toExpr(children.get(2));
         Expr inc = toExpr(children.get(3));
         DeclStmt loopVar = (DeclStmt) toStmt(children.get(4));

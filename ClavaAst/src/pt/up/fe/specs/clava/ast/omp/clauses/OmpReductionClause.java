@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -36,10 +36,10 @@ public class OmpReductionClause implements OmpClause {
         MIN("min"),
         MAX("max");
 
-        private static final Lazy<EnumHelper<ReductionKind>> ENUM_HELPER = EnumHelper
-                .newLazyHelper(ReductionKind.class);
+        private static final Lazy<EnumHelperWithValue<ReductionKind>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(ReductionKind.class);
 
-        public static EnumHelper<ReductionKind> getHelper() {
+        public static EnumHelperWithValue<ReductionKind> getHelper() {
             return ENUM_HELPER.get();
         }
 

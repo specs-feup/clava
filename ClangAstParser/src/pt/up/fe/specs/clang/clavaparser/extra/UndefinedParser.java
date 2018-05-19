@@ -29,6 +29,10 @@ public class UndefinedParser extends AClangNodeParser<Undefined> {
         super(converter);
     }
 
+    public UndefinedParser(ClangConverterTable converter, boolean hasContent) {
+        super(converter, hasContent);
+    }
+
     @Override
     protected Undefined parse(ClangNode node, StringParser parser) {
         parser.clear();

@@ -15,8 +15,9 @@ int main() {
    double a4 = 0x1ffp10 - 0X0p-1;
    double a5 = 0x1.p0 - 0xf.p-1;
    double a6 = 0x0.123p-1 - 0xa.bp10l;
-   // Since C++14
+   // Since C++14, current parser does not correctly support single quote
    double singleQuotes = 231.5235;
+   double singleQuotes2 = 231.5;
    auto y = 1.0_a + 2.0;
    auto z = 1.0_E + 2.0;
    auto u = 1_p + 2;

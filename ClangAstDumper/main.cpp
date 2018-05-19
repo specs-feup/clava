@@ -19,7 +19,6 @@ int main(int argc, const char *argv[])
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
 
-
     // Making it static/global because I do not know how to create actions with arbitrary arguments using newFrontendActionFactory
     DumpResources::init();
 

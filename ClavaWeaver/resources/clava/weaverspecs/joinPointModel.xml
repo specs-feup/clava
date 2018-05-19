@@ -5,7 +5,13 @@
 	https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout
  -->
 <joinpoints root_class="program">
-	
+
+	<!-- 
+	<global>
+		<select alias="descendant"		class="joinpoint" />
+	</global>
+	 -->
+	 
 	<!-- EMPTY -->
 	<!-- Utility joinpoint, to represent empty nodes when directly accessing the tree -->
 	<joinpoint class="empty"/>
@@ -21,6 +27,7 @@
 		<select alias="stmt"			class="statement"/>
 		<select alias="childStmt"		class="statement"/>
 		<select 						class="function"/>
+		<select 						class="method"/>
 		<select 						class="record"/>
 		<select 						class="struct"/>
 		<select 						class="class"/>
@@ -29,8 +36,13 @@
 		<select							class="tag"/>		
 		<select 						class="vardecl"/>
 		<select 						class="comment"/>
+		<select 						class="include"/>	
+		<select 						class="typedefDecl"/>			
+		<select 						class="decl"/>		
 	</joinpoint>
 	
+	<joinpoint class="include" extends="decl">
+	</joinpoint>
 	
 	<!-- RECORD -->
 	<joinpoint class="record">
@@ -46,6 +58,7 @@
 
 	<!--  CLASS -->
 	<joinpoint class="class" extends="record">
+		<select class="method"/>
 	</joinpoint>	
 	
 	<!-- PRAGMA -->
@@ -79,19 +92,29 @@
  		<select alias="init"			class="expression"/>
  	</joinpoint>  		
 	
+	
+	<!-- TYPEDEF DECL -->
+	<joinpoint class="typedefDecl" extends="namedDecl">
+ 	</joinpoint>  		
+	
+	
+	
 	<!--  FUNCTION PARAMETER -->
 	<joinpoint class="param" extends="vardecl">
 	</joinpoint>
 
 
 	<!-- FUNCTION -->
-	<joinpoint class="function">
+	<joinpoint class="function" extends="namedDecl">
 		<!--  <select 						class="body"/>   -->
 	 	<select alias="body" 			class="scope"/>
 		<select 						class="param"/>
+		<select 						class="decl"/>
 	</joinpoint>
 		
-			
+	<!-- METHOD -->
+	<joinpoint class="method" extends="function" tooltip="C++ function">
+	</joinpoint>			
 
 		
 		
@@ -121,11 +144,15 @@
 		<select alias="childExpr"		class="expression"/>
 		<select 						class="call"/>
  		<select alias="stmtCall"		class="call"/>
+ 		<select 						class="memberCall"/>
+		<select							class="memberAccess"/>
  		<select							class="arrayAccess"/>
  		<select 						class="vardecl"/>
 		<select 						class="varref"/>
 		<select							class="binaryOp"/>
 		<select							class="unaryOp"/>
+		<select							class="newExpr"/>
+		<select							class="deleteExpr"/>		
 	</joinpoint>
 	
 
@@ -160,7 +187,10 @@
 		<select alias="callee"		class="expression"/>
 		<select alias="arg"			class="expression"/>
 	</joinpoint>
-
+	
+	<!-- MEMBER CALL -->	
+	<joinpoint class="memberCall" 	extends="call">
+	</joinpoint>
 
 	<!-- BINARY OPERATOR -->	
 	<joinpoint class="binaryOp" 	extends="expression">
@@ -170,7 +200,15 @@
 	
 	<joinpoint class="unaryOp" 	extends="expression">
 		<select alias="operand"			class="expression"/>
-	</joinpoint>		
+	</joinpoint>	
+	
+	<!-- NEW EXPR -->	
+	<joinpoint class="newExpr" 	extends="expression">
+	</joinpoint>	
+
+	<!-- DELETE EXPR -->	
+	<joinpoint class="deleteExpr" 	extends="expression">
+	</joinpoint>	
 	
 
 	<!-- EXPRESSION -->
@@ -188,21 +226,32 @@
 
 	<!-- ArrayAccess -->
 	<joinpoint class="arrayAccess" extends="expression">	
-		<select alias="arrayVar" class="varref" tooltip="varref to the variable of the array access"/>
+		<select alias="arrayVar" class="expression" tooltip="varref to the variable of the array access"/>
 		<select alias="subscript" class="expression" tooltip="expression of the array access subscript"/>
 	</joinpoint>
 
 	<!-- MemberAccess -->
 	<joinpoint class="memberAccess" extends="expression"/>	
 
+	<!-- UnaryExprOrType -->
+	<joinpoint class="unaryExprOrType" extends="expression"/>	
 
 	<!-- COMMENT -->
 	<joinpoint class="comment"/>
 
-	<!--  TYPE -->
+	<!-- TYPE -->
 	<joinpoint class="type">
 	</joinpoint>
 
+		
+	<!--  POINTER TYPE -->
+	<joinpoint class="pointerType" extends="type">
+	</joinpoint>
+	
+	<!--  ARRAY TYPE -->
+	<joinpoint class="arrayType" extends="type">
+	</joinpoint>
+			
 		
 	<!--  ENUM TYPE -->
 	<joinpoint class="enumType" extends="type">
@@ -220,6 +269,10 @@
 	
 	<!--  TAG TYPE -->
 	<joinpoint class="tagType" extends="type">
-	</joinpoint>	
+	</joinpoint>
+		
+	<!--  QUAL TYPE -->
+	<joinpoint class="qualType" extends="type">
+	</joinpoint>
 	 	
 </joinpoints>

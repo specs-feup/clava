@@ -15,8 +15,10 @@ package pt.up.fe.specs.clang.streamparser;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -25,22 +27,34 @@ import java.util.stream.Collectors;
 import org.suikasoft.jOptions.DataStore.SimpleDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
+import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
+import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
+import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class StreamParser {
+
+    private static final boolean STOP_ON_UNEXPECTED_OUTPUT = false;
 
     private static final String TRANSLATION_UNIT_SET_PREFIX = "COUNTER";
 
@@ -90,29 +104,68 @@ public class StreamParser {
     private final Map<DataKey<?>, SnippetParser<?, ?>> keysToSnippetsMap;
     private final Map<String, SnippetParser<?, ?>> parsers;
 
+    // private final Collection<LineStreamParser> linestreamParsers;
+    // private final Map<String, LineStreamParser> linestreamParsersMap;
+
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
-    public StreamParser() {
-        this(null);
-    }
+    private final LineStreamParserV2 lineStreamParser;
+
+    // public StreamParser(DataStore clavaData) {
+    // this(clavaData, null, ClangStreamParserV2.newInstance());
+    // }
 
     /**
      * We need a new instance every time we want to parse a String.
      */
-    public StreamParser(File dumpFile) {
+    public StreamParser(DataStore clavaData, File dumpFile, LineStreamParserV2 lineStreamParser) {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
-
         keysToSnippetsMap = buildDatakeysToSnippetsMap();
         parsers = keysToSnippetsMap.values().stream()
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
+
+        // linestreamParsers = buildLineStreamParsers(clavaData);
+        // linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
+
+        this.lineStreamParser = lineStreamParser;
     }
+
+    /*
+    private Collection<LineStreamParser> buildLineStreamParsers(DataStore clavaData) {
+        return Arrays.asList(ClavaDataParser.newInstance(clavaData), VisitedChildrenParser.newInstance(),
+                IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance(),
+                TopLevelTypesParser.newInstance(), TopLevelAttributesParser.newInstance(), IncludesParser.newInstance(),
+                IdToFilenameParser.newInstance());
+    }
+    */
+    /*
+    private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {
+    
+        Map<String, LineStreamParser> lineStreamParsers = new HashMap<>();
+    
+        for (LineStreamParser parser : parsers) {
+            parser.getIds().stream().forEach(id -> lineStreamParsers.put(id, parser));
+        }
+    
+        // ClavaDataParser clavaDataParser = ClavaDataParser.newInstance();
+        // clavaDataParser.getIds().stream().forEach(id -> lineStreamParsers.put(id, clavaDataParser));
+    
+        return lineStreamParsers;
+    }
+    */
 
     private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
+
+        // Single map for all the node data dumps
+        // Map<String, ClavaData> nodeData = new HashMap<>();
+
+        // Add snippet parsers for Clang Node parsing
+        // snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
 
         // This builder will be shared between Counter and Types
         StringBuilder typesBuilder = new StringBuilder();
@@ -177,12 +230,12 @@ public class StreamParser {
                         StreamParser::parseFieldDeclInfo));
 
         snippetsMap.put(StreamKeys.NAMED_DECL_WITHOUT_NAME,
-                SnippetParser.newInstance("<NamedDecl Without Name>", new HashSet<String>(),
+                SnippetParser.newInstance("<NamedDecl Without Name>", new HashMap<String, String>(),
                         StreamParser::collectString));
 
-        snippetsMap.put(StreamKeys.CXX_METHOD_DECL_PARENT,
-                SnippetParser.newInstance("<CXXMethodDecl Parent>", new HashMap<String, String>(),
-                        StreamParser::collectString));
+        // snippetsMap.put(StreamKeys.CXX_METHOD_DECL_PARENT,
+        // SnippetParser.newInstance("<CXXMethodDecl Parent>", new HashMap<String, String>(),
+        // StreamParser::collectString));
 
         snippetsMap.put(StreamKeys.PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG,
                 SnippetParser.newInstance("<ParmVarDecl Has Inherited Default Arg>", new HashSet<String>(),
@@ -203,6 +256,47 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.CXX_MEMBER_EXPR_INFO,
                 SnippetParser.newInstance("<CXX Member Expr Info>", new HashMap<String, CxxMemberExprInfo>(),
                         StreamParser::parseCxxMemberExprInfo));
+
+        snippetsMap.put(StreamKeys.TYPE_AS_WRITTEN,
+                SnippetParser.newInstance("<Type As Written>", new HashMap<String, String>(),
+                        StreamParser::collectString));
+
+        snippetsMap.put(StreamKeys.LAMBDA_EXPR_DATA,
+                SnippetParser.newInstance("<Lambda Expr Data>", new HashMap<String, LambdaExprData>(),
+                        StreamParser::parseLambdaExprData));
+
+        snippetsMap.put(StreamKeys.TYPEID_DATA,
+                SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
+                        StreamParser::parseTypeidData));
+
+        // snippetsMap.put(StreamKeys.VARDECL_DUMPER_INFO,
+        // SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
+        // StreamParser::parseVarDeclDumperInfo));
+
+        // snippetsMap.put(StreamKeys.FUNCTION_DECL_INFO,
+        // SnippetParser.newInstance("<FunctionDecl Info>", new HashMap<String, FunctionDeclInfo>(),
+        // StreamParser::parseFunctionDeclInfo));
+
+        snippetsMap.put(StreamKeys.INIT_LIST_EXPR_INFO,
+                SnippetParser.newInstance("<InitListExpr Info>", new HashMap<String, InitListExprInfo>(),
+                        StreamParser::parseInitListExprInfo));
+
+        // ClavaData parsers
+
+        // snippetsMap.put(StreamKeys.DECL_DATA,
+        // SnippetParser.newInstance("<Decl Data>", nodeData, DeclDataParser::parseDeclData));
+        //
+        // snippetsMap.put(StreamKeys.FUNCTION_DECL_DATA,
+        // SnippetParser.newInstance("<FunctionDecl Data>", nodeData, DeclDataParser::parseFunctionDeclData));
+        //
+        // snippetsMap.put(StreamKeys.VAR_DECL_DATA,
+        // SnippetParser.newInstance("<VarDecl Data>", nodeData, DeclDataParser::parseVarDeclData));
+        //
+        // snippetsMap.put(StreamKeys.PARM_VAR_DECL_DATA,
+        // SnippetParser.newInstance("<ParmVarDecl Data>", nodeData, DeclDataParser::parseParmVarDeclData));
+        //
+        // snippetsMap.put(StreamKeys.CXX_METHOD_DECL_DATA,
+        // SnippetParser.newInstance("<CXXMethodDecl Data>", nodeData, DeclDataParser::parseCXXMethodDeclData));
 
         // snippetsMap.put(StdErrKeys.CXX_METHOD_DECL_DECLARATION,
         // SnippetParser.newInstance("<CXXMethodDecl Declaration>", new HashMap<String, String>(),
@@ -241,6 +335,14 @@ public class StreamParser {
             // Find parser for line
             SnippetParser<?, ?> parser = parsers.get(currentLine);
 
+            // If parser null, check if it needs to be adapted
+            // TODO: Parser after normal parser, and before warning
+            // if (parser == null) {
+            // // System.out
+            // // .println("ADAPTING '" + currentLine + "' to '" + ClangNodeParsing.adaptsKey(currentLine) + "'");
+            // parser = ClangNodeParsing.adaptsKey(currentLine).map(parsers::get).orElse(null);
+            // }
+
             // If parser not null, use it and continue
             if (parser != null) {
                 try {
@@ -252,14 +354,52 @@ public class StreamParser {
                 continue;
             }
 
+            // If parser null, check linestream parsers
+            if (lineStreamParser.getIds().contains(currentLine)) {
+                try {
+                    lineStreamParser.parse(currentLine, lines);
+                } catch (Exception e) {
+                    SpecsLogs.msgWarn("Problems while parsing '" + currentLine + "'", e);
+                }
+
+                continue;
+            }
+
+            // LineStreamParser lineStreamParser = linestreamParsersMap.get(currentLine);
+            // if (lineStreamParser != null) {
+            // try {
+            // lineStreamParser.parse(currentLine, lines);
+            // } catch (Exception e) {
+            // SpecsLogs.msgWarn("Problems while parsing '" + currentLine + "'", e);
+            // }
+            //
+            // continue;
+            // }
+
             // Add line to the warnings
+            if (STOP_ON_UNEXPECTED_OUTPUT) {
+                throw new RuntimeException("Unexpected output: '" + currentLine + "'");
+            }
+
             warnings.append(currentLine).append("\n");
             SpecsLogs.msgInfo(currentLine);
         }
 
         // Parsed all lines, create datastore
-        DataStore stdErrOutput = new SimpleDataStore(StreamKeys.STORE_DEFINITION);
-        for (DataKey<?> key : StreamKeys.STORE_DEFINITION.getKeys()) {
+        StoreDefinition streamParserDefinition = new StoreDefinitionBuilder("StreamParser Data")
+                .addDefinition(StreamKeys.STORE_DEFINITION)
+                // .addKeys(ClangNodeParsing.getKeys())
+                // .addKeys(ClavaDataParser.getDataKeys())
+                .build();
+
+        // DataStore stdErrOutput = new SimpleDataStore(StreamKeys.STORE_DEFINITION);
+        DataStore stdErrOutput = new SimpleDataStore(streamParserDefinition);
+        // Add keys for ClavaData parsers
+
+        // TODO: Merge with map that you get from DumperDataParser
+
+        // for (DataKey<?> key : StreamKeys.STORE_DEFINITION.getKeys()) {
+        for (DataKey<?> key : streamParserDefinition.getKeys()) {
 
             // Special case: warnings
             if (key.equals(StreamKeys.WARNINGS)) {
@@ -271,6 +411,16 @@ public class StreamParser {
             Preconditions.checkNotNull(parser, "Could not find a parser for key '" + key + "'");
             stdErrOutput.setRaw(key, parser.getResult());
         }
+
+        // Add DataStore of line parser
+        stdErrOutput.addAll(lineStreamParser.getData());
+
+        // Add DataStores from line parsers
+        // for (LineStreamParser parser : linestreamParsers) {
+        // stdErrOutput.addAll(parser.buildData());
+        // }
+
+        // System.out.println("ID TO CLASSNAME:" + stdErrOutput.get(IdToClassnameParser.getDataKey()));
 
         // if (dumpFile != null) {
         // dumpFile.close();
@@ -555,10 +705,6 @@ public class StreamParser {
         map.put(key, new FieldDeclInfo(isBitField, hasInClassInitializer));
     }
 
-    public static int parseInt(LineStream lines) {
-        return Integer.parseInt(lines.nextLine());
-    }
-
     public static int parseInt(LineStream lines, String prefix) {
         String line = lines.nextLine();
         Preconditions.checkArgument(line.startsWith(prefix), "Expected line to start with '" + prefix + "':" + line);
@@ -574,22 +720,10 @@ public class StreamParser {
         // memberName (String)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isArrow = parseOneOrZero(lines.nextLine());
+        boolean isArrow = GeneralParsers.parseOneOrZero(lines.nextLine());
         String memberName = lines.nextLine();
 
         map.put(key, new CxxMemberExprInfo(isArrow, memberName));
-    }
-
-    public static boolean parseOneOrZero(String aBoolean) {
-        if (aBoolean.equals("1")) {
-            return true;
-        }
-
-        if (aBoolean.equals("0")) {
-            return false;
-        }
-
-        throw new RuntimeException("Unexpected value: " + aBoolean);
     }
 
     public static boolean parseTrueOrFalse(String aBoolean) {
@@ -602,6 +736,97 @@ public class StreamParser {
         }
 
         throw new RuntimeException("Unexpected value: " + aBoolean);
+    }
+
+    public static void parseLambdaExprData(LineStream lines, Map<String, LambdaExprData> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // isGenericLambda (boolean)
+        // isMutable (boolean)
+        // hasExplicitParameters (boolean)
+        // hasExplicitResultType (boolean)
+        // captureDefault (LambdaCaptureDefault)
+        // captureKinds (List<LambdaCaptureKind)
+
+        // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
+        boolean isGenericLambda = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isMutable = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean hasExplicitParameters = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean hasExplicitResultType = GeneralParsers.parseOneOrZero(lines.nextLine());
+
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(GeneralParsers.parseInt(lines));
+        int numCaptures = GeneralParsers.parseInt(lines);
+        List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
+        for (int i = 0; i < numCaptures; i++) {
+            captureKinds.add(LambdaCaptureKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
+        }
+
+        map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
+                captureDefault, captureKinds));
+    }
+
+    /*
+    public static void parseVarDeclDumperInfo(LineStream lines, Map<String, VarDeclDumperInfo> map) {
+        String key = lines.nextLine();
+    
+        // Format:
+        // qualified name (String)
+        // isConstexpr (boolean)
+        // isStaticDataMember (boolean)
+        // isOutOfLine (boolean)
+        // hasGlobalStorage (boolean)
+    
+        String qualifiedName = lines.nextLine();
+        boolean isConstexpr = parseOneOrZero(lines.nextLine());
+        boolean isStaticDataMember = parseOneOrZero(lines.nextLine());
+        boolean isOutOfLine = parseOneOrZero(lines.nextLine());
+        boolean hasGlobalStorage = parseOneOrZero(lines.nextLine());
+    
+        map.put(key,
+                new VarDeclDumperInfo(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage));
+    }
+    */
+    public static void parseTypeidData(LineStream lines, Map<String, TypeidData> map) {
+        String key = lines.nextLine();
+
+        // Format:
+
+        // Format:
+        // isTypeOperator (boolean)
+        // operatorId (String)
+
+        boolean isTypeOperator = GeneralParsers.parseOneOrZero(lines.nextLine());
+        String operatorId = lines.nextLine();
+
+        map.put(key, new TypeidData(isTypeOperator, operatorId));
+
+    }
+
+    // public static void parseFunctionDeclInfo(LineStream lines, Map<String, FunctionDeclInfo> map) {
+    // String key = lines.nextLine();
+    //
+    // // Format:
+    // // templateKind (TemplateKind)
+    //
+    // TemplateKind templateKind = TemplateKind.getHelper().valueOf(Integer.parseInt(lines.nextLine()));
+    //
+    // FunctionDeclInfo info = new FunctionDeclInfo(templateKind);
+    //
+    // map.put(key, info);
+    // }
+
+    public static void parseInitListExprInfo(LineStream lines, Map<String, InitListExprInfo> map) {
+        String key = lines.nextLine();
+
+        // Format:
+        // isExplicit (boolean)
+
+        boolean isExplicit = GeneralParsers.parseOneOrZero(lines.nextLine());
+
+        InitListExprInfo info = new InitListExprInfo(isExplicit);
+
+        map.put(key, info);
     }
 
 }

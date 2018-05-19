@@ -16,12 +16,19 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
+import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 
@@ -33,24 +40,46 @@ import pt.up.fe.specs.clava.utils.Typable;
  */
 public abstract class Expr extends ClavaNode implements Typable {
 
-    private ExprData exprData;
-    private ImplicitCastExpr implicitCast;
+    /// DATAKEYS BEGIN
 
+    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+
+    public final static DataKey<ValueKind> VALUE_KIND = KeyFactory.enumeration("valueKind", ValueKind.class)
+            .setDefault(() -> ValueKind.getDefault());
+
+    public final static DataKey<ObjectKind> OBJECT_KIND = KeyFactory.enumeration("objectKind", ObjectKind.class)
+            .setDefault(() -> ObjectKind.ORDINARY);
+
+    public final static DataKey<ImplicitCastExpr> IMPLICIT_CAST = KeyFactory
+            .object("implicitCast", ImplicitCastExpr.class);
+
+    /// DATAKEYS END
+
+    public Expr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /**
+     * For legacy.
+     * 
+     * @deprecated
+     * @param exprData
+     * @param info
+     * @param children
+     */
+    @Deprecated
     public Expr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-
-        this.exprData = exprData;
-        this.implicitCast = null;
+        this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
     }
 
     @Override
     public Type getType() {
-        return exprData.getType();
+        return get(TYPE);
     }
 
     @Override
     public void setType(Type type) {
-        this.exprData = new ExprData(type, exprData.getValueKind());
+        put(TYPE, type);
     }
 
     public Optional<Type> getExprTypeTry() {
@@ -62,17 +91,31 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public ValueKind getValueKind() {
-        return exprData.getValueKind();
+        return get(VALUE_KIND);
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public ExprData getExprData() {
-        return exprData;
+        return DataStoreToLegacy.getExpr(getData());
     }
 
+    /*
     @Override
     public String toContentString() {
-        return super.toContentString() + "types:" + getExprType().getCode() + ", valueKind:" + getValueKind();
+        if (hasDataI()) {
+            return super.toContentString();
+        }
+    
+        return ClavaNode.toContentString(super.toContentString(), "exprData: [" + exprData + "]");
+        // return ClavaNode.toContentString(super.toContentString(), "types:" + getExprType().getCode() + ", valueKind:"
+        // + getValueKind() + ", exprData: [" + exprData + "]");
+        // return super.toContentString() + "types:" + getExprType().getCode() + ", valueKind:" + getValueKind();
     }
+    */
 
     /**
      * 
@@ -102,11 +145,11 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public void setImplicitCast(ImplicitCastExpr implicitCast) {
-        this.implicitCast = implicitCast;
+        put(IMPLICIT_CAST, implicitCast);
     }
 
     public Optional<ImplicitCastExpr> getImplicitCast() {
-        return Optional.ofNullable(implicitCast);
+        return Optional.ofNullable(get(IMPLICIT_CAST));
     }
 
 }

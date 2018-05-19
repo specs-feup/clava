@@ -57,6 +57,11 @@ public class SourceRange {
         this.end = end;
     }
 
+    public SourceRange(SourceRange sourceRange) {
+        this.start = sourceRange.start;
+        this.end = sourceRange.end;
+    }
+
     public SourceLocation getStart() {
         return start;
     }
@@ -107,10 +112,12 @@ public class SourceRange {
             throw new RuntimeException("Case not implemented:" + startType + " and " + endType);
         }
 
-        SpecsLogs.msgInfo("Two different paths in the location from the same source type, check this case.\nStart:"
-                + start.getFilepath() + "\nEnd:" + end.getFilepath());
-
-        return start.getFilepath();
+        return null;
+        // SpecsLogs.msgInfo("Two different paths in the location from the same source type, check this case.\nStart:"
+        // + start.getFilepath() + "\nEnd:" + end.getFilepath());
+        // System.out.println("GET LOCATION:" + this);
+        // SpecsLogs.msgWarn("WARNIMNG");
+        // return start.getFilepath();
         // System.out.println("START FILEPATH:" + start.getFilepath());
         // System.out.println("END FILEPATH:" + end.getFilepath());
         // return start.getFilepath();
@@ -125,9 +132,16 @@ public class SourceRange {
     }
 
     public String getFilename() {
-        Preconditions.checkNotNull(start.getFilepath());
+        return getFilenameTry().get();
+    }
 
-        return new File(start.getFilepath()).getName();
+    public Optional<String> getFilenameTry() {
+        if (start.getFilepath() == null) {
+            return Optional.empty();
+        }
+        // Preconditions.checkNotNull(start.getFilepath());
+
+        return Optional.of(new File(start.getFilepath()).getName());
     }
 
     public File getStartFile() {
@@ -136,6 +150,14 @@ public class SourceRange {
         }
 
         return new File(start.getFilepath());
+    }
+
+    public File getEndFile() {
+        if (end.getFilepath() == null) {
+            return null;
+        }
+
+        return new File(end.getFilepath());
     }
 
     public int getStartLine() {
@@ -403,6 +425,12 @@ public class SourceRange {
         sourceLines.set(0, adjustedStart);
 
         return Optional.of(sourceLines.stream().collect(Collectors.joining("\n")));
+    }
+
+    public boolean isOpenCL() {
+        return getFilenameTry()
+                .map(filename -> filename.toLowerCase().endsWith(".cl"))
+                .orElse(false);
     }
 
 }

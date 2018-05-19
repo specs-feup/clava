@@ -14,17 +14,17 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.enums.EnumHelper;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents the type of a Function.
@@ -34,123 +34,109 @@ import pt.up.fe.specs.util.providers.StringProvider;
  */
 public abstract class FunctionType extends Type {
 
-    /**
-     * Calling conventions.
-     * 
-     * @author JoaoBispo
-     *
-     */
-    public enum CallingConv implements StringProvider {
-
-        C("cdecl"),
-        X86_STD_CALL("stdcall"),
-        X86_FAST_CALL("fastcall"),
-        X86_THIS_CALL("thiscall"),
-        X86_VECTOR_CALL("vectorcall"),
-        X86_PASCAL("pascal"),
-        X86_64_WIN_64("ms_abi"),
-        X86_64_SYS_V("sysv_abi"),
-        AAPCS("pcs(\"aapcs\")"),
-        AAPCS_VFP("pcs(\"aapcs-vfp\")"),
-        INTEL_OC_BICC("intel_ocl_bicc"),
-        SPIR_FUNCTION("opencl default for SPIR"),
-        SPIR_KERNEL("opencl default for SPIR kernels");
-
-        private static final Lazy<EnumHelper<CallingConv>> HELPER = EnumHelper.newLazyHelper(CallingConv.class);
-
-        public static EnumHelper<CallingConv> getEnumHelper() {
-            return HELPER.get();
-        }
-
-        private final String attribute;
-
-        private CallingConv(String attribute) {
-            this.attribute = attribute;
-        }
-
-        public String getAttribute() {
-            return attribute;
-        }
-
-        @Override
-        public String getString() {
-            return getAttribute();
-        }
-    }
+    /// DATAKEYS BEGIN
 
     /**
-     * Data class for Function Type.
-     * 
-     * @author JoaoBispo
-     *
+     * @deprecated No need to be stored in a field, can be calculated. Use FunctionType.hasNoReturn() instead
      */
-    /*
-    static public class FunctionTypeData {
-        private final boolean hasNoReturn;
-        private final boolean isConst;
-        private final CallingConv callingConv;
-    
-        public FunctionTypeData(boolean hasNoReturn, boolean isConst, CallingConv callingConv) {
-            this.hasNoReturn = hasNoReturn;
-            this.isConst = isConst;
-            this.callingConv = callingConv;
-        }
-    
-        public boolean getHasNoReturn() {
-            return hasNoReturn;
-        }
-    
-        public boolean isConst() {
-            return isConst;
-        }
-    
-        public CallingConv getCallingConv() {
-            return callingConv;
-        }
-    }
-    */
+    @Deprecated
+    public final static DataKey<Boolean> NO_RETURN = KeyFactory.bool("noReturn");
+
+    public final static DataKey<Boolean> PRODUCES_RESULT = KeyFactory.bool("producesResult");
+
+    public final static DataKey<Boolean> HAS_REG_PARM = KeyFactory.bool("hasRegParm");
+
+    public final static DataKey<Long> REG_PARM = KeyFactory.longInt("regParm");
+
+    public final static DataKey<CallingConvention> CALLING_CONVENTION = KeyFactory.enumeration("callingConvention",
+            CallingConvention.class);
+
+    /// DATAKEYS END
 
     /**
      * FunctionType fields
      */
-    private final FunctionTypeData functionTypeData;
 
-    /**
-     * 
-     * @param functionTypeData
-     * @param type
-     * @param info
-     * @param children
-     */
-    public FunctionType(FunctionTypeData functionTypeData, String type, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        this(functionTypeData, new TypeData(type), info, children);
-    }
-
-    public FunctionType(FunctionTypeData functionTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-
-        // Cannot do this check, because copies of the node are done without children
-        // Preconditions.checkArgument(children.size() > 0, "Expected at least one child, the return argument");
-
-        this.functionTypeData = functionTypeData;
+    public FunctionType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     public Type getReturnType() {
-        return getChild(Type.class, 0);
+        int indexReturnType = getIndexReturnType();
+        if (indexReturnType < 0) {
+            return null;
+        }
+
+        return getChild(Type.class, indexReturnType);
+    }
+
+    /**
+     * Return type comes after desugared type, if present.
+     * 
+     * @return
+     */
+    public int getIndexReturnType() {
+        return getIndexDesugar() + 1;
+    }
+
+    /**
+     * Inclusive index.
+     * 
+     * @return
+     */
+    public int getIndexParamStart() {
+
+        return getIndexReturnType() + 1;
+    }
+
+    /**
+     * Exclusive index.
+     * 
+     * @return
+     */
+    public int getIndexParamEnd() {
+        return getIndexParamStart() + getNumParams();
     }
 
     public List<Type> getParamTypes() {
+
+        return getChildren().subList(getIndexParamStart(), getIndexParamEnd()).stream()
+                .map(child -> (Type) child)
+                .collect(Collectors.toList());
+
+        /*
         if (getNumChildren() == 1) {
             Collections.emptyList();
         }
-
+        
         return getChildren(Type.class, 1);
+        */
     }
 
-    public FunctionTypeData getFunctionTypeData() {
-        return functionTypeData;
+    /**
+     * 
+     * @return the number of parameters of this function
+     */
+    abstract public int getNumParams();
+    // public int getNumParams() {
+    // // First child is the return type, remaining children are the param types
+    // return getNumChildren() - 1;
+    // }
+
+    abstract public boolean isVariadic();
+
+    public void setReturnType(Type returnType) {
+        setChild(getIndexReturnType(), returnType);
+    }
+
+    public void setParamType(int paramIndex, Type paramType) {
+        if (paramIndex >= getNumParams()) {
+            SpecsLogs.msgInfo("Cannot set param '', function has only '" + getNumParams() + "' params");
+            return;
+        }
+
+        // setChild(paramIndex + 1, paramType);
+        setChild(getIndexParamStart() + paramIndex, paramType);
     }
 
     @Override
@@ -168,11 +154,32 @@ public abstract class FunctionType extends Type {
 
         String paramsCode = getParamTypes().stream()
                 .map(type -> type.getCode())
-                .collect(Collectors.joining(", ", " (", ")"));
+                .collect(Collectors.joining(", "));
+
+        if (isVariadic()) {
+            paramsCode = paramsCode + ", ...";
+        }
+
+        paramsCode = " (" + paramsCode + ")";
 
         code.append(paramsCode);
 
         return code.toString();
+    }
+
+    /**
+     * 
+     * @return true if return type is a void type.
+     */
+    public boolean hasNoReturn() {
+
+        Type returnType = getReturnType();
+
+        if (!(returnType instanceof BuiltinType)) {
+            return false;
+        }
+
+        return returnType.get(BuiltinType.KIND) == BuiltinKind.Void;
     }
 
 }

@@ -8,7 +8,7 @@ aspectdef Launcher
 	var loggerConsole = new Logger();
 	var loggerFile = new Logger(false, "log.txt");
 	
-	// Disable SpecsLogger, in order to compile again weaved code
+	// Disable SpecsLogger, in order to compile again woven code
 	loggerConsole.useSpecsLogger = false;
 	loggerFile.useSpecsLogger = false;
 	

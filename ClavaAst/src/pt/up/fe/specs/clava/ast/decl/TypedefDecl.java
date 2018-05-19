@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -33,10 +32,10 @@ public class TypedefDecl extends TypedefNameDecl {
     private final String typedefSource;
     private final boolean isModulePrivate;
 
-    public TypedefDecl(String typedefSource, boolean isModulePrivate, String declName, Type type, DeclData declData,
-            ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declName, type, declData, info, children);
+    public TypedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate, String declName, Type type,
+            DeclData declData,
+            ClavaNodeInfo info) {
+        super(underlyingType, declName, type, declData, info, Collections.emptyList());
 
         this.typedefSource = typedefSource;
         this.isModulePrivate = isModulePrivate;
@@ -44,13 +43,31 @@ public class TypedefDecl extends TypedefNameDecl {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TypedefDecl(typedefSource, isModulePrivate, getDeclName(), getType(), getDeclData(), getInfo(),
-                Collections.emptyList());
+        return new TypedefDecl(getUnderlyingType(), typedefSource, isModulePrivate, getDeclName(), getType(),
+                getDeclData(), getInfo());
+    }
+
+    @Override
+    public Type getType() {
+        // HACK: Sometimes, the returned type is the same as type being declared, we have not discovered why
+        // In this case, desugar type
+        Type type = super.getType();
+
+        if (type.getCode().equals(getDeclName())) {
+            return type.desugar();
+        }
+
+        return type;
     }
 
     @Override
     public String getCode() {
         Type type = getType();
+
+        // if (getDeclName().equals("IT")) {
+        // System.out.println("LOCATION:" + getLocation());
+        // System.out.println("TYPEDEF DECL TYPE:\n" + type);
+        // }
 
         // If pointer to ParenType, there can be complicated situations such
         // as having function pointer with VLAs that need the name of parameters,
@@ -61,9 +78,22 @@ public class TypedefDecl extends TypedefNameDecl {
         }
 
         String typeCode = type.getCode();
+        String code = "typedef " + typeCode + " " + getTypelessCode();
 
-        return "typedef " + typeCode + " " + getTypelessCode();
+        // if (typeCode.equals("std::set<double>::const_iterator")) {
+        // System.out.println("TYPEDEF TYPE:" + type);
+        // System.out.println("TYPEDEF TYPE ARGS:" + type.getTemplateArgumentTypes());
+        // System.out.println("TYPEDEF TYPE ARGS STRINGS:" + type.getTemplateArgumentStrings());
+        // }
 
+        // type.setTemplateArgumentTypes(Arrays.asList(ClavaNodeFactory.builtinType("float")));
+        // System.out.println("TYPEDEF TYPE 2:" + type);
+        // System.out.println("TYPEDEF TYPE 2 code:" + type.getCode());
+        // if (getDeclName().equals("IT")) {
+        // System.out.println("TYPEDEF DECL CODE:" + code);
+        // }
+
+        return code;
     }
 
     /*
@@ -81,4 +111,5 @@ public class TypedefDecl extends TypedefNameDecl {
     public String getTypelessCode() {
         return getDeclName();
     }
+
 }

@@ -19,13 +19,12 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.weaver.CxxAttributes;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AExpressionUseEnum;
 
 public class CxxExpression extends AExpression {
 
@@ -61,7 +60,7 @@ public class CxxExpression extends AExpression {
     */
 
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         // Get more specific join point for current node
 
         // SpecsLogs.msgInfo("attribute 'vardecl' not implemented yet for joinpoint " + getJoinPointType());
@@ -102,6 +101,8 @@ public class CxxExpression extends AExpression {
 
     @Override
     public String getUseImpl() {
+        return CxxAttributes.convertUse(expr.use());
+        /*
         switch (expr.use()) {
         case READ:
             return AExpressionUseEnum.READ.getName();
@@ -112,7 +113,7 @@ public class CxxExpression extends AExpression {
         default:
             throw new RuntimeException("Case not defined:" + expr.use());
         }
-
+        */
     }
 
     public static List<? extends AVardecl> selectVarDecl(AExpression expression) {

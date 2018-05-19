@@ -1,16 +1,16 @@
 #include <stdbool.h>
 
-_Bool fooBool();
+bool fooBool();
 
-_Bool fooBool() {
+bool fooBool() {
    
    return 1;
 }
 
 
 int main() {
-   _Bool aBool = 1;
-   _Bool a = fooBool();
+   bool aBool = 1;
+   bool a = fooBool();
    
    return 0;
 }

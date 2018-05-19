@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,10 +24,10 @@ public enum UnaryExprOrTypeTrait implements StringProvider {
     VEC_STEP("vec_step"),
     OPEN_MP_REQUIRED_SIMD_ALIGN("__builtin_omp_required_simd_align");
 
-    private static final Lazy<EnumHelper<UnaryExprOrTypeTrait>> HELPER = EnumHelper
-            .newLazyHelper(UnaryExprOrTypeTrait.class);
+    private static final Lazy<EnumHelperWithValue<UnaryExprOrTypeTrait>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(UnaryExprOrTypeTrait.class);
 
-    public static EnumHelper<UnaryExprOrTypeTrait> getHelper() {
+    public static EnumHelperWithValue<UnaryExprOrTypeTrait> getHelper() {
         return HELPER.get();
     }
 

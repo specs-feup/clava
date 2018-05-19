@@ -18,7 +18,9 @@ void ClangAstDumper::dumpCXXCtorInitializer(const CXXCtorInitializer *Init) {
     if (Init->isAnyMemberInitializer()) {
         llvm::errs() << "AnyMemberInitializer\n";
     } else if (Init->isBaseInitializer()) {
-        llvm::errs() << "BaseInitializer:" << QualType(Init->getBaseClass(), 0).getTypePtr() << "_" << id << "\n";
+        // QUALTYPE EXP
+        //llvm::errs() << "BaseInitializer:" << QualType(Init->getBaseClass(), 0).getTypePtr() << "_" << id << "\n";
+        llvm::errs() << "BaseInitializer:" << QualType(Init->getBaseClass(), 0).getAsOpaquePtr() << "_" << id << "\n";
     } else if (Init->isDelegatingInitializer()) {
         llvm::errs() << "DelegatingInitializer:" << Init->getTypeSourceInfo()->getType().getTypePtr() << "_" << id << "\n";
     } else {

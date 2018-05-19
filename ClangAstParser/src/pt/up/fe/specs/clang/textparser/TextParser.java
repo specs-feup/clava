@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.textparser;
 
+import static pt.up.fe.specs.clava.context.ClavaContext.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +51,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -62,8 +65,29 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class TextParser {
 
+    /**
+     * Stores the ids of nodes whose corresponding inline comments have already been associated with.
+     * 
+     * <p>
+     * This is required in case the TextParse is applied over the same nodes twice or more. This can happen while there
+     * are two parsings performed separately.
+     */
+    // private final static DataKey<Set<String>> IDS_WITH_COMMENTS_ASSOCIATED = KeyFactory.generic(
+    // "idsWithCommentsAssociated", (Set<String>) new HashSet<String>())
+    // .setDefault(() -> new HashSet<String>());
+    // private final static DataKey<Set<String>> IDS_WITH_COMMENTS_ASSOCIATED = KeyFactory.generic(
+    // "idsWithCommentsAssociated", (Set<String>) new HashSet<String>())
+    // .setDefault(() -> new HashSet<String>());
+
     private static final List<TextParserRule> RULES = Arrays.asList(
             new InlineCommentRule(), new MultiLineCommentRule(), new PragmaRule(), new PragmaMacroRule());
+
+    private final ClavaContext context;
+
+    public TextParser(ClavaContext context) {
+
+        this.context = context;
+    }
 
     /**
      * Adds text elements to the App tree.
@@ -76,7 +100,7 @@ public class TextParser {
         }
     }
 
-    private static void addElements(TranslationUnit tu) {
+    private void addElements(TranslationUnit tu) {
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
 
@@ -208,7 +232,7 @@ public class TextParser {
     // return true;
     // }
 
-    private static void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
+    private void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
         // If empty, do nothing
         if (associatedInlineComments.isEmpty()) {
             return;
@@ -263,28 +287,95 @@ public class TextParser {
             SpecsLogs.msgInfo("Could not associate the following comments:" + missingComments);
         }
 
+        // Set<String> idsWithInlinedComments = context.get(IDS_WITH_COMMENTS_ASSOCIATED);
+        // Set<ClavaNode> associatedComments = context.get(ClavaContext.ASSOCIATED_COMMENTS);
         for (InlineComment comment : associatedNodes.keySet()) {
+            // System.out.println("COMMENT:" + comment.hashCode());
+            // System.out.println("NODE:" + associatedNodes.get(comment).hashCode());
             associatedNodes.get(comment).associateComment(comment);
+
+            /*
+            ClavaNode node = associatedNodes.get(comment);
+            
+            if (associatedComments.contains(node)) {
+                continue;
+            }
+            
+            associatedComments.add(node);
+            node.associateComment(comment);
+            */
+            /*
+            ClavaNode node = associatedNodes.get(comment);
+            
+            // If legacy parser and node is not legacy, skip it, was already processed
+            if (isLegacyParser && !node.get(ClavaNode.IS_LEGACY_NODE)) {
+                continue;
+            }
+            
+            associatedNodes.get(comment).associateComment(comment);
+            */
+            /*
+            // TODO: Doing this because TextParser currently is being called two times over the same nodes
+            // Remove the test after legacy parsing is no longer used
+            
+            
+            if (node.get(ClavaNode.INLINE_COMMENTS).isEmpty()) {
+               node.associateComment(comment);
+            }
+            // associatedNodes.get(comment).associateComment(comment);
+            */
+            /*
+            ClavaNode node = associatedNodes.get(comment);
+            System.out.println("NODE:" + node.get(ClavaNode.ID));
+            System.out.println("ASSOCIATED NODES:" + idsWithInlinedComments);
+            // Check if node already has inline comments
+            if (idsWithInlinedComments.contains(node.get(ClavaNode.ID))) {
+                continue;
+            }
+            
+            idsWithInlinedComments.add(node.get(ClavaNode.ID));
+            node.associateComment(comment);
+            */
             // System.out.println("COMMENT:" + comment.getCode());
             // System.out.println("CORRESPONDING STMT:" + associatedNodes.get(comment).getCode());
             // System.out.println("CORRESPONDING STMT TYPE:" + associatedNodes.get(comment).getNodeName());
         }
     }
 
-    private static List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
+    private List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
         // Guard nodes for the translation unit
         SourceRange dummyStartLoc = new SourceRange(tu.getFilepath(), 0, 0, 0, 0);
-        ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
-        DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
-                Collections.emptyList());
+        // ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
+        //
+        // DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
+        // Collections.emptyList());
+
+        // DummyDeclData startData = new DummyDeclData("Textparser_StartGuard",
+        // DeclDataV2.empty(ClavaData.newInstance(dummyStartLoc)));
+
+        DummyDecl startGuard = context.get(FACTORY).dummyDecl("Textparser_StartGuard");
+        startGuard.setLocation(dummyStartLoc);
+        // DummyDeclData startData = DummyDeclData.empty();
+        // startData.setClassname("Textparser_StartGuard")
+        // .setLocation(dummyStartLoc);
+        // DummyDecl startGuard = new DummyDecl(startData, Collections.emptyList());
+
+        // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
         // Get last end line
         int endLine = SpecsCollections.last(tu.getChildren()).getLocation().getEndLine();
 
         SourceRange dummyEndLoc = new SourceRange(tu.getFilepath(), endLine + 1, 0, endLine + 1, 0);
-        ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
-        DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
-                Collections.emptyList());
+        // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
+        // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
+        // Collections.emptyList());
+        DummyDecl endGuard = context.get(FACTORY).dummyDecl("Textparser_EndGuard");
+        endGuard.setLocation(dummyEndLoc);
+
+        // DummyDeclData endData = DummyDeclData.empty();
+        // endData.setClassname("Textparser_EndGuard")
+        // .setLocation(dummyEndLoc);
+        // DummyDecl endGuard = new DummyDecl(endData, Collections.emptyList());
 
         tu.addChild(0, startGuard);
         tu.addChild(tu.getNumChildren(), endGuard);

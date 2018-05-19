@@ -20,9 +20,11 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.NullType;
 
 /**
@@ -86,7 +88,23 @@ public class CXXConstructExpr extends Expr {
             return "";
         }
 
-        return cxxRecordName + getArgsCode();
+        // Special case: constructor that receives an initializer_list
+        if (cxxRecordName.startsWith("initializer_list<")) {
+            return getArgs().stream()
+                    .map(arg -> arg.getCode())
+                    .collect(Collectors.joining(", ", "{", "}"));
+        }
+
+        String argsCode = getArgsCode();
+
+        // Special case: No arguments before VarDecl
+        if (argsCode.isEmpty() &&
+                ClavaNodes.getParentNormalized(this) instanceof VarDecl) {
+            // return cxxRecordName + "{}";
+            return "{}";
+        }
+
+        return cxxRecordName + argsCode;
     }
 
     public String getArgsCode() {
@@ -114,6 +132,11 @@ public class CXXConstructExpr extends Expr {
 
     protected boolean isTemporary() {
         return false;
+    }
+
+    @Override
+    public String toContentString() {
+        return ClavaNode.toContentString(super.toContentString(), constructorData.toString());
     }
 
 }

@@ -13,39 +13,67 @@
 
 package pt.up.fe.specs.clava.ast.extra;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TemplateArgumentType extends TemplateArgument {
 
-    private final List<String> type;
+    private List<String> stringType;
+    private Type type;
 
     public TemplateArgumentType(List<String> type, ClavaNodeInfo nodeInfo) {
         super(nodeInfo, Collections.emptyList());
 
-        this.type = type;
+        this.stringType = type;
+        this.type = null;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new TemplateArgumentType(type, getInfo());
+        TemplateArgumentType argType = new TemplateArgumentType(stringType, getInfo());
+        if (type != null) {
+            argType.setType(type.copy(), false);
+        }
+        return argType;
     }
 
-    public List<String> getType() {
+    public List<String> getTypeString() {
+        return stringType;
+    }
+
+    public boolean hasType() {
+        return type != null;
+    }
+
+    public Type getType() {
+        if (type == null) {
+            return ClavaNodeFactory.nullType(getInfo());
+        }
+
         return type;
+    }
+
+    public void setType(Type type, boolean updateTypeString) {
+        this.type = type;
+        if (updateTypeString) {
+            stringType = Arrays.asList(type.getCode());
+        }
     }
 
     @Override
     public String toContentString() {
-        return getType().stream().collect(Collectors.joining(":"));
+        return getTypeString().stream().collect(Collectors.joining(":"));
     }
 
     @Override
     public String getCode() {
-        return type.get(0);
+        return stringType.get(0);
     }
 }

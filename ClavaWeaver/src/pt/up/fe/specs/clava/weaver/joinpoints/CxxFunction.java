@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,9 +21,10 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
@@ -35,31 +34,39 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
+import pt.up.fe.specs.clava.weaver.importable.AstFactory;
+import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
+import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
+import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 
 public class CxxFunction extends AFunction {
+
+    // TODO: Move this to generated enums
+    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue.newLazyHelperWithValue(StorageClass.class);
 
     private final FunctionDecl function;
     private final ACxxWeaverJoinPoint parent;
 
     public CxxFunction(FunctionDecl function, ACxxWeaverJoinPoint parent) {
+        super(new CxxNamedDecl(function, parent));
         this.function = function;
         this.parent = parent;
-    }
-
-    @Override
-    public String getNameImpl() {
-        return function.getDeclName();
     }
 
     @Override
@@ -91,8 +98,13 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint getFunctionTypeImpl() {
-        return CxxJoinpoints.create(function.getType(), this);
+    public AFunctionType getFunctionTypeImpl() {
+        return (CxxFunctionType) CxxJoinpoints.create(function.getType(), this);
+    }
+
+    @Override
+    public ACall newCallImpl(AJoinPoint[] args) {
+        return AstFactory.callFromFunction(this, args);
     }
 
     @Override
@@ -102,7 +114,8 @@ public class CxxFunction extends AFunction {
 
     @Override
     public void insertImpl(String position, String code) {
-        Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+        // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+        Stmt literalStmt = ClavaNodeParser.parseStmt(code);
         insertStmt(literalStmt, position);
     }
 
@@ -167,19 +180,19 @@ public class CxxFunction extends AFunction {
 
     // TODO check if the new name clashes with other symbol?
     @Override
-    public void cloneImpl(String newName) {
+    public AFunction cloneImpl(String newName) {
 
         /* make clone and insert after the function of this join point */
-        makeCloneAndInsert(newName, function);
+        return makeCloneAndInsert(newName, function);
     }
 
-    private void makeCloneAndInsert(String newName, ClavaNode reference) {
+    private AFunction makeCloneAndInsert(String newName, ClavaNode reference) {
 
         if (function instanceof CXXMethodDecl) {
 
             SpecsLogs.msgInfo(
                     "function " + function.getDeclName() + " is a class method, which is not supported yet for clone");
-            return;
+            return null;
         }
 
         FunctionDecl newFunc = makeNewFuncDecl(newName);
@@ -198,7 +211,9 @@ public class CxxFunction extends AFunction {
         }
 
         // change the ids of stuff
-        newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
+        // newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
+
+        return CxxJoinpoints.create(newFunc, null, AFunction.class);
     }
 
     /**
@@ -211,7 +226,29 @@ public class CxxFunction extends AFunction {
 
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
-        Stmt definition = function.getDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
+        Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
+
+        // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
+        // .getDescendants();
+        //
+        // List<ClavaNode> copiedCasts = definition.getDescendants();
+        /*
+        System.out.println("ORIGINAL CAST:" + originalCasts.get(0));
+        System.out.println("COPIED CAST:" + copiedCasts.get(0));
+        copiedCasts.get(0).setType(new BuiltinType(BuiltinKind.FLOAT));
+        System.out.println("ORIGINAL CAST 2:" + originalCasts.get(0));
+        System.out.println("COPIED CAST 2:" + copiedCasts.get(0));
+        
+        System.out.println("ORIGINAL CAST 2 code:" + originalCasts.get(0).getCode());
+        System.out.println("COPIED CAST 2 code:" + copiedCasts.get(0).getCode());
+        */
+        // for (int i = 0; i < originalCasts.size(); i++) {
+        // if (originalCasts.get(i) == copiedCasts.get(i)) {
+        // System.out.println("FOUND SAME");
+        // }
+        // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
+        // }
+        // System.out.println("FINISH");
 
         // make a new function declaration with the new name
         FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
@@ -251,8 +288,8 @@ public class CxxFunction extends AFunction {
 
             if (!file.isPresent()) {
 
-                String path = getRootImpl().getBaseFolderImpl();
-                TranslationUnit tu = ClavaNodeFactory.translationUnit(fileName, path,
+                // String path = getRootImpl().getBaseFolderImpl();
+                TranslationUnit tu = ClavaNodeFactory.translationUnit(fileName, "",
                         Collections.emptyList());
 
                 app.addFile(tu);
@@ -280,29 +317,10 @@ public class CxxFunction extends AFunction {
      */
     private List<IncludeDecl> getWrapperIncludesFromFile(TranslationUnit newTu) {
 
-        List<IncludeDecl> includes = new ArrayList<>();
-
         TranslationUnit callFile = function.getAncestor(TranslationUnit.class);
 
-        for (IncludeDecl includeDecl : callFile.getIncludes().getIncludes()) {
-            Include include = includeDecl.getInclude();
+        return TreeNodeUtils.copy(callFile.getIncludes().getIncludes());
 
-            // If angled include, does not need modification
-            if (include.isAngled()) {
-                // May not work if we add directly an IncludeDecl that is already part of a translation unit
-                includes.add((IncludeDecl) includeDecl.copy());
-                continue;
-            }
-
-            // For each include which is not an angled include, calculate relative path
-
-            // Get relative path to include the file in this file
-            File includeFile = new File(callFile.getFolderpath(), include.getInclude());
-            String relativePath = SpecsIo.getRelativePath(includeFile, newTu.getFile());
-            includes.add(new IncludeDecl(relativePath, false));
-        }
-
-        return includes;
     }
 
     @Override
@@ -322,7 +340,8 @@ public class CxxFunction extends AFunction {
 
     @Override
     public void insertReturnImpl(String code) {
-        insertReturnImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), null));
+        // insertReturnImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), null));
+        insertReturnImpl(CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), null));
     }
 
     @Override
@@ -360,16 +379,6 @@ public class CxxFunction extends AFunction {
             ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt, null);
             returnJp.insertBefore(code);
         }
-
-        // // Find return statement in direct children
-        // List<ClavaNode> childStmts = getBodyImpl().selectChildStmt().stream()
-        // .map(AStatement::getNode)
-        // .collect(Collectors.toList());
-        //
-        // ReturnStmt endReturn = getLastReturnStmt();
-
-        // TODO Auto-generated method stub
-        // super.insertReturnImpl(code);
     }
 
     /**
@@ -385,5 +394,74 @@ public class CxxFunction extends AFunction {
         return function.getDeclaration()
                 .map(node -> CxxJoinpoints.create(node, null))
                 .orElse(null);
+    }
+
+    /**
+     * Setting the type of a Function join point sets the return type
+     */
+    @Override
+    public void setTypeImpl(AJoinPoint type) {
+        // Get new type to set
+        Type newType = (Type) type.getNode();
+
+        FunctionType functionType = function.getFunctionType();
+
+        // Create a copy of the function type, to avoid setting the type on all functions with the same signature
+        FunctionType functionTypeCopy = (FunctionType) functionType.copy();
+
+        // Replace the return type of the function type copy
+        CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
+
+        // Set the function type copy as the type of the function
+        function.setType(functionTypeCopy);
+    }
+
+    @Override
+    public void defNameImpl(String value) {
+        function.setName(value);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
+
+    @Override
+    public StorageClass getStorageClassImpl() {
+        return STORAGE_CLASS.get().fromValue(function.getFunctionDeclData().getStorageClass().name().toLowerCase());
+    }
+
+    @Override
+    public Boolean getIsInlineImpl() {
+        return function.getFunctionDeclData().isInline();
+    }
+
+    @Override
+    public Boolean getIsVirtualImpl() {
+        return function.getFunctionDeclData().isVirtual();
+    }
+
+    @Override
+    public Boolean getIsModulePrivateImpl() {
+        return function.getFunctionDeclData().isModulePrivate();
+    }
+
+    @Override
+    public Boolean getIsPureImpl() {
+        return function.getFunctionDeclData().isPure();
+
+    }
+
+    @Override
+    public Boolean getIsDeleteImpl() {
+        return function.getFunctionDeclData().isDelete();
+
+    }
+
+    @Override
+    public List<? extends ADecl> selectDecl() {
+        return function.getDescendants(Decl.class).stream()
+                .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
+                .collect(Collectors.toList());
     }
 }

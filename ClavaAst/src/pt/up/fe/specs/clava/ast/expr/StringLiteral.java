@@ -19,7 +19,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
-public class StringLiteral extends Expr {
+public class StringLiteral extends Literal {
 
     private final String string;
 
@@ -47,7 +47,13 @@ public class StringLiteral extends Expr {
 
     @Override
     public String toContentString() {
-        return super.toContentString() + "string:" + string;
+        return ClavaNode.toContentString(super.toContentString(), "string:" + string);
+        // return super.toContentString() + "string:" + string;
+    }
+
+    @Override
+    public String getLiteral() {
+        return string;
     }
 
     // StringKind getKind()

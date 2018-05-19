@@ -16,10 +16,15 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 
@@ -31,8 +36,28 @@ import pt.up.fe.specs.clava.language.CastKind;
  */
 public abstract class CastExpr extends Expr {
 
-    private final CastKind castKind;
+    /// DATAKEY BEGIN
 
+    public final static DataKey<CastKind> CAST_KIND = KeyFactory.enumeration("castKind", CastKind.class);
+
+    /// DATAKEY END
+
+    // private final CastKind castKind;
+
+    public CastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // this.castKind = null;
+    }
+
+    /**
+     * Legacy support.
+     * 
+     * @param castKind
+     * @param exprData
+     * @param info
+     * @param subExpr
+     */
     public CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
         this(castKind, exprData, info, Arrays.asList(subExpr));
@@ -54,12 +79,21 @@ public abstract class CastExpr extends Expr {
     // this(castKind, exprData, info, Collections.emptyList());
     // }
 
+    /**
+     * @deprecated
+     * @param castKind
+     * @param exprData
+     * @param info
+     * @param children
+     */
+    @Deprecated
     protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
 
-        super(exprData, info, children);
+        this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        this.castKind = castKind;
+        put(CAST_KIND, castKind);
+        // this.castKind = castKind;
     }
 
     @Override
@@ -68,7 +102,12 @@ public abstract class CastExpr extends Expr {
     }
 
     public CastKind getCastKind() {
-        return castKind;
+        return get(CAST_KIND);
+        // if (hasDataI()) {
+        // return getDataI().get(CAST_KIND);
+        // }
+        //
+        // return castKind;
     }
 
     public Expr getSubExpr() {

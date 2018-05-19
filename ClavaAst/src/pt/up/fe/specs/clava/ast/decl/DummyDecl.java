@@ -14,7 +14,8 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -30,21 +31,27 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
  */
 public class DummyDecl extends Decl implements DummyNode {
 
-    private final String content;
+    public DummyDecl(DataStore clavaData, Collection<? extends ClavaNode> children) {
+        super(clavaData, children);
+    }
 
-    public DummyDecl(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    /**
+     * For legacy support.
+     * 
+     * @param info
+     * @param children
+     */
+    protected DummyDecl(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(DeclData.empty(), info, children);
-
-        this.content = content;
     }
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + " (" + getOriginalType() + ")";
+        return super.getNodeName() + " (" + getContent() + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy declaration '" + content + "' */";
+        return "/* Dummy declaration '" + getContent() + "' */";
     }
 
     @Override
@@ -52,18 +59,16 @@ public class DummyDecl extends Decl implements DummyNode {
         return ClavaNodes.toCode(getNodeCode(), this);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DummyDecl(content, getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public String getContent() {
-        return content;
-    }
-
+    /*
     @Override
     public String toContentString() {
-        return super.toContentString() + " " + getLocation();
+        return "CONTENT STRING";
+        // return toStringHelper();
     }
+    
+    @Override
+    public String toString() {
+        return "TO STRING";
+    }
+    */
 }

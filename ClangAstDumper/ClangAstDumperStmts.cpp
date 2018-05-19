@@ -3,6 +3,8 @@
 //
 
 #include "ClangAstDumper.h"
+#include "ClangAstDumperConstants.h"
+#include "ClangNodes.h"
 
 #include "clang/AST/AST.h"
 
@@ -11,14 +13,39 @@
 
 using namespace clang;
 
+void ClangAstDumper::visitChildrenAndData(const Stmt *S) {
+    // Visit children
+    visitChildren(S);
+
+    // Dump data
+    dataDumper.dump(S);
+
+    // Dump id
+    dumpIdToClassMap(S, clava::getClassName(S));
+}
+
+void ClangAstDumper::visitChildrenAndData(const Expr *E) {
+    // Visit children
+    visitChildren(E);
+
+    // Dump data
+    dataDumper.dump(E);
+
+    // Dump id
+    dumpIdToClassMap(E, clava::getClassName(E));
+}
+
 /*
  * STMTS
  */
 
 bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
+
     if(seenStmts.count(stmtAddr) != 0) {
         return true;
     }
+
+    log(stmtAddr);
 
     // A StmtDumper is created for each context,
     // no need to use id to disambiguate
@@ -30,32 +57,56 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
     // Dump location
     dumpSourceRange(extendedId.str(), stmtAddr->getLocStart(), stmtAddr->getLocEnd());
 
+    //dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));
+
     return false;
 }
 
 void ClangAstDumper::VisitStmt(const Stmt *Node) {
-    dumpStmt(Node);
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+//    llvm::errs() << "DUMPING STMT: " << getId(Node) << "\n";
+
+/*
+    for (const Stmt *SubStmt : Node->children()) {
+        if (SubStmt) {
+            VisitStmtTop(SubStmt);
+        }
+    }
+*/
+    visitChildrenAndData(Node);
+    /*
+    // Visit children
+    visitChildren(clava::StmtNode::STMT, Node);
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT, Node);
+*/
 }
 
-
+/*
 void ClangAstDumper::VisitDeclStmt(const DeclStmt *Node) {
     if(dumpStmt(Node)) {
         return;
     }
 
+    // Visit children
+    visitChildren(clava::StmtNode::DECL_STMT, Node);
 
-    log("DeclStmt", Node);
-    for (DeclStmt::const_decl_iterator I = Node->decl_begin(), E = Node->decl_end(); I != E; ++I) {
-        VisitDeclTop(*I);
-    }
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT , Node);
 
 }
+ */
 void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
     if(dumpStmt(Node)) {
         return;
     }
 
-    log("CXXForRangeStmt", Node);
+    visitChildrenAndData(Node);
+
     VisitStmtTop(Node->getRangeStmt());
     VisitStmtTop(Node->getBeginEndStmt());
     VisitStmtTop(Node->getCond());
@@ -63,23 +114,27 @@ void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
     VisitStmtTop(Node->getBody());
 }
 
+/*
 void ClangAstDumper::VisitCompoundStmt(const CompoundStmt *Node) {
     if(dumpStmt(Node)) {
         return;
     }
 
-    log("CompoundStmt", Node);
-    for (auto &Arg : Node->body()) {
-        VisitStmtTop(Arg);
-    }
+    // Visit children
+    visitChildren(clava::StmtNode::STMT, Node);
+
+    // Dump data
+    dataDumper.dump(clava::StmtNode::STMT , Node);
 }
+ */
 
 void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
     if(dumpStmt(Node)) {
         return;
     }
 
-    log("ForStmt", Node);
+    visitChildrenAndData(Node);
+
     if(Node->getInit() != nullptr) {
         VisitStmtTop(Node->getInit());
     }
@@ -104,211 +159,4 @@ void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
 
 
 }
-
-// EXPR
-
-void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    log("CXXConstructExpr", Node);
-
-        const Type* constructorType = Node->getConstructor()->getType().getTypePtrOrNull();
-        if(constructorType != nullptr) {
-            llvm::errs() << "CONSTRUCTOR_TYPE\n";
-            llvm::errs() << Node << "_" << id << "->" << constructorType << "_" << id << "\n";
-            //VisitTypeTop(Node->getConstructor()->getType().getTypePtr());
-            VisitTypeTop(constructorType);
-        } else {
-            llvm::errs() << "CXXConstructExpr " << Node->getConstructor()->getDeclName().getAsString() << " has null type\n";
-        }
-}
-
-void ClangAstDumper::VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    log("UnaryExprOrTypeTraitExpr", Node);
-
-    // If argument type, dump mapping between node and type
-    if (Node->isArgumentType()) {
-        // Dump type
-        VisitTypeTop(Node->getArgumentType().getTypePtr());
-
-        llvm::errs() << "<UnaryExprOrTypeTraitExpr ArgType>\n";
-        // First address is id of UnaryExprOrTypeTraitExpr, second is id of type of argument
-        llvm::errs() << Node << "_" << id << "->" << Node->getArgumentType().getTypePtr() << "_" << id << "\n";
-    }
-
-}
-
-
-void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    log("DeclRefExpr", Node);
-
-    // Dump qualifier
-    if(Node->getQualifier() != nullptr) {
-        // Can use the stream processor of decl ref expression qualifiers
-        llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-        llvm::errs() << getId(Node) << "\n";
-        Node->getQualifier()->dump();
-        llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
-    }
-
-/*
-    if(Node->hasExplicitTemplateArgs()) {
-        llvm::errs() << "HAS_TEMPLATE_ARGS\n";
-        llvm::errs() << getId(Node) << "\n";
-        //DumpResources::template_args <<  D << "_" << id << "\n";
-    }
-*/
-    // Dump template arguments
-    if(Node->hasExplicitTemplateArgs()) {
-        llvm::errs() << DUMP_TEMPLATE_ARGS << "\n";
-
-        // Node id
-        llvm::errs() << getId(Node) << "\n";
-
-        // Number of template args
-        llvm::errs() << Node->getNumTemplateArgs() << "\n";
-
-        auto templateArgs = Node->getTemplateArgs();
-        for (unsigned i = 0; i < Node->getNumTemplateArgs(); ++i) {
-            auto templateArg = templateArgs + i;
-
-            llvm::errs() << loc2str(templateArg->getSourceRange().getBegin(), templateArg->getSourceRange().getEnd()) << "\n";
-        }
-
-    }
-}
-
-void ClangAstDumper::VisitOffsetOfExpr(const OffsetOfExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    log("OffsetOfExpr", Node);
-
-    // Dump offset set
-    const Type* offsetType = Node->getTypeSourceInfo()->getType().getTypePtr();
-    dumpType(offsetType);
-
-    llvm::errs() << DUMP_OFFSET_OF_INFO<< "\n";
-
-    // Node id
-    llvm::errs() << getId(Node) << "\n";
-
-
-
-    // Offset type
-    llvm::errs() << getId(offsetType) << "\n";
-
-    // Number of expressions
-    llvm::errs() << Node->getNumExpressions() << "\n";
-
-    // Number of components
-    int numComp = Node->getNumComponents();
-    llvm::errs() << numComp << "\n";
-
-    for(int i=0; i<numComp; i++) {
-
-        llvm::errs() << Node->getComponent(i).getKind() << "\n";
-
-        switch(Node->getComponent(i).getKind()) {
-            case OffsetOfNode::Array:
-                llvm::errs() << Node->getComponent(i).getArrayExprIndex() << "\n";
-                break;
-            case OffsetOfNode::Field:
-                llvm::errs() << Node->getComponent(i).getFieldName()->getName() << "\n";
-                break;
-            case OffsetOfNode::Identifier:
-                //llvm::errs() << "OFFSET FIELD NAME:" << Node->getComponent(i).getFieldName()->getName() << "\n";
-                //break;
-            case OffsetOfNode::Base:
-                //llvm::errs() << "OFFSET BASE TYPE START\n";
-                //Node->getComponent(i).getBase()->getType().dump();
-                //llvm::errs() << "OFFSET BASE TYPE END\n";
-                //break;
-            default:
-                // Do nothing, cases not yet implemented
-                break;
-        }
-
-
-
-
-    }
-
-}
-
-void ClangAstDumper::VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    log("CXXDependentScopeMemberExpr", Node);
-
-    llvm::errs() << CXX_MEMBER_EXPR_INFO << "\n";
-
-    // Node id
-    llvm::errs() << getId(Node) << "\n";
-
-    // Is arrow
-    llvm::errs() << Node->isArrow() << "\n";
-
-    // Member name
-    llvm::errs() << Node->getMember().getAsString() << "\n";
-
-}
-
-void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node, bool isTopCall) {
-    if(isTopCall) {
-        if (dumpStmt(Node)) {
-            return;
-        }
-    }
-
-    log("OverloadExpr", Node);
-
-    if(Node->getQualifier() != nullptr) {
-        // Can use the stream processor of decl ref expression qualifiers
-        llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-        llvm::errs() << getId(Node) << "\n";
-        Node->getQualifier()->dump();
-        llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
-    }
-
-}
-
-void ClangAstDumper::VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node) {
-
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-
-
-    log("UnresolvedLookupExpr", Node);
-
-    // Call parent in hierarchy
-    VisitOverloadExpr(Node, false);
-}
-
-void ClangAstDumper::VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    log("UnresolvedMemberExpr", Node);
-
-    // Call parent in hierarchy
-    VisitOverloadExpr(Node, false);
-}
-
 

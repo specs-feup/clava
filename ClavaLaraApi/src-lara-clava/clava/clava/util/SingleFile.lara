@@ -1,0 +1,137 @@
+import clava.ClavaJoinPoints;
+import lara.Io;
+import lara.util.StringSet;
+import clava.Clava;
+
+/**
+ * Merges all current files in a single output file.
+ */
+aspectdef SingleFile
+	input
+		fileOrBaseFolder,
+		optionalFile,
+		staticVerification = true
+	end
+
+	if(fileOrBaseFolder === undefined) {
+		fileOrBaseFolder = Clava.getWeavingFolder();
+		var extension = Clava.isCxx() ? "cpp" : "c";
+		optionalFile = "main." + extension;
+	}
+	
+/*
+	select binaryOp end
+	apply
+		if($binaryOp.kind === 'assign') {
+			println("leftHand:" + $binaryOp.left.code);
+			println("rightHand:" + $binaryOp.right.code);
+		}
+
+	end
+*/
+
+/*
+	for(var $include of Clava.getAvailableIncludes()) {
+		println("Include:"+ $include.name);
+	}
+*/
+	
+
+	//var $singleFile = ClavaJoinPoints.file("main.c", "./");
+
+	var includes = new StringSet();
+	var bodyCode = ""; 
+
+	select file end
+	apply
+		if($file.isHeader) {
+			//println("header:"+$file.name);
+			//$file.write(Clava.getWeavingFolder());
+			continue;
+		}
+
+		// Copy includes
+		//copyIncludes($file);
+
+		// Deal with static declarations
+		var codeChanged = renameStaticDeclarations($file, staticVerification);
+		if(codeChanged) {
+			bodyCode += $file.code;
+			println("Generated file '"+$file.filepath+"' from AST, macros have disappeared");
+		} else {
+			bodyCode += Io.readFile($file.filepath);
+		}
+
+		//bodyCode += Io.readFile($file.filepath);
+
+		// Collects all includes from input files, in order to put them at the beginning of the file
+		for($child of $file.astChildren) {
+			if($child.astName === "IncludeDecl") {
+				includes.add($child.code);
+				//includesCode += $child.code + "\n";
+			} 
+			/*
+			else {
+				//bodyCode += $child.code + "\n";
+			}
+			*/
+		}
+
+		
+		
+	end
+
+	//Io.writeFile("/home/osboxes/Desktop/shared_hdd/2018-01-22 NAS Single File/main.c", includes.values().join("\n") + "\n" + bodyCode);
+	var singleFileCode = includes.values().join("\n") + "\n" + bodyCode;
+	//var outputFile = Io.getPath(Clava.getWeavingFolder(), "main.c");
+	var outputFile = Io.getPath(fileOrBaseFolder, optionalFile);		
+	
+	Io.writeFile(outputFile, singleFileCode);	
+
+	// Copy includes
+	//var baseFolder = Clava.getWeavingFolder();
+	var baseFolder = outputFile.getParentFile();
+	for(var $include of Clava.getAvailableIncludes()) {
+		var outputFile = Io.getPath(baseFolder, $include.name);
+		Io.writeFile(outputFile, Io.readFile($include.filepath));
+	}
+
+end
+
+function renameStaticDeclarations($file, staticVerification) {
+	if(!staticVerification) {
+		return false;
+	}
+
+	var changedCode = false;
+	
+	// Look for static declarations
+	for(var child of $file.astChildren) {
+		//println("Storage class:" + child.storageClass);
+		if(child.astName === "FunctionDecl" && child.storageClass === 'static') {
+			var newName = child.name + "_static_rename";
+			child.name = newName;
+			changedCode = true;
+		}
+
+		if(child.astName === "DeclStmt" && child.storageClass === 'static') {
+			println(child.code);
+			throw "Not yet supported for static variable declarations";
+		}
+	}
+
+	return changedCode;
+}
+
+/*
+function copyIncludes($file) {
+
+	// Copy includes of current file
+	for($child of $file.astChildren) {
+		if($child.astName === "IncludeDecl") {
+			//includes.add($child.code);
+		}
+	}
+
+}
+*/

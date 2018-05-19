@@ -27,8 +27,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -50,6 +50,9 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
         // col:28 used separator 'char' cinit
         // col:28 referenced a 'const t *':'const t *'
 
+        // ParmVarDeclData data = getStdErr().get(StreamKeys.PARM_VAR_DECL_DATA).get(node.getExtendedId());
+        // ParmVarDeclData data = getData(ParmVarDeclData.class, node);
+
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         // Name can be optional, check if there is not a type
@@ -61,9 +64,9 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
 
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
-        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl);
-
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr());
         List<ClavaNode> children = parseChildren(node);
+        checkNewChildren(node.getExtendedId(), children);
 
         boolean hasInit = varDeclData.getInitKind() != InitializationStyle.NO_INIT;
         if (hasInit) {

@@ -25,12 +25,17 @@ int main() {
 	// allocates and constructs five objects (nothrow):
     std::vector<int> * p2 = new (std::nothrow) std::vector<int>[5];
 	
+	// primitive with constructor
+	double *dc = new double(34.56);
+	
+	delete dc;
 	delete[] p2;
     delete[] p1;
     delete box2;
     delete box;
     delete pvalueNoThrow;
     delete pvalue;
+	
 	
 	return 0;
 }

@@ -13,21 +13,26 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.utils.NullNode;
 
-public class NullExpr extends Expr {
+public class NullExpr extends Expr implements NullNode {
 
-    public NullExpr() {
-        super(ExprData.empty(), ClavaNodeInfo.undefinedInfo(), Collections.emptyList());
+    public NullExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new NullExpr();
-    }
+    // public NullExpr() {
+    // super(ExprData.empty(), ClavaNodeInfo.undefinedInfo(), Collections.emptyList());
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new NullExpr();
+    // }
 
 }

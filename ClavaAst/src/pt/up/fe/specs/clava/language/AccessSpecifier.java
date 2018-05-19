@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -23,10 +23,10 @@ public enum AccessSpecifier implements StringProvider {
     PRIVATE,
     NONE;
 
-    private static final Lazy<EnumHelper<AccessSpecifier>> HELPER = EnumHelper.newLazyHelper(AccessSpecifier.class,
+    private static final Lazy<EnumHelperWithValue<AccessSpecifier>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(AccessSpecifier.class,
             NONE);
 
-    public static EnumHelper<AccessSpecifier> getHelper() {
+    public static EnumHelperWithValue<AccessSpecifier> getHelper() {
         return HELPER.get();
     }
 

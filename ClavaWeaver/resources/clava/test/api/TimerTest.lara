@@ -4,7 +4,7 @@ import clava.ClavaJoinPoints;
 
 aspectdef TimerTest
 
-	// Disable SpecsLogger, in order to be able to compile weaved code without the project
+	// Disable SpecsLogger, in order to be able to compile woven code without the project
 	Clava.useSpecsLogger = false;
 
 	// Instrument call to 'Calculate'
@@ -12,8 +12,39 @@ aspectdef TimerTest
 
 	select stmt.call end
 	apply
+		if($call.name !== "bar" && $call.name !== "foo") {
+			continue;
+		}
+	
 		timer.time($call, "Time:");
 	end
+	
+	// Disable printing result
+	timer.setPrint(false);
+	
+	select call{"bar2"} end
+	apply
+		var bar2TimeVar = timer.time($call);		
+		var logger = new Logger();
+		logger.text("I want to print the value of the elapsed time (")
+			.double(bar2TimeVar)
+			.text("), which is in the unit '" + timer.getUnit().getUnitsString() + "' and put other stuff after it")
+			.ln()
+			.log(timer.getAfterJp());
+	end
+	
+	
+	// Enable printing again
+	timer.setPrint(true);
+	select call{"bar3"} end
+	apply
+		timer.time($call);		
+		var logger = new Logger();
+		logger.text("This should appear after the timer print")
+			.ln()
+			.log(timer.getAfterJp());
+	end	
+	
 	
 	select file end
 	apply

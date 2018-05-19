@@ -18,7 +18,7 @@ import java.util.Collection;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -39,10 +39,10 @@ public abstract class TypeWithKeyword extends Type {
         TYPENAME,
         NONE;
 
-        private static final Lazy<EnumHelper<ElaboratedTypeKeyword>> HELPER = EnumHelper
-                .newLazyHelper(ElaboratedTypeKeyword.class, NONE);
+        private static final Lazy<EnumHelperWithValue<ElaboratedTypeKeyword>> HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(ElaboratedTypeKeyword.class, NONE);
 
-        public static EnumHelper<ElaboratedTypeKeyword> getHelper() {
+        public static EnumHelperWithValue<ElaboratedTypeKeyword> getHelper() {
             return HELPER.get();
         }
 

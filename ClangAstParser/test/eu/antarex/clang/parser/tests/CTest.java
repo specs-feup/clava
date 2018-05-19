@@ -35,7 +35,7 @@ public class CTest {
 
     @Test
     public void testBoolean() {
-        new CTester("boolean.c").test();
+        new CTester("boolean.c", "boolean2.c").test();
     }
 
     @Test
@@ -81,4 +81,10 @@ public class CTest {
     public void testGnuStmtExpr() {
         new CTester("gnu_stmt_expr.c").test();
     }
+
+    @Test
+    public void testBuiltinTypesCl() {
+        new CTester("builtin_types.cl").addFlags("-x", "cl").test();
+    }
+
 }

@@ -17,12 +17,13 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public class FinalAttr extends InheritableAttr {
 
     public FinalAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-        super(attrData, nodeInfo, Collections.emptyList());
+        super(AttributeKind.Final, attrData, nodeInfo, Collections.emptyList());
     }
 
     @Override

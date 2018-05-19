@@ -6,6 +6,7 @@ import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -50,6 +51,13 @@ public abstract class ACall extends AExpression {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
     }
 
     /**
@@ -162,21 +170,19 @@ public abstract class ACall extends AExpression {
      * Get value on attribute argList
      * @return the attribute's value
      */
-    public abstract String[] getArgListArrayImpl();
+    public abstract AExpression[] getArgListArrayImpl();
 
     /**
-     * Get value on attribute argList
-     * @return the attribute's value
+     * an alias for 'args'
      */
     public Bindings getArgListImpl() {
-        String[] stringArrayImpl0 = getArgListArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        AExpression[] aExpressionArrayImpl0 = getArgListArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
         return nativeArray0;
     }
 
     /**
-     * Get value on attribute argList
-     * @return the attribute's value
+     * an alias for 'args'
      */
     public final Object getArgList() {
         try {
@@ -194,27 +200,183 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Get value on attribute returnType
+     * Get value on attribute args
      * @return the attribute's value
      */
-    public abstract AJoinPoint getReturnTypeImpl();
+    public abstract AExpression[] getArgsArrayImpl();
 
     /**
-     * Get value on attribute returnType
-     * @return the attribute's value
+     * an array with the arguments of the call
+     */
+    public Bindings getArgsImpl() {
+        AExpression[] aExpressionArrayImpl0 = getArgsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * an array with the arguments of the call
+     */
+    public final Object getArgs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "args", Optional.empty());
+        	}
+        	Bindings result = this.getArgsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "args", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "args", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index
+     * @return 
+     */
+    public abstract AExpression argImpl(int index);
+
+    /**
+     * 
+     * @param index
+     * @return 
+     */
+    public final Object arg(int index) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arg", Optional.empty(), index);
+        	}
+        	AExpression result = this.argImpl(index);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "arg", Optional.ofNullable(result), index);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "arg", e);
+        }
+    }
+
+    /**
+     * the return type of the call
+     */
+    public abstract AType getReturnTypeImpl();
+
+    /**
+     * the return type of the call
      */
     public final Object getReturnType() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
         	}
-        	AJoinPoint result = this.getReturnTypeImpl();
+        	AType result = this.getReturnTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
+        }
+    }
+
+    /**
+     * the function type of the call, which includes the return type and the types of the parameters
+     */
+    public abstract AFunctionType getFunctionTypeImpl();
+
+    /**
+     * the function type of the call, which includes the return type and the types of the parameters
+     */
+    public final Object getFunctionType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functionType", Optional.empty());
+        	}
+        	AFunctionType result = this.getFunctionTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "functionType", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsMemberAccessImpl();
+
+    /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    public final Object getIsMemberAccess() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isMemberAccess", Optional.empty());
+        	}
+        	Boolean result = this.getIsMemberAccessImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isMemberAccess", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isMemberAccess", e);
+        }
+    }
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    public abstract AMemberAccess getMemberAccessImpl();
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    public final Object getMemberAccess() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberAccess", Optional.empty());
+        	}
+        	AMemberAccess result = this.getMemberAccessImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "memberAccess", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "memberAccess", e);
+        }
+    }
+
+    /**
+     * Get value on attribute isStmtCall
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsStmtCallImpl();
+
+    /**
+     * Get value on attribute isStmtCall
+     * @return the attribute's value
+     */
+    public final Object getIsStmtCall() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isStmtCall", Optional.empty());
+        	}
+        	Boolean result = this.getIsStmtCallImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isStmtCall", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isStmtCall", e);
         }
     }
 
@@ -307,11 +469,67 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public void setArgFromStringImpl(int index, String expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArgFromString not implemented ");
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public final void setArgFromString(int index, String expr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArgFromString", this, Optional.empty(), index, expr);
+        	}
+        	this.setArgFromStringImpl(index, expr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArgFromString", this, Optional.empty(), index, expr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArgFromString", e);
+        }
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public void setArgImpl(Integer index, AExpression expr) {
+        throw new UnsupportedOperationException(get_class()+": Action setArg not implemented ");
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    public final void setArg(Integer index, AExpression expr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArg", this, Optional.empty(), index, expr);
+        	}
+        	this.setArgImpl(index, expr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArg", this, Optional.empty(), index, expr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArg", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         return this.aExpression.getVardeclImpl();
     }
 
@@ -415,6 +633,33 @@ public abstract class ACall extends AExpression {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aExpression.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aExpression.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -430,16 +675,6 @@ public abstract class ACall extends AExpression {
     @Override
     public void insertImpl(String position, String code) {
         this.aExpression.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aExpression.defImpl(attribute, value);
     }
 
     /**
@@ -462,7 +697,7 @@ public abstract class ACall extends AExpression {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "callee": 
@@ -485,7 +720,31 @@ public abstract class ACall extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    public void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("numArgs");
@@ -493,14 +752,20 @@ public abstract class ACall extends AExpression {
         attributes.add("declaration");
         attributes.add("definition");
         attributes.add("argList");
+        attributes.add("args");
+        attributes.add("arg");
         attributes.add("returnType");
+        attributes.add("functionType");
+        attributes.add("isMemberAccess");
+        attributes.add("memberAccess");
+        attributes.add("isStmtCall");
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aExpression.fillWithSelects(selects);
         selects.add("callee");
         selects.add("arg");
@@ -510,11 +775,13 @@ public abstract class ACall extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
         actions.add("void setName(string)");
         actions.add("void wrap(string)");
         actions.add("void inline()");
+        actions.add("void setArgFromString(int, string)");
+        actions.add("void setArg(Integer, expression)");
     }
 
     /**
@@ -522,7 +789,7 @@ public abstract class ACall extends AExpression {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "call";
     }
 
@@ -531,7 +798,7 @@ public abstract class ACall extends AExpression {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
@@ -548,7 +815,13 @@ public abstract class ACall extends AExpression {
         DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),
+        ARGS("args"),
+        ARG("arg"),
         RETURNTYPE("returnType"),
+        FUNCTIONTYPE("functionType"),
+        ISMEMBERACCESS("isMemberAccess"),
+        MEMBERACCESS("memberAccess"),
+        ISSTMTCALL("isStmtCall"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
@@ -559,8 +832,11 @@ public abstract class ACall extends AExpression {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -568,16 +844,19 @@ public abstract class ACall extends AExpression {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

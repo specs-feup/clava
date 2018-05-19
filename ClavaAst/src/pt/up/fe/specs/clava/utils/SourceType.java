@@ -13,24 +13,64 @@
 
 package pt.up.fe.specs.clava.utils;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 public enum SourceType {
 
-    HEADER("h", "hpp"),
-    IMPLEMENTATION("c", "cpp", "cl");
+    HEADER("h", "hpp", "incl"),
+    IMPLEMENTATION("c", "cpp", "cl", "cc"),
+    OUT_OF_SOURCE();
 
-    private final static Set<String> PERMITTED_EXCEPTIONS = new HashSet<>(
-            SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
+    // private final static Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
+    // SpecsCollections.concat(HEADER.getExtensions(), IMPLEMENTATION.getExtensions()));
+    private final static Lazy<Set<String>> PERMITTED_EXTENSIONS = Lazy
+            .newInstance(SourceType::buildPermittedExtensions);
 
-    public static Set<String> getPermittedExceptions() {
-        return PERMITTED_EXCEPTIONS;
+    private final static Lazy<Map<String, SourceType>> EXTENSIONS_MAP = Lazy
+            .newInstance(SourceType::buildExtensionsMap);
+
+    private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp", "cc"));
+
+    private static Set<String> buildPermittedExtensions() {
+        return SpecsEnums.extractValues(SourceType.class).stream()
+                .filter(sourceType -> sourceType != OUT_OF_SOURCE)
+                .flatMap(sourceType -> sourceType.getExtensions().stream())
+                .collect(Collectors.toSet());
+    }
+
+    private static Map<String, SourceType> buildExtensionsMap() {
+
+        Map<String, SourceType> extensionsMap = new HashMap<>();
+
+        for (SourceType sourceType : SpecsEnums.extractValues(SourceType.class)) {
+            sourceType.getExtensions().stream()
+                    .forEach(extension -> extensionsMap.put(extension, sourceType));
+        }
+
+        return extensionsMap;
+    }
+
+    public static Set<String> getPermittedExtensions() {
+        return PERMITTED_EXTENSIONS.get();
+    }
+
+    public static Map<String, SourceType> getExtensionsMap() {
+        return EXTENSIONS_MAP.get();
+    }
+
+    public static boolean isCxxExtension(String extension) {
+        return CXX_EXTENSIONS.contains(extension.toLowerCase());
     }
 
     private final Set<String> extensions;
@@ -50,22 +90,50 @@ public enum SourceType {
     public static SourceType getType(String filepath) {
         return getTypeTry(filepath)
                 .orElseThrow(() -> new RuntimeException("Given filepath '" + filepath
-                        + "' is not valid, permitted extensions: " + getPermittedExceptions()));
+                        + "' is not valid, permitted extensions: " + getPermittedExtensions()));
     }
 
     public static Optional<SourceType> getTypeTry(String filepath) {
 
         String extension = SpecsIo.getExtension(filepath);
 
-        if (IMPLEMENTATION.getExtensions().contains(extension)) {
-            return Optional.of(IMPLEMENTATION);
+        // If no extension, use the name of the filepath
+        if (extension.isEmpty()) {
+            extension = new File(filepath).getName();
+
         }
 
-        if (HEADER.getExtensions().contains(extension)) {
-            return Optional.of(HEADER);
+        SourceType sourceType = getExtensionsMap().get(extension);
+
+        if (sourceType == null) {
+            // Check if Clang out-of-source (e.g., <built-in>)
+            if (extension.startsWith("<") && extension.endsWith(">")) {
+                sourceType = SourceType.OUT_OF_SOURCE;
+            }
+
         }
 
-        return Optional.empty();
+        return Optional.ofNullable(sourceType);
+
+        // if (IMPLEMENTATION.getExtensions().contains(extension)) {
+        // return Optional.of(IMPLEMENTATION);
+        // }
+        //
+        // if (HEADER.getExtensions().contains(extension)) {
+        // return Optional.of(HEADER);
+        // }
+
+        // return Optional.empty();
+    }
+
+    public boolean hasExtension(String extension) {
+        // Check if it contains a .
+        int lastIndexOfDot = extension.lastIndexOf('.');
+        if (lastIndexOfDot != -1) {
+            extension = extension.substring(lastIndexOfDot + 1);
+        }
+
+        return extensions.contains(extension.toLowerCase());
     }
 
 }

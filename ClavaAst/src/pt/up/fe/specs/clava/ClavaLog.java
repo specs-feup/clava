@@ -13,7 +13,8 @@
 
 package pt.up.fe.specs.clava;
 
-import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import java.util.function.Supplier;
+
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.logging.SpecsLogger;
@@ -31,12 +32,20 @@ public class ClavaLog extends SpecsLogger {
         super(CLAVA_WEAVER_TAG);
     }
 
+    public static void deprecated(String message) {
+        logger().msgInfo("[DEPRECATED] " + message);
+    }
+
     public static void info(String message) {
         logger().msgInfo(message);
     }
 
-    public static void warning(Pragma pragma, String message) {
-        warning(message + " (" + pragma.getLocation() + ")");
+    public static void info(Supplier<String> message) {
+        info(message.get());
+    }
+
+    public static void warning(ClavaNode node, String message) {
+        warning(message + " (" + node.getLocation() + ")");
         // LoggingUtils.msgInfo("[Warning] " + message + " (" + pragma.getLocation() + ")");
     }
 

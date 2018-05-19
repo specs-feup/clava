@@ -36,6 +36,9 @@ public class CharacterLiteralParser extends AClangNodeParser<CharacterLiteral> {
         //
         // 'char' 59
 
+        // CharacterLiteralData data = getData(CharacterLiteralData.class, node);
+
+        // ExprData
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         // Using long, to be able to store unsigned 32-bit values (for UTF-32)
@@ -44,6 +47,7 @@ public class CharacterLiteralParser extends AClangNodeParser<CharacterLiteral> {
         checkNoChildren(node);
 
         return ClavaNodeFactory.characterLiteral(charValue, exprData, node.getInfo());
+        // return ClavaNodeFactory.characterLiteral(data);
     }
 
 }

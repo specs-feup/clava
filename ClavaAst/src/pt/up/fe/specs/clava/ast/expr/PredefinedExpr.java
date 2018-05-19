@@ -20,7 +20,7 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -74,10 +74,10 @@ public class PredefinedExpr extends Expr {
         PRETTY_FUNCTION("__PRETTY_FUNCTION__"),
         PRETTY_FUNCTION_NO_VIRTUAL("<not implemented for PRETTY_FUNCTION_NO_VIRTUAL>");
 
-        private static final Lazy<EnumHelper<PredefinedIdType>> ENUM_HELPER = EnumHelper
-                .newLazyHelper(PredefinedIdType.class);
+        private static final Lazy<EnumHelperWithValue<PredefinedIdType>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(PredefinedIdType.class);
 
-        public static EnumHelper<PredefinedIdType> getEnumHelper() {
+        public static EnumHelperWithValue<PredefinedIdType> getEnumHelper() {
             return ENUM_HELPER.get();
         }
 

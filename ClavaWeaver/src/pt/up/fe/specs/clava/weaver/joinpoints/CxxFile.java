@@ -25,10 +25,13 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -38,22 +41,26 @@ import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
-import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -89,6 +96,13 @@ public class CxxFile extends AFile {
     }
 
     @Override
+    public List<? extends AMethod> selectMethod() {
+        return getMethods().stream()
+                .map(function -> CxxJoinpoints.create(function, this, AMethod.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ACxxWeaverJoinPoint getParentImpl() {
         return parent;
     }
@@ -114,6 +128,14 @@ public class CxxFile extends AFile {
                 // FunctionDecl represents C function, C++ methods, constructors and destructors
                 .filter(node -> node instanceof FunctionDecl)
                 .map(function -> (FunctionDecl) function)
+                .collect(Collectors.toList());
+    }
+
+    private List<CXXMethodDecl> getMethods() {
+        return tunit.getDescendantsStream()
+                // FunctionDecl represents C function, C++ methods, constructors and destructors
+                .filter(node -> node instanceof CXXMethodDecl)
+                .map(function -> (CXXMethodDecl) function)
                 .collect(Collectors.toList());
     }
 
@@ -211,7 +233,7 @@ public class CxxFile extends AFile {
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-        
+
         return path;
         */
     }
@@ -221,7 +243,10 @@ public class CxxFile extends AFile {
         // Get first joinpoint that is a CxxFile
         CxxFile includeFile = CxxJoinpoints.getAncestorandSelf(jp, CxxFile.class).get();
 
-        tunit.addInclude(includeFile.getNode());
+        // String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
+        String includePath = includeFile.getNode().getRelativeFilepath();
+        tunit.addInclude(includePath, false);
+        // tunit.addInclude(includeFile.getNode(), getWeaverEngine().getBaseSourceFolder());
 
         // Get relative path to include the file in this file
         // String relativePath = SpecsIo.getRelativePath(includeFile.getTu().getFile(), tunit.getFile());
@@ -231,28 +256,19 @@ public class CxxFile extends AFile {
 
     @Override
     public String getFilepathImpl() {
-        return getPathImpl() + getNameImpl();
+        return tunit.getFile().getPath();
     }
 
     @Override
     public String getRelativeFolderpathImpl() {
-        CxxWeaver weaver = getWeaverEngine();
-
-        String path = weaver.getApp().getRelativeFolderPath(weaver.getBaseSourceFolder(), tunit);
-
-        if (path.isEmpty()) {
-            return "./";
-        }
-
-        return path;
-
+        return tunit.getRelativeFolderpath();
+        // return CxxWeaver.getRelativeFolderpath(tunit);
     }
 
     @Override
     public String getRelativeFilepathImpl() {
-        CxxWeaver weaver = getWeaverEngine();
-
-        return weaver.getApp().getRelativePath(weaver.getBaseSourceFolder(), tunit);
+        return tunit.getRelativeFilepath();
+        // return CxxWeaver.getRelativeFilepath(tunit);
     }
 
     @Override
@@ -355,8 +371,51 @@ public class CxxFile extends AFile {
             return;
         }
 
-        File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
+        // File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
+        // tunit.write(destinationFolder, baseSourceFolder);
 
-        tunit.write(baseSourceFolder, destinationFolder);
+        tunit.write(destinationFolder);
+    }
+
+    @Override
+    public Boolean getIsOpenCLImpl() {
+        return tunit.isOpenCLFile();
+    }
+
+    @Override
+    public List<? extends AInclude> selectInclude() {
+        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, this, IncludeDecl.class);
+    }
+
+    @Override
+    public String getBaseSourcePathImpl() {
+        return tunit.getSourcePath().map(File::getPath).orElse(null);
+    }
+
+    @Override
+    public List<? extends ADecl> selectDecl() {
+        return tunit.getDescendantsStream()
+                .filter(node -> node instanceof Decl)
+                .map(varDecl -> CxxJoinpoints.create((Decl) varDecl, this, ADecl.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<? extends ATypedefDecl> selectTypedefDecl() {
+        return tunit.getDescendantsStream()
+                .filter(node -> node instanceof TypedefDecl)
+                .map(varDecl -> CxxJoinpoints.create((TypedefDecl) varDecl, this, ATypedefDecl.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getDestinationFilepathImpl() {
+        return destinationFilepathImpl(getWeaverEngine().getWeavingFolder().getAbsolutePath());
+    }
+
+    @Override
+    public String destinationFilepathImpl(String destinationFolderpath) {
+        boolean flattenFolders = getWeaverEngine().getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+        return tunit.getDestinationFile(new File(destinationFolderpath), flattenFolders).getAbsolutePath();
     }
 }

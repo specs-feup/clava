@@ -101,7 +101,7 @@ public class CXXConstructorDecl extends CXXMethodDecl {
         }
 
         // Special case: try
-        Optional<Stmt> body = getDefinition();
+        Optional<Stmt> body = getFunctionDefinition();
         if (body.isPresent() && body.get() instanceof CXXTryStmt) {
             CXXTryStmt tryBody = (CXXTryStmt) body.get();
             return getDeclarationId(false) + " " + tryBody.getCode(getCodeInitList());

@@ -49,5 +49,16 @@ union anon_struct_c_34 {
 
 union anon_struct_c_34 union_anon_var;
 
+struct anon_struct_c_40 {
+	int ch1;
+	float ch2;
+};
+
+typedef struct anon_struct_c_40 loic_struct;
+
+struct aligned_struct {
+	short f[3];
+} __attribute__ ((aligned (8)));
+
 int main() {
 }

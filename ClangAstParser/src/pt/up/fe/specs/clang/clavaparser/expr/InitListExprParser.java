@@ -25,12 +25,15 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
+import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class InitListExprParser extends AClangNodeParser<InitListExpr> {
@@ -44,6 +47,8 @@ public class InitListExprParser extends AClangNodeParser<InitListExpr> {
 
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
+        InitListExprInfo info = getStdErr().get(StreamKeys.INIT_LIST_EXPR_INFO).get(node.getExtendedId());
+
         boolean hasInitializedFieldInUnion = parser.apply(ClangGenericParsers::checkWord, "fields");
         BareDeclData fieldData = null;
         if (hasInitializedFieldInUnion) {
@@ -55,15 +60,18 @@ public class InitListExprParser extends AClangNodeParser<InitListExpr> {
         // Check if first child is an array filler
         Expr arrayFiller = getArrayFiller(clangChildren);
 
+        // By default use true
+        boolean isExplicit = info != null ? info.isExplicit() : true;
+
+        InitListExprData data = new InitListExprData(hasInitializedFieldInUnion, arrayFiller, fieldData, isExplicit);
+
         List<ClavaNode> children = parseChildren(clangChildren.stream());
 
         List<Expr> initExprs = children.stream()
                 .map(child -> toExpr(child))
                 .collect(Collectors.toList());
-        // List<Expr> initExprs = SpecsCollections.cast(children, Expr.class);
 
-        return ClavaNodeFactory.initListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData,
-                node.getInfo(), initExprs);
+        return ClavaNodeFactory.initListExpr(data, exprData, node.getInfo(), initExprs);
     }
 
     private Expr getArrayFiller(List<ClangNode> children) {

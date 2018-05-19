@@ -41,6 +41,8 @@ public class IntegerLiteralParser extends AClangNodeParser<IntegerLiteral> {
         // 'int' 3
         // 'int' 32767
 
+        // IntegerLiteralData data = getDataTry(IntegerLiteralData.class, node).orElse(null);
+
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
         String literal = parser.apply(StringParsers::parseWord);
 
@@ -48,6 +50,9 @@ public class IntegerLiteralParser extends AClangNodeParser<IntegerLiteral> {
         // getSourceLiteral(node);
 
         return ClavaNodeFactory.integerLiteral(literal, exprData, info(node));
+
+        // return data != null ? new IntegerLiteral(data, Collections.emptyList())
+        // : ClavaNodeFactory.integerLiteral(literal, exprData, info(node));
     }
 
     // private Optional<String> getSourceLiteral(ClangNode node) {

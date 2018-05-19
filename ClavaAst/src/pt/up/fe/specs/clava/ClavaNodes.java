@@ -27,11 +27,13 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
@@ -39,7 +41,7 @@ import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprUse;
+import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
@@ -71,11 +73,13 @@ public class ClavaNodes {
         }
 
         if (node instanceof Expr) {
-            return ClavaNodeFactory.exprStmt((Expr) node);
+            return LegacyToDataStore.getFactory().exprStmt((Expr) node);
+            // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof VarDecl) {
-            return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
+            return node.getFactoryWithNode().declStmt((VarDecl) node);
+            // return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
         }
 
         if (node instanceof Comment || node instanceof Pragma) {
@@ -256,6 +260,10 @@ public class ClavaNodes {
             return isPostOrPre ? ExprUse.READWRITE : ExprUse.READ;
         }
 
+        if (parent instanceof CXXOperatorCallExpr) {
+            return useOperatorCall((CXXOperatorCallExpr) parent, node);
+        }
+
         if (!(parent instanceof BinaryOperator)) {
             return ExprUse.READ;
         }
@@ -287,6 +295,20 @@ public class ClavaNodes {
         Preconditions.checkArgument(isCompoundAssign, "Must be compount assignment: " + op);
 
         return ExprUse.READWRITE;
+    }
+
+    private static ExprUse useOperatorCall(CXXOperatorCallExpr parent, Expr node) {
+
+        if (!parent.getCalleeDeclRef().getRefName().equals("operator=")) {
+            return ExprUse.READ;
+        }
+
+        // Check if node is on the first argument
+        return parent.getArgs().get(0).getDescendantsAndSelfStream()
+                .filter(descendant -> descendant == node)
+                .findFirst()
+                .map(expr -> ExprUse.WRITE)
+                .orElse(ExprUse.READ);
     }
 
     /**
@@ -404,4 +426,13 @@ public class ClavaNodes {
         return ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(leftHand.getType()),
                 ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
     }
+
+    public static Stmt getNodeOrNullStmt(Stmt node) {
+        if (node == null) {
+            return ClavaNodeFactory.nullStmt(ClavaNodeInfo.undefinedInfo());
+        }
+
+        return node;
+    }
+
 }

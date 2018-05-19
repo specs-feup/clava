@@ -13,12 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 /**
@@ -29,35 +30,33 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
  */
 public class ExprStmt extends Stmt {
 
-    private final boolean hasSemicolon;
+    /// DATAKEYS BEGIN
 
-    public ExprStmt(ClavaNodeInfo info, Expr expr) {
-        this(true, info, Arrays.asList(expr));
-    }
+    public final static DataKey<Boolean> HAS_SEMICOLON = KeyFactory.bool("hasSemicolon");
 
-    public ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Expr expr) {
-        this(hasSemicolon, info, Arrays.asList(expr));
-    }
+    /// DATAKEYS END
 
-    private ExprStmt(boolean hasSemicolon, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-
-        this.hasSemicolon = hasSemicolon;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ExprStmt(hasSemicolon, getInfo(), Collections.emptyList());
+    public ExprStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     public Expr getExpr() {
         return getChild(Expr.class, 0);
     }
 
+    public boolean hasSemicolon() {
+        return get(HAS_SEMICOLON);
+    }
+
     @Override
     public String getCode() {
-        String suffix = hasSemicolon ? ";" : "";
+        String suffix = hasSemicolon() ? ";" : "";
         return getExpr().getCode() + suffix;
+    }
+
+    public ExprStmt setHasSemicolon(boolean hasSemicolon) {
+        put(HAS_SEMICOLON, hasSemicolon);
+        return this;
     }
 
 }

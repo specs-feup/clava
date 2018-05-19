@@ -41,13 +41,22 @@ public class BuiltinTypeParser extends AClangNodeParser<BuiltinType> {
         // 'unsigned int'
         // 'int'
 
+        // TODO: Temporary
+        // BuiltinTypeData data = getDataTry(BuiltinTypeData.class, node).orElse(null);
+
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
         typeData = new TypeData(parseType(typeData.getBareType()), typeData);
         // String parsedType = parseType(type);
 
         checkNoChildren(node);
 
+        // New ClavaNodes with ClavaData need post-processing, better not to mix them
+        // if (data != null) {
+        // return new BuiltinType(data, Collections.emptyList());
+        // }
+
         return ClavaNodeFactory.builtinType(typeData, node.getInfo());
+
     }
 
     private String parseType(String type) {

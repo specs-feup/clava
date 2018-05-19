@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -32,7 +33,7 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public class MemberExpr extends Expr {
 
-    private final String memberName;
+    private String memberName;
     private final boolean isArrow;
 
     public MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info, Expr base) {
@@ -57,6 +58,10 @@ public class MemberExpr extends Expr {
 
     public String getMemberName() {
         return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
     public boolean isArrow() {
@@ -96,11 +101,66 @@ public class MemberExpr extends Expr {
     }
 
     private List<String> getChain(Expr expr) {
+        return getExprChain(expr).stream()
+                .map(this::extractMemberName)
+                .collect(Collectors.toList());
+    }
+
+    private String extractMemberName(Expr expr) {
+        if (expr instanceof DeclRefExpr) {
+            return ((DeclRefExpr) expr).getRefName();
+        }
+
+        if (expr instanceof MemberExpr) {
+            return ((MemberExpr) expr).memberName;
+        }
+
+        throw new RuntimeException("Case not implemented for class " + expr.getClass());
+    }
+
+    /*
+    private List<String> getChain(Expr expr) {
+        // TODO: Concatenating the list is inefficient, if chain is big, although this is not expected?
+    
+        // DeclRefExpr is the end of the chain
+        if (expr instanceof DeclRefExpr) {
+            return Arrays.asList(((DeclRefExpr) expr).getRefName());
+        }
+    
+        if (expr instanceof MemberExpr) {
+            MemberExpr memberExpr = (MemberExpr) expr;
+            // Get base that interest us
+            Expr chainBase = toChainBase(memberExpr.getBase());
+            // Could not treat this case, abort
+            if (chainBase == null) {
+                return Collections.emptyList();
+            }
+    
+            List<String> baseString = getChain(chainBase);
+    
+            // If empty, something happened
+            if (baseString.isEmpty()) {
+                return Collections.emptyList();
+            }
+    
+            return SpecsCollections.concat(baseString, memberExpr.memberName);
+            // return baseString == null ? null : baseString + "." + memberExpr.memberName;
+        }
+    
+        SpecsLogs.msgWarn("Expr should be a DeclRefExpr or a MemberExpr, is:" + expr);
+        return Collections.emptyList();
+    }
+    */
+    public List<Expr> getExprChain() {
+        return getExprChain(this);
+    }
+
+    private List<Expr> getExprChain(Expr expr) {
         // TODO: Concatenating the list is inefficient, if chain is big, although this is not expected?
 
         // DeclRefExpr is the end of the chain
         if (expr instanceof DeclRefExpr) {
-            return Arrays.asList(((DeclRefExpr) expr).getRefName());
+            return Arrays.asList(expr);
         }
 
         if (expr instanceof MemberExpr) {
@@ -112,15 +172,14 @@ public class MemberExpr extends Expr {
                 return Collections.emptyList();
             }
 
-            List<String> baseString = getChain(chainBase);
+            List<Expr> baseString = getExprChain(chainBase);
 
             // If empty, something happened
             if (baseString.isEmpty()) {
                 return Collections.emptyList();
             }
 
-            return SpecsCollections.concat(baseString, memberExpr.memberName);
-            // return baseString == null ? null : baseString + "." + memberExpr.memberName;
+            return SpecsCollections.concat(baseString, memberExpr);
         }
 
         SpecsLogs.msgWarn("Expr should be a DeclRefExpr or a MemberExpr, is:" + expr);

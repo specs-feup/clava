@@ -16,6 +16,8 @@ package pt.up.fe.specs.clang.clavaparser.decl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
@@ -31,13 +33,15 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
-import pt.up.fe.specs.util.stringparser.StringParsers;
 
 public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDecl> {
 
@@ -55,10 +59,20 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         // col:4 MCSimulation 'void (const std::string, const std::string)'
         // line:304:24 MCSimulation 'void (const std::string, const std::string)' namespace Routing record CSVReader
 
+        DataStore data = getData(node);
+
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
-        boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
-        String className = emptyName ? null : parser.apply(StringParsers::parseWord);
+        // boolean emptyName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+        // if (!emptyName) {
+        // if (parser.apply(StringParsers::peekStartsWith, "'")) {
+        // System.out.println("CxxConstructorDecl without name that is not well detected yet");
+        // emptyName = true;
+        // }
+        // }
+        //
+        // String className = emptyName ? null : parser.apply(ClangGenericParsers::parseClassName);
+        String className = parseNamedDeclName(node, parser);
 
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
@@ -73,7 +87,10 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         List<CXXCtorInitializer> defaultInits = parseInitializers(node.getExtendedId(), ctorInit);
 
         ListParser<ClavaNode> children = new ListParser<>(parseChildren(clangChildren.stream()));
-        FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children);
+        checkNewChildren(node.getExtendedId(), children.getList());
+
+        FunctionDeclParserResult functionDeclParsed = parser.apply(ClangDataParsers::parseFunctionDecl, children, node,
+                getStdErr());
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");
@@ -82,7 +99,8 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
         String record = parseKeyValue(parser, "record");
 
         // Get corresponding record id
-        String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
+        String recordId = data.get(CXXConstructorDecl.RECORD_ID);
+        // String recordId = getStdErr().get(StreamKeys.CXX_METHOD_DECL_PARENT).get(node.getExtendedId());
 
         CXXMethodDeclData methodData = new CXXMethodDeclData(namespace, record, recordId);
 
@@ -148,13 +166,33 @@ public class CXXConstructorDeclParser extends AClangNodeParser<CXXConstructorDec
                 Preconditions.checkNotNull(initType, "No type found: " + initKind[1]);
             }
 
-            CXXCtorInitializerKind kind = CXXCtorInitializerKind.getHelper().valueOf(initKind[0]);
+            CXXCtorInitializerKind kind = CXXCtorInitializerKind.getHelper().fromValue(initKind[0]);
             CXXCtorInitializer init = new CXXCtorInitializerParser(getConverter(), kind, initType)
                     .parse(ctorInit.get(i));
-            initializers.add(init);
+
+            // Filter initializer
+            if (isValidInitializer(init)) {
+                initializers.add(init);
+            }
+
         }
 
         return initializers;
+    }
+
+    private boolean isValidInitializer(CXXCtorInitializer init) {
+
+        Expr initExpr = init.getInitExpr();
+
+        // Special case: CXXConstructExpr that has NullType as return
+        if (initExpr instanceof CXXConstructExpr) {
+            if (initExpr.getType() instanceof NullType) {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
 }

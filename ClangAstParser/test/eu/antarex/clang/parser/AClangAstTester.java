@@ -27,10 +27,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pt.up.fe.specs.clang.ClangAstParser;
-import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
-import pt.up.fe.specs.clang.clavaparser.ClavaParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -86,6 +84,9 @@ public abstract class AClangAstTester {
     public AClangAstTester(Collection<ResourceProvider> resources, List<String> compilerOptions) {
         this.resources = resources;
         this.compilerOptions = new ArrayList<>(compilerOptions);
+
+        // Set strict mode
+        // ClangAstParser.strictMode(true);
     }
 
     public AClangAstTester showClangAst() {
@@ -154,6 +155,7 @@ public abstract class AClangAstTester {
 
     // @After
     public static void clear() throws Exception {
+
         // if (!AClangAstTester.CLEAN) {
         // if (keepFiles) {
         // return;
@@ -174,84 +176,34 @@ public abstract class AClangAstTester {
 
     @Test
     public void testProper() {
-        List<String> files = new ArrayList<>();
-
-        // Add C++ sources
-        files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "cpp"),
-                file -> SpecsIo.getCanonicalPath(file)));
-
-        // Add C sources
-        files.addAll(SpecsCollections.map(SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME), "c"),
-                file -> SpecsIo.getCanonicalPath(file)));
-
         // Parse files
-        ClangRootNode ast = new ClangAstParser(showClangDump).parse(files, compilerOptions);
 
-        if (showClangDump) {
-            SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-        }
+        CodeParser codeParser = new CodeParser()
+                .setShowClangAst(showClangAst)
+                .setShowClangDump(showClangDump)
+                .setShowClavaAst(showClavaAst)
+                .setShowCode(showCode);
 
-        if (showClangAst) {
-            SpecsLogs.msgInfo("Clang AST:\n" + ast);
-        }
+        File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 
-        // Parse dump information
-        try (ClavaParser clavaParser = new ClavaParser(ast)) {
-            App clavaAst = clavaParser.parse();
+        App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
 
-            if (showClavaAst) {
-                SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst);
-            }
-
-            if (showCode) {
-                SpecsLogs.msgInfo("Code:\n" + clavaAst.getCode());
-            }
-            // System.out.println("AST:\n" + clavaAst);
-
-            // Write
-            // clavaAst.writeFromTopFile(new File(OUTPUT_FOLDERNAME + "/" + mainFile),
-            // IoUtils.safeFolder(OUTPUT_FOLDERNAME + "/outputFirst"));
-            clavaAst.write(new File(AClangAstTester.OUTPUT_FOLDERNAME),
-                    SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
         if (onePass) {
             return;
         }
 
+        CodeParser testCodeParser = new CodeParser();
+
         // Parse output again, check if files are the same
-        List<String> files2 = new ArrayList<>();
 
-        // C++ sources
-        files2.addAll(SpecsCollections.map(
-                SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "cpp"),
-                file -> SpecsIo.getCanonicalPath(file)));
+        File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
 
-        // C sources
-        files2.addAll(
-                SpecsCollections.map(
-                        SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"), "c"),
-                        file -> SpecsIo.getCanonicalPath(file)));
-
-        // Parse files
-        ClangRootNode ast2 = new ClangAstParser().parse(files2, compilerOptions);
-
-        // Parse dump information
-        try (ClavaParser clavaParser = new ClavaParser(ast2)) {
-            App clavaAst2 = clavaParser.parse();
-
-            // Write
-            // clavaAst2.writeFromTopFile(new File(OUTPUT_FOLDERNAME + "/outputFirst/" + mainFile),
-            // IoUtils.safeFolder(OUTPUT_FOLDERNAME + "/outputSecond"));
-            clavaAst2.write(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst/"),
-                    SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
+        testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
 
         // Test if files from first and second are the same
+
         Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
                 .stream()
                 .collect(Collectors.toMap(file -> file.getName(), file -> file));
@@ -266,34 +218,11 @@ public abstract class AClangAstTester {
 
             Assert.assertNotNull("Could not find second version of file '" + name + "'", outputFile2);
 
-            // List<String> lines1 = StringLines.getLines(outputFiles1.get(name));
-            // List<String> lines2 = StringLines.getLines(outputFile2);
-
-            // Print lines if they are not the same size
-            //
-            // if (lines1.size() != lines2.size()) {
-            // LoggingUtils.msgInfo("Expected code:\n" + lines1.stream().collect(Collectors.joining("\n")));
-            // LoggingUtils.msgInfo("Actual code:\n" + lines2.stream().collect(Collectors.joining("\n")));
-            // LoggingUtils
-            // .msgInfo("Expected number of lines to be the same. Expected (" + lines1.size() + ") vs Actual ("
-            // + lines2.size() + ")");
-            // }
-
-            // System.out.println("LINES1:\n" + lines1);
-            // System.out.println("LINES2:\n" + lines2);
-
-            // Assert.assertEquals("Expected number of lines to be the same", lines1.size(), lines2.size());
-
-            // Compare each line
-            // for (int i = 0; i < lines1.size(); i++) {
-            // Assert.assertEquals("Expected lines to be the same", lines1.get(i), lines2.get(i));
-            // }
         }
-
-        // System.out.println("AST:\n" + ast2);
 
         // Compare with .txt, if available
         for (ResourceProvider resource : resources) {
+
             // Get .txt resource
             String txtResource = resource.getResource() + ".txt";
 
@@ -303,15 +232,10 @@ public abstract class AClangAstTester {
                 continue;
             }
 
-            String txtContents = SpecsStrings.normalizeFileContents(SpecsIo.getResource(txtResource));
+            String txtContents = SpecsStrings.normalizeFileContents(SpecsIo.getResource(txtResource), true);
             File generatedFile = outputFiles2.get(resource.getFilename());
-            String generatedFileContents = SpecsStrings.normalizeFileContents(SpecsIo.read(generatedFile));
-            // System.out.println(
-            // "CODE:" + IntStream.range(0, txtContents.length()).mapToObj(i -> (int) txtContents.charAt(i))
-            // .collect(Collectors.toList()));
-            // String file = IoUtils.read(generatedFile);
-            // System.out.println("FILE:" + IntStream.range(0, file.length()).mapToObj(i -> (int) file.charAt(i))
-            // .collect(Collectors.toList()));
+            String generatedFileContents = SpecsStrings.normalizeFileContents(SpecsIo.read(generatedFile), true);
+
             Assert.assertEquals(txtContents, generatedFileContents);
         }
     }

@@ -1,3 +1,6 @@
+import clava.Clava;
+
+import lara.Compilation;
 import lara.code.EnergyBase;
 import lara.code.Logger;
 import lara.util.IdGenerator;
@@ -14,8 +17,16 @@ Energy.prototype.measure = function($start, prefix, $end){
 	$end = $end === undefined ? $start : $end;
 
 	// Message about dependency
-	PrintOnce.message("Weaved code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
+	PrintOnce.message("Woven code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
 
+	// Adds SpecsRapl include
+	Compilation.addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
+	//Clava.getProgram().addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
+	
+	// Adds SpecsRapl source
+	Compilation.addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
+	//Clava.getProgram().addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
+	
 	var logger = new Logger(false, this.filename);
 
 	// Build prefix
@@ -43,6 +54,7 @@ Energy.prototype.measure = function($start, prefix, $end){
 	if (this.printUnit) {
         logger.append(this.getPrintUnit());
     }
+	logger.ln();
 	logger.log($end);
 	$end.insert("after",codeAfter);
 

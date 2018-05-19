@@ -17,12 +17,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -39,6 +42,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public class CXXMethodDecl extends FunctionDecl {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> RECORD_ID = KeyFactory.string("recordId");
+
+    /// DATAKEYS END
 
     private static final long NULL_EXCEPT_ADDRESS = 0;
 
@@ -144,7 +153,9 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         if (useReturnType) {
-            code.append(getFunctionType().getReturnType().getCode()).append(" ");
+            // TODO: When mixing templates and lambdas, sometimes types are not available. Find better solution?
+            getFunctionTypeTry().ifPresent(fType -> code.append(fType.getReturnType().getCode()).append(" "));
+            // code.append(getFunctionType().getReturnType().getCode()).append(" ");
         }
 
         // Add namespace if not inside namespace decl
@@ -181,6 +192,10 @@ public class CXXMethodDecl extends FunctionDecl {
     @Override
     public FunctionProtoType getFunctionType() {
         return (FunctionProtoType) super.getFunctionType();
+    }
+
+    public Optional<FunctionProtoType> getFunctionTypeTry() {
+        return Optional.ofNullable((FunctionProtoType) super.getFunctionType());
     }
 
     @Override

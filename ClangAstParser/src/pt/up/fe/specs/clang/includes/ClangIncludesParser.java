@@ -27,51 +27,50 @@ class ClangIncludesParser {
 
     private static final Map<String, BiFunction<String, Include, Include>> PARTS_PARSER;
     static {
-	PARTS_PARSER = new HashMap<>();
+        PARTS_PARSER = new HashMap<>();
 
-	PARTS_PARSER.put("source",
-		(string, include) -> include.setSourceFile(SpecsIo.getCanonicalFile(new File(string))));
-	PARTS_PARSER.put("include", (string, include) -> include.setInclude(string));
-	PARTS_PARSER.put("line", (string, include) -> include.setLine(Integer.parseInt(string)));
-	PARTS_PARSER.put("angled", (string, include) -> include.setAngled(string.equals("1") ? true : false));
+        PARTS_PARSER.put("source",
+                (string, include) -> include.setSourceFile(SpecsIo.getCanonicalFile(new File(string))));
+        PARTS_PARSER.put("include", (string, include) -> include.setInclude(string));
+        PARTS_PARSER.put("line", (string, include) -> include.setLine(Integer.parseInt(string)));
+        PARTS_PARSER.put("angled", (string, include) -> include.setAngled(string.equals("1") ? true : false));
     }
 
     public Optional<Include> parse(String line) {
-	// System.out.println("LINE:" + line);
-	// Split line using |
-	String[] parts = line.split("\\|");
+        // Split line using |
+        String[] parts = line.split("\\|");
 
-	Include currentInclude = Include.empty();
-	for (String part : parts) {
-	    Optional<Include> newInclude = parsePart(part, currentInclude);
+        Include currentInclude = Include.empty();
+        for (String part : parts) {
+            Optional<Include> newInclude = parsePart(part, currentInclude);
 
-	    if (!newInclude.isPresent()) {
-		return newInclude;
-	    }
+            if (!newInclude.isPresent()) {
+                return newInclude;
+            }
 
-	    currentInclude = newInclude.get();
-	}
+            currentInclude = newInclude.get();
+        }
 
-	return Optional.of(currentInclude);
+        return Optional.of(currentInclude);
     }
 
     private static Optional<Include> parsePart(String part, Include currentInclude) {
-	// Get prefix
-	int colonIndex = part.indexOf(":");
-	if (colonIndex == -1) {
-	    SpecsLogs.msgWarn("Could not find ':' in '" + part + "'");
-	    return Optional.empty();
-	}
+        // Get prefix
+        int colonIndex = part.indexOf(":");
+        if (colonIndex == -1) {
+            SpecsLogs.msgWarn("Could not find ':' in '" + part + "'");
+            return Optional.empty();
+        }
 
-	String key = part.substring(0, colonIndex);
-	String value = part.substring(colonIndex + 1, part.length());
+        String key = part.substring(0, colonIndex);
+        String value = part.substring(colonIndex + 1, part.length());
 
-	if (!PARTS_PARSER.containsKey(key)) {
-	    SpecsLogs.msgWarn("Could not find parser for key ''" + key + "'");
-	    return Optional.empty();
-	}
+        if (!PARTS_PARSER.containsKey(key)) {
+            SpecsLogs.msgWarn("Could not find parser for key ''" + key + "'");
+            return Optional.empty();
+        }
 
-	return Optional.of(PARTS_PARSER.get(key).apply(value, currentInclude));
+        return Optional.of(PARTS_PARSER.get(key).apply(value, currentInclude));
 
     }
 

@@ -41,8 +41,8 @@ public class ClavaWeaverRunner {
         // sourceFile:'DSP_autocor_c/DSP_autocor_c.c', compiler:'llvm', nsteps:10, language:'c', target:'host-intel',
         // algo:'sa', metric:'performance', seqlen:32, nexec:30, nr:-1, clean:1, passes:'', percent:2, append:'',
         // metrics:['performance'], alreadyInstrumented:false}\" -nw -b 2 -l log.zip -j -nci"; // --stack
-        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av arguments.properties -nw  -b 2 -l log.zip -j -nci --stack"; // --stack
-        // -nci
+        String argsString = " ..\\lara-dse\\LaradLauncher.lara -av arguments.properties -nw  -b 2 -j --stack"; // --stack
+        // -nci -l log.zip
         List<String> args = ArgumentsParser.newCommandLine().parse(argsString);
 
         SpecsSystem.executeOnProcessAndWait(ClavaWeaverLauncher.class, workingDir, args);

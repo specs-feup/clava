@@ -13,9 +13,6 @@
 
 package pt.up.fe.specs.clang;
 
-import java.util.Arrays;
-import java.util.List;
-
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 public interface ClangAstWebResource {
@@ -33,16 +30,16 @@ public interface ClangAstWebResource {
     WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v2.1");
     WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v2.13");
+    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v3.0.9");
     WebResourceProvider WIN_DLL1 = create("windows/libgcc_s_seh-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/libstdc++-6.dll");
     WebResourceProvider WIN_DLL3 = create("windows/libwinpthread-1.dll");
 
-    WebResourceProvider LINUX_EXE = create("linux_ubuntu_14/clang_ast", "v2.13");
+    WebResourceProvider LINUX_EXE = create("linux_ubuntu_14/clang_ast", "v3.0.9");
 
-    WebResourceProvider CENTOS6_EXE = create("centos6/clang_ast", "v2.13");
+    WebResourceProvider CENTOS6_EXE = create("centos6/clang_ast", "v3.0");
 
-    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v2.13");
+    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v2.16");
 
     // private static final String BASE_URL = "http://specs.fe.up.pt/resources/clangast/";
     // private static final String BASE_URL = "http://192.168.55.89/resources/clangast/";
@@ -79,7 +76,7 @@ public interface ClangAstWebResource {
         return version;
     }
     */
-    static List<WebResourceProvider> getWindowsResources() {
-        return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
-    }
+    // static List<WebResourceProvider> getWindowsResources() {
+    // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
+    // }
 }

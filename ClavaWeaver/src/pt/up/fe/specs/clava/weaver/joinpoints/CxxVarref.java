@@ -20,7 +20,7 @@ import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 
@@ -52,17 +52,36 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
+    public void defNameImpl(String value) {
+        refExpr.setRefName(value);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
+
+    @Override
     public String getKindImpl() {
         return refExpr.getKind().name().toLowerCase();
     }
 
     @Override
-    public AJoinPoint getUseExprImpl() {
-        return CxxJoinpoints.create(refExpr.getUseExpr(), this);
+    public AExpression getUseExprImpl() {
+        return CxxJoinpoints.create(refExpr.getUseExpr(), this, AExpression.class);
     }
 
+    /*
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public String getUseImpl() {
+        ExprUse use = ((Expr) getUseExprImpl().getNode()).use();
+    
+        return CxxAttributes.convertUse(use);
+    }
+    */
+
+    @Override
+    public AVardecl getVardeclImpl() {
 
         Optional<DeclaratorDecl> varDecl = refExpr.getVariableDeclaration();
 
@@ -70,7 +89,7 @@ public class CxxVarref extends AVarref {
             return null;
         }
 
-        return CxxJoinpoints.create(varDecl.get(), null);
+        return CxxJoinpoints.create(varDecl.get(), null, AVardecl.class);
     }
 
     @Override
@@ -83,4 +102,8 @@ public class CxxVarref extends AVarref {
         return refExpr.isFunctionCall();
     }
 
+    @Override
+    public AVardecl getDeclarationImpl() {
+        return getVardeclImpl();
+    }
 }

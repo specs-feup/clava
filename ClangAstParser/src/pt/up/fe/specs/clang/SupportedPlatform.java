@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clang;
 
 import pt.up.fe.specs.lang.SpecsPlatforms;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -34,10 +34,10 @@ public enum SupportedPlatform implements StringProvider {
     LINUX,
     MAC_OS;
 
-    private static final Lazy<EnumHelper<SupportedPlatform>> HELPER = EnumHelper
-            .newLazyHelper(SupportedPlatform.class);
+    private static final Lazy<EnumHelperWithValue<SupportedPlatform>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(SupportedPlatform.class);
 
-    public static EnumHelper<SupportedPlatform> getHelper() {
+    public static EnumHelperWithValue<SupportedPlatform> getHelper() {
         return HELPER.get();
     }
 

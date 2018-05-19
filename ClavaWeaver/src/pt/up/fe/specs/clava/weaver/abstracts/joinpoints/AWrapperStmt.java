@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -130,6 +131,24 @@ public abstract class AWrapperStmt extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select memberCalls
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberCall> selectMemberCall() {
+        return this.aStatement.selectMemberCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select memberAccesss
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberAccess> selectMemberAccess() {
+        return this.aStatement.selectMemberAccess();
+    }
+
+    /**
      * Method used by the lara interpreter to select arrayAccesss
      * @return 
      */
@@ -172,6 +191,24 @@ public abstract class AWrapperStmt extends AStatement {
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
         return this.aStatement.selectUnaryOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select newExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ANewExpr> selectNewExpr() {
+        return this.aStatement.selectNewExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select deleteExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ADeleteExpr> selectDeleteExpr() {
+        return this.aStatement.selectDeleteExpr();
     }
 
     /**
@@ -238,6 +275,33 @@ public abstract class AWrapperStmt extends AStatement {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aStatement.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aStatement.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -253,16 +317,6 @@ public abstract class AWrapperStmt extends AStatement {
     @Override
     public void insertImpl(String position, String code) {
         this.aStatement.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aStatement.defImpl(attribute, value);
     }
 
     /**
@@ -300,6 +354,12 @@ public abstract class AWrapperStmt extends AStatement {
         	case "stmtCall": 
         		joinPointList = selectStmtCall();
         		break;
+        	case "memberCall": 
+        		joinPointList = selectMemberCall();
+        		break;
+        	case "memberAccess": 
+        		joinPointList = selectMemberAccess();
+        		break;
         	case "arrayAccess": 
         		joinPointList = selectArrayAccess();
         		break;
@@ -315,11 +375,34 @@ public abstract class AWrapperStmt extends AStatement {
         	case "unaryOp": 
         		joinPointList = selectUnaryOp();
         		break;
+        	case "newExpr": 
+        		joinPointList = selectNewExpr();
+        		break;
+        	case "deleteExpr": 
+        		joinPointList = selectDeleteExpr();
+        		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**
@@ -383,8 +466,11 @@ public abstract class AWrapperStmt extends AStatement {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -392,16 +478,19 @@ public abstract class AWrapperStmt extends AStatement {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

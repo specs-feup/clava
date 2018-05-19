@@ -6,6 +6,7 @@ import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -236,6 +237,20 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * 
+     */
+    public void defIsParallelImpl(Boolean value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def isParallel with type Boolean not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public void defIsParallelImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def isParallel with type String not implemented ");
+    }
+
+    /**
      * Get value on attribute iterations
      * @return the attribute's value
      */
@@ -308,6 +323,13 @@ public abstract class ALoop extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "initValue", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defInitValueImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def initValue with type String not implemented ");
     }
 
     /**
@@ -410,7 +432,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * DEPRECATED: use setInitValue instead.
      * @param initCode 
      */
     public void setInitImpl(String initCode) {
@@ -418,7 +440,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * DEPRECATED: use setInitValue instead.
      * @param initCode 
      */
     public final void setInit(String initCode) {
@@ -432,6 +454,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public void setInitValueImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setInitValue not implemented ");
+    }
+
+    /**
+     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public final void setInitValue(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInitValue", this, Optional.empty(), initCode);
+        	}
+        	this.setInitValueImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInitValue", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInitValue", e);
         }
     }
 
@@ -488,6 +536,32 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Sets the attribute 'isParallel' of the loop.
+     * @param isParallel 
+     */
+    public void setIsParallelImpl(Boolean isParallel) {
+        throw new UnsupportedOperationException(get_class()+": Action setIsParallel not implemented ");
+    }
+
+    /**
+     * Sets the attribute 'isParallel' of the loop.
+     * @param isParallel 
+     */
+    public final void setIsParallel(Boolean isParallel) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setIsParallel", this, Optional.empty(), isParallel);
+        	}
+        	this.setIsParallelImpl(isParallel);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setIsParallel", this, Optional.empty(), isParallel);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setIsParallel", e);
+        }
+    }
+
+    /**
      * Interchanges two for loops, if possible.
      * @param otherLoop 
      */
@@ -535,6 +609,36 @@ public abstract class ALoop extends AStatement {
         	this.tileImpl(blockSize, reference);
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.empty(), blockSize, reference);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "tile", e);
+        }
+    }
+
+    /**
+     * Applies loop tiling to target loop.
+     * @param blockSize 
+     * @param reference 
+     * @param useTernary 
+     */
+    public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
+        throw new UnsupportedOperationException(get_class()+": Action tile not implemented ");
+    }
+
+    /**
+     * Applies loop tiling to target loop.
+     * @param blockSize 
+     * @param reference 
+     * @param useTernary 
+     */
+    public final void tile(String blockSize, ALoop reference, Boolean useTernary) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference, useTernary);
+        	}
+        	this.tileImpl(blockSize, reference, useTernary);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.empty(), blockSize, reference, useTernary);
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
@@ -596,6 +700,24 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select memberCalls
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberCall> selectMemberCall() {
+        return this.aStatement.selectMemberCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select memberAccesss
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberAccess> selectMemberAccess() {
+        return this.aStatement.selectMemberAccess();
+    }
+
+    /**
      * Method used by the lara interpreter to select arrayAccesss
      * @return 
      */
@@ -638,6 +760,24 @@ public abstract class ALoop extends AStatement {
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
         return this.aStatement.selectUnaryOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select newExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ANewExpr> selectNewExpr() {
+        return this.aStatement.selectNewExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select deleteExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ADeleteExpr> selectDeleteExpr() {
+        return this.aStatement.selectDeleteExpr();
     }
 
     /**
@@ -704,6 +844,33 @@ public abstract class ALoop extends AStatement {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aStatement.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aStatement.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -719,16 +886,6 @@ public abstract class ALoop extends AStatement {
     @Override
     public void insertImpl(String position, String code) {
         this.aStatement.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aStatement.defImpl(attribute, value);
     }
 
     /**
@@ -778,6 +935,12 @@ public abstract class ALoop extends AStatement {
         	case "stmtCall": 
         		joinPointList = selectStmtCall();
         		break;
+        	case "memberCall": 
+        		joinPointList = selectMemberCall();
+        		break;
+        	case "memberAccess": 
+        		joinPointList = selectMemberAccess();
+        		break;
         	case "arrayAccess": 
         		joinPointList = selectArrayAccess();
         		break;
@@ -793,11 +956,52 @@ public abstract class ALoop extends AStatement {
         	case "unaryOp": 
         		joinPointList = selectUnaryOp();
         		break;
+        	case "newExpr": 
+        		joinPointList = selectNewExpr();
+        		break;
+        	case "deleteExpr": 
+        		joinPointList = selectDeleteExpr();
+        		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "isParallel": {
+        	if(value instanceof Boolean){
+        		this.defIsParallelImpl((Boolean)value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defIsParallelImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "initValue": {
+        	if(value instanceof String){
+        		this.defInitValueImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**
@@ -841,10 +1045,13 @@ public abstract class ALoop extends AStatement {
         actions.add("void changeKind(String)");
         actions.add("void setKind(String)");
         actions.add("void setInit(String)");
+        actions.add("void setInitValue(String)");
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
+        actions.add("void setIsParallel(Boolean)");
         actions.add("void interchange(loop)");
         actions.add("void tile(String, loop)");
+        actions.add("void tile(String, loop, Boolean)");
     }
 
     /**
@@ -892,8 +1099,11 @@ public abstract class ALoop extends AStatement {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -901,16 +1111,19 @@ public abstract class ALoop extends AStatement {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

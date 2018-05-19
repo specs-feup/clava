@@ -1,0 +1,4 @@
+#include <cfloat>
+#include <limits>
+double test_macro = 1.797693E308;
+double test_std = std::numeric_limits<double>::max();

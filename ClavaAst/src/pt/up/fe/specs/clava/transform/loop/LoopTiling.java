@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.transform.loop;
 
 import java.util.Collections;
+import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -28,28 +29,44 @@ import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class LoopTiling {
 
-    public static boolean apply(LoopStmt targetLoop, String blockSize) {
+    private final ClavaContext context;
+    private final ClavaFactory factory;
+
+    public LoopTiling(ClavaContext context) {
+        this.context = context;
+        this.factory = context.get(ClavaContext.FACTORY);
+    }
+
+    public boolean apply(LoopStmt targetLoop, String blockSize) {
 
         return apply(targetLoop, targetLoop, blockSize);
     }
 
-    public static boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize) {
+    public boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize) {
+
+        return apply(targetLoop, referenceLoop, blockSize, true);
+    }
+
+    public boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
 
         if (!test(targetLoop, referenceLoop)) {
 
             return false;
         }
 
-        tile(targetLoop, referenceLoop, blockSize);
+        tile(targetLoop, referenceLoop, blockSize, useTernary);
 
         return true;
     }
 
-    private static void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize) {
+    private void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
 
         ForStmt targetFor = (ForStmt) targetLoop;
         ForStmt referenceFor = (ForStmt) referenceLoop;
@@ -63,7 +80,7 @@ public class LoopTiling {
         // test guarantees there is an upper bound
         Expr oldUpperBound = LoopAnalysisUtils.getUpperBound(targetFor).get();
 
-        changeTarget(targetFor, blockSize, blockVarName, oldUpperBound);
+        changeTarget(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
         addBlockLoop(targetFor, referenceFor, blockSize, blockVarName, oldLowerBound, oldUpperBound);
     }
 
@@ -78,11 +95,12 @@ public class LoopTiling {
      * @param blockVarName
      * @param oldUpperBound
      */
-    private static void addBlockLoop(ForStmt targetFor, ForStmt referenceFor, String blockSize, String blockVarName,
+    private void addBlockLoop(ForStmt targetFor, ForStmt referenceFor, String blockSize, String blockVarName,
             Expr oldLowerBound, Expr oldUpperBound) {
 
         // make header parts
-        Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        // Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        Stmt init = ClavaNodeFactory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
         Stmt cond = ClavaNodeFactory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
         Stmt inc = ClavaNodeFactory.literalStmt(blockVarName + " += " + blockSize);
 
@@ -95,34 +113,69 @@ public class LoopTiling {
         newFor.getBody().addChild(referenceFor);
     }
 
-    private static void changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound) {
+    private void changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
+            boolean useTernary) {
 
         changeInit(targetFor, blockVarName);
-        changeCond(targetFor, blockSize, blockVarName, oldUpperBound);
+        changeCond(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
     }
 
-    private static void changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound) {
+    private void changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
+            boolean useTernary) {
 
         Type oldUpperBoundType = oldUpperBound.getType();
         String oldUpperBoundCode = oldUpperBound.getCode();
+
+        Expr newLimit = null;
         String blockLimit = blockVarName + " + " + blockSize;
 
-        String newLimitCode = "(" + oldUpperBoundCode + " < " + blockLimit + " ? " + oldUpperBoundCode + " : "
-                + blockLimit + ")";
-        Expr newLimit = ClavaNodeFactory.literalExpr(newLimitCode, oldUpperBoundType);
+        if (useTernary) {
+
+            String newLimitCode = "(" + oldUpperBoundCode + " < " + blockLimit + " ? " + oldUpperBoundCode + " : "
+                    + blockLimit + ")";
+            newLimit = ClavaNodeFactory.literalExpr(newLimitCode, oldUpperBoundType);
+        } else {
+
+            // add limit check and limit variable before the target loop
+            String limitVar = makeLimitCheck(targetFor, oldUpperBoundType, oldUpperBoundCode, blockLimit);
+
+            // change the limit code in the target loop
+            newLimit = ClavaNodeFactory.literalExpr(limitVar, oldUpperBoundType);
+        }
 
         NodeInsertUtils.replace(oldUpperBound, newLimit);
+    }
+
+    private String makeLimitCheck(ForStmt targetFor, Type oldUpperBoundType, String oldUpperBoundCode,
+            String blockLimit) {
+
+        List<String> controlVars = LoopAnalysisUtils.getControlVarNames(targetFor);
+        String controlVar = controlVars.get(0);
+        String limitVar = controlVar + "_limit";
+        String limitVarDecl = oldUpperBoundType.unqualifiedType().getCode() + " " + limitVar + " = " + blockLimit + ";";
+        String limitCheck = "if(" + limitVar + " > " + oldUpperBoundCode + ")" + limitVar + " = "
+                + oldUpperBoundCode + ";";
+
+        String limitDeclCode = limitVarDecl + limitCheck;
+        Stmt limitDecl = ClavaNodeFactory.literalStmt(limitDeclCode);
+        NodeInsertUtils.insertBefore(targetFor, limitDecl);
+
+        return limitVar;
     }
 
     /**
      * @param targetFor
      * @param blockVarName
      */
-    private static void changeInit(ForStmt targetFor, String blockVarName) {
+    private void changeInit(ForStmt targetFor, String blockVarName) {
 
         Stmt init = targetFor.getInit().get();
 
-        LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName, ClavaNodeFactory.builtinType("int"));
+        // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName, ClavaNodeFactory.builtinType("int"));
+        // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName,
+        // ClavaNodeFactory.builtinType(BuiltinKind.INT));
+
+        LiteralExpr newRHS = factory.literalExpr(blockVarName, factory.builtinType(BuiltinKind.Int));
 
         if (init instanceof ExprStmt) {
 
@@ -169,7 +222,7 @@ public class LoopTiling {
      *            the loop before which the new block-iterating loop will be introduced
      * @return true if we the transformation can be applied, false otherwise
      */
-    public static boolean test(LoopStmt targetLoop, LoopStmt referenceLoop) {
+    public boolean test(LoopStmt targetLoop, LoopStmt referenceLoop) {
 
         // 1
         if (!(targetLoop instanceof ForStmt && referenceLoop instanceof ForStmt)) {

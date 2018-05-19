@@ -50,7 +50,9 @@ public class RecordDeclParser extends AClangNodeParser<RecordDecl> {
         // Parse children, to extract attributes to RecordDeclData
         List<ClavaNode> children = parseChildren(node);
 
-        RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(), children);
+        // RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(),
+        // getStdErr(), children);
+        RecordDeclData recordDeclData = parseRecordDecl(node, children, parser);
 
         List<Decl> decls = children.stream().map(child -> toDecl(child)).collect(Collectors.toList());
 

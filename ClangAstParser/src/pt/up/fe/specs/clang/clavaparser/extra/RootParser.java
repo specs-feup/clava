@@ -28,19 +28,21 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clang.clavaparser.ClavaPostProcessing;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -112,7 +114,7 @@ public class RootParser extends AClangNodeParser<App> {
 
             // If Undefined, transform to DummyDecl
             if (clavaNode instanceof Undefined) {
-                clavaNode = ClavaNodeFactory.dummyDecl(clavaNode);
+                clavaNode = LegacyToDataStore.getFactory().dummyDecl(clavaNode);
             }
 
             if (!(clavaNode instanceof Decl)) {
@@ -124,6 +126,10 @@ public class RootParser extends AClangNodeParser<App> {
 
             declarations.put(canonicalPath, decl);
         }
+
+        double newNodesFraction = (double) getConverter().getNewParsedNodes() / getConverter().getTotalParsedNodes();
+        SpecsLogs.msgInfo("New nodes ratio: " + SpecsStrings.toPercentage(newNodesFraction) + " (from a total of "
+                + getConverter().getTotalParsedNodes() + " parsed nodes)");
 
         // For each enty in MultiMap, create a Translation Unit
         ClangIncludes includes = node.getClangRoot().getIncludes();
@@ -161,17 +167,22 @@ public class RootParser extends AClangNodeParser<App> {
 
             // Set<String> addedIncludes = new HashSet<>();
 
+            // Add includes
+            uniqueIncludes.stream()
+                    .map(include -> ClavaNodeFactory.include(include, path))
+                    .forEach(decls::add);
+            /*
             // Only add includes that are not in the line number range of the declarations
             if (!uniqueIncludes.isEmpty()) {
                 Set<Integer> lineNumbers = getLineNumbers(declNodes);
-
+            
                 for (Include include : uniqueIncludes) {
-
+            
                     // Only add include if line number of the include is not contained in declaration numbers
                     if (lineNumbers.contains(include.getLine())) {
                         continue;
                     }
-
+            
                     // Check if include was not already added
                     // if (addedIncludes.contains(include.toString())) {
                     // continue;
@@ -181,21 +192,24 @@ public class RootParser extends AClangNodeParser<App> {
                     decls.add(ClavaNodeFactory.include(include, path));
                 }
             }
-
+            */
             // Add declarations
             decls.addAll(declNodes);
 
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
 
             // Clean translation unit
-            ClavaPostProcessing.applyPostPasses(tUnit);
+            // ClavaPostProcessing.applyPostPasses(tUnit);
 
             tUnits.add(tUnit);
         }
 
         // Create App
-
-        App app = ClavaNodeFactory.app(tUnits);
+        // App app = ClavaNodeFactory.app(tUnits);
+        App app = getConfig()
+                .get(ClavaNode.CONTEXT)
+                .get(ClavaContext.FACTORY)
+                .app(tUnits);
 
         app.setIdsAlias(normalizedClangNodes.getRepeatedIdsMap());
 

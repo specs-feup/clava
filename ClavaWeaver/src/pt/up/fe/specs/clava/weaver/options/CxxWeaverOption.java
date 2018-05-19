@@ -25,9 +25,9 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 
 public interface CxxWeaverOption {
 
-    DataKey<String> WEAVED_CODE_FOLDERNAME = KeyFactory.string("Weaved code foldername")
-            .setLabel("Name of weaved code folder")
-            .setDefault(() -> CxxWeaver.getWeavedCodeFoldername());
+    DataKey<String> WOVEN_CODE_FOLDERNAME = KeyFactory.string("Weaved code foldername")
+            .setLabel("Name of woven code folder")
+            .setDefault(() -> CxxWeaver.getWovenCodeFoldername());
 
     DataKey<Boolean> DISABLE_CLAVA_INFO = KeyFactory.bool("Disable Clava Info")
             .setLabel("Disable Clava execution information");
@@ -38,20 +38,34 @@ public interface CxxWeaverOption {
     DataKey<Boolean> CLEAN_INTERMEDIATE_FILES = KeyFactory.bool("Clean intermediate files")
             .setDefault(() -> true);
 
-    DataKey<FileList> LIBRARY_INCLUDES = LaraIKeyFactory.folderList("library includes")
-            .setLabel("Library Includes")
+    DataKey<FileList> HEADER_INCLUDES = LaraIKeyFactory.folderList("header includes")
+            .setLabel("Normal Includes")
+            .setDefault(() -> FileList.newInstance());
+
+    DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
+            .setLabel("System Includes")
             .setDefault(() -> FileList.newInstance());
 
     DataKey<Boolean> DISABLE_WEAVING = KeyFactory.bool("Disable Weaving")
             .setLabel("Disable weaving (only executes the LARA code, does not parse C/C++ code)");
 
     DataKey<Boolean> DISABLE_CODE_GENERATION = KeyFactory.bool("Disable Code Generation")
-            .setLabel("Disable code generation (except sources files that are explictly writen in LARA aspects)");
+            .setLabel("Disable code generation (still possible to generate code explictly from LARA)");
+
+    DataKey<Boolean> GENERATE_MODIFIED_CODE_ONLY = KeyFactory.bool("Generate Modified Code Only")
+            .setLabel("Generate code from AST only if tree is modified (otherwise copies original file)");
+
+    DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten woven code folder structure");
+
+    DataKey<Boolean> UNIT_TESTING_MODE = KeyFactory.bool("Unit Testing Mode")
+            .setLabel("Runs the Clava Unit-Tester");
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
-            .addKeys(WEAVED_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
-                    LIBRARY_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION)
+            .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
+                    HEADER_INCLUDES, SYSTEM_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION,
+                    GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
+            // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .build();
 
 }

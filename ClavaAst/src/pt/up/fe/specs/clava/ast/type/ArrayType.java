@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import pt.up.fe.specs.clava.ClavaCode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
@@ -50,7 +49,8 @@ public abstract class ArrayType extends Type {
 
         Type elementType = getElementType();
 
-        String qualifierString = ClavaCode.getQualifiersCode(arrayTypeData.getQualifiers());
+        // String qualifierString = ClavaCode.getQualifiersCode(arrayTypeData.getQualifiers(), isCxx);
+        String qualifierString = arrayTypeData.getQualifiersCode();
         String arraySizeType = arrayTypeData.getArraySizeType().getCode();
 
         StringBuilder arrayContentCode = new StringBuilder(qualifierString);

@@ -1,0 +1,31 @@
+import lara.CompilationBase;
+import clava.Clava;
+
+Compilation.getExtraSources = function() {
+	return Clava.getProgram().extraSources;
+}
+
+
+Compilation.getExtraIncludes = function() {
+	return Clava.getProgram().extraIncludes;
+}
+
+
+Compilation.addExtraInclude = function(path) {
+	Clava.getProgram().addExtraInclude(path);
+}
+
+
+Compilation.addExtraIncludeFromGit = function(gitRepository, path) {
+	Clava.getProgram().addExtraIncludeFromGit(gitRepository, path);
+}
+
+
+Compilation.addExtraSource = function(path) {
+	Clava.getProgram().addExtraSource(path);
+}
+
+
+Compilation.addExtraSourceFromGit = function(gitRepository, path) {
+	Clava.getProgram().addExtraSourceFromGit(gitRepository, path);
+}

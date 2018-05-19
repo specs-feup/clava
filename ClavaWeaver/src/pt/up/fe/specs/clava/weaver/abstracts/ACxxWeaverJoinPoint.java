@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
 
@@ -13,9 +16,10 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.SourceLocation;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
@@ -24,10 +28,11 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -36,10 +41,17 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
+    // private static final String BASE_CLAVA_AST_PACKAGE = "pt.up.fe.specs.clava.ast";
+    //
+    // protected static String getBaseClavaAstPackage() {
+    // return BASE_CLAVA_AST_PACKAGE;
+    // }
+
     private static final Set<Class<? extends ClavaNode>> IGNORE_NODES;
     static {
         IGNORE_NODES = new HashSet<>();
         IGNORE_NODES.add(ImplicitCastExpr.class);
+        // IGNORE_NODES.add(ParenExpr.class); // Have not tried it yet
     }
 
     @Override
@@ -81,8 +93,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         while (current.getHasParentImpl()) {
             current = current.getParentImpl();
         }
-
-
+        
+        
         return (current instanceof CxxProgram) ? (CxxProgram) current : null;
         */
         // Preconditions.checkArgument(current instanceof CxxProgram,
@@ -114,6 +126,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public Boolean getHasAstParentImpl() {
+        return getNode().hasParent();
+    }
+
+    @Override
     public AJoinPoint ancestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'ancestor'");
 
@@ -132,6 +149,36 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         return null;
+    }
+
+    @Override
+    public AJoinPoint[] descendantsArrayImpl(String type) {
+        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
+
+        return getNode().getDescendantsStream()
+                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .filter(jp -> jp.instanceOf(type))
+                // .filter(jp -> jp.getJoinpointType().equals(type))
+                .toArray(AJoinPoint[]::new);
+
+    }
+
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return getNode().getDescendantsStream()
+                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .toArray(AJoinPoint[]::new);
+    }
+
+    @Override
+    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
+        Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
+
+        return getNode().getDescendantsAndSelfStream()
+                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .filter(jp -> jp.instanceOf(type))
+                // .filter(jp -> jp.getJoinpointType().equals(type))
+                .toArray(AJoinPoint[]::new);
     }
 
     @Override
@@ -175,11 +222,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         ACxxWeaverJoinPoint currentJp = this;
         while (currentJp.getAstParent() != null) {
             ACxxWeaverJoinPoint parentJp = currentJp.getAstParent();
-
+        
             if (parentJp.getJoinpointType().equals(type)) {
                 return parentJp;
             }
-
+        
             currentJp = parentJp;
         }
         */
@@ -194,7 +241,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getAstImpl() {
-        return getNode().toString();
+        return getNode().toTree();
     }
 
     @Override
@@ -229,7 +276,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public void insertImpl(String position, String code) {
-        Insert insert = Insert.getHelper().valueOf(position);
+        Insert insert = Insert.getHelper().fromValue(position);
         CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine());
         //
         // if (insert == Insert.AFTER || insert == Insert.BEFORE) {
@@ -241,15 +288,15 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void defTypeImpl(AJoinPoint type) {
         // Check if joinpoint is a type
-        if (!(type instanceof CxxType)) {
+        if (!(type instanceof AType)) {
             SpecsLogs.msgInfo(
                     "[setType] Passed a joinpoint that is not a Type ('" + type.getJoinpointType() + "'), ignoring");
             return;
         }
 
-        CxxType cxxType = (CxxType) type;
+        AType cxxType = (AType) type;
 
         // Check if node has a type
         ClavaNode node = getNode();
@@ -260,28 +307,100 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return;
         }
 
-        ((Typable) node).setType(cxxType.getNode());
+        /*
+        FunctionDecl decl = node.getApp().getDescendantsAndSelfStream()
+                .filter(FunctionDecl.class::isInstance)
+                .map(FunctionDecl.class::cast)
+                .filter(fdecl -> fdecl.getDeclName().equals("test_matrix_mul"))
+                .findFirst()
+                .get();
+        
+        CStyleCastExpr cStyleCast = decl.getFirstDescendantsAndSelf(CStyleCastExpr.class).get();
+        System.out.println("BEFORE:" + cStyleCast.getExprType().getCode());
+        */
+        /*
+        FunctionDecl decl = null;
+        if (node instanceof CStyleCastExpr) {
+            // Get original
+            decl = node.getApp().getDescendantsAndSelfStream()
+                    .filter(FunctionDecl.class::isInstance)
+                    .map(FunctionDecl.class::cast)
+                    .filter(fdecl -> fdecl.getDeclName().equals("test_matrix_mul"))
+                    .findFirst()
+                    .get();
+        
+            System.out.println("ORIGINAL FUNCTION BEFORE:\n" + decl.getCode());
+            System.out.println("NODE BEFORE:\n" + node.getCode());
+        
+        }
+        */
+
+        /*
+        FunctionDecl decl = node.getAncestor(FunctionDecl.class);
+        if (decl.getDeclName().equals("test_matrix_mul_cloned")) {
+            System.out.println("CLONED");
+        }
+        if (decl.getDeclName().equals("test_matrix_mul")) {
+            System.out.println("ORIGINAL");
+        }
+        */
+        // String cTypeCode = cStyleCast.getExprType().getCode();
+        // System.out.println("BEFORE:" + cStyleCast.getExprType().getCode());
+        ((Typable) node).setType((Type) cxxType.getNode());
+
+        // System.out.println("AFTER:" + cStyleCast.getExprType().getCode());
+        // if (!cStyleCast.getExprType().getCode().equals(cTypeCode)) {
+        // System.out.println("TYPE CHANGED!");
+        // System.out.println("NODE:" + node);
+        // }
+
+        /*
+        if (node instanceof CStyleCastExpr) {
+            System.out.println("ORIGINAL FUNCTION AFTER:\n" + decl.getCode());
+            System.out.println("NODE AFTER:\n" + node.getCode());
+        
+        }
+        */
 
     }
 
     @Override
+    public void setTypeImpl(AJoinPoint type) {
+        defTypeImpl(type);
+    }
+
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+        // Check if type
+        if (node.getNode() instanceof Type) {
+            ClavaLog.info("Action 'insertBefore' not available for 'type' join points");
+            return null;
+        }
+
         return CxxActions.insertBefore(this, node);
     }
 
     @Override
     public AJoinPoint insertBeforeImpl(String code) {
-        return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
+        // return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
+        return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), this));
     }
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        // Check if type
+        if (node.getNode() instanceof Type) {
+            ClavaLog.info("Action 'insertAfter' not available for 'type' join points");
+            return null;
+        }
+
         return CxxActions.insertAfter(this, node);
     }
 
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return insertAfterImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
+        // return insertAfterImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
+        return insertAfterImpl(CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), this));
     }
 
     @Override
@@ -295,10 +414,17 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public void detachImpl() {
         ClavaNode node = getNode();
-        System.out.println("Hello");
+
         if (!node.hasParent()) {
             SpecsLogs.msgInfo(
                     "action detach: could not find a parent in joinpoint of type '" + getJoinpointType() + "'");
+            return;
+        }
+
+        // If node is wrapped, detach wrapper
+        ClavaNode parentNode = node.getParent();
+        if (parentNode.isWrapper()) {
+            parentNode.detach();
             return;
         }
 
@@ -335,41 +461,41 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     /*
     @Override
     public String getName() {
-
+    
         String name = GET_NAME.apply(getNodeNormalized());
-
+    
         if (name != null && name.equals(GET_NAME_DEFAULT)) {
             CxxLog.warning("attribute 'name' not implemented for joinpoint '" + getClass().getSimpleName() + "'");
             return null;
         }
-
+    
         return name;
         /*
         // TODO: Add .getName() to ClavaNode, returning an Optional
-
+    
         // ClavaNode node = getNode();
         ClavaNode node = getNodeNormalized();
         if (node instanceof NamedDecl) {
             NamedDecl namedDecl = ((NamedDecl) node);
             return namedDecl.hasDeclName() ? namedDecl.getDeclName() : null;
         }
-
+    
         // if (node instanceof Type) {
         // return node.getNodeName();
         // }
-
+    
         if (node instanceof TagType) {
             return ((TagType) node).getDeclInfo().getDeclName();
         }
-
+    
         if (node instanceof DeclRefExpr) {
             return ((DeclRefExpr) node).getRefName();
         }
-
+    
         if (node instanceof Stmt) {
             return ((Stmt) node).getClass().getSimpleName();
         }
-
+    
         CxxLog.warning("attribute 'name' not implemented for joinpoint '" + getClass().getSimpleName() + "'");
         return null;
         // throw new RuntimeException(
@@ -393,17 +519,18 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .findFirst().isPresent();
     }
 
+    /*
     @Override
     public void defImpl(String attribute, Object value) {
         // Get def map
         DefMap<?> defMap = getDefMap();
-
+    
         if (defMap == null) {
             SpecsLogs
                     .msgInfo("Joinpoint '" + getJoinpointType() + "' does not have 'def' defined for any attribute");
             return;
         }
-
+    
         if (!defMap.hasAttribute(attribute)) {
             List<String> keys = new ArrayList<>(defMap.keys());
             Collections.sort(keys);
@@ -412,9 +539,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             SpecsLogs.msgInfo("Available attributes: " + keys);
             return;
         }
-
+    
         defMap.apply(attribute, this, value);
     }
+    */
 
     protected DefMap<?> getDefMap() {
         return null;
@@ -488,7 +616,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getAstNameImpl() {
-        return getNodeNormalized().getNodeName();
+        String nodeName = getNodeNormalized().getNodeName();
+        if (nodeName.endsWith("Legacy")) {
+            nodeName = SpecsStrings.removeSuffix(nodeName, "Legacy");
+        }
+
+        return nodeName;
+
     }
 
     @Override
@@ -518,6 +652,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getUserFieldImpl(String fieldName) {
+        ClavaLog.deprecated("attribute 'getUserField' is deprecated, please use 'userField' instead");
+        return userFieldImpl(fieldName);
+        // return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
+    }
+
+    @Override
+    public Object userFieldImpl(String fieldName) {
         return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
     }
 
@@ -527,6 +668,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+
+        Object lastPrevious = null;
+        for (Entry<?, ?> entry : fieldNameAndValue.entrySet()) {
+            lastPrevious = setUserField(entry.getKey().toString(), entry.getValue());
+        }
+
+        return lastPrevious;
+    }
+    // @Override
+    // public Object setUserFieldImpl(Object fieldNameAndValue) {
+    // System.out.println("CLASS:" + fieldNameAndValue.getClass());
+    // System.out.println("VALUE:" + fieldNameAndValue);
+    // return super.setUserFieldImpl(fieldNameAndValue);
+    // }
+
+    @Override
     public AJoinPoint getParentRegionImpl() {
 
         return CxxAttributes.getParentRegion(getNode())
@@ -534,12 +692,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .orElse(null);
         /*
         Optional<? extends ClavaNode> parentRegionTry = CxxAttributes.getParentRegion(getNode());
-
+        
         if (!parentRegionTry.isPresent()) {
             ClavaLog.info("Join point '" + getJoinPointType() + "' does not support parentRegion");
             return null;
         }
-
+        
         return CxxJoinpoints.create(parentRegionTry.get(), this);
         */
         /*
@@ -549,7 +707,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             ClavaLog.info("Join point '" + getJoinPointType() + "' does not support parentRegion");
             return null;
         }
-
+        
         // If already at top region, return that node
         if (currentRegion instanceof TranslationUnit) {
             return CxxJoinpoints.create(currentRegion, this);
@@ -581,7 +739,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         if (!(obj instanceof AJoinPoint)) {
             return false;
         }
-
+        // System.out.println("Equals? " + getNode().equals(((AJoinPoint) obj).getNode()));
+        // System.out.println("Node 1:" + getNode());
+        // System.out.println("Node 2:" + ((AJoinPoint) obj).getNode());
         return getNode().equals(((AJoinPoint) obj).getNode());
     }
 
@@ -589,4 +749,74 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public int hashCode() {
         return getNode().hashCode();
     }
+
+    @Override
+    public AJoinPoint copyImpl() {
+        return CxxJoinpoints.create(getNode().copy(), null);
+    }
+
+    @Override
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return getNode().getChildren().stream()
+                .map(node -> CxxJoinpoints.create(node, this))
+                .collect(Collectors.toList())
+                .toArray(new AJoinPoint[0]);
+
+    }
+
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        if (nodeOrJp instanceof AJoinPoint) {
+            return hasNodeImpl(((AJoinPoint) nodeOrJp).getNode());
+        }
+
+        if (nodeOrJp instanceof ClavaNode) {
+            return getNode() == nodeOrJp;
+        }
+
+        ClavaLog.warning("joinpoint attribute 'hasNode': input type '" + nodeOrJp.getClass()
+                + "' not supported, returning false");
+        return false;
+    }
+
+    /**
+     * 
+     * @return the base ClavaAst class for this kind of nodes.
+     */
+    private String getBaseClavaNodePackage() {
+        return getNode().getClass().getPackage().getName();
+    }
+
+    // @Override
+    // public List<? extends ACxxWeaverJoinPoint> selectDescendant() {
+    // return getNode().getDescendantsStream()
+    // .map(descendant -> CxxJoinpoints.create(descendant, this))
+    // .collect(Collectors.toList());
+    // }
+
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        // Assume nodes are in the same package
+        String packageName = getBaseClavaNodePackage();
+
+        // ... unless current node is in a legacy package. Normalize package
+        if (packageName.endsWith(".legacy")) {
+            packageName = packageName.substring(0, packageName.length() - ".legacy".length());
+        }
+
+        // ... or if the given class name if for a legacy node. Add legacy package
+        if (className.endsWith("Legacy")) {
+            packageName = packageName + ".legacy";
+        }
+
+        String fullClassName = packageName + "." + className;
+
+        try {
+            return Class.forName(fullClassName).isInstance(getNode());
+        } catch (ClassNotFoundException e) {
+            SpecsLogs.msgInfo("Could not find class '" + fullClassName + "' to compare against this node");
+            return false;
+        }
+    }
+
 }

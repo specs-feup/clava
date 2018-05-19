@@ -52,6 +52,11 @@ public abstract class Pragma extends ClavaNode {
         while (parent.isWrapper()) {
             currentNode = parent;
             parent = parent.getParent();
+
+            // In case this node is detached
+            if (parent == null) {
+                return Optional.empty();
+            }
         }
 
         int indexOfPragma = currentNode.indexOfSelf();

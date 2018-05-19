@@ -41,6 +41,12 @@ public class DeclData {
         this.referenced = referenced;
         this.invalid = invalid;
         this.constexpr = constexpr;
+
+        // if (constexpr) {
+        // SpecsLogs.msgWarn(
+        // "ConstExpr true in DeclData, check if there is difference between VarDeclDumperInfo.isConstexpr");
+        // }
+
     }
 
     public boolean isHidden() {

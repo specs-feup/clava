@@ -16,76 +16,79 @@ package pt.up.fe.specs.clava.ast.stmt;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class CXXForRangeStmt extends Stmt {
 
-    public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, DeclStmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
-	    Stmt body) {
+    public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
+            Stmt body) {
 
-	this(info, Arrays.asList(range, beginEnd, cond, inc, loopVar, body));
+        this(info, Arrays.asList(range, ClavaNodes.getNodeOrNullStmt(beginEnd), cond, inc, loopVar, body));
     }
 
     private CXXForRangeStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-	super(info, children);
+        super(info, children);
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-	return new CXXForRangeStmt(getInfo(), Collections.emptyList());
+        return new CXXForRangeStmt(getInfo(), Collections.emptyList());
     }
 
     public DeclStmt getRange() {
-	return getChild(DeclStmt.class, 0);
+        return getChild(DeclStmt.class, 0);
     }
 
-    public DeclStmt getBeginEnd() {
-	return getChild(DeclStmt.class, 1);
+    public Optional<DeclStmt> getBeginEnd() {
+        // It can be a NullStmt
+        return getChildTry(DeclStmt.class, 1);
     }
 
     public Expr getCond() {
-	return getChild(Expr.class, 2);
+        return getChild(Expr.class, 2);
     }
 
     public Expr getInc() {
-	return getChild(Expr.class, 3);
+        return getChild(Expr.class, 3);
     }
 
     public DeclStmt getLoopVar() {
-	return getChild(DeclStmt.class, 4);
+        return getChild(DeclStmt.class, 4);
     }
 
     public Stmt getBody() {
-	return getChild(Stmt.class, 5);
+        return getChild(Stmt.class, 5);
     }
 
     @Override
     public String getCode() {
-	StringBuilder code = new StringBuilder();
+        StringBuilder code = new StringBuilder();
 
-	code.append("for(");
+        code.append("for(");
 
-	VarDecl loopVar = (VarDecl) getLoopVar().getDecls().get(0);
+        VarDecl loopVar = (VarDecl) getLoopVar().getDecls().get(0);
 
-	// String loopVarType = loopVar.getTypeCode().trim();
-	String loopVarType = loopVar.getType().getCode().trim();
-	if (loopVarType.endsWith(" &")) {
-	    loopVarType = loopVarType.substring(0, loopVarType.length() - 1) + "auto&";
-	}
+        // String loopVarType = loopVar.getTypeCode().trim();
+        String loopVarType = loopVar.getType().getCode().trim();
+        if (loopVarType.endsWith(" &")) {
+            loopVarType = loopVarType.substring(0, loopVarType.length() - 1) + "auto&";
+        }
 
-	code.append(loopVarType).append(" ").append(loopVar.getDeclName());
+        code.append(loopVarType).append(" ").append(loopVar.getDeclName());
 
-	code.append(" : ");
-	VarDecl initVar = (VarDecl) getRange().getDecls().get(0);
-	String expr = initVar.getInit().get().getCode();
+        code.append(" : ");
+        VarDecl initVar = (VarDecl) getRange().getDecls().get(0);
+        String expr = initVar.getInit().get().getCode();
 
-	code.append(expr).append(")");
-	code.append(getBody().getCode());
+        code.append(expr).append(")");
+        code.append(getBody().getCode());
 
-	return code.toString();
+        return code.toString();
     }
 }

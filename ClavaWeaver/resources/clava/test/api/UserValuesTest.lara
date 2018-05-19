@@ -1,0 +1,48 @@
+import clava.Clava;
+
+aspectdef UserValues
+
+	select program end
+	apply
+		// Previous way of using userField
+		$program.setUserField("test", "test string");		
+		// Deprecated get
+		println("User field: " + $program.getUserField("test"));
+
+		// Now this is also supported
+		$program.userField = {"test": "test string 2"};
+		println("User field: " + $program.userField("test"));
+		
+		var anArray = ["Hello", "World"];
+		$program.userField = {"anArray": anArray};
+		
+		var aMap = {"field1" : "field1_value", "field2" : 2};
+		$program.userField = {"aMap": aMap};
+	end
+	
+	Clava.pushAst();
+
+	select program end
+	apply
+		println("User field after push: " + $program.userField("test"));
+		println("Array after push:");
+		printObject($program.userField("anArray"));
+		println("\nMap after push:");
+		printObject($program.userField("aMap"));
+		println();
+		// Changes array
+		$program.userField("anArray").push("pushed");
+	end
+	
+	Clava.popAst();
+	
+	select program end
+	apply
+		println("Array after pop:");
+		printObject($program.userField("anArray"));
+	end
+	
+	//println("PROGRAM:" + Clava.getProgram().extraIncludes);
+	//println("Standard:" + Clava.getStandard());
+end
+

@@ -19,9 +19,10 @@ import java.util.stream.Stream;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -38,6 +39,8 @@ public interface ClangNodeParser<T extends ClavaNode> {
     // ClavaNode parse(ClangNode node);
     T parse(ClangNode node);
 
+    // DataStore getDumperData();
+
     default List<ClavaNode> parseChildren(ClangNode node) {
         return parseChildren(node.getChildrenStream());
     }
@@ -49,12 +52,19 @@ public interface ClangNodeParser<T extends ClavaNode> {
     default List<ClavaNode> parseChildren(Stream<ClangNode> stream, String parentNodeName) {
         // Check if inside a Type parser
         boolean isTypeParser = parentNodeName.endsWith("TypeParser");
+
+        return parseChildren(stream, parentNodeName, isTypeParser);
+    }
+
+    default List<ClavaNode> parseChildren(Stream<ClangNode> stream, String parentNodeName, boolean isTypeParser) {
+
         // boolean isTypeParser = getClass().getSimpleName().endsWith("TypeParser");
         // System.out.println("IS TYPE PARSER:" + isTypeParser);
         return stream.map(child -> parseChild(child, isTypeParser))
                 // Remove full comment nodes
                 .filter(clavaNode -> !(clavaNode instanceof FullComment))
                 .collect(Collectors.toList());
+
     }
 
     ClavaNode parseChild(ClangNode node, boolean isTypeParser);
@@ -81,11 +91,12 @@ public interface ClangNodeParser<T extends ClavaNode> {
     static Stmt toStmt(ClavaNode node) {
         // If node is an Expr, create statement
         if (node instanceof Expr) {
-            return ClavaNodeFactory.exprStmt((Expr) node);
+            return LegacyToDataStore.getFactory().exprStmt((Expr) node);
+            // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof NullNode) {
-            // LoggingUtils.msgWarn("RETURNING NULLNODE");
+            // return ClavaNodeFactory.nullStmt(node.getInfo());
             return null;
         }
 
@@ -105,11 +116,15 @@ public interface ClangNodeParser<T extends ClavaNode> {
         }
 
         if (node instanceof Expr) {
-            return ClavaNodeFactory.exprStmtWithoutSemicolon((Expr) node);
+            return LegacyToDataStore.getFactory().exprStmt((Expr) node)
+                    .setHasSemicolon(false);
+            // return ClavaNodesLegacy.exprStmt(false, (Expr) node);
         }
 
         if (node instanceof NamedDecl) {
-            return ClavaNodeFactory.declStmtWithoutSemicolon(ClavaNodeInfo.undefinedInfo(), (NamedDecl) node);
+            return LegacyToDataStore.getFactory().declStmt((Decl) node)
+                    .setHasSemicolon(false);
+            // return ClavaNodeFactory.declStmtWithoutSemicolon(ClavaNodeInfo.undefinedInfo(), (NamedDecl) node);
         }
 
         throw new RuntimeException("Case not implemented yet:" + node.getClass());

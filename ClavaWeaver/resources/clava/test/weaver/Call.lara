@@ -1,0 +1,31 @@
+aspectdef CallTest
+
+	var $firstOp = undefined;
+	select binaryOp end
+	apply
+		$firstOp = $binaryOp;
+	end
+
+	select call{"foo"} end
+	apply
+		println("foo original:" + $call.code);
+		var arg1 = $call.arg(1);
+		$call.exec setArg(0, arg1);
+		println("foo new expr arg:" + $call.code);
+		$call.exec setArgFromString(1, 10);
+		println("foo new string arg:" + $call.code);
+		$call.exec setArg(1, $firstOp);
+		println("foo op arg:" + $call.code);
+	end
+	
+
+	// Member access
+	select call{"foo2"} end
+	apply
+		//println("Call: " + $call.code);
+		//println("Call name: " + $call.name);		
+		println("Decl:" + $call.declaration.line);
+		println("Def:" + $call.definition.line);
+	end
+	
+end

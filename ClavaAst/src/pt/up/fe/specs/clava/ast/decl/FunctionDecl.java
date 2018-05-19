@@ -18,22 +18,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.ClavaLog;
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
-import pt.up.fe.specs.clava.ast.extra.VariadicType;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.ExceptionSpecifier;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -52,9 +55,20 @@ import pt.up.fe.specs.util.lazy.Lazy;
  */
 public class FunctionDecl extends DeclaratorDecl {
 
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
+
+    public final static DataKey<TemplateKind> TEMPLATE_KIND = KeyFactory.enumeration("templateKind",
+            TemplateKind.class)
+            .setDefault(() -> TemplateKind.NON_TEMPLATE);
+
+    /// DATAKEYS END
+
     private final FunctionDeclData functionDeclData;
 
     private Lazy<FunctionDecl> declaration;
+    private Lazy<FunctionDecl> definition;
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
     // prevents direct transformations in the tree (e.g., if we remove a parameter, the value needs to be updated)
     // Solutions:
@@ -68,6 +82,12 @@ public class FunctionDecl extends DeclaratorDecl {
     // reverts to 2)
     // private final int numParameters;
     // private final boolean hasDefinition;
+
+    // Just for testing
+    // public FunctionDecl(FunctionDeclDataV2 data, List<ClavaNode> children) {
+    // super(null, null, null, null, Collections.emptyList());
+    // functionDeclData = null;
+    // }
 
     /**
      * Constructor for a function definition.
@@ -102,7 +122,8 @@ public class FunctionDecl extends DeclaratorDecl {
         super(declName, functionType, declData, info, children);
 
         this.functionDeclData = functionDeclData;
-        this.declaration = Lazy.newInstance(this::findDeclaration);
+        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
+        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
 
     }
 
@@ -175,6 +196,7 @@ public class FunctionDecl extends DeclaratorDecl {
         code.append(ln());
 
         code.append(getDeclarationId(true));
+
         /*
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");
@@ -206,12 +228,37 @@ public class FunctionDecl extends DeclaratorDecl {
         return Optional.ofNullable(declaration.get());
     }
 
-    private FunctionDecl findDeclaration() {
+    /**
+     * The function declaration corresponding to the definition of the function represented by this node.
+     * 
+     * @return
+     */
+    public Optional<FunctionDecl> getDefinitionDeclaration() {
+        // If has body, this node is already the definition
+        if (hasBody()) {
+            return Optional.of(this);
+        }
+
+        // Get 'cached' value
+        return Optional.ofNullable(definition.get());
+    }
+
+    // private FunctionDecl findDeclaration() {
+    //
+    // }
+
+    private FunctionDecl findDeclOrDef(boolean findDecl) {
+        App app = getAppTry().orElse(null);
+
+        if (app == null) {
+            return null;
+        }
+
         // Find function declarations with the same name and the same signature
         List<FunctionDecl> decls = getApp().getDescendantsStream()
                 .filter(FunctionDecl.class::isInstance)
                 .map(FunctionDecl.class::cast)
-                .filter(fdecl -> !fdecl.hasBody())
+                .filter(fdecl -> findDecl ? !fdecl.hasBody() : fdecl.hasBody())
                 .filter(fdecl -> fdecl.getDeclName().equals(getDeclName()))
                 .filter(fdecl -> fdecl.getDeclarationId(false).equals(getDeclarationId(false)))
                 .collect(Collectors.toList());
@@ -225,6 +272,10 @@ public class FunctionDecl extends DeclaratorDecl {
 
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
+
+        if (getFunctionDeclData().hasOpenCLKernelAttr()) {
+            code.append("__kernel ");
+        }
 
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");
@@ -252,16 +303,14 @@ public class FunctionDecl extends DeclaratorDecl {
         String parameters = getParametersCode();
 
         // if (!getFunctionTypeTry().isPresent()) {
-        if (Types.getFunctionType(getType()) == null) {
-            return "<no function type>";
-        }
+        // if (Types.getFunctionType(getType()) == null) {
+        // throw new RuntimeException("Expected type to be a function type: " + getType().toTree());
+        // // return "<no function type>";
+        // }
 
-        Optional<Type> lastParamType = SpecsCollections.lastTry(getFunctionType().getParamTypes());
-        boolean hasVariadicArguments = lastParamType.map(type -> type instanceof VariadicType).orElse(false);
-        // lastParamType == null ? false : lastParamType instanceof VariadicType;
-
-        // boolean hasVariadicArguments = getFunctionType().getCode().endsWith(", ...)");
-        parameters = hasVariadicArguments ? parameters + ", ..." : parameters;
+        // Optional<Type> lastParamType = SpecsCollections.lastTry(getFunctionType().getParamTypes());
+        // boolean hasVariadicArguments = lastParamType.map(type -> type instanceof VariadicType).orElse(false);
+        // parameters = hasVariadicArguments ? parameters + ", ..." : parameters;
 
         code.append("(").append(parameters).append(")");
 
@@ -278,61 +327,9 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         FunctionProtoType functionProtoType = (FunctionProtoType) functionType;
-        FunctionProtoTypeData ptData = functionProtoType.getFunctionProtoTypeData();
-        StringBuilder code = new StringBuilder();
 
-        // Add const/volatile
-        if (ptData.isConst()) {
-            code.append(" const");
-        }
-        if (ptData.isVolatile()) {
-            code.append(" volatile");
-        }
+        return functionProtoType.getCodeAfterParams();
 
-        code.append(getCodeExcept(ptData));
-
-        return code.toString();
-    }
-
-    private String getCodeExcept(FunctionProtoTypeData ptData) {
-        // FunctionType functionType = getFunctionType();
-        // if (!(functionType instanceof FunctionProtoType)) {
-        // return "";
-        // }
-        //
-        // FunctionProtoType functionProtoType = (FunctionProtoType) functionType;
-        ExceptionSpecifier specifier = ptData.getSpecifier();
-        switch (specifier) {
-        case NONE:
-            return "";
-        case MS_ANY:
-            return " throw(...)";
-        case DYNAMIC_NONE:
-            return " throw()";
-        case BASIC_NOEXCEPT:
-            return " noexcept";
-        case COMPUTED_NOEXCEPT:
-            return " noexcept(" + ptData.getNoexceptExpr() + ")";
-        case UNEVALUATED:
-            // Appears to be used in cases like
-            // ~A(), ~A() = delete and ~A() = 0
-            // where there is no exception specifier.
-
-            // However, declarations can later have an implicit noexcept
-            // that is made explicit by the parser and, by extension, Clava's code output
-            // Returning "" would make this incompatible with the later noexcept definition,
-            // so we also specify noexcept here
-            // There are cases where the definition has throw() instead, but definitions with
-            // noexcept appear to be compatible with throw().
-            return " noexcept";
-        default:
-            ClavaLog.info("Code generation not implemented yet for Exception Specifier '" + specifier + "'");
-            return "\n#if 0\nNOT IMPLEMENTED: " + specifier + "\n#endif\n";
-        /*
-        throw new RuntimeException(
-                "Code generation not implemented yet for Exception Specifier '" + specifier + "': "
-                        + getLocation());*/
-        }
     }
 
     protected String getCodeBody() {
@@ -344,7 +341,7 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         // Translate code of the only child
-        Stmt body = getDefinition().orElseThrow(() -> new RuntimeException("Expected a body"));
+        Stmt body = getFunctionDefinition().orElseThrow(() -> new RuntimeException("Expected a body"));
         if (body instanceof CXXTryStmt) {
             code.append(" ");
         }
@@ -361,7 +358,12 @@ public class FunctionDecl extends DeclaratorDecl {
         return getParameters().size();
     }
 
-    public Optional<Stmt> getDefinition() {
+    /**
+     * TODO: Make it protected
+     * 
+     * @return
+     */
+    public Optional<Stmt> getFunctionDefinition() {
         if (!hasBody()) {
             return Optional.empty();
         }
@@ -371,7 +373,7 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     public Optional<CompoundStmt> getBody() {
-        return getDefinition().map(this::getCompoundStmt);
+        return getFunctionDefinition().map(this::getCompoundStmt);
     }
 
     private CompoundStmt getCompoundStmt(Stmt body) {
@@ -388,10 +390,177 @@ public class FunctionDecl extends DeclaratorDecl {
 
     protected String getParametersCode() {
 
-        return getParameters().stream()
+        String params = getParameters().stream()
                 // .map(param -> parseTypes(param.getType()) + param.getDeclName())
                 .map(param -> param.getCode())
                 .collect(Collectors.joining(", "));
+
+        return getFunctionType().isVariadic() ? params + ", ..." : params;
+
+    }
+
+    public void setName(String name) {
+        // String functionName = getDeclName();
+
+        // Determine scope of change. If static, only change calls inside the file
+        boolean isStatic = getFunctionDeclData().getStorageClass() == StorageClass.STATIC;
+        ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
+
+        Optional<FunctionDecl> decl = getDeclaration();
+        Optional<FunctionDecl> def = getDefinitionDeclaration();
+
+        // Find all calls of this function
+        if (root != null) {
+            for (CallExpr callExpr : root.getDescendants(CallExpr.class)) {
+                testAndSetCallName(callExpr, name);
+            }
+
+            /*
+            root.getDescendantsStream()
+                    .filter(node -> node instanceof CallExpr && !(node instanceof CXXMemberCallExpr)
+                            && !(node instanceof CXXOperatorCallExpr))
+                    .map(node -> CallExpr.class.cast(node))
+                    .filter(node -> functionName.equals(node.getCalleeName()))
+                    .forEach(callExpr -> callExpr.setCallName(name));
+                    */
+        }
+
+        // Change name of itself, both definition and declaration
+        decl.ifPresent(node -> node.setDeclName(name));
+        def.ifPresent(node -> node.setDeclName(name));
+
+        // setDeclName(name);
+        // if (name.equals("declAndDefNew")) {
+        // System.out.println("BEFORE");
+        // System.out.println("DECL:" + getDeclaration());
+        // System.out.println("DEF:" + getFunctionDefinition());
+        // }
+
+        // if (name.equals("declAndDefNew")) {
+        // System.out.println("AFTER");
+        // System.out.println("DECL:" + getDeclaration());
+        // System.out.println("DEF:" + getFunctionDefinition());
+        // }
+        // Change name of declaration
+        // getDeclaration()
+        // .filter(functionDecl -> functionDecl != this)
+        // .ifPresent(functionDecl -> functionDecl.setDeclName(name));
+
+    }
+
+    /**
+     * Sets the name of call if the corresponding definition, declaration or both refer to the function represented by
+     * this node.
+     * 
+     * @param name
+     * @param original
+     * @param tentative
+     */
+    private void testAndSetCallName(CallExpr call, String newName) {
+        if (isCorrespondingCall(call)) {
+            call.setCallName(newName);
+        }
+    }
+
+    private boolean isCorrespondingCall(CallExpr call) {
+        // If declaration exists, declaration of call must exist too, if call refers to this function
+
+        Optional<Boolean> result = getDeclaration().map(decl -> match(decl, call.getDeclaration()));
+        if (result.isPresent()) {
+            return result.get();
+        }
+
+        result = getDefinitionDeclaration().map(def -> match(def, call.getDefinition()));
+        if (result.isPresent()) {
+            return result.get();
+        }
+
+        System.out.println("DECL:" + getDeclaration());
+        System.out.println("DEF:" + getDefinitionDeclaration());
+
+        throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
+        /*
+        return getDeclaration().map(decl -> match(decl, call.getDeclaration()))
+                // If no declaration, try definition
+                .orElse(getFunctionDefinition().map(def -> match(def, call.getDefinition()))
+                        .orElseThrow(() -> new RuntimeException(
+                                "Should not arrive here, either function declaration or definition must be defined")));
+        */
+        // Optional<FunctionDecl> functionDecl = getDeclaration();
+        // Optional<FunctionDecl> callDecl = call.getDeclaration();
+
+        /*
+        Optional<Boolean> declMatch = match(getDeclaration(), call.getDeclaration());
+        if (declMatch.isPresent()) {
+            return declMatch.get();
+        }
+        
+        Optional<Boolean> defMatch = match(getFunctionDefinition(), call.getDefinition());
+        if (defMatch.isPresent()) {
+            return defMatch.get();
+        }
+        
+        throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
+        */
+        /*
+        if (functionDecl.isPresent()) {
+            FunctionDecl decl = functionDecl.get();
+        
+            if (!callDecl.isPresent()) {
+                return;
+            }
+        
+            boolean isFunction = decl == callDecl.get();
+        
+            if (isFunction) {
+                call.setCallName(newName);
+            }
+        
+            return;
+        }
+        */
+        /*
+        boolean isDeclOfCall;
+        // If declaration exists, check if declaration of call is the 
+        getDeclaration();
+        call.getDeclaration()
+        */
+    }
+
+    /**
+     * True if both objects match, false if they don't match, or empty if the first argument (functionDecl) is not
+     * present.
+     * 
+     * @param function
+     * @param call
+     * @return
+     */
+    /*
+    private static Optional<Boolean> match(Optional<FunctionDecl> functionDecl, Optional<FunctionDecl> callDecl) {
+        if (!functionDecl.isPresent()) {
+            return Optional.empty();
+        }
+    
+        FunctionDecl decl = functionDecl.get();
+    
+        if (!callDecl.isPresent()) {
+            return Optional.of(false);
+        }
+    
+        return Optional.of(decl == callDecl.get());
+    }
+    */
+
+    private static boolean match(FunctionDecl decl, Optional<FunctionDecl> callDecl) {
+
+        return callDecl.map(cDecl -> decl == cDecl).orElse(false);
+        /*
+        if (!callDecl.isPresent()) {
+            return false;
+        }
+        
+        return decl == callDecl.get();
+        */
     }
 
 }

@@ -13,6 +13,15 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+import java.util.Optional;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
+import com.google.common.base.Preconditions;
+
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.language.TLSKind;
 
 public class VarDeclData {
@@ -37,22 +46,48 @@ public class VarDeclData {
 
     private InitializationStyle initKind;
 
+    private final DataStore varDeclData2;
+
     public VarDeclData() {
-        this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT);
+        this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT, false);
     }
 
     public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,
-            InitializationStyle initKind) {
+            InitializationStyle initKind, DataStore varDeclData2) {
 
         this.storageClass = storageClass;
         this.tlsKind = tlsKind;
         this.isModulePrivate = isModulePrivate;
         this.isNrvo = isNrvo;
         this.initKind = initKind;
+        this.varDeclData2 = varDeclData2;
+    }
+
+    /**
+     * @deprecated Use construtor that accepts VarDeclDumperInfo, or a future constructor that is simpler
+     * @param storageClass
+     * @param tlsKind
+     * @param isModulePrivate
+     * @param isNrvo
+     * @param initKind
+     * @param isConstexpr
+     */
+    @Deprecated
+    public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,
+            InitializationStyle initKind, boolean isConstexpr) {
+
+        Preconditions.checkArgument(isConstexpr == false, "This constructor only works if 'isConstexpr' is false");
+
+        this.storageClass = storageClass;
+        this.tlsKind = tlsKind;
+        this.isModulePrivate = isModulePrivate;
+        this.isNrvo = isNrvo;
+        this.initKind = initKind;
+        this.varDeclData2 = DataStore.newInstance("VarDeclData");
     }
 
     public VarDeclData copy() {
-        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind);
+        return new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind, varDeclData2);
     }
 
     @Override
@@ -64,6 +99,7 @@ public class VarDeclData {
         string.append(", isModulePrivate:").append(isModulePrivate);
         string.append(", isNrvo:").append(isNrvo);
         string.append(", init:").append(initKind);
+        string.append(", vardecl data v2:").append(varDeclData2);
 
         return string.toString();
     }
@@ -71,6 +107,10 @@ public class VarDeclData {
     public InitializationStyle getInitKind() {
         return initKind;
     }
+
+    // public boolean isConstexpr() {
+    // return isConstexpr;
+    // }
 
     public void setInitKind(InitializationStyle initKind) {
         this.initKind = initKind;
@@ -80,4 +120,58 @@ public class VarDeclData {
         return isNrvo;
     }
 
+    /**
+     * @deprecated use getVarDeclDataV2() instead. Will throw an exception if used.
+     * @return
+     */
+    @Deprecated
+    public Optional<VarDeclDumperInfo> getVarDeclDumperInfo() {
+        throw new RuntimeException(
+                "VarDeclData.getVarDeclDumperInfo() is deprecated, please use VarDeclData.getVarDeclDataV2()");
+        // return Optional.ofNullable(varDeclDumperInfo);
+    }
+
+    // public VarDeclDataV2 getVarDeclDataV2() {
+    // return varDeclData2;
+    // }
+
+    /**
+     * @deprecated use hasVarDeclV2() instead. Will throw an exception if used.
+     * @return
+     */
+    @Deprecated
+    public boolean hasVarDeclDumperInfo() {
+        throw new RuntimeException(
+                "VarDeclData.hasVarDeclDumperInfo() is deprecated, please use VarDeclData.hasVarDeclV2()");
+        // return varDeclDumperInfo != null;
+    }
+
+    public boolean hasVarDeclV2() {
+        return varDeclData2 != null;
+    }
+
+    public boolean isConstexpr() {
+        return varDeclData2.get(VarDecl.IS_CONSTEXPR);
+        // return getVarDeclDumperInfo().map(data -> data.isConstexpr()).orElse(false);
+    }
+
+    public boolean hasGlobalStorage() {
+        return varDeclData2.get(VarDecl.HAS_GLOBAL_STORAGE);
+        // return getVarDeclDumperInfo().map(data -> data.hasGlobalStorage()).orElse(false);
+    }
+
+    public boolean isStaticDataMember() {
+        return varDeclData2.get(VarDecl.IS_STATIC_DATA_MEMBER);
+        // return getVarDeclDumperInfo().map(data -> data.isStaticDataMember()).orElse(false);
+    }
+
+    public boolean isOutOfLine() {
+        return varDeclData2.get(VarDecl.IS_OUT_OF_LINE);
+        // return getVarDeclDumperInfo().map(data -> data.isOutOfLine()).orElse(false);
+    }
+
+    public Optional<String> getQualifiedName() {
+        return Optional.of(varDeclData2.get(VarDecl.QUALIFIED_NAME));
+        // return getVarDeclDumperInfo().map(data -> data.getQualifiedName());
+    }
 }

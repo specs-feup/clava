@@ -20,7 +20,7 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -112,10 +112,10 @@ public class UnaryOperator extends Expr {
         EXTENSION("__extension__"),
         COAWAIT("co_await");
 
-        private static final Lazy<EnumHelper<UnaryOperatorKind>> ENUM_HELPER = EnumHelper
-                .newLazyHelper(UnaryOperatorKind.class);
+        private static final Lazy<EnumHelperWithValue<UnaryOperatorKind>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(UnaryOperatorKind.class);
 
-        public static EnumHelper<UnaryOperatorKind> getEnumHelper() {
+        public static EnumHelperWithValue<UnaryOperatorKind> getEnumHelper() {
             return ENUM_HELPER.get();
         }
 
@@ -144,10 +144,10 @@ public class UnaryOperator extends Expr {
         PREFIX,
         POSTFIX;
 
-        private static final Lazy<EnumHelper<UnaryOperatorPosition>> ENUM_HELPER = EnumHelper
-                .newLazyHelper(UnaryOperatorPosition.class);
+        private static final Lazy<EnumHelperWithValue<UnaryOperatorPosition>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(UnaryOperatorPosition.class);
 
-        public static EnumHelper<UnaryOperatorPosition> getEnumHelper() {
+        public static EnumHelperWithValue<UnaryOperatorPosition> getEnumHelper() {
             return ENUM_HELPER.get();
         }
 

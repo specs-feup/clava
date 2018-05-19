@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -137,10 +139,30 @@ public class RecordDecl extends TagDecl {
         code.append(bases);
 
         // Add attributes
-        recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
+        // recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
+
+        String preAttributesCode = recordDeclData.getAttributes().stream()
+                .filter(attr -> !attr.isPostAttr())
+                .map(Attribute::getCode)
+                .collect(Collectors.joining(" "));
+
+        // Append pre-attributes
+        if (!preAttributesCode.isEmpty()) {
+            code.append(" ").append(preAttributesCode);
+        }
 
         if (recordDeclData.isCompleteDefinition()) {
             code.append(getDefinitionCode());
+        }
+
+        String postAttributesCode = recordDeclData.getAttributes().stream()
+                .filter(attr -> attr.isPostAttr())
+                .map(Attribute::getCode)
+                .collect(Collectors.joining(" "));
+
+        // Append post-attributes
+        if (!postAttributesCode.isEmpty()) {
+            code.append(" ").append(postAttributesCode);
         }
 
         code.append(";" + ln());
@@ -163,6 +185,31 @@ public class RecordDecl extends TagDecl {
         code.append("}");
 
         return code.toString();
+    }
+
+    public List<FunctionDecl> getFunction(String functionName) {
+        List<FunctionDecl> functions = new ArrayList<>();
+
+        for (Decl recordField : getRecordFields()) {
+            if (!(recordField instanceof FunctionDecl)) {
+                continue;
+            }
+
+            FunctionDecl functionDecl = (FunctionDecl) recordField;
+            if (!functionDecl.hasDeclName()) {
+                continue;
+            }
+
+            String declName = functionDecl.getDeclName();
+
+            if (!declName.equals(functionName)) {
+                continue;
+            }
+
+            functions.add(functionDecl);
+        }
+
+        return functions;
     }
 
 }

@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clava.language;
 
 import pt.up.fe.specs.util.SpecsStrings;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -77,9 +77,9 @@ public enum CastKind implements StringProvider {
     ZERO_TO_OCL_EVENT("ZeroToOCLEvent"),
     ADDRESS_SPACE_CONVERSION;
 
-    private static final Lazy<EnumHelper<CastKind>> ENUM_HELPER = EnumHelper.newLazyHelper(CastKind.class);
+    private static final Lazy<EnumHelperWithValue<CastKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(CastKind.class);
 
-    public static EnumHelper<CastKind> getHelper() {
+    public static EnumHelperWithValue<CastKind> getHelper() {
         return ENUM_HELPER.get();
     }
 

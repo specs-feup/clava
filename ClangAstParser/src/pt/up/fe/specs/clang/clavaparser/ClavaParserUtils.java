@@ -14,14 +14,15 @@
 package pt.up.fe.specs.clang.clavaparser;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 
@@ -80,6 +81,10 @@ public class ClavaParserUtils {
     }
 
     public static String createAnonName(ClangNode node) {
+        if (!node.getLocation().isValid()) {
+            return "anon_" + UUID.randomUUID().toString();
+        }
+
         String sanitizedFilename = node.getLocation().getFilename().replace('.', '_');
         return "anon_" + sanitizedFilename + "_" + node.getLocation().getStartLine();
     }

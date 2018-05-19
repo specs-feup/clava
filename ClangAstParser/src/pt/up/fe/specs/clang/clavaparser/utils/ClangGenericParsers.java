@@ -28,13 +28,13 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParserUtils;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -141,7 +141,7 @@ public class ClangGenericParsers {
 
         // Check that String starts with a '
         if (!string.startsWith("'")) {
-            throw new RuntimeException("Given string does not start with ':" + string);
+            throw new RuntimeException("Given string does not start with quote ('):" + string);
         }
 
         // return new ParserResult<>(string, elements);
@@ -158,7 +158,8 @@ public class ClangGenericParsers {
             // If there is not a separator, with a prime following it, return
             if (!string.startsWith(separator + "'")) {
                 // Trim string
-                string = string;
+                // string = string;
+                string = string.trim();
                 return new ParserResult<>(string, elements);
             }
 
@@ -528,7 +529,7 @@ public class ClangGenericParsers {
             castKindString = castKindString.substring(0, whitespaceIndex);
         }
 
-        CastKind castKind = CastKind.getHelper().valueOf(castKindString);
+        CastKind castKind = CastKind.getHelper().fromValue(castKindString);
 
         return new ParserResult<>(string, castKind);
     }
@@ -765,7 +766,7 @@ public class ClangGenericParsers {
     // }
 
     public static <K extends Enum<K> & StringProvider> ParserResult<List<K>> parseElements(StringSlice string,
-            EnumHelper<K> enumHelper) {
+            EnumHelperWithValue<K> enumHelper) {
 
         List<K> parsedElements = new ArrayList<>();
 
@@ -791,7 +792,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<K> parseEnum(
-            StringSlice string, EnumHelper<K> enumHelper) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper) {
 
         return parseEnum(string, enumHelper, null);
     }
@@ -805,7 +806,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<K> parseEnum(
-            StringSlice string, EnumHelper<K> enumHelper, K defaultValue) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper, K defaultValue) {
 
         // Try parsing the enum
         ParserResult<Optional<K>> result = checkEnum(string, enumHelper);
@@ -822,7 +823,7 @@ public class ClangGenericParsers {
         throw new RuntimeException(
                 "Could not convert string '" + StringParsers.parseWord(new StringSlice(string)).getResult()
                         + "' to enum '"
-                        + enumHelper.getTranslationMap() + "'");
+                        + enumHelper.getValuesTranslationMap() + "'");
 
     }
 
@@ -835,7 +836,7 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<K> checkEnum(
-            StringSlice string, EnumHelper<K> enumHelper, K defaultValue) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper, K defaultValue) {
 
         ParserResult<Optional<K>> result = checkEnum(string, enumHelper);
         K value = result.getResult().orElse(defaultValue);
@@ -850,13 +851,13 @@ public class ClangGenericParsers {
      * @return
      */
     public static <K extends Enum<K> & StringProvider> ParserResult<Optional<K>> checkEnum(
-            StringSlice string, EnumHelper<K> enumHelper) {
+            StringSlice string, EnumHelperWithValue<K> enumHelper) {
 
         // Copy StringSlice, in case the function does not found the enum
         ParserResult<String> word = StringParsers.parseWord(new StringSlice(string));
 
         // Check if there are any custom mappings for the word
-        Optional<K> result = enumHelper.valueOfTry(word.getResult());
+        Optional<K> result = enumHelper.fromValueTry(word.getResult());
 
         // Prepare return value
         StringSlice modifiedString = result.isPresent() ? word.getModifiedString() : string;
@@ -913,28 +914,30 @@ public class ClangGenericParsers {
      * @param string
      * @return
      */
+    /*
     public static ParserResult<String> parseTypename(StringSlice string) {
         // Test on the first word
         StringSlice testString = string.getFirstWord();
-
+    
         int firstIndex = testString.indexOf(':');
         // Return empty string if could not find ':', or if it is the last character
         if (firstIndex == -1 || (firstIndex + 1) == string.length()) {
             return new ParserResult<>(string, "");
         }
-
+    
         // Return if there is no '::'
         if (string.charAt(firstIndex + 1) != ':') {
             return new ParserResult<>(string, "");
         }
-
+    
         String typename = string.substring(0, firstIndex).toString();
         // System.out.println("!!STRING:" + string);
         // System.out.println("!!TYPENAME:" + typename);
-
+    
         // Cut up to '::', return typename
         return new ParserResult<>(string.substring(firstIndex + 2), typename);
     }
+    */
 
     /**
      * For a string in the format <TEMPLATE><<TYPE>>, returns a string with what is before '<', StringSlide with what is
@@ -947,24 +950,28 @@ public class ClangGenericParsers {
      * @param string
      * @return
      */
+    /*
     public static ParserResult<String> parseTemplate(StringSlice string) {
-        StringSlice testString = string.getFirstWord();
-
+        System.out.println("ASDASDASDASD");
+        // StringSlice testString = string.getFirstWord();
+        String testString = string.next().getWord();
+    
         int openIndex = testString.indexOf('<');
         int closeIndex = testString.indexOf('>');
-
+    
         // Return empty string if could not find '<' or '>' in the first word
         if (openIndex == -1 || closeIndex == -1) {
             return new ParserResult<>(string, "");
         }
-
+    
         Preconditions.checkArgument(openIndex < closeIndex, "Expected < to appear before > : " + string);
-
+    
         String templateName = string.substring(0, openIndex).toString();
-
+    
         // Cut up what is outside of '<>', return templateName
         return new ParserResult<>(string.substring(openIndex + 1, closeIndex), templateName);
     }
+    */
 
     /**
      * 

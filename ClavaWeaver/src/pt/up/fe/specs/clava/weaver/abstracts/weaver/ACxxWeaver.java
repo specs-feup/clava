@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.weaver;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 import java.util.Arrays;
 import java.util.List;
+import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +22,7 @@ public abstract class ACxxWeaver extends WeaverEngine {
      */
     @Override
     public final List<String> getActions() {
-        String[] weaverActions= {"replaceWith", "insertBefore", "insertBefore", "insertAfter", "insertAfter", "detach", "setType", "rebuild", "addFile", "push", "pop", "addInclude", "addInclude", "addIncludeJp", "addGlobal", "write", "messageToUser", "setName", "wrap", "inline", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addFunction", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "clone", "cloneOnFile", "cloneOnFile", "clear", "insertReturn", "insertReturn", "changeKind", "setKind", "setInit", "setCond", "setStep", "interchange", "tile", "setKind", "removeClause", "setNumThreads", "setProcBind", "setPrivate", "setReduction", "setDefault", "setFirstprivate", "setLastprivate", "setShared", "setCopyin", "setScheduleKind", "setScheduleChunkSize", "setScheduleModifiers", "setCollapse", "setOrdered", "setOrdered", "setName", "setContent", "setInit", "setInit"};
+        String[] weaverActions= {"replaceWith", "insertBefore", "insertBefore", "insertAfter", "insertAfter", "detach", "setType", "copy", "setUserField", "setUserField", "rebuild", "addFile", "push", "pop", "addExtraInclude", "addExtraIncludeFromGit", "addExtraSource", "addExtraSourceFromGit", "addInclude", "addInclude", "addIncludeJp", "addGlobal", "write", "messageToUser", "setName", "wrap", "inline", "setArgFromString", "setArg", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addFunction", "insertBegin", "insertBegin", "insertEnd", "insertEnd", "addLocal", "addLocal", "setNaked", "clone", "cloneOnFile", "cloneOnFile", "clear", "insertReturn", "insertReturn", "changeKind", "setKind", "setInit", "setInitValue", "setCond", "setStep", "setIsParallel", "interchange", "tile", "tile", "setKind", "removeClause", "setNumThreads", "setProcBind", "setPrivate", "setReduction", "setDefault", "setFirstprivate", "setLastprivate", "setShared", "setCopyin", "setScheduleKind", "setScheduleChunkSize", "setScheduleModifiers", "setCollapse", "setOrdered", "setOrdered", "setName", "setContent", "setInit", "setInit", "setName", "setName", "newCall", "setReturnType", "setTemplateArgsTypes", "setTemplateArgsTypes", "setArgType"};
         return Arrays.asList(weaverActions);
     }
 
@@ -42,7 +43,7 @@ public abstract class ACxxWeaver extends WeaverEngine {
      */
     @Override
     public final List<Class<?>> getAllImportableClasses() {
-        Class<?>[] defaultClasses = {};
+        Class<?>[] defaultClasses = {StorageClass.class};
         List<Class<?>> otherClasses = this.getImportableClasses();
         List<Class<?>> allClasses = new ArrayList<>(Arrays.asList(defaultClasses));
         allClasses.addAll(otherClasses);

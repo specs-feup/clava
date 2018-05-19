@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.clang.omp.OmpParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
@@ -26,6 +25,7 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause.ProcBindKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleModifier;
+import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -81,7 +81,7 @@ public class CxxOmp extends AOmp {
     }
 
     private OmpClauseKind parseClauseName(String clauseName) {
-        return OmpClauseKind.getHelper().valueOf(clauseName);
+        return OmpClauseKind.getHelper().fromValue(clauseName);
         // OmpClauseKind clauseKind = OmpClauseKind.getHelper().valueOfTry(clauseName).orElse(null);
         // if (clauseKind == null) {
         //
@@ -106,9 +106,9 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setProcBindImpl(String newBind) {
-        ProcBindKind kind = ProcBindKind.getHelper().valueOfTry(newBind)
+        ProcBindKind kind = ProcBindKind.getHelper().fromValueTry(newBind)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + newBind
-                        + "' as a proc bind value, valid values: " + ProcBindKind.getHelper().getAvailableOptions()));
+                        + "' as a proc bind value, valid values: " + ProcBindKind.getHelper().getAvailableValues()));
         ompPragma.clauses().setProcBind(kind);
         // ProcBindKind kind = ProcBindKind.getHelper().valueOfTry(newBind).orElse(null);
         // if (kind == null) {
@@ -152,7 +152,7 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setReductionImpl(String reductionKindString, String[] newVariables) {
-        ReductionKind reductionKind = ReductionKind.getHelper().valueOf(reductionKindString.toLowerCase());
+        ReductionKind reductionKind = ReductionKind.getHelper().fromValue(reductionKindString.toLowerCase());
 
         ompPragma.clauses().setReduction(reductionKind, Arrays.asList(newVariables));
     }
@@ -176,9 +176,9 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setDefaultImpl(String newDefault) {
-        DefaultKind kind = DefaultKind.getHelper().valueOfTry(newDefault)
+        DefaultKind kind = DefaultKind.getHelper().fromValueTry(newDefault)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + newDefault
-                        + "' as a 'default' value, valid values: " + DefaultKind.getHelper().getAvailableOptions()));
+                        + "' as a 'default' value, valid values: " + DefaultKind.getHelper().getAvailableValues()));
         ompPragma.clauses().setDefault(kind);
     }
 
@@ -229,9 +229,9 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setScheduleKindImpl(String scheduleKindString) {
-        ScheduleKind kind = ScheduleKind.getHelper().valueOfTry(scheduleKindString)
+        ScheduleKind kind = ScheduleKind.getHelper().fromValueTry(scheduleKindString)
                 .orElseThrow(() -> new RuntimeException("Can't set '" + scheduleKindString
-                        + "' as a schedule kind, valid values: " + ScheduleKind.getHelper().getAvailableOptions()));
+                        + "' as a schedule kind, valid values: " + ScheduleKind.getHelper().getAvailableValues()));
 
         ompPragma.clauses().setScheduleKind(kind);
     }
@@ -253,7 +253,7 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setScheduleModifiersImpl(String[] modifiers) {
-        List<ScheduleModifier> parsedModifiers = ScheduleModifier.getHelper().valueOf(Arrays.asList(modifiers));
+        List<ScheduleModifier> parsedModifiers = ScheduleModifier.getHelper().fromValue(Arrays.asList(modifiers));
         ompPragma.clauses().setScheduleModifiers(parsedModifiers);
     }
 
@@ -286,20 +286,20 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void removeClauseImpl(String clauseKindString) {
-        OmpClauseKind clauseKind = OmpClauseKind.getHelper().valueOfTry(clauseKindString)
+        OmpClauseKind clauseKind = OmpClauseKind.getHelper().fromValueTry(clauseKindString)
                 .orElseThrow(() -> new RuntimeException("Can't remove clause '" + clauseKindString
                         + "', name is not valid. Valid clause names: "
-                        + OmpClauseKind.getHelper().getAvailableOptions()));
+                        + OmpClauseKind.getHelper().getAvailableValues()));
 
         ompPragma.removeClause(clauseKind);
     }
 
     @Override
     public void setKindImpl(String directiveKindString) {
-        OmpDirectiveKind directiveKind = OmpDirectiveKind.getHelper().valueOfTry(directiveKindString)
+        OmpDirectiveKind directiveKind = OmpDirectiveKind.getHelper().fromValueTry(directiveKindString)
                 .orElseThrow(() -> new RuntimeException("Can't set directive kind '" + directiveKindString
                         + "', name is not valid. Valid directive names: "
-                        + OmpDirectiveKind.getHelper().getAvailableOptions()));
+                        + OmpDirectiveKind.getHelper().getAvailableValues()));
 
         // Create new pragma based on the previous pragma
         OmpPragma newOmpPragma = OmpParser.newOmpPragma(directiveKind, ompPragma);

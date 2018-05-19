@@ -30,10 +30,11 @@ import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.data.DeclRefKind;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.language.CXXOperator;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 /**
@@ -42,7 +43,7 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
  * @author JoaoBispo
  *
  */
-public class DeclRefExpr extends Expr {
+public class DeclRefExpr extends Expr implements Nameable {
     private final String qualifier;
     private final List<String> templateArguments;
     private final BareDeclData declData;
@@ -121,33 +122,27 @@ public class DeclRefExpr extends Expr {
 
     /**
      * 
-     * @return can
+     * @return
      */
     public Optional<? extends Decl> getDeclaration() {
 
-        Optional<String> idSuffix = getInfo().getIdSuffix();
+        // If no id, return
+        // if (!getInfo().getId().isPresent()) {
+        if (!getExtendedId().isPresent()) {
+            return Optional.empty();
+        }
+
+        Optional<String> idSuffix = getIdSuffix();
+
         if (!idSuffix.isPresent()) {
             throw new RuntimeException("Could not find id suffix in '" + getExtendedId() + "'");
         }
 
         String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
-        // System.out.println("VARDECL ID:" + varDeclId);
-
-        // String idToTest = Long.toHexString(declData.getPointer()) + "_";
-        //
-        // List<ClavaNode> nodes = getAncestor(App.class).getDescendantsStream()
-        // .filter(node -> node.getExtendedId().map(id -> id.startsWith(idToTest)).orElse(false))
-        // .collect(Collectors.toList());
-
-        // System.out.println("NODES:" + nodes);
-
-        // System.out.println("ASCENDANTS:"
-        // + this.getAscendantsStream().map(node -> node.getNodeName()).collect(Collectors.joining(" -> ")));
         Optional<ClavaNode> declTry = getApp().getNodeTry(varDeclId);
-        // System.out.println("NODE: " + declTry);
+
         // If not present, probably declaration is outside of parsed files
         // (e.g., declaration of a function in a system header, such as printf)
-
         if (!declTry.isPresent()) {
             return Optional.empty();
         }
@@ -173,6 +168,7 @@ public class DeclRefExpr extends Expr {
     }
 
     public Optional<DeclaratorDecl> getVariableDeclaration() {
+
         Optional<? extends Decl> declTry = getDeclaration();
 
         if (!declTry.isPresent()) {
@@ -180,7 +176,6 @@ public class DeclRefExpr extends Expr {
         }
 
         Decl decl = declTry.get();
-
         /*
         Optional<String> idSuffix = getInfo().getIdSuffix();
         if (!idSuffix.isPresent()) {
@@ -388,5 +383,15 @@ public class DeclRefExpr extends Expr {
             throw new CaseNotDefinedException(kind);
         }
 
+    }
+
+    @Override
+    public String getName() {
+        return getRefName();
+    }
+
+    @Override
+    public void setName(String name) {
+        setRefName(name);
     }
 }

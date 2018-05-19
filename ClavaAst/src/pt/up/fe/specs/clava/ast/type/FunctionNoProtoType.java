@@ -13,14 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 /**
  * K&R-style function with no information about its arguments (e.g., int foo())
@@ -30,20 +27,18 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  */
 public class FunctionNoProtoType extends FunctionType {
 
-    public FunctionNoProtoType(FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info,
-            Type returnType) {
-
-        this(functionTypeData, type, info, Arrays.asList(returnType));
-    }
-
-    private FunctionNoProtoType(FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(functionTypeData, type, info, children);
+    public FunctionNoProtoType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     @Override
-    protected ClavaNode copyPrivate() {
-        return new FunctionNoProtoType(getFunctionTypeData(), getTypeData(), getInfo(), Collections.emptyList());
+    public int getNumParams() {
+        return 0;
+    }
+
+    @Override
+    public boolean isVariadic() {
+        return false;
     }
 
 }

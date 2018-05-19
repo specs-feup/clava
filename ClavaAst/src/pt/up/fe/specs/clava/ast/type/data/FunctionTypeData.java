@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
-import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
+import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 
 public class FunctionTypeData {
 

@@ -73,6 +73,20 @@ public class PointerType extends Type {
         return pointerType.getPointeeType() instanceof ParenType;
     }
 
+    /**
+     * 
+     * @return the number of levels of this pointer. If the pointee is not a pointer, returns 1.
+     */
+    public int getPointerLevels() {
+        Type pointee = getPointeeType();
+        if (!(pointee instanceof PointerType)) {
+            return 1;
+        }
+
+        return 1 + ((PointerType) pointee).getPointerLevels();
+    }
+
+    /*
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -81,7 +95,9 @@ public class PointerType extends Type {
         result = prime * result + ((getPointeeType() == null) ? 0 : getPointeeType().hashCode());
         return result;
     }
+    */
 
+    /*
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -93,9 +109,9 @@ public class PointerType extends Type {
         if (getClass() != obj.getClass()) {
             return false;
         }
-
+    
         PointerType other = (PointerType) obj;
-
+    
         // Test pointee type
         if (getPointeeType() == null) {
             if (other.getPointeeType() != null) {
@@ -104,7 +120,9 @@ public class PointerType extends Type {
         } else if (!getPointeeType().equals(other.getPointeeType())) {
             return false;
         }
-
+    
         return true;
     }
+    */
+
 }

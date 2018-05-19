@@ -50,7 +50,7 @@ public class TypeAliasDeclParser extends AClangNodeParser<TypeAliasDecl> {
         checkNumChildren(children, 1);
         Type aliasedType = toType(children.get(0));
 
-        return ClavaNodeFactory.typeAliasDecl(declName, type, declData, node.getInfo(), aliasedType);
+        return ClavaNodeFactory.typeAliasDecl(aliasedType, declName, type, declData, node.getInfo());
     }
 
 }

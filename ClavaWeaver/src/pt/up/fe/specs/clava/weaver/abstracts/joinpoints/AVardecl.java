@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -70,6 +71,54 @@ public abstract class AVardecl extends ANamedDecl {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
+        }
+    }
+
+    /**
+     * true, if vardecl is a function parameter
+     */
+    public abstract Boolean getIsParamImpl();
+
+    /**
+     * true, if vardecl is a function parameter
+     */
+    public final Object getIsParam() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isParam", Optional.empty());
+        	}
+        	Boolean result = this.getIsParamImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isParam", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isParam", e);
+        }
+    }
+
+    /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public abstract String getStorageClassImpl();
+
+    /**
+     * Get value on attribute storageClass
+     * @return the attribute's value
+     */
+    public final Object getStorageClass() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
+        	}
+        	String result = this.getStorageClassImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "storageClass", e);
         }
     }
 
@@ -151,6 +200,13 @@ public abstract class AVardecl extends ANamedDecl {
 
     /**
      * 
+     */
+    public void defNameImpl(String value) {
+        this.aNamedDecl.defNameImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -213,6 +269,33 @@ public abstract class AVardecl extends ANamedDecl {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aNamedDecl.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -228,16 +311,6 @@ public abstract class AVardecl extends ANamedDecl {
     @Override
     public void insertImpl(String position, String code) {
         this.aNamedDecl.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aNamedDecl.defImpl(attribute, value);
     }
 
     /**
@@ -277,10 +350,36 @@ public abstract class AVardecl extends ANamedDecl {
      * 
      */
     @Override
+    public void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aNamedDecl.fillWithAttributes(attributes);
         attributes.add("hasInit");
         attributes.add("init");
+        attributes.add("isParam");
+        attributes.add("storageClass");
     }
 
     /**
@@ -329,6 +428,8 @@ public abstract class AVardecl extends ANamedDecl {
     protected enum VardeclAttributes {
         HASINIT("hasInit"),
         INIT("init"),
+        ISPARAM("isParam"),
+        STORAGECLASS("storageClass"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
@@ -337,8 +438,11 @@ public abstract class AVardecl extends ANamedDecl {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -346,16 +450,19 @@ public abstract class AVardecl extends ANamedDecl {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

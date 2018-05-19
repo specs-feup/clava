@@ -15,7 +15,7 @@ void voidFoo(int * a);
 
 #include "wrap.h"
 #include <stdio.h>
-#include "clava_weaver_wrappers.h"
+#include "clava_wrappers/clava_weaver_wrappers.h"
 
 int foo(int a) {
    
@@ -28,15 +28,20 @@ int fooNoDecl(int a) {
    return a + 10;
 }
 
+int wrap_fooNoDecl(int a) {
+   int result;
+   result = fooNoDecl(a);
+   
+   return result;
+}
 
 void voidFoo(int * a) {
    (*a)++;
 }
 
-
 int main() {
    wrap_foo(10);
-   fooNoDecl(20);
+   wrap_fooNoDecl(20);
    int a = 100;
    wrap_voidFoo(&a);
    wrap_printf("Hello");
@@ -44,7 +49,7 @@ int main() {
 
 /**** End File ****/
 
-/**** File 'clava_weaver_wrappers.h' ****/
+/**** File 'clava_wrappers/clava_weaver_wrappers.h' ****/
 
 #ifndef _CLAVA_WEAVER_WRAPPERS_H_
 #define _CLAVA_WEAVER_WRAPPERS_H_
@@ -59,11 +64,11 @@ int wrap_printf(char const * __restrict__ A, ...);
 
 /**** End File ****/
 
-/**** File 'clava_weaver_wrappers.cpp' ****/
+/**** File 'clava_wrappers/clava_weaver_wrappers.cpp' ****/
 
 #include "wrap.h"
 #include <stdio.h>
-#include "clava_weaver_wrappers.h"
+#include "clava_wrappers/clava_weaver_wrappers.h"
 
 int wrap_foo(int a) {
    int result;

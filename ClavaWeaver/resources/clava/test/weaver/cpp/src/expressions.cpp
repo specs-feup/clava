@@ -1,3 +1,5 @@
+#include "classA.h"
+
 class temp{
 public:
   int id;
@@ -31,6 +33,8 @@ double analyse(){
     
     x = 20;
     y = x + 2;
+	
+	return 0.0;
 }
 
 double bar() {
@@ -50,5 +54,16 @@ double foo() {
 int main() {
     
     foo();
+	
+	// New expressions
+	A *a1 = new A();
+	A *a2 = new A(20);
+	A *a3 = new A[3];
+	
+	// Delete expressions
+	delete a1;
+	delete a2;
+	delete[] a3;
+	
     return 0;
 }

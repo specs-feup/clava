@@ -14,7 +14,8 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -30,31 +31,32 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  */
 public class DummyType extends Type implements DummyNode {
 
-    private final String content;
+    public DummyType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
 
-    public DummyType(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(new TypeData(content), info, children);
+        // SpecsLogs.msgWarn("DUMMY TYPE DATASTORE");
+    }
 
-        this.content = content;
+    /**
+     * Legacy support.
+     * 
+     * @param typeData
+     * @param info
+     * @param children
+     */
+    public DummyType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        super(typeData, info, children);
+
+        // SpecsLogs.msgWarn("DUMMY TYPE TYPEDATA");
     }
 
     public String getNodeCode() {
-        return "// Dummy type '" + content + "'";
+        return "// Dummy type '" + getContent() + "'";
     }
 
     @Override
-    public String getCode() {
+    public String getCode(String name) {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DummyType(content, getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public String getContent() {
-        return content;
     }
 
 }

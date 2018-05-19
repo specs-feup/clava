@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.weaver.importable;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,10 +23,10 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.omp.OmpParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -33,31 +35,37 @@ import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.data.LanguageId;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
+import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
+import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
 import pt.up.fe.specs.clava.ast.type.ReferenceType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.ArraySizeType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
+import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -66,6 +74,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -109,9 +118,10 @@ public class AstFactory {
         Type type = getVarDeclType(standard, initType);
 
         VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-                InitializationStyle.CINIT);
+                InitializationStyle.CINIT, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
-        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, initExpr.getInfo(), initExpr);
+        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, ClavaNodeInfo.undefinedInfo(),
+                initExpr);
 
         return CxxJoinpoints.create(varDecl, null, AVardecl.class);
     }
@@ -148,22 +158,13 @@ public class AstFactory {
         return ClavaNodeFactory.literalType(autoCode);
     }
 
-    public static ACxxWeaverJoinPoint longType() {
-        BuiltinType type = ClavaNodeFactory.builtinType(new TypeData("long"), ClavaNodeInfo.undefinedInfo());
-        return CxxJoinpoints.create(type, null);
-    }
-
-    public static ACxxWeaverJoinPoint builtinType(String typeCode) {
-        BuiltinType type = ClavaNodeFactory.builtinType(typeCode);
-
-        return CxxJoinpoints.create(type, null);
-    }
-
     public static CxxFunction functionVoid(String name) {
-        BuiltinType voidType = ClavaNodeFactory.builtinType("void");
-        FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
-                new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
-                Collections.emptyList());
+
+        BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKind.Void);
+        FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(voidType);
+        // FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
+        // new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
+        // Collections.emptyList());
         FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
                 new FunctionDeclData(), new DeclData(),
                 ClavaNodeInfo.undefinedInfo(),
@@ -172,20 +173,13 @@ public class AstFactory {
         return (CxxFunction) CxxJoinpoints.create(functionDecl, null);
     }
 
-    public static AExpression integerLiteral(int integer) {
-        Type intType = ClavaNodeFactory.builtinType(new TypeData("int"), ClavaNodeInfo.undefinedInfo());
-        IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
-                ClavaNodeInfo.undefinedInfo());
-
-        return CxxJoinpoints.create(intLiteral, null, AExpression.class);
-    }
-
     public static AStatement stmtLiteral(String code) {
         return stmtLiteral(code, null);
     }
 
     public static AStatement stmtLiteral(String code, ACxxWeaverJoinPoint parent) {
-        return CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), parent, AStatement.class);
+        // return CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), parent, AStatement.class);
+        return CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), parent, AStatement.class);
     }
 
     public static AType typeLiteral(String code) {
@@ -194,14 +188,6 @@ public class AstFactory {
 
     public static ADecl declLiteral(String code) {
         return CxxJoinpoints.create(ClavaNodeFactory.literalDecl(code), null, ADecl.class);
-    }
-
-    public static AExpression doubleLiteral(double floating) {
-        Type type = ClavaNodeFactory.builtinType(new TypeData("double"), ClavaNodeInfo.undefinedInfo());
-        FloatingLiteral intLiteral = ClavaNodeFactory.floatingLiteral(FloatKind.DOUBLE, Double.toString(floating),
-                new ExprData(type), ClavaNodeInfo.undefinedInfo());
-
-        return CxxJoinpoints.create(intLiteral, null, AExpression.class);
     }
 
     public static AExpression exprLiteral(String code) {
@@ -218,8 +204,13 @@ public class AstFactory {
         return CxxJoinpoints.create(ClavaNodeFactory.literalExpr(code, astType), null, AExpression.class);
     }
 
-    public static ACall call(String functionName, CxxType typeJp, AJoinPoint... args) {
-        Type returnType = typeJp.getNode();
+    public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
+        return call(function.getNameImpl(), function.getFunctionTypeImpl(), args);
+    }
+
+    public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
+
+        Type returnType = (Type) typeJp.getNode();
 
         DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(functionName, ValueKind.L_VALUE, returnType,
                 ClavaNodeInfo.undefinedInfo());
@@ -229,8 +220,10 @@ public class AstFactory {
                 .collect(Collectors.toList());
 
         FunctionTypeData fData = new FunctionTypeData(Types.isVoid(returnType), false, false, null, CallingConv.C);
-        FunctionProtoType type = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(), fData,
-                new TypeData(""), ClavaNodeInfo.undefinedInfo(), returnType, argTypes);
+        // FunctionProtoType type = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(), fData,
+        // new TypeData(""), ClavaNodeInfo.undefinedInfo(), returnType, argTypes);
+
+        FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
 
         List<Expr> exprArgs = Arrays.stream(args)
                 .map(arg -> (Expr) arg.getNode())
@@ -250,6 +243,13 @@ public class AstFactory {
      * @return
      */
     public static AFile file(String filename, String path) {
+        // Test if path is absolute
+        if (new File(path).isAbsolute()) {
+            ClavaLog.warning(
+                    "Cannot use absolute paths for new 'file' join points, replacing '" + path + "' with empty String");
+            path = "";
+        }
+
         return CxxJoinpoints.create(ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList()),
                 null, AFile.class);
     }
@@ -290,11 +290,15 @@ public class AstFactory {
     // ClavaNodeFactory.whileStmt(info, condition, thenStmt)
     // }
 
-    public static ACxxWeaverJoinPoint constArrayType(String typeCode, List<Integer> dims) {
-        return constArrayType(ClavaNodeFactory.literalType(typeCode), dims);
+    // public static ACxxWeaverJoinPoint constArrayType(String typeCode, Standard standard, List<Integer> dims) {
+    public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, List<Integer> dims) {
+        return constArrayType(ClavaNodeFactory.literalType(typeCode), standard, dims);
     }
 
-    public static ACxxWeaverJoinPoint constArrayType(Type outType, List<Integer> dims) {
+    // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
+    public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
+
+        Standard standard = Standard.getEnumHelper().fromValue(standardString);
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -304,7 +308,7 @@ public class AstFactory {
         ListIterator<Integer> li = dims.listIterator(dims.size());
         while (li.hasPrevious()) {
 
-            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList());
+            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
             TypeData typeData = new TypeData(outType.getCode());
             ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
 
@@ -317,9 +321,124 @@ public class AstFactory {
 
     public static AJoinPoint omp(String directiveName) {
         // Get directive
-        OmpDirectiveKind kind = OmpDirectiveKind.getHelper().valueOf(directiveName);
+        OmpDirectiveKind kind = OmpDirectiveKind.getHelper().fromValue(directiveName);
         return CxxJoinpoints.create(OmpParser.newOmpPragma(kind), null);
 
         // ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(),
+    }
+
+    public static AStatement caseStmt(AExpression value, AStatement subStmt) {
+        CaseStmt caseStmt = ClavaNodeFactory.caseStmt(ClavaNodeInfo.undefinedInfo(), (Expr) value.getNode(),
+                (Stmt) subStmt.getNode());
+
+        return CxxJoinpoints.create(caseStmt, null, AStatement.class);
+    }
+
+    /**
+     * 
+     * @param value
+     * @param expr
+     * @return a list with a case statement and a break statement
+     */
+    public static List<AStatement> caseFromExpr(AExpression value, AExpression expr) {
+        // Create compound stmt
+        ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
+        BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
+
+        CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),
+                Arrays.asList(exprStmt));
+        compoundStmt.setNaked(true);
+        // InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
+        // ClavaNodeInfo.undefinedInfo());
+        // Stmt commentStmt = ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(), comment);
+
+        AStatement caseStmt = caseStmt(value, CxxJoinpoints.create(compoundStmt, null, AStatement.class));
+
+        return Arrays.asList(caseStmt,
+                CxxJoinpoints.create(breakStmt, null, AStatement.class));
+
+    }
+
+    public static AStatement switchStmt(AExpression condition, AStatement body) {
+        Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(),
+                (Stmt) body.getNode());
+
+        return CxxJoinpoints.create(switchStmt, null, AStatement.class);
+    }
+
+    public static AStatement switchStmt(AExpression condition, AExpression[] cases) {
+        if (cases.length % 2 != 0) {
+            ClavaLog.info("The number of join points for the cases must be even (expression-stmt pairs)");
+            return null;
+        }
+
+        // boolean invalidInput = Arrays.stream(cases)
+        // .filter(aCase -> !(aCase instanceof AExpression))
+        // .findFirst()
+        // .isPresent();
+
+        // if (invalidInput) {
+        // ClavaLog.info("Expected all inputs to be 'expression' join points");
+        // return null;
+        // }
+
+        List<Stmt> statements = new ArrayList<>();
+
+        for (int i = 0; i < cases.length; i += 2) {
+
+            statements.addAll(caseFromExpr(cases[i], cases[i + 1]).stream()
+                    .map(aStmt -> (Stmt) aStmt.getNode())
+                    .collect(Collectors.toList()));
+            /*
+            if (cases[i] instanceof AExpression) {
+                ClavaLog.info("Expected argument " + (i + 2) + " to be an expression join point");
+                return null;
+            }
+            
+            if (cases[i + 1] instanceof AStatement) {
+                ClavaLog.info("Expected argument " + (i + 3) + " to be a statement join point");
+                return null;
+            }
+            */
+        }
+
+        CompoundStmt body = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), statements);
+        Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(), body);
+
+        return CxxJoinpoints.create(switchStmt, null, AStatement.class);
+    }
+
+    ////// Methods that only use ClavaFactory
+
+    public static ACxxWeaverJoinPoint builtinType(String typeCode) {
+        // BuiltinKind kind = BuiltinKind.getHelper().fromValue(typeCode);
+
+        BuiltinType type = CxxWeaver.getFactory().builtinType(typeCode);
+
+        return CxxJoinpoints.create(type, null);
+    }
+
+    public static AExpression doubleLiteral(double floating) {
+        FloatingLiteral floatingLiteral = CxxWeaver.getFactory()
+                .floatingLiteral(FloatKind.DOUBLE, floating);
+        // Type type = CxxWeaver.getFactory().builtinType(BuiltinKind.DOUBLE);
+        // FloatingLiteral intLiteral = ClavaNodeFactory.floatingLiteral(FloatKind.DOUBLE, Double.toString(floating),
+        // new ExprData(type), ClavaNodeInfo.undefinedInfo());
+
+        return CxxJoinpoints.create(floatingLiteral, null, AExpression.class);
+    }
+
+    public static ACxxWeaverJoinPoint longType() {
+        BuiltinType type = CxxWeaver.getFactory().builtinType(BuiltinKind.Long);
+        return CxxJoinpoints.create(type, null);
+    }
+
+    public static AExpression integerLiteral(int integer) {
+        IntegerLiteral intLiteral = CxxWeaver.getFactory().integerLiteral(integer);
+        // Type intType = ClavaNodeFactory.builtinType(BuiltinKind.INT);
+        // IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
+        // ClavaNodeInfo.undefinedInfo());
+
+        return CxxJoinpoints.create(intLiteral, null, AExpression.class);
     }
 }

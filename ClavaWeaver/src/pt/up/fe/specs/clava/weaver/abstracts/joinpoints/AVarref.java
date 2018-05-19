@@ -3,7 +3,9 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.List;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -51,6 +53,13 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * 
+     */
+    public void defNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def name with type String not implemented ");
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -76,19 +85,19 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
-     * expression where this reference is used
+     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
-    public abstract AJoinPoint getUseExprImpl();
+    public abstract AExpression getUseExprImpl();
 
     /**
-     * expression where this reference is used
+     * expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
     public final Object getUseExpr() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "useExpr", Optional.empty());
         	}
-        	AJoinPoint result = this.getUseExprImpl();
+        	AExpression result = this.getUseExprImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "useExpr", Optional.ofNullable(result));
         	}
@@ -122,11 +131,62 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    public abstract AVardecl getDeclarationImpl();
+
+    /**
+     * Get value on attribute declaration
+     * @return the attribute's value
+     */
+    public final Object getDeclaration() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
+        	}
+        	AVardecl result = this.getDeclarationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "declaration", e);
+        }
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getVardeclImpl() {
+    public AVardecl getVardeclImpl() {
         return this.aExpression.getVardeclImpl();
     }
 
@@ -230,6 +290,33 @@ public abstract class AVarref extends AExpression {
 
     /**
      * 
+     */
+    @Override
+    public AJoinPoint copyImpl() {
+        return this.aExpression.copyImpl();
+    }
+
+    /**
+     * 
+     * @param fieldName 
+     * @param value 
+     */
+    @Override
+    public Object setUserFieldImpl(String fieldName, Object value) {
+        return this.aExpression.setUserFieldImpl(fieldName, value);
+    }
+
+    /**
+     * 
+     * @param fieldNameAndValue 
+     */
+    @Override
+    public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
+        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
+    }
+
+    /**
+     * 
      * @param message 
      */
     @Override
@@ -245,16 +332,6 @@ public abstract class AVarref extends AExpression {
     @Override
     public void insertImpl(String position, String code) {
         this.aExpression.insertImpl(position, code);
-    }
-
-    /**
-     * 
-     * @param attribute 
-     * @param value 
-     */
-    @Override
-    public void defImpl(String attribute, Object value) {
-        this.aExpression.defImpl(attribute, value);
     }
 
     /**
@@ -294,12 +371,37 @@ public abstract class AVarref extends AExpression {
      * 
      */
     @Override
+    public final void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("kind");
         attributes.add("useExpr");
         attributes.add("isFunctionCall");
+        attributes.add("declaration");
     }
 
     /**
@@ -316,6 +418,7 @@ public abstract class AVarref extends AExpression {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
+        actions.add("void setName(String)");
     }
 
     /**
@@ -347,6 +450,7 @@ public abstract class AVarref extends AExpression {
         KIND("kind"),
         USEEXPR("useExpr"),
         ISFUNCTIONCALL("isFunctionCall"),
+        DECLARATION("declaration"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
@@ -357,8 +461,11 @@ public abstract class AVarref extends AExpression {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -366,16 +473,19 @@ public abstract class AVarref extends AExpression {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

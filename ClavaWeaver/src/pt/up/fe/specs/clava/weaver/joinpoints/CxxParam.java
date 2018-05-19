@@ -39,4 +39,9 @@ public class CxxParam extends AParam {
         return param;
     }
 
+    @Override
+    public Boolean getIsParamImpl() {
+        return true;
+    }
+
 }

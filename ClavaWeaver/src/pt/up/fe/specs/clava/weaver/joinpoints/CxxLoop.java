@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
 import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
@@ -352,12 +353,29 @@ public class CxxLoop extends ALoop {
 
     @Override
     public void setInitImpl(String initCode) {
+        ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
+        setInitValue(initCode);
+    }
 
+    @Override
+    public void setInitValueImpl(String initCode) {
+        // if (!(loop instanceof ForStmt)) {
+        // return; // TODO: warn user?
+        // }
+        //
+        // LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        //
+        // ((ForStmt) loop).setInit(literalStmt);
+        defInitValueImpl(initCode);
+    }
+
+    @Override
+    public void defInitValueImpl(String value) {
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
 
         ((ForStmt) loop).setInit(literalStmt);
     }
@@ -485,11 +503,34 @@ public class CxxLoop extends ALoop {
     @Override
     public void tileImpl(String blockSize, ALoop reference) {
 
-        boolean success = LoopTiling.apply(loop, (LoopStmt) reference.getNode(), blockSize.toString());
+        tileImpl(blockSize, reference, true);
+    }
+
+    @Override
+    public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
+
+        boolean success = new LoopTiling(CxxWeaver.getContex()).apply(loop, (LoopStmt) reference.getNode(),
+                blockSize.toString(), useTernary);
 
         if (!success) {
 
             ClavaLog.info("Could not tile the loop");
         }
     }
+
+    @Override
+    public void defIsParallelImpl(Boolean value) {
+        loop.setParallel(value);
+    }
+
+    @Override
+    public void defIsParallelImpl(String value) {
+        loop.setParallel(Boolean.parseBoolean(value));
+    }
+
+    @Override
+    public void setIsParallelImpl(Boolean isParallel) {
+        defIsParallelImpl(isParallel);
+    }
+
 }

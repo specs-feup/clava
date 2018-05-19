@@ -93,11 +93,15 @@ public class ClavaNodeInfo {
     if (id == null) {
         return;
     }
-
+    
     id.setSet(set);
     }
     */
     public String getExtendedId() {
+        if (id == null) {
+            return null;
+        }
+
         return id.getExtendedId();
     }
 
@@ -141,6 +145,7 @@ public class ClavaNodeInfo {
 
     public Optional<String> getIdSuffix() {
         String id = getExtendedId();
+
         if (id == null) {
             return Optional.empty();
         }
@@ -155,7 +160,6 @@ public class ClavaNodeInfo {
     }
 
     public void setId(String newId) {
-
         id.setId(newId);
     }
 }

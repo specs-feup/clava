@@ -13,9 +13,10 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -31,42 +32,33 @@ import pt.up.fe.specs.clava.language.CastKind;
  */
 public class ImplicitCastExpr extends CastExpr {
 
-    public ImplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-        this(castKind, exprData, info, Arrays.asList(subExpr));
+    public ImplicitCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     /**
-     * Constructor for node copy.
+     * Legacy support.
      * 
      * @param castKind
-     * @param destinationTypes
-     * @param location
+     * @param exprData
+     * @param info
+     * @param subExpr
      */
-    private ImplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    protected ImplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
 
         super(castKind, exprData, info, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ImplicitCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public Expr getSubExpr() {
-        return getChild(Expr.class, 0);
-    }
+    // @Override
+    // public Expr getSubExpr() {
+    // return getChild(Expr.class, 0);
+    // }
 
     @Override
     public String getCode() {
         // The code of its only child
         return getSubExpr().getCode();
-    }
-
-    @Override
-    public String toContentString() {
-        return super.toContentString() + " (type:" + getExprType().getCode() + ", CastKind:" + getCastKind() + ")";
     }
 
     /**

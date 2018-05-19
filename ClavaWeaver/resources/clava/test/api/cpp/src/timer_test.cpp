@@ -2,6 +2,14 @@ double bar() {
     return 1.0;
 }
 
+double bar2() {
+    return 1.0;
+}
+
+double bar3() {
+    return 1.0;
+}
+
 double foo() {
     double a = 0;
     
@@ -15,5 +23,6 @@ double foo() {
 int main() {
     
     foo();
-
+	bar2();
+	bar3();
 }

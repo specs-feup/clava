@@ -13,16 +13,20 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.attr.FinalAttr;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.comment.BlockContentComment;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.DummyComment;
@@ -35,12 +39,12 @@ import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
@@ -69,13 +73,13 @@ import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.data.LanguageId;
-import pt.up.fe.specs.clava.ast.decl.data.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
+import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
@@ -99,6 +103,8 @@ import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTemporaryObjectExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
@@ -108,20 +114,23 @@ import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
+import pt.up.fe.specs.clava.ast.expr.PackExpansionExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.ParenListExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
+import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
@@ -133,9 +142,17 @@ import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
+import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
-import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
+import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
+import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
@@ -166,17 +183,18 @@ import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
-import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
+import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
+import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.EnumType;
@@ -187,6 +205,7 @@ import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
 import pt.up.fe.specs.clava.ast.type.LValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
@@ -197,6 +216,7 @@ import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType.TemplateParmData;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
@@ -204,18 +224,24 @@ import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.Qualifier;
+import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data.UnaryTransformTypeKind;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
+import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
+import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
+import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
+import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Contains methods to create Clava nodes.
@@ -235,9 +261,9 @@ public class ClavaNodeFactory {
         return new Undefined(name, content, info, children);
     }
 
-    public static App app(Collection<TranslationUnit> translationUnits) {
-        return new App(translationUnits);
-    }
+    // public static App app(Collection<TranslationUnit> translationUnits) {
+    // return new App(translationUnits);
+    // }
 
     public static TranslationUnit translationUnit(String filename, String path, Collection<Decl> declarations) {
         return new TranslationUnit(filename, path, declarations);
@@ -245,6 +271,10 @@ public class ClavaNodeFactory {
 
     public static IncludeDecl include(String include, boolean isAngled) {
         return new IncludeDecl(include, isAngled);
+    }
+
+    public static IncludeDecl include(Include include) {
+        return include(include, include.getSourceFile().getAbsolutePath());
     }
 
     public static IncludeDecl include(Include include, String filepath) {
@@ -267,6 +297,13 @@ public class ClavaNodeFactory {
 
     public static TemplateArgumentType templateArgumentType(List<String> type, ClavaNodeInfo nodeInfo) {
         return new TemplateArgumentType(type, nodeInfo);
+    }
+
+    public static TemplateArgumentType templateArgumentType(Type type, ClavaNodeInfo nodeInfo) {
+        TemplateArgumentType argType = new TemplateArgumentType(Arrays.asList(type.getCode()), nodeInfo);
+        argType.setType(type, false);
+
+        return argType;
     }
 
     public static TemplateArgumentExpr templateArgumentExpr(Expr expr, ClavaNodeInfo nodeInfo) {
@@ -301,6 +338,13 @@ public class ClavaNodeFactory {
         return new MultiLineComment(lines, nodeInfo);
     }
 
+    /**
+     * @deprecated use inlineComment
+     * @param text
+     * @param nodeInfo
+     * @return
+     */
+    @Deprecated
     public static InlineCommandComment inlineCommandComment(String text, ClavaNodeInfo nodeInfo) {
         return new InlineCommandComment(text, nodeInfo);
     }
@@ -324,13 +368,13 @@ public class ClavaNodeFactory {
     // return new LiteralDecl(code, info);
     // }
 
-    public static DummyDecl dummyDecl(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyDecl(content, info, children);
-    }
-
-    public static DummyDecl dummyDecl(ClavaNode node) {
-        return new DummyDecl(node.toContentString(), node.getInfo(), node.getChildren());
-    }
+    // public static DummyDecl dummyDecl(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // return new DummyDeclLegacy(content, info, children);
+    // }
+    //
+    // public static DummyDecl dummyDecl(ClavaNode node) {
+    // return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
+    // }
 
     public static LinkageSpecDecl linkageSpecialDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
             List<ClavaNode> declarations) {
@@ -338,9 +382,9 @@ public class ClavaNodeFactory {
         return new LinkageSpecDecl(linkageType, declData, info, declarations);
     }
 
-    public static TypedefDecl typedefDecl(String typedefSource, boolean isModulePrivate, String name, Type type,
-            DeclData declData, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new TypedefDecl(typedefSource, isModulePrivate, name, type, declData, info, children);
+    public static TypedefDecl typedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate,
+            String name, Type type, DeclData declData, ClavaNodeInfo info) {
+        return new TypedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData, info);
     }
 
     public static VarDecl varDecl(String varName, Type type) {
@@ -349,7 +393,7 @@ public class ClavaNodeFactory {
         boolean isNrvo = false;
 
         VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-                InitializationStyle.NO_INIT);
+                InitializationStyle.NO_INIT, false);
         DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
         return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, null, null);
     }
@@ -454,7 +498,8 @@ public class ClavaNodeFactory {
     }
 
     public static ParmVarDecl parmVarDecl(String varName, Type type) {
-        return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), null, null);
+        return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), ClavaNodeInfo.undefinedInfo(),
+                null);
     }
 
     public static ParmVarDecl parmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type type,
@@ -524,10 +569,10 @@ public class ClavaNodeFactory {
         return new FriendDecl(declData, info, friendNode);
     }
 
-    public static TypeAliasDecl typeAliasDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Type aliasedType) {
+    public static TypeAliasDecl typeAliasDecl(Type aliasedType, String declName, Type type, DeclData declData,
+            ClavaNodeInfo info) {
 
-        return new TypeAliasDecl(declName, type, declData, info, aliasedType);
+        return new TypeAliasDecl(aliasedType, declName, type, declData, info);
     }
 
     public static UsingDirectiveDecl usingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
@@ -546,7 +591,7 @@ public class ClavaNodeFactory {
     }
 
     public static RedeclarableTemplateDecl redeclarableTemplateDecl(String declName, List<Decl> specializations,
-            DeclData declData, ClavaNodeInfo info, List<TemplateTypeParmDecl> templateParameters, Decl templateDecl) {
+            DeclData declData, ClavaNodeInfo info, List<NamedDecl> templateParameters, Decl templateDecl) {
 
         return new RedeclarableTemplateDecl(declName, specializations, declData, info, templateParameters,
                 templateDecl);
@@ -581,29 +626,56 @@ public class ClavaNodeFactory {
         return new NamespaceAliasDecl(nestedPrefix, declInfo, declName, declData, info);
     }
 
+    public static CXXConversionDecl cxxConversionDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
+            Stmt definition) {
+
+        return new CXXConversionDecl(methodData, declName, functionType, functionDeclData, declData, info, inputs,
+                definition);
+
+    }
+
     /*
      * 'type' nodes
      */
 
     public static DummyType dummyType(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyType(content, info, children);
+        return new DummyTypeLegacy(content, info, children);
     }
 
     public static DummyType dummyType(ClavaNode node) {
-        return new DummyType(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyTypeLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
     // public static BuiltinTypeOld builtinType(List<Type> type, ClavaNodeInfo info) {
     // return new BuiltinTypeOld(type, info);
     // }
 
+    /**
+     * FIXED
+     * 
+     * @deprecated use BuiltinType(BuiltinKind kind) constructor
+     * @param type
+     * @return
+     */
+    @Deprecated
     public static BuiltinType builtinType(String type) {
         return ClavaNodeFactory.builtinType(new TypeData(type.toLowerCase()),
                 ClavaNodeInfo.undefinedInfo());
     }
 
+    /**
+     * FIXED
+     * 
+     * @deprecated use BuiltinType(BuiltinKind kind) constructor
+     * 
+     * @param typeData
+     * @param infoB
+     * @return
+     */
+    @Deprecated
     public static BuiltinType builtinType(TypeData typeData, ClavaNodeInfo info) {
-        return new BuiltinType(typeData, info);
+        return new BuiltinTypeLegacy(typeData, info);
     }
 
     public static TypedefType typedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
@@ -611,10 +683,10 @@ public class ClavaNodeFactory {
         return new TypedefType(declInfo, typeData, info, classType);
     }
 
-    public static QualType qualType(List<Qualifier> qualifiers, TypeData typeData, ClavaNodeInfo info,
+    public static QualType qualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
             Type qualifiedType) {
 
-        return new QualType(qualifiers, typeData, info, qualifiedType);
+        return new QualType(qualTypeData, typeData, info, qualifiedType);
     }
 
     public static PointerType pointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
@@ -625,20 +697,84 @@ public class ClavaNodeFactory {
         return new EnumType(declInfo, typeData, info);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param functionProtoTypeData
+     * @param functionTypeData
+     * @param type
+     * @param info
+     * @param returnType
+     * @param arguments
+     * @return
+     */
+    @Deprecated
     public static FunctionProtoType functionProtoType(FunctionProtoTypeData functionProtoTypeData,
             FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info, Type returnType,
             Collection<? extends Type> arguments) {
 
-        return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
+        DataStore data = new LegacyToDataStore()
+                .setNodeInfo(info)
+                .setType(type)
+                .setFunctionType(functionTypeData)
+                .setFunctionProtoType(functionProtoTypeData)
+                .getData();
+
+        // Has to check if last argument is of variadic type, and adjust number of arguments accordingly
+        int numParams = arguments.size();
+        boolean isVariadic = arguments.stream().filter(argType -> argType instanceof VariadicType)
+                .findFirst().isPresent();
+        if (isVariadic) {
+            --numParams;
+        }
+
+        data.add(FunctionProtoType.NUM_PARAMETERS, numParams);
+        data.add(FunctionProtoType.IS_VARIADIC, isVariadic);
+
+        return new FunctionProtoType(data, SpecsCollections.concat(returnType, arguments));
+
+        // return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param functionTypeData
+     * @param typeData
+     * @param info
+     * @param returnType
+     * @return
+     */
+    @Deprecated
     public static FunctionNoProtoType functionNoProtoType(FunctionTypeData functionTypeData, TypeData typeData,
             ClavaNodeInfo info, Type returnType) {
-        return new FunctionNoProtoType(functionTypeData, typeData, info, returnType);
+
+        DataStore data = new LegacyToDataStore()
+                .setNodeInfo(info)
+                .setType(typeData)
+                .setFunctionType(functionTypeData)
+                .getData();
+
+        data.add(FunctionProtoType.NUM_PARAMETERS, 0);
+
+        return new FunctionNoProtoType(data, Arrays.asList(returnType));
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param info
+     * @return
+     */
+    @Deprecated
     public static NullType nullType(ClavaNodeInfo info) {
-        return new NullType(info);
+        if (info == null) {
+            return LegacyToDataStore.getFactory().nullType();
+        }
+
+        DataStore data = new LegacyToDataStore()
+                .setType(new TypeData("<null type>"))
+                .setNodeInfo(info)
+                .getData();
+
+        return new NullType(data, Collections.emptyList());
     }
 
     public static RecordType recordType(String recordName, DeclRef declInfo, TagKind tagKind,
@@ -687,6 +823,12 @@ public class ClavaNodeFactory {
         return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
     }
 
+    public static ConstantArrayType constantArrayType(int constant, Type elementType, Standard standard) {
+        ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, new ArrayList<Qualifier>(), standard);
+        return new ConstantArrayType(constant, arrayTypeData, null, null, elementType);
+        // return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
+    }
+
     public static IncompleteArrayType incompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
             ClavaNodeInfo info, Type elementType) {
         return new IncompleteArrayType(arrayTypeData, typeData, info, elementType);
@@ -726,16 +868,41 @@ public class ClavaNodeFactory {
         return new InjectedClassNameType(declInfo, data, info);
     }
 
+    public static PackExpansionType packExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
+            Type pattern) {
+
+        return new PackExpansionType(numExpansions, data, info, pattern);
+    }
+
+    public static DependentSizedArrayType dependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
+            ClavaNodeInfo info,
+            Type elementType, Expr sizeExpr) {
+
+        return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
+    }
+
+    public static TypeOfExprType typeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
+            Expr underlyingExpr, Type underlyingType) {
+        return new TypeOfExprType(standard, data, info, underlyingExpr, underlyingType);
+    }
+
     /*
     * 'stmt' nodes
     */
 
     public static DummyStmt dummyStmt(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyStmt(content, info, children);
+        return new DummyStmtLegacy(content, info, children);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @param literalType
+     * @return
+     */
+    @Deprecated
     public static LiteralType literalType(String literalType) {
-        return new LiteralType(literalType);
+        return LegacyToDataStore.getFactory().literalType(literalType);
+        // return new LiteralType(literalType);
     }
 
     public static SubstTemplateTypeParmType substTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info,
@@ -745,12 +912,15 @@ public class ClavaNodeFactory {
 
     /**
      * Helper method that receives a ClavaNode.
-     *
+     * 
+     * @deprecated use ClavaFactory
+     * 
      * @param node
      * @return
      */
+    @Deprecated
     public static DummyStmt dummyStmt(ClavaNode node) {
-        return new DummyStmt(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyStmtLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
     public static CompoundStmt compoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
@@ -773,40 +943,32 @@ public class ClavaNodeFactory {
         return new DefaultStmt(info, subStmt);
     }
 
-    public static ReturnStmt returnStmt(ClavaNodeInfo info, Expr retValue) {
-        return new ReturnStmt(info, retValue);
-    }
+    // public static ReturnStmt returnStmt(ClavaNodeInfo info, Expr retValue) {
+    // return new ReturnStmt(info, retValue);
+    // }
 
-    public static ReturnStmt returnStmt(ClavaNodeInfo info) {
-        return new ReturnStmt(info);
-    }
+    // public static ReturnStmt returnStmt(ClavaNodeInfo info) {
+    // return new ReturnStmt(info);
+    // }
 
-    public static DeclStmt declStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
-        return new DeclStmt(info, decls);
-    }
+    // public static DeclStmt declStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
+    // return new DeclStmt(info, decls);
+    // }
 
-    public static DeclStmt declStmt(ClavaNodeInfo info, RecordDecl recordDecl, List<VarDecl> varDecls) {
-        return new DeclStmt(info, recordDecl, varDecls);
-    }
+    // public static DeclStmt declStmt(ClavaNodeInfo info, RecordDecl recordDecl, List<VarDecl> varDecls) {
+    // return new DeclStmt(info, recordDecl, varDecls);
+    // }
 
-    public static DeclStmt declStmtWithoutSemicolon(ClavaNodeInfo info, NamedDecl decl) {
-        return new DeclStmt(false, info, decl);
-    }
-
-    public static ExprStmt exprStmt(Expr expr) {
-        return new ExprStmt(expr.getInfo(), expr);
-    }
-
-    public static ExprStmt exprStmtWithoutSemicolon(Expr expr) {
-        return new ExprStmt(false, expr.getInfo(), expr);
-    }
+    // public static DeclStmt declStmtWithoutSemicolon(ClavaNodeInfo info, NamedDecl decl) {
+    // return new DeclStmt(false, info, decl);
+    // }
 
     public static ExprStmt exprStmtAssign(Expr lhs, Expr rhs, Type returnType) {
         ExprData exprData = new ExprData(returnType);
 
         BinaryOperator op = binaryOperator(BinaryOperatorKind.ASSIGN, exprData, null, lhs, rhs);
 
-        return exprStmt(op);
+        return LegacyToDataStore.getFactory().exprStmt(op);// exprStmt(op);
     }
 
     public static ContinueStmt continueStmt(ClavaNodeInfo info) {
@@ -841,7 +1003,7 @@ public class ClavaNodeFactory {
     // return new LiteralStmt(literalCode, info);
     // }
 
-    public static CXXForRangeStmt cxxForRangeStmt(ClavaNodeInfo info, DeclStmt range, DeclStmt beginEnd, Expr cond,
+    public static CXXForRangeStmt cxxForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond,
             Expr inc, DeclStmt loopVar, Stmt body) {
         return new CXXForRangeStmt(info, range, beginEnd, cond, inc, loopVar, body);
     }
@@ -878,30 +1040,38 @@ public class ClavaNodeFactory {
         return new NullStmt(info);
     }
 
-    /*
-     * 'expr' nodes
+    /**
+     * @deprecated use ClavaFactory 'expr' nodes
      */
 
+    @Deprecated
     public static LiteralExpr literalExpr(String literalCode, Type type) {
-        return new LiteralExpr(literalCode, type);
+        return LegacyToDataStore.getFactory().literalExpr(literalCode, type);
+        // return new LiteralExprLegacy(literalCode, type);
     }
 
     // public static LiteralExpr literalExpr(String literalCode, Type type, ClavaNodeInfo info) {
     // return new LiteralExpr(literalCode, type, info);
     // }
 
+    /**
+     * @deprecated use DummyExpr constructor.
+     * @param node
+     * @return
+     */
+    @Deprecated
     public static DummyExpr dummyExpr(ClavaNode node) {
-        return new DummyExpr(node.toContentString(), node.getInfo(), node.getChildren());
+        return new DummyExprLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
-    public static DummyExpr dummyExpr(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyExpr(content, info, children);
-    }
+    // public static DummyExpr dummyExpr(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // return new DummyExprLegacy(content, info, children);
+    // }
 
     public static ImplicitCastExpr exprImplicitCast(CastKind castKind, ExprData exprData,
             ClavaNodeInfo info, Expr subExpr) {
 
-        return new ImplicitCastExpr(castKind, exprData, info, subExpr);
+        return new ImplicitCastExprLegacy(castKind, exprData, info, subExpr);
     }
 
     public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
@@ -910,13 +1080,13 @@ public class ClavaNodeFactory {
 
     public static IntegerLiteral integerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
 
-        return new IntegerLiteral(literal, exprData, info);
+        return new IntegerLiteralLegacy(literal, exprData, info);
     }
 
-    public static CXXFunctionalCastExpr cxxFunctionalCastExpr(String targetType, CastKind castKind,
+    public static CXXFunctionalCastExpr cxxFunctionalCastExpr(CastKind castKind,
             ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
 
-        return new CXXFunctionalCastExpr(targetType, castKind, exprData, info, subExpr);
+        return new CXXFunctionalCastExpr(castKind, exprData, info, subExpr);
     }
 
     /**
@@ -1034,7 +1204,7 @@ public class ClavaNodeFactory {
     public static FloatingLiteral floatingLiteral(FloatKind floatKind, String number, ExprData exprData,
             ClavaNodeInfo info) {
 
-        return new FloatingLiteral(floatKind, number, exprData, info);
+        return new FloatingLiteralLegacy(floatKind, number, exprData, info);
     }
 
     public static BinaryOperator binaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr lhs,
@@ -1064,7 +1234,14 @@ public class ClavaNodeFactory {
     }
 
     public static CXXBoolLiteralExpr cxxBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
-        return new CXXBoolLiteralExpr(value, exprData, info);
+        DataStore data = new LegacyToDataStore().setNodeInfo(info).setExpr(exprData).getData();
+        data.add(CXXBoolLiteralExpr.VALUE, value);
+
+        return new CXXBoolLiteralExpr(data, Collections.emptyList());
+        // Collections.emptyList());
+        // this(value, exprData, info, Collections.emptyList());
+
+        // return new CXXBoolLiteralExpr(value, exprData, info);
     }
 
     public static CXXNewExpr cxxNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData exprData,
@@ -1085,8 +1262,12 @@ public class ClavaNodeFactory {
         return new CXXOperatorCallExpr(exprData, info, function, args);
     }
 
+    // public static CharacterLiteral characterLiteral(CharacterLiteralData data) {
+    // return new CharacterLiteral(data, Collections.emptyList());
+    // }
+
     public static CharacterLiteral characterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info) {
-        return new CharacterLiteral(charValue, exprData, info);
+        return new CharacterLiteralLegacy(charValue, exprData, info);
     }
 
     public static CXXDefaultInitExpr cxxDefaultInitExpr(ExprData exprData, ClavaNodeInfo info) {
@@ -1117,11 +1298,16 @@ public class ClavaNodeFactory {
         return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, exprData, info, argument);
     }
 
-    public static InitListExpr initListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller,
-            BareDeclData fieldData,
-            ExprData exprData, ClavaNodeInfo info, Collection<? extends Expr> initExprs) {
+    // public static InitListExpr initListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller,
+    // BareDeclData fieldData,
+    // ExprData exprData, ClavaNodeInfo info, Collection<? extends Expr> initExprs) {
+    //
+    // return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData, info, initExprs);
+    // }
+    public static InitListExpr initListExpr(InitListExprData data, ExprData exprData, ClavaNodeInfo info,
+            Collection<? extends Expr> initExprs) {
 
-        return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData, info, initExprs);
+        return new InitListExpr(data, exprData, info, initExprs);
     }
 
     public static CXXStdInitializerListExpr cxxStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info,
@@ -1171,8 +1357,14 @@ public class ClavaNodeFactory {
         return new GNUNullExpr(exprData, info);
     }
 
+    /**
+     * @deprecated use ClavaFactory
+     * @return
+     */
+    @Deprecated
     public static NullExpr nullExpr() {
-        return new NullExpr();
+        return LegacyToDataStore.getFactory().nullExpr();
+        // return new NullExpr();
     }
 
     public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(boolean isArrow, String memberName,
@@ -1182,6 +1374,42 @@ public class ClavaNodeFactory {
 
     public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
         return new StmtExpr(exprData, info, compoundStmt);
+    }
+
+    public static SizeOfPackExpr sizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
+            List<TemplateArgument> partialArguments) {
+
+        return new SizeOfPackExpr(packId, packName, exprData, info, partialArguments);
+    }
+
+    public static PackExpansionExpr packExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
+        return new PackExpansionExpr(exprData, info, pattern);
+    }
+
+    public static ParenListExpr parenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
+        return new ParenListExpr(exprData, info, expressions);
+    }
+
+    public static CXXUnresolvedConstructExpr cxxUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData,
+            ClavaNodeInfo info,
+            List<Expr> arguments) {
+
+        return new CXXUnresolvedConstructExpr(typeAsWritten, exprData, info, arguments);
+    }
+
+    public static LambdaExpr lambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
+            CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
+
+        return new LambdaExpr(lambdaData, exprData, info, lambdaClass, captureArguments, body);
+    }
+
+    public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
+        return new CXXTypeidExpr(typeidData, exprData, info);
+    }
+
+    public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
+            Expr operatorExpr) {
+        return new CXXTypeidExpr(typeidData, exprData, info, operatorExpr);
     }
 
     /*
@@ -1205,8 +1433,61 @@ public class ClavaNodeFactory {
         return new FinalAttr(attrData, nodeInfo);
     }
 
+    public static OpenCLKernelAttr openCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
+        return new OpenCLKernelAttr(attrData, nodeInfo);
+    }
+
     public static CompoundStmt compoundStmt(ClavaNodeInfo info, String code) {
         return compoundStmt(info, Arrays.asList(literalStmt(code)));
     }
+
+    /***** NEW METHODS WITH HIGHER LEVEL CONSTRUCTORS *****/
+
+    /** EXPR **/
+
+    /**
+     * Builds a DeclRefExpr for a variable named 'varName' and with a BuiltinType with the given kind.
+     * 
+     * @param varName
+     * @param kind
+     * @return
+     */
+    /*
+    public static DeclRefExpr declRefExpr(String varName, BuiltinKind kind) {
+    
+        // BuiltinKind kind = BuiltinKind.getHelper().valueOf(builtinTypeAsString);
+        BuiltinType builtinType = builtinType(kind);
+    
+        DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(varName, builtinType);
+    
+        return declRef;
+    }
+    */
+
+    /**
+     * Builds an IntegerLiteral from the given integer.
+     * 
+     * @param integer
+     * @return
+     */
+    /*
+    public static IntegerLiteral integerLiteral(int integer) {
+        Type intType = builtinType(BuiltinKind.INT);
+    
+        return ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
+                ClavaNodeInfo.undefinedInfo());
+    }
+    */
+
+    /** TYPE **/
+
+    /**
+     * 
+     * @param kind
+     * @return
+     */
+    // public static BuiltinType builtinType(BuiltinKind kind) {
+    // return new BuiltinType(new BuiltinTypeData(kind), Collections.emptyList());
+    // }
 
 }

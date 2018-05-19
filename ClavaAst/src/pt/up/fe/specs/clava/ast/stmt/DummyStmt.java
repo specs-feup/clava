@@ -14,7 +14,8 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -29,36 +30,27 @@ import pt.up.fe.specs.clava.ast.DummyNode;
  */
 public class DummyStmt extends Stmt implements DummyNode {
 
-    private final String content;
+    public DummyStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
-    public DummyStmt(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    /**
+     * Legacy support.
+     * 
+     * @param info
+     * @param children
+     */
+    public DummyStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
-
-        this.content = content;
     }
 
     public String getNodeCode() {
-        return "/* Dummy statement '" + content + "'*/";
+        return "/* Dummy statement '" + getContent() + "'*/";
     }
 
     @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DummyStmt(content, getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public String getContent() {
-        return content;
-    }
-
-    @Override
-    public String toContentString() {
-        return super.toContentString() + "location:" + getLocation();
     }
 
 }

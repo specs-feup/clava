@@ -82,4 +82,13 @@ public class CxxVardecl extends AVardecl {
         varDecl.setInit(ClavaNodeFactory.literalExpr(init, varDecl.getType()));
     }
 
+    @Override
+    public Boolean getIsParamImpl() {
+        return false;
+    }
+
+    @Override
+    public String getStorageClassImpl() {
+        return varDecl.getVarDeclData().getStorageClass().name().toLowerCase();
+    }
 }

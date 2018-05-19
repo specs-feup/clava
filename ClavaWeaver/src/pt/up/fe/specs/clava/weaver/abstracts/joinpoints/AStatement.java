@@ -93,6 +93,18 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     public abstract List<? extends ACall> selectStmtCall();
 
     /**
+     * Method used by the lara interpreter to select memberCalls
+     * @return 
+     */
+    public abstract List<? extends AMemberCall> selectMemberCall();
+
+    /**
+     * Method used by the lara interpreter to select memberAccesss
+     * @return 
+     */
+    public abstract List<? extends AMemberAccess> selectMemberAccess();
+
+    /**
      * Method used by the lara interpreter to select arrayAccesss
      * @return 
      */
@@ -123,6 +135,18 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     public abstract List<? extends AUnaryOp> selectUnaryOp();
 
     /**
+     * Method used by the lara interpreter to select newExprs
+     * @return 
+     */
+    public abstract List<? extends ANewExpr> selectNewExpr();
+
+    /**
+     * Method used by the lara interpreter to select deleteExprs
+     * @return 
+     */
+    public abstract List<? extends ADeleteExpr> selectDeleteExpr();
+
+    /**
      * 
      */
     @Override
@@ -141,6 +165,12 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         	case "stmtCall": 
         		joinPointList = selectStmtCall();
         		break;
+        	case "memberCall": 
+        		joinPointList = selectMemberCall();
+        		break;
+        	case "memberAccess": 
+        		joinPointList = selectMemberAccess();
+        		break;
         	case "arrayAccess": 
         		joinPointList = selectArrayAccess();
         		break;
@@ -156,11 +186,34 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         	case "unaryOp": 
         		joinPointList = selectUnaryOp();
         		break;
+        	case "newExpr": 
+        		joinPointList = selectNewExpr();
+        		break;
+        	case "deleteExpr": 
+        		joinPointList = selectDeleteExpr();
+        		break;
         	default:
         		joinPointList = super.select(selectName);
         		break;
         }
         return joinPointList;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void defImpl(String attribute, Object value) {
+        switch(attribute){
+        case "type": {
+        	if(value instanceof AJoinPoint){
+        		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
+        }
     }
 
     /**
@@ -183,11 +236,15 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         selects.add("childExpr");
         selects.add("call");
         selects.add("stmtCall");
+        selects.add("memberCall");
+        selects.add("memberAccess");
         selects.add("arrayAccess");
         selects.add("vardecl");
         selects.add("varref");
         selects.add("binaryOp");
         selects.add("unaryOp");
+        selects.add("newExpr");
+        selects.add("deleteExpr");
     }
 
     /**
@@ -218,8 +275,11 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         CHAINANCESTOR("chainAncestor"),
@@ -227,16 +287,19 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
+        HASASTPARENT("hasAstParent"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
         CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETUSERFIELD("setUserField"),
         JAVAFIELDTYPE("javaFieldType"),
+        USERFIELD("userField"),
         LOCATION("location"),
+        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         HASPARENT("hasParent");
         private String name;

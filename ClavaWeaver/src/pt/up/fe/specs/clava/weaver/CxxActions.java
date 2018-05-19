@@ -18,8 +18,8 @@ import java.util.Optional;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -29,6 +29,9 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
  * Class with utility methods related with weaver actions.
+ * 
+ * TODO: Move methods that require the weaver to a new class that receives the weaver during construction and is
+ * available in the weaver.
  * 
  * @author JoaoBispo
  *
@@ -50,17 +53,20 @@ public class CxxActions {
 
         switch (insert) {
         case BEFORE:
-            NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
+            // NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
+            NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeParser.parseStmt(code));
             break;
 
         case AFTER:
-            NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
+            // NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
+            NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeParser.parseStmt(code));
             break;
 
         case AROUND:
         case REPLACE:
+            // Has to replace with a node of the same "kind" (e.g., Expr, Stmt...)
             weaver.clearUserField(target);
-            NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, null, target));
+            NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, CxxWeaver.getFactory().nullType(), target));
             break;
         default:
             throw new RuntimeException("Case not defined:" + insert);

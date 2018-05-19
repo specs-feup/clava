@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.transform.call;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,8 +29,8 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
@@ -44,6 +43,7 @@ import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.BiConsumerClassMap;
@@ -67,6 +67,7 @@ public class InlineRenamer {
     private Expr callReplacement;
 
     private AccumulatorMap<String> newNamesCounter;
+    private ClavaFactory factory;
 
     public InlineRenamer(CallExpr call, FunctionDecl functionDecl, List<Stmt> stmts, Set<String> usedNames) {
         this.call = call;
@@ -83,6 +84,9 @@ public class InlineRenamer {
         this.callReplacement = null;
 
         this.newNamesCounter = new AccumulatorMap<>();
+
+        // Store reference to factory
+        this.factory = call.getFactory();
     }
 
     private BiConsumerClassMap<Expr, ParmVarDecl> buildArgumentsRenamers() {
@@ -248,7 +252,8 @@ public class InlineRenamer {
         VarDecl varDecl = ClavaNodeFactory.varDecl(returnVarName, retValue);
 
         // Replace return with an DeclStmt to the return expression
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt declStmt = factory.declStmt(varDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
         stmts.set(returnIndex, declStmt);
 
         // Save new name expression in callReplacement
@@ -321,9 +326,9 @@ public class InlineRenamer {
 
         // Get arity of parameter
         Type paramType = parmVarDecl.getType();
-        System.out.println("PARAM TYPE:" + paramType);
-        System.out.println("ARITY:" + Types.getPointerArity(paramType));
-        System.out.println("ELEMENT TYPE:" + Types.getElement(paramType));
+        // System.out.println("PARAM TYPE:" + paramType);
+        // System.out.println("ARITY:" + Types.getPointerArity(paramType));
+        // System.out.println("ELEMENT TYPE:" + Types.getElement(paramType));
 
         int pointerArity = Types.getPointerArity(paramType);
         Type elementType = Types.getElement(paramType);
@@ -337,7 +342,7 @@ public class InlineRenamer {
         Expr exprWithCast = ClavaNodeFactory.cStyleCastExpr(CastKind.NO_OP, new ExprData(newType),
                 ClavaNodeInfo.undefinedInfo(), expr);
 
-        System.out.println("NEW TYPE:" + newType.getCode());
+        // System.out.println("NEW TYPE:" + newType.getCode());
 
         // Add statement with declaration of variable
         VarDeclData varDeclData = parmVarDecl.getVarDeclData().copy();
@@ -346,7 +351,8 @@ public class InlineRenamer {
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, newName, newType,
                 parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), exprWithCast);
 
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt declStmt = factory.declStmt(varDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
         prefixStmts.add(declStmt);
 
     }
@@ -364,10 +370,15 @@ public class InlineRenamer {
         VarDeclData varDeclData = varDecl.getVarDeclData().copy();
         varDeclData.setInitKind(InitializationStyle.CINIT);
 
-        VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDecl.getType(),
+        // Sanitize Vardecl type (e.g., transform arrays to pointers)
+        // Type varDeclType = sanitizeVarDeclType(varDecl.getType());
+        Type varDeclType = expr.getType().copy();
+
+        VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDeclType,
                 varDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), expr);
 
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(newVarDecl));
+        DeclStmt declStmt = factory.declStmt(newVarDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(newVarDecl));
         prefixStmts.add(declStmt);
 
         // System.out.println("ARRAY SUB");
@@ -377,6 +388,41 @@ public class InlineRenamer {
         // System.out.println("PARAM TYPE:" + parmVarDecl.getType());
     }
 
+    /*
+    private Type sanitizeVarDeclType(Type type) {
+        Type sanitizedType = type.copy();
+    
+        // System.out.println("TYPE BEFORE:" + sanitizedType);
+        // Replace all array types with pointer types
+        Type currentType = sanitizedType;
+        while (currentType != null) {
+            if (currentType instanceof ArrayType) {
+                // Obtain and detach element type
+                Type elementType = ((ArrayType) currentType).getElementType();
+                elementType.detach();
+    
+                // Create pointer type
+                PointerType pointerType = ClavaNodeFactory.pointerType(currentType.getTypeData(),
+                        ClavaNodeInfo.undefinedInfo(), elementType);
+    
+                NodeInsertUtils.replace(currentType, pointerType);
+    
+                currentType = elementType;
+                continue;
+            }
+    
+            if (currentType.hasSugar()) {
+                currentType = currentType.desugar();
+            } else {
+                currentType = null;
+            }
+        }
+    
+        // System.out.println("TYPE AFTER:" + sanitizedType);
+    
+        return sanitizedType;
+    }
+    */
     /**
      * Renames a parameter that has no corresponding argument.
      * 
@@ -395,7 +441,8 @@ public class InlineRenamer {
         VarDecl varDecl = ClavaNodeFactory.varDecl(parmVarDecl.getVarDeclData(), newName, parmVarDecl.getType(),
                 parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), parmVarDecl.getInit().orElse(null));
 
-        DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
+        DeclStmt declStmt = factory.declStmt(varDecl);
+        // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
         prefixStmts.add(declStmt);
     }
 

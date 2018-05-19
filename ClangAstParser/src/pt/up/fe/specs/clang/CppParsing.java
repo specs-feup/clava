@@ -23,7 +23,6 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.io.FileService;
 import pt.up.fe.specs.util.stringparser.ParserWorker;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -87,7 +86,8 @@ public class CppParsing {
 
         File file = new File(location.getFilepath());
         if (!file.isFile()) {
-            SpecsLogs.msgWarn("Location is considered valid, but is not a file:" + file);
+            // SpecsLogs.msgWarn("Location is considered valid, but is not a file:" + file);
+            // Location is considered valid, but is not a file
             return Optional.empty();
         }
         // Preconditions.checkArgument(file.isFile(),

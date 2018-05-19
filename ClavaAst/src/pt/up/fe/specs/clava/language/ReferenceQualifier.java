@@ -13,22 +13,11 @@
 
 package pt.up.fe.specs.clava.language;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
+public enum ReferenceQualifier {
 
-public enum ReferenceQualifier implements StringProvider {
-
-    LVALUE("&"),
-    RVALUE("&&"),
-    NONE("");
-
-    private static final Lazy<EnumHelper<ReferenceQualifier>> HELPER = EnumHelper
-            .newLazyHelper(ReferenceQualifier.class, NONE);
-
-    public static EnumHelper<ReferenceQualifier> getHelper() {
-        return HELPER.get();
-    }
+    LValue("&"),
+    RValue("&&"),
+    None("");
 
     private final String code;
 
@@ -44,8 +33,4 @@ public enum ReferenceQualifier implements StringProvider {
         return code;
     }
 
-    @Override
-    public String getString() {
-        return getCode();
-    }
 }

@@ -3,6 +3,15 @@
 #include <fstream>
 #include <vector>
 
+enum A {
+  VALUE_1 = 1,
+  VALUE_2 = 2,
+};
+
+inline enum A operator|(enum A lhs, enum A rhs) {
+  return (enum A) (static_cast<std::underlying_type<enum A>::type>(lhs) | static_cast<std::underlying_type<enum A>::type>(rhs));
+}
+
 void test1(std::istream& str, std::string line) {
    auto x = (std::getline(str, line)).operator bool();
    std::cout << x << std::endl;

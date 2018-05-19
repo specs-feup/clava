@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 
@@ -48,8 +47,8 @@ public class CxxArrayAccess extends AArrayAccess {
     }
 
     @Override
-    public AVarref getArrayVarImpl() {
-        return (AVarref) CxxJoinpoints.create(arraySub.getDeclRef(), this);
+    public AExpression getArrayVarImpl() {
+        return (AExpression) CxxJoinpoints.create(arraySub.getArrayExpr(), this);
     }
 
     // @Override
@@ -65,8 +64,16 @@ public class CxxArrayAccess extends AArrayAccess {
     }
 
     @Override
-    public AJoinPoint getVardeclImpl() {
-        return ((AExpression) CxxJoinpoints.create(arraySub.getDeclRef(), this)).getVardeclImpl();
+    public AVardecl getVardeclImpl() {
+        AExpression arrayVar = getArrayVarImpl();
+
+        if ((arrayVar instanceof AVarref)) {
+            return null;
+        }
+
+        return ((AVarref) arrayVar).getVardeclImpl();
+
+        // return ((AExpression) CxxJoinpoints.create(arraySub.getArrayExpr(), this)).getVardeclImpl();
     }
 
     @Override
@@ -75,7 +82,7 @@ public class CxxArrayAccess extends AArrayAccess {
     }
 
     @Override
-    public List<? extends AVarref> selectArrayVar() {
+    public List<? extends AExpression> selectArrayVar() {
         return Arrays.asList(getArrayVarImpl());
     }
 

@@ -18,13 +18,16 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
+import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
@@ -178,6 +181,14 @@ public class Types {
             return ((ArrayType) type).getElementType();
         }
 
+        if (type instanceof QualType) {
+            return ((QualType) type).getUnqualifiedType();
+        }
+
+        if (type instanceof TypedefType) {
+            return ((TypedefType) type).getTypeClass();
+        }
+
         return null;
     }
 
@@ -195,4 +206,53 @@ public class Types {
         return Optional.empty();
     }
 
+    /**
+     * To be called when a sugared type is modified.
+     * 
+     * @param sugaredType
+     */
+    public static void updateSugaredType(Type sugaredType) {
+        // No sugar, nothing to do
+        if (!sugaredType.hasSugar()) {
+            return;
+        }
+
+        Type underlyingType = sugaredType.desugar();
+
+        // If underlyingType type is a TypedefType, to reflect changes replace with the underlying type
+        if (underlyingType instanceof TypedefType) {
+            Type typeClass = ((TypedefType) underlyingType).getTypeClass();
+
+            // Optimization: detach to avoid copy
+            typeClass.detach();
+
+            sugaredType.setDesugar(typeClass);
+        }
+
+    }
+
+    public static boolean isEqual(Type type1, Type type2) {
+
+        if (type1 == null && type2 == null) {
+            return true;
+        }
+
+        if (type1 == null || type2 == null) {
+            return false;
+        }
+
+        type1 = toComparable(type1);
+        type2 = toComparable(type2);
+
+        return type1.getCode().equals(type2.getCode());
+
+    }
+
+    private static Type toComparable(Type type) {
+        if (type instanceof AutoType) {
+            return toComparable(((AutoType) type).getDeducedType());
+        }
+
+        return type;
+    }
 }

@@ -25,8 +25,8 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -65,7 +65,6 @@ public class FloatingLiteralParser extends AClangNodeParser<FloatingLiteral> {
         String dumpLiteral = parser.apply(StringParsers::parseWord);
 
         String number = getSourceLiteral(node).orElse(dumpLiteral);
-
         // System.out.println("DUMP FLOAT:" + number);
 
         // Optional<String> source = location.getSource();
@@ -110,7 +109,7 @@ public class FloatingLiteralParser extends AClangNodeParser<FloatingLiteral> {
     }
 
     private static FloatKind getFloatKind(Type type) {
-        BuiltinTypeKeyword keyword = BuiltinTypeKeyword.getHelper().valueOf(type.getCode());
+        BuiltinTypeKeyword keyword = BuiltinTypeKeyword.getHelper().fromValue(type.getCode());
 
         if (keyword != null) {
             FloatKind kind = FLOAT_KINDS.get(keyword);

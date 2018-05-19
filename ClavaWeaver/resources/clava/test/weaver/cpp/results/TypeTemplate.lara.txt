@@ -1,0 +1,13 @@
+Original template args: double
+Original template args types: double
+Original template args: double
+Original template args types: double
+After setting float: float
+After setting float: float
+After setting int with array: int
+After setting int with array: int
+Original template args: int,float
+After second arg to double: int,double
+After setting with array [double, int]: double,int
+After setting typedef_to_change: std::vector<float>::const_iterator
+After setting changed_typedef_type: std::vector<int>::const_iterator

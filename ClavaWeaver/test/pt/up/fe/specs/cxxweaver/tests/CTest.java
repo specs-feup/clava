@@ -77,8 +77,8 @@ public class CTest {
 
     @Test
     public void testDijkstra() {
-        newTester().setCheckWeavedCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
-        newTester().setCheckWeavedCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
+        newTester().setCheckWovenCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
+        newTester().setCheckWovenCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
     }
 
     @Test
@@ -95,4 +95,15 @@ public class CTest {
     public void testInline() {
         newTester().test("Inline.lara", "inline.c", "inline_utils.h", "inline_utils.c");
     }
+
+    @Test
+    public void testSetType() {
+        newTester().test("SetType.lara", "set_type.c");
+    }
+
+    @Test
+    public void testDetach() {
+        newTester().test("Detach.lara", "detach.c");
+    }
+
 }

@@ -13,7 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -27,38 +33,32 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public class IntegerLiteral extends Literal {
 
-    private final String literal;
+    /// DATAKEYS BEGIN
 
-    public IntegerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
+    public final static DataKey<BigInteger> VALUE = KeyFactory.bigInteger("value");
+
+    /// DATAKEYS END
+
+    // private final String literal;
+
+    public IntegerLiteral(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /**
+     * For legacy support.
+     * 
+     * @param exprData
+     * @param info
+     */
+    protected IntegerLiteral(ExprData exprData, ClavaNodeInfo info) {
         // According to CPP reference, all literals (except for string literal) are rvalues
         // http://en.cppreference.com/w/cpp/language/value_category
         super(exprData, info, Collections.emptyList());
-
-        this.literal = literal;
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new IntegerLiteral(literal, getExprData(), getInfo());
-    }
-
-    @Override
-    public String getCode() {
-
-        return getType().getConstantCode(literal);
-        // // Check if literal needs "U" or "UL" postfix
-        // String unsigned = Types.getUnsignedPostfix(getType());
-        // return literal + unsigned;
-    }
-
-    @Override
-    public String getLiteral() {
-        return literal;
-    }
-
-    @Override
-    public String toContentString() {
-        return super.toContentString() + ", literal:" + literal;
+    public BigInteger getValue() {
+        return get(VALUE);
     }
 
 }

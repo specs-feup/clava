@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -23,7 +24,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -71,9 +72,9 @@ public enum CXXOperator implements StringProvider {
     private final String operatorCode;
     private final BiFunction<String, List<Expr>, String> toCode;
 
-    private static final Lazy<EnumHelper<CXXOperator>> HELPER = EnumHelper.newLazyHelper(CXXOperator.class);
+    private static final Lazy<EnumHelperWithValue<CXXOperator>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(CXXOperator.class);
 
-    public static EnumHelper<CXXOperator> getHelper() {
+    public static EnumHelperWithValue<CXXOperator> getHelper() {
         return HELPER.get();
     }
 
@@ -89,7 +90,7 @@ public enum CXXOperator implements StringProvider {
             workString = workString.substring("operator".length());
         }
 
-        CXXOperator operator = getHelper().getTranslationMap().get(workString);
+        CXXOperator operator = getHelper().getValuesTranslationMap().get(workString);
 
         return Optional.ofNullable(operator);
     }
@@ -159,7 +160,12 @@ public enum CXXOperator implements StringProvider {
 
         // If size is 2, this is a sign that we should use postfix notation
         if (args.size() == 2) {
-            Preconditions.checkArgument(args.get(1) instanceof IntegerLiteral && args.get(1).getCode().equals("0"));
+
+            Preconditions.checkArgument(args.get(1) instanceof IntegerLiteral,
+                    "Expected argument 1 to be an IntegerLiteral.");
+            Preconditions.checkArgument(((IntegerLiteral) args.get(1)).getValue().equals(BigInteger.ZERO),
+                    "Expected value to be zero.");
+
             return args.get(0).getCode() + operator;
         }
 

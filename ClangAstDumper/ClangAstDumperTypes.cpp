@@ -3,11 +3,24 @@
 //
 
 #include "ClangAstDumper.h"
+#include "ClangAstDumperConstants.h"
+#include "ClangNodes.h"
 
 #include "clang/AST/AST.h"
 
 
 using namespace clang;
+
+void ClangAstDumper::visitChildrenAndData(const Type *T) {
+    // Visit children
+    visitChildren(T);
+
+    // Dump data
+    dataDumper.dump(T);
+
+    // Dump id
+    dumpIdToClassMap(T, clava::getClassName(T));
+}
 
 /*
  * TYPES
@@ -22,6 +35,8 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
         return true;
     }
 
+    log(typeAddr);
+
     // Dump type if it has not appeared yet
     // A TypeDumper is created for each context,
     // no need to use id to disambiguate
@@ -31,17 +46,24 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
     typeAddr->dump();
     llvm::errs() << "TYPE_END\n";
 
+    //dumpIdToClassMap(typeAddr, clava::getClassName(typeAddr));
 
 
     return false;
 }
 
 bool ClangAstDumper::dumpType(const QualType& type) {
+    // QUALTYPE EXP
     void* typeAddr = type.getAsOpaquePtr();
+    //const void* typeAddr = &type;
+
 
     if(seenTypes.count(typeAddr) != 0) {
+    //if(seenTypes.count(&type) != 0) {
         return true;
     }
+
+    log("QualType", typeAddr);
 
     // Dump type if it has not appeared yet
     // A TypeDumper is created for each context,
@@ -51,6 +73,9 @@ bool ClangAstDumper::dumpType(const QualType& type) {
     llvm::errs() << "TYPE_BEGIN\n";
     type.dump();
     llvm::errs() << "TYPE_END\n";
+
+    //dumpIdToClassMap(typeAddr, "QualType");
+
 
 
     return false;
@@ -63,15 +88,40 @@ bool ClangAstDumper::dumpType(const QualType& type) {
  * @param T
  */
 void ClangAstDumper::VisitType(const Type *T){
-    dumpType(T);
+    if(dumpType(T)) {
+        return;
+    }
+
+    visitChildrenAndData(T);
+    /*
+    // Visit children
+    visitChildren(clava::TypeNode::TYPE, T);
+
+    // Dump data
+    dataDumper.dump(clava::TypeNode::TYPE, T);
+     */
 }
 
+/*
+void ClangAstDumper::VisitBuiltinType(const BuiltinType *T) {
+    if(dumpType(T)) {
+        return;
+    }
 
+    // Visit children
+    visitChildren(clava::TypeNode::TYPE, T);
+
+    // Dump data
+    dataDumper.dump(clava::TypeNode::BUILTIN_TYPE, T);
+}
+ */
 
 void ClangAstDumper::VisitPointerType(const PointerType *T) {
     if(dumpType(T)) {
         return;
     }
+
+    visitChildrenAndData(T);
 
     // Visit child
     VisitTypeTop(T->getPointeeType().getTypePtr());
@@ -83,6 +133,8 @@ void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializatio
     if(seenTypes.count(T) != 0) {
         return;
     }
+
+    visitChildrenAndData(T);
 
     // Visit template types
     for (auto &Arg : *T) {
@@ -158,19 +210,24 @@ void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     // Return type
     VisitTypeTop(T->getReturnType().getTypePtr());
 
     // Parameters type
     for (QualType PT : T->getParamTypes()) {
+        // QUALTYPE EXP
         VisitTypeTop(PT.getTypePtr());
+        //VisitTypeTop(PT);
+        //VisitTypeTop(PT.getAsOpaquePtr());
     }
 
     auto EI = T->getExtInfo();
 
     // Dump template names
     llvm::errs() << FUNCTION_PROTO_TYPE_EXCEPTION << "\n";
-    llvm::errs() << getId(T) << "\n";
+    llvm::errs() << clava::getId(T, id) << "\n";
     auto EPI = T->getExtProtoInfo();
 
     llvm::errs() << EPI.ExceptionSpec.Type << "\n";
@@ -190,6 +247,8 @@ void ClangAstDumper::VisitTypedefType(const TypedefType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     VisitTypeTop(T->getDecl()->getUnderlyingType().getTypePtr());
 
 }
@@ -200,6 +259,8 @@ void ClangAstDumper::VisitElaboratedType(const ElaboratedType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     VisitTypeTop(T->getNamedType().getTypePtr());
 }
 
@@ -209,10 +270,27 @@ void ClangAstDumper::VisitLValueReferenceType(const LValueReferenceType *T) {
         return;
     }
 
+    visitChildrenAndData(T);
+
     VisitTypeTop(T->getPointeeType().getTypePtr());
 }
 
 
+void ClangAstDumper::VisitDependentSizedArrayType(const DependentSizedArrayType *T) {
 
+    if(dumpType(T)) {
+        return;
+    }
+
+    visitChildrenAndData(T);
+
+    // Element type
+    VisitTypeTop(T->getElementType().getTypePtr());
+
+    // Size expression (can be null)
+    if(T->getSizeExpr()) {
+        VisitStmtTop(T->getSizeExpr());
+    }
+}
 
 

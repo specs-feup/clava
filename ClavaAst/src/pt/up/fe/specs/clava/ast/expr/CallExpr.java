@@ -25,7 +25,9 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -79,15 +81,17 @@ public class CallExpr extends Expr {
         return getChild(Expr.class, 0);
     }
 
+    /*
     private DeclRefExpr getCalleeInternal() {
         Expr callee = getCallee();
-
+    
         if (!(callee instanceof DeclRefExpr)) {
             throw new UnexpectedChildExpection(CallExpr.class, callee);
         }
-
+    
         return (DeclRefExpr) callee;
     }
+    */
 
     public List<Expr> getArgs() {
         if (getNumChildren() == 1) {
@@ -97,10 +101,35 @@ public class CallExpr extends Expr {
         return SpecsCollections.cast(getChildren().subList(1, getNumChildren()), Expr.class);
     }
 
+    public int getNumArgs() {
+        return getNumChildren() - 1;
+    }
+
+    public void checkIndex(int index) {
+        int numArgs = getNumArgs();
+        boolean validIndex = index >= 0 && index < numArgs;
+        if (!validIndex) {
+            throw new RuntimeException(
+                    "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
+
+        }
+    }
+
+    public Expr setArgument(int index, Expr arg) {
+        // Check num args
+        checkIndex(index);
+        int argIndex = 1 + index;
+        return (Expr) setChild(argIndex, arg);
+    }
+
     public DeclRefExpr getCalleeDeclRef() {
-        return getCallee().getFirstDescendantsAndSelf(DeclRefExpr.class).orElseThrow(
+        return getCalleeDeclRefTry().orElseThrow(
                 () -> new RuntimeException(
                         "Expected callee tree to have at least one DeclRefExpr:\n" + getCallee()));
+    }
+
+    public Optional<DeclRefExpr> getCalleeDeclRefTry() {
+        return getCallee().getFirstDescendantsAndSelf(DeclRefExpr.class);
     }
 
     /**
@@ -120,7 +149,6 @@ public class CallExpr extends Expr {
         // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
         // return Optional.empty();
         // }
-
         Optional<FunctionDecl> functionDecl = getFunctionDecl();
 
         if (!functionDecl.isPresent()) {
@@ -133,24 +161,66 @@ public class CallExpr extends Expr {
         }
 
         // Search for the declaration
-        return getApp().getFunctionDeclaration(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
+        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
+                functionDecl.get().getFunctionType()));
     }
 
-    private Optional<FunctionDecl> getFunctionDecl() {
+    protected Optional<FunctionDecl> getFunctionDecl() {
 
-        Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+        DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
+
+        if (declRef == null) {
+            return Optional.empty();
+        }
+
+        Optional<DeclaratorDecl> varDecl = declRef.getVariableDeclaration();
+
+        // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
 
         if (!varDecl.isPresent()) {
             return Optional.empty();
         }
 
         DeclaratorDecl declarator = varDecl.get();
-        if (!(declarator instanceof FunctionDecl)) {
-            SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-            return Optional.empty();
+        if (declarator instanceof FunctionDecl) {
+            return Optional.of((FunctionDecl) declarator);
         }
 
-        return Optional.of((FunctionDecl) declarator);
+        // E.g., constructors
+        /*
+        if (declarator instanceof VarDecl) {
+            System.out.println("VarDecl Type:" + declarator.getType());
+            Expr initExpr = ((VarDecl) declarator).getInit().orElse(null);
+            if (initExpr == null) {
+                SpecsLogs.msgWarn("Could not extract function from call from VarDecl, check if ok:\n" + declarator);
+                return Optional.empty();
+            }
+        
+            if (initExpr instanceof CXXConstructExpr) {
+                Type initExprType = initExpr.getType();
+                RecordType recordType = initExprType instanceof RecordType ? (RecordType) initExprType
+                        : initExprType.desugarTo(RecordType.class);
+        
+                // RecordType recordType = initExpr.getType().desugarTo(RecordType.class);
+                CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
+                if (recordDecl == null) {
+                    return Optional.empty();
+                }
+                System.out.println("RECORD DECL:" + recordDecl);
+                // recordType.getDeclInfo().;
+                System.out.println("Constructor type:" + initExpr.getType());
+            }
+        }
+        */
+        SpecsLogs.msgLib("Could not extract function from call callee decl, check if ok:\n" + declarator);
+        return Optional.empty();
+
+        // if (!(declarator instanceof FunctionDecl)) {
+        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of((FunctionDecl) declarator);
     }
 
     /**
@@ -173,8 +243,45 @@ public class CallExpr extends Expr {
         return getApp().getFunctionDefinition(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
     }
 
+    /**
+     * 
+     * @return can return
+     */
     public String getCalleeName() {
-        return getCalleeDeclRef().getRefName();
+        return getCalleeNameTry()
+                .orElseThrow(() -> new RuntimeException("Could not find callee name for node:" + getCallee()));
+    }
+
+    public Optional<String> getCalleeNameTry() {
+
+        Optional<Nameable> nameable = getCallee().getDescendantsAndSelfStream()
+                .filter(Nameable.class::isInstance)
+                .findFirst()
+                .map(Nameable.class::cast);
+
+        if (nameable.isPresent()) {
+            return nameable.map(Nameable::getName);
+        }
+
+        // throw new RuntimeException("Could not find a node that implements the interface 'Nameable':" + getCallee());
+
+        // SpecsLogs.debug(() -> "Could not find callee name for node:" + getCallee());
+        return Optional.empty();
+
+        /*
+        // Try DeclRef
+        Optional<DeclRefExpr> declRefExpr = getCalleeDeclRefTry();
+        if (declRefExpr.isPresent()) {
+            return declRefExpr.get().getRefName();
+        }
+        
+        // Special case: UnresolvedLookupExpr
+        Optional<UnresolvedLookupExpr> unresolvedLookup = getCallee()
+                .getFirstDescendantsAndSelf(UnresolvedLookupExpr.class);
+        if (unresolvedLookup.isPresent()) {
+            return unresolvedLookup.get().getName();
+        }
+        */
     }
 
     /**
@@ -186,7 +293,43 @@ public class CallExpr extends Expr {
         return Arrays.asList(getCalleeName());
     }
 
-    public void setCalleeName(String name) {
+    /**
+     * Sets the name of the call.
+     * 
+     * @param name
+     */
+    public void setCallName(String name) {
         getCalleeDeclRef().setRefName(name);
+    }
+
+    public Optional<FunctionType> getFunctionType() {
+
+        // First check declaration
+        FunctionType typeFromDecl = getDeclaration().map(FunctionDecl::getFunctionType).orElse(null);
+        if (typeFromDecl != null) {
+            return Optional.of(typeFromDecl);
+        }
+
+        // Check definition
+        FunctionType typeFromDef = getDefinition().map(FunctionDecl::getFunctionType).orElse(null);
+        if (typeFromDef != null) {
+            return Optional.of(typeFromDef);
+        }
+
+        // Could not find the function type for call
+        return Optional.empty();
+        // throw new RuntimeException("Could not find the function type for call at " + getLocation());
+    }
+
+    /**
+     * 
+     * @return true if this call is the only expression of a statement
+     */
+    public boolean isStmtCall() {
+        if (!hasParent()) {
+            return false;
+        }
+
+        return getParent() instanceof Stmt;
     }
 }

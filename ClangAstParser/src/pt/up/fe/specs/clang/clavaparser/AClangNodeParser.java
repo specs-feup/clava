@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.clavaparser;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
@@ -29,13 +31,22 @@ import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.NodeDataParser;
+// import pt.up.fe.specs.clang.parsers.ClavaDataParser;
+// import pt.up.fe.specs.clang.parsers.VisitedChildrenParser;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
-import pt.up.fe.specs.clava.ast.expr.DummyExpr;
+import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
+import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
@@ -45,6 +56,8 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
+import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -58,6 +71,9 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     private final ClangConverterTable converter;
     private final boolean hasContent;
+    private final boolean ignoreContent;
+
+    // private final ClavaNodeConstructors constructors;
 
     /**
      * Helper constructor which sets 'hasContent' to true.
@@ -69,11 +85,29 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     }
 
     public AClangNodeParser(ClangConverterTable converter, boolean hasContent) {
+        this(converter, hasContent, false);
+    }
+
+    public AClangNodeParser(ClangConverterTable converter, boolean hasContent, boolean ignoreContent) {
         this.converter = converter;
         this.hasContent = hasContent;
+        this.ignoreContent = ignoreContent;
+        // this.constructors = new ClavaNodeConstructors();
     }
 
     protected abstract N parse(ClangNode node, StringParser parser);
+
+    // public <T extends ClavaNode> T newClavaNode(Class<T> clavaNodeClass, ClavaData clavaData,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // return constructors.newClavaNode(clavaNodeClass, clavaData, children);
+    // }
+
+    // public <T extends ClavaNode> T newClavaNode(Class<T> nodeClass, DataStore data,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // return constructors.newClavaNode(nodeClass, data, children);
+    // }
 
     @Override
     public ClangConverterTable getConverter() {
@@ -82,16 +116,30 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
     @Override
     public N parse(ClangNode node) {
+        // String id = node.getExtendedId();
+        // if (id != null) {
+        // // Check if node exists in the id to classname map
+        // String classname = getStdErr().get(IdToClassnameParser.getDataKey()).get(node.getExtendedId());
+        // if (classname == null) {
+        // throw new RuntimeException(
+        // "Classname not found in the id to classname map for node '" + node.getExtendedId() + "':\n"
+        // + node);
+        // }
+        //
+        // }
+
         // Create StringParser from node content
         StringParser parser = new StringParser(node.getContentTry().orElse("").trim());
 
-        // No content
-        if (!hasContent) {
-            Preconditions.checkArgument(parser.isEmpty(),
-                    "Expected no content for parser '" + getClass().getSimpleName() + "', found '" + parser + "'");
-        } else {
-            Preconditions.checkArgument(!parser.isEmpty(),
-                    "Expected content for parser '" + getClass().getSimpleName() + "', but is empty");
+        if (!ignoreContent) {
+            // No content
+            if (!hasContent) {
+                Preconditions.checkArgument(parser.isEmpty(),
+                        "Expected no content for parser '" + getClass().getSimpleName() + "', found '" + parser + "'");
+            } else {
+                Preconditions.checkArgument(!parser.isEmpty(),
+                        "Expected content for parser '" + getClass().getSimpleName() + "', but is empty");
+            }
         }
 
         // Store original string of parser, for debugging
@@ -107,11 +155,16 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                     + "'.\nOriginal string was:" + originalContent + "\nLocation:" + node.getLocation());
         }
 
+        // Mark node
+        if (isLegacyParser()) {
+            clavaNode.setIsLegacyNode(true);
+        }
+
         return clavaNode;
     }
 
     public DummyDecl newDummyDecl(ClangNode node) {
-        return ClavaNodeFactory.dummyDecl(node.getDescription(), info(node),
+        return new DummyDeclLegacy(node.getDescription(), info(node),
                 node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
     }
 
@@ -130,10 +183,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
                 node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
     }
 
-    public DummyExpr newDummyExpr(ClangNode node) {
-        return ClavaNodeFactory.dummyExpr(node.getDescription(), info(node),
-                node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
-    }
+    // public DummyExpr newDummyExpr(ClangNode node) {
+    // return ClavaNodeFactory.dummyExpr(node.getDescription(), info(node),
+    // node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
+    // }
 
     /**
      * Casts the given node to an Expr. If not possible, throws an Exception.
@@ -184,7 +237,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
      * @return
      */
     public Decl toDecl(ClavaNode node) {
-        return ClavaParserUtils.cast(node, Decl.class, ClavaNodeFactory::dummyDecl);
+        // DummyDecl dummyDecl = LegacyToDataStore.getFactory().dummyDecl(node.getClass().getSimpleName());
+        // dummyDecl.setLocation(node.getLocation());
+
+        // return ClavaParserUtils.cast(node, Decl.class, ClavaNodesLegacy::dummyDecl);
+        return ClavaParserUtils.cast(node, Decl.class, LegacyToDataStore.getFactory()::dummyDecl);
     }
 
     /**
@@ -357,6 +414,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         return converter.getClangRootData();
     }
 
+    // @Override
+    // public DataStore getDumperData() {
+    // return getStdErr();
+    // }
+
     protected DataStore getStdErr() {
         return converter.getClangRootData().getStdErr();
     }
@@ -409,5 +471,146 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         }
 
         return getConverter().parse(node);
+    }
+
+    protected Standard getStandard() {
+        return getClangRootData().getConfig().get(ClavaOptions.STANDARD);
+    }
+
+    protected String parseNamedDeclName(ClangNode node, StringParser parser) {
+        String declName = getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).get(node.getExtendedId());
+        // boolean hasName = !getStdErr().get(StreamKeys.NAMED_DECL_WITHOUT_NAME).contains(node.getExtendedId());
+
+        if (declName != null) {
+            // return parser.apply(StringParsers::parseWord);
+            return parser.apply(StringParsers::parseString, declName);
+        }
+
+        return null;
+    }
+
+    /**
+     * Modifies the given list of children (removes the Attr nodes inside).
+     *
+     * @param string
+     * @param children
+     * @return
+     */
+    public RecordDeclData parseRecordDecl(ClangNode node, List<ClavaNode> children, StringParser parser) {
+
+        // Parse kind
+        TagKind tagKind = parser.apply(ClangGenericParsers::parseEnum, TagKind.getHelper());
+
+        // Check name, take into account it can be an anonymous name
+        String name = parseNamedDeclName(node, parser);
+        boolean isAnonymous = false;
+        if (name == null) {
+            name = ClavaParserUtils.createAnonName(node);
+            isAnonymous = true;
+        }
+
+        // Parse booleans
+        boolean isModulePrivate = parser.apply(StringParsers::hasWord, "__module_private__");
+        boolean isCompleteDefinition = parser.apply(StringParsers::hasWord, "definition");
+
+        /*
+        if (name.isEmpty()) {
+            RecordType recordType = (RecordType) typesMap.get(node.getExtendedId());
+        
+            if (recordType == null || recordType.isAnonymous()) {
+                name = ClavaParserUtils.createAnonName(node);
+            } else {
+                String recordTypeCode = recordType.getCode();
+                if (recordTypeCode.contains(" ")) {
+                    SpecsLogs.msgWarn("Spaces inside RecordType code, check if ok");
+                }
+                name = recordType.getCode();
+            }
+        
+        }
+        */
+
+        // Remove attributes
+        List<Attribute> attributes = SpecsCollections.pop(children, Attribute.class);
+
+        RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isAnonymous, isModulePrivate,
+                isCompleteDefinition, attributes);
+
+        return recordDeclData;
+    }
+
+    // protected <T extends ClavaData> T getData(Class<T> dataClass,
+    // ClangNode node) {
+    //
+    // return dataClass.cast(getData(clavaNodeClass, node));
+    // }
+
+    // protected <T extends ClavaData> T getData(Class<T> clavaDataClass, ClangNode node) {
+    // return getDataTry(clavaDataClass, node).orElseThrow(() -> new RuntimeException(
+    // "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent()));
+    //
+    // }
+
+    // protected <T extends ClavaData> Optional<T> getDataTry(Class<T> clavaDataClass, ClangNode node) {
+    // return ClavaDataParser.getClavaData(getStdErr(), clavaDataClass, node.getExtendedId());
+    //
+    // }
+
+    protected DataStore getData(ClangNode node) {
+        return getDataTry(node).orElseThrow(() -> new RuntimeException(
+                "Could not find data for node '" + node.getExtendedId() + "'. Parent:\n" + node.getParent()));
+    }
+
+    protected Optional<DataStore> getDataTry(ClangNode node) {
+        return NodeDataParser.getNodeData(getStdErr(), node.getExtendedId());
+
+    }
+
+    protected void checkNewChildren(String parentId, List<ClavaNode> previousChildren) {
+        if (!ClangAstParser.isStrictMode()) {
+            return;
+        }
+
+        // Compare against new children
+        // List<String> newChildren = getStdErr().get(VisitedChildrenParser.getDataKey()).get(parentId);
+        List<String> newChildren = getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(parentId);
+
+        if (newChildren == null) {
+            throw new RuntimeException("No children visited for node " + parentId);
+        }
+
+        if (newChildren.size() != previousChildren.size()) {
+            throw new RuntimeException("Different number of children in node '" + parentId + "', previously found '"
+                    + previousChildren.size()
+                    + "' children, now has '" + newChildren.size() + "' children");
+        }
+
+        int numChildren = newChildren.size();
+        boolean allSame = true;
+        List<String> previousChildrenIds = previousChildren.stream()
+                .map(child -> child.getExtendedId().orElse("<UNDEFINED>"))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < numChildren; i++) {
+            if (!previousChildrenIds.get(i).equals(newChildren.get(i))) {
+                allSame = false;
+                break;
+            }
+        }
+
+        if (!allSame) {
+            throw new RuntimeException(
+                    "New children do not match for node '" + parentId + "'.\nPrevious children:" + previousChildrenIds
+                            + "\nNew children:"
+                            + newChildren);
+        }
+    }
+
+    protected DataStore getConfig() {
+        return getClangRootData().getConfig();
+    }
+
+    protected boolean isLegacyParser() {
+        return true;
     }
 }

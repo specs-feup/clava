@@ -33,7 +33,7 @@ public class CXXConstructExprData {
 
     @Override
     public String toString() {
-        return "isElidable:" + isElidable + "; zeroInit:" + requiresZeroInitialization;
+        return "isElidable:" + isElidable + ", zeroInit:" + requiresZeroInitialization;
     }
 
 }

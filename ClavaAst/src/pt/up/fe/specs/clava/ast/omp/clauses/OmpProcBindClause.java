@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.omp.clauses;
 
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -24,10 +24,10 @@ public class OmpProcBindClause implements OmpClause {
         CLOSE,
         SPREAD;
 
-        private static final Lazy<EnumHelper<ProcBindKind>> ENUM_HELPER = EnumHelper
-                .newLazyHelper(ProcBindKind.class);
+        private static final Lazy<EnumHelperWithValue<ProcBindKind>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(ProcBindKind.class);
 
-        public static EnumHelper<ProcBindKind> getHelper() {
+        public static EnumHelperWithValue<ProcBindKind> getHelper() {
             return ENUM_HELPER.get();
         }
 

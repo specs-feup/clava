@@ -18,47 +18,49 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangNodeParser;
-import pt.up.fe.specs.clang.clavaparser.ClavaParserUtils;
+import pt.up.fe.specs.clang.parsers.NodeDataParser;
+// import pt.up.fe.specs.clang.parsers.ClavaDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.Attr;
-import pt.up.fe.specs.clava.ast.attr.data.AttrData;
+import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
+import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.ExceptionType;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
-import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.ExceptionType;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ObjectKind;
-import pt.up.fe.specs.clava.ast.expr.data.ValueKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.type.FunctionType.CallingConv;
-import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.ArraySizeType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.Qualifier;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeDependency;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
+import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.TLSKind;
-import pt.up.fe.specs.clava.language.TagKind;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.parsing.ListParser;
 import pt.up.fe.specs.util.stringparser.ParserResult;
@@ -95,8 +97,9 @@ public class ClangDataParsers {
         boolean isConst = parser.apply(ClangGenericParsers::checkWord, "const");
         boolean isVolatile = parser.apply(ClangGenericParsers::checkWord, "volatile");
         boolean isRestrict = parser.apply(ClangGenericParsers::checkWord, "restrict");
+
         ReferenceQualifier referenceQualifier = parser.apply(ClangGenericParsers::parseEnum,
-                ReferenceQualifier.getHelper(), ReferenceQualifier.NONE);
+                ReferenceQualifier.class, ReferenceQualifier.None);
 
         FunctionProtoTypeData data = new FunctionProtoTypeData(hasTrailingReturn, isConst, isVolatile, isRestrict,
                 referenceQualifier);
@@ -122,7 +125,7 @@ public class ClangDataParsers {
     }
 
     public static ParserResult<FunctionDeclParserResult> parseFunctionDecl(StringSlice string,
-            ListParser<ClavaNode> children) {
+            ListParser<ClavaNode> children, ClangNode node, DataStore streamData) {
 
         StringParser parser = new StringParser(string);
 
@@ -146,13 +149,59 @@ public class ClangDataParsers {
         List<ParmVarDecl> params = children.pop(ParmVarDecl.class);
 
         int childrenLeft = children.getList().size();
-        Preconditions.checkArgument(childrenLeft < 2, "Expected only one child or none, got " + childrenLeft);
+
+        // Check if OpenCL file
+        boolean isOpenCL = node.getLocation().isOpenCL();
+
+        int maxNumberChildrenLeft = 1;
+
+        // If not OpenCL, can have an additional child
+        if (isOpenCL) {
+            maxNumberChildrenLeft++;
+        }
+
+        // Preconditions.checkArgument(childrenLeft < 2, "Expected only one child or none, got " + childrenLeft);
+        Preconditions.checkArgument(childrenLeft <= maxNumberChildrenLeft,
+                "Expected children to be at most " + maxNumberChildrenLeft + ", got " + childrenLeft);
 
         // Optionally, there can be a Stmt
         Stmt definition = children.isEmpty() ? null : children.popSingle(ClangNodeParser::toStmt);
 
+        // If OpenCL, can have a kernel attribute
+        OpenCLKernelAttr openClKernelAttr = null;
+        if (!children.isEmpty() && isOpenCL) {
+            openClKernelAttr = children.popSingle(OpenCLKernelAttr.class::cast);
+        }
+
+        // System.out.println("DATAS:" + streamData
+        // .get(ClangNodeParsing.getNodeDataKey(nodeClass)).keySet());
+
+        // Get stream information
+        DataStore functionData = NodeDataParser.getNodeData(streamData, node.getExtendedId())
+                .orElse(null);
+        // FunctionDeclDataV2 functionData = ClavaDataParser.getClavaData(clavaDataClass, nodeId,
+        // dataStore)streamData.get(ClavaDataParser.getDataKey(nodeClass))
+        // .get(node.getExtendedId());
+        // FunctionDeclDataV2 functionData = streamData.get(ClavaDataParser.getDataKey(nodeClass))
+        // .get(node.getExtendedId());
+        // Preconditions.checkNotNull(functionData, "Could not get data for node: " + node.getExtendedId());
+
+        if (functionData == null) {
+            SpecsLogs.msgWarn("Check case: could not get FunctionDeclData for " + node.getExtendedId());
+        }
+        // FunctionDeclInfo streamInfo = streamData.get(StreamKeys.FUNCTION_DECL_INFO).get(node.getExtendedId());
+        // if (streamInfo == null) {
+        // SpecsLogs.msgWarn("Check case: could not get FunctionDeclInfo for " + node.getExtendedId());
+        // }
+
+        // Add information from the stream parser
+        // TemplateKind templateKind = streamInfo != null ? streamInfo.getTemplateKind() : TemplateKind.NON_TEMPLATE;
+        TemplateKind templateKind = functionData != null ? functionData.get(FunctionDecl.TEMPLATE_KIND)
+                : TemplateKind.NON_TEMPLATE;
+        // TemplateKind templateKind = functionData.getTemplateKind();
+
         FunctionDeclData data = new FunctionDeclData(storageClass, isInline, isVirtual, isModulePrivate, isPure,
-                isDelete, exceptionSpecifier, exceptionAddress, templateArguments);
+                isDelete, exceptionSpecifier, exceptionAddress, templateArguments, openClKernelAttr, templateKind);
 
         FunctionDeclParserResult result = new FunctionDeclParserResult(data, params, definition);
 
@@ -308,25 +357,28 @@ public class ClangDataParsers {
      * @param children
      * @return
      */
+    /*
     public static ParserResult<RecordDeclData> parseRecordDecl(StringSlice string, ClangNode node,
-            Map<String, Type> typesMap, List<ClavaNode> children) {
+            Map<String, Type> typesMap, DataStore stdErr, List<ClavaNode> children) {
+        System.out.println("RECORD DECL PARSER:" + string);
+        System.out.println("NAME:" + stdErr.get(StreamKeys.NAMED_DECL_WITHOUT_NAME).get(node.getExtendedId()));
         StringParser parser = new StringParser(string);
-
+    
         // Parse kind
         TagKind tagKind = parser.apply(ClangGenericParsers::parseEnum, TagKind.getHelper());
-
+    
         // Parse booleans at the end
         // It is done this way because it can have no name
         // However, there can be an ambiguous case, when there is a type called 'definition' without definition
         boolean isCompleteDefinition = parser.apply(ClangGenericParsers::checkLastString, "definition");
         boolean isModulePrivate = parser.apply(ClangGenericParsers::checkLastString, "__module_private__");
-
+    
         // Remaining of the string is the name, take into account it can be an anonymous name
         String name = parser.apply(StringParsers::parseWord);
         if (name.isEmpty()) {
             RecordType recordType = (RecordType) typesMap.get(node.getExtendedId());
-
-            if (recordType.isAnonymous()) {
+    
+            if (recordType == null || recordType.isAnonymous()) {
                 name = ClavaParserUtils.createAnonName(node);
             } else {
                 String recordTypeCode = recordType.getCode();
@@ -335,16 +387,17 @@ public class ClangDataParsers {
                 }
                 name = recordType.getCode();
             }
-
+    
         }
         // Remove attributes
         List<Attr> attributes = SpecsCollections.pop(children, Attr.class);
-
+    
         RecordDeclData recordDeclData = new RecordDeclData(tagKind, name, isModulePrivate, isCompleteDefinition,
                 attributes);
-
+    
         return new ParserResult<>(parser.getCurrentString(), recordDeclData);
     }
+    */
 
     public static ParserResult<RecordBase> parseRecordBase(StringSlice string, Type type) {
         StringParser parser = new StringParser(string);
@@ -373,7 +426,9 @@ public class ClangDataParsers {
         return new ParserResult<>(parser.getCurrentString(), cxxNamedCastExprData);
     }
 
-    public static ParserResult<VarDeclData> parseVarDecl(StringSlice string) {
+    public static ParserResult<VarDeclData> parseVarDecl(StringSlice string, ClangNode node,
+            DataStore streamData) {
+        // DataStore streamData, DataKey<Map<String, T>> key) {
         StringParser parser = new StringParser(string);
 
         StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelper(),
@@ -383,9 +438,33 @@ public class ClangDataParsers {
         boolean isModulePrivate = parser.apply(ClangGenericParsers::checkWord, "__module_private__");
         boolean isNrvo = parser.apply(ClangGenericParsers::checkWord, "nrvo");
 
-        InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
+        InitializationStyle initKind = parser.apply(ClangGenericParsers::parseEnum, InitializationStyle.getHelper(),
+                InitializationStyle.NO_INIT);
 
-        VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind);
+        // VarDeclDataV2 varDeclData2 = streamData.get(StreamKeys.VAR_DECL_DATA).get(node.getExtendedId());
+
+        DataStore varDeclData2 = NodeDataParser.getNodeData(streamData, node.getExtendedId())
+                .orElse(null);
+
+        // VarDeclDataV2 varDeclData2 = streamData.get(ClavaDataParser.getDataKey(varDeclClass))
+        // .get(node.getExtendedId());
+        if (varDeclData2 == null) {
+            SpecsLogs.msgWarn(
+                    "ClangDataParsers.parseVarDecl: could not find varDeclDataV2 for node " + node.getExtendedId());
+            System.out.println("PARENT NODE:" + node.getParent());
+        }
+        // VarDeclDumperInfo varDeclDumperInfo =
+        // streamData.get(StreamKeys.VARDECL_DUMPER_INFO).get(node.getExtendedId());
+        // if (varDeclDumperInfo == null) {
+        // SpecsLogs.msgWarn(
+        // "ClangDataParsers.parseVarDecl: could not find varDeclDumperInfo for node " + node.getExtendedId());
+        // System.out.println("PARENT NODE:" + node.getParent());
+        // }
+        // Preconditions.checkNotNull(varDeclDumperInfo, "VarDeclDumperInfo for node " + node.getExtendedId());
+        // InitializationStyle initKind = parser.apply(ClangGenericParsers::parseInitializationStyle);
+
+        VarDeclData varDeclData = new VarDeclData(storageClass, tlsKind, isModulePrivate, isNrvo, initKind,
+                varDeclData2);
 
         return new ParserResult<>(parser.getCurrentString(), varDeclData);
     }
@@ -404,11 +483,15 @@ public class ClangDataParsers {
             qualifiers.add(Qualifier.RESTRICT);
         }
 
+        if (parser.apply(ClangGenericParsers::checkWord, "__global")) {
+            qualifiers.add(Qualifier.GLOBAL);
+        }
+
         return new ParserResult<>(parser.getCurrentString(), qualifiers);
 
     }
 
-    public static ParserResult<ArrayTypeData> parseArrayType(StringSlice string) {
+    public static ParserResult<ArrayTypeData> parseArrayType(StringSlice string, Standard standard) {
         StringParser parser = new StringParser(string);
 
         ArraySizeType sizeType = ArraySizeType.NORMAL;
@@ -421,7 +504,7 @@ public class ClangDataParsers {
 
         List<Qualifier> qualifiers = parser.apply(ClangDataParsers::parseQualifiers);
 
-        ArrayTypeData data = new ArrayTypeData(sizeType, qualifiers);
+        ArrayTypeData data = new ArrayTypeData(sizeType, qualifiers, standard);
 
         return new ParserResult<>(parser.getCurrentString(), data);
     }

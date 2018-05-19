@@ -40,6 +40,10 @@ public class AutoType extends Type {
         return getChild(Type.class, 0);
     }
 
+    public void setDeducedType(Type deducedType) {
+        setChild(0, deducedType);
+    }
+
     @Override
     public String getCode(String name) {
         if (name == null) {
@@ -48,4 +52,26 @@ public class AutoType extends Type {
 
         return "auto" + " " + name;
     }
+
+    @Override
+    protected Type desugarImpl() {
+        return getDeducedType();
+    }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setDeducedType(desugaredType);
+    }
+
+    /*
+    @Override
+    public int hashCode() {
+        return getDeducedType().hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        return getDeducedType().equals(obj);
+    }
+    */
 }

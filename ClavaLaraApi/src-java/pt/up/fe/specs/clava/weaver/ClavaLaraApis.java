@@ -24,7 +24,7 @@ public class ClavaLaraApis {
     private static final List<ResourceProvider> CLAVA_LARA_API = ResourceProvider
             .getResourcesFromEnum(LaraCoreApiResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
 
-    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class);
+    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class, OpenCLTemplates.class);
 
     public static List<ResourceProvider> getApis() {
         return CLAVA_LARA_API;

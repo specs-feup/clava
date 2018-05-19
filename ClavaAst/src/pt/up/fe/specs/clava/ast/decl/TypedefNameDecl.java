@@ -28,10 +28,18 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public abstract class TypedefNameDecl extends TypeDecl {
 
-    public TypedefNameDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    private final Type underlyingType;
+
+    public TypedefNameDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
 
         super(declName, type, declData, info, children);
+
+        this.underlyingType = underlyingType;
+    }
+
+    public Type getUnderlyingType() {
+        return underlyingType;
     }
 
 }

@@ -18,31 +18,91 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * The base class of the type hierarchy.
+ *
+ * <p>
+ * TODO: Type instances should be immutable, setters should return a copy of the node with the modified attribute.
  *
  * @author JoaoBispo
  *
  */
 public abstract class Type extends ClavaNode {
 
-    private TypeData data;
+    /// DATAKEYS BEGIN
 
-    public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
+    public final static DataKey<String> TYPE_AS_STRING = KeyFactory.string("typeAsString");
 
-        this.data = data;
+    public final static DataKey<Boolean> HAS_SUGAR = KeyFactory.bool("hasSugar");
+
+    public final static DataKey<TypeDependency> TYPE_DEPENDENCY = KeyFactory.enumeration("typeDependency",
+            TypeDependency.class);
+
+    public final static DataKey<Boolean> IS_VARIABLY_MODIFIED = KeyFactory.bool("isVariablyModified");
+
+    public final static DataKey<Boolean> CONTAINS_UNEXPANDED_PARAMETER_PACK = KeyFactory
+            .bool("containsUnexpandedParameterPack");
+
+    public final static DataKey<Boolean> IS_FROM_AST = KeyFactory.bool("isFromAst");
+
+    /// DATAKEYS END
+
+    // private TypeData data;
+
+    public Type(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
+    /**
+     * For legacy.
+     * 
+     * @param data
+     * @param info
+     * @param children
+     */
+    public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
+        /*
+        super(info, children);
+        
+        this.data = data;
+        */
+    }
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public TypeData getTypeData() {
-        return data;
+        return DataStoreToLegacy.getType(getData());
+        // if (hasDataI()) {
+        // throw new NotSupportedByDataStoreException();
+        // }
+        // return data;
+    }
+
+    @Override
+    public Type copy() {
+        Type copy = (Type) super.copy();
+
+        // Set app
+        // copy.app = app;
+
+        return copy;
     }
 
     /**
@@ -71,28 +131,67 @@ public abstract class Type extends ClavaNode {
         // return getType() + " " + nameString;
     }
 
-    public void setStringType(String stringType) {
-        data = new TypeData(stringType, data);
-    }
+    // public void setStringType(String stringType) {
+    // data = new TypeData(stringType, data);
+    // }
 
+    /**
+     * TODO: rename to getTypeAsString
+     * 
+     * @return
+     */
     public String getBareType() {
+        return getData().get(TYPE_AS_STRING);
+        /*
+        if (hasDataI()) {
+            return getDataI().get(TYPE_AS_STRING);
+        }
+        
         return data.getBareType();
+        */
     }
 
+    /**
+     * TODO: rename to setTypeAsString
+     * 
+     * @param type
+     * @return
+     */
+    public Type setBareType(String type) {
+        return (Type) copy().put(TYPE_AS_STRING, type);
+
+        /*
+        if (hasDataI()) {
+            Type copy = copy();
+            copy.getDataI().put(TYPE_AS_STRING, type);
+            return copy;
+        }
+        
+        Type copy = copy();
+        copy.data.setBareType(type);
+        return copy;
+        */
+    }
+
+    /*
     @Override
     public String toContentString() {
+        if (hasDataI()) {
+            return super.toContentString();
+        }
         return super.toContentString() + getCode();
     }
+    */
 
     /**
      * By default returns false.
      *
      * @return true if type is considered anonymous (e.g., anonymous struct)
      */
-    public boolean isAnonymous() {
-        return getCode().contains("(anonymous ");
-        // return false;
-    }
+    // public boolean isAnonymous() {
+    // return getCode().contains("(anonymous ");
+    // // return false;
+    // }
 
     /**
      * Code for a literal constant (e.g., 1u when unsigned)
@@ -100,17 +199,65 @@ public abstract class Type extends ClavaNode {
      * @param constant
      * @return
      */
+    /*
     public String getConstantCode(String constant) {
         return constant;
     }
+    */
 
     /**
-     * By default, returns empty list.
+     * By default, if has sugar, returns the desugared implementation of template args. Otherwise, returns an empty
+     * list.
      *
      * @return
      */
-    public List<String> getTemplateArgs() {
-        return Collections.emptyList();
+    public List<String> getTemplateArgumentStrings() {
+        if (!hasSugar()) {
+            return Collections.emptyList();
+        }
+
+        return desugar().getTemplateArgumentStrings();
+    }
+
+    public List<Type> getTemplateArgumentTypes() {
+        if (!hasSugar()) {
+            return Collections.emptyList();
+        }
+
+        return desugar().getTemplateArgumentTypes();
+    }
+
+    /**
+     * Sets all argument types of the template.
+     * 
+     * @param newTemplateArgTypes
+     */
+    public void setTemplateArgumentTypes(List<Type> newTemplateArgTypes) {
+        // If no sugar, do nothing
+        if (!hasSugar()) {
+            return;
+        }
+
+        desugar().setTemplateArgumentTypes(newTemplateArgTypes);
+
+        Types.updateSugaredType(this);
+    }
+
+    /**
+     * Sets a single argument type of the template. Cannot use an index larger than the number of original arguments.
+     * 
+     * @param index
+     * @param newTemplateArgType
+     */
+    public void setTemplateArgumentType(int index, Type newTemplateArgType) {
+        // If no sugar, do nothing
+        if (!hasSugar()) {
+            return;
+        }
+
+        desugar().setTemplateArgumentType(index, newTemplateArgType);
+
+        Types.updateSugaredType(this);
     }
 
     /**
@@ -119,11 +266,93 @@ public abstract class Type extends ClavaNode {
      * @return true if there are template arguments, false otherise
      */
     public boolean hasTemplateArgs() {
-        return !getTemplateArgs().isEmpty();
+        return !getTemplateArgumentStrings().isEmpty();
     }
 
-    public Type desugar() {
-        if (!getTypeData().hasSugar()) {
+    public boolean hasTemplateArgTypes() {
+        return !getTemplateArgumentTypes().isEmpty();
+    }
+
+    /**
+     * 
+     * @return true if this type updated its template argument types, false otherwise
+     */
+    public boolean hasUpdatedTemplateArgTypes() {
+        // If no sugar, return false
+        if (!hasSugar()) {
+            // System.out.println("NO SUGAR:" + this.getClass().getSimpleName());
+            return false;
+        }
+        // System.out.println("DESUGARING:" + this.getClass().getSimpleName());
+        return desugar().hasUpdatedTemplateArgTypes();
+    }
+
+    /**
+     * 
+     * @return true if the type has some kind of 'sugar' (e.g., typedef). Qualifiers (e.g., const) do not count as
+     *         sugar.
+     */
+    public boolean hasSugar() {
+        return get(HAS_SUGAR);
+        /*
+        if (hasDataI()) {
+            return getDataI().get(HAS_SUGAR);
+        }
+        
+        return getTypeData().hasSugar();
+        */
+    }
+
+    /**
+     * Desugars a type until it finds a Type of the given class.
+     * 
+     * <p>
+     * TODO: Should return self if given type if the same type as this?
+     * 
+     * @param typeClass
+     * @return
+     */
+    public <T extends Type> Optional<T> desugarToTry(Class<T> typeClass) {
+        // If no sugar, return
+        if (!hasSugar()) {
+            return Optional.empty();
+        }
+
+        Type desugared = desugar();
+
+        if (!typeClass.isInstance(desugared)) {
+            return desugared.desugarToTry(typeClass);
+        }
+
+        return Optional.of(typeClass.cast(desugared));
+
+        /*
+        // Check if current type is the asked type
+        if (typeClass.isInstance(this)) {
+        return Optional.of(typeClass.cast(this));
+        }
+        
+        // If is sugared, desugar and call again
+        if (hasSugar()) {
+        return desugar().desugar(typeClass);
+        }
+        
+        return Optional.empty();
+        */
+    }
+
+    public <T extends Type> T desugarTo(Class<T> typeClass) {
+        return desugarToTry(typeClass)
+                .orElseThrow(() -> new RuntimeException("Could not desugar to type '" + typeClass + "':\n" + this));
+    }
+
+    /**
+     * TODO: Should not return 'this' if it does not have sugar?
+     * 
+     * @return
+     */
+    public final Type desugar() {
+        if (!hasSugar()) {
             return this;
         }
 
@@ -131,13 +360,63 @@ public abstract class Type extends ClavaNode {
     }
 
     protected Type desugarImpl() {
+        return getChild(Type.class, 0);
+
+        /*
+        if (hasDataI()) {
+            // If has sugar, first child is always the desugared type
+            return getChild(Type.class, 0);
+        }
+        throw new NotImplementedException(getClass());
+        */
+    }
+
+    /**
+     * 
+     * @return 0 if has sugar, -1 if it does not
+     */
+    public int getIndexDesugar() {
+        if (hasSugar()) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+
+    public final void setDesugar(Type desugaredType) {
+        if (!hasSugar()) {
+            throw new RuntimeException("Type does not have sugar:" + this);
+        }
+
+        setDesugarImpl(desugaredType);
+    }
+
+    protected void setDesugarImpl(Type desugaredType) {
         throw new NotImplementedException(getClass());
     }
 
+    /*
     @Override
     public App getApp() {
-        throw new RuntimeException("Type nodes are detached from the App tree, this method is not implemented");
+        // App appNode = app.get();
+        // if (appNode != null) {
+        // return appNode;
+        // }
+    
+        // If app not null, return it
+        if (app != null) {
+            return app;
+        }
+    
+        // Return app of parent node
+        if (hasParent()) {
+            return getParent().getApp();
+        }
+    
+        throw new RuntimeException(
+                "Could not find an 'App' node associated with this type (id: " + getExtendedId().orElse(null) + ")");
     }
+    */
 
     /**
      *
@@ -151,55 +430,71 @@ public abstract class Type extends ClavaNode {
         return false;
     }
 
+    public <T extends Type> T to(Class<T> type) {
+        return toTry(type).orElseThrow(
+                () -> new RuntimeException("Could not convert type '" + getClass() + "' to '" + type + "':\n" + this));
+    }
+
     /**
      * Goes down the type tree looking for the given type. If a node has more than one child, descending stops.
      *
      * @param type
      * @return
      */
-    public <T extends Type> Optional<T> to(Class<T> type) {
+    public <T extends Type> Optional<T> toTry(Class<T> type) {
         if (type.isInstance(this)) {
             return Optional.of(type.cast(this));
         }
 
         // Continue if there is one child
         if (getNumChildren() == 1) {
-            return ((Type) getChild(0)).to(type);
+            return ((Type) getChild(0)).toTry(type);
         }
 
         if (this instanceof AttributedType) {
-            return ((AttributedType) this).getModifiedType().to(type);
+            return ((AttributedType) this).getModifiedType().toTry(type);
         }
 
         // Stop, can go no further
-        SpecsLogs.msgWarn("Could not find type '" + type + "'");
+        // SpecsLogs.msgWarn("Could not find type '" + type + "'");
         return Optional.empty();
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = prime;
-        result = prime * result + ((data == null) ? 0 : data.hashCode());
-        return result;
+        return getCode().hashCode();
+        // final int prime = 31;
+        // int result = prime;
+        // result = prime * result + ((data == null) ? 0 : data.hashCode());
+        // return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+
+        // if (this == obj) {
+        // return true;
+        // }
+        //
+        // if (!super.equals(obj)) {
+        // return false;
+        // }
+        //
+        // if (getClass() != obj.getClass()) {
+        // return false;
+        // }
+        // Type other = (Type) obj;
+
+        if (!(obj instanceof Type)) {
+            return false;
         }
 
+        return Types.isEqual(this, ((Type) obj));
+        // System.out.println("THIS CODE:" + getCode());
+        // System.out.println("OTHER CODE:" + ((Type) obj).getCode());
+        // return getCode().equals(((Type) obj).getCode());
         /*
-        if (!super.equals(obj)) {
-            return false;
-        }
-        */
-
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Type other = (Type) obj;
+        
         if (data == null) {
             if (other.data != null) {
                 return false;
@@ -208,6 +503,27 @@ public abstract class Type extends ClavaNode {
             return false;
         }
         return true;
+        */
     }
+
+    public Type unqualifiedType() {
+        if (this instanceof QualType) {
+            return ((QualType) this).getUnqualifiedType();
+        }
+
+        return this;
+    }
+
+    /*
+    @Override
+    protected void setData(ClavaData data) {
+        throw new RuntimeException(".setData() not allowed for Type nodes, they are considered immutable");
+    }
+    
+    @Override
+    public void setId(String newId) {
+        throw new RuntimeException(".setId() not allowed for Type nodes, they are considered immutable");
+    }
+    */
 
 }

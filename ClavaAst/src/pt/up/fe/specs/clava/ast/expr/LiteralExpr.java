@@ -13,12 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.LiteralNode;
 
 /**
  * Represents a literal piece of code corresponding to a statement.
@@ -26,34 +26,15 @@ import pt.up.fe.specs.clava.ast.type.Type;
  * @author JoaoBispo
  *
  */
-public class LiteralExpr extends Expr {
+public class LiteralExpr extends Expr implements LiteralNode {
 
-    private final String literalCode;
-
-    /**
-     * Appends a semicolon if the given code does not end with one.
-     * 
-     * @param literalCode
-     * @param info
-     */
-    public LiteralExpr(String literalCode, Type type) {
-        this(literalCode, type, ClavaNodeInfo.undefinedInfo());
-    }
-
-    private LiteralExpr(String literalCode, Type type, ClavaNodeInfo info) {
-        super(new ExprData(type), info, Collections.emptyList());
-
-        this.literalCode = literalCode;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LiteralExpr(literalCode, getType(), getInfo());
+    public LiteralExpr(DataStore nodeData, Collection<? extends ClavaNode> children) {
+        super(nodeData, children);
     }
 
     @Override
     public String getCode() {
-        return literalCode;
+        return getLiteralCode();
     }
 
 }

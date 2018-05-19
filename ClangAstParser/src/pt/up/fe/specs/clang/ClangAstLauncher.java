@@ -77,6 +77,9 @@ public class ClangAstLauncher {
         // Set version of ClangAst
         config.set(ClangAstKeys.CLANGAST_VERSION, CLANGAST_BINARY_VERSION);
 
+        // boolean useCustomResources = config.get(ClavaOptions.CUSTOM_RESOURCES);
+        // ClangRootNode clangAst = new ClangAstParser(false, useCustomResources).parse(files, config);
+
         ClangRootNode clangAst = new ClangAstParser().parse(files, config);
 
         // Parse dump information

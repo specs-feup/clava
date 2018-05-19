@@ -1,0 +1,24 @@
+
+int main() {
+   void * aVoidPointer;
+   bool aBoolean; // _Bool in C99
+   char aChar;
+   unsigned char unsignedChar;
+   wchar_t wideChar;
+   char16_t char16; // C++
+   char32_t char32; // C++
+   unsigned short unsignedShort;
+   unsigned int unsignedInt;
+   unsigned long unsignedLong;
+   unsigned long long unsignedLongLong;
+   __uint128_t unsignedInt128;
+   signed char signedChar;
+   short aShort;
+   short signedShort;
+   __fp16 anHalf;
+   float aFloat;
+   double aDouble;
+   long double longDouble;
+   //_Float16 float16;
+   //__float128 float128;
+}

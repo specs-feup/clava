@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.util.classmap.ClassSet;
 
 /**
  * Represents an array subscript.
@@ -33,6 +34,9 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  *
  */
 public class ArraySubscriptExpr extends Expr {
+
+    private static final ClassSet<ClavaNode> VALID_ARRAY_VARS = ClassSet.newInstance(DeclRefExpr.class,
+            MemberExpr.class);
 
     public ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {
         this(exprData, info, Arrays.asList(lhs, rhs));
@@ -67,14 +71,32 @@ public class ArraySubscriptExpr extends Expr {
      * 
      * @return
      */
+    /*
     public DeclRefExpr getDeclRef() {
         ClavaNode currentNode = getChild(0);
         while (!(currentNode instanceof DeclRefExpr)) {
             Preconditions.checkArgument(currentNode.hasChildren(), "Expected to find DeclRefExpr:" + this);
             currentNode = currentNode.getChild(0);
         }
-
+    
         return (DeclRefExpr) currentNode;
+    }
+    */
+
+    public Expr getArrayExpr() {
+        ClavaNode currentNode = getChild(0);
+
+        while (!VALID_ARRAY_VARS.contains(currentNode)) {
+            Preconditions.checkArgument(currentNode.hasChildren(), "Expected to find DeclRefExpr:" + this);
+            currentNode = currentNode.getChild(0);
+        }
+
+        return (Expr) currentNode;
+
+        // System.out.println("ARRAY EXPR:" + currentNode);
+        // Expr expr = (Expr) ClavaNodes.normalize(currentNode);
+
+        // return expr;
     }
 
     public List<Expr> getSubscripts() {
@@ -99,4 +121,5 @@ public class ArraySubscriptExpr extends Expr {
 
         return subscripts;
     }
+
 }

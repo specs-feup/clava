@@ -45,6 +45,9 @@ public class FunctionDeclParser extends AClangNodeParser<FunctionDecl> {
         // col:13 used MPIR_Call_world_errhand 'void (int)' extern
         // line:15:6 referenced extractsys 'void (struct expression *, mysys *)'
 
+        // System.out.println(
+        // "FUNCTION DECL DATA: " + getStdErr().get(StreamKeys.FUNCTION_DECL_DATA).get(node.getExtendedId()));
+
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
         String functionName = parser.apply(StringParsers::parseWord);
@@ -53,7 +56,10 @@ public class FunctionDeclParser extends AClangNodeParser<FunctionDecl> {
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
         ListParser<ClavaNode> parsedChildren = new ListParser<>(parseChildren(node));
-        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, parsedChildren);
+        checkNewChildren(node.getExtendedId(), parsedChildren.getList());
+
+        FunctionDeclParserResult data = parser.apply(ClangDataParsers::parseFunctionDecl, parsedChildren, node,
+                getStdErr());
 
         checkNumChildren(parsedChildren.getList(), 0);
 

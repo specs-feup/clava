@@ -21,14 +21,15 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
@@ -38,10 +39,15 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.actions.CallWrap;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -60,7 +66,10 @@ public class CxxCall extends ACall {
 
     @Override
     public String getNameImpl() {
-        return call.getCalleeName();
+        // System.out.println("CALL NAME:" + call.getCalleeName());
+        // System.out.println("CALL NAME TRY:" + call.getCalleeNameTry());
+        return call.getCalleeNameTry().orElse(null);
+        // return call.getCalleeName();
     }
 
     @Override
@@ -103,12 +112,13 @@ public class CxxCall extends ACall {
         if (declareVariable) {
 
             VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, false,
-                    InitializationStyle.CINIT);
+                    InitializationStyle.CINIT, false);
             DeclData declData = new DeclData(false, false, true, false, false, false);
             VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, variableName, returnType, declData, call.getInfo(),
                     call);
 
-            DeclStmt declStmt = ClavaNodeFactory.declStmt(call.getInfo(), Arrays.asList(varDecl));
+            DeclStmt declStmt = call.getFactoryWithNode().declStmt(varDecl);
+            // DeclStmt declStmt = ClavaNodeFactory.declStmt(call.getInfo(), Arrays.asList(varDecl));
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, declStmt, true);
@@ -116,10 +126,10 @@ public class CxxCall extends ACall {
         // If assignment to already existing variable, use the following tree:
         // ExprStmt -> BinaryOperator -> DeclRefExpr, Call
         else {
-            Expr varExpr = ClavaNodeFactory.literalExpr(variableName, returnType);
+            Expr varExpr = CxxWeaver.getFactory().literalExpr(variableName, returnType);
             BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(returnType),
                     call.getInfo(), varExpr, call);
-            ExprStmt newStmt = ClavaNodeFactory.exprStmt(assign);
+            ExprStmt newStmt = CxxWeaver.getFactory().exprStmt(assign);
 
             // Replace stmt
             NodeInsertUtils.replace(exprStmt, newStmt, true);
@@ -167,35 +177,46 @@ public class CxxCall extends ACall {
 
     @Override
     public void setNameImpl(String name) {
-        call.setCalleeName(name);
+        defNameImpl(name);
     }
 
     @Override
-    public CxxFunction getDeclarationImpl() {
-        return call.getDeclaration().map(decl -> (CxxFunction) CxxJoinpoints.create(decl, this)).orElse(null);
+    public void defNameImpl(String value) {
+        call.setCallName(value);
+    }
+
+    @Override
+    public AFunction getDeclarationImpl() {
+        return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl, this)).orElse(null);
         // Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
         //
         // return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override
-    public CxxFunction getDefinitionImpl() {
-        return call.getDefinition().map(decl -> (CxxFunction) CxxJoinpoints.create(decl, this)).orElse(null);
+    public AFunction getDefinitionImpl() {
+        return call.getDefinition().map(decl -> (AFunction) CxxJoinpoints.create(decl, this)).orElse(null);
     }
 
     @Override
-    public String[] getArgListArrayImpl() {
+    public AExpression[] getArgsArrayImpl() {
         return call.getArgs()
                 .stream()
-                .map(Expr::getCode)
+                // .map(Expr::getCode)
+                .map(arg -> (AExpression) CxxJoinpoints.create(arg, this))
                 .collect(Collectors.toList())
-                .toArray(new String[0]);
+                .toArray(new AExpression[0]);
     }
 
     @Override
-    public AJoinPoint getReturnTypeImpl() {
+    public AExpression[] getArgListArrayImpl() {
+        return getArgsArrayImpl();
+    }
 
-        return CxxJoinpoints.create(call.getType(), this);
+    @Override
+    public AType getReturnTypeImpl() {
+
+        return (AType) CxxJoinpoints.create(call.getType(), this);
     }
 
     @Override
@@ -207,5 +228,75 @@ public class CxxCall extends ACall {
     public void inlineImpl() {
         call.getAncestor(App.class).inline(call);
         // new CallInliner(call).inline();
+    }
+
+    @Override
+    public void setArgFromStringImpl(int index, String expr) {
+        // Get arg of equivalent index, to extract type
+        Expr arg = call.getArgs().get(index);
+        Expr literalExpr = ClavaNodeFactory.literalExpr(expr, arg.getExprType());
+        setArgImpl(index, (AExpression) CxxJoinpoints.create(literalExpr, null));
+    }
+
+    @Override
+    public void setArgImpl(Integer index, AExpression expr) {
+        // Check num args
+        // int numArgs = getArgListArrayImpl().length;
+        // if (index >= 0 && index < numArgs) {
+        // SpecsLogs.msgInfo(
+        // "Not setting call argument, index is '" + index + "' and call has " + numArgs + " arguments");
+        // return;
+        // }
+
+        call.setArgument(index, (Expr) expr.getNode());
+    }
+
+    /**
+     * Method required for Nashorn to disambiguate between String and CxxExpression.
+     * 
+     * @param index
+     * @param expr
+     */
+    // public void setArgImpl(Integer index, CxxExpression expr) {
+    // setArgImpl(index, (AExpression) expr);
+    // }
+
+    @Override
+    public AExpression argImpl(int index) {
+        call.checkIndex(index);
+        Expr arg = call.getArgs().get(index);
+        return (AExpression) CxxJoinpoints.create(arg, this);
+
+    }
+
+    @Override
+    public Boolean getIsMemberAccessImpl() {
+        return call instanceof CXXMemberCallExpr;
+    }
+
+    @Override
+    public AMemberAccess getMemberAccessImpl() {
+        if (!(call instanceof CXXMemberCallExpr)) {
+            return null;
+        }
+
+        MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
+
+        return CxxJoinpoints.create(memberExpr, this, AMemberAccess.class);
+
+    }
+
+    @Override
+    public AFunctionType getFunctionTypeImpl() {
+        return call.getFunctionType()
+                .map(type -> (AFunctionType) CxxJoinpoints.create(type, this))
+                .orElse(null);
+
+        // return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
+    }
+
+    @Override
+    public Boolean getIsStmtCallImpl() {
+        return call.isStmtCall();
     }
 }

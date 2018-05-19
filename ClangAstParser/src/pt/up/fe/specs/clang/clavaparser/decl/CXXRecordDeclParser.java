@@ -46,17 +46,35 @@ public class CXXRecordDeclParser extends AClangNodeParser<CXXRecordDecl> {
 
     @Override
     public CXXRecordDecl parse(ClangNode node, StringParser parser) {
+
         // Examples:
         //
         // line:104:8 struct compile_config_s definition
         // col:8 implicit struct compile_config_s
-
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
 
-        // Parse children, to extract attributes to RecordDeclData
-        List<ClavaNode> children = parseChildren(node);
-        RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(), children);
+        // HACK: Before parsing children, remove first node that will be a CXXRecordDecl.
+        // This node is not being used in the Clava AST, and currently we are not able to
+        // visit it in the dumper, which makes the parsing of the node fail due to missing
+        // information about the name
+        List<ClangNode> clangChildren = new ArrayList<>(node.getChildren());
+        for (int i = 0; i < clangChildren.size(); i++) {
+            if (clangChildren.get(i).getName().equals("CXXRecordDecl")) {
+                // Remove first CXXRecordDecl
+                clangChildren.remove(i);
+                break;
+            }
+        }
 
+        // Parse children, to extract attributes to RecordDeclData
+        // List<ClavaNode> children = parseChildren(node);
+        List<ClavaNode> children = parseChildren(clangChildren.stream());
+        checkNewChildren(node.getExtendedId(), children);
+
+        // RecordDeclData recordDeclData = parser.apply(ClangDataParsers::parseRecordDecl, node, getTypesMap(),
+        // getStdErr(), children);
+        RecordDeclData recordDeclData = parseRecordDecl(node, children, parser);
+        // System.out.println("AFTER RECORD DECL:" + parser);
         // Parse bases
         List<RecordBase> recordBases = Collections.emptyList();
 
@@ -95,9 +113,9 @@ public class CXXRecordDeclParser extends AClangNodeParser<CXXRecordDecl> {
         }
 
         // If first child is a CXXRecordDecl, remove it
-        if (!children.isEmpty() && children.get(0) instanceof CXXRecordDecl) {
-            children.remove(0);
-        }
+        // if (!children.isEmpty() && children.get(0) instanceof CXXRecordDecl) {
+        // children.remove(0);
+        // }
 
         List<Decl> decls = children.stream().map(child -> toDecl(child)).collect(Collectors.toList());
 

@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -33,7 +35,7 @@ import pt.up.fe.specs.util.utilities.StringLines;
 public class CompoundStmt extends Stmt {
 
     // true if this CompoundStmt initially did not have curly braces {}
-    private final boolean isNaked;
+    private boolean isNaked;
 
     public static CompoundStmt newNakedInstance(ClavaNodeInfo info, Collection<? extends Stmt> children) {
         return new CompoundStmt(true, info, children);
@@ -61,7 +63,15 @@ public class CompoundStmt extends Stmt {
 
     @Override
     public String getCode() {
+        return getCode(false);
+    }
+
+    public String getCode(boolean inline) {
+
         List<Stmt> statements = getStatements();
+
+        String newLine = inline ? "" : ln();
+        String tab = inline ? " " : getTab();
 
         // If naked, and has only zero or one statements
         if (isNaked && statements.size() < 2) {
@@ -71,35 +81,61 @@ public class CompoundStmt extends Stmt {
             }
             Stmt statement = statements.get(0);
 
-            return " " + statement.getCode() + statement.getInlineCommentsCode();
+            String commentsCode = statement.getInlineCommentsCode();
+            if (inline && !commentsCode.isEmpty()) {
+                commentsCode += ln();
+            }
+
+            return " " + statement.getCode() + commentsCode;
         }
 
         StringBuilder builder = new StringBuilder();
 
         // If not the direct child of another CompoundStmt (not a scope), add a space
         boolean hasCompoundStmtParent = getParent() instanceof CompoundStmt;
-        if (hasCompoundStmtParent) {
+        if (hasCompoundStmtParent || inline) {
             // builder.append(ln() + "{");
             builder.append("{");
         } else {
             builder.append(" {");
         }
 
-        builder.append(getInlineCommentsCode());
-        builder.append(ln());
+        String inlineComments = getInlineCommentsCode();
+        builder.append(inlineComments);
+        // builder.append(getInlineCommentsCode());
+
+        // If not inline, or if there are comments, always add new line
+        if (!inline || !inlineComments.isEmpty()) {
+            builder.append(ln());
+        }
 
         for (Stmt stmt : getStatements()) {
+
+            String inlineComment = stmt.getInlineCommentsCode();
 
             String stmtCode = StringLines.getLines(stmt.getCode()).stream()
                     // Add ";" in the end if not present
                     // .map(line -> line.endsWith(";") ? line : line + ";")
                     // Add tab
-                    .map(line -> getTab() + line)
-                    .collect(Collectors.joining(ln(), "", stmt.getInlineCommentsCode() + ln()));
+                    .map(line -> tab + line)
+                    .collect(Collectors.joining(newLine, "", inlineComment + newLine));
             builder.append(stmtCode);
+
+            if (inline && !inlineComment.isEmpty()) {
+                builder.append(ln());
+            }
+
+            if (inline && (stmt instanceof WrapperStmt)) {
+                if (((WrapperStmt) stmt).getWrappedNode() instanceof InlineComment) {
+                    builder.append(ln());
+                }
+            }
         }
 
-        builder.append("}" + ln());
+        if (inline) {
+            builder.append(" ");
+        }
+        builder.append("}" + newLine);
         return builder.toString();
     }
 
@@ -129,4 +165,18 @@ public class CompoundStmt extends Stmt {
     public boolean isAggregateStmt() {
         return true;
     }
+
+    public boolean isNaked() {
+        return isNaked;
+    }
+
+    public void setNaked(boolean isNaked) {
+        if (isNaked && getStatements().size() > 1) {
+            ClavaLog.warning("Compount statements with more than one statement can't be naked");
+            return;
+        }
+
+        this.isNaked = isNaked;
+    }
+
 }

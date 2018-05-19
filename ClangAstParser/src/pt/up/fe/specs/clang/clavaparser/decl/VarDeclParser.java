@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.clavaparser.decl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -24,14 +25,18 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class VarDeclParser extends AClangNodeParser<VarDecl> {
 
@@ -52,9 +57,28 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         String varName = parser.apply(StringParsers::parseWord);
         Type type = parser.apply(string -> ClangGenericParsers.parseClangType(string, node, getTypesMap()));
 
-        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl);
+        VarDeclData varDeclData = parser.apply(ClangDataParsers::parseVarDecl, node, getStdErr());
+
+        // System.out.println("NAME: " + varName);
+        // System.out.println(
+        // "QUALIFIED NAME: " + varDeclData.getVarDeclDumperInfo().getQualifiedName());
+
+        // System.out.println(
+        // "IS CONST EXPR? " + varDeclData.isConstexpr() + " - on " + varName + " line "
+        // + node.getLocation().getStartLine());
+        // Adapt 'const' in case VarDecl is constexpr
+
+        // System.out.println("TYPE BEFORE:" + type + " (" + type.hashCode() + ")");
+        if (varDeclData.isConstexpr()) {
+            type = adaptTypeConstToConstexpr(varName, type);
+            // type.getDescendantsAndSelf(Type.class).stream()
+            // .forEach(VarDeclParser::adaptConstToConstexpr);
+        }
+
+        // System.out.println("TYPE AFTER:" + type + " (" + type.hashCode() + ")");
 
         List<ClavaNode> children = parseChildren(node);
+        checkNewChildren(node.getExtendedId(), children);
 
         boolean hasInit = varDeclData.getInitKind() != InitializationStyle.NO_INIT;
         if (hasInit) {
@@ -68,4 +92,41 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, info(node), initExpr);
     }
 
+    private static Type adaptTypeConstToConstexpr(String name, Type type) {
+        if (type.hasSugar()) {
+            adaptTypeConstToConstexpr("desugared " + name, type.desugar());
+        }
+
+        if (!(type instanceof QualType)) {
+            return type;
+        }
+
+        QualType qualType = (QualType) type;
+
+        QualType copy = (QualType) qualType.copy();
+        // copy.setId(null);
+        copy.setId(LegacyToDataStore.getIdGenerator().next("legacy_"));
+
+        // System.out.println("For " + name + ": " + copy.getQualifiers());
+        copy.setQualifiers(copy.getQualifiers().stream()
+                .map(qual -> qual == Qualifier.CONST ? Qualifier.CONSTEXPR : qual)
+                .collect(Collectors.toList()));
+
+        if (qualType.hasParent()) {
+            // System.out.println("Replacing in parent");
+            NodeInsertUtils.replace(qualType, copy);
+        }
+
+        return copy;
+    }
+    // private static void adaptConstToConstexpr(Type type) {
+    // if (!(type instanceof QualType)) {
+    // return;
+    // }
+    //
+    // QualType qualType = (QualType) type;
+    // // qualType.setQualifiers(qualType.getQualifiers().stream()
+    // // .map(qual -> qual == Qualifier.CONST ? Qualifier.CONSTEXPR : qual)
+    // // .collect(Collectors.toList()));
+    // }
 }

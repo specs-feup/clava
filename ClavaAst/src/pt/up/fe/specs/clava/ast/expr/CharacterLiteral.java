@@ -14,75 +14,68 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.util.SpecsStrings;
 
-public class CharacterLiteral extends Expr {
+public class CharacterLiteral extends Literal {
 
-    private static final Map<Character, String> CHAR_LITERAL;
-    static {
-        CHAR_LITERAL = new HashMap<>();
-        CHAR_LITERAL.put('\n', "\\n");
-        CHAR_LITERAL.put('\t', "\\t");
-        CHAR_LITERAL.put('\r', "\\r");
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Long> VALUE = KeyFactory.longInt("value");
+    public final static DataKey<CharacterKind> KIND = KeyFactory.enumeration("kind", CharacterKind.class);
+
+    /// DATAKEYS END
+
+    public CharacterLiteral(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private final long charValue;
-
-    public CharacterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info) {
-        this(charValue, exprData, info, Collections.emptyList());
-    }
-
-    private CharacterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info,
+    /**
+     * For legacy support.
+     * 
+     * @deprecated
+     * @param charValue
+     * @param exprData
+     * @param info
+     * @param children
+     */
+    @Deprecated
+    protected CharacterLiteral(ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(exprData, info, children);
-
-        this.charValue = charValue;
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CharacterLiteral(charValue, getExprData(), getInfo(), Collections.emptyList());
+    public long getCharValue() {
+        return get(VALUE);
     }
 
     @Override
     public String getCode() {
-        // Check if value is inside Character boundaries
-        if (charValue > (long) Character.MAX_VALUE) {
-            throw new RuntimeException("Not implemented dealing with values larger than Character.MAX_VALUE");
+        String sourceLiteral = get(SOURCE_LITERAL);
+
+        // If source literal starts with ', then just return
+        if (sourceLiteral.startsWith("'")) {
+            return sourceLiteral;
         }
 
-        char aChar = (char) charValue;
-
-        // Check if character is inside table
-        String literal = CHAR_LITERAL.get(aChar);
-        if (literal != null) {
-            return "'" + literal + "'";
+        if (sourceLiteral.equals("u") || sourceLiteral.equals("U")) {
+            return getCodeFromUnicode(sourceLiteral);
         }
 
-        // ASCII characters
-        if (aChar < 128) {
-            if (SpecsStrings.isPrintableChar(aChar)) {
-                return "'" + aChar + "'";
-            }
-
-            // Not printable, just return as an int
-            return Integer.toString(aChar);
-        }
-
-        // Print as Unicode
-        String hexString = SpecsStrings.toHexString(aChar, 8).substring("0x".length());
-        return "u'\\U" + hexString + "'";
+        throw new RuntimeException("Case not supported for source literal '" + sourceLiteral + "'");
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + ", charValue:" + charValue;
+    private String getCodeFromUnicode(String sourceLiteralPrefix) {
+        String hexString = SpecsStrings.toHexString(get(VALUE), 8).substring("0x".length());
+        return sourceLiteralPrefix + "'\\U" + hexString + "'";
     }
+
 }

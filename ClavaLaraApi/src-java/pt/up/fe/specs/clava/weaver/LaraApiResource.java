@@ -21,13 +21,20 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraApiResource implements LaraResourceProvider {
 
+    // OpenCL
+    OPENCL_CALL("opencl/OpenCLCall.lara"),
+    OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
+    OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
+
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
+    SINGLE_FILE("util/SingleFile.lara"),
 
     // Static objects
 
     CLAVA("Clava.lara"),
     CLAVA_ASPECTS("ClavaAspects.lara"),
+    CLAVA_CODE("ClavaCode.lara"),
     CLAVA_JOIN_POINTS("ClavaJoinPoints.lara");
 
     private final String resource;

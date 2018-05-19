@@ -26,8 +26,11 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
+import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.MultiMap;
 
@@ -83,14 +86,14 @@ public interface StreamKeys {
     DataKey<Map<String, FieldDeclInfo>> FIELD_DECL_INFO = KeyFactory.generic("stderr_FIELD_DECL_INFO",
             new HashMap<String, FieldDeclInfo>());
 
-    DataKey<Set<String>> NAMED_DECL_WITHOUT_NAME = KeyFactory.generic("stderr_NAMED_DECL_WITHOUT_NAME",
+    DataKey<Map<String, String>> NAMED_DECL_WITHOUT_NAME = KeyFactory.generic("stderr_NAMED_DECL_WITHOUT_NAME",
             // Using SpecsCollections in order to invoke .setDefault()
-            SpecsCollections.<String> newHashSet())
+            SpecsCollections.<String, String> newHashMap())
             // Setting default, in case all named decls have names
-            .setDefault(() -> new HashSet<String>());
+            .setDefault(() -> new HashMap<>());
 
-    DataKey<Map<String, String>> CXX_METHOD_DECL_PARENT = KeyFactory.generic("stderr_cxx_method_decl_parent",
-            new HashMap<String, String>());
+    // DataKey<Map<String, String>> CXX_METHOD_DECL_PARENT = KeyFactory.generic("stderr_cxx_method_decl_parent",
+    // new HashMap<String, String>());
 
     DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
             .generic("stderr_parm_var_decl_has_inherited_default_arg",
@@ -108,6 +111,56 @@ public interface StreamKeys {
 
     DataKey<Map<String, CxxMemberExprInfo>> CXX_MEMBER_EXPR_INFO = KeyFactory.generic("stderr_cxx_member_expr_info",
             new HashMap<String, CxxMemberExprInfo>());
+
+    DataKey<Map<String, String>> TYPE_AS_WRITTEN = KeyFactory.generic("stderr_type_as_written",
+            new HashMap<String, String>());
+
+    DataKey<Map<String, LambdaExprData>> LAMBDA_EXPR_DATA = KeyFactory.generic("stderr_lambda_expr_data",
+            new HashMap<String, LambdaExprData>());
+
+    DataKey<Map<String, TypeidData>> TYPEID_DATA = KeyFactory.generic("stderr_typeid_data",
+            new HashMap<String, TypeidData>());
+
+    // DataKey<Set<String>> IS_CONST_EXPR = KeyFactory.generic("stderr_is_const_expr",
+    // SpecsCollections.<String> newHashSet())
+    // // Setting default, in case no var decl is a const expr
+    // .setDefault(() -> new HashSet<String>());
+    //
+    // DataKey<Map<String, String>> VARDECL_QUALIFIED_NAME = KeyFactory.generic("stderr_vardecl_qualified_name",
+    // new HashMap<String, String>());
+
+    // DataKey<Map<String, VarDeclDumperInfo>> VARDECL_DUMPER_INFO = KeyFactory.generic("stderr_vardecl_dumper_info",
+    // new HashMap<String, VarDeclDumperInfo>());
+    //
+    // DataKey<Map<String, FunctionDeclInfo>> FUNCTION_DECL_INFO = KeyFactory.generic("stderr_function_decl_info",
+    // new HashMap<String, FunctionDeclInfo>());
+
+    DataKey<Map<String, InitListExprInfo>> INIT_LIST_EXPR_INFO = KeyFactory.generic("stderr_init_list_expr_info",
+            new HashMap<String, InitListExprInfo>());
+
+    // DataKey<Map<String, DeclDataV2>> DECL_DATA = KeyFactory.generic("stderr_decl_data",
+    // new HashMap<String, DeclDataV2>());
+    //
+    // DataKey<Map<String, FunctionDeclDataV2>> FUNCTION_DECL_DATA = KeyFactory.generic("stderr_function_decl_data",
+    // new HashMap<String, FunctionDeclDataV2>());
+    //
+    // DataKey<Map<String, VarDeclDataV2>> VAR_DECL_DATA = KeyFactory.generic("stderr_var_decl_data",
+    // new HashMap<String, VarDeclDataV2>());
+    //
+    // DataKey<Map<String, ParmVarDeclData>> PARM_VAR_DECL_DATA = KeyFactory.generic("stderr_parm_var_decl_data",
+    // new HashMap<String, ParmVarDeclData>());
+    //
+    // DataKey<Map<String, CXXMethodDeclDataV2>> CXX_METHOD_DECL_DATA =
+    // KeyFactory.generic("stderr_cxx_method_decl_data",
+    // new HashMap<String, CXXMethodDeclDataV2>());
+
+    // <VarDecl Info>
+
+    // DataKey<Set<String>> PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG = KeyFactory
+    // .generic("stderr_parm_var_decl_has_inherited_default_arg",
+    // SpecsCollections.<String> newHashSet())
+    // // Setting default, in case no parm var decl has inherited arg
+    // .setDefault(() -> new HashSet<String>());
 
     // DataKey<Map<String, String>> CXX_METHOD_DECL_DECLARATION =
     // KeyFactory.generic("stderr_cxx_method_decl_declaration",
@@ -138,12 +191,25 @@ public interface StreamKeys {
             .addKey(TEMPLATE_ARGUMENTS)
             .addKey(FIELD_DECL_INFO)
             .addKey(NAMED_DECL_WITHOUT_NAME)
-            .addKey(CXX_METHOD_DECL_PARENT)
+            // .addKey(CXX_METHOD_DECL_PARENT)
             .addKey(PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG)
             .addKey(OFFSET_OF_INFO)
             .addKey(FUNCTION_PROTOTYPE_EXCEPTION)
             .addKey(TYPEDEF_DECL_SOURCE)
             .addKey(CXX_MEMBER_EXPR_INFO)
+            .addKey(TYPE_AS_WRITTEN)
+            .addKey(LAMBDA_EXPR_DATA)
+            .addKey(TYPEID_DATA)
+            // .addKey(IS_CONST_EXPR)
+            // .addKey(VARDECL_QUALIFIED_NAME)
+            // .addKey(VARDECL_DUMPER_INFO)
+            // .addKey(FUNCTION_DECL_INFO)
+            .addKey(INIT_LIST_EXPR_INFO)
+            // .addKeys(ClangNodeParsing.getKeys())
+            // .addKey(DECL_DATA)
+            // .addKey(FUNCTION_DECL_DATA)
+            // .addKey(VAR_DECL_DATA)
+            // .addKey(PARM_VAR_DECL_DATA)
             // .addKey(CXX_METHOD_DECL_DECLARATION)
             // .addKey(INTEGER_LITERALS_BUILTIN)
             // .addKey(FLOATING_LITERALS_BUILTIN)

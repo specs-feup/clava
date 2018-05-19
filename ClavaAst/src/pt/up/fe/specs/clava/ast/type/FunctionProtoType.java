@@ -1,4 +1,5 @@
 /**
+ * 
  * Copyright 2016 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -14,39 +15,81 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
-import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.language.ReferenceQualifier;
 
 public class FunctionProtoType extends FunctionType {
 
-    private final FunctionProtoTypeData functionProtoTypeData;
+    /// DATAKEYS BEGIN
 
-    public FunctionProtoType(FunctionProtoTypeData functionProtoTypeData, FunctionTypeData functionTypeData,
-            TypeData typeData, ClavaNodeInfo info, Type returnType, Collection<? extends Type> arguments) {
-        this(functionProtoTypeData, functionTypeData, typeData, info, SpecsCollections.concat(returnType, arguments));
-    }
+    public final static DataKey<Integer> NUM_PARAMETERS = KeyFactory.integer("numParameters");
 
-    private FunctionProtoType(FunctionProtoTypeData functionProtoTypeData, FunctionTypeData functionTypeData,
-            TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(functionTypeData, typeData, info, children);
+    public final static DataKey<Boolean> HAS_TRAILING_RETURNS = KeyFactory.bool("hasTrailingReturn");
 
-        this.functionProtoTypeData = functionProtoTypeData;
+    public final static DataKey<Boolean> IS_VARIADIC = KeyFactory.bool("isVariadic");
+
+    public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
+
+    public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
+
+    public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
+
+    public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
+            .enumeration("referenceQualifier", ReferenceQualifier.class);
+
+    public final static DataKey<ExceptionSpecificationType> EXCEPTION_SPECIFICATION_TYPE = KeyFactory
+            .enumeration("exceptionSpecificationType", ExceptionSpecificationType.class);
+
+    public final static DataKey<Expr> NOEXCEPT_EXPR = KeyFactory.object("noexceptExpr", Expr.class);
+
+    /// DATAKEYS END
+
+    public FunctionProtoType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     @Override
-    protected ClavaNode copyPrivate() {
-        return new FunctionProtoType(functionProtoTypeData, getFunctionTypeData(), getTypeData(), getInfo(),
-                Collections.emptyList());
+    public int getIndexParamStart() {
+        return getIndexReturnType() + 1;
     }
 
-    public FunctionProtoTypeData getFunctionProtoTypeData() {
-        return functionProtoTypeData;
+    @Override
+    public int getIndexParamEnd() {
+        return getIndexParamStart() + get(NUM_PARAMETERS);
+    }
+
+    public String getCodeAfterParams() {
+        StringBuilder code = new StringBuilder();
+
+        // Add const/volatile
+        if (get(IS_CONST)) {
+            code.append(" const");
+        }
+        if (get(IS_VOLATILE)) {
+            code.append(" volatile");
+        }
+
+        String exceptCode = get(EXCEPTION_SPECIFICATION_TYPE).getCode(get(NOEXCEPT_EXPR));
+        code.append(exceptCode);
+
+        return code.toString();
+    }
+
+    @Override
+    public int getNumParams() {
+        return get(NUM_PARAMETERS);
+    }
+
+    @Override
+    public boolean isVariadic() {
+        return get(IS_VARIADIC);
     }
 
 }

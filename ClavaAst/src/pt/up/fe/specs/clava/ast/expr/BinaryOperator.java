@@ -20,7 +20,7 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.enums.EnumHelper;
+import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -67,10 +67,10 @@ public class BinaryOperator extends Expr {
         OR_ASSIGN("|=", true),
         COMMA(",");
 
-        private static final Lazy<EnumHelper<BinaryOperatorKind>> HELPER = EnumHelper
-                .newLazyHelper(BinaryOperatorKind.class);
+        private static final Lazy<EnumHelperWithValue<BinaryOperatorKind>> HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(BinaryOperatorKind.class);
 
-        public static EnumHelper<BinaryOperatorKind> getHelper() {
+        public static EnumHelperWithValue<BinaryOperatorKind> getHelper() {
             return HELPER.get();
         }
 

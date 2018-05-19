@@ -27,12 +27,15 @@ import java.util.stream.Stream;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clava.parser.DelayedParsing;
+import pt.up.fe.specs.clang.clavaparser.attr.FinalAttrParser;
+import pt.up.fe.specs.clang.clavaparser.attr.OpenCLKernelAttrParser;
 import pt.up.fe.specs.clang.clavaparser.comment.FullCommentParser;
 import pt.up.fe.specs.clang.clavaparser.comment.InlineCommandCommentParser;
 import pt.up.fe.specs.clang.clavaparser.comment.ParagraphCommentParser;
 import pt.up.fe.specs.clang.clavaparser.comment.TextCommentParser;
 import pt.up.fe.specs.clang.clavaparser.decl.AccessSpecDeclParser;
 import pt.up.fe.specs.clang.clavaparser.decl.CXXConstructorDeclParser;
+import pt.up.fe.specs.clang.clavaparser.decl.CXXConversionDeclParser;
 import pt.up.fe.specs.clang.clavaparser.decl.CXXDestructorDeclParser;
 import pt.up.fe.specs.clang.clavaparser.decl.CXXMethodDeclParser;
 import pt.up.fe.specs.clang.clavaparser.decl.CXXRecordDeclParser;
@@ -76,6 +79,8 @@ import pt.up.fe.specs.clang.clavaparser.expr.CXXStdInitializerListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXTemporaryObjectExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXThisExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CXXThrowExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.CXXTypeidExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.CXXUnresolvedConstructExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CallExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CharacterLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CompoundAssignOperatorParser;
@@ -88,11 +93,15 @@ import pt.up.fe.specs.clang.clavaparser.expr.ImplicitCastExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ImplicitValueInitExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.InitListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.IntegerLiteralParser;
+import pt.up.fe.specs.clang.clavaparser.expr.LambdaExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.MaterializeTemporaryExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.MemberExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.OffsetOfExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.PackExpansionExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ParenExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.ParenListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.PredefinedExprParser;
+import pt.up.fe.specs.clang.clavaparser.expr.SizeOfPackExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.StmtExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.StringLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.UnaryExprOrTypeTraitExprParser;
@@ -112,14 +121,12 @@ import pt.up.fe.specs.clang.clavaparser.stmt.CapturedStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CaseStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CompoundStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.ContinueStmtParser;
-import pt.up.fe.specs.clang.clavaparser.stmt.DeclStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DefaultStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DoStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.ForStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.IfStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.LabelStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.NullStmtParser;
-import pt.up.fe.specs.clang.clavaparser.stmt.ReturnStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.SwitchStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.WhileStmtParser;
 import pt.up.fe.specs.clang.clavaparser.type.AttributedTypeParser;
@@ -128,6 +135,7 @@ import pt.up.fe.specs.clang.clavaparser.type.BuiltinTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ConstantArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecayedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.DecltypeTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.DependentSizedArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ElaboratedTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.EnumTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.FunctionNoProtoTypeParser;
@@ -135,6 +143,7 @@ import pt.up.fe.specs.clang.clavaparser.type.FunctionProtoTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.IncompleteArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.InjectedClassNameTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.LValueReferenceTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.PackExpansionTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.ParenTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.PointerTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.QualTypeParser;
@@ -143,6 +152,7 @@ import pt.up.fe.specs.clang.clavaparser.type.RecordTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.SubstTemplateTypeParmTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.TemplateSpecializationTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.TemplateTypeParmTypeParser;
+import pt.up.fe.specs.clang.clavaparser.type.TypeOfExprTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.TypedefTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.UnaryTransformTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.VariableArrayTypeParser;
@@ -152,6 +162,8 @@ import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.AdaptBoolCasts;
 import pt.up.fe.specs.clang.transforms.AdaptBoolTypes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
+import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RecoverStdMacros;
 import pt.up.fe.specs.clang.transforms.RemoveBoolOperatorCalls;
@@ -160,10 +172,13 @@ import pt.up.fe.specs.clang.transforms.RemoveDefaultInitializers;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemoveImplicitConstructors;
 import pt.up.fe.specs.clang.transforms.ReplaceClangLabelStmt;
+import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
+import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -178,6 +193,8 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 public class ClavaParser implements AutoCloseable {
 
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
+            new DenanonymizeDecls(),
+            new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
             new RemoveClangComments(),
             new CreateDeclStmts(),
@@ -221,14 +238,12 @@ public class ClavaParser implements AutoCloseable {
     private static ClangConverterTable buildConverter_3_8(ClangRootData clangRootData) {
         ClangConverterTable converter = new ClangConverterTable(clangRootData);
 
+        // Can't replace with NewClavaNodeParser instances because new node coverage
+        // by visitors is not good yet.
+
         /* extra */
         converter.put("Root", RootParser::new);
         converter.put("NULL", NullNodeParser::new);
-        // converter.put("original Namespace", OriginalNamespaceParser::new);
-        // converter.put("CXXCtorInitializer", CXXCtorInitializerParser::new);
-        // converter.put("CXXCtorInitializer Field",
-        // conv -> new CXXCtorInitializerParser(conv, CXXCtorInitializerType.FIELD));
-        // converter.put("TemplateArgument", TemplateArgumentParser::new);
         converter.put("VariadicType", VariadicTypeParser::new);
         converter.put("AlwaysInlineAttr", AlwaysInlineAttrParser::new);
         converter.put("TemplateArgument", TemplateArgumentParser::new);
@@ -258,14 +273,17 @@ public class ClavaParser implements AutoCloseable {
         converter.put("NamespaceAliasDecl", NamespaceAliasDeclParser::new);
         converter.put("ClassTemplateDecl", ClassTemplateDeclParser::new);
         converter.put("VarTemplateDecl", VarTemplateDeclParser::new);
+        converter.put("CXXConversionDecl", CXXConversionDeclParser::new);
 
         /* stmt */
         converter.put("CompoundStmt", CompoundStmtParser::new);
         converter.put("SwitchStmt", SwitchStmtParser::new);
         converter.put("CaseStmt", CaseStmtParser::new);
         converter.put("DefaultStmt", DefaultStmtParser::new);
-        converter.put("ReturnStmt", ReturnStmtParser::new);
-        converter.put("DeclStmt", DeclStmtParser::new);
+        // converter.put("ReturnStmt", ReturnStmtParser::new);
+        converter.put("ReturnStmt", conv -> new NewClavaNodeParser<>(conv, ReturnStmt.class));
+        // converter.put("DeclStmt", DeclStmtParser::new);
+        converter.put("DeclStmt", conv -> new NewClavaNodeParser<>(conv, DeclStmt.class));
         converter.put("ContinueStmt", ContinueStmtParser::new);
         converter.put("IfStmt", IfStmtParser::new);
         converter.put("WhileStmt", WhileStmtParser::new);
@@ -328,11 +346,18 @@ public class ClavaParser implements AutoCloseable {
         converter.put("PredefinedExpr", PredefinedExprParser::new);
         converter.put("CXXDependentScopeMemberExpr", CXXDependentScopeMemberExprParser::new);
         converter.put("StmtExpr", StmtExprParser::new);
+        converter.put("SizeOfPackExpr", SizeOfPackExprParser::new);
+        converter.put("PackExpansionExpr", PackExpansionExprParser::new);
+        converter.put("ParenListExpr", ParenListExprParser::new);
+        converter.put("CXXUnresolvedConstructExpr", CXXUnresolvedConstructExprParser::new);
+        converter.put("LambdaExpr", LambdaExprParser::new);
+        converter.put("CXXTypeidExpr", CXXTypeidExprParser::new);
 
         /* type */
         converter.put("RecordType", RecordTypeParser::new);
         converter.put("FunctionProtoType", FunctionProtoTypeParser::new);
-        converter.put("BuiltinType", BuiltinTypeParser::new);
+        converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
+        // converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
         converter.put("LValueReferenceType", LValueReferenceTypeParser::new);
         converter.put("RValueReferenceType", RValueReferenceTypeParser::new);
         converter.put("QualType", QualTypeParser::new);
@@ -354,6 +379,9 @@ public class ClavaParser implements AutoCloseable {
         converter.put("UnaryTransformType", UnaryTransformTypeParser::new);
         converter.put("VariableArrayType", VariableArrayTypeParser::new);
         converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
+        converter.put("PackExpansionType", PackExpansionTypeParser::new);
+        converter.put("DependentSizedArrayType", DependentSizedArrayTypeParser::new);
+        converter.put("TypeOfExprType", TypeOfExprTypeParser::new);
 
         /* comment */
         converter.put("ParagraphComment", ParagraphCommentParser::new);
@@ -363,6 +391,7 @@ public class ClavaParser implements AutoCloseable {
 
         /* attributes */
         converter.put("FinalAttr", FinalAttrParser::new);
+        converter.put("OpenCLKernelAttr", OpenCLKernelAttrParser::new);
 
         return converter;
     }
@@ -389,25 +418,78 @@ public class ClavaParser implements AutoCloseable {
         // Process Clang nodes to add extra information (e.g., namespace and RecordDecl names to CXXMethodDecl)
         new ClangAstProcessor(converter).process(clangAst);
 
+        // Apply post-processing to ClavaData
+        // clavaDataPostProcessing();
+
         // Parse root node
         RootParser rootParser = new RootParser(converter);
 
         App app = rootParser.parse(clangAst);
 
         // Add text elements (comments, pragmas) to the tree
-        new TextParser().addElements(app);
+        new TextParser(app.getContext()).addElements(app);
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         if (sourceTree) {
-            processSourceTree(app);
+            new TreeTransformer(POST_PARSING_RULES).transform(app);
+            // processSourceTree(app);
         }
+
+        // Sets app to all type nodes
+        /*
+        nodeTypes.values().stream().forEach(type -> type.setApp(app));
+        app.getDescendantsStream()
+                .filter(node -> node instanceof Typable)
+                .map(node -> (Typable) node)
+                .forEach(typable -> {
+                    typable.getType().setApp(app);
+                });
+        */
+        // Set app in parsed Type nodes that have ClavaData
+        /*
+        System.out.println("NEW PARSED NODES:" + converter.getNewParsedNodes());
+        converter.getNewParsedNodes().values().stream()
+                .filter(Type.class::isInstance)
+                .map(Type.class::cast)
+                .forEach(type -> type.setApp(app));
+        */
+        // Perform second pass over types
+        // processTypesSecondPass();
+
+        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
+        // original clang tree
+        // if (sourceTree) {
+        // processSourceTree(app);
+        // }
 
         SpecsLogs.msgInfo("--- AST parsing report ---");
         checkUndefinedNodes(app);
 
         return app;
     }
+
+    // private void clavaDataPostProcessing() {
+    // // Build map
+    // // Map<String, ClavaNode> nodesMap = converter.getParsedNodes().stream()
+    // // .filter(node -> node.getData() != null)
+    // // .collect(Collectors.toMap(node -> node.getData().getId(), node -> node));
+    //
+    // // ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(nodesMap);
+    // ClavaDataPostProcessing postProcessing = new ClavaDataPostProcessing(converter.getNewParsedNodes());
+    //
+    // for (ClavaNode node : converter.getNewParsedNodes().values()) {
+    // ClavaData data = node.getData();
+    //
+    // // If null, no work to be done
+    // if (data == null) {
+    // continue;
+    // }
+    //
+    // ClavaDataUtils.applyPostProcessing(data, postProcessing);
+    // }
+    //
+    // }
 
     public Map<String, Type> getTypes() {
         return converter.getOriginalTypes();
@@ -422,51 +504,34 @@ public class ClavaParser implements AutoCloseable {
     }
 
     private void completeTemplateSpecializationTypes() {
-
+        // System.out.println("ORIGINAL TYPES:" + converter.getOriginalTypes());
         // Go over all original types and find TemplateSpecializationType nodes
         for (Type type : converter.getOriginalTypes().values()) {
-            type.getDescendantsStream()
-                    .filter(node -> node instanceof TemplateSpecializationType)
-                    .map(node -> (TemplateSpecializationType) node)
+            type.getDescendantsAndSelf(TemplateSpecializationType.class).stream()
                     .forEach(this::completeTemplateSpecializationType);
+
+            // .filter(node -> node instanceof TemplateSpecializationType)
+            // .map(node -> (TemplateSpecializationType) node)
+            // .forEach(this::completeTemplateSpecializationType);
         }
-        /*
-                MultiMap<String, String> templateArgTypes = converter.getClangRootData().getTemplateArgTypes();
-        
-        for (Entry<String, List<String>> entry : templateArgTypes.entrySet()) {
-            // Get TemplateSpecializationType
-            Type type = converter.getOriginalTypes().get(entry.getKey());
-        
-            Preconditions.checkNotNull(type, "Expected type with id '" + entry.getKey() + "' to exist");
-            SpecsChecks.checkClass(type, TemplateSpecializationType.class);
-            TemplateSpecializationType templateType = (TemplateSpecializationType) type;
-        
-            // Get template arguments types
-            List<Type> argsTypes = new ArrayList<>();
-            for (String typeId : entry.getValue()) {
-                // Get type
-                Type argType = converter.getOriginalTypes().get(typeId);
-                Preconditions.checkNotNull(argType, "Could not find a type for id '" + typeId + "'");
-                argsTypes.add(argType);
-            }
-        
-            templateType.setArgsTypes(argsTypes);
-        }
-        */
     }
 
     private void completeTemplateSpecializationType(TemplateSpecializationType templateType) {
         // Get args types id
         List<String> typeIds = converter.getClangRootData().getTemplateArgTypes()
-                .get(templateType.getInfo().getExtendedId());
+                // .get(templateType.getInfo().getExtendedId());
+                .get(templateType.getExtendedId().orElse(null));
+        // System.out.println("TYPE IDS:" + typeIds);
 
         // Get args types
         List<Type> argTypes = typeIds.stream()
                 .map(typeId -> converter.getOriginalTypes().get(typeId))
                 .collect(Collectors.toList());
 
-        // Set
-        templateType.setArgsTypes(argTypes);
+        // System.out.println("ARG TYPES:" + argTypes);
+
+        // Set template argument types, but without changing the string template arguments
+        templateType.setTemplateArgumentTypes(argTypes, false);
     }
 
     private void parseDelayedTypes() {
@@ -564,24 +629,26 @@ public class ClavaParser implements AutoCloseable {
         }
     }
 
+    /*
     private static void processSourceTree(ClavaNode node) {
-
+    
         POST_PARSING_RULES.stream()
                 .forEach(transform -> transform.visit(node));
-
+    
         // long tic = System.nanoTime();
-
+    
         // TraversalStrategy.POST_ORDER.apply(node, new RemoveTemporaryExpressions());
         // TraversalStrategy.POST_ORDER.apply(node, new RemoveMaterializeTempExpressions());
-
+    
         // TraversalStrategy.POST_ORDER.apply(node, new RemoveExtraNodes());
         // TraversalStrategy.POST_ORDER.apply(node, new ExtractFullComments());
         // TraversalStrategy.POST_ORDER.apply(node, new CreateDeclStmts());
         // TraversalStrategy.POST_ORDER.apply(node, new AdaptBoolTypes());
         // TraversalStrategy.POST_ORDER.apply(node, new AdaptBoolCasts());
-
+    
         // ParseUtils.printTime("Clava AST Post-processing", tic);
     }
+    */
 
     @Override
     public void close() throws Exception {

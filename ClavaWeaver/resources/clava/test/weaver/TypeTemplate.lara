@@ -1,0 +1,93 @@
+import clava.ClavaJoinPoints;
+/*
+aspectdef Test2
+
+
+	select function{"foo_no_std"}.vardecl{"W"} end
+	apply
+		println("TYPE:" + $vardecl.type.templateArgsTypes[0].code);
+	end
+	
+end
+*/
+aspectdef Test
+
+   var floatType = ClavaJoinPoints.builtinType("float");
+   var intType = ClavaJoinPoints.builtinType("int");
+   var doubleType = ClavaJoinPoints.builtinType("double");
+
+
+	//// Vector
+   
+	// Get template argument types
+	select file.vardecl{"W"} end
+	apply
+		println("Original template args: " + $vardecl.type.templateArgsStrings);
+		
+		var typesStrings = [];
+		for(var $type of $vardecl.type.templateArgsTypes) {
+			typesStrings.push($type.code);
+		}
+		println("Original template args types: " + typesStrings.join(", "));		
+	end
+
+	// Set a single template argument
+	select file.vardecl{"W"} end
+	apply
+		$vardecl.type.setTemplateArgsTypes(0, floatType);
+		println("After setting float: " + $vardecl.type.templateArgsStrings);		
+	end
+
+	// Set all template arguments
+	select file.vardecl{"W"} end
+	apply
+		$vardecl.type.templateArgsTypes = [intType];
+		println("After setting int with array: " + $vardecl.type.templateArgsStrings);		
+	end
+	
+	
+	
+	//// Map
+   
+	// Get template argument types
+	select file.vardecl{"map"} end
+	apply
+		println("Original template args: " + $vardecl.type.templateArgsStrings);				
+	end
+
+	// Set a single template argument
+	select file.vardecl{"map"} end
+	apply
+		$vardecl.type.setTemplateArgsTypes(1, doubleType);
+		println("After second arg to double: " + $vardecl.type.templateArgsStrings);		
+	end
+
+	// Set all template arguments
+	select file.vardecl{"map"} end
+	apply
+		$vardecl.type.templateArgsTypes = [doubleType, intType];
+		println("After setting with array [double, int]: " + $vardecl.type.templateArgsStrings);		
+	end
+	
+
+	// Change typedef declaration
+	select typedefDecl{"typedef_to_change"} end
+	apply
+		$typedefDecl.type.templateArgsTypes = [floatType];
+		println("After setting typedef_to_change: " + $typedefDecl.type.code);		
+	end
+
+	// Change type of vardecl which is a typedef
+	select vardecl{"changed_typedef_type"} end
+	apply
+		$vardecl.type.templateArgsTypes = [intType];
+		if($vardecl.type.kind === "TypedefType") {
+			$vardecl.type = $vardecl.type.desugar;
+		}
+		
+		println("After setting changed_typedef_type: " + $vardecl.type.code);		
+	end
+	
+
+	
+end

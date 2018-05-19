@@ -14,7 +14,8 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -30,13 +31,12 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public class DummyExpr extends Expr implements DummyNode {
 
-    private final String content;
+    public DummyExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
-    public DummyExpr(String content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        // Using RVALUE as default
+    public DummyExpr(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(ExprData.empty(), info, children);
-
-        this.content = content;
     }
 
     @Override
@@ -45,22 +45,12 @@ public class DummyExpr extends Expr implements DummyNode {
     }
 
     public String getNodeCode() {
-        return "/* Dummy expr '" + content + "'*/";
+        return "/* Dummy expr '" + getContent() + "'*/";
     }
 
     @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DummyExpr(content, getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public String getContent() {
-        return content;
     }
 
 }

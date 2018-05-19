@@ -20,15 +20,25 @@ import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -44,6 +54,8 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
+import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxScope extends AScope {
 
@@ -88,7 +100,8 @@ public class CxxScope extends AScope {
     public void insertImpl(String position, String code) {
         // 'body' behaviour
         if (!scope.isNestedScope()) {
-            Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+            // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+            Stmt literalStmt = ClavaNodeParser.parseStmt(code);
             CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
             return;
         }
@@ -155,7 +168,9 @@ public class CxxScope extends AScope {
 
         CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
 
-        return node;
+        // return node;
+        // TODO: Consider returning newStmt instead
+        return CxxJoinpoints.create(newStmt, null);
     }
 
     @Override
@@ -170,7 +185,9 @@ public class CxxScope extends AScope {
         // Preconditions.checkArgument(newStmt instanceof Stmt,
         // "Expected input of action scope.insertEnd to be a Stmt joinpoint, is a " + node.getJoinPointType());
         CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
-        return node;
+        // return node;
+        // TODO: Consider returning newStmt instead
+        return CxxJoinpoints.create(newStmt, null);
         /*
         List<? extends AStatement> statements = selectStatements();
         if (statements.isEmpty()) {
@@ -289,5 +306,94 @@ public class CxxScope extends AScope {
     @Override
     public List<? extends AComment> selectComment() {
         return CxxSelects.select(AComment.class, getStatements(), true, this, Comment.class::isInstance);
+    }
+
+    @Override
+    public Boolean getNakedImpl() {
+        return scope.isNaked();
+    }
+
+    @Override
+    public void defNakedImpl(Boolean value) {
+        scope.setNaked(value);
+    }
+
+    @Override
+    public void setNakedImpl(Boolean isNaked) {
+        defNakedImpl(isNaked);
+    }
+
+    @Override
+    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
+
+        return addLocalImpl(name, type, null);
+    }
+
+    @Override
+    public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
+
+        // Check if joinpoint is a CxxType
+        if (!(type instanceof CxxType)) {
+            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinpointType() + ") is not a type");
+            return null;
+        }
+
+        Type typeNode = ((CxxType) type).getNode();
+
+        // defaults as no init
+        Expr initExpr = null;
+        InitializationStyle initStyle = InitializationStyle.NO_INIT;
+
+        if (initValue != null) {
+
+            initExpr = ClavaNodeFactory.literalExpr(initValue,
+                    ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
+
+            initStyle = InitializationStyle.CINIT;
+        }
+
+        boolean isUsed = true;
+        boolean isImplicit = false;
+        boolean isNrvo = false;
+
+        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle, false);
+        DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
+
+        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode, declData, ClavaNodeInfo.undefinedInfo(),
+                initExpr);
+
+        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl, this);
+
+        insertBegin(varDeclJp);
+
+        return varDeclJp;
+    }
+
+    @Override
+    public AStatement[] getStmtsArrayImpl() {
+        return selectStmt().toArray(new AStatement[0]);
+    }
+
+    @Override
+    public AStatement getFirstStmtImpl() {
+        AStatement[] stmts = getStmtsArrayImpl();
+
+        if (stmts.length == 0) {
+            return null;
+        }
+
+        return stmts[0];
+
+    }
+
+    @Override
+    public AStatement getLastStmtImpl() {
+        AStatement[] stmts = getStmtsArrayImpl();
+
+        if (stmts.length == 0) {
+            return null;
+        }
+
+        return stmts[stmts.length - 1];
     }
 }

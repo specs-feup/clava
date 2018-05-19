@@ -13,154 +13,97 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
-import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 
 public class BuiltinType extends Type {
 
-    private final List<BuiltinTypeKeyword> keywords;
-    private final String otherBuiltins;
+    /// DATAKEYS BEGIN
 
-    public BuiltinType(TypeData typeData, ClavaNodeInfo info) {
-        super(typeData, info, Collections.emptyList());
+    // public final static DataKey<Integer> KIND_ORDINAL = KeyFactory.integer("kindOrdinal", -1);
+    /**
+     * The kind of the built-in.
+     */
+    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class);
 
-        keywords = buildKeywords(typeData.getBareType());
-        otherBuiltins = buildOtherBuiltins(typeData.getBareType());
+    /**
+     * Optional, the literal code for this built-in type.
+     */
+    public final static DataKey<String> KIND_LITERAL = KeyFactory.string("kindLiteral");
+
+    /// DATAKEYS END
+
+    public BuiltinType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private static List<BuiltinTypeKeyword> buildKeywords(String bareType) {
+    /**
+     * @deprecated for legacy support
+     * @param data
+     * @param info
+     * @param children
+     */
+    @Deprecated
+    protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+        this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
 
-        if (bareType.startsWith("<") && bareType.endsWith(">")) {
-            return Collections.emptyList();
-        }
-
-        try {
-            List<BuiltinTypeKeyword> keywords = Arrays.stream(bareType.split(" "))
-                    .filter(type -> !type.isEmpty())
-                    .map(type -> BuiltinTypeKeyword.getHelper().valueOf(type))
-                    .collect(Collectors.toList());
-            return keywords;
-        } catch (Exception e) {
-            throw new RuntimeException("Could not decode type '" + bareType, e);
-        }
-
-    }
-
-    private String buildOtherBuiltins(String bareType) {
-        if (bareType.startsWith("<") && bareType.endsWith(">")) {
-            return bareType;
-        }
-
-        return null;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new BuiltinType(getTypeData(), getInfo());
+        // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
+        put(KIND_LITERAL, data.getBareType());
     }
 
     @Override
     public String getCode(String name) {
-        // String type = getBareType();
-        String type = keywords.stream()
-                .map(keyword -> keyword.getCode())
-                .collect(Collectors.joining(" "));
+
+        // Give priority to kind literal
+        String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
+
+        // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
+        // boolean isCxx = getData().getStandard().isCxx();
+        // String type = getKind().getCode();
 
         String varName = name == null ? "" : " " + name;
         return type + varName;
-        /*
-        if (name == null) {
-            return type;
-        }
-        
-        return type + " " + name;
-        */
     }
 
-    public List<BuiltinTypeKeyword> getKeywords() {
-        return keywords;
+    public BuiltinType setKindLiteral(String literalKind) {
+        getData().put(KIND_LITERAL, literalKind);
+        return this;
     }
 
-    public Optional<String> getOtherBuiltins() {
-        return Optional.of(otherBuiltins);
-    }
+    // public BuiltinKind getKind() {
+    // public BuiltinKindV2 getKind() {
+    // return get(KIND);
+    // }
 
+    /**
+     * TODO: Remove this method, move to IntegerLiteral (only use), used BuiltinKind
+     */
+    /*
     @Override
     public String getConstantCode(String constant) {
-        if (keywords.contains(BuiltinTypeKeyword.UNSIGNED)) {
+        boolean isUnsigned = getKind().isUnsigned();
+    
+        if (isUnsigned) {
             // if (getBareType().startsWith("unsigned")) {
             return constant + "u";
         }
-
+    
         return constant;
-        // System.out.println("TYPE:" + getType());
-        // switch (getType()) {
-        // case "unsigned int":
-        // case "unsigned long":
-        // case "unsigned long long":
-        // return constant + "u";
-        // default:
-        // return constant;
-        // }
-
+    
     }
+    */
 
-    public boolean isVoid() {
-        // If return type is not void, add return
-        boolean hasVoid = getKeywords().stream()
-                .filter(keyword -> keyword == BuiltinTypeKeyword.VOID)
-                .findAny()
-                .isPresent();
-
-        if (getKeywords().size() > 1) {
-            SpecsLogs.msgInfo("'void' type has more than one keyword, check if ok: " + getKeywords());
-        }
-
-        return hasVoid;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((getTypeData() == null) ? 0 : getTypeData().hashCode());
-        result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
-
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        BuiltinType other = (BuiltinType) obj;
-
-        if (keywords == null) {
-            if (other.keywords != null) {
-                return false;
-            }
-        } else if (!keywords.equals(other.keywords)) {
-            return false;
-        }
-
-        return true;
-    }
+    // public boolean isVoid() {
+    // return getKind() == BuiltinKind.VOID;
+    // }
 
 }

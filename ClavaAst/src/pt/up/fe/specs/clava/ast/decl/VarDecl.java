@@ -17,19 +17,25 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.data.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
+import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.language.TLSKind;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -39,6 +45,34 @@ import pt.up.fe.specs.util.SpecsCollections;
  *
  */
 public class VarDecl extends DeclaratorDecl {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
+            .enumeration("storageClass", StorageClass.class)
+            .setDefault(() -> StorageClass.NONE);
+
+    public final static DataKey<TLSKind> TLS_KIND = KeyFactory
+            .enumeration("tlsKind", TLSKind.class)
+            .setDefault(() -> TLSKind.NONE);
+
+    public final static DataKey<Boolean> IS_MODULE_PRIVATE = KeyFactory.bool("isModulePrivate");
+
+    public final static DataKey<Boolean> IS_NRVO_VARIABLE = KeyFactory.bool("isNRVOVariable");
+
+    public final static DataKey<InitializationStyle> INIT_STYLE = KeyFactory
+            .enumeration("initStyle", InitializationStyle.class)
+            .setDefault(() -> InitializationStyle.NO_INIT);
+
+    public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
+
+    public final static DataKey<Boolean> IS_STATIC_DATA_MEMBER = KeyFactory.bool("isStaticDataMember");
+
+    public final static DataKey<Boolean> IS_OUT_OF_LINE = KeyFactory.bool("isOutOfLine");
+
+    public final static DataKey<Boolean> HAS_GLOBAL_STORAGE = KeyFactory.bool("hasGlobalStorage");
+
+    /// DATAKEYS END
 
     private final VarDeclData data;
 
@@ -61,6 +95,7 @@ public class VarDecl extends DeclaratorDecl {
 
     @Override
     public String getCode() {
+
         StringBuilder code = new StringBuilder();
 
         StorageClass storageClass = getVarDeclData().getStorageClass();
@@ -68,7 +103,7 @@ public class VarDecl extends DeclaratorDecl {
             code.append(getVarDeclData().getStorageClass().getString()).append(" ");
         }
 
-        code.append(getType().getCode(getDeclName()));
+        code.append(getType().getCode(getDeclNameCode()));
         code.append(getInitializationCode());
 
         return code.toString();
@@ -81,7 +116,26 @@ public class VarDecl extends DeclaratorDecl {
      */
     @Override
     public String getTypelessCode() {
-        return getDeclName() + getInitializationCode();
+        return getDeclNameCode() + getInitializationCode();
+    }
+
+    private String getDeclNameCode() {
+        String name = getDeclName();
+
+        // if (!getVarDeclData().hasVarDeclDumperInfo()) {
+        if (!getVarDeclData().hasVarDeclV2()) {
+            return name;
+        }
+
+        // Check if it is a static member outside of the record
+        if (getVarDeclData().isStaticDataMember()
+                && getVarDeclData().isOutOfLine()) {
+            name = getVarDeclData().getQualifiedName()
+                    .orElseThrow(
+                            () -> new RuntimeException("Expected qualified name to be defined for VarDecl.\n " + this));
+        }
+
+        return name;
     }
 
     public String getInitializationCode() {
@@ -93,9 +147,23 @@ public class VarDecl extends DeclaratorDecl {
             return "";
         case CALL_INIT:
             return callInitCode();
+        case LIST_INIT:
+            return listInitCode();
         default:
             throw new RuntimeException("Case not defined:" + data.getInitKind());
         }
+    }
+
+    private String listInitCode() {
+        // Must be present
+        Expr initList = getInit().get();
+        SpecsCheck.checkArgument(initList instanceof InitListExpr,
+                () -> "Expected argument to be an instance of " + InitListExpr.class + ", it is a "
+                        + initList.getClass());
+
+        return initList.getCode();
+        // return getInit().map(ClavaNode::getCode)
+        // .orElseThrow(() -> new RuntimeException());
     }
 
     public boolean hasInit() {
@@ -116,7 +184,32 @@ public class VarDecl extends DeclaratorDecl {
      * @return
      */
     private String cinitCode() {
-        return " = " + getChild(0).getCode();
+        String prefix = " = ";
+
+        // return " = " + getChild(0).getCode();
+
+        Expr initExpr = getInit().get();
+
+        // Special case: CXXConstructorExpr without args
+        // if (initExpr instanceof CXXConstructExpr) {
+        // if (((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
+        // return prefix + " {}";
+        // }
+        // }
+
+        // Special case: InitListExpr
+        // if (initExpr instanceof InitListExpr) {
+        // InitListExpr initListExpr = (InitListExpr) initExpr;
+        // List<Expr> initExprs = initListExpr.getInitExprs();
+        //
+        // if (initExprs.size() == 1) {
+        // if (initExprs.get(0) instanceof InitListExpr) {
+        // return prefix + initExprs.get(0).getCode();
+        // }
+        // }
+        // }
+
+        return prefix + initExpr.getCode();
     }
 
     private String callInitCode() {

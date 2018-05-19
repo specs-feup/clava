@@ -18,7 +18,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 
 public class CxxMemberAccess extends AMemberAccess {
@@ -43,8 +43,8 @@ public class CxxMemberAccess extends AMemberAccess {
     }
 
     @Override
-    public AJoinPoint getBaseImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(memberExpr.getBase()), this);
+    public AExpression getBaseImpl() {
+        return CxxJoinpoints.create(ClavaNodes.normalize(memberExpr.getBase()), this, AExpression.class);
     }
 
     @Override

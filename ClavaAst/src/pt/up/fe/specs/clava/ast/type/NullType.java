@@ -13,11 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
  * Represents an 'empty' node type, to be used, for instance, in cases where type is optional, or when type could not be
@@ -28,19 +29,32 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  * @author JoaoBispo
  *
  */
-public class NullType extends Type {
+public class NullType extends Type implements NullNode {
 
-    public NullType(ClavaNodeInfo info) {
-        super(new TypeData("<null type>"), info, Collections.emptyList());
+    // public NullType(ClavaNodeInfo info) {
+    // this(new LegacyToDataStore()
+    // .setType(new TypeData("<null type>"))
+    // .setNodeInfo(info)
+    // .getData(),
+    // Collections.emptyList());
+    // // super(new TypeData("<null type>"), info, Collections.emptyList());
+    // }
+
+    public NullType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new NullType(getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new NullType(getInfo());
+    // }
 
     @Override
-    public String getCode() {
+    public String getCode(String name) {
+        if (name != null) {
+            return getBareType() + " " + name;
+        }
+
         return getBareType();
     }
 

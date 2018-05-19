@@ -13,30 +13,22 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.LiteralNode;
 
-public class LiteralType extends Type {
+public class LiteralType extends Type implements LiteralNode {
 
-    public LiteralType(String literalType) {
-        this(literalType, ClavaNodeInfo.undefinedInfo());
-    }
-
-    private LiteralType(String literalType, ClavaNodeInfo info) {
-        super(new TypeData(literalType), info, Collections.emptyList());
+    public LiteralType(DataStore nodeData, Collection<? extends ClavaNode> children) {
+        super(nodeData, children);
     }
 
     @Override
-    protected ClavaNode copyPrivate() {
-        return new LiteralType(getBareType(), getInfo());
-    }
-
-    @Override
-    public String getCode() {
-        return getBareType();
+    public String getCode(String name) {
+        return getLiteralCode() + " " + name;
     }
 
 }

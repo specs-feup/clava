@@ -77,7 +77,7 @@ public class CxxTest {
 
     @Test
     public void testArrayAccess() {
-        newTester().test("ArrayAccess.lara", "array_access.cpp");
+        newTester().test("ArrayAccess.lara", "array_access.cpp", "array_access.h");
     }
 
     @Test
@@ -127,7 +127,7 @@ public class CxxTest {
 
     @Test
     public void testExpressions() {
-        newTester().test("Expressions.lara", "expressions.cpp");
+        newTester().test("Expressions.lara", "expressions.cpp", "classA.h");
     }
 
     @Test
@@ -158,6 +158,37 @@ public class CxxTest {
 
     @Test
     public void testMacros() {
-        newTester().setCheckWeavedCodeSyntax(false).test("Macros.lara", "macros.cpp");
+        newTester().setCheckWovenCodeSyntax(false).test("Macros.lara", "macros.cpp");
     }
+
+    @Test
+    public void testCall() {
+        newTester().test("Call.lara", "call.cpp");
+    }
+
+    @Test
+    public void testPragmaClavaAttribute() {
+        newTester().test("PragmaAttribute.lara", "pragma_attribute.cpp");
+    }
+
+    @Test
+    public void testTypeTemplate() {
+        newTester().test("TypeTemplate.lara", "type_template.cpp");
+    }
+
+    @Test
+    public void testFunction() {
+        newTester().test("Function.lara", "function.cpp", "function.h");
+    }
+
+    @Test
+    public void testAstAttributes() {
+        newTester().test("AstAttributes.lara", "ast_attributes.cpp");
+    }
+
+    // @Test
+    // public void testClass() {
+    // newTester().test("Class.lara", "class.cpp");
+    // }
+
 }

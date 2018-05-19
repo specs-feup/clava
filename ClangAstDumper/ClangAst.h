@@ -96,24 +96,37 @@ public:
 class DumpAstVisitor : public RecursiveASTVisitor<DumpAstVisitor> {
 
 public:
+    //explicit DumpAstVisitor(ASTContext *Context, int id, ClangAstDumper *dumper) : Context(Context) , id(id), dumper(dumper) {}
     explicit DumpAstVisitor(ASTContext *Context, int id) : Context(Context) , id(id) {}
     bool TraverseDecl(Decl *D);
 
 private:
     ASTContext *Context;
     int id;
+    //ClangAstDumper dumper;
+    //ClangAstDumper *dumper;
 };
 
 
 class PrintNodesTypesRelationsVisitor : public RecursiveASTVisitor<PrintNodesTypesRelationsVisitor> {
 
+private:
+    ASTContext *Context;
+    int id;
+    ClangAstDumper dumper;
+    //ClangAstDumper *dumper;
+    std::set<void *> seenNodes;
+
 public:
-    explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id);
+    //explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper *dumper);
+    explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper dumper);
+    //bool TraverseDecl(Decl *D);
 
     bool VisitOMPExecutableDirective(OMPExecutableDirective * D);
     //bool VisitDeclRefExpr(DeclRefExpr * D);
     bool VisitCXXConstructExpr(CXXConstructExpr * D);
     bool VisitExpr(Expr *D);
+    bool VisitLambdaExpr(LambdaExpr *D);
     bool VisitTypeDecl(TypeDecl *D);
     bool VisitTypedefNameDecl(TypedefNameDecl *D);
     bool VisitEnumDecl(EnumDecl *D);
@@ -134,14 +147,7 @@ public:
 
     void dumpNodeToType(std::ofstream &stream, void* nodeAddr, const QualType& type, bool checkDuplicates = true);
 
-
-
-        private:
-    ASTContext *Context;
-    int id;
-    ClangAstDumper dumper;
-
-    std::set<void *> seenNodes;
+    //ClangAstDumper getDumper();
 
 };
 
@@ -150,12 +156,15 @@ public:
 class MyASTConsumer : public ASTConsumer {
 
 private:
+
+    int id;
+    //ClangAstDumper dumper;
     DumpAstVisitor topLevelDeclVisitor;
     PrintNodesTypesRelationsVisitor printRelationsVisitor;
-    int id;
 
-public:
-    MyASTConsumer(ASTContext *C, int id);
+    public:
+    MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper);
+    //MyASTConsumer(ASTContext *C, int id, ClangAstDumper *dumper);
     ~MyASTConsumer();
 
 

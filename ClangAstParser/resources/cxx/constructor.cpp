@@ -1,3 +1,5 @@
+#include "constructor.h"
+
 #include <string>
 
 struct X {

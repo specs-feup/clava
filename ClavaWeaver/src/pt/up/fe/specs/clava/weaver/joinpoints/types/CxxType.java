@@ -13,7 +13,11 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
-import pt.up.fe.specs.clava.ast.type.ArrayType;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
@@ -58,14 +62,16 @@ public class CxxType extends AType {
         return ((ConstantArrayType) type).getConstant();
     }
 
+    /*
     @Override
     public AJoinPoint getElementTypeImpl() {
         if (type instanceof ArrayType) {
             return CxxJoinpoints.create(((ArrayType) type).getElementType(), this);
         }
-
+    
         return this;
     }
+    */
 
     @Override
     public Boolean getHasTemplateArgsImpl() {
@@ -73,13 +79,14 @@ public class CxxType extends AType {
     }
 
     @Override
-    public String[] getTemplateArgsArrayImpl() {
-        return type.getTemplateArgs().toArray(new String[0]);
+    public String[] getTemplateArgsStringsArrayImpl() {
+        return type.getTemplateArgumentStrings().toArray(new String[0]);
     }
 
     @Override
     public Boolean getHasSugarImpl() {
-        return type.getTypeData().hasSugar();
+        // return type.getTypeData().hasSugar();
+        return type.hasSugar();
     }
 
     @Override
@@ -107,4 +114,48 @@ public class CxxType extends AType {
         return type instanceof PointerType;
     }
 
+    @Override
+    public AType getUnwrapImpl() {
+        Type unwrappedType = Types.getSingleElement(type);
+
+        if (unwrappedType == null) {
+            return null;
+        }
+
+        return (AType) CxxJoinpoints.create(unwrappedType, this);
+    }
+
+    @Override
+    public Boolean getIsTopLevelImpl() {
+        // Type is top-level if it has not parent
+        return !type.hasParent();
+    }
+
+    @Override
+    public AType[] getTemplateArgsTypesArrayImpl() {
+        return type.getTemplateArgumentTypes().stream()
+                .map(argType -> (AType) CxxJoinpoints.create(argType, this))
+                .toArray(size -> new AType[size]);
+
+    }
+
+    @Override
+    public void defTemplateArgsTypesImpl(AType[] value) {
+        List<Type> argTypes = Arrays.stream(value)
+                .map(aType -> (Type) aType.getNode())
+                .collect(Collectors.toList());
+
+        type.setTemplateArgumentTypes(argTypes);
+
+    }
+
+    @Override
+    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
+        defTemplateArgsTypesImpl(templateArgTypes);
+    }
+
+    @Override
+    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
+        type.setTemplateArgumentType(index, (Type) templateArgType.getNode());
+    }
 }

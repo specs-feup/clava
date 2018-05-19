@@ -13,9 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
+import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
+
 public class TypeData {
 
-    private final String bareType;
+    private String bareType;
     private final boolean hasSugar;
     private final boolean isDependent;
     private final TypeDependency typeDependency;
@@ -75,6 +77,10 @@ public class TypeData {
 
     public boolean isFromAst() {
         return isFromAst;
+    }
+
+    public void setBareType(String bareType) {
+        this.bareType = bareType;
     }
 
     /**
@@ -144,6 +150,21 @@ public class TypeData {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        string.append("Bare type: ").append(bareType);
+        string.append(", has sugar: ").append(hasSugar);
+        string.append(", is dependent: ").append(isDependent);
+        string.append(", type dependendy: ").append(typeDependency);
+        string.append(", is variably modified: ").append(isVariablyModified);
+        string.append(", contains unexpanded parameter pack: ").append(containsUnexpandedParameterPack);
+        string.append(", is from AST: ").append(isFromAst);
+
+        return string.toString();
     }
 
 }

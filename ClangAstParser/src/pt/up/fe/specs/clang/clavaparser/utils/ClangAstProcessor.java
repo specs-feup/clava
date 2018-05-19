@@ -97,11 +97,28 @@ public class ClangAstProcessor {
 
         // Collect all addresses of CXXRecordDecls
         // Get stream with all the nodes in the tree
+
+        // Check duplicates
+        // AccumulatorMap<String> acc = new AccumulatorMap<>();
+        //
+        // clangDump.getDescendantsStream()
+        // // Get all CXXRecordDecl
+        // .filter(node -> node.getName().equals("CXXRecordDecl"))
+        // // Remove nodes without address
+        // .filter(node -> node.hasId())
+        // .forEach(node -> acc.add(node.getExtendedId()));
+        //
+        // System.out.println("ACC MAP:" + acc);
+
+        Set<String> seenNodes = new HashSet<>();
+
         Map<String, ClangNode> records = clangDump.getDescendantsStream()
                 // Get all CXXRecordDecl
                 .filter(node -> node.getName().equals("CXXRecordDecl"))
                 // Remove nodes without address
                 .filter(node -> node.hasId())
+                // Filter duplicates
+                .filter(node -> seenNodes.add(node.getExtendedId()))
                 // Build map
                 .collect(Collectors.toMap(node -> node.getExtendedId(), node -> node));
 

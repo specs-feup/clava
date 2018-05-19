@@ -1,4 +1,4 @@
-
+#include "array_access.h"
 
 int main() {
 
@@ -18,7 +18,19 @@ int main() {
     
     a3[b3[3][4][5]][2][3] = 0;
 
+	double (*a4)[10][10];
+	int i, *j;
+	(*a4)[i][*j] = 0;
 	
-	
-	    
+
+	A aArray[10];
+	aArray[0].b[0].value = 0;
+
+	B bInstance;
+	aArray[0].b[1] = bInstance;
+
+	A aInstance;
+	aInstance.b[2].value = 1;
+	aInstance.b[3] = bInstance;
+	aInstance.value[0] = 2;
 }

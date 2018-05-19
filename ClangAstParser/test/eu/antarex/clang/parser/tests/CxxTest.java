@@ -49,7 +49,7 @@ public class CxxTest {
 
     @Test
     public void testConstructor() {
-        new CxxTester("constructor.cpp").test();
+        new CxxTester("constructor.cpp", "constructor.h").test();
     }
 
     @Test
@@ -155,6 +155,41 @@ public class CxxTest {
     @Test
     public void testClassTemplate() {
         new CxxTester("class_template.cpp", "class_template.h").test();
+    }
+
+    @Test
+    public void testBuiltinTypes() {
+        new CxxTester("builtin_types.cpp").test();
+    }
+
+    @Test
+    public void testLambda() {
+        new CxxTester("lambda.cpp").showClavaAst().addFlags("-std=c++14").test();
+    }
+
+    @Test
+    public void testDblmax() {
+        new CxxTester("dbl_max.cpp").test();
+    }
+
+    @Test
+    public void testGnuExtensions() {
+        new CxxTester("gnu_extensions.cpp").addFlags("-std=gnu++11").test();
+    }
+
+    @Test
+    public void testSizeof() {
+        new CxxTester("sizeof.cpp").test();
+    }
+
+    @Test
+    public void testIncludes() {
+        new CxxTester("includes.cpp", "includes.h", "includes2.h", "includes2.cpp").test();
+    }
+
+    @Test
+    public void testAttribute() {
+        new CxxTester("attribute.cpp").test();
     }
 
 }

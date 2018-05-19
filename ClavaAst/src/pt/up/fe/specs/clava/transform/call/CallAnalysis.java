@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Literal;
+import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
@@ -52,6 +53,7 @@ public class CallAnalysis {
         ALLOWED_NODES.add(UnaryOperator.class);
         ALLOWED_NODES.add(LoopStmt.class);
         ALLOWED_NODES.add(ReturnStmt.class);
+        ALLOWED_NODES.add(ParenExpr.class);
     }
 
     public CallAnalysis() {

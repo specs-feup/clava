@@ -58,16 +58,24 @@ public class UserDefinedLiteral extends CallExpr {
 
     @Override
     public String getCode() {
+        return getLiteral();
+        /*
+        if (getCookedLiteralExpr().hasDataI()) {
+            return getLiteral();
+        }
+        
         StringBuilder code = new StringBuilder();
-
+        
         code.append(getLiteral());
+        
         String calleeName = getCalleeName();
         Preconditions.checkArgument(calleeName.startsWith(OPERATOR_PREFIX),
                 "Expected calleeName to start with '" + OPERATOR_PREFIX + "', instead is '" + calleeName + "'");
-
+        
         code.append(calleeName.substring(OPERATOR_PREFIX.length()));
-
+        
         return code.toString();
+        */
     }
 
 }

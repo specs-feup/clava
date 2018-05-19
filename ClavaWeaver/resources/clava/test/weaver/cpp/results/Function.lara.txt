@@ -1,0 +1,13 @@
+Max is inline: true
+MaxNoInline is inline: false
+Function new name: declOnlyNew
+Function new name: defOnlyNew
+Function new name: declAndDefNew
+Function new name: notCalledNew
+Caller body:  {
+declOnlyNew();
+defOnlyNew();
+declAndDefNew();
+A a;
+a.declOnly();
+}

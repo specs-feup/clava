@@ -46,6 +46,13 @@ public class ClangTypesParser {
 
         for (ClangNode clangType : clangTypes) {
 
+            // Check if node has been already parsed
+            // if (types.containsKey(clangType.getExtendedId())) {
+            // continue;
+            // }
+            //
+            // System.out.println("ID:" + clangType.getExtendedId());
+
             // Parse node
             ClavaNode clavaNode = converter.parse(clangType);
 

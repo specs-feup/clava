@@ -1,0 +1,16 @@
+/**** File 'set_type.c' ****/
+
+double const constDouble = 0.0;
+
+double fooType(int a, double b);
+
+int fooType2(int a, double b);
+
+int fooType3(double a, double b);
+
+double fooType(int a, double b) {
+   
+   return a + (int) b;
+}
+
+/**** End File ****/

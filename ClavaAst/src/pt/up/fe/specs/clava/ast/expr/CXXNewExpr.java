@@ -28,7 +28,7 @@ import pt.up.fe.specs.util.SpecsCollections;
 /**
  * Represents a new-expression e.g: "new Object(foo)".
  * 
- * @author João Bispo
+ * @author Joï¿½o Bispo
  *
  */
 public class CXXNewExpr extends Expr {
@@ -120,8 +120,21 @@ public class CXXNewExpr extends Expr {
         }
 
         Optional<Expr> constructorExpr = getConstructorExpr();
+
         if (constructorExpr.isPresent()) {
-            code.append(constructorExpr.get().getCode());
+            // Special case: literal
+            Expr expr = constructorExpr.get();
+            if (expr instanceof Literal) {
+                Type exprType = getExprType();
+                if (Types.isPointer(exprType)) {
+                    exprType = Types.getPointeeType(exprType);
+                }
+
+                code.append(exprType.getCode()).append("(").append(expr.getCode()).append(")");
+            } else {
+                code.append(expr.getCode());
+            }
+
         } else {
             Type exprType = getExprType();
             if (Types.isPointer(exprType)) {

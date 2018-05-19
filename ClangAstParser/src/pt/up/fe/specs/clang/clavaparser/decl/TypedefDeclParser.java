@@ -54,11 +54,15 @@ public class TypedefDeclParser extends AClangNodeParser<TypedefDecl> {
         String typedefSource = getStdErr().get(StreamKeys.TYPEDEF_DECL_SOURCE).getOrDefault(node.getExtendedId(), null);
 
         List<ClavaNode> children = parseChildren(node);
+        checkNumChildren(children, 1);
+        Type underlyingType = toType(children.get(0));
+        // System.out.println("TYPEDEFDECL CHILDREN:" + children);
         // List<ClavaNode> children = node.getChildrenStream()
         // .map(child -> getConverter().parse(child))
         // .collect(Collectors.toList());
 
-        return ClavaNodeFactory.typedefDecl(typedefSource, isModulePrivate, name, type, declData, info(node), children);
+        return ClavaNodeFactory.typedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData,
+                info(node));
     }
 
 }

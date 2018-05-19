@@ -9,12 +9,22 @@ include("../deps.cmake")
 # Add Modules
 deps_find_package(llvm3.8 REQUIRED) # LLVM
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -static-libgcc -static-libstdc++")
+set(COMMON_CXX_FLAGS "-std=c++11 -O3")
 
-# For Centos
+if(SYSTEM_PLATFORM STREQUAL "MacOS")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -stdlib=libc++")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -static-libgcc -static-libstdc++")
+endif()
+
+
+#Enable debug
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG")
+
+# For CentOS and macOS
 # Set SYSTEM_PLATFORM in deps_config.cmake
-if(SYSTEM_PLATFORM STREQUAL "Centos")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS")
+if(SYSTEM_PLATFORM STREQUAL "Centos" OR SYSTEM_PLATFORM STREQUAL "MacOS")
+  	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS")
 endif()
 
 
@@ -23,16 +33,15 @@ set(SOURCE_FILES
 		main.cpp
 		ClangAst.cpp
 		ClangAstDumper.cpp
-		#ClangAstDumper.h
 		ClangAstDumperTypes.cpp
 		ClangAstDumperStmts.cpp
 		ClangAstDumperDecls.cpp
-		ClangAstDumperExtra.cpp
+        ClangAstDumperExtra.cpp
 		TypeMarker.cpp
-		#TypeMarker.h
-		#ClangAstDumperConstants.h
-		#TEst.h
-		)
+        ClavaDataDumper.cpp
+        ClavaDataDumperDecls.cpp
+    ChildrenVisitorDecls.cpp 
+    ClangNodes.cpp ClavaDataDumperStmts.cpp ClavaDataDumperTypes.cpp ClangAstDumperExprs.cpp ChildrenVisitorStmts.cpp ClavaConstants.cpp ChildrenVisitorTypes.cpp ClangEnums_3_8_1.cpp ClangastDumperAttr.cpp ChildrenVisitorAttrs.cpp ClavaDataDumperAttrs.cpp)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
 
@@ -44,4 +53,4 @@ target_include_directories(ClangAstDumper
 # Add Libraries
 target_link_libraries(ClangAstDumper
         ${DEPS_LIBRARIES}
-        )
+)

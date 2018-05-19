@@ -26,9 +26,13 @@ import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -38,8 +42,12 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeleteExpr;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberCall;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANewExpr;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
@@ -116,15 +124,21 @@ public class CxxStatement extends AStatement {
             return Collections.emptyList();
         }
 
-        return Arrays.asList((CxxCall) CxxJoinpoints.create((CallExpr) expr, this));
+        return Arrays.asList((ACall) CxxJoinpoints.create((CallExpr) expr, this));
     }
 
     @Override
     public List<? extends ACall> selectCall() {
         return stmt.getDescendantsAndSelfStream()
                 .filter(node -> node instanceof CallExpr)
-                .map(loop -> (CxxCall) CxxJoinpoints.create(loop, this))
+                .map(loop -> (ACall) CxxJoinpoints.create(loop, this))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<? extends AMemberCall> selectMemberCall() {
+        return CxxSelects.select(AMemberCall.class, stmt.getChildren(), true, this,
+                node -> node instanceof CXXMemberCallExpr);
     }
 
     @Override
@@ -152,7 +166,7 @@ public class CxxStatement extends AStatement {
                 .filter(ArraySubscriptExpr.class::isInstance)
                 .map(ArraySubscriptExpr.class::cast)
                 .filter(CxxStatement::isTopLevelArraySubscript)
-                .map(arraySub -> (CxxArrayAccess) CxxJoinpoints.create(arraySub, this))
+                .map(arraySub -> (AArrayAccess) CxxJoinpoints.create(arraySub, this))
                 .collect(Collectors.toList());
 
     }
@@ -233,6 +247,21 @@ public class CxxStatement extends AStatement {
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
         return CxxSelects.select(AUnaryOp.class, stmt.getChildrenNormalized(), true, this, UnaryOperator.class);
+    }
+
+    @Override
+    public List<? extends ANewExpr> selectNewExpr() {
+        return CxxSelects.select(ANewExpr.class, stmt.getChildrenNormalized(), true, this, CXXNewExpr.class);
+    }
+
+    @Override
+    public List<? extends ADeleteExpr> selectDeleteExpr() {
+        return CxxSelects.select(ADeleteExpr.class, stmt.getChildrenNormalized(), true, this, CXXDeleteExpr.class);
+    }
+
+    @Override
+    public List<? extends AMemberAccess> selectMemberAccess() {
+        return CxxSelects.select(AMemberAccess.class, stmt.getChildrenNormalized(), true, this, MemberExpr.class);
     }
 
 }

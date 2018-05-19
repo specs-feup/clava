@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.expr.data;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class ExprData {
@@ -40,6 +42,10 @@ public class ExprData {
         this.objectKind = objectKind;
     }
 
+    public ExprData copy() {
+        return new ExprData(type, valueKind, objectKind);
+    }
+
     public Type getType() {
         return type;
     }
@@ -58,7 +64,7 @@ public class ExprData {
 
     @Override
     public String toString() {
-        return "ValueKind:" + valueKind + "; ObjectKind:" + objectKind + "; Type:" + type.getCode();
+        return "ValueKind:" + valueKind + ", ObjectKind:" + objectKind + ", Type:" + type.getCode();
     }
 
     /**

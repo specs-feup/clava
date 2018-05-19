@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -39,6 +40,33 @@ public class SubstTemplateTypeParmType extends Type {
 
     public boolean isSugared() {
         return true;
+    }
+
+    public TemplateTypeParmType getReplaceParameter() {
+        return getChild(TemplateTypeParmType.class, 0);
+    }
+
+    public Type getReplacementType() {
+        return getChild(Type.class, 1);
+    }
+
+    public void setReplacementType(Type replacementType) {
+        setChild(1, replacementType);
+    }
+
+    @Override
+    protected Type desugarImpl() {
+        return getReplacementType();
+    }
+
+    @Override
+    protected void setDesugarImpl(Type desugaredType) {
+        setReplacementType(desugaredType);
+    }
+
+    @Override
+    public List<Type> getTemplateArgumentTypes() {
+        return Arrays.asList(getReplacementType());
     }
 
 }

@@ -1,0 +1,144 @@
+import clava.Clava;
+
+/**
+ * @class
+ */
+var ClavaJoinPoints = {};
+
+/**
+ * @param {J#ClavaNode} node - A node of the AST.
+ */
+ClavaJoinPoints.create = function(node) {
+	// Check instance
+	checkTrue(Java.type("pt.up.fe.specs.clava.ClavaNode").class.isInstance(node), "ClavaJoinPoints.create::node: Expected input to be a ClavaNode");
+	return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node, null);
+}
+
+/**
+ * @return true, if the two join points are equal, in the sense that the underlying AST nodes are also equal, according to their .equals() method (might return true for different AST nodes).
+ */
+ClavaJoinPoints.equals = function(jp1, jp2) {
+	return jp1.equals(jp2);
+}
+
+ClavaJoinPoints.builtinType = function(code) {
+	//return Clava.getFactory().builtinType(code);
+	return AstFactory.builtinType(code);
+}
+
+/**
+ * Builds an array type of constant dimensions.
+ * 
+ * type - Mandatory. Represents the inner type of the array. Can be either a string or a Type join point. A string will be converted to a literal type.
+ * dims - Mandatory. Represents the dimensions of the array. Can be either a JavaScript array or variadic integers which are converted to a JavaScript array.
+ **/
+ClavaJoinPoints.constArrayType = function(type, dims) {
+	
+	checkDefined(type, 'type', 'ClavaJoinPoints.constArrayType');
+	checkDefined(dims, 'dims', 'ClavaJoinPoints.constArrayType');
+	
+	if(!Array.isArray(dims)) {
+		dims = arrayFromArgs(arguments, 1);
+	}
+	
+	var typeofType = typeof type;
+	
+	if(typeofType === "string") {
+		
+		return AstFactory.constArrayType(type, Clava.getStandard(), dims);
+	} else if(Java.type("pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType").class.isInstance(type)) {
+		
+		return AstFactory.constArrayType(type.getNode(), Clava.getStandard(), dims);
+	} else {
+		
+		throw 'ClavaJoinPoints.constArrayType: illegal argument "type", needs to be either a string or a type join point';
+	}
+}
+
+ClavaJoinPoints.exprLiteral = function(code, type) {
+	var typeofType = typeof type;
+
+	if(type === undefined) {
+		return AstFactory.exprLiteral(code);
+	}
+	
+	if(typeofType === "string") {
+		type = ClavaJoinPoints.builtinType(type);
+	}
+	
+
+	
+	return AstFactory.exprLiteral(code, type);
+
+}; 
+
+/**
+ * @param {string} varName
+ * @param {joinpoint} init
+ * */
+ClavaJoinPoints.varDecl = function(varName, init) {
+	return AstFactory.varDecl(varName, init);
+}
+
+/**
+ * @param {string} varName
+ * @param {Type} type
+ * */
+ClavaJoinPoints.varDeclNoInit = function(varName, type) {
+	return AstFactory.varDeclNoInit(varName, type);
+}
+
+/**
+ * Creates a new literal join point 'type'.
+ *
+ * @param {string} typeString The literal code of the type
+ */
+ClavaJoinPoints.typeLiteral = function(typeString) {
+	return AstFactory.typeLiteral(typeString);
+}
+
+/**
+ * Creates a new join point 'file'.
+ *
+ * @param {string} filename The name of the file
+ * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. 
+ */
+ClavaJoinPoints.file = function(filename, path) {
+	if(path === undefined) {
+		path = '';
+	}
+	
+	return AstFactory.file(filename, path);
+}
+
+/**
+ * Creates a new literal join point 'stmt'.
+ *
+ * @param {string} stmtString The literal code of the statement.
+ */
+ClavaJoinPoints.stmtLiteral = function(stmtString) {
+	return AstFactory.stmtLiteral(stmtString);
+}
+
+/**
+ * Creates a new join point 'call'. 
+ *
+ * @param {$function} $function - The literal code of the statement.
+ * @param {...$expression} arguments - The arguments of the function.
+ */
+ClavaJoinPoints.call = function($function) {
+	var callArgs = arrayFromArgs(arguments, 1);
+	return AstFactory.stmtLiteral($function, callArgs);
+}
+
+/**
+ * Creates a new join point 'switch'
+ *
+ * @param {$function} $function - The literal code of the statement.
+ * @param {...$expression} cases - An even number of expression join points, each pair representing the case value and expression, respectively.
+ */
+ClavaJoinPoints.switchStmt = function($conditionExpr) {
+	var cases = arrayFromArgs(arguments, 1);
+	return AstFactory.switchStmt($conditionExpr, cases);
+}
+
