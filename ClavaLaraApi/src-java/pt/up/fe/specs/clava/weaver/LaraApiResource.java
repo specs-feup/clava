@@ -24,6 +24,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     // OpenCL
     OPENCL_CALL("opencl/OpenCLCall.lara"),
     OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
+    OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
 
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),

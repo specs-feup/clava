@@ -36,6 +36,7 @@ public class ClavaPragmas {
     static {
         CLAVA_DIRECTIVES_MAP = new HashMap<>();
         CLAVA_DIRECTIVES_MAP.put("attribute", AttributeDirective::parse);
+        // CLAVA_DIRECTIVES_MAP.put("opencl", OpenCLDirective::parse);
         // CLAVA_DIRECTIVES_MAP.put("attribute", content -> AttributeDirective::parse);
     }
 
@@ -67,6 +68,10 @@ public class ClavaPragmas {
         // }
 
         StringParser parser = new StringParser(clavaPragma.getContent());
+
+        if (!parser.apply(StringParsers::peekStartsWith, "def ")) {
+            return;
+        }
 
         // Check if starts with name of joinpoint
         boolean hasJoinpoint = parser.apply(StringParsers::checkStringStarts, "$").isPresent();
