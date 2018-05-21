@@ -1,2 +1,0 @@
-
-#include "ShortcutPosition.h"

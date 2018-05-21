@@ -59,7 +59,7 @@ public class CxxBenchTest {
 
     @Test
     public void testRouting() {
-        new CxxTester("bench/ShortcutPosition.cpp", "bench/ShortcutPosition.h").showCode().test();
+        new CxxTester("bench/Routing.cpp", "bench/ShortcutPosition.h").showCode().test();
     }
 
 }
