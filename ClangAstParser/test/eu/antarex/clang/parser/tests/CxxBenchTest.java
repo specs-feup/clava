@@ -42,22 +42,24 @@ public class CxxBenchTest {
         new CxxTester("bench/fast_stack.cpp").test();
     }
 
-    //@Test
+    // @Test
     public void testSortedId() {
         new CxxTester("bench/sorted_id.cpp", "bench/sorted_id.h").test();
-	}
-
+    }
 
     @Test
     public void testTemplateExpansionPack() {
         new CxxTester("bench/template_expansion_pack.cpp").test();
     }
 
-
-
     @Test
     public void testAtom() {
-        new CxxTester("bench/atom.cpp").showCode().test();
+        new CxxTester("bench/atom.cpp").test();
+    }
+
+    @Test
+    public void testRouting() {
+        new CxxTester("bench/ShortcutPosition.cpp", "bench/ShortcutPosition.h").showCode().test();
     }
 
 }
