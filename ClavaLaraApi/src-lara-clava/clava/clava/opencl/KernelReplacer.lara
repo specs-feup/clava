@@ -19,7 +19,11 @@ function KernelReplacer($call, kernelName, kernelCodePath, bufferSizes, localSiz
 	this._inOutBuffers = {};
 
 	// kernel name and source
-	this._kernelCode = readFile(kernelCodePath);
+	var kernelFile = Io.getPath(this._file.path, kernelCodePath);
+	if(!Io.isFile(kernelFile)) {
+		throw "[KernelReplacer] Cannot read OpenCL file in location " + kernelFile + " (" + kernelCodePath + ")";
+	}
+	this._kernelCode = readFile(kernelFile);
 	this._sourceStringName = undefined;
 	this._kernelName = kernelName;
 
