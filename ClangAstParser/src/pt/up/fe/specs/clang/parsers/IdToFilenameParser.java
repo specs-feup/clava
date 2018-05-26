@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.GeneralParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.GeneralParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clava.Include;

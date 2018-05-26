@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.GeneralParsers;
+
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
