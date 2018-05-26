@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clang.parsers.data;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
@@ -32,11 +32,11 @@ public class AttrDataParser {
 
         DataStore clavaData = NodeDataParser.parseNodeData(lines, dataStore);
 
-        clavaData.add(Attribute.KIND, GeneralParsers.enumFromName(AttributeKind.getHelper(), lines));
-        clavaData.add(Attribute.IS_IMPLICIT, GeneralParsers.parseOneOrZero(lines));
-        clavaData.add(Attribute.IS_INHERITED, GeneralParsers.parseOneOrZero(lines));
-        clavaData.add(Attribute.IS_LATE_PARSED, GeneralParsers.parseOneOrZero(lines));
-        clavaData.add(Attribute.IS_PACK_EXPANSION, GeneralParsers.parseOneOrZero(lines));
+        clavaData.add(Attribute.KIND, LineStreamParsers.enumFromName(AttributeKind.getHelper(), lines));
+        clavaData.add(Attribute.IS_IMPLICIT, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Attribute.IS_INHERITED, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Attribute.IS_LATE_PARSED, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Attribute.IS_PACK_EXPANSION, LineStreamParsers.parseOneOrZero(lines));
 
         return clavaData;
     }
@@ -46,7 +46,7 @@ public class AttrDataParser {
 
         data.add(AlignedAttr.SPELLING, lines.nextLine());
 
-        boolean isExpr = GeneralParsers.parseOneOrZero(lines);
+        boolean isExpr = LineStreamParsers.parseOneOrZero(lines);
         String nodeId = lines.nextLine();
 
         if (isExpr) {

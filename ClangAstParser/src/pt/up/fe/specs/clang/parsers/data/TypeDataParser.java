@@ -14,7 +14,7 @@
 package pt.up.fe.specs.clang.parsers.data;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
@@ -47,11 +47,11 @@ public class TypeDataParser {
         DataStore clavaData = NodeDataParser.parseNodeData(lines, false, dataStore);
 
         clavaData.add(Type.TYPE_AS_STRING, lines.nextLine());
-        clavaData.add(Type.HAS_SUGAR, GeneralParsers.parseOneOrZero(lines));
-        clavaData.add(Type.TYPE_DEPENDENCY, GeneralParsers.enumFromName(TypeDependency.class, lines));
-        clavaData.add(Type.IS_VARIABLY_MODIFIED, GeneralParsers.parseOneOrZero(lines));
-        clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, GeneralParsers.parseOneOrZero(lines));
-        clavaData.add(Type.IS_FROM_AST, GeneralParsers.parseOneOrZero(lines));
+        clavaData.add(Type.HAS_SUGAR, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Type.TYPE_DEPENDENCY, LineStreamParsers.enumFromName(TypeDependency.class, lines));
+        clavaData.add(Type.IS_VARIABLY_MODIFIED, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Type.IS_FROM_AST, LineStreamParsers.parseOneOrZero(lines));
 
         return clavaData;
     }
@@ -62,7 +62,7 @@ public class TypeDataParser {
 
         // data.add(BuiltinType.KIND_ORDINAL, GeneralParsers.parseInt(lines));
         // data.add(BuiltinType.KIND, GeneralParsers.enumFromValue(BuiltinKind.getHelper(), lines));
-        data.add(BuiltinType.KIND, GeneralParsers.enumFromName(BuiltinKind.class, lines));
+        data.add(BuiltinType.KIND, LineStreamParsers.enumFromName(BuiltinKind.class, lines));
         data.add(BuiltinType.KIND_LITERAL, lines.nextLine());
 
         return data;
@@ -72,10 +72,10 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, dataStore);
 
-        data.add(QualType.C99_QUALIFIERS, GeneralParsers.enumListFromName(C99Qualifier.getHelper(), lines));
-        data.add(QualType.ADDRESS_SPACE_QUALIFIER, GeneralParsers.enumFromName(AddressSpaceQualifierV2.getHelper(),
+        data.add(QualType.C99_QUALIFIERS, LineStreamParsers.enumListFromName(C99Qualifier.getHelper(), lines));
+        data.add(QualType.ADDRESS_SPACE_QUALIFIER, LineStreamParsers.enumFromName(AddressSpaceQualifierV2.getHelper(),
                 lines));
-        data.add(QualType.ADDRESS_SPACE, GeneralParsers.parseLong(lines));
+        data.add(QualType.ADDRESS_SPACE, LineStreamParsers.parseLong(lines));
 
         return data;
 
@@ -85,11 +85,11 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, parserData);
 
-        data.add(FunctionType.NO_RETURN, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionType.PRODUCES_RESULT, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionType.HAS_REG_PARM, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionType.REG_PARM, GeneralParsers.parseLong(lines));
-        data.add(FunctionType.CALLING_CONVENTION, GeneralParsers.enumFromName(CallingConvention.getHelper(), lines));
+        data.add(FunctionType.NO_RETURN, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionType.PRODUCES_RESULT, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionType.HAS_REG_PARM, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionType.REG_PARM, LineStreamParsers.parseLong(lines));
+        data.add(FunctionType.CALLING_CONVENTION, LineStreamParsers.enumFromName(CallingConvention.getHelper(), lines));
 
         return data;
     }
@@ -98,18 +98,18 @@ public class TypeDataParser {
 
         DataStore data = parseFunctionTypeData(lines, parserData);
 
-        data.add(FunctionProtoType.NUM_PARAMETERS, GeneralParsers.parseInt(lines));
+        data.add(FunctionProtoType.NUM_PARAMETERS, LineStreamParsers.parseInt(lines));
 
-        data.add(FunctionProtoType.HAS_TRAILING_RETURNS, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionProtoType.IS_VARIADIC, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionProtoType.IS_CONST, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionProtoType.IS_VOLATILE, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionProtoType.IS_RESTRICT, GeneralParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.HAS_TRAILING_RETURNS, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_VARIADIC, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_CONST, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_VOLATILE, LineStreamParsers.parseOneOrZero(lines));
+        data.add(FunctionProtoType.IS_RESTRICT, LineStreamParsers.parseOneOrZero(lines));
 
-        data.add(FunctionProtoType.REFERENCE_QUALIFIER, GeneralParsers.enumFromName(ReferenceQualifier.class, lines));
+        data.add(FunctionProtoType.REFERENCE_QUALIFIER, LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
 
         data.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
-                GeneralParsers.enumFromName(ExceptionSpecificationType.class, lines));
+                LineStreamParsers.enumFromName(ExceptionSpecificationType.class, lines));
 
         data.add(FunctionProtoType.NOEXCEPT_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
         /*

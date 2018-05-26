@@ -29,7 +29,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
 
 import com.google.common.base.Preconditions;
@@ -720,7 +720,7 @@ public class StreamParser {
         // memberName (String)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isArrow = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isArrow = LineStreamParsers.parseOneOrZero(lines.nextLine());
         String memberName = lines.nextLine();
 
         map.put(key, new CxxMemberExprInfo(isArrow, memberName));
@@ -750,16 +750,16 @@ public class StreamParser {
         // captureKinds (List<LambdaCaptureKind)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isGenericLambda = GeneralParsers.parseOneOrZero(lines.nextLine());
-        boolean isMutable = GeneralParsers.parseOneOrZero(lines.nextLine());
-        boolean hasExplicitParameters = GeneralParsers.parseOneOrZero(lines.nextLine());
-        boolean hasExplicitResultType = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isGenericLambda = LineStreamParsers.parseOneOrZero(lines.nextLine());
+        boolean isMutable = LineStreamParsers.parseOneOrZero(lines.nextLine());
+        boolean hasExplicitParameters = LineStreamParsers.parseOneOrZero(lines.nextLine());
+        boolean hasExplicitResultType = LineStreamParsers.parseOneOrZero(lines.nextLine());
 
-        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(GeneralParsers.parseInt(lines));
-        int numCaptures = GeneralParsers.parseInt(lines);
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(LineStreamParsers.parseInt(lines));
+        int numCaptures = LineStreamParsers.parseInt(lines);
         List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
         for (int i = 0; i < numCaptures; i++) {
-            captureKinds.add(LambdaCaptureKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
+            captureKinds.add(LambdaCaptureKind.getHelper().fromValue(LineStreamParsers.parseInt(lines)));
         }
 
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
@@ -796,7 +796,7 @@ public class StreamParser {
         // isTypeOperator (boolean)
         // operatorId (String)
 
-        boolean isTypeOperator = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isTypeOperator = LineStreamParsers.parseOneOrZero(lines.nextLine());
         String operatorId = lines.nextLine();
 
         map.put(key, new TypeidData(isTypeOperator, operatorId));
@@ -822,7 +822,7 @@ public class StreamParser {
         // Format:
         // isExplicit (boolean)
 
-        boolean isExplicit = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isExplicit = LineStreamParsers.parseOneOrZero(lines.nextLine());
 
         InitListExprInfo info = new InitListExprInfo(isExplicit);
 

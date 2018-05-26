@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.parsers.data.AttrDataParser;
@@ -141,7 +141,7 @@ public class NodeDataParser {
 
         SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
-        boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
+        boolean isMacro = hasLocation ? LineStreamParsers.parseOneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
 

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -71,10 +71,10 @@ public class OffsetOfInfo {
 
         // number of expressions
         // int numExpressions = StdErrParser.parseInt(lines, "numExpr:");
-        int numExpressions = GeneralParsers.parseInt(lines);
+        int numExpressions = LineStreamParsers.parseInt(lines);
         // number of components
         // int numComponents = StdErrParser.parseInt(lines, "numComp:");
-        int numComponents = GeneralParsers.parseInt(lines);
+        int numComponents = LineStreamParsers.parseInt(lines);
 
         // Parse each component
         List<OffsetOfClangComponent> components = new ArrayList<>(numComponents);
@@ -88,12 +88,12 @@ public class OffsetOfInfo {
     private static OffsetOfClangComponent parseComponent(LineStream lines) {
         // Kind
         // int kindOrdinal = StdErrParser.parseInt(lines, "kind:");
-        int kindOrdinal = GeneralParsers.parseInt(lines);
+        int kindOrdinal = LineStreamParsers.parseInt(lines);
         OffsetOfComponentKind kind = KIND_VALUES.get()[kindOrdinal];
 
         switch (kind) {
         case ARRAY:
-            int expressionIndex = GeneralParsers.parseInt(lines);
+            int expressionIndex = LineStreamParsers.parseInt(lines);
             return OffsetOfClangComponent.newArrayComponent(expressionIndex);
         case FIELD:
             String fieldName = lines.nextLine();

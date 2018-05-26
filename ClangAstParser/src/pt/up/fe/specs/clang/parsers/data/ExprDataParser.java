@@ -16,7 +16,7 @@ package pt.up.fe.specs.clang.parsers.data;
 import java.math.BigInteger;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
@@ -47,8 +47,8 @@ public class ExprDataParser {
         DataStore data = NodeDataParser.parseNodeData(lines, dataStore);
         // TODO: ClavaNodes.getType, should be in ClavaContext?
         data.add(Expr.TYPE, ClavaNodes.getType(dataStore, lines.nextLine()));
-        data.add(Expr.VALUE_KIND, GeneralParsers.enumFromInt(ValueKind.getEnumHelper(), lines));
-        data.add(Expr.OBJECT_KIND, GeneralParsers.enumFromInt(ObjectKind.getEnumHelper(), lines));
+        data.add(Expr.VALUE_KIND, LineStreamParsers.enumFromInt(ValueKind.getEnumHelper(), lines));
+        data.add(Expr.OBJECT_KIND, LineStreamParsers.enumFromInt(ObjectKind.getEnumHelper(), lines));
 
         return data;
     }
@@ -56,7 +56,7 @@ public class ExprDataParser {
     public static DataStore parseCastExprData(LineStream lines, DataStore dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        data.add(CastExpr.CAST_KIND, GeneralParsers.enumFromName(CastKind.getHelper(), lines));
+        data.add(CastExpr.CAST_KIND, LineStreamParsers.enumFromName(CastKind.getHelper(), lines));
 
         return data;
     }
@@ -72,8 +72,8 @@ public class ExprDataParser {
     public static DataStore parseCharacterLiteralData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(CharacterLiteral.VALUE, GeneralParsers.parseLong(lines));
-        data.add(CharacterLiteral.KIND, GeneralParsers.enumFromInt(CharacterKind.getEnumHelper(), lines));
+        data.add(CharacterLiteral.VALUE, LineStreamParsers.parseLong(lines));
+        data.add(CharacterLiteral.KIND, LineStreamParsers.enumFromInt(CharacterKind.getEnumHelper(), lines));
 
         return data;
     }
@@ -97,7 +97,7 @@ public class ExprDataParser {
     public static DataStore parseCXXBoolLiteralExprData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(CXXBoolLiteralExpr.VALUE, GeneralParsers.parseOneOrZero(lines.nextLine()));
+        data.add(CXXBoolLiteralExpr.VALUE, LineStreamParsers.parseOneOrZero(lines.nextLine()));
 
         return data;
     }

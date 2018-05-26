@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.GeneralParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -58,7 +58,7 @@ public class TopLevelNodesParser {
     private static void apply(String id, DataKey<Set<String>> key, LineStream lines, DataStore data,
             boolean checkDuplicate) {
 
-        GeneralParsers.parseStringSet(id, lines, data.get(key), checkDuplicate);
+        LineStreamParsers.parseStringSet(id, lines, data.get(key), checkDuplicate);
     }
 
 }
