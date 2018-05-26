@@ -32,8 +32,8 @@ public class IncludesParser implements LineStreamWorker {
 
         File sourceFile = new File(lineStream.nextLine());
         String include = lineStream.nextLine();
-        int line = LineStreamParsers.parseInt(lineStream);
-        boolean isAngled = LineStreamParsers.parseOneOrZero(lineStream);
+        int line = LineStreamParsers.integer(lineStream);
+        boolean isAngled = LineStreamParsers.oneOrZero(lineStream);
 
         includes.add(new Include(sourceFile, include, line, isAngled));
     }

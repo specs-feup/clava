@@ -39,7 +39,7 @@ public class IdToFilenameParser implements LineStreamWorker {
     @Override
     public void apply(LineStream lineStream, DataStore data) {
         Map<String, String> map = data.get(ClangParserKeys.ID_TO_FILENAME_MAP);
-        LineStreamParsers.parseStringMap(PARSER_ID, lineStream, map);
+        LineStreamParsers.stringMap(PARSER_ID, lineStream, map);
     }
 
 }

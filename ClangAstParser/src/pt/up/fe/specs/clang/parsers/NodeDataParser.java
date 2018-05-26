@@ -141,7 +141,7 @@ public class NodeDataParser {
 
         SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
-        boolean isMacro = hasLocation ? LineStreamParsers.parseOneOrZero(lines) : false;
+        boolean isMacro = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
 

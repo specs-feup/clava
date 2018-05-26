@@ -71,10 +71,10 @@ public class OffsetOfInfo {
 
         // number of expressions
         // int numExpressions = StdErrParser.parseInt(lines, "numExpr:");
-        int numExpressions = LineStreamParsers.parseInt(lines);
+        int numExpressions = LineStreamParsers.integer(lines);
         // number of components
         // int numComponents = StdErrParser.parseInt(lines, "numComp:");
-        int numComponents = LineStreamParsers.parseInt(lines);
+        int numComponents = LineStreamParsers.integer(lines);
 
         // Parse each component
         List<OffsetOfClangComponent> components = new ArrayList<>(numComponents);
@@ -88,12 +88,12 @@ public class OffsetOfInfo {
     private static OffsetOfClangComponent parseComponent(LineStream lines) {
         // Kind
         // int kindOrdinal = StdErrParser.parseInt(lines, "kind:");
-        int kindOrdinal = LineStreamParsers.parseInt(lines);
+        int kindOrdinal = LineStreamParsers.integer(lines);
         OffsetOfComponentKind kind = KIND_VALUES.get()[kindOrdinal];
 
         switch (kind) {
         case ARRAY:
-            int expressionIndex = LineStreamParsers.parseInt(lines);
+            int expressionIndex = LineStreamParsers.integer(lines);
             return OffsetOfClangComponent.newArrayComponent(expressionIndex);
         case FIELD:
             String fieldName = lines.nextLine();

@@ -45,7 +45,7 @@ public class VisitedChildrenParser implements LineStreamWorker {
 
         String key = lineStream.nextLine();
 
-        int numChildren = LineStreamParsers.parseInt(lineStream);
+        int numChildren = LineStreamParsers.integer(lineStream);
         List<String> childrenIds = parseChildren(lineStream, numChildren);
 
         // Check after consuming all elements from the stream

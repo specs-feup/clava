@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
+import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import com.google.common.base.Preconditions;
 
@@ -202,7 +202,7 @@ public class ClangAstParser {
         config.add(ClavaNode.CONTEXT, context);
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(context);
+        LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context);
         if (SpecsSystem.isDebug()) {
             lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
         }
@@ -326,7 +326,7 @@ public class ClangAstParser {
         return clangDump;
     }
 
-    private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParserV2 lineStreamParser) {
+    private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParser lineStreamParser) {
         File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
 
         // TODO: Temporary, needs to be set again, since this will run in a separate thread
@@ -529,7 +529,7 @@ public class ClangAstParser {
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         ClavaContext context = new ClavaContext();
-        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance(context);
+        LineStreamParser clangStreamParser = ClangStreamParserV2.newInstance(context);
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
                         clangStreamParser));

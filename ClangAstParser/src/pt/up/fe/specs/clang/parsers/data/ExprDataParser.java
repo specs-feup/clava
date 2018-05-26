@@ -72,7 +72,7 @@ public class ExprDataParser {
     public static DataStore parseCharacterLiteralData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(CharacterLiteral.VALUE, LineStreamParsers.parseLong(lines));
+        data.add(CharacterLiteral.VALUE, LineStreamParsers.longInt(lines));
         data.add(CharacterLiteral.KIND, LineStreamParsers.enumFromInt(CharacterKind.getEnumHelper(), lines));
 
         return data;
@@ -97,7 +97,7 @@ public class ExprDataParser {
     public static DataStore parseCXXBoolLiteralExprData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(CXXBoolLiteralExpr.VALUE, LineStreamParsers.parseOneOrZero(lines.nextLine()));
+        data.add(CXXBoolLiteralExpr.VALUE, LineStreamParsers.oneOrZero(lines.nextLine()));
 
         return data;
     }

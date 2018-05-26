@@ -33,10 +33,10 @@ public class AttrDataParser {
         DataStore clavaData = NodeDataParser.parseNodeData(lines, dataStore);
 
         clavaData.add(Attribute.KIND, LineStreamParsers.enumFromName(AttributeKind.getHelper(), lines));
-        clavaData.add(Attribute.IS_IMPLICIT, LineStreamParsers.parseOneOrZero(lines));
-        clavaData.add(Attribute.IS_INHERITED, LineStreamParsers.parseOneOrZero(lines));
-        clavaData.add(Attribute.IS_LATE_PARSED, LineStreamParsers.parseOneOrZero(lines));
-        clavaData.add(Attribute.IS_PACK_EXPANSION, LineStreamParsers.parseOneOrZero(lines));
+        clavaData.add(Attribute.IS_IMPLICIT, LineStreamParsers.oneOrZero(lines));
+        clavaData.add(Attribute.IS_INHERITED, LineStreamParsers.oneOrZero(lines));
+        clavaData.add(Attribute.IS_LATE_PARSED, LineStreamParsers.oneOrZero(lines));
+        clavaData.add(Attribute.IS_PACK_EXPANSION, LineStreamParsers.oneOrZero(lines));
 
         return clavaData;
     }
@@ -46,7 +46,7 @@ public class AttrDataParser {
 
         data.add(AlignedAttr.SPELLING, lines.nextLine());
 
-        boolean isExpr = LineStreamParsers.parseOneOrZero(lines);
+        boolean isExpr = LineStreamParsers.oneOrZero(lines);
         String nodeId = lines.nextLine();
 
         if (isExpr) {

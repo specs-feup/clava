@@ -58,7 +58,7 @@ public class TopLevelNodesParser {
     private static void apply(String id, DataKey<Set<String>> key, LineStream lines, DataStore data,
             boolean checkDuplicate) {
 
-        LineStreamParsers.parseStringSet(id, lines, data.get(key), checkDuplicate);
+        LineStreamParsers.stringSet(id, lines, data.get(key), checkDuplicate);
     }
 
 }
