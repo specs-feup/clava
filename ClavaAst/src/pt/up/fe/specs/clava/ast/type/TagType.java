@@ -48,7 +48,7 @@ public abstract class TagType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // System.out.println("TAGTYPE:" + getTagKind());
         // System.out.println("DECL INFO:" + getDeclInfo());
         // System.out.println("TAG KIND:" + getTagKind());

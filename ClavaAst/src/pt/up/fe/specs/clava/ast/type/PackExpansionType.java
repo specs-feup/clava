@@ -67,10 +67,10 @@ public class PackExpansionType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // According to Clang parser, '...' must immediately precede declared identifier
         String packName = name == null ? "..." : "... " + name;
         // return getPattern().map(type -> type.getCode(name)).orElse("") + "...";
-        return getPattern().map(type -> type.getCode(packName)).orElse("");
+        return getPattern().map(type -> type.getCode(sourceNode, packName)).orElse("");
     }
 }

@@ -58,16 +58,16 @@ public class TypeOfExprType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
 
         // If GNU, do not change type (i.e., typeof)
         // if (getApp().getStandard().isGnu()) {
         if (standard.isGnu()) {
-            return super.getCode(name);
+            return super.getCode(sourceNode, name);
         }
 
         // Not GNU, change to __typeof__
-        String typeCode = super.getCode(name);
+        String typeCode = super.getCode(sourceNode, name);
         Preconditions.checkArgument(typeCode.startsWith("typeof "), "Expected code of type to start with 'typeof '");
 
         return "__typeof__" + typeCode.substring("typeof".length());

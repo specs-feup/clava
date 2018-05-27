@@ -61,7 +61,7 @@ public class BuiltinType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
 
         // Give priority to kind literal
         String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());

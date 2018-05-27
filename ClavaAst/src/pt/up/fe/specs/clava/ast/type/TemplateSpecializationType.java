@@ -244,7 +244,7 @@ public class TemplateSpecializationType extends Type {
     */
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
 
         StringBuilder code = new StringBuilder();
 

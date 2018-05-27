@@ -110,7 +110,12 @@ public abstract class Type extends ClavaNode {
      */
     @Override
     public String getCode() {
-        return getCode(null);
+        // return getCode(sourceNode, null);
+        return getCode(null, null);
+    }
+
+    public String getCode(String name) {
+        return getCode(null, name);
     }
 
     /**
@@ -119,8 +124,11 @@ public abstract class Type extends ClavaNode {
      *
      * <p>
      * Accepts null in case there is no name to use.
+     * 
+     * @param sourceNode
+     *            TODO
      */
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // throw new NotImplementedException(getClass());
         if (name == null) {
             return getBareType();

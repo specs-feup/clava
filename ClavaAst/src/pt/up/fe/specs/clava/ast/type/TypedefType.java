@@ -57,7 +57,7 @@ public class TypedefType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
 
         // System.out.println("TYPEDEF TYPE CODE:" + super.getCode(name));
         // System.out.println("TYPEDEF TYPE CHILD CODE:" + getTypeClass().getCode(name));
@@ -86,14 +86,14 @@ public class TypedefType extends Type {
         if (templateSpecialization.isPresent()) {
             // System.out.println("TYPEDEF TEMPLATE:" + templateSpecialization.get());
             // System.out.println("TYPEDEF TEMPLATE CODE:" + templateSpecialization.get().getCode(name));
-            return templateSpecialization.get().getCode(name);
+            return templateSpecialization.get().getCode(sourceNode, name);
         }
 
         // // If typedef of a TemplateSpecializationType, might need to use more specialized type
         // if (typeClass instanceof TemplateSpecializationType || typeClass instanceof TypedefType) {
         // return getTypeClass().getCode(name);
         // }
-        return super.getCode(name);
+        return super.getCode(sourceNode, name);
         // return getType() + " " + name;
 
         // return getTypeClass().getCode(name);

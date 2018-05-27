@@ -71,7 +71,7 @@ public class ElaboratedType extends TypeWithKeyword {
     */
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // HACK Set of Type classes whose .getCode() is not working properly, using bare type
 
         // System.out.println("ELABORATED:" + namedType);

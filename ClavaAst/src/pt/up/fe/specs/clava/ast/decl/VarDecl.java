@@ -103,7 +103,7 @@ public class VarDecl extends DeclaratorDecl {
             code.append(getVarDeclData().getStorageClass().getString()).append(" ");
         }
 
-        code.append(getType().getCode(getDeclNameCode()));
+        code.append(getType().getCode(this, getDeclNameCode()));
         code.append(getInitializationCode());
 
         return code.toString();

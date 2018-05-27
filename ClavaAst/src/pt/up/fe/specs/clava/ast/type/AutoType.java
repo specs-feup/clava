@@ -45,7 +45,7 @@ public class AutoType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         if (name == null) {
             return "auto";
         }

@@ -44,7 +44,7 @@ public abstract class ArrayType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         String nameCode = name == null ? "" : name;
 
         Type elementType = getElementType();
@@ -68,7 +68,7 @@ public abstract class ArrayType extends Type {
 
         // If element type is itself an ArrayType, put this array code in front of the name
         if (elementType instanceof ArrayType) {
-            return elementType.getCode(nameCode + "[" + arrayContentCode + "]");
+            return elementType.getCode(sourceNode, nameCode + "[" + arrayContentCode + "]");
         }
 
         return getElementType().getCode() + " " + nameCode + "[" + arrayContentCode + "]";

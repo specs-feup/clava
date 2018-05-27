@@ -51,8 +51,8 @@ public class DecayedType extends AdjustedType {
 
     // Return the code of the original type
     @Override
-    public String getCode(String name) {
-        return getOriginalType().getCode(name);
+    public String getCode(ClavaNode sourceNode, String name) {
+        return getOriginalType().getCode(sourceNode, name);
     }
 
     @Override
