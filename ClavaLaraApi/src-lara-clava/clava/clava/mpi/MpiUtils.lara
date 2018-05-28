@@ -1,0 +1,56 @@
+/**
+ * Utility methods related with MPI operations.
+ * @class
+ */
+var MpiUtils = {};
+
+/**
+ * Tries to statically detect if a statement is executed only once. 
+ *
+ * Restrictions:
+ * - Does not take into account runtime execution problems, such as exceptions;
+ * - Does not detect if the function is called indirectly through a function pointer;
+ *
+ * @return true if it could be detected, within the restrictions, that the statement is only executed once.
+ */
+MpiUtils.isExecutedOnce = function ($statement) {
+
+
+	// Go back until it finds the function body
+	var $currentScope = $statement.ancestor('scope');
+
+	while($currentScope !== undefined) {
+		var $scopeOwner = $currentScope.owner;
+
+		// If finds a scope that is part of a loop or if/else, return false immediately
+		if($scopeOwner.instanceOf('loop') || $scopeOwner.instanceOf('if')) {
+			return false;
+		}
+
+		// If function, check if main function
+		if($scopeOwner.instanceOf('function')) {
+			var $function = $scopeOwner;
+
+			// If main, passes check
+			if($function.name === 'main') {
+				return true;
+			}
+
+			// Verify if function is called only once
+			var calls = $function.calls;
+			if(calls.length !== 1) {
+				return false;
+			}
+	
+			var $singleCall = calls[0];
+			
+			// Recursively call the function on the call statement
+			return MpiUtils.isExecutedOnce($singleCall.ancestor("statement"));
+		}
+		
+		$currentScope = $currentScope.ancestor('scope');
+	}
+	
+	// Could not find the scope of the statement. Is it outside of a function?
+	return false;
+}

@@ -21,6 +21,9 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraApiResource implements LaraResourceProvider {
 
+    // MPI
+    MPI_UTILS("mpi/MpiUtils.lara"),
+
     // OpenCL
     OPENCL_CALL("opencl/OpenCLCall.lara"),
     OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
