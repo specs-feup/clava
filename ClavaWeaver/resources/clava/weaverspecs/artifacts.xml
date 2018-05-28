@@ -201,6 +201,7 @@
 		<attribute name="stmts" type="statement[]" />
 		<attribute name="firstStmt" type="statement" />
 		<attribute name="lastStmt" type="statement" />
+		<attribute name="owner" type="joinpoint" tooltip="The statement that owns the scope (e.g., function, loop...)"/>
 	</artifact>
 
 
@@ -288,6 +289,7 @@
 		<attribute name="isPure" type="Boolean"/>
 		<attribute name="isDelete" type="Boolean"/>
 		<attribute name="storageClass" type="StorageClass"/>
+		<attribute name="calls" type="call[]"/>		
 	</artifact>
 
 

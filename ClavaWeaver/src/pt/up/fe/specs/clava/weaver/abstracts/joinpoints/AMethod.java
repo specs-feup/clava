@@ -180,6 +180,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute callsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public ACall[] getCallsArrayImpl() {
+        return this.aFunction.getCallsArrayImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -531,6 +540,7 @@ public abstract class AMethod extends AFunction {
         ISPURE("isPure"),
         ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
+        CALLS("calls"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

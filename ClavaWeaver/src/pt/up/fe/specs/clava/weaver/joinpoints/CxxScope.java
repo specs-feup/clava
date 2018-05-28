@@ -396,4 +396,11 @@ public class CxxScope extends AScope {
 
         return stmts[stmts.length - 1];
     }
+
+    @Override
+    public AJoinPoint getOwnerImpl() {
+        // TODO: This should generically work, but corner cases have not been checked
+        return getAstParentImpl();
+    }
+
 }
