@@ -22,6 +22,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
@@ -30,6 +33,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.utils.IncludeManager;
 import pt.up.fe.specs.clava.utils.SourceType;
@@ -45,6 +49,8 @@ import pt.up.fe.specs.util.utilities.StringLines;
  *
  */
 public class TranslationUnit extends ClavaNode {
+
+    public static final DataKey<Language> LANGUAGE = KeyFactory.object("language", Language.class);
 
     // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
     // private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
@@ -443,6 +449,10 @@ public class TranslationUnit extends ClavaNode {
         actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
 
         return new File(actualDestinationFolder, getFilename());
+    }
+
+    public void setLanguage(Language language) {
+        put(LANGUAGE, language);
     }
 
 }
