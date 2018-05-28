@@ -403,6 +403,41 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public abstract ACall[] getCallsArrayImpl();
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public Bindings getCallsImpl() {
+        ACall[] aCallArrayImpl0 = getCallsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public final Object getCalls() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
+        	}
+        	Bindings result = this.getCallsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "calls", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -824,6 +859,7 @@ public abstract class AFunction extends ANamedDecl {
         attributes.add("isPure");
         attributes.add("isDelete");
         attributes.add("storageClass");
+        attributes.add("calls");
     }
 
     /**
@@ -891,6 +927,7 @@ public abstract class AFunction extends ANamedDecl {
         ISPURE("isPure"),
         ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
+        CALLS("calls"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
