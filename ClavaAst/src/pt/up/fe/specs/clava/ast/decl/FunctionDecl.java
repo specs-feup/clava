@@ -563,4 +563,22 @@ public class FunctionDecl extends DeclaratorDecl {
         */
     }
 
+    /**
+     * 
+     * @return all the calls to this function declaration.
+     */
+    public List<CallExpr> getCalls() {
+        // Get all the calls
+        App app = getAppTry().orElse(null);
+        if (app == null) {
+            return Collections.emptyList();
+        }
+
+        return app.getDescendantsStream()
+                .filter(CallExpr.class::isInstance)
+                .map(CallExpr.class::cast)
+                .filter(this::isCorrespondingCall)
+                .collect(Collectors.toList());
+    }
+
 }
