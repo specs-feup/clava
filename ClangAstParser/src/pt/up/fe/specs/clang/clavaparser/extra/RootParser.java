@@ -29,6 +29,7 @@ import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -38,6 +39,7 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -198,6 +200,11 @@ public class RootParser extends AClangNodeParser<App> {
 
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
 
+            Language language = getStdErr().get(ClangParserKeys.FILE_LANGUAGE_DATA)
+                    .get(new File(filenamePath, filename));
+            if (language != null) {
+                tUnit.setLanguage(language);
+            }
             // Clean translation unit
             // ClavaPostProcessing.applyPostPasses(tUnit);
 

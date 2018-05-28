@@ -57,8 +57,8 @@ public interface ClangParserKeys {
     DataKey<Set<String>> TOP_LEVEL_ATTR_IDS = KeyFactory.generic("clang_parser_stream_top_level_attr_ids",
             new HashSet<>());
 
-    DataKey<Map<File, Language>> FILE_LANGUAGE_DATA = KeyFactory.generic("clang_parser_stream_file_language_data",
-            new HashMap<>());
+    DataKey<Map<File, Language>> FILE_LANGUAGE_DATA = KeyFactory
+            .generic("clang_parser_stream_file_language_data", () -> new HashMap<>());
 
     /**
      * Enables debug prints.
