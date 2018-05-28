@@ -396,15 +396,8 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         int counter = GLOBAL_COUNTER.fetch_add(1);
         DumpResources::writeCounter(counter);
 
-        //llvm::errs() << "C++?\n";
-        //clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus);
 
-        //llvm::errs() << "OpenCL?\n";
-        //clava::dump(CI.getInvocation().getLangOpts()->OpenCL);
-
-        //llvm::errs() << "File\n";
-        //clava::dump(file.str());
-
+        dumpCompilerInstanceData(CI, file);
 
         // Dump id->file data
         llvm::errs() << ID_FILE_MAP << "\n";
@@ -418,6 +411,37 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         //return llvm::make_unique<MyASTConsumer>(Context, counter, &dumper);
     }
 
+
+    void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI, StringRef file) {
+        clava::dump(COMPILER_INSTANCE_DATA);
+
+        //llvm::errs() << "File\n";
+        clava::dump(file.str());
+
+        clava::dump(CI.getInvocation().getLangOpts()->LineComment);
+        // Derived from Std.isC89 in Clang 3.8
+        clava::dump(CI.getInvocation().getLangOpts()->GNUInline);
+        clava::dump(CI.getInvocation().getLangOpts()->C99);
+        clava::dump(CI.getInvocation().getLangOpts()->C11);
+        clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus);
+        clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus11);
+        clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus14);
+        clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus1z);
+        clava::dump(CI.getInvocation().getLangOpts()->Digraphs);
+        clava::dump(CI.getInvocation().getLangOpts()->GNUMode);
+        clava::dump(CI.getInvocation().getLangOpts()->HexFloats);
+        clava::dump(CI.getInvocation().getLangOpts()->ImplicitInt);
+
+        clava::dump(CI.getInvocation().getLangOpts()->OpenCL);
+        clava::dump(CI.getInvocation().getLangOpts()->OpenCLVersion);
+        clava::dump(CI.getInvocation().getLangOpts()->NativeHalfType);
+
+        clava::dump(CI.getInvocation().getLangOpts()->CUDA);
+
+        clava::dump(CI.getInvocation().getLangOpts()->Bool);
+        clava::dump(CI.getInvocation().getLangOpts()->Half);
+        clava::dump(CI.getInvocation().getLangOpts()->WChar);
+    }
 
 
     /*** DumpIncludesAction ***/

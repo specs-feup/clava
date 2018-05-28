@@ -85,6 +85,7 @@ public:
 
     virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, StringRef file);
 
+    void dumpCompilerInstanceData(CompilerInstance &CI, StringRef file);
 };
 
 
