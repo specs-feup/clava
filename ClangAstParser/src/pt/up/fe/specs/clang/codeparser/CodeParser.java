@@ -87,6 +87,7 @@ public class CodeParser {
         Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
 
         List<String> implementationFiles = allFiles.keySet().stream()
+                // TEST: HEADER + IMPL
                 .filter(SourceType.IMPLEMENTATION::hasExtension)
                 .collect(Collectors.toList());
 
