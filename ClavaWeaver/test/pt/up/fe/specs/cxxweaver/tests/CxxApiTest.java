@@ -93,4 +93,9 @@ public class CxxApiTest {
     public void testUserValues() {
         newTester().test("UserValuesTest.lara", "user_values.cpp");
     }
+
+    @Test
+    public void testClavaCode() {
+        newTester().test("ClavaCodeTest.lara", "clava_code.cpp");
+    }
 }
