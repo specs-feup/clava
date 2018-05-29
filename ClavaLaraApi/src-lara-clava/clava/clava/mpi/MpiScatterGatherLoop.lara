@@ -1,0 +1,34 @@
+/**
+ * Applies an MPI scatter-gather strategy to loops.
+ * @class
+ */
+function MpiScatterGatherLoop($loop) {
+	this._$loop = $loop;
+	// Inputs + access pattern
+	// Outputs + access pattern
+}
+
+MpiScatterGatherLoop.prototype.addInput = function(varName, accessPattern) {
+
+	// Check if loop contains a reference to the variable
+	var firstVarref = undefined;
+	for(var $varref of this._$loop.descendants('varref')) {
+		if($varref.name === varName) {
+			firstVarref = $varref;
+			break;
+		}
+	}
+	
+	if(firstVarref === undefined) {
+		throw "Could not find a reference to the variable '"+varName+"' in the loop located at " + this._$loop.location;
+	}
+
+	println("Varref type: " + $varref.type.code);
+	
+	if(accessPattern === undefined) {
+		
+	}
+	
+
+}
+

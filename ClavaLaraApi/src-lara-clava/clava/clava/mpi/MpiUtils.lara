@@ -1,6 +1,0 @@
-/**
- * Utility methods related with MPI operations.
- * @class
- */
-var MpiUtils = {};
-
