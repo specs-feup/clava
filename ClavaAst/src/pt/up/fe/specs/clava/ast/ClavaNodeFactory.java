@@ -502,6 +502,18 @@ public class ClavaNodeFactory {
                 null);
     }
 
+    public static ParmVarDecl parmVarDecl(String type, String name) {
+        boolean hasInheritedDefaultArg = false;
+        VarDeclData data = new VarDeclData();
+        String varName = name;
+        Type literalType = LegacyToDataStore.getFactory().literalType(type);
+        DeclData declData = new DeclData();
+        ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+        Expr initExpr = null;
+
+        return parmVarDecl(hasInheritedDefaultArg, data, varName, literalType, declData, info, initExpr);
+    }
+
     public static ParmVarDecl parmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type type,
             DeclData declData, ClavaNodeInfo info, Expr initExpr) {
 
