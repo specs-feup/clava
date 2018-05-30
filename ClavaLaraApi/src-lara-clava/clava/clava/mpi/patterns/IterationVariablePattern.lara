@@ -1,0 +1,11 @@
+import clava.mpi.MpiAccessPattern;
+
+/**
+ * Array that is accessed using only the iteration variable directly, without modifications.
+ */
+function IterationVariablePattern() {
+    // Parent constructor
+    MpiAccessPattern.call(this);
+}
+// Inheritance
+IterationVariablePattern.prototype = Object.create(MpiAccessPattern.prototype);

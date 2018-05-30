@@ -1,0 +1,14 @@
+/**
+ * Represents an MPI access pattern.
+ *
+ * @class
+ */
+function MpiAccessPattern() {
+//	checkDefined(name, "Metric::name");
+//	this.name = name;
+}
+
+
+ 
+
+

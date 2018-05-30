@@ -22,7 +22,13 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 public enum LaraApiResource implements LaraResourceProvider {
 
     // MPI
-    MPI_UTILS("mpi/MpiScatterGatherLoop.lara"),
+    MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
+    MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.lara"),
+
+    // MPI Patterns
+    ITERATION_VARIABLE_PATTERN("mpi/patterns/IterationVariablePattern.lara"),
+    MPI_ACCESS_PATTERNS("mpi/patterns/MpiAccessPatterns.lara"),
+    SCALAR_PATTERN("mpi/patterns/ScalarPattern.lara"),
 
     // OpenCL
     OPENCL_CALL("opencl/OpenCLCall.lara"),
