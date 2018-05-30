@@ -1,3 +1,4 @@
+import clava.Clava;
 import clava.util.SingleFile;
 
 /**
@@ -67,4 +68,35 @@ ClavaCode.isExecutedOnce = function ($statement) {
 	
 	// Could not find the scope of the statement. Is it outside of a function?
 	return false;
+}
+
+
+/**
+ * Returns the function definitions in the program with the given name.
+ * @param {string} functionName - The name of the function to find 
+ * @param {boolean} isSingleFunction -  If true, ensures there is a single definition with the given name
+ * @return {$function[]|$function} An array of function definitions, or a single function is 'isSingleFunction' is true
+ */
+ClavaCode.getFunctionDefinition = function (functionName, isSingleFunction) {
+	// Locate function
+	var functionSearch = Clava.getProgram()
+		.descendants('function')
+		//.filter($f => $f.name.equals('main'))[0];
+		.filter(function($f) { return $f.name.equals(functionName) && $f.hasDefinition;});
+
+
+	// If single function false, return search results
+	if(!isSingleFunction) {
+		return functionSearch;
+	}	
+		
+	if(functionSearch.length === 0) {
+		throw "Could not find main function";
+	}
+	
+	if(functionSearch.length > 1) {
+		throw "Found more than one definition for function with name '"+functionName+"'";
+	}
+	
+	return functionSearch[0];
 }
