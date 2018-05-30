@@ -581,4 +581,14 @@ public class FunctionDecl extends DeclaratorDecl {
                 .collect(Collectors.toList());
     }
 
+    public void setParamters(List<ParmVarDecl> params) {
+        // Remove current parameters
+        removeChildren(ParmVarDecl.class);
+
+        // Add parameters to the beginning of the children
+        for (int i = 0; i < params.size(); i++) {
+            addChild(i, params.get(i));
+        }
+    }
+
 }
