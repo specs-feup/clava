@@ -39,10 +39,30 @@ MpiScatterGatherLoop.prototype.addInput = function(varName, accessPattern) {
  */ 
 MpiScatterGatherLoop.prototype.execute = function() {
 
-	var $mainFunction = ClavaCode.getFunctionDefinition('main', true);
-
+	var $mainFunction = ClavaCode.getFunctionDefinition("main", true);
+	var $mainFile = $mainFunction.ancestor("file");
+	
+	// Add include
+	$mainFile.addInclude("mpi.h");
+	
+	// Add params to main, if no params
+	if($mainFunction.params.length === 0) {
+		var mainParams = ["int " + MpiScatterGatherLoop._ARGC, "char** " + MpiScatterGatherLoop._ARGV];
+		//$mainFunction.def params = mainParams; // Valid 
+		//$mainFunction.def params = []; // Throws exception "Cannot pass an empty array to a 'def'"
+		$mainFunction.setParamsFromStrings = mainParams; // Valid
+		$mainFunction.setParamsFromStrings = []; // Valid
+ 	}
+	println("Params: " + $mainFunction.params.length);
+	
+	
 	println("Main function:" + $mainFunction.location);
 		
 }
+
+
+/** PRIVATE SECTION **/
+MpiScatterGatherLoop._ARGC = "argc";
+MpiScatterGatherLoop._ARGV = "argv";
 
 
