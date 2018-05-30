@@ -112,7 +112,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getParamsArrayImpl() {
+    public AParam[] getParamsArrayImpl() {
         return this.aFunction.getParamsArrayImpl();
     }
 
@@ -238,6 +238,20 @@ public abstract class AMethod extends AFunction {
      */
     public void defNameImpl(String value) {
         this.aFunction.defNameImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(AParam[] value) {
+        this.aFunction.defParamsImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(String[] value) {
+        this.aFunction.defParamsImpl(value);
     }
 
     /**
@@ -385,6 +399,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    @Override
+    public void setParamsImpl(AParam[] params) {
+        this.aFunction.setParamsImpl(params);
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    @Override
+    public void setParamsFromStringsImpl(String[] params) {
+        this.aFunction.setParamsFromStringsImpl(params);
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -460,6 +492,17 @@ public abstract class AMethod extends AFunction {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "params": {
+        	if(value instanceof AParam[]){
+        		this.defParamsImpl((AParam[])value);
+        		return;
+        	}
+        	if(value instanceof String[]){
+        		this.defParamsImpl((String[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

@@ -196,15 +196,15 @@ public abstract class AFunction extends ANamedDecl {
      * Get value on attribute params
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getParamsArrayImpl();
+    public abstract AParam[] getParamsArrayImpl();
 
     /**
      * Get value on attribute params
      * @return the attribute's value
      */
     public Bindings getParamsImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getParamsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AParam[] aParamArrayImpl0 = getParamsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aParamArrayImpl0);
         return nativeArray0;
     }
 
@@ -225,6 +225,20 @@ public abstract class AFunction extends ANamedDecl {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "params", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(AParam[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def params with type AParam not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(String[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def params with type String not implemented ");
     }
 
     /**
@@ -591,6 +605,58 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    public void setParamsImpl(AParam[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParams not implemented ");
+    }
+
+    /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    public final void setParams(AParam[] params) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), params);
+        	}
+        	this.setParamsImpl(params);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), params);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParams", e);
+        }
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    public void setParamsFromStringsImpl(String[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamsFromStrings not implemented ");
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    public final void setParamsFromStrings(String[] params) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), params);
+        	}
+        	this.setParamsFromStringsImpl(params);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), params);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParamsFromStrings", e);
+        }
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -828,6 +894,17 @@ public abstract class AFunction extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "params": {
+        	if(value instanceof AParam[]){
+        		this.defParamsImpl((AParam[])value);
+        		return;
+        	}
+        	if(value instanceof String[]){
+        		this.defParamsImpl((String[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
@@ -884,6 +961,8 @@ public abstract class AFunction extends ANamedDecl {
         actions.add("String cloneOnFile(String, String)");
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
+        actions.add("void setParams(param[])");
+        actions.add("void setParamsFromStrings(String[])");
         actions.add("void setName(String)");
         actions.add("call newCall(joinpoint[])");
     }

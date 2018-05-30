@@ -218,6 +218,14 @@
 	<action name="insertReturn" class="function" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)">
 		<parameter name="code" type="String" />
 	</action>
+	
+	<action name="setParams" class="function" tooltip="Sets the parameters of the function">
+		<parameter name="params" type="param[]" />
+	</action>	
+	
+	<action name="setParamsFromStrings" class="function" tooltip="Overload that accepts strings that represent type-varname pairs (e.g., int param1)">
+		<parameter name="params" type="String[]" />
+	</action>	
 
 
 

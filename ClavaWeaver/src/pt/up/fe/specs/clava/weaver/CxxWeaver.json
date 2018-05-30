@@ -8837,7 +8837,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint[]",
+                              "type": "param[]",
                               \name": "params"
                            }]
                },
@@ -9333,6 +9333,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameters of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setParams"
+                           },
+                           {
+                              "type": "param[]",
+                              "name": "params",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload that accepts strings that represent type-varname pairs (e.g., int param1)",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setParamsFromStrings"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "params",
                               "defaultValue": ""
                            }]
                },
@@ -14478,7 +14506,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint[]",
+                              "type": "param[]",
                               \name": "params"
                            }]
                },
@@ -14974,6 +15002,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameters of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setParams"
+                           },
+                           {
+                              "type": "param[]",
+                              "name": "params",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload that accepts strings that represent type-varname pairs (e.g., int param1)",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setParamsFromStrings"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "params",
                               "defaultValue": ""
                            }]
                },

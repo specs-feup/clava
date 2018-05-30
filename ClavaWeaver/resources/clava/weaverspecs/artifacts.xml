@@ -281,7 +281,10 @@
 		</attribute>
 		<attribute name="body" type="joinpoint" />
 		<attribute name="paramNames" type="String[]"/>
-		<attribute name="params" type="joinpoint[]"/>
+		<attribute name="params" type="param[]">
+			<def type="param[]"/>
+			<def type="String[]"/>		
+		</attribute>
 		<attribute name="id" type="String"/>
 		<attribute name="isInline" type="Boolean"/>
 		<attribute name="isVirtual" type="Boolean"/>
