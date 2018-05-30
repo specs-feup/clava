@@ -1,3 +1,5 @@
+import clava.Clava;
+
 /**
  * Applies an MPI scatter-gather strategy to loops.
  * @class
@@ -31,4 +33,16 @@ MpiScatterGatherLoop.prototype.addInput = function(varName, accessPattern) {
 	
 
 }
+
+/**
+ * Adapts code to use the MPI strategy.
+ */ 
+MpiScatterGatherLoop.prototype.execute = function() {
+
+	var $mainFunction = ClavaCode.getFunctionDefinition('main', true);
+
+	println("Main function:" + $mainFunction.location);
+		
+}
+
 
