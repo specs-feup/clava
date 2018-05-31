@@ -9,6 +9,10 @@
 	<action name="replaceWith" return="joinpoint">
 		<parameter name="node" type="joinpoint" />
 	</action>
+	
+	<action name="replaceWith" return="joinpoint">
+		<parameter name="node" type="String" />
+	</action>
 
 	<!-- Inserts node before the given node -->
 	<action name="insertBefore" return="joinpoint">
@@ -102,7 +106,7 @@
 		<parameter name="jp" type="joinpoint" />
 	</action>
 
-	<action name="addGlobal" class="file">
+	<action name="addGlobal" class="file" return="vardecl">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
 		<parameter name="initValue" type="String" />

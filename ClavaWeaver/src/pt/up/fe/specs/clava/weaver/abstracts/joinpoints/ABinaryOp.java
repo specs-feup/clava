@@ -197,6 +197,15 @@ public abstract class ABinaryOp extends AExpression {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aExpression.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aExpression.insertBeforeImpl(node);
     }

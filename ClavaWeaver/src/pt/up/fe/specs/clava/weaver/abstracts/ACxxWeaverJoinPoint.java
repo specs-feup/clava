@@ -409,6 +409,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         // Return input joinpoint
         return node;
+
+    }
+
+    @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return CxxActions.insertAsStmt(getNode(), node, Insert.REPLACE, getWeaverEngine());
     }
 
     @Override

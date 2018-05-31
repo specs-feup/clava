@@ -64,6 +64,15 @@ public abstract class ATypedefDecl extends ANamedDecl {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aNamedDecl.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aNamedDecl.insertBeforeImpl(node);
     }

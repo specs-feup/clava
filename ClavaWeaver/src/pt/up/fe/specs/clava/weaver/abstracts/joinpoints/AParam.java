@@ -109,6 +109,15 @@ public abstract class AParam extends AVardecl {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aVardecl.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aVardecl.insertBeforeImpl(node);
     }

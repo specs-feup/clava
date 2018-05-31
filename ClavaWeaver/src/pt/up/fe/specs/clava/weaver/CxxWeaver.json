@@ -497,6 +497,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -1094,6 +1107,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -1784,6 +1810,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -2393,6 +2432,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -3172,6 +3224,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -3780,6 +3845,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -4358,6 +4436,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -4902,6 +4993,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -5430,6 +5534,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -6013,6 +6130,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -6541,6 +6671,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -7231,6 +7374,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -7798,6 +7954,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -8413,7 +8582,7 @@
                   "type": "action",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "vardecl",
                               \name": "addGlobal"
                            },
                            {
@@ -8671,6 +8840,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -9498,6 +9680,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -10202,6 +10397,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -10876,6 +11084,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -11440,6 +11661,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -12344,6 +12578,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -12952,6 +13199,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -13544,6 +13804,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -14331,6 +14604,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -15167,6 +15453,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -15711,6 +16010,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -16286,6 +16598,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -17301,6 +17626,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -17911,6 +18249,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -18610,6 +18961,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -19188,6 +19552,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -19933,6 +20310,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -20623,6 +21013,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -21180,6 +21583,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -22021,6 +22437,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -22638,6 +23067,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -23195,6 +23637,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -23791,6 +24246,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -24473,6 +24941,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -25187,6 +25668,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -25861,6 +26355,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -26405,6 +26912,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -27041,6 +27561,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -27637,6 +28170,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -28255,6 +28801,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]
@@ -28894,6 +29453,19 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "void",
                               \name": "setType"
                            },
@@ -29519,6 +30091,19 @@
                            },
                            {
                               "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
                               "name": "node",
                               "defaultValue": ""
                            }]

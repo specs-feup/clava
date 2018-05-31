@@ -69,6 +69,7 @@ public abstract class AJoinPoint extends JoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         actions.add("replaceWith(AJoinPoint node)");
+        actions.add("replaceWith(String node)");
         actions.add("insertBefore(AJoinPoint node)");
         actions.add("insertBefore(String node)");
         actions.add("insertAfter(AJoinPoint node)");
@@ -94,6 +95,33 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param node 
      */
     public final AJoinPoint replaceWith(AJoinPoint node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), node);
+        	}
+        	AJoinPoint result = this.replaceWithImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "replaceWith", this, Optional.ofNullable(result), node);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "replaceWith", e);
+        }
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    public AJoinPoint replaceWithImpl(String node) {
+        throw new UnsupportedOperationException(get_class()+": Action replaceWith not implemented ");
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    public final AJoinPoint replaceWith(String node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), node);
