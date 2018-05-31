@@ -1,0 +1,21 @@
+/**
+ * Utility methods related to MPI.
+ *
+ * @class
+ */
+var MpiUtils = {};
+
+MpiUtils.VAR_NUM_TASKS = "mpi_num_tasks";
+MpiUtils.VAR_NUM_WORKERS = "mpi_num_workers";
+MpiUtils.VAR_RANK = "mpi_rank";
+
+/**
+ * Enables/disables library SpecsLogger for printing.
+ * <p>
+ * By default, is disabled.
+ */
+ /*
+MpiUtils.getNumTaksVar = function() {
+	
+}
+*/
