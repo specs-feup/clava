@@ -1225,6 +1225,13 @@ public class ClavaNodeFactory {
         return new BinaryOperator(op, exprData, info, lhs, rhs);
     }
 
+    public static BinaryOperator binaryOperator(BinaryOperatorKind op, Expr lhs, Expr rhs) {
+        ExprData exprData = ExprData.empty();
+        ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+
+        return binaryOperator(op, exprData, info, lhs, rhs);
+    }
+
     public static ParenExpr parenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
         return new ParenExpr(exprData, info, subExpr);
     }

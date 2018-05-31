@@ -19,12 +19,17 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class ForStmt extends LoopStmt {
 
@@ -170,6 +175,106 @@ public class ForStmt extends LoopStmt {
         }
 
         return Optional.empty();
+    }
+
+    /**
+     * The value by which the iteration variable changes each iteration.
+     * 
+     * <p>
+     * Supports values for increment expressions of Canonical Loop Forms as defined by the OpenMP standard.
+     */
+    public Optional<Expr> getStepValueExpr() {
+        return getInc().flatMap(inc -> getStepValueExpr(inc.getChild(0)));
+    }
+
+    private Optional<Expr> getStepValueExpr(ClavaNode incExpr) {
+        // var += incr
+        // var -= incr
+        // var = var + incr
+        // var = incr + var
+        // var = var - incr
+
+        if (incExpr instanceof BinaryOperator) {
+            ClavaLog.warning("Not yet implemented for binary operators");
+            return Optional.empty();
+        }
+
+        // ++var
+        // var++
+        // --var
+        // var--
+        if (incExpr instanceof UnaryOperator) {
+            UnaryOperator unaryOp = (UnaryOperator) incExpr;
+            UnaryOperatorKind kind = unaryOp.getOp();
+
+            if (kind == UnaryOperatorKind.PRE_INC || kind == UnaryOperatorKind.POST_INC) {
+                return Optional.of(getFactory().integerLiteral(1));
+            }
+
+            if (kind == UnaryOperatorKind.PRE_DEC || kind == UnaryOperatorKind.POST_DEC) {
+                return Optional.of(getFactory().integerLiteral(-1));
+            }
+
+            return Optional.empty();
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * 
+     * @return an expression that represents the number of iterations of the loop
+     */
+    public Optional<Expr> getIterationsExpr() {
+        // Calculate diff between begin and end
+        Expr beginEndDiff = getBeginEndDiff().orElse(null);
+        if (beginEndDiff == null) {
+            return Optional.empty();
+        }
+
+        Expr stepValue = getStepValueExpr().orElse(null);
+        if (stepValue == null) {
+            return Optional.empty();
+        }
+
+        Integer stepValueInteger = SpecsStrings.parseInteger(stepValue.getCode());
+        // Special case: step value 1
+        if (stepValueInteger != null && stepValueInteger.intValue() == 1) {
+            return Optional.of(beginEndDiff);
+        }
+
+        return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
+    }
+
+    private Optional<Expr> getBeginEndDiff() {
+        Expr endExpr = getConditionValueExpr().orElse(null);
+        if (endExpr == null) {
+            return Optional.empty();
+        }
+
+        BinaryOperator binOp = getCondOperator().orElse(null);
+        if (binOp == null) {
+            return Optional.empty();
+        }
+
+        Expr initExpr = getInitValueExpr().orElse(null);
+        if (initExpr == null) {
+            return Optional.empty();
+        }
+
+        Integer initExprInteger = SpecsStrings.parseInteger(initExpr.getCode());
+
+        // Special case: relation < and begin 0
+        if (binOp.getOp() == BinaryOperatorKind.LT && initExprInteger != null && initExprInteger.intValue() == 0) {
+            return Optional.of(endExpr);
+        }
+
+        // Special case: relation <= and begin 1
+        if (binOp.getOp() == BinaryOperatorKind.LE && initExprInteger != null && initExprInteger.intValue() == 1) {
+            return Optional.of(endExpr);
+        }
+
+        return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));
     }
 
 }
