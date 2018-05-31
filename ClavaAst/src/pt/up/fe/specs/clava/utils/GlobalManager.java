@@ -37,7 +37,7 @@ public class GlobalManager {
         definedVars = new HashSet<>();
     }
 
-    public void addGlobal(TranslationUnit tunit, String name, Type type, Expr initValue) {
+    public VarDecl addGlobal(TranslationUnit tunit, String name, Type type, Expr initValue) {
 
         boolean isDefined = definedVars.contains(name);
         if (!isDefined) {
@@ -58,5 +58,7 @@ public class GlobalManager {
                 initExpr);
 
         tunit.addDeclaration(varDecl);
+
+        return varDecl;
     }
 }
