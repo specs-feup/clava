@@ -15,12 +15,21 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Optional;
+import java.util.Set;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class ForStmt extends LoopStmt {
+
+    private static final Set<BinaryOperatorKind> RELATIONAL_OPS = EnumSet.of(BinaryOperatorKind.LE,
+            BinaryOperatorKind.LT, BinaryOperatorKind.GE, BinaryOperatorKind.GT);
 
     /**
      * Constructor of a 'for' statement.
@@ -115,4 +124,52 @@ public class ForStmt extends LoopStmt {
 
         setChild(2, literalStmt);
     }
+
+    public Optional<BinaryOperator> getCondOperator() {
+        return getCond()
+                .map(cond -> cond.getChild(0))
+                .filter(BinaryOperator.class::isInstance)
+                .map(BinaryOperator.class::cast);
+
+    }
+
+    /**
+     * The value expression of the test relation in the condition of an OpenM canonical loop form.
+     * 
+     * <p>
+     * The value expression is define if the condition expression is a binary operator with one of the following
+     * operators: <, <=, >, >=
+     * 
+     * @return
+     */
+    public Optional<Expr> getConditionValueExpr() {
+        return getCondOperator()
+                .filter(binOp -> RELATIONAL_OPS.contains(binOp.getOp()))
+                .map(BinaryOperator::getRhs);
+
+    }
+
+    public Optional<Expr> getInitValueExpr() {
+        return getInit().flatMap(init -> getInitValueExpr(init.getChild(0)));
+    }
+
+    private Optional<Expr> getInitValueExpr(ClavaNode initExpr) {
+
+        if (initExpr instanceof VarDecl) {
+            return ((VarDecl) initExpr).getInit();
+        }
+
+        if (initExpr instanceof BinaryOperator) {
+
+            BinaryOperator binOp = (BinaryOperator) initExpr;
+            if (binOp.getOp() != BinaryOperatorKind.ASSIGN) {
+                return Optional.empty();
+            }
+
+            return Optional.of(binOp.getRhs());
+        }
+
+        return Optional.empty();
+    }
+
 }
