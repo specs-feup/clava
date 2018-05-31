@@ -11732,6 +11732,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Relation",
+                              \name": "condRelation"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               \name": "controlVar"
                            }]
@@ -11812,6 +11820,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "expression",
+                              \name": "iterationsExpr"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "[for| while]",
                               \name": "kind"
                            }]
@@ -11830,6 +11846,15 @@
                            {
                               "type": "Integer[]",
                               \name": "rank"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The expression of the iteration step",
+                  "children": [
+                           {
+                              "type": "String",
+                              \name": "stepValue"
                            }]
                },
                {
@@ -30181,6 +30206,36 @@
                {
                   "string": "null",
                   \value": "STATIC"
+               }]
+      },
+      {
+         "type": "enum",
+         "name": "Relation"
+         ,
+         "children": [
+               {
+                  "string": "null",
+                  \value": "EQ"
+               },
+               {
+                  "string": "null",
+                  \value": "GE"
+               },
+               {
+                  "string": "null",
+                  \value": "GT"
+               },
+               {
+                  "string": "null",
+                  \value": "LE"
+               },
+               {
+                  "string": "null",
+                  \value": "LT"
+               },
+               {
+                  "string": "null",
+                  \value": "NE"
                }]
       }]
 }

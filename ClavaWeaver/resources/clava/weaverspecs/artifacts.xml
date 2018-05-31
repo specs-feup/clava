@@ -182,6 +182,7 @@
 			<def type="string"/>
 		</attribute>
 		<attribute name="iterations" type="Integer" />
+		<attribute name="iterationsExpr" type="expression" />
 		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
 			<parameter name="otherLoop" type="loop" />	
 		</attribute>
@@ -189,6 +190,8 @@
 			<def/>
 		</attribute>		
 		<attribute name="endValue" type="String" tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')"/>
+		<attribute name="stepValue" type="String" tooltip="The expression of the iteration step"/>		
+		<attribute name="condRelation" type="Relation"/>
 	</artifact>
 
 
@@ -514,5 +517,16 @@
 		<value name="REGISTER"/>
 		<value name="STATIC"/>
 	</enum>
+	
+	<enum name="Relation">	
+		<value name="LE"/>
+		<value name="LT"/>
+		<value name="GE"/>
+		<value name="GT"/>
+		<value name="EQ"/>		
+		<value name="NE"/>
+	</enum>
+	
+
 
 </artifacts>

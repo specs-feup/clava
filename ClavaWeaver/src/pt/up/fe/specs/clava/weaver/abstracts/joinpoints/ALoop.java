@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
@@ -276,6 +277,31 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Get value on attribute iterationsExpr
+     * @return the attribute's value
+     */
+    public abstract AExpression getIterationsExprImpl();
+
+    /**
+     * Get value on attribute iterationsExpr
+     * @return the attribute's value
+     */
+    public final Object getIterationsExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "iterationsExpr", Optional.empty());
+        	}
+        	AExpression result = this.getIterationsExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "iterationsExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "iterationsExpr", e);
+        }
+    }
+
+    /**
      * 
      * @param otherLoop
      * @return 
@@ -352,6 +378,54 @@ public abstract class ALoop extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "endValue", e);
+        }
+    }
+
+    /**
+     * The expression of the iteration step
+     */
+    public abstract String getStepValueImpl();
+
+    /**
+     * The expression of the iteration step
+     */
+    public final Object getStepValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stepValue", Optional.empty());
+        	}
+        	String result = this.getStepValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "stepValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "stepValue", e);
+        }
+    }
+
+    /**
+     * Get value on attribute condRelation
+     * @return the attribute's value
+     */
+    public abstract Relation getCondRelationImpl();
+
+    /**
+     * Get value on attribute condRelation
+     * @return the attribute's value
+     */
+    public final Object getCondRelation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condRelation", Optional.empty());
+        	}
+        	Relation result = this.getCondRelationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "condRelation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "condRelation", e);
         }
     }
 
@@ -1028,9 +1102,12 @@ public abstract class ALoop extends AStatement {
         attributes.add("rank");
         attributes.add("isParallel");
         attributes.add("iterations");
+        attributes.add("iterationsExpr");
         attributes.add("isInterchangeable");
         attributes.add("initValue");
         attributes.add("endValue");
+        attributes.add("stepValue");
+        attributes.add("condRelation");
     }
 
     /**
@@ -1097,9 +1174,12 @@ public abstract class ALoop extends AStatement {
         RANK("rank"),
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
+        ITERATIONSEXPR("iterationsExpr"),
         ISINTERCHANGEABLE("isInterchangeable"),
         INITVALUE("initValue"),
         ENDVALUE("endValue"),
+        STEPVALUE("stepValue"),
+        CONDRELATION("condRelation"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

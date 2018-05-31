@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.WeaverEngine;
 import java.util.Arrays;
 import java.util.List;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
+import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.ArrayList;
 
 /**
@@ -43,7 +44,7 @@ public abstract class ACxxWeaver extends WeaverEngine {
      */
     @Override
     public final List<Class<?>> getAllImportableClasses() {
-        Class<?>[] defaultClasses = {StorageClass.class};
+        Class<?>[] defaultClasses = {StorageClass.class, Relation.class};
         List<Class<?>> otherClasses = this.getImportableClasses();
         List<Class<?>> allClasses = new ArrayList<>(Arrays.asList(defaultClasses));
         allClasses.addAll(otherClasses);
