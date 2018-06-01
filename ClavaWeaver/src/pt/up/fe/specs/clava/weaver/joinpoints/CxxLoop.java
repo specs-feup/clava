@@ -351,17 +351,31 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void setInitImpl(String initCode) {
-        // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
-        // setInitValue(initCode);
-
+    public void defInitImpl(String value) {
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
 
         ((ForStmt) loop).setInit(literalStmt);
+    }
+
+    @Override
+    public void setInitImpl(String initCode) {
+        defInitImpl(initCode);
+        /*
+        // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
+        // setInitValue(initCode);
+        
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+        
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        
+        ((ForStmt) loop).setInit(literalStmt);
+        */
     }
 
     /*
@@ -657,5 +671,17 @@ public class CxxLoop extends ALoop {
         }
 
         return stepValue;
+    }
+
+    @Override
+    public AStatement getInitImpl() {
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
+
+        return ((ForStmt) loop).getInit().map(init -> CxxJoinpoints.create(init, this, AStatement.class)).orElse(null);
+
     }
 }

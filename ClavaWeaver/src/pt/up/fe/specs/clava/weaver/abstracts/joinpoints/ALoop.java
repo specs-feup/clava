@@ -329,6 +329,36 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * The statement of the loop initialization
+     */
+    public abstract AStatement getInitImpl();
+
+    /**
+     * The statement of the loop initialization
+     */
+    public final Object getInit() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
+        	}
+        	AStatement result = this.getInitImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "init", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defInitImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def init with type String not implemented ");
+    }
+
+    /**
      * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
      */
     public abstract String getInitValueImpl();
@@ -506,7 +536,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * DEPRECATED: use setInitValue instead.
+     * Sets the init statement of the loop.
      * @param initCode 
      */
     public void setInitImpl(String initCode) {
@@ -514,7 +544,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * DEPRECATED: use setInitValue instead.
+     * Sets the init statement of the loop.
      * @param initCode 
      */
     public final void setInit(String initCode) {
@@ -1102,6 +1132,13 @@ public abstract class ALoop extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "init": {
+        	if(value instanceof String){
+        		this.defInitImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "initValue": {
         	if(value instanceof String){
         		this.defInitValueImpl((String)value);
@@ -1130,6 +1167,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("iterations");
         attributes.add("iterationsExpr");
         attributes.add("isInterchangeable");
+        attributes.add("init");
         attributes.add("initValue");
         attributes.add("endValue");
         attributes.add("stepValue");
@@ -1203,6 +1241,7 @@ public abstract class ALoop extends AStatement {
         ITERATIONS("iterations"),
         ITERATIONSEXPR("iterationsExpr"),
         ISINTERCHANGEABLE("isInterchangeable"),
+        INIT("init"),
         INITVALUE("initValue"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),

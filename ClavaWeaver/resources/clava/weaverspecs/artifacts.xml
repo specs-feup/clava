@@ -186,6 +186,9 @@
 		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
 			<parameter name="otherLoop" type="loop" />	
 		</attribute>
+		<attribute name="init" type="statement" tooltip="The statement of the loop initialization">
+			<def type="string"/>
+		</attribute>
 		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
 			<def/>
 		</attribute>		

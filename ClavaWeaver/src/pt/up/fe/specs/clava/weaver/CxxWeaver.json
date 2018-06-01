@@ -11791,6 +11791,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The statement of the loop initialization",
+                  "children": [
+                           {
+                              "type": "statement",
+                              \name": "init"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')",
                   "children": [
                            {
@@ -12399,7 +12408,7 @@
                },
                {
                   "type": "action",
-                  "tooltip": "DEPRECATED: use setInitValue instead.",
+                  "tooltip": "Sets the init statement of the loop.",
                   "children": [
                            {
                               "type": "void",

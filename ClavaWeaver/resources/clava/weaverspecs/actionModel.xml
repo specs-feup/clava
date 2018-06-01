@@ -242,7 +242,7 @@
 		<parameter name="kind" type="String" />
 	</action>
 	
-	<action name="setInit" class="loop" tooltip="DEPRECATED: use setInitValue instead.">
+	<action name="setInit" class="loop" tooltip="Sets the init statement of the loop.">
 		<parameter name="initCode" type="String"/>
 	</action>
 	
