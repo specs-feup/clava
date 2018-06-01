@@ -1,4 +1,5 @@
 import clava.mpi.MpiUtils;
+import clava.mpi.patterns.MpiAccessPatterns;
 
 import clava.Clava;
 import clava.ClavaJoinPoints;
@@ -9,32 +10,26 @@ import clava.ClavaJoinPoints;
  */
 function MpiScatterGatherLoop($loop) {
 	this._$loop = $loop;
+	this._inputJps = [];
+	this._inputAccesses = [];
+	this._outputJps = [];	
+	this._outputAccesses = [];
+	
+	// Check if loop can be parallelize
+	if(this._$loop.iterationsExpr === undefined) {
+		throw "Could not determine expression with number of iterations of the loop. Check if the loop is in the Canonical Loop Form, according to the OpenMP standard.";
+	}
 	// Inputs + access pattern
 	// Outputs + access pattern
 }
 
 MpiScatterGatherLoop.prototype.addInput = function(varName, accessPattern) {
+	this._addVariable(varName, accessPattern, this._inputJps, this._inputAccesses);
+}
 
-	// Check if loop contains a reference to the variable
-	var firstVarref = undefined;
-	for(var $varref of this._$loop.descendants('varref')) {
-		if($varref.name === varName) {
-			firstVarref = $varref;
-			break;
-		}
-	}
-	
-	if(firstVarref === undefined) {
-		throw "Could not find a reference to the variable '"+varName+"' in the loop located at " + this._$loop.location;
-	}
 
-	println("Varref type: " + $varref.type.code);
-	
-	if(accessPattern === undefined) {
-		
-	}
-	
-
+MpiScatterGatherLoop.prototype.addOutput = function(varName, accessPattern) {
+	this._addVariable(varName, accessPattern, this._outputJps, this._outputAccesses);
 }
 
 /**
@@ -68,22 +63,94 @@ MpiScatterGatherLoop.prototype.execute = function() {
 /** PRIVATE SECTION **/
 
 MpiScatterGatherLoop._FUNCTION_MPI_WORKER = "mpi_worker";
-MpiScatterGatherLoop._VAR_MPI_STATUS = "status";
 MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS = "mpi_loop_num_elems";
+MpiScatterGatherLoop._VAR_MASTER_TOTAL_ITER = "clava_mpi_total_iter";
 
 MpiScatterGatherLoop.prototype._replaceLoop = function() {
-	this._$loop.replaceWith(MpiMaster(MpiUtils.VAR_NUM_WORKERS, "", ""));
+//	println("Cond relation:" + this._$loop.condRelation);
+//	println("Iterations expr:" + this._$loop.iterationsExpr.code);
+
+	var masterSend = "";
+	
+	for(var i=0; i<this._inputJps.length; i++) {
+		var $inputJp = this._inputJps[i];
+		var accessPattern = this._inputAccesses[i];
+		
+		masterSend += accessPattern.sendMaster($inputJp, MpiScatterGatherLoop._VAR_MASTER_TOTAL_ITER);
+		masterSend += "\n";
+	}
+	
+	var masterReceive = "";
+	
+	for(var i=0; i<this._outputJps.length; i++) {
+		var $inputJp = this._outputJps[i];
+		var accessPattern = this._outputAccesses[i];
+		
+		masterReceive += accessPattern.receiveMaster($inputJp, MpiScatterGatherLoop._VAR_MASTER_TOTAL_ITER);
+		masterReceive += "\n";
+	}
+
+
+	this._$loop.replaceWith(MpiMaster(MpiUtils.VAR_NUM_WORKERS, this._$loop.iterationsExpr.code, masterSend, masterReceive, MpiUtils._VAR_MPI_STATUS));
 }
 
-
+/*
 MpiScatterGatherLoop.prototype._buildMpiMaster = function() {
 
-	return MpiMaster(MpiUtils.VAR_NUM_WORKERS);
+	return MpiMaster(MpiUtils.VAR_NUM_WORKERS, "", "");
 }
+*/
 
 MpiScatterGatherLoop.prototype._buildMpiWorker = function() {
 
-	return MpiWorker(MpiScatterGatherLoop._FUNCTION_MPI_WORKER, MpiScatterGatherLoop._VAR_MPI_STATUS, MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS, "", "", "", "");
+	var workerLoopCode = this._getWorkerLoopCode();
+
+	var workerReceive = "";
+	
+	for(var i=0; i<this._inputJps.length; i++) {
+		var $inputJp = this._inputJps[i];
+		var accessPattern = this._inputAccesses[i];
+		
+		workerReceive += accessPattern.receiveWorker($inputJp, MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS);
+		workerReceive += "\n";
+	}
+
+	var outputDecl = "";
+	for(var i=0; i<this._outputJps.length; i++) {
+		var $outputJp = this._outputJps[i];
+		var accessPattern = this._outputAccesses[i];
+		
+		outputDecl += accessPattern.outputDeclWorker($outputJp, MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS);
+		outputDecl += "\n";
+	}
+
+	var workerSend = "";
+	
+	for(var i=0; i<this._outputJps.length; i++) {
+		var $outputJp = this._outputJps[i];
+		var accessPattern = this._outputAccesses[i];
+		
+		workerSend += accessPattern.sendWorker($outputJp, MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS);
+		workerSend += "\n";
+	}
+	
+	return MpiWorker(MpiScatterGatherLoop._FUNCTION_MPI_WORKER, MpiUtils._VAR_MPI_STATUS, MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS, workerReceive, outputDecl, workerLoopCode, workerSend);
+}
+
+
+
+MpiScatterGatherLoop.prototype._getWorkerLoopCode = function() {
+
+	// Copy loop
+	var $workerLoop = this._$loop.copy();
+
+	// Adjust start and end of loop
+	$workerLoop.initValue = "0";
+	$workerLoop.endValue = MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS;
+	
+	// TODO: Adapt loop body, if needed
+
+	return $workerLoop.code;
 }
 
 MpiScatterGatherLoop.prototype._addMpiInit = function($mainFunction) {
@@ -101,6 +168,32 @@ MpiScatterGatherLoop.prototype._addMpiInit = function($mainFunction) {
 
 	$mainFunction.body.insertBegin(MpiInit(argc, argv, MpiUtils.VAR_RANK, MpiUtils.VAR_NUM_TASKS, MpiUtils.VAR_NUM_WORKERS, MpiScatterGatherLoop._FUNCTION_MPI_WORKER));
 
+}
+
+MpiScatterGatherLoop.prototype._addVariable = function(varName, accessPattern, namesArray, accessesArray) {
+
+	// Check if loop contains a reference to the variable
+	var firstVarref = undefined;
+	for(var $varref of this._$loop.descendants('varref')) {
+		if($varref.name === varName) {
+			firstVarref = $varref;
+			break;
+		}
+	}
+	
+	if(firstVarref === undefined) {
+		throw "Could not find a reference to the variable '"+varName+"' in the loop located at " + this._$loop.location;
+	}
+
+	//println("Varref type: " + $varref.type.code);
+	
+	if(accessPattern === undefined) {
+		accessPattern = MpiAccessPatterns.SCALAR_PATTERN;
+		// TODO: Verify varref type is a scalar
+	}
+	
+	namesArray.push(firstVarref);
+	accessesArray.push(accessPattern);
 }
 
 
@@ -144,7 +237,7 @@ void [[functionName]]() {
 }% end
 
 
-codedef MpiMaster(numWorkers, numIterations, masterSend, masterReceive) %{
+codedef MpiMaster(numWorkers, numIterations, masterSend, masterReceive, status) %{
 	// Master routine
 	
 	// split iterations of the loop
@@ -163,6 +256,8 @@ codedef MpiMaster(numWorkers, numIterations, masterSend, masterReceive) %{
 	
 	
 	[[masterSend]]
+	
+	MPI_Status [[status]];
 	
 	[[masterReceive]]
 	

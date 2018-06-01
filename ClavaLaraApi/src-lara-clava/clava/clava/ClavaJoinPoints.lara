@@ -57,6 +57,15 @@ ClavaJoinPoints.constArrayType = function(type, dims) {
 	}
 }
 
+ClavaJoinPoints.variableArrayType = function($type, $sizeExpr) {
+	checkDefined($type, '$type', 'ClavaJoinPoints.variableArrayType');
+	checkDefined($sizeExpr, '$sizeExpr', 'ClavaJoinPoints.variableArrayType');
+	
+	
+	return AstFactory.variableArrayType($type, $sizeExpr);
+}
+
+
 ClavaJoinPoints.exprLiteral = function(code, type) {
 	var typeofType = typeof type;
 
