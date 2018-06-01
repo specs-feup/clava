@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class ForStmt extends LoopStmt {
 
@@ -118,6 +119,14 @@ public class ForStmt extends LoopStmt {
     public void setInit(LiteralStmt literalStmt) {
 
         setChild(0, literalStmt);
+    }
+
+    public void setInitValue(Expr expr) {
+        getInitValueExpr().ifPresent(initExpr -> NodeInsertUtils.replace(initExpr, expr));
+    }
+
+    public void setConditionValue(Expr expr) {
+        getConditionValueExpr().ifPresent(initExpr -> NodeInsertUtils.replace(initExpr, expr));
     }
 
     public void setCond(LiteralStmt literalStmt) {
