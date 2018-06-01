@@ -533,5 +533,7 @@ public abstract class Type extends ClavaNode {
         throw new RuntimeException(".setId() not allowed for Type nodes, they are considered immutable");
     }
     */
-
+    public Type normalize() {
+        return this;
+    }
 }

@@ -876,6 +876,13 @@ public class ClavaNodeFactory {
         return new VariableArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
     }
 
+    public static VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
+        ArrayTypeData arrayTypeData = new ArrayTypeData();
+        TypeData typeData = new TypeData(elementType.getCode());
+
+        return variableArrayType(arrayTypeData, typeData, ClavaNodeInfo.undefinedInfo(), elementType, sizeExpr);
+    }
+
     public static InjectedClassNameType injectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
         return new InjectedClassNameType(declInfo, data, info);
     }

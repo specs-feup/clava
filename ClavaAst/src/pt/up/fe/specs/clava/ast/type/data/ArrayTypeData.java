@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
+import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaCode;
@@ -30,6 +31,10 @@ public class ArrayTypeData {
         this.arraySizeType = arraySizeType;
         this.qualifiers = qualifiers;
         this.standard = standard;
+    }
+
+    public ArrayTypeData() {
+        this(ArraySizeType.NORMAL, Collections.emptyList(), Standard.CXX11);
     }
 
     public ArraySizeType getArraySizeType() {

@@ -70,4 +70,9 @@ public class DecayedType extends AdjustedType {
         setOriginalType(desugaredType);
     }
 
+    @Override
+    public Type normalize() {
+        return getOriginalType();
+    }
+
 }
