@@ -422,6 +422,7 @@
 		<attribute name="isBuiltin" type="Boolean" />
 		<attribute name="constant" type="Boolean" />
 		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
+		<attribute name="normalize" type="type" tooltip="Ignores certain types (e.g., DecayedType)" />
 	</artifact>
 
 

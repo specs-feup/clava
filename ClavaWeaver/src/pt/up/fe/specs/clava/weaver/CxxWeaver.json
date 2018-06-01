@@ -1264,6 +1264,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -6828,6 +6837,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -9837,6 +9855,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12358,6 +12385,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the end value of the loop. Works with loops of kind 'for'.",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setEndValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "initCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "DEPRECATED: use setInitValue instead.",
                   "children": [
                            {
@@ -12372,7 +12413,7 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the init statement of the loop. Works with loops of kind 'for'.",
+                  "tooltip": "Sets the init value of the loop. Works with loops of kind 'for'.",
                   "children": [
                            {
                               "type": "void",
@@ -18440,6 +18481,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -20488,6 +20538,15 @@
                            {
                               "type": "String",
                               \name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
                            }]
                },
                {
@@ -24428,6 +24487,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -25147,6 +25215,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -25830,6 +25907,15 @@
                            {
                               "type": "String",
                               \name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Ignores certain types (e.g., DecayedType)",
+                  "children": [
+                           {
+                              "type": "type",
+                              \name": "normalize"
                            }]
                },
                {

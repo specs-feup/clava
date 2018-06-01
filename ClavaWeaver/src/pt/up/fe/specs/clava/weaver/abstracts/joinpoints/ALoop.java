@@ -532,7 +532,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * Sets the init value of the loop. Works with loops of kind 'for'.
      * @param initCode 
      */
     public void setInitValueImpl(String initCode) {
@@ -540,7 +540,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * Sets the init value of the loop. Works with loops of kind 'for'.
      * @param initCode 
      */
     public final void setInitValue(String initCode) {
@@ -554,6 +554,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInitValue", e);
+        }
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public void setEndValueImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setEndValue not implemented ");
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public final void setEndValue(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setEndValue", this, Optional.empty(), initCode);
+        	}
+        	this.setEndValueImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setEndValue", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setEndValue", e);
         }
     }
 
@@ -1132,6 +1158,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void setKind(String)");
         actions.add("void setInit(String)");
         actions.add("void setInitValue(String)");
+        actions.add("void setEndValue(String)");
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
         actions.add("void setIsParallel(Boolean)");

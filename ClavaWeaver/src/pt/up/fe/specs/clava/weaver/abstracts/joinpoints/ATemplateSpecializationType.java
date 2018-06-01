@@ -255,6 +255,15 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Get value on attribute normalize
+     * @return the attribute's value
+     */
+    @Override
+    public AType getNormalizeImpl() {
+        return this.aType.getNormalizeImpl();
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -521,6 +530,7 @@ public abstract class ATemplateSpecializationType extends AType {
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
         UNWRAP("unwrap"),
+        NORMALIZE("normalize"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

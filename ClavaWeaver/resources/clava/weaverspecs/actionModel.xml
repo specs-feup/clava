@@ -246,7 +246,11 @@
 		<parameter name="initCode" type="String"/>
 	</action>
 	
-	<action name="setInitValue" class="loop" tooltip="Sets the init statement of the loop. Works with loops of kind 'for'.">
+	<action name="setInitValue" class="loop" tooltip="Sets the init value of the loop. Works with loops of kind 'for'.">
+		<parameter name="initCode" type="String"/>
+	</action>
+
+	<action name="setEndValue" class="loop" tooltip="Sets the end value of the loop. Works with loops of kind 'for'.">
 		<parameter name="initCode" type="String"/>
 	</action>
 	

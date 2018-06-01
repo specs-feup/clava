@@ -319,6 +319,13 @@ public class AstFactory {
         return CxxJoinpoints.create(outType, null);
     }
 
+    public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
+        Type variableArrayType = ClavaNodeFactory.variableArrayType((Type) elementType.getNode(),
+                (Expr) sizeExpr.getNode());
+
+        return CxxJoinpoints.create(variableArrayType, null, AType.class);
+    }
+
     public static AJoinPoint omp(String directiveName) {
         // Get directive
         OmpDirectiveKind kind = OmpDirectiveKind.getHelper().fromValue(directiveName);

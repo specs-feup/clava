@@ -34,6 +34,8 @@ import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
 import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
@@ -350,10 +352,19 @@ public class CxxLoop extends ALoop {
 
     @Override
     public void setInitImpl(String initCode) {
-        ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
-        setInitValue(initCode);
+        // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
+        // setInitValue(initCode);
+
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+
+        ((ForStmt) loop).setInit(literalStmt);
     }
 
+    /*
     @Override
     public void setInitValueImpl(String initCode) {
         // if (!(loop instanceof ForStmt)) {
@@ -365,6 +376,23 @@ public class CxxLoop extends ALoop {
         // ((ForStmt) loop).setInit(literalStmt);
         defInitValueImpl(initCode);
     }
+    
+    @Override
+    public void defInitValueImpl(String value) {
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+    
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
+    
+        ((ForStmt) loop).setInit(literalStmt);
+    }
+    */
+
+    @Override
+    public void setInitValueImpl(String initCode) {
+        defInitValueImpl(initCode);
+    }
 
     @Override
     public void defInitValueImpl(String value) {
@@ -372,9 +400,20 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
+        Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setInit(literalStmt);
+        ((ForStmt) loop).setInitValue(CxxWeaver.getFactory().literalExpr(value, intType));
+    }
+
+    @Override
+    public void setEndValueImpl(String value) {
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
+
+        ((ForStmt) loop).setConditionValue(CxxWeaver.getFactory().literalExpr(value, intType));
     }
 
     @Override
