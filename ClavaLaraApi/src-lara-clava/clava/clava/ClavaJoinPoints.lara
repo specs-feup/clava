@@ -153,3 +153,8 @@ ClavaJoinPoints.switchStmt = function($conditionExpr) {
 	return AstFactory.switchStmt($conditionExpr, cases);
 }
 
+
+ClavaJoinPoints.omp = function(directiveName) {
+	return AstFactory.omp(directiveName);
+}
+
