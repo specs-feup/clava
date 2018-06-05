@@ -81,7 +81,11 @@ public class ClavaWeaverLauncher {
         }
 
         List<String> laraUnitArgs = new ArrayList<>();
-        laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
+        // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
+        laraUnitArgs.add("--weaver");
+        laraUnitArgs.add(CxxWeaver.class.getName());
+
+        // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
         for (int i = flagIndex + 1; i < args.length; i++) {
             laraUnitArgs.add(args[i]);
         }
