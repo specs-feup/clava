@@ -68,7 +68,16 @@ public class FloatingLiteral extends Literal {
             // System.out.println("COULD NOT PARSE: " + literal);
         }
 
-        double diff = Math.abs((parsedDouble - get(VALUE)));
+        // Because of the parsing problems, approximate value is "closer" to the truth than literal
+        double approximateValue = get(VALUE);
+
+        // If approximate value is zero, return literal
+        if (approximateValue == 0.0) {
+            return literal;
+        }
+
+        // Calculate relative diff
+        double diff = Math.abs((parsedDouble - approximateValue)) / approximateValue;
 
         // There is no difference, return literal
         if (diff == 0.0) {
@@ -81,7 +90,7 @@ public class FloatingLiteral extends Literal {
         }
 
         // Return approximate value
-        return Double.toString(get(VALUE));
+        return Double.toString(approximateValue);
 
         // System.out.println("LITERAL VALUE:" + getLiteral());
         // System.out.println("APPROXIMATE VALUE:" + getData().getValue());
