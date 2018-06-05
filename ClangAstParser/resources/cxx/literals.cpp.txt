@@ -22,5 +22,20 @@ int main() {
    auto z = 1.0_E + 2.0;
    auto u = 1_p + 2;
    
+   // Constants from NAS benchmark
+	double xcrref[5];
+	xcrref[0] = 0.1125590409344e+03;
+    xcrref[1] = 0.1180007595731e+02;
+    xcrref[2] = 0.2710329767846e+02;
+    xcrref[3] = 0.2469174937669e+02;
+    xcrref[4] = 0.2638427874317e+03;
+	
+	double xceref[5];
+    xceref[0] = 0.4419655736008e+01;
+    xceref[1] = 0.4638531260002e+00;
+    xceref[2] = 0.1011551749967e+01;
+    xceref[3] = 0.9235878729944e+00;
+    xceref[4] = 0.1018045837718e+02;
+   
    return 0;
 }
