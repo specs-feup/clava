@@ -173,3 +173,10 @@ Clava.getFactory = function() {
 	return new AstFactory(Clava.getContext());
 }
 */
+
+/**** PRIVATE ****/
+
+Clava._getApiUtils = function() {	
+	return Java.type("pt.up.fe.specs.clava.weaver.ClavaApiUtils");
+}
+

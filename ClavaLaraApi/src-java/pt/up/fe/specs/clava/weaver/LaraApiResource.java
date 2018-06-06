@@ -21,6 +21,9 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraApiResource implements LaraResourceProvider {
 
+    // AUTOPAR
+    AUTOPAR_UTILS("autopar/AutoParUtils.lara"),
+
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
     MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.lara"),
