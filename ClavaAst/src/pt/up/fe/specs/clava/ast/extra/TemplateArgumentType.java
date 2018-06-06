@@ -63,7 +63,7 @@ public class TemplateArgumentType extends TemplateArgument {
     public void setType(Type type, boolean updateTypeString) {
         this.type = type;
         if (updateTypeString) {
-            stringType = Arrays.asList(type.getCode());
+            stringType = Arrays.asList(type.getCode(this));
         }
     }
 

@@ -184,7 +184,7 @@ public abstract class NamedDecl extends Decl implements Typable {
 
     @Override
     public String toContentString() {
-        return super.toContentString() + "declName:" + declName + ", type:" + getType().getCode();
+        return super.toContentString() + "declName:" + declName + ", type:" + getTypeCode();
     }
 
 }

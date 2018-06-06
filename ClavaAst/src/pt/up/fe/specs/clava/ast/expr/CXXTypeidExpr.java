@@ -75,7 +75,7 @@ public class CXXTypeidExpr extends Expr {
 
         code.append("typeid(");
         if (typeidData.isTypeOperand()) {
-            code.append(typeidData.getOperandType().getCode());
+            code.append(typeidData.getOperandType().getCode(this));
         } else {
             code.append(getOperandExpr().get().getCode());
         }

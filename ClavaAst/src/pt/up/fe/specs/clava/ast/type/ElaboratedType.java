@@ -124,7 +124,7 @@ public class ElaboratedType extends TypeWithKeyword {
 
             if (hasTemplateArgs) {
                 String templateArgs = namedType.getTemplateArgumentTypes().stream()
-                        .map(Type::getCode)
+                        .map(type -> type.getCode(sourceNode))
                         .collect(Collectors.joining(", "));
                 bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
             }

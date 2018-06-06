@@ -52,7 +52,7 @@ public class ImplicitValueInitExpr extends Expr {
 
     @Override
     public String toContentString() {
-        return super.toContentString() + " (type:" + getExprType().getCode() + ")";
+        return super.toContentString() + " (type:" + getExprType().getCode(this) + ")";
     }
 
 }

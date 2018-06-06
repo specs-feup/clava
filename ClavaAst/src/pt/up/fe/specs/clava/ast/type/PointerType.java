@@ -50,7 +50,7 @@ public class PointerType extends Type {
         }
 
         String nameString = name == null ? "" : " " + name;
-        String pointeeCode = pointeeType.getCode();
+        String pointeeCode = pointeeType.getCode(sourceNode);
         String pointeeSuffix = pointeeCode.endsWith("*") ? "" : " ";
         return pointeeCode + pointeeSuffix + "*" + nameString;
         // return getPointeeType().getCode(name) + "*";

@@ -118,6 +118,10 @@ public abstract class Type extends ClavaNode {
         return getCode(null, name);
     }
 
+    public String getCode(ClavaNode node) {
+        return getCode(node, null);
+    }
+
     /**
      * Type instances getCode() method receive a String (e.g., with the name of a variable), in case this is code to
      * declare something.
@@ -470,7 +474,7 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public int hashCode() {
-        return getCode().hashCode();
+        return Types.hashCode(this);
         // final int prime = 31;
         // int result = prime;
         // result = prime * result + ((data == null) ? 0 : data.hashCode());
@@ -536,4 +540,5 @@ public abstract class Type extends ClavaNode {
     public Type normalize() {
         return this;
     }
+
 }

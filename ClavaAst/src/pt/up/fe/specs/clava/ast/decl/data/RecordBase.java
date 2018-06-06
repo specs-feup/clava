@@ -15,12 +15,13 @@ package pt.up.fe.specs.clava.ast.decl.data;
 
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
+import pt.up.fe.specs.clava.utils.Typable;
 
-public class RecordBase {
+public class RecordBase implements Typable {
 
     private final boolean isVirtual;
     private final AccessSpecifier accessSpecifier;
-    private final Type type;
+    private Type type;
     private final boolean isPackExpansion;
 
     public RecordBase(boolean isVirtual, AccessSpecifier accessSpecifier, Type type, boolean isPackExpansion) {
@@ -38,14 +39,25 @@ public class RecordBase {
         return accessSpecifier;
     }
 
+    @Override
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public boolean isPackExpansion() {
         return isPackExpansion;
     }
 
+    /**
+     * TODO: Pass ClavaNode
+     * 
+     * @return
+     */
     public String getCode() {
         StringBuilder code = new StringBuilder();
 

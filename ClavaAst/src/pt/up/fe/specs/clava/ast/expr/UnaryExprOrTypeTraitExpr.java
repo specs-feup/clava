@@ -111,7 +111,7 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         }
 
         String argumentCode = hasArgumentExpression() ? getArgumentExpression().getCode()
-                : getArgumentType().get().getCode();
+                : getArgumentType().get().getCode(this);
 
         if (useParenthesis) {
             return uettKind.getString() + "(" + argumentCode + ")";

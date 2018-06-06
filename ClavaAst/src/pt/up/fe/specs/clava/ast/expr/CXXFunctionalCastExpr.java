@@ -89,7 +89,7 @@ public class CXXFunctionalCastExpr extends CastExpr {
 
     @Override
     public String getCode() {
-        return getType().getCode() + "(" + getSubExpr().getCode() + ")";
+        return getTypeCode() + "(" + getSubExpr().getCode() + ")";
     }
 
     // public String getTargetType() {

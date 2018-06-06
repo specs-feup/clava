@@ -13,11 +13,26 @@
 
 package pt.up.fe.specs.clava.utils;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 
+/**
+ * Interface for ClavaNodes that have an associated type.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public interface Typable {
 
     Type getType();
 
     void setType(Type type);
+
+    default String getTypeCode() {
+        return getType().getCode((ClavaNode) this, null);
+    }
+
+    default String getTypeCode(String name) {
+        return getType().getCode((ClavaNode) this, name);
+    }
 }

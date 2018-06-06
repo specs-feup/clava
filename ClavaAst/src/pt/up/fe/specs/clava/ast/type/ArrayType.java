@@ -71,7 +71,7 @@ public abstract class ArrayType extends Type {
             return elementType.getCode(sourceNode, nameCode + "[" + arrayContentCode + "]");
         }
 
-        return getElementType().getCode() + " " + nameCode + "[" + arrayContentCode + "]";
+        return getElementType().getCode(sourceNode) + " " + nameCode + "[" + arrayContentCode + "]";
     }
 
     @Override

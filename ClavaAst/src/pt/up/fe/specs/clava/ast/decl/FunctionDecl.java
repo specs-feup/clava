@@ -286,7 +286,7 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         if (useReturnType) {
-            String returnType = getFunctionType().getReturnType().getCode();
+            String returnType = getFunctionType().getReturnType().getCode(this);
             code.append(returnType);
         }
 

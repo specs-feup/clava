@@ -46,7 +46,7 @@ public class TypeAliasDecl extends TypedefNameDecl {
 
     @Override
     public String getCode() {
-        return "using " + getDeclName() + " = " + getAliasedType().getCode() + ";";
+        return "using " + getDeclName() + " = " + getAliasedType().getCode(this) + ";";
     }
 
 }

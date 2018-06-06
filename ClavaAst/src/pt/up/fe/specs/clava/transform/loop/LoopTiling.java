@@ -152,7 +152,8 @@ public class LoopTiling {
         List<String> controlVars = LoopAnalysisUtils.getControlVarNames(targetFor);
         String controlVar = controlVars.get(0);
         String limitVar = controlVar + "_limit";
-        String limitVarDecl = oldUpperBoundType.unqualifiedType().getCode() + " " + limitVar + " = " + blockLimit + ";";
+        String limitVarDecl = oldUpperBoundType.unqualifiedType().getCode(targetFor) + " " + limitVar + " = "
+                + blockLimit + ";";
         String limitCheck = "if(" + limitVar + " > " + oldUpperBoundCode + ")" + limitVar + " = "
                 + oldUpperBoundCode + ";";
 

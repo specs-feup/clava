@@ -34,6 +34,7 @@ public class TemplateSpecializationType extends Type {
     private final String templateName;
     private final boolean isTypeAlias;
 
+    // TODO: Deprecate this field, generate on demand
     private List<String> templateArgumentsStrings;
     // private List<Type> templateArgumentTypes;
     private boolean hasUpdatedArgumentTypes;
@@ -133,6 +134,7 @@ public class TemplateSpecializationType extends Type {
 
         // Set argument
         ((TemplateArgumentType) templateArgument).setType(newTemplateArgType, true);
+        // TODO: This should be generated when asked
         templateArgumentsStrings.set(index, newTemplateArgType.getCode());
         // templateArgumentTypes.set(index, newTemplateArgType);
         setUpdatedTemplateArgTypes(true);

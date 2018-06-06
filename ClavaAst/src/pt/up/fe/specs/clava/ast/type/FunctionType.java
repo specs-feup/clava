@@ -153,7 +153,7 @@ public abstract class FunctionType extends Type {
         code.append(getReturnType().getCode(sourceNode, name));
 
         String paramsCode = getParamTypes().stream()
-                .map(type -> type.getCode())
+                .map(type -> type.getCode(sourceNode))
                 .collect(Collectors.joining(", "));
 
         if (isVariadic()) {

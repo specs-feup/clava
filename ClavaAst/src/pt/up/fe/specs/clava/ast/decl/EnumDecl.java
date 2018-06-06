@@ -119,8 +119,8 @@ public class EnumDecl extends TagDecl {
         return builder.toString();
     }
 
-    private static void addType(Type type, StringBuilder builder) {
-        String typeCode = type.getCode();
+    private void addType(Type type, StringBuilder builder) {
+        String typeCode = type.getCode(this);
 
         // Only append if not a default type
         if (DEFAULT_TYPES.contains(typeCode)) {
@@ -139,8 +139,9 @@ public class EnumDecl extends TagDecl {
         STRUCT,
         NO_SCOPE;
 
-        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(EnumScopeType.class,
-                NO_SCOPE);
+        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(EnumScopeType.class,
+                        NO_SCOPE);
 
         public static EnumHelperWithValue<EnumScopeType> getEnumHelper() {
             return ENUM_HELPER.get();

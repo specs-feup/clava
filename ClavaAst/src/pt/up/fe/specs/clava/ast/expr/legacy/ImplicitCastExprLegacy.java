@@ -68,7 +68,7 @@ public class ImplicitCastExprLegacy extends ImplicitCastExpr {
 
     @Override
     public String toContentString() {
-        return super.toContentString() + " (type:" + getExprType().getCode() + ", CastKind:" + getCastKind() + ")";
+        return super.toContentString() + " (type:" + getExprType().getCode(this) + ", CastKind:" + getCastKind() + ")";
     }
 
     /**

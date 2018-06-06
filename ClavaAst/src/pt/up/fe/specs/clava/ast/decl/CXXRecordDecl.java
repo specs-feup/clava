@@ -60,7 +60,7 @@ public class CXXRecordDecl extends RecordDecl {
     @Override
     public String toContentString() {
         String bases = getRecordBases().stream()
-                .map(base -> base.getType().getCode())
+                .map(base -> base.getTypeCode())
                 .collect(Collectors.joining(","));
 
         bases = bases.isEmpty() ? "" : ", bases{" + bases + "}";
