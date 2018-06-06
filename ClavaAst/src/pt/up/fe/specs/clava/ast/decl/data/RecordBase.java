@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.utils.Typable;
@@ -58,7 +59,7 @@ public class RecordBase implements Typable {
      * 
      * @return
      */
-    public String getCode() {
+    public String getCode(ClavaNode sourceNode) {
         StringBuilder code = new StringBuilder();
 
         // Add access specifier
@@ -70,7 +71,7 @@ public class RecordBase implements Typable {
         }
 
         // Add type
-        code.append(" ").append(type.getCode());
+        code.append(" ").append(type.getCode(sourceNode));
 
         if (isPackExpansion) {
             code.append("...");

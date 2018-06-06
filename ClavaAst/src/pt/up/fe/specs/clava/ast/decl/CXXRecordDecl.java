@@ -71,7 +71,7 @@ public class CXXRecordDecl extends RecordDecl {
     @Override
     public String getCode() {
         String bases = getRecordBases().stream()
-                .map(recordBase -> recordBase.getCode())
+                .map(recordBase -> recordBase.getCode(this))
                 .collect(Collectors.joining(", "));
 
         bases = bases.isEmpty() ? bases : " : " + bases;

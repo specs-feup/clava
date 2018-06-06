@@ -63,8 +63,11 @@ public class BuiltinType extends Type {
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
+        // First, try kind code, then literal
+        String type = get(KIND).getCodeTry(sourceNode).orElse(get(KIND_LITERAL));
+
         // Give priority to kind literal
-        String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
+        // String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
 
         // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
         // boolean isCxx = getData().getStandard().isCxx();

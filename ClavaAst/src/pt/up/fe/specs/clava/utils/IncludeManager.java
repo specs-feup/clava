@@ -79,4 +79,10 @@ public class IncludeManager {
     public String toString() {
         return includes.toString();
     }
+
+    public boolean hasInclude(String includeName, boolean isAngled) {
+        String includeCode = new IncludeDecl(includeName, isAngled).getFormattedInclude();
+
+        return currentIncludes.contains(includeCode);
+    }
 }

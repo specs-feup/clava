@@ -455,4 +455,8 @@ public class TranslationUnit extends ClavaNode {
         put(LANGUAGE, language);
     }
 
+    public boolean hasInclude(String includeName, boolean isAngled) {
+        return getIncludes().hasInclude(includeName, isAngled);
+    }
+
 }
