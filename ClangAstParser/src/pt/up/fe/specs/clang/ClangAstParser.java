@@ -783,69 +783,8 @@ public class ClangAstParser {
         }
 
         return executable.getFile();
-
-        /*
-        if (Platforms.isWindows()) {
-            // return IoUtils.resourceCopyVersioned(ClangAstResource.WIN_EXE, resourceFolder, false).getFile();
-            for (FileResourceProvider resource : ClangAstWebResource.getWindowsResources()) {
-                resource.writeVersioned(resourceFolder, ClangAstParser.class);
-                // IoUtils.resourceCopyVersioned(resource, resourceFolder, false);
-            }
-        
-            return new File(resourceFolder, ClangAstWebResource.WIN_EXE.getFilename());
-        }
-        */
-
-        /*
-        // CentOS 6
-        if (System.getProperty("os.version").contains(".el6.")) {
-            // Copy executable
-            ResourceWriteData file = ClangAstWebResource.CENTOS6_EXE.writeVersioned(resourceFolder,
-                    ClangAstParser.class);
-        
-            // Make file executable
-            if (file.isNewFile()) {
-                ProcessUtils.runProcess(Arrays.asList("chmod", "+x", file.getFile().getAbsolutePath()), false, true);
-            }
-        
-            return file.getFile();
-        }
-        */
-        /*
-        if (Platforms.isLinux()) {
-            // Copy executable
-            ResourceWriteData file = ClangAstWebResource.LINUX_EXE.writeVersioned(resourceFolder, ClangAstParser.class);
-            // ResourceCopyData file = IoUtils.resourceCopyVersioned(ClangAstResource.LINUX_EXE, resourceFolder, false);
-        
-            // Make file executable
-            if (file.isNewFile()) {
-                ProcessUtils.runProcess(Arrays.asList("chmod", "+x", file.getFile().getAbsolutePath()), false, true);
-            }
-        
-            return file.getFile();
-        }
-        */
-
-        // throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
     }
 
-    /*
-    private static FileResourceProvider getExecutableResource(SupportedPlatform platform) {
-        
-        switch (platform) {
-        case WINDOWS:
-            return ClangAstWebResource.WIN_EXE;
-        case CENTOS6:
-            return ClangAstWebResource.CENTOS6_EXE;
-        case LINUX:
-            return ClangAstWebResource.LINUX_EXE;
-        case MAC_OS:
-            return ClangAstWebResource.MAC_OS_EXE;
-        default:
-            throw new RuntimeException("Case not defined: '" + platform + "'");
-        }
-    }
-    */
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
 
         switch (platform) {

@@ -79,4 +79,5 @@ public interface ClangAstWebResource {
     // static List<WebResourceProvider> getWindowsResources() {
     // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
     // }
+
 }
