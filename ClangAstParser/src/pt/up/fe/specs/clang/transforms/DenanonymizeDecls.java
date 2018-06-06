@@ -126,7 +126,7 @@ public class DenanonymizeDecls implements SimplePostClavaRule {
 
         if (recordType != null // It has a RecordType
                 && lastRecordDecl.getRecordDeclData().isAnonymous() // Last record is anonymous
-                && recordType.getRecordName().equals(lastRecordDecl.getType().getCode())) { // They are the same type
+                && recordType.getRecordName().equals(lastRecordDecl.getTypeCode())) { // They are the same type
 
             return namedDecl;
         }

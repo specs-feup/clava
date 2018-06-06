@@ -52,7 +52,7 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
 
         // System.out.println("BUILTIN");
         // Check if a boolean
-        if (!type.getCode().equals("_Bool")) {
+        if (!((Typable) node).getTypeCode().equals("_Bool")) {
             return;
         }
         // System.out.println("BOOL");
@@ -65,7 +65,6 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
 
         // Replace BuiltinType
         BuiltinType newBuiltin = newBoolBuiltin(node);
-
         typable.setType(newBuiltin);
 
     }

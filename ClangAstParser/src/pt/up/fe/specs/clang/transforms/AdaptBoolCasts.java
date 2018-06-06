@@ -36,7 +36,7 @@ public class AdaptBoolCasts implements SimplePostClavaRule {
         CXXFunctionalCastExpr castExpr = (CXXFunctionalCastExpr) node;
 
         // if (!castExpr.getTargetType().equals("_Bool")) {
-        if (!castExpr.getType().getCode().equals("_Bool")) {
+        if (!castExpr.getTypeCode().equals("_Bool")) {
             return;
         }
 

@@ -297,7 +297,6 @@ public class AstFactory {
 
     // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
     public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
-
         Standard standard = Standard.getEnumHelper().fromValue(standardString);
 
         Preconditions.checkNotNull(dims);
