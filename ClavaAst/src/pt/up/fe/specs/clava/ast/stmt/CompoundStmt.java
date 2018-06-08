@@ -52,13 +52,6 @@ public class CompoundStmt extends Stmt {
 
     }
 
-    // true if this CompoundStmt initially did not have curly braces {}
-    // private boolean isNaked;
-
-    // public static CompoundStmt newNakedInstance(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-    // return new CompoundStmt(true, info, children);
-    // }
-
     private static List<Stmt> parseChildren(Collection<? extends ClavaNode> children) {
 
         List<Stmt> statements = children.stream()
@@ -78,26 +71,6 @@ public class CompoundStmt extends Stmt {
         return statements;
 
     }
-
-    // public CompoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-    // this(false, info, children);
-    // }
-
-    // private CompoundStmt(boolean isNaked, ClavaNodeInfo info, Collection<? extends Stmt> children) {
-    // this(new LegacyToDataStore().setNodeInfo(info).set(IS_NAKED, isNaked).getData(), children);
-    //
-    // // this.isNaked = isNaked;
-    //
-    // // If naked, can have only only child, or be empty
-    // // if (isNaked) {
-    // // Preconditions.checkArgument(children.size() < 2, "Expected at most 1 child:" + children);
-    // // }
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CompoundStmt(isNaked, getInfo(), Collections.emptyList());
-    // }
 
     @Override
     public String getCode() {
@@ -216,7 +189,6 @@ public class CompoundStmt extends Stmt {
 
         set(IS_NAKED, isNaked);
         return this;
-        // this.isNaked = isNaked;
     }
 
 }

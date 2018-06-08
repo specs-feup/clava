@@ -32,34 +32,9 @@ public class LiteralStmt extends Stmt implements LiteralNode {
         super(data, children);
     }
 
-    // private final String literalCode;
-
-    /**
-     * 
-     * 
-     * @param literalCode
-     */
-    // public LiteralStmt(String literalCode) {
-    // this(literalCode, ClavaNodeInfo.undefinedInfo());
-    // }
-
-    // private LiteralStmt(String literalCode, ClavaNodeInfo info) {
-    // this(new LegacyToDataStore().setNodeInfo(info).set(LITERAL_CODE, literalCode).getData(),
-    // Collections.emptyList());
-    //
-    // // this.literalCode = literalCode.endsWith(";") ? literalCode : literalCode + ";";
-    // // this.literalCode = literalCode;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LiteralStmt(literalCode, getInfo());
-    // }
-
     @Override
     public String getCode() {
         return get(LITERAL_CODE);
-        // return literalCode;
     }
 
 }
