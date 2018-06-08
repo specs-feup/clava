@@ -180,6 +180,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -332,6 +341,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -781,6 +799,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -933,6 +960,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -1469,6 +1505,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -1621,6 +1666,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -2117,6 +2171,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -2269,6 +2332,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -2829,6 +2901,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -2981,6 +3062,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -3532,6 +3622,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -3684,6 +3783,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -4118,6 +4226,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -4270,6 +4387,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -4685,6 +4811,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -4837,6 +4972,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -5234,6 +5378,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -5386,6 +5539,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -5817,6 +5979,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -5969,6 +6140,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -6371,6 +6551,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -6523,6 +6712,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -7042,6 +7240,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -7194,6 +7401,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -7658,6 +7874,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -7810,6 +8035,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -8324,6 +8558,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -8476,6 +8719,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -9238,6 +9490,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -9390,6 +9651,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -10060,6 +10330,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -10212,6 +10491,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -10704,6 +10992,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -10856,6 +11153,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -11379,6 +11685,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -11531,6 +11846,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -12082,6 +12406,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -12234,6 +12567,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -12926,6 +13268,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -13078,6 +13429,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -13565,6 +13925,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -13717,6 +14086,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -14283,6 +14661,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -14435,6 +14822,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -15068,6 +15464,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -15220,6 +15625,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -15776,6 +16190,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -15928,6 +16351,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -16359,6 +16791,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -16511,6 +16952,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -17120,6 +17570,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -17272,6 +17731,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -17984,6 +18452,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -18136,6 +18613,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -18695,6 +19181,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -18847,6 +19342,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -19301,6 +19805,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -19453,6 +19966,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -19969,6 +20491,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -20121,6 +20652,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -20756,6 +21296,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -20908,6 +21457,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -21362,6 +21920,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -21514,6 +22081,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -21982,6 +22558,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -22134,6 +22719,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -22778,6 +23372,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -22930,6 +23533,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -23416,6 +24028,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -23568,6 +24189,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -24004,6 +24634,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -24156,6 +24795,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -24701,6 +25349,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -24853,6 +25510,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -25429,6 +26095,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -25581,6 +26256,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -26125,6 +26809,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -26277,6 +26970,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -26723,6 +27425,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -26875,6 +27586,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -27346,6 +28066,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -27498,6 +28227,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -27971,6 +28709,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -28123,6 +28870,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -28581,6 +29337,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -28733,6 +29498,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -29238,6 +30012,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -29390,6 +30173,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {
@@ -29837,6 +30629,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Retrieves all descendants of the join point",
                   "children": [
                            {
@@ -29989,6 +30790,15 @@
                            {
                               "type": "joinpoint",
                               \name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              \name": "pragmas"
                            }]
                },
                {

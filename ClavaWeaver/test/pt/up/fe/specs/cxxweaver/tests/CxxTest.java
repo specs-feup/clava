@@ -191,4 +191,9 @@ public class CxxTest {
     // newTester().test("Class.lara", "class.cpp");
     // }
 
+    @Test
+    public void testPragmaData() {
+        newTester().test("PragmaData.lara", "pragma_data.cpp");
+    }
+
 }

@@ -333,6 +333,7 @@ public abstract class AClass extends ARecord {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
@@ -361,6 +362,7 @@ public abstract class AClass extends ARecord {
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

@@ -84,7 +84,8 @@
 		</attribute>
 		<attribute name="parentRegion" type="joinpoint" />
 		<attribute name="currentRegion" type="joinpoint" />
-		<!--  <attribute name="pragmas" type="joinpoint[]" />  -->
+		<attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
+		<attribute name="data" type="Object" tooltip="JS object with the parsed data of #pragma clava data, associated with this node"/>
 	</global>
 
 

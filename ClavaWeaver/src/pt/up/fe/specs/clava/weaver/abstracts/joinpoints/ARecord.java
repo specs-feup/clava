@@ -191,6 +191,7 @@ public abstract class ARecord extends ACxxWeaverJoinPoint {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
@@ -219,6 +220,7 @@ public abstract class ARecord extends ACxxWeaverJoinPoint {
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

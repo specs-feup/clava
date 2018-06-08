@@ -472,6 +472,7 @@ public abstract class AUnaryExprOrType extends AExpression {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
@@ -500,6 +501,7 @@ public abstract class AUnaryExprOrType extends AExpression {
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

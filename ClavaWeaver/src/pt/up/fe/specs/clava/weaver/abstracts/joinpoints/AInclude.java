@@ -343,6 +343,7 @@ public abstract class AInclude extends ADecl {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
@@ -371,6 +372,7 @@ public abstract class AInclude extends ADecl {
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

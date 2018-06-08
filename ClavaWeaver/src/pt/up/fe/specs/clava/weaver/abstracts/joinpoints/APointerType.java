@@ -468,6 +468,7 @@ public abstract class APointerType extends AType {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
@@ -496,6 +497,7 @@ public abstract class APointerType extends AType {
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

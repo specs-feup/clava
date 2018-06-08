@@ -441,6 +441,8 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("userField(String fieldName)");
         attributes.add("parentRegion");
         attributes.add("currentRegion");
+        attributes.add("pragmas");
+        attributes.add("data");
     }
 
     /**
@@ -1381,6 +1383,62 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "currentRegion", e);
+        }
+    }
+
+    /**
+     * Get value on attribute pragmas
+     * @return the attribute's value
+     */
+    public abstract APragma[] getPragmasArrayImpl();
+
+    /**
+     * The pragmas associated with this node
+     */
+    public Bindings getPragmasImpl() {
+        APragma[] aPragmaArrayImpl0 = getPragmasArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aPragmaArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The pragmas associated with this node
+     */
+    public final Object getPragmas() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pragmas", Optional.empty());
+        	}
+        	Bindings result = this.getPragmasImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "pragmas", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "pragmas", e);
+        }
+    }
+
+    /**
+     * JS object with the parsed data of #pragma clava data, associated with this node
+     */
+    public abstract Object getDataImpl();
+
+    /**
+     * JS object with the parsed data of #pragma clava data, associated with this node
+     */
+    public final Object getData() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "data", Optional.empty());
+        	}
+        	Object result = this.getDataImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "data", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "data", e);
         }
     }
 
