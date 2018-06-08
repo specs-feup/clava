@@ -13,6 +13,7 @@ import clava.autorpar.BuildPetitFileInput;
 import clava.autorpar.ExecPetitDependencyTest;
 import clava.autorpar.SetArrayAccessOpenMPscoping;
 
+var LoopOmpAttributes = {};
 
 aspectdef ParallelizeLoop
 	input $ForStmt end
