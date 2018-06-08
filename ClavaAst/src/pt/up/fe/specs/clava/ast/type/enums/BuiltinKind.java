@@ -161,8 +161,16 @@ public enum BuiltinKind {
     }
 
     private String getCodeBool(ClavaNode sourceNode) {
+
+        if (sourceNode == null) {
+            return "bool";
+        }
+
         // Get translation unit
-        TranslationUnit tunit = sourceNode.getAncestor(TranslationUnit.class);
+        TranslationUnit tunit = sourceNode.getAncestorTry(TranslationUnit.class).orElse(null);
+        if (tunit == null) {
+            return "bool";
+        }
 
         // If C++, just return bool
         if (tunit.get(TranslationUnit.LANGUAGE).get(Language.C_PLUS_PLUS)) {

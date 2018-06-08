@@ -42,7 +42,8 @@ public class Language extends DataClass<Language> {
     /**
      * True if is a C++ variant.
      */
-    public static final DataKey<Boolean> C_PLUS_PLUS = KeyFactory.bool("c++");
+    public static final DataKey<Boolean> C_PLUS_PLUS = KeyFactory.bool("c++")
+            .setDefault(() -> true);
 
     /**
      * True if is a C++11 variant (or later).

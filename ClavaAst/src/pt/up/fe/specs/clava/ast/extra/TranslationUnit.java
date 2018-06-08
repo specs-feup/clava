@@ -50,7 +50,9 @@ import pt.up.fe.specs.util.utilities.StringLines;
  */
 public class TranslationUnit extends ClavaNode {
 
-    public static final DataKey<Language> LANGUAGE = KeyFactory.object("language", Language.class);
+    public static final DataKey<Language> LANGUAGE = KeyFactory.object("language", Language.class)
+            // TODO: Remove this after parsing of header files is implemented
+            .setDefault(() -> new Language());
 
     // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
     // private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
