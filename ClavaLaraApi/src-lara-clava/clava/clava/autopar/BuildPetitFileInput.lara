@@ -3,7 +3,7 @@
 *                       BuildPetitFileInput
 * 
 **************************************************************/
-import clava.autorpar.get_varTypeAccess;
+import clava.autopar.get_varTypeAccess;
 
 aspectdef BuildPetitFileInput
 	input $ForStmt end

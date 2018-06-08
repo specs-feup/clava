@@ -3,7 +3,7 @@
 *                   additionalConditionsCheck
 * 
 **************************************************************/
-import clava.autorpar.checkForFunctionCalls;
+import clava.autopar.checkForFunctionCalls;
 
 aspectdef additionalConditionsCheck	
 	input $ForStmt end

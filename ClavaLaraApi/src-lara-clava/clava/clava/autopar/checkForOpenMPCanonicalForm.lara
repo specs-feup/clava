@@ -3,7 +3,7 @@
 *                   checkForOpenMPCanonicalForm
 * 
 **************************************************************/
-import clava.autorpar.checkForInvalidStmts;
+import clava.autopar.checkForInvalidStmts;
 
 aspectdef checkForOpenMPCanonicalForm	
 	input $ForStmt end

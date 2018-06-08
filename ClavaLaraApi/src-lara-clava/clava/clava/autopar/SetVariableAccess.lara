@@ -5,7 +5,7 @@
 **************************************************************/
 // should I have checking for pointerAccessVarNames !!!
 import lara.Strings;
-import clava.autorpar.get_varTypeAccess;
+import clava.autopar.get_varTypeAccess;
 
 aspectdef SetVariableAccess
 	input $ForStmt end

@@ -3,7 +3,7 @@
 *                       SetVarrefOpenMPscoping
 * 
 **************************************************************/
-import clava.autorpar.checkvarreReduction;
+import clava.autopar.checkvarreReduction;
 
 aspectdef SetVarrefOpenMPscoping
 	input $ForStmt end

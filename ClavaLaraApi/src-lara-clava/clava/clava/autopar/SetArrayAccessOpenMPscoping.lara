@@ -3,7 +3,7 @@
 *                       SetArrayAccessOpenMPscoping
 * 
 **************************************************************/
-import clava.autorpar.FindReductionArrays;
+import clava.autopar.FindReductionArrays;
 
 aspectdef SetArrayAccessOpenMPscoping
 	input $ForStmt end
