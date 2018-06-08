@@ -1,0 +1,9 @@
+aspectdef PragmaData
+
+	select function{"foo"}.loop end
+	apply
+		println("Data:");
+		printObject($loop.data);
+	end
+
+end
