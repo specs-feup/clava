@@ -510,8 +510,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         DataStore newDataStore = dataI.copy();
 
         // Set id
-        String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
-        newDataStore.put(ID, newId);
+        // String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
+        // newDataStore.put(ID, newId);
 
         try {
             Constructor<? extends ClavaNode> constructorMethod = nodeClass.getConstructor(DataStore.class,
