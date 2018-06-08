@@ -1,0 +1,153 @@
+/**************************************************************
+* 
+*                       ExecPetitDependencyTest
+* 
+**************************************************************/
+//import OmegaConfig;
+import clava.autopar.AutoParUtils;
+import lara.util.ProcessExecutor;
+
+aspectdef ExecPetitDependencyTest
+	input $ForStmt end
+
+	var loopindex = GetLoopIndex($ForStmt);
+	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
+		return;
+
+	LoopOmpAttributes[loopindex].petitInputFileAddress = Clava.getWeavingFolder() + 
+		'/deploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' + '.t';
+
+	LoopOmpAttributes[loopindex].petitOutputFileAddress = Clava.getWeavingFolder() + 
+		'/deploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' +'_output.t';
+
+	var petit_input_file = [];
+	for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
+		petit_input_file.push(LoopOmpAttributes[loopindex].ForStmtToPetit[i].str);
+
+
+
+	Io.writeFile(LoopOmpAttributes[loopindex].petitInputFileAddress, petit_input_file.join('\n'));
+
+
+	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4 ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
+
+	// RUN petit dependency test 
+	var application = new ProcessExecutor();
+	application.setWorkingDir(Clava.getWeavingFolder() + '/')
+				.setTimeout(60)
+				.setTimeUnit("SECONDS")
+				.setPrintToConsole(false);
+
+	application.execute(Petitcmd);
+	consoleOutput = application.getConsoleOutput();
+
+	
+
+	if (consoleOutput.length === 0)
+	{
+		LoopOmpAttributes[loopindex].PetitFoundDependency = [];
+
+		var PetitOutputDependencyFile = Strings.asLines(Io.readFile(LoopOmpAttributes[loopindex].petitOutputFileAddress));
+		Io.appendFile(LoopOmpAttributes[loopindex].petitInputFileAddress, '\n\n!' + Array(100).join('-') + '\n');
+		Io.appendFile(LoopOmpAttributes[loopindex].petitInputFileAddress,'!' + Array(10).join('\t') + ' Petit Output Dependency ' + '\n!-\n');
+
+		var nosolvedepvarName = [];
+		for(var i=0;i<PetitOutputDependencyFile.length;i++)
+		{
+			
+			
+			var outputLine = PetitOutputDependencyFile[i].allReplace({':':'', '-->':'', '\\[':'', '\\]':''});
+			outputLine = outputLine.split(' ').filter(function(n){ return n != ''; }).join(' ').split(' ');
+
+
+
+			var varName = Object.keys(LoopOmpAttributes[loopindex].petit_arrays).filter(function(key) {return LoopOmpAttributes[loopindex].petit_arrays[key].name === outputLine[2].split('(')[0];})[0];
+
+			var depObj = {
+						depType : outputLine[0],
+						src : Number(outputLine[1]),
+						dst : Number(outputLine[3]),
+						ArrayName : outputLine[2].split('(')[0],
+						varName : varName,
+						depVector : outputLine[5].allReplace({'\\(':'', '\\)':''}).split(','),
+						subscriptNumber : outputLine[2].split('(')[1].split(',').length,
+						depStatus : outputLine[6],
+						src_usge : outputLine[2],
+						dst_usge : outputLine[4],
+
+						parentlooprank_src : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[1])-1].parentlooprank,
+						parentlooprank_dst : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[3])-1].parentlooprank,
+
+						IsdependentCurrentloop_src : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[1])-1].IsdependentCurrentloop,
+						IsdependentInnerloop_src : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[1])-1].IsdependentInnerloop,
+						IsdependentOuterloop_src : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[1])-1].IsdependentOuterloop,
+
+
+						IsdependentCurrentloop_dst : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[3])-1].IsdependentCurrentloop,
+						IsdependentInnerloop_dst : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[3])-1].IsdependentInnerloop,
+						IsdependentOuterloop_dst : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[3])-1].IsdependentOuterloop,
+
+						varref_line_src : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[1])-1].line,
+						varref_line_dst : LoopOmpAttributes[loopindex].ForStmtToPetit[Number(outputLine[3])-1].line,
+
+						cannotbesolved :false,
+						canbeignored : false
+					};
+
+
+			if (
+				outputLine[5].indexOf('#') !== -1 ||
+				String(depObj.depVector.join('')).allReplace({'\\+':'','0':'','\\*':''}).length !== 0
+				)
+			{
+				nosolvedepvarName.push(varName);
+			}
+
+			var check_str = [];
+			if  (
+					depObj.subscriptNumber <= depObj.depVector.length &&
+					( depObj.IsdependentInnerloop_src || depObj.IsdependentCurrentloop_src ) &&
+					(String(depObj.depVector.join('')).allReplace({'\\+':'','0':''}).length === 0) 
+					&& (depObj.depVector[0] === '0')
+					
+				)
+			{
+				depObj.canbeignored = true;
+			}
+
+			if (depObj.depVector[0] === '0' || depObj.src > depObj.dst)
+				depObj.canbeignored = true;
+
+
+			if (
+				depObj.canbeignored === true &&
+				depObj.parentlooprank_src !== depObj.parentlooprank_dst &&
+				depObj.src > depObj.dst
+				)
+			{
+				depObj.canbeignored = false;
+			}
+
+
+			LoopOmpAttributes[loopindex].PetitFoundDependency.push(depObj);
+
+			Io.appendFile(LoopOmpAttributes[loopindex].petitInputFileAddress,'!-\t' + PetitOutputDependencyFile[i] + 
+				(depObj.canbeignored === true ?'\t canbeignored = ' + depObj.canbeignored : '') + 
+				'\n');
+		}
+		
+
+		for(var depObj of LoopOmpAttributes[loopindex].PetitFoundDependency)
+			if (nosolvedepvarName.indexOf(depObj.varName) !== -1)
+				depObj.cannotbesolved = true;
+			
+
+		Io.appendFile(LoopOmpAttributes[loopindex].petitInputFileAddress, '!' + Array(100).join('-') + '\n');
+
+	}
+	else
+	{
+		Add_msgError(LoopOmpAttributes, $ForStmt,'consoleOutput ' + consoleOutput);
+	}
+
+end

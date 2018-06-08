@@ -1,0 +1,20 @@
+/**************************************************************
+* 
+*                       InlineFunctionCalls
+* 
+**************************************************************/
+aspectdef InlineFunctionCalls
+
+	var inlinedCalls = [];
+	select file.function.loop.call end
+	apply
+			if (
+				$call.astAncestor('ForStmt') === undefined ||  
+				$call.astAncestor('ForStmt').rank.join('_') === $loop.rank.join('_')
+				)
+			{
+				$call.exec inline;				
+			}
+	end
+		
+end

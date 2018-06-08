@@ -1,0 +1,57 @@
+/**************************************************************
+* 
+*                       AddOpenMPDirectivesForLoop
+* 
+**************************************************************/
+aspectdef AddOpenMPDirectivesForLoop
+	input $ForStmt end
+
+	var loopindex = GetLoopIndex($ForStmt);
+
+	if (typeof LoopOmpAttributes[loopindex] === 'undefined')
+	{
+		return;
+	}
+
+	var msgError = LoopOmpAttributes[loopindex].msgError;
+	if (typeof msgError === 'undefined')
+		msgError = [];	
+
+	var InsertBeforeStr = '';
+
+	if (msgError.length > 0)
+	{
+		InsertBeforeStr = '/*' + Array(15).join('*') + ' Clava msgError ' + Array(15).join('*') +
+							'\n\t\t' + msgError.join('\n\t\t') +
+							'\n' + Array(40).join('*') + '*/';
+	}
+	else
+	{
+		var privateVars = LoopOmpAttributes[loopindex].privateVars;
+		var firstprivateVars = LoopOmpAttributes[loopindex].firstprivateVars;
+		var lastprivateVars = LoopOmpAttributes[loopindex].lastprivateVars;
+		var reduction = LoopOmpAttributes[loopindex].reduction;
+		var depPetitFileName = LoopOmpAttributes[loopindex].DepPetitFileName;
+
+		var OpenMPDirectivesStr = '#pragma omp parallel for default(shared) ';
+
+		if (privateVars.length > 0)
+				OpenMPDirectivesStr += 'private(' + privateVars.join(', ') + ') ';
+
+		if (firstprivateVars.length > 0)
+				OpenMPDirectivesStr += 'firstprivate(' + firstprivateVars.join(', ') + ') ';
+		
+		if (lastprivateVars.length > 0)
+				OpenMPDirectivesStr += 'lastprivate(' + lastprivateVars.join(', ') + ') ';
+		
+		if (reduction.length > 0)
+				OpenMPDirectivesStr += reduction.join('  ') + ' ';			
+
+		if (depPetitFileName!== null && depPetitFileName.length > 0)
+			OpenMPDirectivesStr += '\n// ' + depPetitFileName;
+		
+		InsertBeforeStr = OpenMPDirectivesStr;
+	}
+
+	$ForStmt.insert before  InsertBeforeStr;
+end

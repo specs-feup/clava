@@ -1,0 +1,327 @@
+/**************************************************************
+* 
+*                   checkForOpenMPCanonicalForm
+* 
+**************************************************************/
+import clava.autorpar.checkForInvalidStmts;
+
+aspectdef checkForOpenMPCanonicalForm	
+	input $ForStmt end
+	/*
+			this aspectdef will set some user fields such as controlVarsName, controlVarsAstId and  msgError for $ForStmt
+			however, if the loop is not in OpenMP Canonical Form, the use field hasOpenMPCanonicalForm will be false
+	*/
+
+	var loopindex = GetLoopIndex($ForStmt);
+
+
+	// check if $ForStmt has been checked for Canonical Form or not	
+	if 	(LoopOmpAttributes[loopindex] !== undefined)
+		return;
+
+	// create LoopOmpAttributes structure for current $ForStmt
+	LoopOmpAttributes[loopindex] = {};
+	LoopOmpAttributes[loopindex].msgError = [];
+	LoopOmpAttributes[loopindex].astId = $ForStmt.astId;
+	LoopOmpAttributes[loopindex].loopindex = loopindex;
+
+
+
+	// check if all inner loops are in OpenMP Canonical Form or not
+	select $ForStmt.body.loop end
+	apply
+		var innerloopindex = $loop.astAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
+		if (LoopOmpAttributes[innerloopindex] === undefined)
+			call checkForOpenMPCanonicalForm($loop);
+
+		if (LoopOmpAttributes[innerloopindex].hasOpenMPCanonicalForm === false)
+		{
+			Add_msgError(LoopOmpAttributes, $ForStmt, 'loop contains inner ForStmt which are not in OpenMP Canonical Form');
+			LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
+			return;
+		}
+		else
+		{
+
+			if (LoopOmpAttributes[innerloopindex].loopControlVarname === undefined)			
+				{
+					Add_msgError(LoopOmpAttributes, $ForStmt,'inner loop #' + $loop.line + ' dose not have loopControlVarname');
+					return;
+				}
+
+			var varName = LoopOmpAttributes[innerloopindex].loopControlVarname;
+
+			if (LoopOmpAttributes[loopindex].innerloopsControlVarname === undefined)
+				LoopOmpAttributes[loopindex].innerloopsControlVarname = [];
+
+			if (LoopOmpAttributes[loopindex].innerloopsControlVarname.indexOf(varName) === -1)
+				LoopOmpAttributes[loopindex].innerloopsControlVarname.push(varName);
+		}
+	end
+
+
+	var controlVarsName = [];
+	var controlVarsAstId = [];
+	var msgError = [];
+
+
+
+	var initVars = [];
+	var initVardecl = []; 	 	
+ 	var initmsgError = [];
+	select $ForStmt.init.vardecl end
+	apply
+		initVardecl.push({
+					name : $vardecl.name,
+					astId : $vardecl.astId,
+					varType : $vardecl.type.code,					
+					use : 'write',
+					loc : 'init',
+					hasInit : $vardecl.hasInit
+				});
+	end
+
+	var initVarref = [];
+	select $ForStmt.init.varref end
+	apply
+		if ( 
+			($varref.kind === 'address_of') ||
+			($varref.useExpr.use === 'readwrite') ||
+			($varref.kind === 'pointer_access' && $varref.useExpr.use === 'write')
+		   )
+		{
+			initmsgError.push($init.code.split(';').join(' ') + ' : ' + ' is not allowed' );
+		}
+		else if ($varref.useExpr.use === 'write')
+			initVarref.push({
+						name : $varref.name,
+						astId : $varref.vardecl.astId,
+						varType : $varref.vardecl.type.code,
+						use : $varref.useExpr.use,
+						loc : 'init'
+					});
+	end
+
+ 	initVars = initVars.concat(initVardecl);
+ 	initVars = initVars.concat(initVarref);
+
+ 	var condVars = [];
+	select $ForStmt.cond.varref end
+	apply
+		if ($varref.useExpr.use == 'read')
+		condVars.push({
+					name : $varref.name,
+					astId : $varref.vardecl.astId,
+					varType : $varref.vardecl.type.code,
+					use : $varref.useExpr.use,
+					loc : 'cond'
+				});
+	end
+
+ 	var stepVars = [];
+	select $ForStmt.step.varref end
+	apply
+		if ($varref.useExpr.use == 'write' || $varref.useExpr.use == 'readwrite')
+			stepVars.push({
+						name : $varref.name,
+						astId : $varref.vardecl.astId,
+						varType : $varref.vardecl.type.code,
+						use : $varref.useExpr.use,
+						loc : 'step'
+					});
+	end 
+
+
+	controlVarsName = intersection(
+								initVars.map(function(obj) {return obj.name;}),
+								condVars.map(function(obj) {return obj.name;}),
+								stepVars.map(function(obj) {return obj.name;})
+								);
+
+	controlVarsAstId = intersection(
+								initVars.map(function(obj) {return obj.astId;}),
+								condVars.map(function(obj) {return obj.astId;}),
+								stepVars.map(function(obj) {return obj.astId;})
+								);
+
+	
+	//------------------------------------------------------------
+	// checking loop init-expr  (integer-type var = lb)
+	//------------------------------------------------------------
+	if (initVardecl.length > 1)
+		initmsgError.push(' only single var declaration is allowed' );
+	else if (initVardecl.length == 1 && initVardecl[0].varType != 'int')
+		initmsgError.push('typeOf(' + initVardecl[0].name + ') must have int type, not ' +  initVardecl[0].varType);
+	else if (initVardecl.length == 1 && initVardecl[0].hasInit == false)
+		initmsgError.push(' declaration without variable initialization' );
+
+	//------------------------------------------------------------
+	// checking loop init-expr  (var = lb)
+	//------------------------------------------------------------
+	if (initVarref.length > 1)
+		initmsgError.push(' only single var initialization is allowed' );
+	else if (initVarref.length == 1 && initVarref[0].varType != 'int')
+		initmsgError.push('typeOf(' + initVarref[0].name + ') = ' + initVarref[0].varType + ' as loop counter type is not allowed' );
+
+	//------------------------------------------------------------
+	// checking loop for at least one control var
+	//------------------------------------------------------------
+ 	if (initVars.length == 0)
+		initmsgError.push('loop-init : at least a single variable initialization/declaration is required' );
+	
+
+	//------------------------------------------------------------
+	// checking loop test-expr  (var op lb || lb op var) var in [>,>=,<,<=]
+	//------------------------------------------------------------
+ 	var condmsgError = []; 	
+ 	var condbinaryOp = [];
+ 	var condIterationValue = NaN;
+ 	select $ForStmt.cond.binaryOp end
+ 	apply
+ 		condbinaryOp.push($binaryOp.kind);
+ 		if ($binaryOp.left.astName === 'IntegerLiteral')
+ 			condIterationValue = Number($binaryOp.left.code);
+ 		else if ($binaryOp.right.astName === 'IntegerLiteral')
+ 			condIterationValue = Number($binaryOp.right.code);
+ 		break #$ForStmt;
+ 	end
+	
+ 	if (['lt','le','gt','ge'].indexOf(condbinaryOp[0]) == -1)
+ 	{
+ 		condmsgError.push(' relation-op should be in the following : (var op lb) OR (lb op var) where op in [<,<=,>,>=]' );
+ 	}
+ 	else if (condIterationValue < 100)
+ 	{
+ 		//condmsgError.push(' loop iteration number ( ' + condIterationValue + ' ) is too low!!!');
+ 	}
+
+
+ 	//------------------------------------------------------------
+ 	// checking loop incr-expr
+ 	//------------------------------------------------------------
+ 	var stepmsgError = []; 	
+ 	var stepOp = null;
+ 	select $ForStmt.step.expr end
+ 	apply
+ 		stepOp = $expr.kind;
+ 		break #$ForStmt;
+ 	end
+ 	condition $expr.joinpointType == 'binaryOp' || $expr.joinpointType == 'unaryOp' end
+
+ 	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
+		stepmsgError.push('loop-step expression is not in canonical form' );
+
+
+
+	msgError = msgError.concat(initmsgError);
+	msgError = msgError.concat(condmsgError);
+	msgError = msgError.concat(stepmsgError);
+
+	
+
+	if (controlVarsAstId.length === 1)
+	{
+		call o : checkForControlVarChanged($ForStmt,controlVarsAstId[0]);
+		if (o.ControlVarChanged == true)
+		{
+			LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
+			msgError.push('For controlVar is changed inside of loop body');
+		}
+
+	}
+
+	call o : checkForInvalidStmts($ForStmt);
+	if (o.InvalidStmts.length > 0)
+	{
+		LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
+		msgError.push('Loop contains Invalid Statement -> ' + o.InvalidStmts.join('\t'));
+	}
+
+	if (msgError.length > 0 || controlVarsAstId.length !== 1)
+	{
+		Add_msgError(LoopOmpAttributes, $ForStmt, msgError);
+		LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
+		return;
+	}
+	
+
+	LoopOmpAttributes[loopindex].loopControlVarname = controlVarsName[0];
+	LoopOmpAttributes[loopindex].loopControlVarastId = controlVarsAstId[0];
+	//------------------------------------------------------------
+	//------------------		extract start and end line for loop
+	//------------------------------------------------------------
+	var strtmp = Strings.replacer($ForStmt.location,'->',':').split(':');
+	LoopOmpAttributes[loopindex].start = Number(strtmp[strtmp.length-4]);
+	LoopOmpAttributes[loopindex].end = Number(strtmp[strtmp.length-2]);
+	//------------------------------------------------------------
+	//------------------		set loop parameters
+	//------------------------------------------------------------
+
+	LoopOmpAttributes[loopindex].setp = null;
+ 	if (['lt','le'].indexOf(condbinaryOp[0]) !== -1)
+ 	{
+ 		LoopOmpAttributes[loopindex].setp = 'incremental';
+ 	}
+ 	else if (['gt','ge'].indexOf(condbinaryOp[0]) !== -1)
+ 	{
+ 		LoopOmpAttributes[loopindex].setp = 'decremental';
+ 	}
+ 	LoopOmpAttributes[loopindex].initValue = $ForStmt.initValue;
+ 	LoopOmpAttributes[loopindex].endValue = $ForStmt.endValue;
+
+
+	LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = true;
+
+	LoopOmpAttributes[loopindex].privateVars = [];
+	LoopOmpAttributes[loopindex].firstprivateVars = [];
+	LoopOmpAttributes[loopindex].lastprivateVars = [];
+	LoopOmpAttributes[loopindex].Reduction = [];
+	LoopOmpAttributes[loopindex].DepPetitFileName = null;
+
+
+	LoopOmpAttributes[loopindex].DepArrays = [];
+	select $ForStmt.arrayAccess.subscript end
+	apply
+		for($varref of $subscript.descendantsAndSelf("varref"))
+		{
+			if (LoopOmpAttributes[loopindex].loopControlVarname === $varref.name &&
+				LoopOmpAttributes[loopindex].DepArrays.indexOf($arrayAccess.arrayVar.name) === -1)
+				LoopOmpAttributes[loopindex].DepArrays.push($arrayAccess.arrayVar.name);
+		}
+	end
+
+
+end
+
+
+/*************************   intersection  *************************/
+ var intersection = function(){
+  return Array.prototype.slice.call(arguments).reduce(function(previous, current){
+    return previous.filter(function(element){
+      return current.indexOf(element) > -1;
+    });
+  });
+};
+
+
+/**************************************************************
+* 
+*                     checkForControlVarChanged
+* 
+**************************************************************/
+aspectdef checkForControlVarChanged
+ 	input $ForStmt, VarAstId end
+ 	output ControlVarChanged end
+ 	ControlVarChanged = false;
+
+	select $ForStmt.body.stmt.varref  end
+	apply
+		ControlVarChanged = true;
+		return;
+	end
+	condition $varref.vardecl.astId == VarAstId && $varref.useExpr.use.indexOf('write') !== -1  end
+end
+
+
+
+

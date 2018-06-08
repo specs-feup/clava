@@ -1,0 +1,41 @@
+/**************************************************************
+* 
+*                       SetMemberAccessOpenMPscoping
+* 
+**************************************************************/
+
+aspectdef SetMemberAccessOpenMPscoping
+	input $ForStmt end
+
+	var loopindex = GetLoopIndex($ForStmt);
+	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
+		return;
+
+
+	var varreflist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'memberAccess'});
+
+
+	for(var i = 0; i < varreflist.length; i++)
+	{
+		var varObj = varreflist[i];
+		if (
+				varObj.hasDescendantOfArrayAccess === false &&
+				varObj.usedInClause === false &&
+				varObj.nextUse !== 'R' &&
+				(varObj.use === 'WR' || varObj.use === 'W')
+			)
+		{
+			varObj.usedInClause = true;
+		}
+	}
+
+	for(var i = 0; i < varreflist.length; i++)
+		if (varreflist[i].usedInClause === false)
+		{
+			Add_msgError(LoopOmpAttributes, $ForStmt,'Variable ' + varreflist[i].name + ' could not be categorized into any OpenMP Variable Scope');
+		}
+	
+
+
+end
+

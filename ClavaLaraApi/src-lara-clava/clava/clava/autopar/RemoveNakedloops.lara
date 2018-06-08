@@ -1,0 +1,14 @@
+/**************************************************************
+* 
+*                       RemoveNakedloops
+* 
+**************************************************************/
+aspectdef RemoveNakedloops
+
+	select file.function.loop.body end
+	apply
+		$body.exec setNaked(false);
+	end
+	condition $body.naked === true end
+
+end

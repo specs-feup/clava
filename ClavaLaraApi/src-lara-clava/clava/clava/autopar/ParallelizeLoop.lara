@@ -1,0 +1,44 @@
+/**************************************************************
+* 
+*                       ParallelizeLoop
+* 
+**************************************************************/
+import clava.autorpar.checkForOpenMPCanonicalForm;
+import clava.autorpar.AddOpenMPDirectivesForLoop;
+import clava.autorpar.SetVariableAccess;
+import clava.autorpar.additionalConditionsCheck;
+import clava.autorpar.SetVarrefOpenMPscoping;
+import clava.autorpar.SetMemberAccessOpenMPscoping;
+import clava.autorpar.BuildPetitFileInput;
+import clava.autorpar.ExecPetitDependencyTest;
+import clava.autorpar.SetArrayAccessOpenMPscoping;
+
+
+aspectdef ParallelizeLoop
+	input $ForStmt end
+	
+
+	call checkForOpenMPCanonicalForm($ForStmt);
+
+	call additionalConditionsCheck($ForStmt);
+
+	
+
+	call SetVariableAccess($ForStmt);
+
+	
+	call SetVarrefOpenMPscoping($ForStmt);
+
+	call BuildPetitFileInput($ForStmt);
+	call ExecPetitDependencyTest($ForStmt);
+	
+	call SetArrayAccessOpenMPscoping($ForStmt);
+
+	//call SetMemberAccessOpenMPscoping($ForStmt);
+
+	// remove all variable declared inside loop , i changed SetVariableAccess code!!!!
+	call AddOpenMPDirectivesForLoop($ForStmt);
+
+
+
+end // aspectdef ParallelizeLoop

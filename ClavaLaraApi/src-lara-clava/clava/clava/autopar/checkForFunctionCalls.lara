@@ -1,0 +1,20 @@
+/**************************************************************
+* 
+*                      checkForFunctionCalls
+* 
+**************************************************************/
+aspectdef checkForFunctionCalls
+ 	input $ForStmt end
+ 	output FunctionCalls end
+ 	FunctionCalls = [];
+ 		
+	// check for calling functions
+
+	select $ForStmt.call end
+	apply				
+		if (safefunctionCallslist.indexOf($call.name) === -1)
+			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
+	end
+	condition $call.astName === 'CallExpr' end
+	
+end
