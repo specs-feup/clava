@@ -356,7 +356,7 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
+        LiteralStmt literalStmt = getFactory().literalStmt(value + ";");
 
         ((ForStmt) loop).setInit(literalStmt);
     }
@@ -437,7 +437,7 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(condCode + ";");
+        LiteralStmt literalStmt = getFactory().literalStmt(condCode + ";");
 
         ((ForStmt) loop).setCond(literalStmt);
     }
@@ -449,7 +449,7 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(stepCode);
+        LiteralStmt literalStmt = getFactory().literalStmt(stepCode);
 
         ((ForStmt) loop).setInc(literalStmt);
     }

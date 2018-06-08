@@ -26,7 +26,9 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
+import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class ClavaWeaverData {
 
@@ -73,6 +75,14 @@ public class ClavaWeaverData {
 
         userValuesStack.push(userValuesCopy);
         // userValuesStack.push(new HashMap<>());
+
+        // Apply AST processing
+        // Executing here since execution might depend on code that consults the current App (e.g., for ClavaContext,
+        // factory...)
+        long tic = System.nanoTime();
+        ClavaPragmas.processClavaPragmas(app);
+        SpecsLogs.msgInfo(SpecsStrings.takeTime("Weaver AST processing", tic));
+
     }
 
     public Map<ClavaNode, Map<String, Object>> getUserValues() {

@@ -168,7 +168,7 @@ public class AstFactory {
         FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
                 new FunctionDeclData(), new DeclData(),
                 ClavaNodeInfo.undefinedInfo(),
-                ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), Collections.emptyList()));
+                CxxWeaver.getFactory().compoundStmt());
 
         return (CxxFunction) CxxJoinpoints.create(functionDecl, null);
     }
@@ -351,8 +351,7 @@ public class AstFactory {
         ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
         BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
 
-        CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),
-                Arrays.asList(exprStmt));
+        CompoundStmt compoundStmt = CxxWeaver.getFactory().compoundStmt(exprStmt);
         compoundStmt.setNaked(true);
         // InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
         // ClavaNodeInfo.undefinedInfo());
@@ -408,7 +407,7 @@ public class AstFactory {
             */
         }
 
-        CompoundStmt body = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), statements);
+        CompoundStmt body = CxxWeaver.getFactory().compoundStmt(statements);
         Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(), body);
 
         return CxxJoinpoints.create(switchStmt, null, AStatement.class);

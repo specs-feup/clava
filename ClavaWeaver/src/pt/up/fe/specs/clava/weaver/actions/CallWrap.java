@@ -193,7 +193,7 @@ public class CallWrap {
 
         List<Stmt> functionCallCode = createFunctionCallCode(paramNames);
 
-        wrapperFunctionDeclImpl.setBody(ClavaNodeFactory.compoundStmt(null, functionCallCode));
+        wrapperFunctionDeclImpl.setBody(factory.compoundStmt(functionCallCode));
 
         implTu.addChild(wrapperFunctionDeclImpl);
 
@@ -215,7 +215,7 @@ public class CallWrap {
 
         List<Stmt> functionCallCode = createFunctionCallCode(paramNames);
 
-        wrapperFunctionDeclImpl.setBody(ClavaNodeFactory.compoundStmt(null, functionCallCode));
+        wrapperFunctionDeclImpl.setBody(factory.compoundStmt(functionCallCode));
 
         // add to original file
         TranslationUnit originalFile = declaration.getAncestor(TranslationUnit.class);

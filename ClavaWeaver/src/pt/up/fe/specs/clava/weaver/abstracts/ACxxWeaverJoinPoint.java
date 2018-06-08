@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
@@ -57,6 +58,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public CxxWeaver getWeaverEngine() {
         return super.getWeaverEngine();
+    }
+
+    public ClavaFactory getFactory() {
+        return CxxWeaver.getFactory();
     }
 
     /**

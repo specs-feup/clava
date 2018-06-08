@@ -52,7 +52,6 @@ import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
-import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
@@ -517,9 +516,9 @@ public class CxxWeaver extends ACxxWeaver {
             // app.setSources(sources);
             SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang AST to Clava", tic));
 
-            tic = System.nanoTime();
-            ClavaPragmas.processClavaPragmas(app);
-            SpecsLogs.msgInfo(SpecsStrings.takeTime("Weaver AST processing", tic));
+            // tic = System.nanoTime();
+            // ClavaPragmas.processClavaPragmas(app);
+            // SpecsLogs.msgInfo(SpecsStrings.takeTime("Weaver AST processing", tic));
 
             if (SHOW_MEMORY_USAGE) {
                 SpecsLogs.msgInfo("Current memory used (Java):"
