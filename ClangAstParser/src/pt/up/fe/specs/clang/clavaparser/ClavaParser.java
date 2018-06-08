@@ -119,7 +119,6 @@ import pt.up.fe.specs.clang.clavaparser.stmt.CXXForRangeStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CXXTryStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CapturedStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CaseStmtParser;
-import pt.up.fe.specs.clang.clavaparser.stmt.CompoundStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.ContinueStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DefaultStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DoStmtParser;
@@ -276,7 +275,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("CXXConversionDecl", CXXConversionDeclParser::new);
 
         /* stmt */
-        converter.put("CompoundStmt", CompoundStmtParser::new);
+        // converter.put("CompoundStmt", CompoundStmtParser::new);
         converter.put("SwitchStmt", SwitchStmtParser::new);
         converter.put("CaseStmt", CaseStmtParser::new);
         converter.put("DefaultStmt", DefaultStmtParser::new);

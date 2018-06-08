@@ -29,6 +29,12 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
+/**
+ * @deprecated Replaced, safe to delete
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class CompoundStmtParser extends AClangNodeParser<CompoundStmt> {
 
     public CompoundStmtParser(ClangConverterTable converter) {
@@ -37,7 +43,6 @@ public class CompoundStmtParser extends AClangNodeParser<CompoundStmt> {
 
     @Override
     public CompoundStmt parse(ClangNode node, StringParser parser) {
-
         // Parse children
         List<ClavaNode> children = parseChildren(node);
 
@@ -56,8 +61,9 @@ public class CompoundStmtParser extends AClangNodeParser<CompoundStmt> {
                 // Map all nodes to Stmt
                 .map(stmt -> (Stmt) stmt)
                 .collect(Collectors.toList());
-
-        return ClavaNodeFactory.compoundStmt(info(node), statements);
+        // CompoundStmt stmt = LegacyToDataStore.getFactory().compoundStmt(statements);
+        return new CompoundStmt(new LegacyToDataStore().setNodeInfo(info(node)).getData(), statements);
+        // return ClavaNodeFactory.compoundStmt(info(node), statements);
     }
 
 }
