@@ -75,7 +75,7 @@ public class CXXFunctionalCastExpr extends CastExpr {
 
         super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        put(CastExpr.CAST_KIND, castKind);
+        set(CastExpr.CAST_KIND, castKind);
 
         // super(castKind, exprData, info, children);
 

@@ -110,7 +110,7 @@ public abstract class Type extends ClavaNode {
      * change.
      */
     @Override
-    public <T, E extends T> ClavaNode put(DataKey<T> key, E value) {
+    public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
         Type typeCopy = copy();
         typeCopy.getData().put(key, value);
 
@@ -182,7 +182,7 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public Type setBareType(String type) {
-        return (Type) copy().put(TYPE_AS_STRING, type);
+        return (Type) copy().set(TYPE_AS_STRING, type);
 
         /*
         if (hasDataI()) {

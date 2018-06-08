@@ -214,7 +214,7 @@ public class CompoundStmt extends Stmt {
             return this;
         }
 
-        put(IS_NAKED, isNaked);
+        set(IS_NAKED, isNaked);
         return this;
         // this.isNaked = isNaked;
     }

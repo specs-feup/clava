@@ -55,7 +55,7 @@ public class ExprStmt extends Stmt {
     }
 
     public ExprStmt setHasSemicolon(boolean hasSemicolon) {
-        put(HAS_SEMICOLON, hasSemicolon);
+        set(HAS_SEMICOLON, hasSemicolon);
         return this;
     }
 

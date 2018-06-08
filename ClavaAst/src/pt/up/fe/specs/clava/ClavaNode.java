@@ -374,12 +374,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     public ClavaNode setId(String newId) {
-        put(ID, newId);
+        set(ID, newId);
         return this;
     }
 
     public ClavaNode setLocation(SourceRange location) {
-        put(LOCATION, location);
+        set(LOCATION, location);
         return this;
     }
 
@@ -488,7 +488,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param key
      * @param value
      */
-    public <T, E extends T> ClavaNode put(DataKey<T> key, E value) {
+    public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
         dataI.put(key, value);
 
         return this;

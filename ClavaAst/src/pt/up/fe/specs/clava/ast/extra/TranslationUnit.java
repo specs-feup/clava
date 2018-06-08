@@ -452,7 +452,7 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public void setLanguage(Language language) {
-        put(LANGUAGE, language);
+        set(LANGUAGE, language);
     }
 
     public boolean hasInclude(String includeName, boolean isAngled) {
