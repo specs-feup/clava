@@ -181,7 +181,6 @@ import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
-import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
@@ -942,9 +941,9 @@ public class ClavaNodeFactory {
         return new DummyStmtLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     }
 
-    public static CompoundStmt compoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-        return new CompoundStmt(info, children);
-    }
+    // public static CompoundStmt compoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
+    // return new CompoundStmt(info, children);
+    // }
 
     public static SwitchStmt switchStmt(ClavaNodeInfo info, Expr cond, Stmt body) {
         return new SwitchStmt(info, cond, body);
@@ -1014,9 +1013,9 @@ public class ClavaNodeFactory {
         return new ForStmt(info, init, cond, inc, body);
     }
 
-    public static LiteralStmt literalStmt(String literalCode) {
-        return new LiteralStmt(literalCode);
-    }
+    // public static LiteralStmt literalStmt(String literalCode) {
+    // return new LiteralStmt(literalCode);
+    // }
 
     // public static LiteralStmt literalStmt(String literalCode, ClavaNodeInfo info) {
     // return new LiteralStmt(literalCode, info);
@@ -1463,9 +1462,10 @@ public class ClavaNodeFactory {
         return new OpenCLKernelAttr(attrData, nodeInfo);
     }
 
-    public static CompoundStmt compoundStmt(ClavaNodeInfo info, String code) {
-        return compoundStmt(info, Arrays.asList(literalStmt(code)));
-    }
+    // public static CompoundStmt compoundStmt(ClavaNodeInfo info, String code) {
+    // // return compoundStmt(info, Arrays.asList(literalStmt(code)));
+    // return compoundStmt(info, Arrays.asList(LegacyToDataStore.getFactory().literalStmt(code)));
+    // }
 
     /***** NEW METHODS WITH HIGHER LEVEL CONSTRUCTORS *****/
 

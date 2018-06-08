@@ -415,7 +415,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * 
      * @return the underlying DataStore of this node
      */
-    public DataStore getData() {
+    protected DataStore getData() {
         return dataI;
     }
 
@@ -483,12 +483,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     /**
-     * Internal method for setting values.
+     * Generic method for setting values.
      * 
      * @param key
      * @param value
      */
-    protected <T, E extends T> ClavaNode put(DataKey<T> key, E value) {
+    public <T, E extends T> ClavaNode put(DataKey<T> key, E value) {
         dataI.put(key, value);
 
         return this;

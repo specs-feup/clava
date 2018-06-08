@@ -14,16 +14,22 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -34,32 +40,64 @@ import pt.up.fe.specs.util.utilities.StringLines;
  */
 public class CompoundStmt extends Stmt {
 
-    // true if this CompoundStmt initially did not have curly braces {}
-    private boolean isNaked;
+    public final static DataKey<Boolean> IS_NAKED = KeyFactory.bool("isNaked");
 
-    public static CompoundStmt newNakedInstance(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-        return new CompoundStmt(true, info, children);
-    }
-
-    public CompoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-        this(false, info, children);
-    }
-
-    private CompoundStmt(boolean isNaked, ClavaNodeInfo info, Collection<? extends Stmt> children) {
-        super(info, children);
-
-        this.isNaked = isNaked;
+    public CompoundStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, parseChildren(children));
 
         // If naked, can have only only child, or be empty
-        if (isNaked) {
+        if (get(IS_NAKED)) {
             Preconditions.checkArgument(children.size() < 2, "Expected at most 1 child:" + children);
         }
+
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CompoundStmt(isNaked, getInfo(), Collections.emptyList());
+    // true if this CompoundStmt initially did not have curly braces {}
+    // private boolean isNaked;
+
+    // public static CompoundStmt newNakedInstance(ClavaNodeInfo info, Collection<? extends Stmt> children) {
+    // return new CompoundStmt(true, info, children);
+    // }
+
+    private static List<Stmt> parseChildren(Collection<? extends ClavaNode> children) {
+
+        List<Stmt> statements = children.stream()
+                // Remove NullNodes
+                // .filter(child -> !(child instanceof NullNode))
+                // Transform Undefined nodes into DummyStmt nodes
+                // TODO: to remove after Undefined is no longer used
+                .map(child -> child instanceof Undefined ? ClavaNodeFactory.dummyStmt(child) : child)
+                // Transform Expr nodes into ExprStmt nodes
+                // .map(child -> child instanceof Expr ? ClavaNodesLegacy.exprStmt((Expr) child) : child)
+                .map(child -> child instanceof Expr ? LegacyToDataStore.getFactory().exprStmt((Expr) child)
+                        : child)
+                // Map all nodes to Stmt
+                .map(stmt -> (Stmt) stmt)
+                .collect(Collectors.toList());
+
+        return statements;
+
     }
+
+    // public CompoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
+    // this(false, info, children);
+    // }
+
+    // private CompoundStmt(boolean isNaked, ClavaNodeInfo info, Collection<? extends Stmt> children) {
+    // this(new LegacyToDataStore().setNodeInfo(info).set(IS_NAKED, isNaked).getData(), children);
+    //
+    // // this.isNaked = isNaked;
+    //
+    // // If naked, can have only only child, or be empty
+    // // if (isNaked) {
+    // // Preconditions.checkArgument(children.size() < 2, "Expected at most 1 child:" + children);
+    // // }
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CompoundStmt(isNaked, getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
@@ -74,7 +112,7 @@ public class CompoundStmt extends Stmt {
         String tab = inline ? " " : getTab();
 
         // If naked, and has only zero or one statements
-        if (isNaked && statements.size() < 2) {
+        if (get(IS_NAKED) && statements.size() < 2) {
 
             if (statements.isEmpty()) {
                 return ";";
@@ -167,16 +205,18 @@ public class CompoundStmt extends Stmt {
     }
 
     public boolean isNaked() {
-        return isNaked;
+        return get(IS_NAKED);
     }
 
-    public void setNaked(boolean isNaked) {
+    public CompoundStmt setNaked(boolean isNaked) {
         if (isNaked && getStatements().size() > 1) {
             ClavaLog.warning("Compount statements with more than one statement can't be naked");
-            return;
+            return this;
         }
 
-        this.isNaked = isNaked;
+        put(IS_NAKED, isNaked);
+        return this;
+        // this.isNaked = isNaked;
     }
 
 }

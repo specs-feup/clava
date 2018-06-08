@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -109,12 +108,13 @@ public class ClavaNodes {
         }
 
         if (hint instanceof Stmt) {
-            return ClavaNodeFactory.literalStmt(code);
+            hint.getFactory().literalStmt(code);
+            // return ClavaNodeFactory.literalStmt(code);
         }
 
         // Default to statement when unknown
         SpecsLogs.msgLib("Creating literalStmt for hint node of type '" + hint.getClass() + "'");
-        return ClavaNodeFactory.literalStmt(code);
+        return hint.getFactory().literalStmt(code);
     }
 
     /**
@@ -336,12 +336,20 @@ public class ClavaNodes {
 
         // If NullStmt, create empty naked stmt
         if (stmt instanceof NullStmt) {
-            return CompoundStmt.newNakedInstance(stmt.getInfo(), Collections.emptyList());
+            return stmt.getFactory().compoundStmt().setNaked(true);
+            // return CompoundStmt.newNakedInstance(stmt.getInfo(), Collections.emptyList());
         }
 
         // Create naked CompoundStmt
         // Location is important, for insertion of text (e.g., TextParser)
-        return CompoundStmt.newNakedInstance(ClavaNodeInfo.undefinedInfo(stmt.getLocation()), Arrays.asList(stmt));
+        CompoundStmt newStmt = stmt.getFactory()
+                .compoundStmt(stmt)
+                .setNaked(true);
+
+        newStmt.setLocation(stmt.get(ClavaNode.LOCATION));
+
+        return newStmt;
+        // return CompoundStmt.newNakedInstance(ClavaNodeInfo.undefinedInfo(stmt.getLocation()), Arrays.asList(stmt));
 
     }
 

@@ -38,9 +38,12 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -240,6 +243,26 @@ public class ClavaFactory {
     public ReturnStmt returnStmt() {
         return new ReturnStmt(newStmtDataStore(), Collections.emptyList());
     }
+
+    public LiteralStmt literalStmt(String literalCode) {
+        return new LiteralStmt(newStmtDataStore().put(LiteralStmt.LITERAL_CODE, literalCode), Collections.emptyList());
+    }
+
+    public CompoundStmt compoundStmt(String statement) {
+        return compoundStmt(literalStmt(statement));
+    }
+
+    public CompoundStmt compoundStmt(Stmt... children) {
+        return compoundStmt(Arrays.asList(children));
+    }
+
+    public CompoundStmt compoundStmt(Collection<Stmt> children) {
+        return new CompoundStmt(newStmtDataStore(), children);
+    }
+
+    // public CompoundStmt compoundStmt(boolean isNaked, Collection<? extends ClavaNode> children) {
+    // return new CompoundStmt(newStmtDataStore().put(CompoundStmt.IS_NAKED, isNaked), children);
+    // }
 
     /**
      * Creates an ExprStmt with semicolon.

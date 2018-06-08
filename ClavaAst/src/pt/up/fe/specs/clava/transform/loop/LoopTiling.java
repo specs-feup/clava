@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.transform.loop;
 
-import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -100,12 +99,15 @@ public class LoopTiling {
 
         // make header parts
         // Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
-        Stmt init = ClavaNodeFactory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
-        Stmt cond = ClavaNodeFactory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
-        Stmt inc = ClavaNodeFactory.literalStmt(blockVarName + " += " + blockSize);
+        // Stmt init = ClavaNodeFactory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        // Stmt cond = ClavaNodeFactory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
+        // Stmt inc = ClavaNodeFactory.literalStmt(blockVarName + " += " + blockSize);
+        Stmt init = factory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
+        Stmt cond = factory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
+        Stmt inc = factory.literalStmt(blockVarName + " += " + blockSize);
 
         // make for loop
-        CompoundStmt emptyBody = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), Collections.emptyList());
+        CompoundStmt emptyBody = factory.compoundStmt();
         ForStmt newFor = ClavaNodeFactory.forStmt(ClavaNodeInfo.undefinedInfo(), init, cond, inc, emptyBody);
 
         // add loop as parent
@@ -158,7 +160,7 @@ public class LoopTiling {
                 + oldUpperBoundCode + ";";
 
         String limitDeclCode = limitVarDecl + limitCheck;
-        Stmt limitDecl = ClavaNodeFactory.literalStmt(limitDeclCode);
+        Stmt limitDecl = factory.literalStmt(limitDeclCode);
         NodeInsertUtils.insertBefore(targetFor, limitDecl);
 
         return limitVar;

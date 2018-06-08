@@ -106,6 +106,18 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
+     * For Type nodes, this method does not change the current node, but returns a copy of the current node with the
+     * change.
+     */
+    @Override
+    public <T, E extends T> ClavaNode put(DataKey<T> key, E value) {
+        Type typeCopy = copy();
+        typeCopy.getData().put(key, value);
+
+        return typeCopy;
+    }
+
+    /**
      * Helper method which passes null as the name.
      */
     @Override

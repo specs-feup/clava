@@ -13,10 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LiteralNode;
 
 /**
  * Represents a literal piece of code corresponding to a statement.
@@ -24,34 +26,40 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  * @author JoaoBispo
  *
  */
-public class LiteralStmt extends Stmt {
+public class LiteralStmt extends Stmt implements LiteralNode {
 
-    private final String literalCode;
+    public LiteralStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    // private final String literalCode;
 
     /**
      * 
      * 
      * @param literalCode
      */
-    public LiteralStmt(String literalCode) {
-        this(literalCode, ClavaNodeInfo.undefinedInfo());
-    }
+    // public LiteralStmt(String literalCode) {
+    // this(literalCode, ClavaNodeInfo.undefinedInfo());
+    // }
 
-    private LiteralStmt(String literalCode, ClavaNodeInfo info) {
-        super(info, Collections.emptyList());
+    // private LiteralStmt(String literalCode, ClavaNodeInfo info) {
+    // this(new LegacyToDataStore().setNodeInfo(info).set(LITERAL_CODE, literalCode).getData(),
+    // Collections.emptyList());
+    //
+    // // this.literalCode = literalCode.endsWith(";") ? literalCode : literalCode + ";";
+    // // this.literalCode = literalCode;
+    // }
 
-        // this.literalCode = literalCode.endsWith(";") ? literalCode : literalCode + ";";
-        this.literalCode = literalCode;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LiteralStmt(literalCode, getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LiteralStmt(literalCode, getInfo());
+    // }
 
     @Override
     public String getCode() {
-        return literalCode;
+        return get(LITERAL_CODE);
+        // return literalCode;
     }
 
 }

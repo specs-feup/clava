@@ -57,7 +57,8 @@ public class BuiltinType extends Type {
         this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
 
         // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
-        put(KIND_LITERAL, data.getBareType());
+        // Type.put() creates a copy
+        getData().put(KIND_LITERAL, data.getBareType());
     }
 
     @Override
