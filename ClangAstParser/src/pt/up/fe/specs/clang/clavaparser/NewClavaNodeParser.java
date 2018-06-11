@@ -68,7 +68,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // getConfig().get(ClavaNode.CONTEXT)
         // .get(ClavaContext.FACTORY)
         // .newNode()
-        return clavaNode.newInstance(nodeClass, children);
+        return clavaNode.newInstance(true, nodeClass, children);
         // return newClavaNode(nodeClass, clavaNode.getDataI(), children);
         /*
         if (clavaNode.hasDataI()) {
