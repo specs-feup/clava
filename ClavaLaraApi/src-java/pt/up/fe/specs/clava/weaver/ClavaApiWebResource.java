@@ -26,4 +26,5 @@ public interface ClavaApiWebResource {
     }
 
     WebResourceProvider PETIT_UBUNTU = create("linux_ubuntu_14/petit");
+    WebResourceProvider PETIT_CENTOS6 = create("centos6/petit");
 }

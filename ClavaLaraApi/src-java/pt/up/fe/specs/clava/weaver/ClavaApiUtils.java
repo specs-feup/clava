@@ -20,6 +20,7 @@ import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
+import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 /**
  * Utility methods that support Clava APIs.
@@ -37,16 +38,12 @@ public class ClavaApiUtils {
 
         File resourceFolder = getClavaApiResourceFolder();
 
-        // Check if Linux
-        if (!SpecsPlatforms.isLinux()) {
-            throw new RuntimeException(
-                    "The 'petit' executable (e.g., used by AutoPar package) is only available on Linux platforms");
-        }
+        WebResourceProvider petitExecutable = getPetitExecutableResource();
 
         // Copy executable
         // ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangAstParser.class);
 
-        ResourceWriteData executable = ClavaApiWebResource.PETIT_UBUNTU.writeVersioned(resourceFolder,
+        ResourceWriteData executable = petitExecutable.writeVersioned(resourceFolder,
                 ClavaApiUtils.class);
 
         // If file is new and we are in a flavor of Linux, make file executable
@@ -55,5 +52,21 @@ public class ClavaApiUtils {
         }
 
         return executable.getFile();
+    }
+
+    private static WebResourceProvider getPetitExecutableResource() {
+
+        // Check if Linux
+        if (SpecsPlatforms.isLinux()) {
+            return ClavaApiWebResource.PETIT_UBUNTU;
+        }
+
+        if (SpecsPlatforms.isCentos6()) {
+            return ClavaApiWebResource.PETIT_CENTOS6;
+        }
+
+        throw new RuntimeException(
+                "The 'petit' executable (e.g., used by AutoPar package) is currently available only for Debian-compatible systems (e.g., Ubuntu) and RedHat systems (e.g., CentOS)");
+
     }
 }
