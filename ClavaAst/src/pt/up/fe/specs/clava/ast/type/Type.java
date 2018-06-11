@@ -95,9 +95,26 @@ public abstract class Type extends ClavaNode {
         // return data;
     }
 
+    /*
     @Override
     public Type copy() {
         Type copy = (Type) super.copy();
+    
+        // Set app
+        // copy.app = app;
+    
+        return copy;
+    }
+    */
+
+    @Override
+    public Type copy() {
+        return (Type) super.copy();
+    }
+
+    @Override
+    public Type copy(boolean keepId) {
+        Type copy = (Type) super.copy(keepId);
 
         // Set app
         // copy.app = app;

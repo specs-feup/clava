@@ -317,14 +317,69 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         getData().get(INLINE_COMMENTS).add(inlineComment);
     }
 
+    /**
+     * By default, copying a node creates an new, unique id for the new copy.
+     */
     @Override
     public ClavaNode copy() {
-        return super.copy();
+        return copy(false);
     }
 
+    /**
+     * 
+     * @param keepId
+     *            if true, the id of the copy will be the same as the id of the original node
+     * @return
+     */
+    public ClavaNode copy(boolean keepId) {
+        // Re-implements ATreeNode copy, in order to specify if IDs should change or not
+        // return super.copy();
+
+        // TODO: Remove after legacy nodes are replaced
+        // If copyPrivate() is overriden, this means it is a legacy node, and needs to call
+        // the method version without arguments
+        boolean overridesCopyPrivate = isCopyPrivateOverriden();
+        ClavaNode newToken = overridesCopyPrivate ? copyPrivate() : copyPrivate(keepId);
+
+        // Check new token does not have children
+        if (newToken.getNumChildren() != 0) {
+            throw new RuntimeException("Node '" + newToken.getClass().getSimpleName() + "' of type '"
+                    + newToken.getNodeName() + "' still has children after copyPrivate(), check implementation");
+        }
+
+        for (ClavaNode child : getChildren()) {
+            // Copy children of token
+            ClavaNode newChildToken = child.copy(keepId);
+
+            newToken.addChild(newChildToken);
+        }
+
+        return newToken;
+    }
+
+    private boolean isCopyPrivateOverriden() {
+        try {
+            Class<?> copyPrivateNoArgsClass = this.getClass().getDeclaredMethod("copyPrivate").getDeclaringClass();
+            // System.out.println("COPY PRIVATE DECLARING CLASS:" + copyPrivateNoArgsClass);
+            return !copyPrivateNoArgsClass.equals(ClavaNode.class);
+        } catch (NoSuchMethodException e) {
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("Could not obtain copyPrivate() method through reflection", e);
+        }
+    }
+
+    /**
+     * By default, copying a node creates an new, unique id for the new copy.
+     */
     @Override
     protected ClavaNode copyPrivate() {
-        return newInstance(getClass(), Collections.emptyList());
+        // return newInstance(getClass(), Collections.emptyList());
+        return copyPrivate(false);
+    }
+
+    protected ClavaNode copyPrivate(boolean keepId) {
+        return newInstance(keepId, getClass(), Collections.emptyList());
     }
 
     public boolean hasInlineComments() {
@@ -505,13 +560,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param children
      * @return
      */
-    public <T extends ClavaNode> T newInstance(Class<T> nodeClass, List<ClavaNode> children) {
+    public <T extends ClavaNode> T newInstance(boolean keepId, Class<T> nodeClass, List<ClavaNode> children) {
 
         DataStore newDataStore = dataI.copy();
 
         // Set id
-        // String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
-        // newDataStore.put(ID, newId);
+        if (!keepId) {
+            String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
+            newDataStore.put(ID, newId);
+        }
 
         try {
             Constructor<? extends ClavaNode> constructorMethod = nodeClass.getConstructor(DataStore.class,
