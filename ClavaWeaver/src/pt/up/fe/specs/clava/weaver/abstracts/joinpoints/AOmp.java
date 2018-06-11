@@ -75,6 +75,13 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * 
+     */
+    public void defNumThreadsImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def numThreads with type String not implemented ");
+    }
+
+    /**
      * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
     public abstract String getProcBindImpl();
@@ -95,6 +102,13 @@ public abstract class AOmp extends APragma {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "procBind", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defProcBindImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def procBind with type String not implemented ");
     }
 
     /**
@@ -1211,6 +1225,20 @@ public abstract class AOmp extends APragma {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "numThreads": {
+        	if(value instanceof String){
+        		this.defNumThreadsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "procBind": {
+        	if(value instanceof String){
+        		this.defProcBindImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

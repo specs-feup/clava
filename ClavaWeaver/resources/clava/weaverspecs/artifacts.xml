@@ -485,8 +485,12 @@
 	<!-- OMP -->
 	<artifact class="omp" default="kind">
 		<attribute name="kind" type="String" tooltip="The kind of the directive"/>
-		<attribute name="numThreads" type="String" tooltip="An integer expression, or undefined if no 'num_threads' clause is defined"/>
-		<attribute name="procBind" type="String" tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined"/>
+		<attribute name="numThreads" type="String" tooltip="An integer expression, or undefined if no 'num_threads' clause is defined">
+			<def/>
+		</attribute>
+		<attribute name="procBind" type="String" tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined">
+			<def/>
+		</attribute>
 		<attribute name="private" type="String[]" tooltip="The variable names of all private clauses, or empty array if no private clause is defined"/>
 		<attribute name="hasClause" type="Boolean" tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
 			<parameter name="clauseName" type="String" />
