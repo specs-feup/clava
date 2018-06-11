@@ -8,7 +8,12 @@ double foo() {
     for(int i=0; i<1000; i++) {
         a += bar();
     }
-    
+	
+	// A scope
+	{
+		a++;
+	}
+	
     return a;
 }
 

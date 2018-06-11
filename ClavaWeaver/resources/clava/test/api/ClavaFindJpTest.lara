@@ -12,6 +12,12 @@ aspectdef ClavaTest
 		$aLoop = $loop;
 	end
 
+	var $aScope = undefined;
+	select scope end
+	apply 
+		$aScope = $scope;
+	end
+	
 	// Push AST
 	Clava.pushAst();
 	
@@ -19,6 +25,13 @@ aspectdef ClavaTest
 	var $eqLoop = Clava.findJp($aLoop);
 	if($eqLoop === undefined) {
 		println("Could not find loop");
+		return;
+	}
+	
+	// Find equivalent join point scope
+	var $eqScope = Clava.findJp($aScope);
+	if($eqScope === undefined) {
+		println("Could not find scope");
 		return;
 	}
 	
