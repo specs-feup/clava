@@ -113,23 +113,19 @@ public class ClangAstParser {
 
     private final boolean dumpStdout;
     private final boolean useCustomResources;
-    private final boolean disableNewParsingMethod;
+    // private final boolean disableNewParsingMethod;
     private final FileResourceManager clangAstResources;
 
     public ClangAstParser() {
-        this(false, false, false);
+        this(false, false);
 
     }
 
-    // public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
-    // this(dumpStdout, useCustomResources, false);
-    // }
-
-    public ClangAstParser(boolean dumpStdout, boolean useCustomResources, boolean disableNewParsingMethod) {
+    // public ClangAstParser(boolean dumpStdout, boolean useCustomResources, boolean disableNewParsingMethod) {
+    public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
         this.dumpStdout = dumpStdout;
         this.useCustomResources = useCustomResources;
-        this.disableNewParsingMethod = disableNewParsingMethod;
-        // this.disableNewParsingMethod = true;
+        // this.disableNewParsingMethod = disableNewParsingMethod;
 
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
 
@@ -138,12 +134,6 @@ public class ClangAstParser {
         }
 
     }
-
-    // public ClangAstParser() {
-    // if (SwingUtils.isSwingAvailable()) {
-    // (new HeapWindow()).run();
-    // }
-    // }
 
     public ClangRootNode parse(Collection<String> files, List<String> options) {
 
@@ -303,16 +293,13 @@ public class ClangAstParser {
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
         // Check if no new nodes should be used
-        Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
-                : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
+        // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        Map<String, ClavaNode> newNodes = lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
 
-        // ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-        // isTemporary, ompDirectives, enumToIntegerType, stderr, clangStreamParser.getParsedNodes());
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
                 newNodes);
-        // lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES));
-        // new HashMap<>());
 
         return new ClangRootNode(clangRootData, clangDump);
     }
