@@ -489,8 +489,9 @@ public class CxxWeaver extends ACxxWeaver {
         // TODO: parse should receive File instead of String?
         long tic = System.nanoTime();
 
-        boolean disableNewParsingMethod = getConfig().get(ClavaOptions.DISABLE_CLAVA_DATA_NODES);
-        ClangRootNode ast = new ClangAstParser(false, useCustomResources, disableNewParsingMethod).parse(
+        // boolean disableNewParsingMethod = getConfig().get(ClavaOptions.DISABLE_CLAVA_DATA_NODES);
+        // ClangRootNode ast = new ClangAstParser(false, useCustomResources, disableNewParsingMethod).parse(
+        ClangRootNode ast = new ClangAstParser(false, useCustomResources).parse(
                 implementationFilenames,
                 parserOptions);
 

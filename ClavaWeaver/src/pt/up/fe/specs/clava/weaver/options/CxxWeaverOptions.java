@@ -78,8 +78,8 @@ public class CxxWeaverOptions {
         addBooleanOption(ClavaOptions.CUSTOM_RESOURCES, "cr", "custom-resources",
                 "Enables custom resource files (e.g., clang_ast.resources)");
 
-        addBooleanOption(ClavaOptions.DISABLE_CLAVA_DATA_NODES, "dnp", "disable-new-parsing",
-                "Disables new method for parsing nodes (only uses 'legacy' nodes)");
+        // addBooleanOption(ClavaOptions.DISABLE_CLAVA_DATA_NODES, "dnp", "disable-new-parsing",
+        // "Disables new method for parsing nodes (only uses 'legacy' nodes)");
 
         // addBooleanOption(CxxWeaverOption.UNIT_TESTING_MODE, getUnitTestFlag(), "unit-test",
         // "Starts Clava in unit-testing mode");
