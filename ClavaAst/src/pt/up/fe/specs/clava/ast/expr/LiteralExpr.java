@@ -32,9 +32,9 @@ public class LiteralExpr extends Expr implements LiteralNode {
         super(nodeData, children);
     }
 
-    @Override
-    public String getCode() {
-        return getLiteralCode();
-    }
+    // @Override
+    // public String getCode() {
+    // return getLiteralCode();
+    // }
 
 }

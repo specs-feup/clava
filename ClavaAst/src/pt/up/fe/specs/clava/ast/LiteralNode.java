@@ -39,7 +39,7 @@ public interface LiteralNode {
         return get(LITERAL_CODE);
     }
 
-    // default String getCode() {
-    // return getLiteralCode();
-    // }
+    default String getCode() {
+        return getLiteralCode();
+    }
 }
