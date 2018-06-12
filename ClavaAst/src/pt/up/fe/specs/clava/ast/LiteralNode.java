@@ -39,7 +39,8 @@ public interface LiteralNode {
         return get(LITERAL_CODE);
     }
 
-    default String getCode() {
-        return getLiteralCode();
-    }
+    // Does not override already implemented methods
+    // default String getCode() {
+    // return getLiteralCode();
+    // }
 }

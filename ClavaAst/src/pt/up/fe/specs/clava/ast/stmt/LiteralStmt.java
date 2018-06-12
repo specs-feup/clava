@@ -32,9 +32,9 @@ public class LiteralStmt extends Stmt implements LiteralNode {
         super(data, children);
     }
 
-    // @Override
-    // public String getCode() {
-    // return get(LITERAL_CODE);
-    // }
+    @Override
+    public String getCode() {
+        return get(LITERAL_CODE);
+    }
 
 }
