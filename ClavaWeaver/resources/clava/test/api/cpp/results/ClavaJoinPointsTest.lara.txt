@@ -1,1 +1,2 @@
 User literal type: xpto
+Literal statement: int a = 0;
