@@ -5,3 +5,6 @@ Data:
    b:
       a string
 }
+Empty Object:
+{
+}

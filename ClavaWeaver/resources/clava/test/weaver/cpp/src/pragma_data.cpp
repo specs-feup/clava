@@ -17,9 +17,15 @@ double foo() {
     return a;
 }
 
+void noData() {
+	for(int i=0; i<0; i++) {
+	}
+}
+
 int main() {
     
     foo();
+	noData();
   
 	return 0;
 
