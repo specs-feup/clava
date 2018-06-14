@@ -3,7 +3,7 @@
 # ---------
 #
 # Locate or download the Clava C++ weaver for LARA DSL executable.
-# See: https://web.fe.up.pt/~specs/projects/lara/doku.php?id=lara:lara
+# See: https://web.fe.up.pt/~specs/projects/lara/doku.php?id=lara:downloads
 #
 # This module defines the following variables
 # ::
