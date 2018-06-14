@@ -3,7 +3,7 @@
 # ---------
 #
 # This module provides integration with Clava C++ weaver for LARA DSL.
-# See: https://web.fe.up.pt/~specs/projects/lara/doku.php?id=lara:lara
+# See: https://web.fe.up.pt/~specs/projects/lara/doku.php?id=lara:documentation
 #
 # This module defines the following varriables
 # ::
