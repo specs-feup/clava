@@ -56,7 +56,6 @@ if(DOWNLOADED_CLAVA)
 elseif(LOCAL_CLAVA)
     message(STATUS "Using local Clava at: ${LOCAL_CLAVA}")
     set(CLAVA_JAR_PATH ${LOCAL_CLAVA})
-
 endif()
 
 if(NOT EXISTS ${CLAVA_JAR_PATH})
