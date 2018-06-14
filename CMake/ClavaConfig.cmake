@@ -20,12 +20,18 @@
 # Check for Java JRE
 find_package(Java COMPONENTS Runtime REQUIRED)
 
-# Set default URL for clava.jar
-set(CLAVA_JAR_URL "http://specs.fe.up.pt/tools/clava.jar")
-set(CLAVA_JAR_PATH "${CMAKE_CURRENT_BINARY_DIR}/clava.jar")
+# Check if installation file with JAR path exists
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/clava-installation-jar.txt")
+	file(READ "${CMAKE_CURRENT_LIST_DIR}/clava-installation-jar.txt" CLAVA_JAR_PATH) 
+else()
+	# Set default URL for clava.jar
+	set(CLAVA_JAR_URL "http://specs.fe.up.pt/tools/clava.jar")
+	set(CLAVA_JAR_PATH "${CMAKE_CURRENT_BINARY_DIR}/clava.jar")
+	set(DOWNLOADED_CLAVA true)
+endif()
 
 # Download clava by default
-if(NOT LOCAL_CLAVA)
+if(DOWNLOADED_CLAVA)
 
     # Check if Clava has been already downloaded
     if(EXISTS ${CLAVA_JAR_PATH})
@@ -46,7 +52,7 @@ if(NOT LOCAL_CLAVA)
         message(STATUS "Downloaded Clava to: ${CLAVA_JAR_PATH}")
     endif()
 
-else()
+elseif(LOCAL_CLAVA)
     message(STATUS "Using local Clava at: ${LOCAL_CLAVA}")
     set(CLAVA_JAR_PATH ${LOCAL_CLAVA})
 
