@@ -16,6 +16,7 @@
 # If defined, search for Clava in path specified in this parameter
 #
 #
+#
 
 # Check for Java JRE
 find_package(Java COMPONENTS Runtime REQUIRED)
