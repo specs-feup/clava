@@ -60,3 +60,10 @@ endif()
 # Set the result variables
 set(CLAVA_JAR ${CLAVA_JAR_PATH})
 set(CLAVA_JAR_FOUND)
+
+# Add current folder to the modules path
+#set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}")
+
+# Add ApplyLARA, to make function apply_lara_aspect available
+#include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake RESULT_VARIABLE LARA_RESULT)
+include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake)

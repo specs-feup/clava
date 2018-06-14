@@ -17,8 +17,10 @@
 # 2. Include the module using ``include(ApplyLARA)``
 # 3. Call ``apply_lara_aspect`` function with appropriate parameters
 
+# Removed 'find', this file is automatically included when calling find_package(Clava)
 # Find Clava
-find_package(Clava REQUIRED)
+#find_package(Clava REQUIRED)
+
 set(LARA_WORKING_DIR ${CMAKE_CURRENT_BINARY_DIR}/lara)
 
 # Include the working directory, such that generated headers can be included in the rest of the parent project
