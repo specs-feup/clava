@@ -24,8 +24,21 @@ function(clava_weave ORIG_TARGET ASPECT)
 	endif()
 	#message(STATUS "PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
 	
+	
+	# get original include folders
+	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+	message(STATUS "ORIG_INCLUDES: ${ORIG_INCLUDES}")
+	
+	# process original includes list
+	string(REGEX REPLACE "([^;]+)" "\\1" PROC_ORIG_INCLUDES "${ORIG_INCLUDES}")
+	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+		string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
+	endif()
+	message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
+	
+	
 	# get original include directories
-	get_target_property(ORIG_INC_DIRS ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+	#get_target_property(ORIG_INC_DIRS ${ORIG_TARGET} INCLUDE_DIRECTORIES)
 	#message(STATUS "ORIG_INC_DIRS: ${ORIG_INC_DIRS}")
 	
 	# make the cmake configuration depend on the LARA file
@@ -37,7 +50,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	execute_process(
 		# -std c99 
 		#COMMAND ${CLAVA_COMMAND}
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR}"
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR}" -ih "${PROC_ORIG_INCLUDES}"
 		WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
 	)
 	
