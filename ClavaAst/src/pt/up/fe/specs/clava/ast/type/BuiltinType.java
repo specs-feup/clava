@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.util.parsing.StringCodec;
 
 public class BuiltinType extends Type {
 
@@ -33,7 +34,8 @@ public class BuiltinType extends Type {
     /**
      * The kind of the built-in.
      */
-    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class);
+    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class)
+            .setDecoder(StringCodec.newInstance(kind -> kind.getCode(), BuiltinKind::newInstance));
 
     /**
      * Optional, the literal code for this built-in type.
