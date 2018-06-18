@@ -766,7 +766,7 @@ public class CxxWeaver extends ACxxWeaver {
                 // Convert to absolute path
                 .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
                 // CMake-friendly list
-                .collect(Collectors.joining("\";\"", "\"", "\""));
+                .collect(Collectors.joining(";"));
 
         File cmakeGeneratedFiles = new File(getWeavingFolder(), CMAKE_GENERATED_FILES_FILENAME);
 
