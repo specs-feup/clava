@@ -101,6 +101,8 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final Set<String> LANGUAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx")));
 
+    private static final String CMAKE_GENERATED_FILES_FILENAME = "clava_generated_files.txt";
+
     // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList(
     // "c", "cpp"));
     // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
@@ -222,6 +224,10 @@ public class CxxWeaver extends ACxxWeaver {
         weaverData = null;
 
         this.setWeaverProfiler(new ClavaMetrics());
+    }
+
+    public ClavaWeaverData getWeaverData() {
+        return weaverData;
     }
 
     public App getApp() {
@@ -705,6 +711,11 @@ public class CxxWeaver extends ACxxWeaver {
                 writeCode(getWeavingFolder());
             }
 
+            // Write CMake helper files
+            if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
+                generateCmakerHelperFiles();
+            }
+
         }
 
         /// Clean-up phase
@@ -742,6 +753,27 @@ public class CxxWeaver extends ACxxWeaver {
         return true;
     }
 
+    private void generateCmakerHelperFiles() {
+        // Generated files
+        Set<File> generatedFiles = new HashSet<>();
+
+        // Add generated files based on input code
+        generatedFiles.addAll(weaverData.getGeneratedFiles());
+        // Add manually generated files
+        generatedFiles.addAll(weaverData.getManuallyWrittenFiles());
+
+        String generatedFilesContent = generatedFiles.stream()
+                // Convert to absolute path
+                .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
+                // CMake-friendly list
+                .collect(Collectors.joining("\";\"", "\"", "\""));
+
+        File cmakeGeneratedFiles = new File(getWeavingFolder(), CMAKE_GENERATED_FILES_FILENAME);
+
+        SpecsIo.write(cmakeGeneratedFiles, generatedFilesContent);
+
+    }
+
     public void writeCode(File outputFolder) {
         Set<String> modifiedFilenames = getModifiedFilenames();
 
@@ -763,6 +795,9 @@ public class CxxWeaver extends ACxxWeaver {
             SpecsLogs.msgInfo("Changes in file '" + destinationFile + "'");
             SpecsIo.write(destinationFile, code);
         }
+
+        // Store which files were generated
+        weaverData.setGeneratedFiles(files.keySet());
     }
 
     private Set<String> getModifiedFilenames() {

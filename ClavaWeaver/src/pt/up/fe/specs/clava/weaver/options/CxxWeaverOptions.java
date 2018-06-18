@@ -55,6 +55,9 @@ public class CxxWeaverOptions {
         addBooleanOption(CxxWeaverOption.GENERATE_MODIFIED_CODE_ONLY, "gom", "generate-only-if-modified",
                 "Generate code from AST for a file only if file is modified by a LARA action. Otherwise, the original file is copied");
 
+        addBooleanOption(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES, "cmk", "cmake",
+                "Generate helper files to be used by Clava CMake integration modules");
+
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_CLAVA_INFO.getName(),
                 WeaverOptionBuilder.build("nci", "no-clava-info",
                         "Disables printing of information about Clava", CxxWeaverOption.DISABLE_CLAVA_INFO));

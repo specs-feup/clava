@@ -13,12 +13,17 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.io.File;
 import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -38,13 +43,26 @@ public class ClavaWeaverData {
     // Parsed program state
     private final Deque<App> apps;
     private final Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
+    private final Set<File> manuallyWrittenFiles;
+    private Collection<File> generatedFiles;
 
     public ClavaWeaverData(DataStore data) {
         this.data = data;
 
         this.apps = new ArrayDeque<>();
         this.userValuesStack = new ArrayDeque<>();
+        // this.manuallyWrittenFiles = new LinkedHashSet<>();
+        this.manuallyWrittenFiles = new HashSet<>();
+        this.generatedFiles = Collections.emptySet();
 
+    }
+
+    public void addManualWrittenFile(File file) {
+        this.manuallyWrittenFiles.add(file);
+    }
+
+    public Collection<File> getManuallyWrittenFiles() {
+        return this.manuallyWrittenFiles;
     }
 
     public Optional<App> getAst() {
@@ -136,6 +154,14 @@ public class ClavaWeaverData {
     public App popAst() {
         userValuesStack.pop();
         return apps.pop();
+    }
+
+    public void setGeneratedFiles(Collection<File> generatedFiles) {
+        this.generatedFiles = new HashSet<>(generatedFiles);
+    }
+
+    public Collection<File> getGeneratedFiles() {
+        return generatedFiles;
     }
 
 }

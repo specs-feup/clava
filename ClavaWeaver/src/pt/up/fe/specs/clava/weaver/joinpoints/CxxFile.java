@@ -375,7 +375,8 @@ public class CxxFile extends AFile {
         // File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
         // tunit.write(destinationFolder, baseSourceFolder);
 
-        tunit.write(destinationFolder);
+        File writtenFile = tunit.write(destinationFolder);
+        getWeaverEngine().getWeaverData().addManualWrittenFile(writtenFile);
     }
 
     @Override
