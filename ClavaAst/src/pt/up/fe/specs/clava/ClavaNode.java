@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
 
@@ -119,6 +120,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     @Override
     public String toContentString() {
         return getData().toInlinedString();
+    }
+
+    public StoreDefinition getKeys() {
+        return this.dataI.getStoreDefinition().orElseThrow(() -> new RuntimeException(""));
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -474,13 +479,13 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return dataI;
     }
 
-    public void setData(DataStore data) {
-        this.dataI.addAll(data);
-    }
+    // public void setData(DataStore data) {
+    // this.dataI.addAll(data);
+    // }
 
-    public boolean hasDataI() {
-        return dataI != null;
-    }
+    // public boolean hasDataI() {
+    // return dataI != null;
+    // }
 
     public Optional<String> getIdSuffix() {
         if (!getExtendedId().isPresent()) {
