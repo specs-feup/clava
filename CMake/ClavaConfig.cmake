@@ -73,3 +73,6 @@ set(CLAVA_JAR_FOUND)
 # Add ApplyLARA, to make function apply_lara_aspect available
 #include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake RESULT_VARIABLE LARA_RESULT)
 include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake)
+
+# Add function 'clava_generate'
+include(${CMAKE_CURRENT_LIST_DIR}/clava/ClavaGenerate.cmake)
