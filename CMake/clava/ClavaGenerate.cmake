@@ -1,4 +1,8 @@
 # 
+#
+# When using clava_generate, code generation is disabled, only take into account 
+# files that are written manually with action $file.write().
+#
 function(clava_generate INPUT_TARGET GENERATED_TARGET GENERATION_COMMAND_TARGET)
 
 	# Split into generation (calling command) and generated library

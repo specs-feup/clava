@@ -76,3 +76,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake)
 
 # Add function 'clava_generate'
 include(${CMAKE_CURRENT_LIST_DIR}/clava/ClavaGenerate.cmake)
+
+# Add function 'clava_weave'
+include(${CMAKE_CURRENT_LIST_DIR}/clava/ClavaWeave.cmake)
