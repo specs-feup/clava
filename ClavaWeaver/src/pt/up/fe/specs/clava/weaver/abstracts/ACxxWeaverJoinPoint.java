@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
+import org.suikasoft.jOptions.Datakey.DataKey;
 
 import com.google.common.base.Preconditions;
 
@@ -883,5 +884,35 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // return getWeaverEngine().getScriptEngine().eval("var _data = {a:30, b:40}; _data;");
 
         // return getWeaverEngine().getScriptEngine().eval("var _data = {a:10, b:20}; _data;");
+    }
+
+    @Override
+    public String[] getKeysArrayImpl() {
+        return getNode().getKeys()
+                .getKeyMap()
+                .keySet()
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public Object getValueImpl(String key) {
+        // Get key
+        DataKey<?> datakey = getNode().getKeys().getKey(key);
+
+        return getNode().get(datakey);
+    }
+
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        // Get key
+        DataKey<Object> datakey = getNode().getKeys().getKeyRaw(key);
+
+        // If string, use decoder
+        if (value instanceof String) {
+            value = datakey.decode((String) value);
+        }
+
+        // Returns new join point of the node, using the same parent
+        return CxxJoinpoints.create(getNode().set(datakey, value), getParentImpl());
     }
 }

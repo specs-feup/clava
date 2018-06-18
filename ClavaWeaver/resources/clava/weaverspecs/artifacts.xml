@@ -86,6 +86,14 @@
 		<attribute name="currentRegion" type="joinpoint" />
 		<attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
 		<attribute name="data" type="Object" tooltip="JS object with the parsed data of #pragma clava data, associated with this node"/>
+		<attribute name="keys" type="String[]" tooltip="A list of the properties currently supported by this node"/>
+		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
+			<parameter name="key" type="String" />	
+		</attribute>
+		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
+			<parameter name="key" type="String" />	
+			<parameter name="value" type="Object" />				
+		</attribute>		
 	</global>
 
 
