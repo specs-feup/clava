@@ -131,6 +131,10 @@ public enum BuiltinKind {
         BUILTIN_CODE = new HashMap<>();
         BUILTIN_CODE.put(Void, "void");
         BUILTIN_CODE.put(Int, "int");
+        BUILTIN_CODE.put(Long, "long");
+        BUILTIN_CODE.put(LongLong, "long long");
+        BUILTIN_CODE.put(Float, "float");
+        BUILTIN_CODE.put(Double, "double");
     }
 
     // public String getCode(ClavaContext context) {
@@ -209,5 +213,9 @@ public enum BuiltinKind {
 
     public boolean isFloatingPoint() {
         return this.ordinal() >= Half.ordinal() && this.ordinal() <= LongDouble.ordinal();
+    }
+
+    public String getCode() {
+        return getCodePrivate(null);
     }
 }
