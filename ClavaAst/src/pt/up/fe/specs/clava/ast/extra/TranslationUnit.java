@@ -356,13 +356,15 @@ public class TranslationUnit extends ClavaNode {
     }
 
     // public void write(File destinationFolder, File baseInputFolder) {
-    public void write(File destinationFolder) {
+    public File write(File destinationFolder) {
         String relativePath = getRelativeFolderpath();
 
         File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
         File destinationFile = new File(actualDestinationFolder, getFilename());
 
         SpecsIo.write(destinationFile, getCode());
+
+        return destinationFile;
     }
 
     /**
