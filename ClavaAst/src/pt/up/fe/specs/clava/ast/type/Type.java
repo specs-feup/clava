@@ -128,10 +128,16 @@ public abstract class Type extends ClavaNode {
      */
     @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
-        Type typeCopy = copy();
-        typeCopy.getData().put(key, value);
+        return set(key, value, true);
+    }
 
-        return typeCopy;
+    protected <T, E extends T> ClavaNode set(DataKey<T> key, E value, boolean createCopy) {
+        Type typeToChange = createCopy ? copy() : this;
+
+        // Type typeCopy = copy();
+        typeToChange.getData().put(key, value);
+
+        return typeToChange;
     }
 
     /**
