@@ -27,7 +27,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	
 	# get original include folders
 	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
-	message(STATUS "ORIG_INCLUDES: ${ORIG_INCLUDES}")
+	#message(STATUS "ORIG_INCLUDES: ${ORIG_INCLUDES}")
 	
 	# process original includes list
 	string(REGEX REPLACE "([^;]+)" "\\1" PROC_ORIG_INCLUDES "${ORIG_INCLUDES}")
@@ -60,7 +60,7 @@ function(clava_weave ORIG_TARGET ASPECT)
         string(STRIP "${CLAVA_WOVEN_SOURCES}" CLAVA_WOVEN_SOURCES)
         set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CLAVA_WOVEN_SOURCES}")
 
-        message(STATUS "CLAVA_WOVEN_SOURCES: ${CLAVA_WOVEN_SOURCES}")
+        #message(STATUS "CLAVA_WOVEN_SOURCES: ${CLAVA_WOVEN_SOURCES}")
 	else()
 		message(FATAL_ERROR "Could not find Clava file 'clava_generated_files.txt'")
 	endif()
@@ -70,7 +70,7 @@ function(clava_weave ORIG_TARGET ASPECT)
         file(READ "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_INCLUDE_DIRS)
         string(STRIP "${CLAVA_INCLUDE_DIRS}" CLAVA_INCLUDE_DIRS)
 
-        message(STATUS "CLAVA_INCLUDE_DIRS: ${CLAVA_INCLUDE_DIRS}")
+        #message(STATUS "CLAVA_INCLUDE_DIRS: ${CLAVA_INCLUDE_DIRS}")
 	else()
 		message(FATAL_ERROR "Could not find Clava file 'clava_include_dirs.txt'")
 	endif()
