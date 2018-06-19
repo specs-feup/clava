@@ -751,6 +751,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public boolean close() {
+
         if (!args.get(CxxWeaverOption.DISABLE_WEAVING)) {
             if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
                 SpecsLogs.msgInfo("Checking woven code syntax...");
@@ -826,7 +827,11 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.write(cmakeGeneratedFiles, generatedFilesContent);
 
         // Determine new include dirs
-        String includeFoldersContent = getIncludePaths().stream().collect(Collectors.joining(";"));
+        // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
+        String includeFoldersContent = getAllIncludes(getWeavingFolder()).stream()
+                .map(File::getAbsolutePath)
+                .collect(Collectors.joining(";"));
+
         File cmakeIncludes = new File(getWeavingFolder(), CMAKE_INCLUDE_DIRS_FILENAME);
         SpecsIo.write(cmakeIncludes, includeFoldersContent);
     }
@@ -956,28 +961,40 @@ public class CxxWeaver extends ACxxWeaver {
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
         getApp().write(tempFolder, flattenFolders);
-
+        /*
         // For all Translation Units, collect new destination folders
         List<File> srcFolders = getApp().getTranslationUnits().stream()
-                .map(tu -> tu.getDestinationFolder(tempFolder, flattenFolders))
+                // .map(tu -> tu.getDestinationFolder(tempFolder, flattenFolders))
+                .map(tu -> new File(tu.getDestinationFolder(tempFolder, flattenFolders), tu.getRelativeFolderpath()))
                 .collect(Collectors.toList());
-
+        
         // TODO: When separation of src/include is done, take it into account here
         // List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         List<File> includeFolders = srcFolders;
+        */
+        Set<File> includeFolders = getSourceIncludes(tempFolder);
 
-        // Copy current options
-        List<String> rebuildOptions = new ArrayList<>(parserOptions);
+        List<String> rebuildOptions = new ArrayList<>();
+
+        // Copy current options, removing previous includes
+        parserOptions.stream()
+                .filter(option -> !option.startsWith("-I"))
+                .forEach(rebuildOptions::add);
+        // rebuildOptions.addAll(parserOptions);
 
         // Add include folders
         for (File includeFolder : includeFolders) {
-            rebuildOptions.add("\"-I" + includeFolder.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
         }
 
         // Add extra includes
-        for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
-            rebuildOptions.add("\"-I" + extraInclude.getAbsolutePath() + "\"");
+        // for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
+        for (File extraInclude : getExternalIncludes()) {
+            rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
         }
+
+        // App rebuiltApp = createApp(srcFolders, rebuildOptions);
+        List<File> srcFolders = new ArrayList<>(includeFolders);
 
         App rebuiltApp = createApp(srcFolders, rebuildOptions);
 
@@ -1148,17 +1165,65 @@ public class CxxWeaver extends ACxxWeaver {
         return getCxxWeaver().getApp().getContext();
     }
 
-    private Set<String> getIncludePaths() {
-        Set<String> includePaths = new HashSet<>();
+    private Set<File> getSourceIncludes(File weavingFolder) {
+        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
-        getApp().getTranslationUnits().stream()
-                .map(tu -> SpecsIo.getCanonicalPath(new File(tu.getFolderpath())))
-                .forEach(includePaths::add);
+        // For all Translation Units, collect new destination folders
+        return getApp().getTranslationUnits().stream()
+                .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
+                        tu.getRelativeFolderpath()))
+                .map(file -> SpecsIo.getCanonicalFile(file))
+                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+    }
 
-        getApp().getExternalDependencies().getExtraIncludes().stream()
-                .map(SpecsIo::getCanonicalPath)
-                .forEach(includePaths::add);
+    private Set<File> getExternalIncludes() {
+        return getApp().getExternalDependencies().getExtraIncludes().stream()
+                .map(SpecsIo::getCanonicalFile)
+                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+    }
+
+    private Set<File> getAllIncludes(File weavingFolder) {
+        Set<File> includePaths = new LinkedHashSet<>();
+
+        includePaths.addAll(getSourceIncludes(weavingFolder));
+        includePaths.addAll(getExternalIncludes());
 
         return includePaths;
     }
+
+    /*
+    
+    private Set<String> getIncludePaths(File weavingFolder) {
+        Set<String> includePaths = new HashSet<>();
+    
+        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+        // System.out.println("FLATTEN FOLDERS:" + flattenFolders);
+        // for (TranslationUnit tunit : getApp().getTranslationUnits()) {
+        // System.out.println("TUNIT: " + tunit.getLocation());
+        // System.out.println("DESTINATION FOLDER:" + tunit.getDestinationFolder(weavingFolder, flattenFolders));
+        // System.out.println("Relative filepath:" + tunit.getRelativeFilepath());
+        // System.out.println("Relative folderpath:" + tunit.getRelativeFolderpath());
+        //
+        // }
+    
+        // For all Translation Units, collect new destination folders
+        getApp().getTranslationUnits().stream()
+                // .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
+                .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
+                        tu.getRelativeFolderpath()))
+                .map(file -> SpecsIo.getCanonicalPath(file))
+                .forEach(includePaths::add);
+    
+        // getApp().getTranslationUnits().stream()
+        // .map(tu -> SpecsIo.getCanonicalPath(new File(tu.getFolderpath())))
+        // .forEach(includePaths::add);
+    
+        getApp().getExternalDependencies().getExtraIncludes().stream()
+                .map(SpecsIo::getCanonicalPath)
+                .forEach(includePaths::add);
+    
+        return includePaths;
+    }
+    
+    */
 }
