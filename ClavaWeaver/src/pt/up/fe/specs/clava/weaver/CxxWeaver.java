@@ -102,6 +102,7 @@ public class CxxWeaver extends ACxxWeaver {
     private static final Set<String> LANGUAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx")));
 
     private static final String CMAKE_GENERATED_FILES_FILENAME = "clava_generated_files.txt";
+    private static final String CMAKE_INCLUDE_DIRS_FILENAME = "clava_include_dirs.txt";
 
     // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList(
     // "c", "cpp"));
@@ -824,6 +825,10 @@ public class CxxWeaver extends ACxxWeaver {
 
         SpecsIo.write(cmakeGeneratedFiles, generatedFilesContent);
 
+        // Determine new include dirs
+        String includeFoldersContent = getIncludePaths().stream().collect(Collectors.joining(";"));
+        File cmakeIncludes = new File(getWeavingFolder(), CMAKE_INCLUDE_DIRS_FILENAME);
+        SpecsIo.write(cmakeIncludes, includeFoldersContent);
     }
 
     public void writeCode(File outputFolder) {
@@ -1141,5 +1146,19 @@ public class CxxWeaver extends ACxxWeaver {
 
     public static ClavaContext getContex() {
         return getCxxWeaver().getApp().getContext();
+    }
+
+    private Set<String> getIncludePaths() {
+        Set<String> includePaths = new HashSet<>();
+
+        getApp().getTranslationUnits().stream()
+                .map(tu -> SpecsIo.getCanonicalPath(new File(tu.getFolderpath())))
+                .forEach(includePaths::add);
+
+        getApp().getExternalDependencies().getExtraIncludes().stream()
+                .map(SpecsIo::getCanonicalPath)
+                .forEach(includePaths::add);
+
+        return includePaths;
     }
 }
