@@ -317,6 +317,11 @@ public class CxxWeaver extends ACxxWeaver {
         // this.outputDir = outputDir;
         this.args = args;
 
+        // If args does not have a standard, add a standard one based on the input files
+        if (!this.args.hasValue(ClavaOptions.STANDARD)) {
+            this.args.add(ClavaOptions.STANDARD, getStandard());
+        }
+
         // Initialize list of options for parser
         parserOptions = new ArrayList<>();
 
@@ -396,8 +401,55 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public String getStdFlag() {
+        // String std = getStandard().getString();
+        //
+        // return "-std=" + std;
+
         Standard standard = args.get(ClavaOptions.STANDARD);
         return "-std=" + standard.getString();
+
+    }
+
+    public Standard getStandard() {
+
+        if (args.hasValue(ClavaOptions.STANDARD)) {
+            return args.get(ClavaOptions.STANDARD);
+        }
+
+        // Determine standard based on implementation files
+        boolean isCxx = false;
+        boolean isC = false;
+
+        for (String implFile : SpecsIo.getFileMap(getSources(), SourceType.IMPLEMENTATION.getExtensions())
+                .keySet()) {
+
+            if (SourceType.isCxxExtension(SpecsIo.getExtension(implFile))) {
+                isCxx = true;
+                continue;
+            }
+
+            if (SourceType.isCExtension(SpecsIo.getExtension(implFile))) {
+                isC = true;
+                continue;
+            }
+        }
+
+        if (isCxx && isC) {
+            throw new RuntimeException(
+                    "Found both C and C++ implementation files, currently this is not supported");
+        } else if (!isCxx && !isC) {
+            // Default to C++
+            return Standard.CXX11;
+            // throw new RuntimeException(
+            // "Could not find neither C or C++ implementation files");
+        } else if (isCxx) {
+            return Standard.CXX11;
+            // return "c++11";
+        } else {
+            return Standard.C99;
+            // return "c99";
+        }
+
     }
 
     public Set<String> getIncludeFlags() {
