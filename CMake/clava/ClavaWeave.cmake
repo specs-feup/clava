@@ -10,8 +10,8 @@ function(clava_weave ORIG_TARGET ASPECT)
 	#message(STATUS "ASPECT: ${ASPECT}")
 
 	# get woven directory path
-	set(WOVEN_DIR "clava_${ORIG_TARGET}")
-	#message(STATUS "WOVEN_DIR: ${WOVEN_DIR}")
+	set(WOVEN_DIR_NAME "clava_${ORIG_TARGET}")
+	#message(STATUS "WOVEN_DIR_NAME: ${WOVEN_DIR_NAME}")
 
 	# get original source files
 	get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
@@ -36,6 +36,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	endif()
 	message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
 	
+	set(WOVEN_DIR "${ORIG_CMAKE_DIR}/${WOVEN_DIR_NAME}")
 	
 	# get original include directories
 	#get_target_property(ORIG_INC_DIRS ${ORIG_TARGET} INCLUDE_DIRECTORIES)
@@ -44,19 +45,22 @@ function(clava_weave ORIG_TARGET ASPECT)
 	# make the cmake configuration depend on the LARA file
 	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ASPECT};${ORIG_SOURCES}")
 	
-	set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR}")
+	# mark Clava output directory as a target for 'make clean'
+	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "${WOVEN_DIR}")
+	
+	set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME}")
 	
 	# execute Clava (TODO: set correct standard from cmake) (TODO: set correct clava jar)
 	execute_process(
 		# -std c99 
 		#COMMAND ${CLAVA_COMMAND}
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR}" -ih "${PROC_ORIG_INCLUDES}"
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}"
 		WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
 	)
 	
 	# read new sources
-	if(EXISTS "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_generated_files.txt")
-        file(READ "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
+	if(EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
+        file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
         string(STRIP "${CLAVA_WOVEN_SOURCES}" CLAVA_WOVEN_SOURCES)
         set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CLAVA_WOVEN_SOURCES}")
 
@@ -66,8 +70,8 @@ function(clava_weave ORIG_TARGET ASPECT)
 	endif()
 	
 	# read new includes
-	if(EXISTS "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_include_dirs.txt")
-        file(READ "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_INCLUDE_DIRS)
+	if(EXISTS "${WOVEN_DIR}/clava_include_dirs.txt")
+        file(READ "${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_INCLUDE_DIRS)
         string(STRIP "${CLAVA_INCLUDE_DIRS}" CLAVA_INCLUDE_DIRS)
 
         message(STATUS "CLAVA_INCLUDE_DIRS: ${CLAVA_INCLUDE_DIRS}")
