@@ -62,13 +62,28 @@ function(clava_weave ORIG_TARGET ASPECT)
 
         message(STATUS "CLAVA_WOVEN_SOURCES: ${CLAVA_WOVEN_SOURCES}")
 	else()
-		# TODO: make error message better
-		message(FATAL_ERROR "couldn't find sources")
+		message(FATAL_ERROR "Could not find Clava file 'clava_generated_files.txt'")
 	endif()
+	
+	# read new includes
+	if(EXISTS "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_include_dirs.txt")
+        file(READ "${ORIG_CMAKE_DIR}/${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_INCLUDE_DIRS)
+        string(STRIP "${CLAVA_INCLUDE_DIRS}" CLAVA_INCLUDE_DIRS)
+
+        message(STATUS "CLAVA_INCLUDE_DIRS: ${CLAVA_INCLUDE_DIRS}")
+	else()
+		message(FATAL_ERROR "Could not find Clava file 'clava_include_dirs.txt'")
+	endif()
+	
 
 	# set new sources
 	set_target_properties(${ORIG_TARGET}
 		PROPERTIES SOURCES "${CLAVA_WOVEN_SOURCES}"
 	)
+	
+	# set new include directories
+	set_target_properties(${ORIG_TARGET}
+		PROPERTIES INCLUDE_DIRECTORIES "${CLAVA_INCLUDE_DIRS}"
+	)	
 	
 endfunction(clava_weave)
