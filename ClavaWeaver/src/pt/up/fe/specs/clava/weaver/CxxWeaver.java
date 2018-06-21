@@ -1170,8 +1170,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         // For all Translation Units, collect new destination folders
         return getApp().getTranslationUnits().stream()
-                .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
-                        tu.getRelativeFolderpath()))
+                // .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
+                // tu.getRelativeFolderpath()))
+                .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
                 .map(file -> SpecsIo.getCanonicalFile(file))
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
