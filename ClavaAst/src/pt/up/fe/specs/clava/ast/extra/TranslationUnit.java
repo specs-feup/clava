@@ -425,12 +425,15 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public File getDestinationFolder(File baseFolder, boolean flattenFolder) {
+
         if (flattenFolder) {
             return baseFolder;
         }
 
+        // If no source path present, use folder where file is located
         if (!getSourcePath().isPresent()) {
-            return baseFolder;
+            // return baseFolder;
+            return getFile().getParentFile();
         }
 
         File sourcePath = getSourcePath().get();
