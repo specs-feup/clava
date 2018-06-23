@@ -21,6 +21,10 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
+import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -156,6 +160,21 @@ public class LegacyToDataStore {
 
         nodeData.add(Attribute.IS_IMPLICIT, data.isImplicit());
         nodeData.add(Attribute.IS_INHERITED, data.isInherited());
+
+        return this;
+    }
+
+    /// DECLS
+
+    public LegacyToDataStore setDecl(DeclData data) {
+
+        nodeData.add(Decl.IS_IMPLICIT, data.isImplicit());
+        nodeData.add(Decl.IS_USED, data.isUsed());
+        nodeData.add(Decl.IS_REFERENCED, data.isReferenced());
+        nodeData.add(Decl.IS_INVALID_DECL, data.isInvalid());
+
+        nodeData.add(NamedDecl.IS_HIDDEN, data.isHidden());
+        nodeData.add(FunctionDecl.IS_CONSTEXPR, data.isConstexpr());
 
         return this;
     }
