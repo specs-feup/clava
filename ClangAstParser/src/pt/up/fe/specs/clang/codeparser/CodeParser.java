@@ -108,7 +108,7 @@ public class CodeParser {
         // Parse dump information
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             App clavaAst = clavaParser.parse();
-            clavaAst.setSources(allFiles);
+            clavaAst.setSourcesFromStrings(allFiles);
             clavaAst.addConfig(ast.getConfig());
 
             if (showClavaAst) {

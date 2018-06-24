@@ -228,12 +228,14 @@ public class RootParser extends AClangNodeParser<App> {
 
         List<ClangNode> uniqueNodes = new ArrayList<>();
         Map<String, String> repeatedIdsMap = new HashMap<>();
-
+        // System.out.println("CONFIG:" + rootNode.getConfig());
         rootNode.getChildrenStream().forEach(node -> {
+            // System.out.println("NODE ID:" + node.getExtendedId());
             // Convert node to a string based on location
             String locationString = node.getLocation().toString();
-
+            // System.out.println("LOCATION:" + locationString);
             String normalizedId = fileLocationToId.get(locationString);
+            // System.out.println("normalizedId:" + normalizedId);
 
             // If location is not mapped to a normalized node yet, add to map;
             if (normalizedId == null) {
