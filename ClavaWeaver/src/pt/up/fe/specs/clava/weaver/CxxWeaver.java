@@ -102,6 +102,7 @@ public class CxxWeaver extends ACxxWeaver {
     private static final Set<String> LANGUAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx")));
 
     private static final String CMAKE_GENERATED_FILES_FILENAME = "clava_generated_files.txt";
+    private static final String CMAKE_IMPLEMENTATION_FILES_FILENAME = "clava_implementation_files.txt";
     private static final String CMAKE_INCLUDE_DIRS_FILENAME = "clava_include_dirs.txt";
 
     // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList(
@@ -818,7 +819,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         String generatedFilesContent = generatedFiles.stream()
                 // Convert to absolute path
-                .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
+                // .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
+                .map(file -> SpecsIo.getCanonicalPath(file))
                 // CMake-friendly list
                 .collect(Collectors.joining(";"));
 
@@ -826,10 +828,23 @@ public class CxxWeaver extends ACxxWeaver {
 
         SpecsIo.write(cmakeGeneratedFiles, generatedFilesContent);
 
+        // Get only implementation files
+        String implementationFilesContent = generatedFiles.stream()
+                .filter(file -> SourceType.getType(file.getName()) == SourceType.IMPLEMENTATION)
+                // .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
+                .map(file -> SpecsIo.getCanonicalPath(file))
+                // CMake-friendly list
+                .collect(Collectors.joining(";"));
+
+        File cmakeImplementationFiles = new File(getWeavingFolder(), CMAKE_IMPLEMENTATION_FILES_FILENAME);
+
+        SpecsIo.write(cmakeImplementationFiles, implementationFilesContent);
+
         // Determine new include dirs
         // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
         String includeFoldersContent = getAllIncludes(getWeavingFolder()).stream()
-                .map(File::getAbsolutePath)
+                // .map(File::getAbsolutePath)
+                .map(SpecsIo::getCanonicalPath)
                 .collect(Collectors.joining(";"));
 
         File cmakeIncludes = new File(getWeavingFolder(), CMAKE_INCLUDE_DIRS_FILENAME);
@@ -1172,6 +1187,8 @@ public class CxxWeaver extends ACxxWeaver {
         return getApp().getTranslationUnits().stream()
                 // .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
                 // tu.getRelativeFolderpath()))
+                // Consider only header files
+                .filter(tu -> tu.isHeaderFile())
                 .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
                 .map(file -> SpecsIo.getCanonicalFile(file))
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
