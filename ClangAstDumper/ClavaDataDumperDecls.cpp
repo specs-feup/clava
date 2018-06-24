@@ -50,6 +50,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpDeclData(D); break;
         case clava::DeclNode::NAMED_DECL:
             DumpNamedDeclData(static_cast<const NamedDecl *>(D)); break;
+        case clava::DeclNode::VALUE_DECL:
+            DumpValueDeclData(static_cast<const ValueDecl *>(D)); break;
         case clava::DeclNode::FUNCTION_DECL:
             DumpFunctionDeclData(static_cast<const FunctionDecl *>(D)); break;
         case clava::DeclNode::CXX_METHOD_DECL:
@@ -126,11 +128,20 @@ void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
 
 }
 
+void clava::ClavaDataDumper::DumpValueDeclData(const ValueDecl *D) {
+    // Hierarchy
+    DumpNamedDeclData(D);
+
+    clava::dump(D->getType(), id);
+    clava::dump(D->isWeak());
+}
+
+
 
 
 void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     // Hierarchy
-    DumpNamedDeclData(D);
+    DumpValueDeclData(D);
 
     // Print information about FunctionDecl
     clava::dump(D->isConstexpr());

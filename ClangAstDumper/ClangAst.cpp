@@ -614,4 +614,3 @@ void DumpResources::finish() {
     DumpResources::consumer_order.close();
     DumpResources::types_with_templates.close();
 }
-
