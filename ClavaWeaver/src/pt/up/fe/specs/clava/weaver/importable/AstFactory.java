@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
@@ -250,8 +251,12 @@ public class AstFactory {
             path = "";
         }
 
-        return CxxJoinpoints.create(ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList()),
-                null, AFile.class);
+        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList());
+        // New files do not have a path
+        TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, "", Collections.emptyList());
+        tUnit.setSourcePath(new File(path));
+
+        return CxxJoinpoints.create(tUnit, null, AFile.class);
     }
 
     public static AJoinPoint externC(AJoinPoint jpDecl) {

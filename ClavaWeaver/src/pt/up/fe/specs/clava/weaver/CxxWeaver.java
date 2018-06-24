@@ -292,6 +292,9 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
         reset();
 
+        // Add normal include folders to the sources
+        // sources.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
+
         weaverData = new ClavaWeaverData(args);
 
         accMap = new AccumulatorMap<>();
@@ -564,9 +567,9 @@ public class CxxWeaver extends ACxxWeaver {
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             tic = System.nanoTime();
             App app = clavaParser.parse();
-
+            // System.out.println("ALL FILES: " + allFiles);
             // Set source paths of each TranslationUnit
-            app.setSources(allFiles);
+            app.setSourcesFromStrings(allFiles);
 
             // Set options
 
@@ -741,6 +744,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public File getWeavingFolder() {
+        // System.out.println("OUTPUT FOLDER:" + args.get(LaraiKeys.OUTPUT_FOLDER));
+        // System.out.println("WOVEN CODE FOLDERNAME:" + args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
         // return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
         return SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
     }
@@ -862,6 +867,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Write files that have changed
         for (Entry<File, String> entry : files.entrySet()) {
             File destinationFile = entry.getKey();
+            // System.out.println("DESTINATION FILE:" + destinationFile);
             String code = entry.getValue();
 
             // If file already exists, and is the same as the file that we are about to write, skip
@@ -970,7 +976,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Check if inside apply
 
         // Write current tree to a temporary folder
-        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER);
+        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER).getAbsoluteFile();
         SpecsIo.deleteFolderContents(tempFolder, true);
 
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
@@ -987,7 +993,7 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         List<File> includeFolders = srcFolders;
         */
-        Set<File> includeFolders = getSourceIncludes(tempFolder);
+        Set<File> includeFolders = getSourceFiles(tempFolder);
 
         List<String> rebuildOptions = new ArrayList<>();
 
@@ -1180,7 +1186,17 @@ public class CxxWeaver extends ACxxWeaver {
         return getCxxWeaver().getApp().getContext();
     }
 
-    private Set<File> getSourceIncludes(File weavingFolder) {
+    /**
+     * Helper method which returns all files (headers and implementation).
+     * 
+     * @param weavingFolder
+     * @return
+     */
+    private Set<File> getSourceFiles(File weavingFolder) {
+        return getSourceFiles(weavingFolder, false);
+    }
+
+    private Set<File> getSourceFiles(File weavingFolder, boolean onlyHeaders) {
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
         // For all Translation Units, collect new destination folders
@@ -1188,7 +1204,7 @@ public class CxxWeaver extends ACxxWeaver {
                 // .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
                 // tu.getRelativeFolderpath()))
                 // Consider only header files
-                .filter(tu -> tu.isHeaderFile())
+                .filter(tu -> onlyHeaders ? tu.isHeaderFile() : true)
                 .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
                 .map(file -> SpecsIo.getCanonicalFile(file))
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
@@ -1203,7 +1219,7 @@ public class CxxWeaver extends ACxxWeaver {
     private Set<File> getAllIncludes(File weavingFolder) {
         Set<File> includePaths = new LinkedHashSet<>();
 
-        includePaths.addAll(getSourceIncludes(weavingFolder));
+        includePaths.addAll(getSourceFiles(weavingFolder, true));
         includePaths.addAll(getExternalIncludes());
 
         return includePaths;

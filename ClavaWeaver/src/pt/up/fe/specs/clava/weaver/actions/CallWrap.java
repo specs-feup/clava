@@ -128,6 +128,7 @@ public class CallWrap {
         // Add include
         // String includePath = CxxWeaver.getRelativeFilepath(getHeaderFile());
         String includePath = getHeaderFile().getRelativeFilepath();
+
         cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(includePath, false);
         // cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(getHeaderFile(),
         // CxxWeaver.getCxxWeaver().getBaseSourceFolder());
@@ -172,6 +173,7 @@ public class CallWrap {
 
         // String includePath = CxxWeaver.getRelativeFilepath(includeFile);
         String includePath = includeFile.getRelativeFilepath();
+
         implTu.addInclude(includePath, false);
         // implTu.addInclude(includeFile, CxxWeaver.getCxxWeaver().getBaseSourceFolder());
 
@@ -337,7 +339,8 @@ public class CallWrap {
             // AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, app.getBaseFolderImpl());
             AFile implFile = AstFactory.file(implementationFilename, WRAPPERS_FOLDERNAME);
             AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
-
+            // System.out.println("INCLUDE PATH:" + includePath);
+            System.out.println("HEADER RELATIVE:" + headerFile.getRelativeFolderpath());
             app.addFileImpl(headerFile);
             app.addFileImpl(implFile);
         }
