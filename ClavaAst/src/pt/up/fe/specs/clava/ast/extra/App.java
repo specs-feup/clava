@@ -79,7 +79,8 @@ public class App extends ClavaNode {
     private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
 
     // private List<File> sources;
-    private Map<String, File> sourceFiles;
+    // private Map<String, File> sourceFiles;
+    private Map<File, File> sourceFiles;
 
     private GlobalManager globalManager;
     private final Map<String, ClavaNode> nodesCache;
@@ -265,8 +266,11 @@ public class App extends ClavaNode {
     }
 
     public void write(File destinationFolder, boolean flattenFolder) {
+        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
         for (Entry<File, String> entry : getCode(destinationFolder, flattenFolder).entrySet()) {
             SpecsIo.write(entry.getKey(), entry.getValue());
+            // System.out.println("WRITING: " + entry.getKey());
+            // System.out.println("WRITTEN FILE: " + entry.getKey());
         }
     }
 
@@ -363,21 +367,20 @@ public class App extends ClavaNode {
      * @return
      */
     public Map<File, String> getCode(File destinationFolder, boolean flattenFolders, Set<String> modifiedFiles) {
-
         Map<File, String> files = new HashMap<>();
 
         boolean enableModifiedFilesFilter = enableModifiedFilesFilter(getFiles(), modifiedFiles);
 
         // Generate code for each translation unit considering the given destination
-        // and using a path relative to the topFile
+        // and using a path relative to the source path
 
         for (TranslationUnit tUnit : getTranslationUnits()) {
             // File destinationFile = buildDestinationFile(tUnit, destinationFolder, flattenFolders);
             File destinationFile = tUnit.getDestinationFile(destinationFolder, flattenFolders);
-
             String code = getTuCode(tUnit, enableModifiedFilesFilter, modifiedFiles);
 
             files.put(destinationFile, code);
+
             // files.put(destinationFile, tUnit.getCode());
         }
 
@@ -388,14 +391,16 @@ public class App extends ClavaNode {
 
         Set<File> relativeWoven = files.keySet().stream()
                 .map(file -> SpecsIo.getRelativePath(file, destinationFolder))
+                // .map(file -> flattenFolders ? file.getPath() : SpecsIo.getRelativePath(file, destinationFolder))
                 .map(path -> new File(path))
                 .collect(Collectors.toSet());
 
         // System.out.println("Generated files:" + relativeWoven);
         // System.out.println("Original files:" + sourceFiles.entrySet());
         // for (File file : allFiles) {
-        for (Entry<String, File> sourceFile : sourceFiles.entrySet()) {
-            File originalSourceFile = new File(sourceFile.getKey());
+        // for (Entry<String, File> sourceFile : sourceFiles.entrySet()) {
+        for (Entry<File, File> sourceFile : sourceFiles.entrySet()) {
+            File originalSourceFile = sourceFile.getKey();
             File originalSourcePath = sourceFile.getValue();
 
             // System.out.println("SOURCE FILE:" + originalSourceFile);
@@ -403,19 +408,29 @@ public class App extends ClavaNode {
             // String relativeSource = SpecsIo.getRelativePath(file, baseInputFolder);
             // String clavaCodeOutput = ClavaCode.getRelativePath(file, baseInputFolder);
             String originalRelativePath = TranslationUnit.getRelativePath(originalSourceFile, originalSourcePath);
+            // System.out.println("ORIGINAL SOURCE FILE: " + originalSourceFile);
+            // System.out.println("ORIGINAL SOURCE PATH: " + originalSourcePath);
+            // System.out.println("ORIGINAL RELATIVE PATH: " + originalRelativePath);
+
             // System.out.println("ORIGINAL RELATIVE PATH:" + originalRelativePath);
             File originalSourceFolder = originalSourcePath.isDirectory() ? originalSourcePath
                     : originalSourcePath.getParentFile();
+            // System.out.println("ORIGINAL SOURCE FOLDER: " + originalSourceFolder);
 
             File adjustedRelativePath = new File(originalRelativePath);
+            // System.out.println("FLATTEN FOLDER:" + flattenFolders);
+            // System.out.println("ORIGINAL NULL?:" + originalSourceFolder != null);
             if (!flattenFolders && originalSourceFolder != null) {
                 adjustedRelativePath = new File(originalSourceFolder.getName(), originalRelativePath);
             }
+            // System.out.println("Adjusted relative path:" + adjustedRelativePath);
+
             // System.out.println("ADJUSTED RELATIVE PATH:" + adjustedRelativePath);
             // if (!relativeSource.equals(clavaCodeOutput)) {
             // SpecsLogs.msgWarn("TEMPORARY TEST: expected '" + clavaCodeOutput + "', got '" + relativeSource + "'");
             // }
             // System.out.println("ADJUSTED PATH:" + adjustedRelativePath);
+            // System.out.println("RELATIVE WOVEN:" + relativeWoven);
             if (relativeWoven.contains(adjustedRelativePath)) {
                 continue;
             }
@@ -720,18 +735,37 @@ public class App extends ClavaNode {
     }
 
     /**
+     * Helper method that accepts a map that has String instead of File as keys.
+     * 
+     * @param allStringFiles
+     */
+    public void setSourcesFromStrings(Map<String, File> allStringFiles) {
+        Map<File, File> allFiles = new HashMap<>();
+
+        for (Entry<String, File> entry : allStringFiles.entrySet()) {
+            allFiles.put(new File(entry.getKey()), entry.getValue());
+        }
+
+        setSources(allFiles);
+    }
+
+    /**
      * Sets the sources of each Translation Unit.
      *
      * @param allFiles
      */
-    public void setSources(Map<String, File> allFiles) {
+    public void setSources(Map<File, File> allFiles) {
 
         // Set sourceFiles
         sourceFiles = allFiles;
 
+        // System.out.println("ALL FILES:" + allFiles);
         for (TranslationUnit tu : getTranslationUnits()) {
             // Find the corresponding source
-            File sourcePath = allFiles.get(tu.getFilepath());
+            // System.out.println("TU FILE:" + tu.getFile());
+            // System.out.println("TU FILEPATH:" + tu.getFilepath());
+            File sourcePath = allFiles.get(tu.getFile());
+            // File sourcePath = allFiles.get(SpecsIo.getCanonicalPath(tu.getFile()));
             if (sourcePath == null) {
                 // SpecsLogs.msgWarn("Could not find source path for TU '" + tu.getFilepath() + "'. Table:" + allFiles);
                 continue;
