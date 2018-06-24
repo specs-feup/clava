@@ -112,7 +112,7 @@ ClavaJoinPoints.typeLiteral = function(typeString) {
  * Creates a new join point 'file'.
  *
  * @param {string} filename The name of the file
- * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. 
+ * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. This path will be required when including the file (e.g., #include "<path>/<filename>")
  */
 ClavaJoinPoints.file = function(filename, path) {
 	if(path === undefined) {
