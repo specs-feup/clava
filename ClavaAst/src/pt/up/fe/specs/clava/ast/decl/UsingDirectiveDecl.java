@@ -19,22 +19,17 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 public class UsingDirectiveDecl extends NamedDecl {
 
     public UsingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
-        this(declName, ClavaNodeFactory.nullType(info), declData, info);
-    }
-
-    private UsingDirectiveDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info) {
-        super(declName, type, declData, info, Collections.emptyList());
+        super(declName, ClavaNodeFactory.nullType(info), declData, info, Collections.emptyList());
 
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new UsingDirectiveDecl(getDeclName(), getType(), getDeclData(), getInfo());
+        return new UsingDirectiveDecl(getDeclName(), getDeclData(), getInfo());
     }
 
     @Override

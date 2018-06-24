@@ -549,6 +549,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param value
      */
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
+        // If value is null, remove value, if present
+        if (value == null) {
+            if (dataI.hasValue(key)) {
+                dataI.remove(key);
+            }
+
+            return this;
+        }
+
         dataI.put(key, value);
 
         return this;

@@ -103,7 +103,12 @@ public class VarDecl extends DeclaratorDecl {
             code.append(getVarDeclData().getStorageClass().getString()).append(" ");
         }
 
-        code.append(getType().getCode(this, getDeclNameCode()));
+        String declName = getDeclNameCode();
+
+        // Type.getCode() accepts null if no name
+        declName = declName.isEmpty() ? null : declName;
+
+        code.append(getType().getCode(this, declName));
         code.append(getInitializationCode());
 
         return code.toString();
@@ -119,7 +124,15 @@ public class VarDecl extends DeclaratorDecl {
         return getDeclNameCode() + getInitializationCode();
     }
 
+    /**
+     * 
+     * @return the code related to the named decl, or null if no name
+     */
     private String getDeclNameCode() {
+        // if (!hasDeclName()) {
+        // return null;
+        // }
+
         String name = getDeclName();
 
         // if (!getVarDeclData().hasVarDeclDumperInfo()) {

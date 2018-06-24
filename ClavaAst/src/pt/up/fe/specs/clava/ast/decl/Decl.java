@@ -63,26 +63,21 @@ public abstract class Decl extends ClavaNode {
 
     /// DATAKEYS END
 
-    // private final DeclData data;
-
     public Decl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // this.data = null;
     }
 
     /**
      * Legacy support.
      * 
+     * @deprecated
      * @param data
      * @param info
      * @param children
      */
+    @Deprecated
     public Decl(DeclData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         this(new LegacyToDataStore().setDecl(data).setNodeInfo(info).getData(), children);
-        // super(info, children);
-
-        // this.data = data;
     }
 
     /**
