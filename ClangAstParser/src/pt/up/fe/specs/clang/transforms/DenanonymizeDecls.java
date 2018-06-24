@@ -17,13 +17,14 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeIterator;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
+import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
@@ -73,7 +74,8 @@ public class DenanonymizeDecls implements SimplePostClavaRule {
                 continue;
             }
 
-            NamedDecl anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
+            // NamedDecl anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
+            Typable anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
 
             if (anonymousDecl == null) {
                 continue;
@@ -114,21 +116,33 @@ public class DenanonymizeDecls implements SimplePostClavaRule {
 
     }
 
-    private static NamedDecl getAnonymousDecl(ClavaNode node, RecordDecl lastRecordDecl) {
-        if (!(node instanceof NamedDecl)) {
+    // private static NamedDecl getAnonymousDecl(ClavaNode node, RecordDecl lastRecordDecl) {
+    private static Typable getAnonymousDecl(ClavaNode node, RecordDecl lastRecordDecl) {
+        // if (!(node instanceof NamedDecl)) {
+        // return null;
+        // }
+
+        if (!(node instanceof Decl)) {
             return null;
         }
 
-        NamedDecl namedDecl = (NamedDecl) node;
+        if (!(node instanceof Typable)) {
+            return null;
+        }
+
+        // NamedDecl namedDecl = (NamedDecl) node;
+        Typable typableDecl = (Typable) node;
 
         // Check if type has a record type
-        RecordType recordType = namedDecl.getType().toTry(RecordType.class).orElse(null);
+        // RecordType recordType = namedDecl.getType().toTry(RecordType.class).orElse(null);
+        RecordType recordType = typableDecl.getType().toTry(RecordType.class).orElse(null);
 
         if (recordType != null // It has a RecordType
                 && lastRecordDecl.getRecordDeclData().isAnonymous() // Last record is anonymous
                 && recordType.getRecordName().equals(lastRecordDecl.getTypeCode())) { // They are the same type
 
-            return namedDecl;
+            // return namedDecl;
+            return typableDecl;
         }
 
         return null;

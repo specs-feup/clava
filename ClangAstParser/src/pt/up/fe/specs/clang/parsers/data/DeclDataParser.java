@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
@@ -84,10 +85,20 @@ public class DeclDataParser {
         return data;
     }
 
+    public static DataStore parseValueDeclData(LineStream lines, DataStore dataStore) {
+        // Parse NamedDecl data
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        data.add(ValueDecl.TYPE, ClavaNodes.getType(dataStore, lines.nextLine()));
+        data.add(ValueDecl.IS_WEAK, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
     public static DataStore parseFunctionDeclData(LineStream lines, DataStore dataStore) {
 
         // Parse NamedDecl data
-        DataStore data = parseNamedDeclData(lines, dataStore);
+        DataStore data = parseValueDeclData(lines, dataStore);
 
         data.add(FunctionDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
