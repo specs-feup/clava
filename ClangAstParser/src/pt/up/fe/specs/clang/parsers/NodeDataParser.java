@@ -52,6 +52,8 @@ public class NodeDataParser {
         // DECLS
         STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
         STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
+        STATIC_DATA_PARSERS.put("<TypeDeclData>", DeclDataParser::parseTypeDeclData);
+        STATIC_DATA_PARSERS.put("<ValueDeclData>", DeclDataParser::parseValueDeclData);
         STATIC_DATA_PARSERS.put("<FunctionDeclData>", DeclDataParser::parseFunctionDeclData);
         STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
         STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);

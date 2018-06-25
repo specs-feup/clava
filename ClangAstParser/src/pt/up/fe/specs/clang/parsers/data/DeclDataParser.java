@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
@@ -85,6 +86,15 @@ public class DeclDataParser {
         return data;
     }
 
+    public static DataStore parseTypeDeclData(LineStream lines, DataStore dataStore) {
+        // Parse NamedDecl data
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        data.add(TypeDecl.TYPE_FOR_DECL, ClavaNodes.getType(dataStore, lines.nextLine()));
+
+        return data;
+    }
+
     public static DataStore parseValueDeclData(LineStream lines, DataStore dataStore) {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
@@ -119,7 +129,7 @@ public class DeclDataParser {
     public static DataStore parseVarDeclData(LineStream lines, DataStore dataStore) {
 
         // Parse NamedDecl data
-        DataStore data = parseNamedDeclData(lines, dataStore);
+        DataStore data = parseValueDeclData(lines, dataStore);
 
         data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromInt(StorageClass.getHelper(), lines));
         data.add(VarDecl.TLS_KIND, LineStreamParsers.enumFromInt(TLSKind.getHelper(), lines));
