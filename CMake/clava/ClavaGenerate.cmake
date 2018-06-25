@@ -1,52 +1,100 @@
-# 
-#
-# When using clava_generate, code generation is disabled, only take into account 
-# files that are written manually with action $file.write().
-#
-function(clava_generate INPUT_TARGET GENERATED_TARGET GENERATION_COMMAND_TARGET)
+# TODO: Documentation
+function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 
-	# Split into generation (calling command) and generated library
-	# Adds generation as dependency of 
+	# get CMakeLists.txt dir
+	get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
+	#message(STATUS "ORIG_CMAKE_DIR: ${ORIG_CMAKE_DIR}")
+	
+	# get full path of aspect file
+	set(ASPECT "${ORIG_CMAKE_DIR}/${ASPECT}")
+	#message(STATUS "ASPECT: ${ASPECT}")
 
-	message(STATUS "Input Target: ${INPUT_TARGET}")
-	message(STATUS "Generate Target: ${GENERATED_TARGET}")
+	# get woven directory path
+	set(WOVEN_DIR_NAME "clava_${ORIG_TARGET}")
+	#message(STATUS "WOVEN_DIR_NAME: ${WOVEN_DIR_NAME}")
 
+	# get original source files
+	get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
+	#message(STATUS "ORIG_SOURCES: ${ORIG_SOURCES}")
+	
+	# process original source file list
+	string(REGEX REPLACE "([^;]+)" "${ORIG_CMAKE_DIR}/\\1" PROC_ORIG_SOURCES "${ORIG_SOURCES}")
+	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+		string(REGEX REPLACE ";" ":" PROC_ORIG_SOURCES "${PROC_ORIG_SOURCES}")
+	endif()
+	#message(STATUS "PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
+	
+	
+	# get original include folders
+	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+	#message(STATUS "ORIG_INCLUDES: ${ORIG_INCLUDES}")
+	
+	# process original includes list
+	string(REGEX REPLACE "([^;]+)" "\\1" PROC_ORIG_INCLUDES "${ORIG_INCLUDES}")
+	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+		string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
+	endif()
+	#message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
+	
+	set(WOVEN_DIR "${ORIG_CMAKE_DIR}/${WOVEN_DIR_NAME}")
+	
+	# get original include directories
+	#get_target_property(ORIG_INC_DIRS ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+	#message(STATUS "ORIG_INC_DIRS: ${ORIG_INC_DIRS}")
+	
+	# make the cmake configuration depend on the LARA file
+	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ASPECT};${ORIG_SOURCES}")
+	
+	# mark Clava output directory as a target for 'make clean'
+	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "${WOVEN_DIR}")
+	
+	set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME}")
+	
+	# execute Clava (TODO: set correct standard from cmake) (TODO: set correct clava jar)
+	execute_process(
+		# -std c99 
+		#COMMAND ${CLAVA_COMMAND}
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}" -ncg
+		WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
+	)
+	
+	# read new sources
+	if(EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
+        file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
+        string(STRIP "${CLAVA_WOVEN_SOURCES}" CLAVA_WOVEN_SOURCES)
+        set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CLAVA_WOVEN_SOURCES}")
 
+        #message(STATUS "CLAVA_WOVEN_SOURCES: ${CLAVA_WOVEN_SOURCES}")
+	else()
+		message(FATAL_ERROR "Could not find Clava file 'clava_generated_files.txt'")
+	endif()
 	
-	add_custom_target(
-		${GENERATION_COMMAND_TARGET}
-   )
-	
-	add_custom_command(
-    TARGET
-        ${GENERATION_COMMAND_TARGET}
-	POST_BUILD
-    COMMAND
-		#clava --help
-        cmake -E touch ${GENERATED_TARGET}.stamp
-    COMMENT
-        "Generating HDF5 library"
-    VERBATIM
-    )	
-	
-	get_property(TARGET_SOURCES TARGET ${INPUT_TARGET} PROPERTY SOURCES)
-	message(STATUS "sources: ${TARGET_SOURCES}")
-	get_property(TARGET_INCLUDES TARGET ${INPUT_TARGET} PROPERTY INCLUDE_DIRECTORIES)	
-	message(STATUS "includes: ${TARGET_INCLUDES}")	
-	
-	add_library(${GENERATED_TARGET} "H:/Work_Shared/2018-06-15 CMake HDF5 with Clava/generated/src/generated.cpp")
+	# read new includes
+	if(EXISTS "${WOVEN_DIR}/clava_include_dirs.txt")
+        file(READ "${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_INCLUDE_DIRS)
+        string(STRIP "${CLAVA_INCLUDE_DIRS}" CLAVA_INCLUDE_DIRS)
 
-	target_include_directories(${GENERATED_TARGET} PUBLIC "H:/Work_Shared/2018-06-15 CMake HDF5 with Clava/generated/src/")
+        #message(STATUS "CLAVA_INCLUDE_DIRS: ${CLAVA_INCLUDE_DIRS}")
+	else()
+		message(FATAL_ERROR "Could not find Clava file 'clava_include_dirs.txt'")
+	endif()
+	
 
-	get_property(GENERATED_SOURCES TARGET ${GENERATED_TARGET} PROPERTY SOURCES)
-	message(STATUS "generated sources: ${GENERATED_SOURCES}")	
+	# add new sources
+	add_library(${GENERATED_TARGET} "${CLAVA_WOVEN_SOURCES}")
+
+	# add original target includes
+#	set_target_properties(${GENERATED_TARGET}
+#		PROPERTIES INCLUDE_DIRECTORIES "${ORIG_INCLUDES}"
+#	)
+	# add new include directories
+	target_include_directories(${GENERATED_TARGET} PUBLIC "${CLAVA_INCLUDE_DIRS}")
+	target_include_directories(${GENERATED_TARGET} PUBLIC "${ORIG_INCLUDES}")
+
+	get_target_property(GEN_INCLUDES ${GENERATED_TARGET} INCLUDE_DIRECTORIES)
+	message(STATUS "Generated Includes: ${GEN_INCLUDES}")
 	
-	get_property(GENERATED_INCLUDES TARGET ${GENERATED_TARGET} PROPERTY INCLUDE_DIRECTORIES)
-	message(STATUS "generated includes: ${GENERATED_INCLUDES}")	
-	
-	add_dependencies(${GENERATED_TARGET} ${GENERATION_COMMAND_TARGET})
-	add_dependencies(${INPUT_TARGET} ${GENERATED_TARGET})
-	
+	add_dependencies("${GENERATED_TARGET}" "${ORIG_TARGET}")
 
 	
 endfunction(clava_generate)
