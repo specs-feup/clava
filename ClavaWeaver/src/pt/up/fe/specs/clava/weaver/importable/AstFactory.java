@@ -245,16 +245,19 @@ public class AstFactory {
      */
     public static AFile file(String filename, String path) {
         // Test if path is absolute
-        if (new File(path).isAbsolute()) {
+        if (path != null && new File(path).isAbsolute()) {
             ClavaLog.warning(
                     "Cannot use absolute paths for new 'file' join points, replacing '" + path + "' with empty String");
-            path = "";
+            path = null;
         }
 
         // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList());
         // New files do not have a path
         TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, "", Collections.emptyList());
-        tUnit.setSourcePath(new File(path));
+
+        if (path != null) {
+            tUnit.setSourcePath(new File(path));
+        }
 
         return CxxJoinpoints.create(tUnit, null, AFile.class);
     }
