@@ -21,7 +21,9 @@
 find_package(Java COMPONENTS Runtime REQUIRED)
 
 # Check if installation file with JAR path exists
-if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/clava-installation-jar.txt")
+if(LOCAL_CLAVA)
+
+elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/clava-installation-jar.txt")
 	file(READ "${CMAKE_CURRENT_LIST_DIR}/clava-installation-jar.txt" CLAVA_JAR_PATH) 
 	message(STATUS "Found Clava at: " ${CLAVA_JAR_PATH})
 else()
