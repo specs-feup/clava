@@ -177,6 +177,12 @@
 	</artifact>
 
 
+	<!-- ENUM DECL -->
+	<artifact class="enumDecl" default="name">
+		<attribute name="enumerators" type="enumeratorDecl[]" />
+	</artifact>
+
+
 	<!-- LOOP -->
 	<artifact class="loop" default="kind">
 		<attribute name="kind" type="{for,while}" />

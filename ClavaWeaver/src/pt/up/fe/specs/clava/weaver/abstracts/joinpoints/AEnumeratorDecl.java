@@ -1,74 +1,30 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import javax.script.Bindings;
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AEnumDecl
+ * Auto-Generated class for join point AEnumeratorDecl
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AEnumDecl extends ANamedDecl {
+public abstract class AEnumeratorDecl extends ANamedDecl {
 
     protected ANamedDecl aNamedDecl;
 
     /**
      * 
      */
-    public AEnumDecl(ANamedDecl aNamedDecl){
+    public AEnumeratorDecl(ANamedDecl aNamedDecl){
         super(aNamedDecl);
         this.aNamedDecl = aNamedDecl;
     }
-    /**
-     * Get value on attribute enumerators
-     * @return the attribute's value
-     */
-    public abstract AEnumeratorDecl[] getEnumeratorsArrayImpl();
-
-    /**
-     * Get value on attribute enumerators
-     * @return the attribute's value
-     */
-    public Bindings getEnumeratorsImpl() {
-        AEnumeratorDecl[] aEnumeratorDeclArrayImpl0 = getEnumeratorsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aEnumeratorDeclArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute enumerators
-     * @return the attribute's value
-     */
-    public final Object getEnumerators() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "enumerators", Optional.empty());
-        	}
-        	Bindings result = this.getEnumeratorsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "enumerators", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "enumerators", e);
-        }
-    }
-
-    /**
-     * Method used by the lara interpreter to select enumerators
-     * @return 
-     */
-    public abstract List<? extends AEnumeratorDecl> selectEnumerator();
-
     /**
      * Get value on attribute name
      * @return the attribute's value
@@ -234,9 +190,6 @@ public abstract class AEnumDecl extends ANamedDecl {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
-        	case "enumerator": 
-        		joinPointList = selectEnumerator();
-        		break;
         	default:
         		joinPointList = this.aNamedDecl.select(selectName);
         		break;
@@ -274,7 +227,6 @@ public abstract class AEnumDecl extends ANamedDecl {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aNamedDecl.fillWithAttributes(attributes);
-        attributes.add("enumerators");
     }
 
     /**
@@ -283,7 +235,6 @@ public abstract class AEnumDecl extends ANamedDecl {
     @Override
     protected final void fillWithSelects(List<String> selects) {
         this.aNamedDecl.fillWithSelects(selects);
-        selects.add("enumerator");
     }
 
     /**
@@ -300,7 +251,7 @@ public abstract class AEnumDecl extends ANamedDecl {
      */
     @Override
     public final String get_class() {
-        return "enumDecl";
+        return "enumeratorDecl";
     }
 
     /**
@@ -318,8 +269,7 @@ public abstract class AEnumDecl extends ANamedDecl {
     /**
      * 
      */
-    protected enum EnumDeclAttributes {
-        ENUMERATORS("enumerators"),
+    protected enum EnumeratorDeclAttributes {
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
@@ -365,13 +315,13 @@ public abstract class AEnumDecl extends ANamedDecl {
         /**
          * 
          */
-        private EnumDeclAttributes(String name){
+        private EnumeratorDeclAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<EnumDeclAttributes> fromString(String name) {
+        public static Optional<EnumeratorDeclAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -379,7 +329,7 @@ public abstract class AEnumDecl extends ANamedDecl {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(EnumDeclAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(EnumeratorDeclAttributes::name).collect(Collectors.toList());
         }
 
         /**

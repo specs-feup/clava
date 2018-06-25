@@ -99,6 +99,11 @@
 	
 	<!-- ENUM DECL -->
 	<joinpoint class="enumDecl" extends="namedDecl">
+		<select alias="enumerator" 		class="enumeratorDecl"/>		
+ 	</joinpoint>  
+ 	
+ 	<!-- ENUMERATOR DECL -->
+	<joinpoint class="enumeratorDecl" extends="namedDecl">
  	</joinpoint>  
 	
 	<!--  FUNCTION PARAMETER -->
