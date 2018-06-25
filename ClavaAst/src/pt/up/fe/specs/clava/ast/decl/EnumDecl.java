@@ -45,6 +45,17 @@ public class EnumDecl extends TagDecl {
     private final boolean isModulePrivate;
     private final Type integerType;
 
+    /*
+    public EnumDecl(DataStore data, Collection<? extends EnumConstantDecl> children) {
+        super(data, children);
+    
+        // TODO: THIS IS TEMPORARY!!!!
+        this.enumScopeType = EnumScopeType.CLASS;
+        this.isModulePrivate = false;
+        this.integerType = getFactory().builtinType("int");
+    }
+    */
+
     public EnumDecl(EnumScopeType enumScopeType, String tagName, boolean isModulePrivate, Type integerType,
             EnumType type, DeclData declData,
             ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
