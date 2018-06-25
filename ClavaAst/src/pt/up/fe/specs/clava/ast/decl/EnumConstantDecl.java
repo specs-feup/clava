@@ -25,7 +25,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
- * Represents the declaration of of a variable, function or enum constant.
+ * Represents the declaration of an enum constant.
  * 
  * @author JoaoBispo
  *

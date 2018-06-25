@@ -129,11 +129,17 @@ public class TranslationUnit extends ClavaNode {
 
     public static String getRelativePath(File filepath, File baseSourceFolder) {
 
+        // Normalize baseSourceFolder
+        if (baseSourceFolder != null && baseSourceFolder.getPath().isEmpty()) {
+            baseSourceFolder = null;
+        }
+
         // If source path does not exist yet, or no base source folder specified, just return filename
         if (!filepath.exists() || baseSourceFolder == null) {
             // System.out.println("FILEPATH:" + filepath);
             // Only return complete resource path if it is not absolute
             String relativePath = filepath.isAbsolute() ? filepath.getName() : filepath.getPath();
+
             if (baseSourceFolder != null) {
                 relativePath = new File(baseSourceFolder, relativePath).getPath();
             }
@@ -410,6 +416,10 @@ public class TranslationUnit extends ClavaNode {
         // System.out.println("SOURCE PATH:" + sourcePath);
 
         if (sourcePath == null) {
+            return "";
+        }
+
+        if (sourcePath.getPath().isEmpty()) {
             return "";
         }
 
