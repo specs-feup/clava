@@ -12,6 +12,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::DECL: return "Decl";
         case clava::DeclNode::NAMED_DECL: return "NamedDecl";
         case clava::DeclNode::VALUE_DECL: return "ValueDecl";
+        case clava::DeclNode::TYPE_DECL: return "TypeDecl";
         case clava::DeclNode::FUNCTION_DECL: return "FunctionDecl";
         case clava::DeclNode::CXX_METHOD_DECL: return "CXXMethodDecl";
         case clava::DeclNode::VAR_DECL: return "VarDecl";

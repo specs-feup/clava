@@ -16,7 +16,10 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL},
-        {"ParmVarDecl", clava::DeclNode::VAR_DECL}
+        {"ParmVarDecl", clava::DeclNode::VAR_DECL},
+        {"TypeDecl", clava::DeclNode::TYPE_DECL},
+        {"EnumDecl", clava::DeclNode::TYPE_DECL}
+
 
 };
 
@@ -42,6 +45,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitDeclChildren(D, visitedChildren); break;
         case clava::DeclNode::NAMED_DECL:
             VisitNamedDeclChildren(static_cast<const NamedDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::TYPE_DECL:
+            VisitTypeDeclChildren(static_cast<const TypeDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VALUE_DECL:
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
@@ -77,6 +82,17 @@ void ClangAstDumper::VisitNamedDeclChildren(const NamedDecl *D, std::vector<std:
     //VisitDeclTop(D->getUnderlyingDecl());
     //llvm::errs() << "VISITING " << clava::getId(D->getUnderlyingDecl(), id) << " -> " << clava::getClassName(D->getUnderlyingDecl()) << "\n";
     //llvm::errs() << "ORIGINAL " << clava::getId(D, id) << "\n";
+}
+
+void ClangAstDumper::VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
+
+    // Visit type
+    VisitTypeTop(D->getTypeForDecl());
+    dumpType(D->getTypeForDecl());
+
+
 }
 
 void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
@@ -132,7 +148,7 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
 
 void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children) {
     // Hierarchy
-    VisitDeclChildren(D, children);
+    VisitTypeDeclChildren(D, children);
 }
 
 

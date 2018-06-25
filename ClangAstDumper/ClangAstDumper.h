@@ -181,6 +181,7 @@ private:
     // Children visitors for Decls
     void VisitDeclChildren(const Decl *D, std::vector<std::string> &children);
     void VisitNamedDeclChildren(const NamedDecl *D, std::vector<std::string> &children);
+    void VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);

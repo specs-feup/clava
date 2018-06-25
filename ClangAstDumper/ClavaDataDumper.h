@@ -96,7 +96,8 @@ namespace clava {
         // DECLS
 
         void DumpDeclData(const Decl *D);
-        void DumpNamedDeclData(const NamedDecl *D); // Not being called yet in ClangAstDumper
+        void DumpNamedDeclData(const NamedDecl *D);
+        void DumpTypeDeclData(const TypeDecl *D);
         void DumpValueDeclData(const ValueDecl *D);
         void DumpFunctionDeclData(const FunctionDecl *D);
         void DumpCXXMethodDeclData(const CXXMethodDecl *D);

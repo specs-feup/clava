@@ -14,7 +14,7 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
-        {"CXXRecordDecl", clava::DeclNode::NAMED_DECL},
+        {"CXXRecordDecl", clava::DeclNode::TYPE_DECL},
         {"FieldDecl", clava::DeclNode::NAMED_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"NamespaceAliasDecl", clava::DeclNode::NAMED_DECL},
@@ -23,6 +23,8 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"TemplateDecl", clava::DeclNode::NAMED_DECL},
         {"TemplateTypeParmDecl", clava::DeclNode::NAMED_DECL},
         {"TypedefDecl", clava::DeclNode::NAMED_DECL},
+        {"TypeDecl", clava::DeclNode::TYPE_DECL},
+        {"EnumDecl", clava::DeclNode::TYPE_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL}
 };
 
@@ -50,6 +52,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpDeclData(D); break;
         case clava::DeclNode::NAMED_DECL:
             DumpNamedDeclData(static_cast<const NamedDecl *>(D)); break;
+        case clava::DeclNode::TYPE_DECL:
+            DumpTypeDeclData(static_cast<const TypeDecl *>(D)); break;
         case clava::DeclNode::VALUE_DECL:
             DumpValueDeclData(static_cast<const ValueDecl *>(D)); break;
         case clava::DeclNode::FUNCTION_DECL:
@@ -128,6 +132,15 @@ void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
 
 }
 
+void clava::ClavaDataDumper::DumpTypeDeclData(const TypeDecl *D) {
+    // Hierarchy
+    DumpNamedDeclData(D);
+
+    clava::dump(clava::getId(D->getTypeForDecl(), id));
+}
+
+
+
 void clava::ClavaDataDumper::DumpValueDeclData(const ValueDecl *D) {
     // Hierarchy
     DumpNamedDeclData(D);
@@ -181,7 +194,8 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
 
 void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     // Hierarchy
-    DumpNamedDeclData(D);
+    //DumpNamedDeclData(D);
+    DumpValueDeclData(D);
 
     // Print information about VarDecl
     clava::dump(D->getStorageClass());
