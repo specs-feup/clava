@@ -62,4 +62,12 @@ public class CApiTest {
         newTester().setCheckWovenCodeSyntax(false)
                 .test("EnergyTest.lara", "energy_test.c");
     }
+
+    @Test
+    public void testAutoPar() {
+        if (SpecsPlatforms.isUnix()) {
+            newTester().test("AutoParTest.lara", "autopar_test.c");
+        }
+
+    }
 }
