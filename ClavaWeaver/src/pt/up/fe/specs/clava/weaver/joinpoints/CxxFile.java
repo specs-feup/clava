@@ -262,7 +262,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String getRelativeFolderpathImpl() {
-        return tunit.getRelativeFolderpath();
+        return tunit.getRelativeFolderpath().orElse(null);
         // return CxxWeaver.getRelativeFolderpath(tunit);
     }
 
