@@ -226,7 +226,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String getPathImpl() {
-        return tunit.getFolderpath();
+        return tunit.getFolderpath().orElse(null);
         /*
         String filename = tunit.getFilename();
         String path = tunit.getFilepath();
@@ -392,7 +392,9 @@ public class CxxFile extends AFile {
 
     @Override
     public String getBaseSourcePathImpl() {
-        return tunit.getSourcePath().map(File::getPath).orElse(null);
+        SpecsLogs.msgWarn(
+                "Attribute $file.baseSourcePath is deprecated, please use attribute $file.relativeFolderpath, which returns the same.");
+        return tunit.getRelativeFolderpath().orElse(null);
     }
 
     @Override
