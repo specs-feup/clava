@@ -1,0 +1,138 @@
+import clava.autopar.InlineFunctionCalls;
+import clava.autopar.RemoveNakedloops;
+import clava.autopar.NormalizedBinaryOp;
+import clava.autopar.ParallelizeLoop;
+    
+
+import clava.Clava;
+
+/**
+ * Utility methods for parallelization.
+ *
+ * @class
+ */
+var Parallelize = {};
+
+/**
+ * @param $loops {$loop[]} an array of for loops to attempt to parallelize. If undefined, tries to parallelize all for loops in the program.
+ */
+Parallelize.forLoops = function($loops) {
+	
+	// Initialize loops if undefined
+	if($loops === undefined) {
+		$loops = Clava.getProgram().descendants('loop');
+		/*
+		$allLoops = Clava.getProgram().descendants('loop');
+		
+		// TODO: Replace with filter() ?
+		$loops = [];
+		for($loop of $allLoops) {
+			if($loop.kind !== "for") {
+				continue;
+			}
+			
+			$loops.push($loop);
+		}
+		*/
+	}
+
+	// Filter any loop that is not a for loop
+	var $forLoops = [];
+	for(var $loop of $loops) {
+		if($loop.kind !== "for") {
+			continue;
+		}
+		
+		$forLoops.push($loop);
+	}
+	
+	// Save the current AST, before applying modifications that help analysis
+	Clava.pushAst();
+
+	
+	// Mark all for loops with pragmas
+	for($originalLoop of $forLoops) {
+		if($originalLoop.kind !== "for") {
+			continue;
+		}
+		
+		var $loop = Clava.findJp($originalLoop);
+	
+		$loop.insertBefore("#pragma parallelize_id " + $originalLoop.astId);
+	}
+	
+	
+	call InlineFunctionCalls;
+    call RemoveNakedloops;
+    call NormalizedBinaryOp;
+    
+	// Rebuild tree
+	Clava.rebuild();	
+
+
+    println('\n\nParallelizing ' + $forLoops.length + ' for loops . . .\n\n');
+
+	// Find all loops marked for parallelization
+	//var loopPragmas = {};
+	var parallelLoops = {};
+	var unparallelizableLoops = {};	
+	
+	$pragmas = Clava.getProgram().descendants('pragma');
+	for(var $pragma of $pragmas) {
+		if($pragma.name !== "parallelize_id") {
+			continue;
+		}
+
+		var parallelization = call ParallelizeLoop($pragma.target);
+		
+		if(parallelization.ompPragma === undefined) {
+			unparallelizableLoops[$pragma.content] = parallelization.errorMsg;
+		} else {
+			parallelLoops[$pragma.content] = parallelization.ompPragma;
+		}
+	}
+
+    
+/*	
+	for($loop of $loops) {
+		if($loop.kind !== "for") {
+			continue;
+		}
+	
+		var $processedLoop = Clava.findJp($loop);
+		var parallelization = call ParallelizeLoop($processedLoop);
+
+		//var $originalLoop = Clava.findJp($loop);
+		
+		if(parallelization.ompPragma !== undefined) {
+			unparallelizableLoops[$loop] = parallelization.errorMsg;
+		} else {
+			parallelLoops[$loop] = parallelization.ompPragma;
+		}
+	}
+	*/
+	// Revert changes
+	Clava.popAst();
+
+	// Add pragmas to loops
+	for(var $loop of $loops) {
+		var ompPragma = parallelLoops[$loop.astId];
+		if(ompPragma === undefined) {
+			println("Could not parallelize loop@"+$loop.location+": " + unparallelizableLoops[$loop.astId]);
+			continue;
+		}
+
+		$loop.insertBefore(ompPragma);
+		
+		// Add include
+		$loop.ancestor("file").addInclude("omp.h",true);
+	}
+
+	
+	
+
+	
+    println('\n\nFinished parallelization . . .\n\n');    
+	
+		
+}

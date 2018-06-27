@@ -5,6 +5,10 @@
 **************************************************************/
 aspectdef AddOpenMPDirectivesForLoop
 	input $ForStmt end
+	output 
+		ompPragma,
+		errorMsg
+	end
 
 	var loopindex = GetLoopIndex($ForStmt);
 
@@ -24,6 +28,8 @@ aspectdef AddOpenMPDirectivesForLoop
 		InsertBeforeStr = '/*' + Array(15).join('*') + ' Clava msgError ' + Array(15).join('*') +
 							'\n\t\t' + msgError.join('\n\t\t') +
 							'\n' + Array(40).join('*') + '*/';
+
+		errorMsg = InsertBeforeStr;			
 	}
 	else
 	{
@@ -51,7 +57,10 @@ aspectdef AddOpenMPDirectivesForLoop
 			OpenMPDirectivesStr += '\n// ' + depPetitFileName;
 		
 		InsertBeforeStr = OpenMPDirectivesStr;
+		ompPragma = OpenMPDirectivesStr;
 	}
 
 	$ForStmt.insert before  InsertBeforeStr;
+	
+
 end

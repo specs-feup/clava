@@ -15,3 +15,4 @@ var AutoParUtils = {};
 AutoParUtils.getPetit = function() {
 	return Clava._getApiUtils().getPetitExecutable();
 }
+

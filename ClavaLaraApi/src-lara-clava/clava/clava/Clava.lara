@@ -118,7 +118,7 @@ Clava.findJp = function($jp) {
 	
 	var $newJp = CxxWeaverApi.findJp($file.filepath, $jp.astId);
 	if($newJp === null) {
-		info("Could not find the given '" + $jp + "' in the current AST", "Clava.findJp");
+		info("Could not find the given '" + $jp + "' in the current AST. Please verify if a rebuild was done", "Clava.findJp");
 		return undefined;
 	}
 	

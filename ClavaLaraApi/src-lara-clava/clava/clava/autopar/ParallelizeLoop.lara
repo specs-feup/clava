@@ -17,7 +17,10 @@ var LoopOmpAttributes = {};
 
 aspectdef ParallelizeLoop
 	input $ForStmt end
-	
+	output 
+		ompPragma,
+		errorMsg
+	end
 
 	call checkForOpenMPCanonicalForm($ForStmt);
 
@@ -38,8 +41,8 @@ aspectdef ParallelizeLoop
 	//call SetMemberAccessOpenMPscoping($ForStmt);
 
 	// remove all variable declared inside loop , i changed SetVariableAccess code!!!!
-	call AddOpenMPDirectivesForLoop($ForStmt);
+	var ompDirectivesResult = call AddOpenMPDirectivesForLoop($ForStmt);
 
-
-
+	ompPragma = ompDirectivesResult.ompPragma;
+	errorMsg = ompDirectivesResult.errorMsg;
 end // aspectdef ParallelizeLoop

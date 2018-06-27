@@ -42,6 +42,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_14("autopar/SetMemberAccessOpenMPscoping.lara"),
     AUTOPAR_15("autopar/SetVariableAccess.lara"),
     AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
+    AUTOPAR_17("autopar/Parallelize.lara"),
 
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
