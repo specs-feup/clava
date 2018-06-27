@@ -186,6 +186,7 @@ public class ClavaWeaverTester {
         data.add(LaraiKeys.OUTPUT_FOLDER, workFolder);
         data.add(LaraiKeys.WORKSPACE_FOLDER, FileList.newInstance(workFolder));
         data.add(LaraiKeys.VERBOSE, VerboseLevel.errors);
+        data.add(LaraiKeys.TRACE_MODE, true);
         // data.add(LaraiKeys.DEBUG_MODE, true);
         data.add(LaraiKeys.LOG_JS_OUTPUT, Boolean.TRUE);
         data.add(LaraiKeys.LOG_FILE, OptionalFile.newInstance(getWeaverLog().getAbsolutePath()));
