@@ -771,7 +771,11 @@ public class App extends ClavaNode {
                 continue;
             }
 
-            tu.setSourcePath(sourcePath);
+            // Calculate the relative path between the sourcePath and the file folder
+
+            String relativePath = SpecsIo.getRelativePath(tu.getFile().getParentFile(), sourcePath);
+
+            tu.setRelativePath(relativePath);
         }
     }
 

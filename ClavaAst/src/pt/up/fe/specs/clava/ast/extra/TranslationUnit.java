@@ -68,13 +68,13 @@ public class TranslationUnit extends ClavaNode {
 
     private final Lazy<Boolean> isCxxUnit;
 
-    private File sourcePath;
+    private String relativePath;
 
-    public TranslationUnit(String filename, String relativePath, Collection<Decl> declarations) {
-        super(createInfo(new ArrayList<>(declarations), relativePath + filename), declarations);
+    public TranslationUnit(String filename, String filePath, Collection<Decl> declarations) {
+        super(createInfo(new ArrayList<>(declarations), filePath + filename), declarations);
 
         this.filename = filename;
-        path = relativePath;
+        path = processFilePath(filePath);
 
         List<IncludeDecl> includesList = declarations.stream()
                 .filter(decl -> decl instanceof IncludeDecl)
@@ -85,7 +85,21 @@ public class TranslationUnit extends ClavaNode {
 
         isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
 
-        sourcePath = null;
+        relativePath = null;
+    }
+
+    private String processFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+
+        if (filePath.isEmpty()) {
+            return null;
+        }
+
+        // Should convert to absolute?
+
+        return SpecsIo.getCanonicalPath(new File(filePath));
     }
 
     public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
@@ -201,12 +215,28 @@ public class TranslationUnit extends ClavaNode {
      *
      * @return if set, returns the original source path of this translation unit
      */
-    public Optional<File> getSourcePath() {
-        return Optional.ofNullable(sourcePath);
+    /**
+     * Relative path refers to the last portion of the path of this file that should be considered as not part of the
+     * original source folder.
+     * <p>
+     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
+     * be /folder1, this method returns folder2.
+     * 
+     * @return
+     */
+    /*
+    public Optional<String> getRelativePath() {
+        return Optional.ofNullable(relativePath);
     }
+    */
 
-    public void setSourcePath(File sourcePath) {
-        this.sourcePath = sourcePath;
+    public void setRelativePath(String relativePath) {
+        if (relativePath == null) {
+            this.relativePath = null;
+            return;
+        }
+
+        this.relativePath = relativePath.isEmpty() ? null : relativePath;
     }
 
     private String getChildCode(ClavaNode decl) {
@@ -258,8 +288,8 @@ public class TranslationUnit extends ClavaNode {
      *
      * @return the path to the folder of this file
      */
-    public String getFolderpath() {
-        return path;
+    public Optional<String> getFolderpath() {
+        return Optional.ofNullable(path);
     }
 
     public String getFilepath() {
@@ -267,7 +297,7 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public File getFile() {
-        if (path.isEmpty()) {
+        if (path == null) {
             return new File(filename);
         }
 
@@ -412,34 +442,57 @@ public class TranslationUnit extends ClavaNode {
     }
     */
 
+    // * <p>
+    // * Relative path example: if this file is included using "folder/header.h", returns "folder".
+
     /**
      * The folder of this file, relative to the include folders of the project.
      * 
      * <p>
-     * Example: if this file is included using "folder/header.h", returns "folder".
+     * Relative path refers to the last portion of the path of this file that should be considered as not part of the
+     * original source folder.
+     * <p>
+     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
+     * be /folder1, this method returns folder2.
+     * 
+     * *
+     * 
      * 
      * @return
      */
     public Optional<String> getRelativeFolderpath() {
+        return Optional.ofNullable(relativePath);
         // System.out.println("FILE:" + path);
         // System.out.println("SOURCE PATH:" + sourcePath);
-
-        if (sourcePath == null) {
+        /*
+        if (relativePath == null) {
             return Optional.empty();
         }
-
-        if (sourcePath.getPath().isEmpty()) {
-            return Optional.empty();
-        }
-
-        String relativePath = getRelativePath(new File(path), sourcePath);
-
+        
         if (relativePath.isEmpty()) {
             return Optional.empty();
         }
-
+        
+        return Optional.of(relativePath);
+        */
+        /*
+        if (path == null) {
+            return Optional.of(sourcePath);
+        }
+        
+        
+        String relativePath = getRelativePath(new File(path), sourcePath);
+        // System.out.println("PATH:" + path);
+        // System.out.println("SOURCE PATH:" + sourcePath);
+        // System.out.println("RELATIVE PATH BETWEEN EMPTY AND SOURCE:" + getRelativePath(new File(null), sourcePath));
+        if (relativePath.isEmpty()) {
+            return Optional.empty();
+        }
+        
         return Optional.of(relativePath);
         // return Optional.of(getRelativePath(new File(path), sourcePath));
+        
+         */
     }
 
     /**
@@ -468,7 +521,11 @@ public class TranslationUnit extends ClavaNode {
      * @return
      */
     public String getRelativeFilepath() {
-        return getRelativePath(getFile(), sourcePath);
+        return getRelativeFolderpath()
+                .map(relativePath -> relativePath + "/" + getFilename())
+                .orElse(getFilename());
+
+        // return getRelativePath(getFile(), sourcePath);
     }
 
     /**
@@ -485,12 +542,13 @@ public class TranslationUnit extends ClavaNode {
         }
 
         // Check if there is a path defined
-        String folderpath = getFolderpath();
+        Optional<String> folderpathTry = getFolderpath();
         // System.out.println("FOLDERPATH:" + folderpath);
-        if (folderpath.isEmpty()) {
+        if (!folderpathTry.isPresent()) {
             return baseFolder;
         }
 
+        String folderpath = folderpathTry.get();
         File folder = new File(folderpath);
 
         // If folderpath is absolute, return only last name; otherwise, use it fully
