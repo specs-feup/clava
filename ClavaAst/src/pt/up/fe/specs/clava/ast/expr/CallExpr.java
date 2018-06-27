@@ -174,7 +174,6 @@ public class CallExpr extends Expr {
         }
 
         Optional<DeclaratorDecl> varDecl = declRef.getVariableDeclaration();
-
         // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
 
         if (!varDecl.isPresent()) {

@@ -135,14 +135,21 @@ public class TranslationUnit extends ClavaNode {
         }
 
         // If source path does not exist yet, or no base source folder specified, just return filename
-        if (!filepath.exists() || baseSourceFolder == null) {
+        // if (!filepath.exists() || baseSourceFolder == null) {
+        if (baseSourceFolder == null) {
             // System.out.println("FILEPATH:" + filepath);
             // Only return complete resource path if it is not absolute
             String relativePath = filepath.isAbsolute() ? filepath.getName() : filepath.getPath();
+            // System.out.println("BASESOURCE FOLDER:" + baseSourceFolder);
+            // System.out.println("FILEPATH:" + filepath);
+            // System.out.println("IS ABSOLUTE:" + filepath.isAbsolute());
+            // System.out.println("FILEPATH GETNAME:" + filepath.getName());
+            // System.out.println("RELATIVE PATH BEFORE:" + relativePath);
 
-            if (baseSourceFolder != null) {
-                relativePath = new File(baseSourceFolder, relativePath).getPath();
-            }
+            // if (baseSourceFolder != null) {
+            // relativePath = new File(baseSourceFolder, relativePath).getPath();
+            // }
+            // System.out.println("RELATIVE PATH AFTER:" + relativePath);
             // return sourcePath.getPath();
             // System.out.println("getRelativePath:" + relativePath);
 
@@ -372,9 +379,11 @@ public class TranslationUnit extends ClavaNode {
 
     // public void write(File destinationFolder, File baseInputFolder) {
     public File write(File destinationFolder) {
-        String relativePath = getRelativeFolderpath();
-
-        File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
+        // String relativePath = getRelativeFolderpath();
+        File actualDestinationFolder = getRelativeFolderpath()
+                .map(relativePath -> SpecsIo.mkdir(new File(destinationFolder, relativePath)))
+                .orElse(destinationFolder);
+        // File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
         File destinationFile = new File(actualDestinationFolder, getFilename());
 
         SpecsIo.write(destinationFile, getCode());
@@ -411,19 +420,26 @@ public class TranslationUnit extends ClavaNode {
      * 
      * @return
      */
-    public String getRelativeFolderpath() {
+    public Optional<String> getRelativeFolderpath() {
         // System.out.println("FILE:" + path);
         // System.out.println("SOURCE PATH:" + sourcePath);
 
         if (sourcePath == null) {
-            return "";
+            return Optional.empty();
         }
 
         if (sourcePath.getPath().isEmpty()) {
-            return "";
+            return Optional.empty();
         }
 
-        return getRelativePath(new File(path), sourcePath);
+        String relativePath = getRelativePath(new File(path), sourcePath);
+
+        if (relativePath.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(relativePath);
+        // return Optional.of(getRelativePath(new File(path), sourcePath));
     }
 
     /**
@@ -510,17 +526,18 @@ public class TranslationUnit extends ClavaNode {
         File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
         // System.out.println("ACTUAL DESTINATION FOLDER:" + actualDestinationFolder);
 
-        String relativePath = getRelativeFolderpath();
-
-        // System.out.println("RELATIVE PATH:" + relativePath);
+        // String relativePath = getRelativeFolderpath();
 
         // Build destination path
-        actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
+        File adjustedDestinationFolder = getRelativeFolderpath()
+                .map(relativePath -> SpecsIo.mkdir(new File(actualDestinationFolder, relativePath)))
+                .orElse(actualDestinationFolder);
+        // actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
 
         // System.out.println("ADJUSTED ACTUAL DESTI ATION:" + actualDestinationFolder);
         // System.out.println("FILE:" + new File(actualDestinationFolder, getFilename()));
 
-        return new File(actualDestinationFolder, getFilename());
+        return new File(adjustedDestinationFolder, getFilename());
     }
 
     public void setLanguage(Language language) {
