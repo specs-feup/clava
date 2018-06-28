@@ -25,11 +25,10 @@ aspectdef AddOpenMPDirectivesForLoop
 
 	if (msgError.length > 0)
 	{
+		errorMsg = msgError;
 		InsertBeforeStr = '/*' + Array(15).join('*') + ' Clava msgError ' + Array(15).join('*') +
 							'\n\t\t' + msgError.join('\n\t\t') +
 							'\n' + Array(40).join('*') + '*/';
-
-		errorMsg = InsertBeforeStr;			
 	}
 	else
 	{
