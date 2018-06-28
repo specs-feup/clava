@@ -21,19 +21,6 @@ Parallelize.forLoops = function($loops) {
 	// Initialize loops if undefined
 	if($loops === undefined) {
 		$loops = Clava.getProgram().descendants('loop');
-		/*
-		$allLoops = Clava.getProgram().descendants('loop');
-		
-		// TODO: Replace with filter() ?
-		$loops = [];
-		for($loop of $allLoops) {
-			if($loop.kind !== "for") {
-				continue;
-			}
-			
-			$loops.push($loop);
-		}
-		*/
 	}
 
 	// Filter any loop that is not a for loop
@@ -61,7 +48,7 @@ Parallelize.forLoops = function($loops) {
 		$loop.insertBefore("#pragma parallelize_id " + $originalLoop.astId);
 	}
 	
-	
+	// Transformations to help analysis
 	call InlineFunctionCalls;
     call RemoveNakedloops;
     call NormalizedBinaryOp;
@@ -70,7 +57,7 @@ Parallelize.forLoops = function($loops) {
 	Clava.rebuild();	
 
 
-    println('\n\nParallelizing ' + $forLoops.length + ' for loops . . .\n\n');
+    println('Parallelizing ' + $forLoops.length + ' for loops...');
 
 	// Find all loops marked for parallelization
 	//var loopPragmas = {};
@@ -91,34 +78,15 @@ Parallelize.forLoops = function($loops) {
 			parallelLoops[$pragma.content] = parallelization.ompPragma;
 		}
 	}
-
-    
-/*	
-	for($loop of $loops) {
-		if($loop.kind !== "for") {
-			continue;
-		}
-	
-		var $processedLoop = Clava.findJp($loop);
-		var parallelization = call ParallelizeLoop($processedLoop);
-
-		//var $originalLoop = Clava.findJp($loop);
-		
-		if(parallelization.ompPragma !== undefined) {
-			unparallelizableLoops[$loop] = parallelization.errorMsg;
-		} else {
-			parallelLoops[$loop] = parallelization.ompPragma;
-		}
-	}
-	*/
-	// Revert changes
+   
+	// Revert AST changes
 	Clava.popAst();
 
 	// Add pragmas to loops
 	for(var $loop of $loops) {
 		var ompPragma = parallelLoops[$loop.astId];
 		if(ompPragma === undefined) {
-			println("Could not parallelize loop@"+$loop.location+": " + unparallelizableLoops[$loop.astId]);
+			println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
 			continue;
 		}
 
@@ -127,12 +95,6 @@ Parallelize.forLoops = function($loops) {
 		// Add include
 		$loop.ancestor("file").addInclude("omp.h",true);
 	}
-
 	
-	
-
-	
-    println('\n\nFinished parallelization . . .\n\n');    
-	
-		
+    println('Parallelization finished');    
 }
