@@ -9,7 +9,7 @@ aspectdef checkForFunctionCalls
  	FunctionCalls = [];
  		
 	// Check if there are user-defined safe function
-	var userSafeFunctions = $ForStmt.data["autoparIgnore"];
+	var userSafeFunctions = $ForStmt.data["safeFunctions"];
 	if(userSafeFunctions === undefined) {
 		userSafeFunctions = [];
 	}
