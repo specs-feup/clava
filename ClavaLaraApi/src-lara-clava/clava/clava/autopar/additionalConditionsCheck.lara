@@ -12,11 +12,14 @@ aspectdef additionalConditionsCheck
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
 
+
+	
 	call o : checkForFunctionCalls($ForStmt);
 	if (o.FunctionCalls.length > 0)
 	{
 		Add_msgError(LoopOmpAttributes, $ForStmt, 'Found function call inside loop that prevented parallelization: ' + o.FunctionCalls.join(','));
 	}
+	
 
 	// check non-affine array subscript A[B[j]].... ????
 	//------------------------------------------------------------
