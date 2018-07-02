@@ -18,10 +18,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
+import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
@@ -31,6 +36,16 @@ import pt.up.fe.specs.util.SpecsLogs;
  *
  */
 public class InitListExpr extends Expr {
+
+    /// DATAKEY BEGIN
+
+    /**
+     * If this initializer list initializes an array with more elements than there are initializers in the list,
+     * specifies an expression to be used for value initialization of the rest of the elements.
+     */
+    public final static DataKey<Expr> ARRAY_FILLER = KeyFactory.object("arrayFiller", Expr.class);
+
+    /// DATAKEY END
 
     private final InitListExprData data;
 
@@ -76,8 +91,11 @@ public class InitListExpr extends Expr {
                 .map(expr -> expr.getCode())
                 .collect(Collectors.joining(", "));
 
+        boolean hasSameInitsAsElements = hasSameInitsAsElements();
+
         // if (arrayFiller != null) {
-        if (data.hasArrayFiller()) {
+        if (data.hasArrayFiller() && !hasSameInitsAsElements) {
+
             String exprClassName = data.getArrayFiller().getClass().getSimpleName();
             switch (exprClassName) {
             case "ImplicitValueInitExpr":
@@ -97,6 +115,27 @@ public class InitListExpr extends Expr {
 
         // , "{ ", " }"
         // return "{" + list + "}";
+    }
+
+    private boolean hasSameInitsAsElements() {
+        Type type = getType();
+        if (!(type instanceof ConstantArrayType)) {
+            return false;
+        }
+
+        ConstantArrayType constantArrayType = (ConstantArrayType) type;
+
+        int arraySize = constantArrayType.getConstant();
+
+        // Special case where initialization is a StringLiteral
+        // TODO: Check if type of array is char?
+        if (getInitExprs().size() == 1 && getInitExprs().get(0) instanceof StringLiteral) {
+            StringLiteral stringLiteral = ((StringLiteral) getInitExprs().get(0));
+            // Add one to StringLiteral due to \0
+            return arraySize == stringLiteral.getStringContents().length() + 1;
+        }
+
+        return false;
     }
 
     @Override
