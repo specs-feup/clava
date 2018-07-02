@@ -118,9 +118,12 @@ namespace clava {
         void DumpIntegerLiteralData(const IntegerLiteral *E);
         void DumpFloatingLiteralData(const FloatingLiteral *E);
         void DumpCXXBoolLiteralExprData(const CXXBoolLiteralExpr *E);
+        void DumpCompoundLiteralExprData(const CompoundLiteralExpr *E);
+        void DumpInitListExprData(const InitListExpr *E);
 
 
-        // TYPES
+
+            // TYPES
         void DumpTypeData(const Type *T);
         void DumpTypeData(const Type *T, Qualifiers &qualifiers);
         //void DumpTypeData(const QualType &T);

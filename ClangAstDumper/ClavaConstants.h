@@ -50,7 +50,9 @@ namespace clava {
         CHARACTER_LITERAL,
         INTEGER_LITERAL,
         FLOATING_LITERAL,
-        CXX_BOOL_LITERAL_EXPR
+        CXX_BOOL_LITERAL_EXPR,
+        COMPOUND_LITERAL_EXPR,
+        INIT_LIST_EXPR
     };
 
     /**

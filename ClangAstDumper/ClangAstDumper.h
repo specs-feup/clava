@@ -198,7 +198,9 @@ private:
 
     // Children visitors for Exprs
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
-    //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
+    void VisitInitListExprChildren(const InitListExpr *E, std::vector<std::string> &children);
+
+        //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
 
 
     // Children visitors for Attributes
