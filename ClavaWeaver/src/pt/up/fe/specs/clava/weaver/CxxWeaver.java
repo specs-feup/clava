@@ -847,7 +847,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Determine new include dirs
         // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
-        String includeFoldersContent = getAllIncludes(getWeavingFolder()).stream()
+        String includeFoldersContent = getAllIncludeFolders(getWeavingFolder()).stream()
                 // .map(File::getAbsolutePath)
                 .map(SpecsIo::getCanonicalPath)
                 .collect(Collectors.joining(";"));
@@ -993,7 +993,7 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         List<File> includeFolders = srcFolders;
         */
-        Set<File> includeFolders = getSourceFiles(tempFolder);
+        Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
 
         List<String> rebuildOptions = new ArrayList<>();
 
@@ -1010,7 +1010,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add extra includes
         // for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
-        for (File extraInclude : getExternalIncludes()) {
+        for (File extraInclude : getExternalIncludeFolders()) {
             rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
         }
 
@@ -1187,16 +1187,16 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     /**
-     * Helper method which returns all files (headers and implementation).
+     * Helper method which returns include folders of the source files.
      * 
      * @param weavingFolder
      * @return
      */
-    private Set<File> getSourceFiles(File weavingFolder) {
-        return getSourceFiles(weavingFolder, false);
+    private Set<File> getSourceIncludeFolders(File weavingFolder) {
+        return getSourceIncludeFolders(weavingFolder, false);
     }
 
-    private Set<File> getSourceFiles(File weavingFolder, boolean onlyHeaders) {
+    private Set<File> getSourceIncludeFolders(File weavingFolder, boolean onlyHeaders) {
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
         // For all Translation Units, collect new destination folders
@@ -1210,17 +1210,17 @@ public class CxxWeaver extends ACxxWeaver {
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 
-    private Set<File> getExternalIncludes() {
+    private Set<File> getExternalIncludeFolders() {
         return getApp().getExternalDependencies().getExtraIncludes().stream()
                 .map(SpecsIo::getCanonicalFile)
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 
-    private Set<File> getAllIncludes(File weavingFolder) {
+    private Set<File> getAllIncludeFolders(File weavingFolder) {
         Set<File> includePaths = new LinkedHashSet<>();
 
-        includePaths.addAll(getSourceFiles(weavingFolder, true));
-        includePaths.addAll(getExternalIncludes());
+        includePaths.addAll(getSourceIncludeFolders(weavingFolder, true));
+        includePaths.addAll(getExternalIncludeFolders());
 
         return includePaths;
     }
