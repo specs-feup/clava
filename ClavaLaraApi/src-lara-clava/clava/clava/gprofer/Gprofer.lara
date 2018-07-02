@@ -1,0 +1,141 @@
+import clava.gprofer._GproferAspects;
+import clava.Clava;
+import lara.cmake.CMaker;
+
+function Gprofer(runs, args) {
+	
+	this._app = Clava.getProgram();
+	
+	this._runs = defaultValue(runs, 1);
+	checkNumber(this._runs, "runs @ Gprofer(runs, args)");
+	
+	this._args = defaultValue(args, []);
+	checkArray(this._args, "args @ Gprofer(runs, args)");
+	
+	this._data = {};
+	this._hotSpots = {};
+	
+	this._cmaker = this._defaultCmaker();
+}
+
+Gprofer.prototype.getCmaker = function() {
+	
+	return this._cmaker;
+}
+
+Gprofer._EXE_NAME = "gprofer";
+
+Gprofer.prototype._defaultCmaker = function($function) {
+	
+	var cmaker = new CMaker(Gprofer._EXE_NAME, false);
+	
+	cmaker.addFlags("-no-pie", "-pg");
+	
+	// sources
+	for (var $file of this._app.descendants('file')) {
+		
+		if($file.isHeader) {
+			continue;
+		}
+		
+		cmaker.getSources().addSource($file.filepath);
+	}
+	
+	// includes
+	for(var userInclude of Clava.getIncludeFolders()) {
+		debug("Adding include: " + userInclude);
+		cmaker.addIncludeFolder(userInclude);
+	}
+	
+	//~ // external includes
+	//~ var extraIncludes = Clava.getProgram().extraIncludes;
+	//~ for(var extraInclude of extraIncludes) {
+		//~ if(Io.isFolder(extraInclude)) {
+			//~ debug("Adding external include '" + extraInclude + "'");
+			//~ variantCmaker.addIncludeFolder(extraInclude);
+		//~ } else {
+			//~ debug("Extra include ' " + extraIncludes +  " ' is not a folder");
+		//~ }
+		
+	//~ }
+	
+	return cmaker;
+};
+
+Gprofer._buildName = function($function) {
+	
+	if(Clava.isCxx()) {
+		/* build name based on gprof output */
+		var func = $function.name;
+		var line = $function.line;
+		var file = $function.ancestor('file').name;
+		
+		return file + "#" + func + "#" + line;	
+	}
+	
+	return $function.name;
+};
+
+Gprofer.prototype.setArgs = function(args) {
+	
+	checkArray(args, "Gprofer.setArgs(args)");
+	this._args = args;
+	
+	return this;
+}
+
+Gprofer.prototype.setRuns = function(runs) {
+	
+	checkNumber(runs, "Gprofer.setRuns(runs)");
+	this._runs = runs;
+	
+	return this;
+}
+
+Gprofer.prototype.profile = function() {
+		
+	// compile the application
+	var binary = this._cmaker.build(Clava.getWeavingFolder(),  Io.getPath(Clava.getWeavingFolder(), "build"));
+	
+	// call java gprofer
+	// fill this._data and this._hotSpots
+	
+	return this;
+};
+
+Gprofer.prototype.getHotspots = function() {
+	
+	// return all
+};
+
+Gprofer.prototype.getHotspot = function(rank) {
+	
+	var _rank = defaultValue(rank, 1);
+	checkArray(_rank, "Gprofer.getHotspot(rank)");
+	
+	var name = this._hotSpots[rank];
+	
+	var f = undefined;
+	if(Clava.isCxx()) {
+		
+		f = call GproferGetCxxFunction(name);
+	} else {
+		
+		f = call GproferGetCFunction(name);
+	}
+	
+	return f.$func;
+};
+
+Gprofer.prototype.getPercentage = function($function) {
+
+	checkJoinPointType($function, 'function', 'Gprofer.getPercentage($function)');
+	
+	return this._get('percentage', $function);
+};
+
+Gprofer.prototype._get = function(type, $function) {
+	
+	var name = Gprofer._buildName($function);	
+	return this._data[name][type];
+};
