@@ -40,6 +40,19 @@ public class StringLiteral extends Literal {
         return string;
     }
 
+    public String getStringContents() {
+        return string.substring(1, string.length() - 1);
+        // String stringContents = string;
+        // if (stringContents.startsWith("\"")) {
+        // stringContents = stringContents.substring(1);
+        // }
+        // if (stringContents.endsWith("\"")) {
+        //
+        // }
+        //
+        // return string;
+    }
+
     @Override
     public String getCode() {
         return getString();
