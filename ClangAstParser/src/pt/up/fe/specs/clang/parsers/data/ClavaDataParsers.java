@@ -79,4 +79,15 @@ public class ClavaDataParsers {
         return new SourceRange(startLocation, endLocation);
     }
 
+    public static String literalSource(LineStream lines) {
+        // Append lines until terminator line is found
+        StringBuilder builder = new StringBuilder();
+        String currentLine = null;
+        while (!(currentLine = lines.nextLine()).equals("%CLAVA_SOURCE_END%")) {
+            builder.append(currentLine).append("\n");
+        }
+
+        return builder.toString();
+    }
+
 }

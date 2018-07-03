@@ -66,7 +66,7 @@ public class ExprDataParser {
     public static DataStore parseLiteralData(LineStream lines, DataStore dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        data.add(Literal.SOURCE_LITERAL, lines.nextLine());
+        data.add(Literal.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
 
         return data;
     }
