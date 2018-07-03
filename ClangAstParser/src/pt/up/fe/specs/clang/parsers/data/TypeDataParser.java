@@ -13,17 +13,22 @@
 
 package pt.up.fe.specs.clang.parsers.data;
 
+import java.math.BigInteger;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
@@ -106,7 +111,8 @@ public class TypeDataParser {
         data.add(FunctionProtoType.IS_VOLATILE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionProtoType.IS_RESTRICT, LineStreamParsers.oneOrZero(lines));
 
-        data.add(FunctionProtoType.REFERENCE_QUALIFIER, LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
+        data.add(FunctionProtoType.REFERENCE_QUALIFIER,
+                LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
 
         data.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
                 LineStreamParsers.enumFromName(ExceptionSpecificationType.class, lines));
@@ -120,6 +126,27 @@ public class TypeDataParser {
         */
 
         return data;
+    }
+
+    public static DataStore parseArrayTypeData(LineStream lines, DataStore parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        data.add(ArrayType.ARRAY_SIZE_MODIFIER, LineStreamParsers.enumFromName(ArraySizeModifier.class, lines));
+        data.add(ArrayType.INDEX_TYPE_QUALIFIERS, LineStreamParsers.enumListFromName(C99Qualifier.getHelper(), lines));
+
+        return data;
+
+    }
+
+    public static DataStore parseConstantArrayTypeData(LineStream lines, DataStore parserData) {
+
+        DataStore data = parseArrayTypeData(lines, parserData);
+
+        data.add(ConstantArrayType.ARRAY_SIZE, new BigInteger(lines.nextLine()));
+
+        return data;
+
     }
 
 }
