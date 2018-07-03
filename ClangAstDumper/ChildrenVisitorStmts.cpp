@@ -117,6 +117,10 @@ void ClangAstDumper::VisitInitListExprChildren(const InitListExpr *E, std::vecto
 
     // Visit array filler
     VisitStmtTop(E->getArrayFiller());
+
+    // Visit field
+    //VisitDeclTop(E->getInitializedFieldInUnion());
+
 }
 
 
