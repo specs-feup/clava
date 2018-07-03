@@ -305,9 +305,12 @@ const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange)
 
 
     std::string text = Lexer::getSourceText(CharSourceRange::getTokenRange(begin, end), sm, LangOptions(), 0);
-    if (text.size() > 0 && (text.at(text.size()-1) == ',')) //the text can be ""
-        return Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
-    return text;
+    if (text.size() > 0 && (text.at(text.size()-1) == ',')) { //the text can be ""
+        std::string otherText = Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
+        return  otherText + "\n%CLAVA_SOURCE_END%";
+    }
+
+    return text + "\n%CLAVA_SOURCE_END%";
 
 
 }

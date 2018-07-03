@@ -9,7 +9,6 @@
 #include "clang/Lex/Lexer.h"
 
 #include <map>
-#include <iostream>
 
 const std::map<const std::string, clava::StmtNode > clava::STMT_DATA_MAP = {
 
@@ -216,7 +215,6 @@ void clava::ClavaDataDumper::DumpInitListExprData(const InitListExpr *E) {
     //clava::dump(clava::getId(E->getInitializedFieldInUnion(), id)); // Apparently not supported in old parser
     clava::dump(const_cast<InitListExpr*>(E)->isExplicit()); // isExplicit() could be const
     clava::dump(E->isStringLiteralInit()); // isExplicit() could be const
-//    clava::dump(E->isFileScope());
 
 
 }
