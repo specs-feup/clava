@@ -38,17 +38,32 @@ public class CompoundLiteralExpr extends Literal {
     }
 
     // TODO: Implement getCode() after other nodes are implemented
-    /*
+
     @Override
     public String getCode() {
-        return "(" + getTypeCode() + ")" + getInitializer().getCode();
+        // System.out.println("IS MACRO:" + get(ClavaNode.IS_MACRO));
+        // System.out.println("IS INITIALIZER MACRO:" + getInitializer().get(ClavaNode.IS_MACRO));
+        // System.out.println("CODE:" + getLiteral());
+
+        // if (get(ClavaNode.IS_MACRO)) {
+        // return "(" + getTypeCode() + ")" + getInitializer().getCode();
+        // }
+
+        // System.out.println("INITIALIZER:" + getInitializer().toTree());
+        // System.out.println("INITIALIZER CHILDREN:" + getInitializer().getChildren().size());
+        // System.out.println("INITIALIZER FILLER:" + getInitializer().get(InitListExpr.ARRAY_FILLER));
+        //
+        // System.out.println("INITIALIZER CODE:" + getInitializer().getCode());
+        // return "(" + getTypeCode() + ")" + getInitializer().getCode();
+        return getLiteral();
+
         // return "(" + getTypeCode() + ")" + getChild(0).getCode();
-    
+
         // System.out.println("TYPE:" + getTypeCode());
         // System.out.println("COMPOUND AST:" + toTree());
         // System.out.println("INIT LIST CODE:" + getChild(0).getCode());
         // return getChild(0).getCode();
-    
+
     }
-    */
+
 }

@@ -13,12 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
  * Represents an implicit type conversions which has no direct representation in the original source code.
@@ -28,9 +27,13 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public class ImplicitValueInitExpr extends Expr {
 
-    public ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
-        this(exprData, info, Collections.emptyList());
+    public ImplicitValueInitExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // public ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
+    // this(exprData, info, Collections.emptyList());
+    // }
 
     /**
      * Constructor for node copy.
@@ -39,20 +42,20 @@ public class ImplicitValueInitExpr extends Expr {
      * @param destinationTypes
      * @param location
      */
-    private ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
+    // private ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info,
+    // List<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    // }
 
-        super(exprData, info, children);
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ImplicitValueInitExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ImplicitValueInitExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public String toContentString() {
-        return super.toContentString() + " (type:" + getExprType().getCode(this) + ")";
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + " (type:" + getExprType().getCode(this) + ")";
+    // }
 
 }

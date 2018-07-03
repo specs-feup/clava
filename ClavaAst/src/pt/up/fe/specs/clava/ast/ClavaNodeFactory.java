@@ -116,8 +116,6 @@ import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
-import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
-import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
@@ -132,7 +130,6 @@ import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.StmtExpr;
-import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
@@ -142,7 +139,6 @@ import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
@@ -1092,9 +1088,9 @@ public class ClavaNodeFactory {
         return new ImplicitCastExprLegacy(castKind, exprData, info, subExpr);
     }
 
-    public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
-        return new ImplicitValueInitExpr(exprData, info);
-    }
+    // public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
+    // return new ImplicitValueInitExpr(exprData, info);
+    // }
 
     public static IntegerLiteral integerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
 
@@ -1192,9 +1188,9 @@ public class ClavaNodeFactory {
         return new CXXDefaultArgExpr(exprData, info);
     }
 
-    public static StringLiteral stringLiteral(String string, ExprData exprData, ClavaNodeInfo info) {
-        return new StringLiteral(string, exprData, info);
-    }
+    // public static StringLiteral stringLiteral(String string, ExprData exprData, ClavaNodeInfo info) {
+    // return new StringLiteral(string, exprData, info);
+    // }
 
     public static CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
         ExprData exprData = new ExprData(type);
@@ -1329,11 +1325,11 @@ public class ClavaNodeFactory {
     //
     // return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, exprData, info, initExprs);
     // }
-    public static InitListExpr initListExpr(InitListExprData data, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends Expr> initExprs) {
-
-        return new InitListExpr(data, exprData, info, initExprs);
-    }
+    // public static InitListExpr initListExpr(InitListExprData data, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends Expr> initExprs) {
+    //
+    // return new InitListExpr(data, exprData, info, initExprs);
+    // }
 
     public static CXXStdInitializerListExpr cxxStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {

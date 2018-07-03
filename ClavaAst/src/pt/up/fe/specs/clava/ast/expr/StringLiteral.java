@@ -13,35 +13,50 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class StringLiteral extends Literal {
 
-    private final String string;
+    /// DATAKEY BEGIN
 
-    public StringLiteral(String string, ExprData exprData, ClavaNodeInfo info) {
-        // According to CPP reference, string literals are lvalues
-        // http://en.cppreference.com/w/cpp/language/value_category
-        super(exprData, info, Collections.emptyList());
+    public final static DataKey<String> STRING = KeyFactory.string("string");
 
-        this.string = string;
+    /// DATAKEY END
+
+    // private final String string;
+
+    public StringLiteral(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new StringLiteral(string, getExprData(), getInfo());
-    }
+    // public StringLiteral(String string, ExprData exprData, ClavaNodeInfo info) {
+    // // According to CPP reference, string literals are lvalues
+    // // http://en.cppreference.com/w/cpp/language/value_category
+    // super(exprData, info, Collections.emptyList());
+    //
+    // this.string = string;
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new StringLiteral(string, getExprData(), getInfo());
+    // }
 
     public String getString() {
-        return string;
+        return getLiteral();
+        // return string;
     }
 
     public String getStringContents() {
-        return string.substring(1, string.length() - 1);
+        return get(STRING);
+        // String literalString = getString();
+        // return literalString.substring(1, literalString.length() - 1);
         // String stringContents = string;
         // if (stringContents.startsWith("\"")) {
         // stringContents = stringContents.substring(1);
@@ -55,19 +70,20 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getCode() {
-        return getString();
+        // return getString();
+        return "\"" + getStringContents() + "\"";
     }
 
-    @Override
-    public String toContentString() {
-        return ClavaNode.toContentString(super.toContentString(), "string:" + string);
-        // return super.toContentString() + "string:" + string;
-    }
+    // @Override
+    // public String toContentString() {
+    // return ClavaNode.toContentString(super.toContentString(), "string:" + string);
+    // // return super.toContentString() + "string:" + string;
+    // }
 
-    @Override
-    public String getLiteral() {
-        return string;
-    }
+    // @Override
+    // public String getLiteral() {
+    // return string;
+    // }
 
     // StringKind getKind()
 

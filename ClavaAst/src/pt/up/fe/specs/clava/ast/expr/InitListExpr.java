@@ -14,20 +14,15 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.InitListExprData;
-import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
@@ -54,18 +49,17 @@ public class InitListExpr extends Expr {
 
     /// DATAKEY END
 
-    private boolean isOldFormat;
+    // private boolean isOldFormat;
 
-    private InitListExprData data;
+    // private InitListExprData data;
 
-    /*
     public InitListExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    
-        isOldFormat = false;
-        this.data = null;
+
+        // isOldFormat = false;
+        // this.data = null;
     }
-    */
+
     // @deprecated Cannot be replaced yet because of ArrayFiller, which class is not implemented yet in the new format
 
     /**
@@ -74,15 +68,15 @@ public class InitListExpr extends Expr {
      * @param info
      * @param initExprs
      */
-    @Deprecated
-    public InitListExpr(InitListExprData data, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends Expr> initExprs) {
-        // this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), initExprs);
-        super(exprData, info, initExprs);
-
-        this.data = data;
-        isOldFormat = true;
-    }
+    // @Deprecated
+    // public InitListExpr(InitListExprData data, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends Expr> initExprs) {
+    // // this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), initExprs);
+    // super(exprData, info, initExprs);
+    //
+    // this.data = data;
+    // isOldFormat = true;
+    // }
 
     /*
     private final boolean hasInitializedFieldInUnion;
@@ -100,17 +94,17 @@ public class InitListExpr extends Expr {
     }
     */
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        if (isOldFormat) {
-            // return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, getExprData(), getInfo(),
-            // Collections.emptyList());
-            return new InitListExpr(data, getExprData(), getInfo(),
-                    Collections.emptyList());
-        }
-
-        return super.copyPrivate();
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // if (isOldFormat) {
+    // // return new InitListExpr(hasInitializedFieldInUnion, arrayFiller, fieldData, getExprData(), getInfo(),
+    // // Collections.emptyList());
+    // return new InitListExpr(data, getExprData(), getInfo(),
+    // Collections.emptyList());
+    // }
+    //
+    // return super.copyPrivate();
+    // }
 
     public List<Expr> getInitExprs() {
         // return getChildren().stream().filter(child -> !(child instanceof Undefined))
@@ -125,16 +119,17 @@ public class InitListExpr extends Expr {
 
     @Override
     public String getCode() {
+        /*
         if (isOldFormat) {
             String list = getInitExprs().stream()
                     .map(expr -> expr.getCode())
                     .collect(Collectors.joining(", "));
-
+        
             boolean hasSameInitsAsElements = hasSameInitsAsElements();
-
+        
             // if (arrayFiller != null) {
             if (data.hasArrayFiller() && !hasSameInitsAsElements) {
-
+        
                 String exprClassName = data.getArrayFiller().getClass().getSimpleName();
                 switch (exprClassName) {
                 case "ImplicitValueInitExpr":
@@ -145,14 +140,14 @@ public class InitListExpr extends Expr {
                     break;
                 }
             }
-
+        
             if (data.isExplicit()) {
                 return "{" + list + "}";
             } else {
                 return list;
             }
         }
-
+        */
         String list = getChildren().stream()
                 .map(expr -> expr.getCode())
                 .collect(Collectors.joining(", "));
@@ -203,16 +198,17 @@ public class InitListExpr extends Expr {
         // return "{" + list + "}";
     }
 
+    /*
     private boolean hasSameInitsAsElements() {
         Type type = getType();
         if (!(type instanceof ConstantArrayType)) {
             return false;
         }
-
+    
         ConstantArrayType constantArrayType = (ConstantArrayType) type;
-
+    
         int arraySize = constantArrayType.getConstant();
-
+    
         // Special case where initialization is a StringLiteral
         // TODO: Check if type of array is char?
         if (getInitExprs().size() == 1 && getInitExprs().get(0) instanceof StringLiteral) {
@@ -220,12 +216,14 @@ public class InitListExpr extends Expr {
             // Add one to StringLiteral due to \0
             return arraySize == stringLiteral.getStringContents().length() + 1;
         }
-
+    
         return false;
     }
-
+    */
+    /*
     @Override
     public String toContentString() {
         return toContentString(super.toContentString(), data.toString());
     }
+    */
 }
