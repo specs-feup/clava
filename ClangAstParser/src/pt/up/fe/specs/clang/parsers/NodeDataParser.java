@@ -69,6 +69,8 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
         STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
         STATIC_DATA_PARSERS.put("<CXXBoolLiteralExprData>", ExprDataParser::parseCXXBoolLiteralExprData);
+        STATIC_DATA_PARSERS.put("<CompoundLiteralExprData>", ExprDataParser::parseCompoundlLiteralExprData);
+        STATIC_DATA_PARSERS.put("<InitListExprData>", ExprDataParser::parseInitListExprData);
 
         // TYPES
         STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);

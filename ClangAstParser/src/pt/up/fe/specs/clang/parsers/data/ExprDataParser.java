@@ -23,8 +23,10 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
+import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
@@ -98,6 +100,26 @@ public class ExprDataParser {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(CXXBoolLiteralExpr.VALUE, LineStreamParsers.oneOrZero(lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseCompoundlLiteralExprData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseLiteralData(lines, dataStore);
+
+        data.add(CompoundLiteralExpr.IS_FILE_SCOPE, LineStreamParsers.oneOrZero(lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseInitListExprData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(InitListExpr.ARRAY_FILLER, ClavaNodes.getExpr(dataStore, lines.nextLine()));
+        // data.add(InitListExpr.INITIALIZED_FIELD_IN_UNION, (FieldDecl) ClavaNodes.getDecl(dataStore,
+        // lines.nextLine()));
+        data.add(InitListExpr.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
+        data.add(InitListExpr.IS_STRING_LITERAL_INIT, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }
