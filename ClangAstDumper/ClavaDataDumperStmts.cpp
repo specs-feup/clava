@@ -24,6 +24,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CompoundLiteralExpr", clava::StmtNode::COMPOUND_LITERAL_EXPR},
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
+        {"StringLiteral", clava::StmtNode::STRING_LITERAL},
 };
 
 
@@ -70,6 +71,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpIntegerLiteralData(static_cast<const IntegerLiteral *>(S)); break;
         case clava::StmtNode ::FLOATING_LITERAL:
             DumpFloatingLiteralData(static_cast<const FloatingLiteral *>(S)); break;
+        case clava::StmtNode ::STRING_LITERAL:
+            DumpStringLiteralData(static_cast<const StringLiteral *>(S)); break;
         case clava::StmtNode ::CXX_BOOL_LITERAL_EXPR:
             DumpCXXBoolLiteralExprData(static_cast<const CXXBoolLiteralExpr *>(S)); break;
         case clava::StmtNode ::COMPOUND_LITERAL_EXPR:
@@ -191,6 +194,12 @@ void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
     llvm::errs() << "Source expr:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getExprLoc())) << "\n";
     llvm::errs() << "Source location:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getLocation())) << "\n";
 */
+}
+
+void clava::ClavaDataDumper::DumpStringLiteralData(const StringLiteral *E) {
+    DumpLiteralData(E);
+
+    clava::dump(E->getString().str());
 }
 
 
