@@ -51,7 +51,6 @@ public class VisitedChildrenParser implements LineStreamWorker {
         // Check after consuming all elements from the stream
         LineStreamParsers.checkDuplicate(PARSER_ID, key, childrenIds, children);
         children.put(key, childrenIds);
-
     }
 
     private List<String> parseChildren(LineStream linestream, int numChildren) {

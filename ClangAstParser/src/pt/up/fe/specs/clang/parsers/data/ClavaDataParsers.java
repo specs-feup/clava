@@ -87,7 +87,7 @@ public class ClavaDataParsers {
             builder.append(currentLine).append("\n");
         }
 
-        return builder.toString();
+        return builder.toString().trim();
     }
 
 }

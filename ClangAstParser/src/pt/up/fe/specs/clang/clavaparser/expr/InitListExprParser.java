@@ -28,7 +28,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
@@ -71,7 +70,8 @@ public class InitListExprParser extends AClangNodeParser<InitListExpr> {
                 .map(child -> toExpr(child))
                 .collect(Collectors.toList());
 
-        return ClavaNodeFactory.initListExpr(data, exprData, node.getInfo(), initExprs);
+        // return ClavaNodeFactory.initListExpr(data, exprData, node.getInfo(), initExprs);
+        throw new RuntimeException("Deprecated");
     }
 
     private Expr getArrayFiller(List<ClangNode> children) {

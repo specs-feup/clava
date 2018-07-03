@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -41,7 +40,8 @@ public class StringLiteralParser extends AClangNodeParser<StringLiteral> {
         String string = parser.apply(ClangGenericParsers::parseRemaining);
         Preconditions.checkArgument(node.getNumChildren() == 0, "Expected no children");
 
-        return ClavaNodeFactory.stringLiteral(string, exprData, info(node));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.stringLiteral(string, exprData, info(node));
     }
 
 }
