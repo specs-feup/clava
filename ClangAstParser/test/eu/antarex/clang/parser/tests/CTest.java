@@ -87,4 +87,9 @@ public class CTest {
         new CTester("builtin_types.cl").addFlags("-x", "cl").test();
     }
 
+    @Test
+    public void testCompoundLiteral() {
+        new CTester("compound_literal.c").test();
+    }
+
 }
