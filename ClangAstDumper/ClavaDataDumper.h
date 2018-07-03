@@ -134,8 +134,11 @@ namespace clava {
         void DumpFunctionTypeData(const FunctionType *T);
         void DumpFunctionProtoTypeData(const FunctionProtoType *T);
         void DumpTagTypeData(const TagType *T);
+        void DumpArrayTypeData(const ArrayType *T);
+        void DumpConstantArrayTypeData(const ConstantArrayType *T);
 
-        // ATTRS
+
+            // ATTRS
 
         void DumpAttrData(const Attr *A);
         void DumpAlignedAttrData(const AlignedAttr *A);

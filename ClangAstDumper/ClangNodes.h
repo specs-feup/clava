@@ -107,8 +107,10 @@ namespace clava {
     void dump(const std::vector<std::string> &strings);
     void dump(const std::vector<Attr*> &attributes, const int id);
     void dump(const QualType& type, int id);
+    void dump(const Qualifiers& qualifiers, ASTContext* Context);
 
 
-}
+
+    }
 
 #endif //CLANGASTDUMPER_CLANGNODES_H

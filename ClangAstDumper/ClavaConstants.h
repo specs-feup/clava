@@ -73,7 +73,9 @@ namespace clava {
         BUILTIN_TYPE,
         FUNCTION_TYPE,
         FUNCTION_PROTO_TYPE,
-        TAG_TYPE
+        TAG_TYPE,
+        ARRAY_TYPE,
+        CONSTANT_ARRAY_TYPE
     };
 
 

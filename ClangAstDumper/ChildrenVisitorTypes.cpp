@@ -93,3 +93,13 @@ void ClangAstDumper::VisitTagTypeChildren(const TagType *T, std::vector<std::str
     // Just visit decl
     VisitDeclTop(T->getDecl());
 }
+
+void ClangAstDumper::VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    // Element type
+    VisitTypeTop(T->getElementType());
+    visitedChildren.push_back(clava::getId(T->getElementType(), id));
+}
+

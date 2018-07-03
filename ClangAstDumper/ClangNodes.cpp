@@ -7,6 +7,9 @@
 
 #include "clang/Lex/Lexer.h"
 
+#include <bitset>
+
+
 using namespace clang;
 
 const std::string clava::getClassName(const Decl* D) {
@@ -258,6 +261,25 @@ void clava::dump(const QualType& type, int id) {
 
 
 }
+
+void clava::dump(const Qualifiers& qualifiers, ASTContext* Context) {
+    auto c99Qualifiers = qualifiers.getCVRQualifiers();
+    const int numBits = std::numeric_limits<decltype(c99Qualifiers)>::digits;
+    size_t numSetBits = std::bitset<numBits>(c99Qualifiers).count();
+
+    // Dumps the number of C99 qualifiers, and then the name of the qualifiers
+    clava::dump((int) numSetBits);
+    if(qualifiers.hasConst()) {clava::dump("CONST");}
+    if(qualifiers.hasRestrict()) {
+        if(Context->getPrintingPolicy().LangOpts.C99)
+            clava::dump("RESTRICT_C99");
+        else
+            clava::dump("RESTRICT");
+    }
+    if(qualifiers.hasVolatile()) {clava::dump("VOLATILE");}
+
+}
+
 
 
 /**
