@@ -13,14 +13,31 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 
 public abstract class ArrayType extends Type {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<ArraySizeModifier> ARRAY_SIZE_MODIFIER = KeyFactory
+            .enumeration("arraySizeModifier", ArraySizeModifier.class);
+
+    public final static DataKey<List<C99Qualifier>> INDEX_TYPE_QUALIFIERS = KeyFactory
+            .generic("indexTypeQualifiers", new ArrayList<>());
+
+    /// DATAKEYS END
 
     private final ArrayTypeData arrayTypeData;
 

@@ -13,9 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -36,6 +40,13 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  *
  */
 public class ConstantArrayType extends ArrayType {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<BigInteger> ARRAY_SIZE = KeyFactory
+            .object("arraySize", BigInteger.class);
+
+    /// DATAKEYS END
 
     private final int constant;
 
