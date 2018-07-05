@@ -136,6 +136,7 @@ namespace clava {
         void DumpTagTypeData(const TagType *T);
         void DumpArrayTypeData(const ArrayType *T);
         void DumpConstantArrayTypeData(const ConstantArrayType *T);
+        void DumpVariableArrayTypeData(const VariableArrayType *T);
 
 
             // ATTRS

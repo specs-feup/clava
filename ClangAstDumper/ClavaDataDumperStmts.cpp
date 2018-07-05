@@ -199,7 +199,9 @@ void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
 void clava::ClavaDataDumper::DumpStringLiteralData(const StringLiteral *E) {
     DumpLiteralData(E);
 
-    clava::dump(E->getString().str());
+    //E->getString() cannot be used when literal is not a single char wide
+//    clava::dump(E->getString().str());
+//    clava::dump("\n%CLAVA_SOURCE_END%");
 }
 
 

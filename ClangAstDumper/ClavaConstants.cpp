@@ -64,6 +64,8 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TAG_TYPE: return "TagType";
         case clava::TypeNode::ARRAY_TYPE: return "ArrayType";
         case clava::TypeNode::CONSTANT_ARRAY_TYPE: return "ConstantArrayType";
+        case clava::TypeNode::INCOMPLETE_ARRAY_TYPE: return "IncompleteArrayType";
+        case clava::TypeNode::VARIABLE_ARRAY_TYPE: return "VariableArrayType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

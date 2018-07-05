@@ -12,7 +12,9 @@
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"BuiltinType", clava::TypeNode::BUILTIN_TYPE},
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
-        {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE}
+        {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE},
+        {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
+        {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -46,8 +48,12 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
         //    DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
         case clava::TypeNode::FUNCTION_PROTO_TYPE:
             DumpFunctionProtoTypeData(static_cast<const FunctionProtoType *>(T)); break;
+        case clava::TypeNode::ARRAY_TYPE:
+            DumpArrayTypeData(static_cast<const ArrayType *>(T)); break;
         case clava::TypeNode::CONSTANT_ARRAY_TYPE:
             DumpConstantArrayTypeData(static_cast<const ConstantArrayType *>(T)); break;
+        case clava::TypeNode::VARIABLE_ARRAY_TYPE:
+            DumpVariableArrayTypeData(static_cast<const VariableArrayType *>(T)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump(TypeNode): Case not implemented, '"+ getName(typeNode) +"'");
     }
 }
@@ -237,4 +243,11 @@ void clava::ClavaDataDumper::DumpConstantArrayTypeData(const ConstantArrayType *
 
     //clava::dump(T->getSize().VAL);
     clava::dump(T->getSize().toString(10, false));
+}
+
+void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *T) {
+    // Hierarchy
+    DumpArrayTypeData(T);
+
+    //clava::dump(clava::getId(T->getSizeExpr(), id));
 }
