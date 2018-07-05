@@ -14,15 +14,25 @@
 package pt.up.fe.specs.clang.codeparser;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangDumperParser;
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -159,4 +169,135 @@ public class CodeParser {
         return app;
 
     }
+
+    /**
+     * 
+     * @param sources
+     * @param compilerOptions
+     * @return
+     */
+    public App parseParallel(List<File> sources, List<String> compilerOptions) {
+
+        List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
+        Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
+        System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
+        System.out.println("ALL SOURCES:" + allSources);
+
+        // Parse files, individually
+        for (Entry<String, File> sourceFile : allSources.entrySet()) {
+            DataStore options = ClavaOptions.toDataStore(compilerOptions);
+
+            // Adapt compiler options according to the file
+            adaptOptions(options, new File(sourceFile.getKey()));
+
+            ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
+                    Arrays.asList(sourceFile.getKey()),
+                    options);
+
+            System.out.println("sourceFile:" + sourceFile.getKey());
+            System.out.println("AST:" + ast);
+        }
+
+        return null;
+        /*
+        
+        
+        
+        if (showClangDump) {
+            SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
+        }
+        
+        if (showClangAst) {
+            SpecsLogs.msgInfo("Clang AST:\n" + ast);
+        }
+        
+        // Parse dump information
+        try (ClavaParser clavaParser = new ClavaParser(ast)) {
+            App clavaAst = clavaParser.parse();
+            clavaAst.setSourcesFromStrings(allFiles);
+            clavaAst.addConfig(ast.getConfig());
+        
+            if (showClavaAst) {
+                SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst.toTree());
+            }
+        
+            if (showCode) {
+                SpecsLogs.msgInfo("Code:\n" + clavaAst.getCode());
+            }
+        
+            return clavaAst;
+        
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        */
+
+    }
+
+    private void adaptOptions(DataStore options, File source) {
+        // Check if the standard is compatible with the file type
+        Standard standard = options.getTry(ClavaOptions.STANDARD).orElse(null);
+
+        // Remove standard if extensions do not match
+        if (standard != null) {
+            if ((SourceType.isCExtension(SpecsIo.getExtension(source)) && standard.isCxx())
+                    || SourceType.isCxxExtension(SpecsIo.getExtension(source)) && !standard.isCxx()) {
+
+                options.remove(ClavaOptions.STANDARD);
+            }
+        }
+
+    }
+
+    /**
+     * Collects all source folders, taking into account given sources to compile, and include folders in flags.
+     * 
+     * @param sources
+     * @param parserOptions
+     * @return
+     */
+    private List<File> getInputSourceFolders(List<File> sources, List<String> parserOptions) {
+
+        Set<File> sourceFolders = new HashSet<>();
+
+        // Add folders of sources
+        for (File source : sources) {
+            if (source.isDirectory()) {
+                sourceFolders.add(SpecsIo.getCanonicalFile(source));
+                continue;
+            }
+
+            if (source.isFile()) {
+                sourceFolders.add(SpecsIo.getCanonicalFile(source.getParentFile()));
+                continue;
+            }
+
+            SpecsLogs.msgWarn("Could not process source '" + source + "'");
+        }
+
+        // Add folders of includes
+        for (String parserOption : parserOptions) {
+            // Remove possible quotes
+            if (parserOption.startsWith("\"")) {
+                parserOption = parserOption.substring(1);
+            }
+
+            if (parserOption.endsWith("\"")) {
+                parserOption = parserOption.substring(0, parserOption.length() - 1);
+            }
+
+            if (parserOption.startsWith("-I")) {
+                sourceFolders
+                        .add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption.substring("-I".length()))));
+                continue;
+            }
+        }
+
+        // Reorder source folders, shortest to longest
+        List<File> orderedSources = new ArrayList<>(sourceFolders);
+        Collections.sort(orderedSources);
+
+        return orderedSources;
+    }
+
 }
