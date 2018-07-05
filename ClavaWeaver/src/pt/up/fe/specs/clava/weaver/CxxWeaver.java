@@ -33,6 +33,7 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -531,6 +532,12 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
+
+        new CodeParser().parseParallel(sources, parserOptions);
+        // List<File> allSourceFolders = getInputSourceFolders(sources, parserOptions);
+        // Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
+        // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
+        // System.out.println("ALL SOURCES:" + allSources);
 
         // All files, header and implementation
         Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
