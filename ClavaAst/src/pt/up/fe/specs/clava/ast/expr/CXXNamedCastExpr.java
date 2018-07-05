@@ -20,6 +20,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 
 public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
 
@@ -52,10 +54,18 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
+        // System.out.println("BEFORE:" + cxxNamedCastExprdata.getTypeAsWritten());
+        // System.out.println("AFTER:" + getTypeCode());
+        // HACK: To deal with _Bool in C++ files while it is not properly addressed
+        String typeCode = cxxNamedCastExprdata.getTypeAsWritten();
+        if (typeCode.equals("_Bool") && getAncestorTry(TranslationUnit.class)
+                .map(tu -> tu.get(TranslationUnit.LANGUAGE).get(Language.C_PLUS_PLUS)).orElse(false)) {
+            typeCode = "bool";
+        }
 
         code.append(cxxNamedCastExprdata.getCastName());
         // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
-        code.append("<").append(getTypeCode()).append(">");
+        code.append("<").append(typeCode).append(">");
         code.append("(").append(getSubExpr().getCode()).append(")");
 
         return code.toString();
