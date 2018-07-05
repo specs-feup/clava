@@ -13,7 +13,10 @@
 
 package pt.up.fe.specs.clang.clavaparser.type;
 
+import java.util.Arrays;
 import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
@@ -22,21 +25,22 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
-public class VariableArrayTypeParser extends AClangNodeParser<Type> {
+public class VariableArrayTypeParser extends AClangNodeParser<VariableArrayType> {
 
     public VariableArrayTypeParser(ClangConverterTable converter) {
         super(converter);
     }
 
     @Override
-    protected Type parse(ClangNode node, StringParser parser) {
+    protected VariableArrayType parse(ClangNode node, StringParser parser) {
 
         // Examples:
         //
@@ -81,7 +85,14 @@ public class VariableArrayTypeParser extends AClangNodeParser<Type> {
         Type elementType = toType(children.get(0));
         Expr sizeExpr = toExpr(children.get(1));
 
-        return ClavaNodeFactory.variableArrayType(arrayTypeData, typeData, node.getInfo(), elementType, sizeExpr);
+        // return ClavaNodeFactory.variableArrayType(arrayTypeData, typeData, node.getInfo(), elementType, sizeExpr);
+        DataStore data = new LegacyToDataStore()
+                .setArrayType(arrayTypeData)
+                .setType(typeData)
+                .setNodeInfo(node.getInfo())
+                .getData();
+
+        return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
         /*
         
         Integer constant = parser.apply(ClangGenericParsers::parseInt);

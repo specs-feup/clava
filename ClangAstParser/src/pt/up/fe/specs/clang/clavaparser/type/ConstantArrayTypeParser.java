@@ -13,7 +13,11 @@
 
 package pt.up.fe.specs.clang.clavaparser.type;
 
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
@@ -21,7 +25,7 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
@@ -50,7 +54,16 @@ public class ConstantArrayTypeParser extends AClangNodeParser<ConstantArrayType>
 
         Type elementType = toType(children.get(0));
 
-        return ClavaNodeFactory.constantArrayType(constant, arrayTypeData, typeData, node.getInfo(), elementType);
+        // throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.constantArrayType(constant, arrayTypeData, typeData, node.getInfo(), elementType);
+        DataStore data = new LegacyToDataStore()
+                .setArrayType(arrayTypeData)
+                .setType(typeData)
+                .setNodeInfo(node.getInfo())
+                .getData();
+        data.set(ConstantArrayType.ARRAY_SIZE, BigInteger.valueOf(constant));
+
+        return new ConstantArrayType(data, Arrays.asList(elementType));
     }
 
 }

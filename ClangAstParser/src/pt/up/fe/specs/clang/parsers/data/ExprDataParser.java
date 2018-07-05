@@ -29,7 +29,6 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
-import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -100,7 +99,7 @@ public class ExprDataParser {
     public static DataStore parseStringLiteralData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(StringLiteral.STRING, lines.nextLine());
+        // data.add(StringLiteral.STRING, ClavaDataParsers.literalSource(lines));
 
         return data;
     }

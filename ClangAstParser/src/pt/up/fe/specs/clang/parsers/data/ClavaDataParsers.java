@@ -84,10 +84,16 @@ public class ClavaDataParsers {
         StringBuilder builder = new StringBuilder();
         String currentLine = null;
         while (!(currentLine = lines.nextLine()).equals("%CLAVA_SOURCE_END%")) {
-            builder.append(currentLine).append("\n");
+            // while (!"%CLAVA_SOURCE_END%".equals(currentLine = lines.nextLine())) {
+            // System.out.println("CURRENT LINE:" + currentLine);
+            // Only append new line if not the first line
+            if (builder.length() != 0) {
+                builder.append("\n");
+            }
+            builder.append(currentLine);
         }
 
-        return builder.toString().trim();
+        return builder.toString();
     }
 
 }

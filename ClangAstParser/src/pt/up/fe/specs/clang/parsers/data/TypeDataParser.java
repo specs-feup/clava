@@ -149,4 +149,14 @@ public class TypeDataParser {
 
     }
 
+    public static DataStore parseVariableArrayTypeData(LineStream lines, DataStore parserData) {
+
+        DataStore data = parseArrayTypeData(lines, parserData);
+
+        // data.add(VariableArrayType.SIZE_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
+
+        return data;
+
+    }
+
 }
