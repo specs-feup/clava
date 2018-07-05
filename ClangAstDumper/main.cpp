@@ -12,9 +12,12 @@
 using namespace clang::tooling;
 
 static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+static llvm::cl::opt<int> UserIdOption("id", llvm::cl::cat(MyToolCategory));
 
 int main(int argc, const char *argv[])
 {
+
+
     CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
