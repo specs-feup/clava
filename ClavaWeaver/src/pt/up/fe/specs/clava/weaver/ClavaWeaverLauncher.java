@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.joptions.gui.LaraLauncher;
 
+import pt.up.fe.specs.lara.doc.LaraDocLauncher;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -53,6 +54,12 @@ public class ClavaWeaverLauncher {
             return unitTesterResult.get();
         }
 
+        // If doc generator flag is present, run doc generator
+        Optional<Boolean> docGeneratorResult = runDocGenerator(args);
+        if (docGeneratorResult.isPresent()) {
+            return docGeneratorResult.get();
+        }
+
         return LaraLauncher.launch(args, new CxxWeaver());
     }
 
@@ -74,7 +81,11 @@ public class ClavaWeaverLauncher {
         }
 
         List<String> laraUnitArgs = new ArrayList<>();
-        laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
+        // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
+        laraUnitArgs.add("--weaver");
+        laraUnitArgs.add(CxxWeaver.class.getName());
+
+        // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
         for (int i = flagIndex + 1; i < args.length; i++) {
             laraUnitArgs.add(args[i]);
         }
@@ -84,6 +95,34 @@ public class ClavaWeaverLauncher {
         int unitResults = LaraUnitLauncher.execute(laraUnitArgs.toArray(new String[0]));
 
         return Optional.of(unitResults != -1);
+    }
+
+    private static Optional<Boolean> runDocGenerator(String[] args) {
+        // Look for flag
+        String docGeneratorFlag = "-" + LaraiKeys.getDocGeneratorFlag();
+
+        int flagIndex = IntStream.range(0, args.length)
+                .filter(index -> docGeneratorFlag.equals(args[index]))
+                .findFirst()
+                .orElse(-1);
+
+        if (flagIndex == -1) {
+            return Optional.empty();
+        }
+
+        List<String> laraDocArgs = new ArrayList<>();
+        laraDocArgs.add("--weaver");
+        laraDocArgs.add(CxxWeaver.class.getName());
+
+        for (int i = flagIndex + 1; i < args.length; i++) {
+            laraDocArgs.add(args[i]);
+        }
+
+        SpecsLogs.debug("Launching lara-doc with flags '" + laraDocArgs + "'");
+
+        int docResults = LaraDocLauncher.execute(laraDocArgs.toArray(new String[0]));
+
+        return Optional.of(docResults != -1);
     }
 
 }

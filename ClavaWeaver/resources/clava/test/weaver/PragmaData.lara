@@ -1,0 +1,16 @@
+aspectdef PragmaData
+
+	select function{"foo"}.loop end
+	apply
+		println("Data:");
+		printObject($loop.data);
+		println("");
+	end
+
+	select function{"noData"}.loop end
+	apply
+		println("Empty Object:");
+		printObject($loop.data);
+	end
+	
+end

@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
@@ -57,10 +58,7 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.ReferenceType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 import pt.up.fe.specs.clava.language.Standard;
@@ -168,7 +166,7 @@ public class AstFactory {
         FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
                 new FunctionDeclData(), new DeclData(),
                 ClavaNodeInfo.undefinedInfo(),
-                ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), Collections.emptyList()));
+                CxxWeaver.getFactory().compoundStmt());
 
         return (CxxFunction) CxxJoinpoints.create(functionDecl, null);
     }
@@ -244,14 +242,21 @@ public class AstFactory {
      */
     public static AFile file(String filename, String path) {
         // Test if path is absolute
-        if (new File(path).isAbsolute()) {
+        if (path != null && new File(path).isAbsolute()) {
             ClavaLog.warning(
-                    "Cannot use absolute paths for new 'file' join points, replacing '" + path + "' with empty String");
-            path = "";
+                    "Cannot use absolute paths for new 'file' join points, replacing '" + path + "' with null");
+            path = null;
         }
 
-        return CxxJoinpoints.create(ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList()),
-                null, AFile.class);
+        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList());
+        // New files do not have a path
+        TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, null, Collections.emptyList());
+
+        if (path != null) {
+            tUnit.setRelativePath(path);
+        }
+
+        return CxxJoinpoints.create(tUnit, null, AFile.class);
     }
 
     public static AJoinPoint externC(AJoinPoint jpDecl) {
@@ -296,9 +301,16 @@ public class AstFactory {
     }
 
     // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
+    /**
+     * TODO: Standard string not required
+     * 
+     * @param outType
+     * @param standardString
+     * @param dims
+     * @return
+     */
     public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
-
-        Standard standard = Standard.getEnumHelper().fromValue(standardString);
+        // Standard standard = Standard.getEnumHelper().fromValue(standardString);
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -308,15 +320,25 @@ public class AstFactory {
         ListIterator<Integer> li = dims.listIterator(dims.size());
         while (li.hasPrevious()) {
 
-            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
-            TypeData typeData = new TypeData(outType.getCode());
-            ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+            // ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
+            // TypeData typeData = new TypeData(outType.getCode());
+            // ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
 
             inType = outType;
-            outType = ClavaNodeFactory.constantArrayType(li.previous(), arrayTypeData, typeData, info, inType);
+            // outType = ClavaNodeFactory.constantArrayType(li.previous(), arrayTypeData, typeData, info, inType);
+            outType = CxxWeaver.getFactory().constantArrayType(inType, li.previous());
         }
 
         return CxxJoinpoints.create(outType, null);
+    }
+
+    public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
+        Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
+                (Expr) sizeExpr.getNode());
+        // Type variableArrayType = ClavaNodeFactory.variableArrayType((Type) elementType.getNode(),
+        // (Expr) sizeExpr.getNode());
+
+        return CxxJoinpoints.create(variableArrayType, null, AType.class);
     }
 
     public static AJoinPoint omp(String directiveName) {
@@ -345,8 +367,7 @@ public class AstFactory {
         ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
         BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
 
-        CompoundStmt compoundStmt = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(),
-                Arrays.asList(exprStmt));
+        CompoundStmt compoundStmt = CxxWeaver.getFactory().compoundStmt(exprStmt);
         compoundStmt.setNaked(true);
         // InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
         // ClavaNodeInfo.undefinedInfo());
@@ -402,7 +423,7 @@ public class AstFactory {
             */
         }
 
-        CompoundStmt body = ClavaNodeFactory.compoundStmt(ClavaNodeInfo.undefinedInfo(), statements);
+        CompoundStmt body = CxxWeaver.getFactory().compoundStmt(statements);
         Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(), body);
 
         return CxxJoinpoints.create(switchStmt, null, AStatement.class);

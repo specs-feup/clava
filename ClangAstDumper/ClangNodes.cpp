@@ -7,6 +7,9 @@
 
 #include "clang/Lex/Lexer.h"
 
+#include <bitset>
+
+
 using namespace clang;
 
 const std::string clava::getClassName(const Decl* D) {
@@ -259,6 +262,25 @@ void clava::dump(const QualType& type, int id) {
 
 }
 
+void clava::dump(const Qualifiers& qualifiers, ASTContext* Context) {
+    auto c99Qualifiers = qualifiers.getCVRQualifiers();
+    const int numBits = std::numeric_limits<decltype(c99Qualifiers)>::digits;
+    size_t numSetBits = std::bitset<numBits>(c99Qualifiers).count();
+
+    // Dumps the number of C99 qualifiers, and then the name of the qualifiers
+    clava::dump((int) numSetBits);
+    if(qualifiers.hasConst()) {clava::dump("CONST");}
+    if(qualifiers.hasRestrict()) {
+        if(Context->getPrintingPolicy().LangOpts.C99)
+            clava::dump("RESTRICT_C99");
+        else
+            clava::dump("RESTRICT");
+    }
+    if(qualifiers.hasVolatile()) {clava::dump("VOLATILE");}
+
+}
+
+
 
 /**
  * Taken from: https://stackoverflow.com/questions/11083066/getting-the-source-behind-clangs-ast
@@ -305,9 +327,12 @@ const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange)
 
 
     std::string text = Lexer::getSourceText(CharSourceRange::getTokenRange(begin, end), sm, LangOptions(), 0);
-    if (text.size() > 0 && (text.at(text.size()-1) == ',')) //the text can be ""
-        return Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
-    return text;
+    if (text.size() > 0 && (text.at(text.size()-1) == ',')) { //the text can be ""
+        std::string otherText = Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
+        return  otherText + "\n%CLAVA_SOURCE_END%";
+    }
+
+    return text + "\n%CLAVA_SOURCE_END%";
 
 
 }

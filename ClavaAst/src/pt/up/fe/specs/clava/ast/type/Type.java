@@ -95,9 +95,26 @@ public abstract class Type extends ClavaNode {
         // return data;
     }
 
+    /*
     @Override
     public Type copy() {
         Type copy = (Type) super.copy();
+    
+        // Set app
+        // copy.app = app;
+    
+        return copy;
+    }
+    */
+
+    @Override
+    public Type copy() {
+        return (Type) super.copy();
+    }
+
+    @Override
+    public Type copy(boolean keepId) {
+        Type copy = (Type) super.copy(keepId);
 
         // Set app
         // copy.app = app;
@@ -106,11 +123,50 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
+     * For Type nodes, this method does not change the current node, but returns a copy of the current node with the
+     * change.
+     */
+    @Override
+    public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
+        return set(key, value, true);
+    }
+
+    /**
+     * Since the normal set of Type nodes creates a copy, this is a helper method to be used internally, in case a value
+     * needs to be set in place (e.g., compatibility constructors).
+     * 
+     * @param key
+     * @param value
+     * @return
+     */
+    protected <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
+        return set(key, value, false);
+    }
+
+    protected <T, E extends T> ClavaNode set(DataKey<T> key, E value, boolean createCopy) {
+        Type typeToChange = createCopy ? copy() : this;
+
+        // Type typeCopy = copy();
+        typeToChange.getData().put(key, value);
+
+        return typeToChange;
+    }
+
+    /**
      * Helper method which passes null as the name.
      */
     @Override
     public String getCode() {
-        return getCode(null);
+        // return getCode(sourceNode, null);
+        return getCode(null, null);
+    }
+
+    public String getCode(String name) {
+        return getCode(null, name);
+    }
+
+    public String getCode(ClavaNode node) {
+        return getCode(node, null);
     }
 
     /**
@@ -119,8 +175,11 @@ public abstract class Type extends ClavaNode {
      *
      * <p>
      * Accepts null in case there is no name to use.
+     * 
+     * @param sourceNode
+     *            TODO
      */
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // throw new NotImplementedException(getClass());
         if (name == null) {
             return getBareType();
@@ -158,7 +217,7 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public Type setBareType(String type) {
-        return (Type) copy().put(TYPE_AS_STRING, type);
+        return (Type) copy().set(TYPE_AS_STRING, type);
 
         /*
         if (hasDataI()) {
@@ -462,7 +521,7 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public int hashCode() {
-        return getCode().hashCode();
+        return Types.hashCode(this);
         // final int prime = 31;
         // int result = prime;
         // result = prime * result + ((data == null) ? 0 : data.hashCode());
@@ -525,5 +584,8 @@ public abstract class Type extends ClavaNode {
         throw new RuntimeException(".setId() not allowed for Type nodes, they are considered immutable");
     }
     */
+    public Type normalize() {
+        return this;
+    }
 
 }

@@ -24,6 +24,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.parsers.data.AttrDataParser;
@@ -51,6 +52,8 @@ public class NodeDataParser {
         // DECLS
         STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
         STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
+        STATIC_DATA_PARSERS.put("<TypeDeclData>", DeclDataParser::parseTypeDeclData);
+        STATIC_DATA_PARSERS.put("<ValueDeclData>", DeclDataParser::parseValueDeclData);
         STATIC_DATA_PARSERS.put("<FunctionDeclData>", DeclDataParser::parseFunctionDeclData);
         STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
         STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);
@@ -66,12 +69,18 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<CharacterLiteralData>", ExprDataParser::parseCharacterLiteralData);
         STATIC_DATA_PARSERS.put("<IntegerLiteralData>", ExprDataParser::parseIntegerLiteralData);
         STATIC_DATA_PARSERS.put("<CXXBoolLiteralExprData>", ExprDataParser::parseCXXBoolLiteralExprData);
+        STATIC_DATA_PARSERS.put("<CompoundLiteralExprData>", ExprDataParser::parseCompoundlLiteralExprData);
+        STATIC_DATA_PARSERS.put("<InitListExprData>", ExprDataParser::parseInitListExprData);
+        STATIC_DATA_PARSERS.put("<StringLiteralData>", ExprDataParser::parseStringLiteralData);
 
         // TYPES
         STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
         STATIC_DATA_PARSERS.put("<BuiltinTypeData>", TypeDataParser::parseBuiltinTypeData);
         STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
         STATIC_DATA_PARSERS.put("<FunctionProtoTypeData>", TypeDataParser::parseFunctionProtoTypeData);
+        STATIC_DATA_PARSERS.put("<ArrayTypeData>", TypeDataParser::parseArrayTypeData);
+        STATIC_DATA_PARSERS.put("<ConstantArrayTypeData>", TypeDataParser::parseConstantArrayTypeData);
+        STATIC_DATA_PARSERS.put("<VariableArrayTypeData>", TypeDataParser::parseVariableArrayTypeData);
 
         // ATTRIBUTES
         STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
@@ -140,7 +149,7 @@ public class NodeDataParser {
 
         SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
-        boolean isMacro = hasLocation ? GeneralParsers.parseOneOrZero(lines) : false;
+        boolean isMacro = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
 

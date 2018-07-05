@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.util.parsing.StringCodec;
 
 public class BuiltinType extends Type {
 
@@ -33,7 +34,8 @@ public class BuiltinType extends Type {
     /**
      * The kind of the built-in.
      */
-    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class);
+    public final static DataKey<BuiltinKind> KIND = KeyFactory.enumeration("builtinKind", BuiltinKind.class)
+            .setDecoder(StringCodec.newInstance(kind -> kind.getCode(), BuiltinKind::newInstance));
 
     /**
      * Optional, the literal code for this built-in type.
@@ -57,14 +59,18 @@ public class BuiltinType extends Type {
         this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
 
         // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
-        put(KIND_LITERAL, data.getBareType());
+        // Type.put() creates a copy
+        getData().put(KIND_LITERAL, data.getBareType());
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
+
+        // First, try kind code, then literal
+        String type = get(KIND).getCodeTry(sourceNode).orElse(get(KIND_LITERAL));
 
         // Give priority to kind literal
-        String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
+        // String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
 
         // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
         // boolean isCxx = getData().getStandard().isCxx();

@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,24 +22,23 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 public class NamespaceDecl extends NamedDecl {
 
     // private final String namespace;
     private final boolean isInline;
     private final BareDeclData originalNamespace;
+    //
+    // public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace, DeclData declData,
+    // ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
+    //
+    // this(isInline, originalNamespace, namespace, declData, info, namespaceDecls);
+    // }
 
-    public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace, DeclData declData,
-            ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
-
-        this(isInline, originalNamespace, namespace, null, declData, info, namespaceDecls);
-    }
-
-    private NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace, Type type,
+    public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace,
             DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
 
-        super(namespace, type, declData, info, children);
+        super(namespace, null, declData, info, children);
 
         // this.namespace = namespace;
         this.isInline = isInline;
@@ -49,7 +47,7 @@ public class NamespaceDecl extends NamedDecl {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new NamespaceDecl(isInline, originalNamespace, getDeclName(), getType(), getDeclData(), getInfo(),
+        return new NamespaceDecl(isInline, originalNamespace, getDeclName(), getDeclData(), getInfo(),
                 Collections.emptyList());
     }
 

@@ -33,6 +33,12 @@ import pt.up.fe.specs.util.exceptions.WrongClassException;
  */
 public class EnumType extends TagType {
 
+    /*
+    public EnumType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+    */
+
     public EnumType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info) {
         this(declInfo, typeData, info, Collections.emptyList());
     }

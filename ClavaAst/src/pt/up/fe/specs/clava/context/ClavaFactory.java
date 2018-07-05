@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.context;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,15 +39,21 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
@@ -161,6 +168,25 @@ public class ClavaFactory {
         return new LiteralType(data, Collections.emptyList());
     }
 
+    public ConstantArrayType constantArrayType(Type elementType, int size) {
+        return constantArrayType(elementType, BigInteger.valueOf(size));
+    }
+
+    public ConstantArrayType constantArrayType(Type elementType, BigInteger size) {
+        DataStore data = newTypeDataStore()
+                .put(ConstantArrayType.ARRAY_SIZE, size)
+                .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
+
+        return new ConstantArrayType(data, Arrays.asList(elementType));
+    }
+
+    public VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
+        DataStore data = newTypeDataStore()
+                .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
+
+        return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
+    }
+
     /// EXPRS
 
     public DummyExpr dummyExpr(String dummyContent) {
@@ -240,6 +266,26 @@ public class ClavaFactory {
     public ReturnStmt returnStmt() {
         return new ReturnStmt(newStmtDataStore(), Collections.emptyList());
     }
+
+    public LiteralStmt literalStmt(String literalCode) {
+        return new LiteralStmt(newStmtDataStore().put(LiteralStmt.LITERAL_CODE, literalCode), Collections.emptyList());
+    }
+
+    public CompoundStmt compoundStmt(String statement) {
+        return compoundStmt(literalStmt(statement));
+    }
+
+    public CompoundStmt compoundStmt(Stmt... children) {
+        return compoundStmt(Arrays.asList(children));
+    }
+
+    public CompoundStmt compoundStmt(Collection<Stmt> children) {
+        return new CompoundStmt(newStmtDataStore(), children);
+    }
+
+    // public CompoundStmt compoundStmt(boolean isNaked, Collection<? extends ClavaNode> children) {
+    // return new CompoundStmt(newStmtDataStore().put(CompoundStmt.IS_NAKED, isNaked), children);
+    // }
 
     /**
      * Creates an ExprStmt with semicolon.

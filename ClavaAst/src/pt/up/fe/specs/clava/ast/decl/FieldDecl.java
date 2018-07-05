@@ -89,7 +89,7 @@ public class FieldDecl extends DeclaratorDecl {
         // code.append(getTypeCode()).append(getDeclName());
         String name = getDeclName();
 
-        code.append(getType().getCode(name));
+        code.append(getType().getCode(this, name));
 
         getBitwidth().ifPresent(expr -> code.append(": ").append(expr.getCode()));
 

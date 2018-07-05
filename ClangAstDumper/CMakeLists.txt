@@ -28,6 +28,17 @@ if(SYSTEM_PLATFORM STREQUAL "Centos" OR SYSTEM_PLATFORM STREQUAL "MacOS")
 endif()
 
 
+OPTION(USE_CLAVA "Uses Clava during compilation")
+
+# Enable Clava
+if(USE_CLAVA)
+#	message(STATUS "Using Clava in this project")
+	find_package(Clava REQUIRED)
+#else()
+#    message(STATUS "Not using Clava")
+endif(USE_CLAVA)
+unset(USE_CLAVA CACHE) # So that the value is refreshed
+
 
 set(SOURCE_FILES
 		main.cpp
@@ -49,6 +60,8 @@ add_executable(ClangAstDumper ${SOURCE_FILES})
 target_include_directories(ClangAstDumper
        PUBLIC ${DEPS_INCLUDES}
 )
+
+# Add enums helper
 
 # Add Libraries
 target_link_libraries(ClangAstDumper

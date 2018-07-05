@@ -26,7 +26,7 @@ import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
+import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import com.google.common.base.Preconditions;
 
@@ -167,7 +167,7 @@ public class ClangDumperParser {
 
     private DataStore processStdErr(InputStream inputStream, ClavaContext context) {
         // Create LineStreamParser
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(context);
+        LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context);
 
         // Set debug
         if (SpecsSystem.isDebug()) {

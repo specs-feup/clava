@@ -1,6 +1,8 @@
 import clava.Clava;
 
 /**
+ * Utility methods related with the creation of new join points.
+ *
  * @class
  */
 var ClavaJoinPoints = {};
@@ -55,6 +57,15 @@ ClavaJoinPoints.constArrayType = function(type, dims) {
 	}
 }
 
+ClavaJoinPoints.variableArrayType = function($type, $sizeExpr) {
+	checkDefined($type, '$type', 'ClavaJoinPoints.variableArrayType');
+	checkDefined($sizeExpr, '$sizeExpr', 'ClavaJoinPoints.variableArrayType');
+	
+	
+	return AstFactory.variableArrayType($type, $sizeExpr);
+}
+
+
 ClavaJoinPoints.exprLiteral = function(code, type) {
 	var typeofType = typeof type;
 
@@ -101,13 +112,14 @@ ClavaJoinPoints.typeLiteral = function(typeString) {
  * Creates a new join point 'file'.
  *
  * @param {string} filename The name of the file
- * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. 
+ * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. This path will be required when including the file (e.g., #include "<path>/<filename>")
  */
 ClavaJoinPoints.file = function(filename, path) {
+/*
 	if(path === undefined) {
 		path = '';
 	}
-	
+	*/
 	return AstFactory.file(filename, path);
 }
 
@@ -140,5 +152,10 @@ ClavaJoinPoints.call = function($function) {
 ClavaJoinPoints.switchStmt = function($conditionExpr) {
 	var cases = arrayFromArgs(arguments, 1);
 	return AstFactory.switchStmt($conditionExpr, cases);
+}
+
+
+ClavaJoinPoints.omp = function(directiveName) {
+	return AstFactory.omp(directiveName);
 }
 

@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
@@ -276,6 +277,31 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Get value on attribute iterationsExpr
+     * @return the attribute's value
+     */
+    public abstract AExpression getIterationsExprImpl();
+
+    /**
+     * Get value on attribute iterationsExpr
+     * @return the attribute's value
+     */
+    public final Object getIterationsExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "iterationsExpr", Optional.empty());
+        	}
+        	AExpression result = this.getIterationsExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "iterationsExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "iterationsExpr", e);
+        }
+    }
+
+    /**
      * 
      * @param otherLoop
      * @return 
@@ -300,6 +326,36 @@ public abstract class ALoop extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInterchangeable", e);
         }
+    }
+
+    /**
+     * The statement of the loop initialization
+     */
+    public abstract AStatement getInitImpl();
+
+    /**
+     * The statement of the loop initialization
+     */
+    public final Object getInit() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
+        	}
+        	AStatement result = this.getInitImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "init", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defInitImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def init with type String not implemented ");
     }
 
     /**
@@ -352,6 +408,54 @@ public abstract class ALoop extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "endValue", e);
+        }
+    }
+
+    /**
+     * The expression of the iteration step
+     */
+    public abstract String getStepValueImpl();
+
+    /**
+     * The expression of the iteration step
+     */
+    public final Object getStepValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stepValue", Optional.empty());
+        	}
+        	String result = this.getStepValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "stepValue", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "stepValue", e);
+        }
+    }
+
+    /**
+     * Get value on attribute condRelation
+     * @return the attribute's value
+     */
+    public abstract Relation getCondRelationImpl();
+
+    /**
+     * Get value on attribute condRelation
+     * @return the attribute's value
+     */
+    public final Object getCondRelation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condRelation", Optional.empty());
+        	}
+        	Relation result = this.getCondRelationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "condRelation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "condRelation", e);
         }
     }
 
@@ -432,7 +536,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * DEPRECATED: use setInitValue instead.
+     * Sets the init statement of the loop.
      * @param initCode 
      */
     public void setInitImpl(String initCode) {
@@ -440,7 +544,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * DEPRECATED: use setInitValue instead.
+     * Sets the init statement of the loop.
      * @param initCode 
      */
     public final void setInit(String initCode) {
@@ -458,7 +562,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * Sets the init value of the loop. Works with loops of kind 'for'.
      * @param initCode 
      */
     public void setInitValueImpl(String initCode) {
@@ -466,7 +570,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop. Works with loops of kind 'for'.
+     * Sets the init value of the loop. Works with loops of kind 'for'.
      * @param initCode 
      */
     public final void setInitValue(String initCode) {
@@ -480,6 +584,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInitValue", e);
+        }
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public void setEndValueImpl(String initCode) {
+        throw new UnsupportedOperationException(get_class()+": Action setEndValue not implemented ");
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'.
+     * @param initCode 
+     */
+    public final void setEndValue(String initCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setEndValue", this, Optional.empty(), initCode);
+        	}
+        	this.setEndValueImpl(initCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setEndValue", this, Optional.empty(), initCode);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setEndValue", e);
         }
     }
 
@@ -794,6 +924,15 @@ public abstract class ALoop extends AStatement {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aStatement.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aStatement.insertBeforeImpl(node);
     }
@@ -993,6 +1132,13 @@ public abstract class ALoop extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "init": {
+        	if(value instanceof String){
+        		this.defInitImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "initValue": {
         	if(value instanceof String){
         		this.defInitValueImpl((String)value);
@@ -1019,9 +1165,13 @@ public abstract class ALoop extends AStatement {
         attributes.add("rank");
         attributes.add("isParallel");
         attributes.add("iterations");
+        attributes.add("iterationsExpr");
         attributes.add("isInterchangeable");
+        attributes.add("init");
         attributes.add("initValue");
         attributes.add("endValue");
+        attributes.add("stepValue");
+        attributes.add("condRelation");
     }
 
     /**
@@ -1046,6 +1196,7 @@ public abstract class ALoop extends AStatement {
         actions.add("void setKind(String)");
         actions.add("void setInit(String)");
         actions.add("void setInitValue(String)");
+        actions.add("void setEndValue(String)");
         actions.add("void setCond(String)");
         actions.add("void setStep(String)");
         actions.add("void setIsParallel(Boolean)");
@@ -1088,17 +1239,23 @@ public abstract class ALoop extends AStatement {
         RANK("rank"),
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
+        ITERATIONSEXPR("iterationsExpr"),
         ISINTERCHANGEABLE("isInterchangeable"),
+        INIT("init"),
         INITVALUE("initValue"),
         ENDVALUE("endValue"),
+        STEPVALUE("stepValue"),
+        CONDRELATION("condRelation"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -1116,15 +1273,18 @@ public abstract class ALoop extends AStatement {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

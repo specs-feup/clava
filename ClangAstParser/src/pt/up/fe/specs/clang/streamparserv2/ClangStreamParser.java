@@ -39,6 +39,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -254,7 +255,10 @@ public class ClangStreamParser {
             decls.addAll(declNodes);
 
             TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
-
+            Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
+            if (language != null) {
+                tUnit.setLanguage(language);
+            }
             // Clean translation unit
             // ClavaPostProcessing.applyPostPasses(tUnit);
 

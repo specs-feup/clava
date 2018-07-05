@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.data;
 
+import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaCode;
@@ -20,6 +21,12 @@ import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
 import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.language.Standard;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class ArrayTypeData {
 
     private final ArraySizeType arraySizeType;
@@ -32,12 +39,20 @@ public class ArrayTypeData {
         this.standard = standard;
     }
 
+    public ArrayTypeData() {
+        this(ArraySizeType.NORMAL, Collections.emptyList(), Standard.CXX11);
+    }
+
     public ArraySizeType getArraySizeType() {
         return arraySizeType;
     }
 
     public List<Qualifier> getQualifiers() {
         return qualifiers;
+    }
+
+    public Standard getStandard() {
+        return standard;
     }
 
     public String getQualifiersCode() {

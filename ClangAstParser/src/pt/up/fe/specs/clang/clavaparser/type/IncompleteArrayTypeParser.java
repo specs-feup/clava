@@ -13,14 +13,17 @@
 
 package pt.up.fe.specs.clang.clavaparser.type;
 
+import java.util.Arrays;
 import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.IncompleteArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
@@ -47,7 +50,14 @@ public class IncompleteArrayTypeParser extends AClangNodeParser<IncompleteArrayT
 
         Type elementType = toType(children.get(0));
 
-        return ClavaNodeFactory.incompleteArrayType(arrayTypeData, typeData, node.getInfo(), elementType);
+        // return ClavaNodeFactory.incompleteArrayType(arrayTypeData, typeData, node.getInfo(), elementType);
+        DataStore data = new LegacyToDataStore()
+                .setArrayType(arrayTypeData)
+                .setType(typeData)
+                .setNodeInfo(node.getInfo())
+                .getData();
+
+        return new IncompleteArrayType(data, Arrays.asList(elementType));
     }
 
 }

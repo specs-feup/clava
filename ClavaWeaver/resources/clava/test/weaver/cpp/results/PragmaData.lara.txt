@@ -1,0 +1,10 @@
+Data:
+{
+   a:
+      20,
+   b:
+      a string
+}
+Empty Object:
+{
+}

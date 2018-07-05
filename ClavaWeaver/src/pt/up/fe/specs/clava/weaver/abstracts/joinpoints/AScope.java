@@ -169,6 +169,29 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * The statement that owns the scope (e.g., function, loop...)
+     */
+    public abstract AJoinPoint getOwnerImpl();
+
+    /**
+     * The statement that owns the scope (e.g., function, loop...)
+     */
+    public final Object getOwner() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "owner", Optional.empty());
+        	}
+        	AJoinPoint result = this.getOwnerImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "owner", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "owner", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select stmts
      * @return 
      */
@@ -595,6 +618,15 @@ public abstract class AScope extends AStatement {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aStatement.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aStatement.insertBeforeImpl(node);
     }
@@ -823,6 +855,7 @@ public abstract class AScope extends AStatement {
         attributes.add("stmts");
         attributes.add("firstStmt");
         attributes.add("lastStmt");
+        attributes.add("owner");
     }
 
     /**
@@ -889,14 +922,17 @@ public abstract class AScope extends AStatement {
         STMTS("stmts"),
         FIRSTSTMT("firstStmt"),
         LASTSTMT("lastStmt"),
+        OWNER("owner"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -914,15 +950,18 @@ public abstract class AScope extends AStatement {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

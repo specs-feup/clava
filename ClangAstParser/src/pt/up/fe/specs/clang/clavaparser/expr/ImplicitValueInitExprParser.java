@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.ImplicitValueInitExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -37,7 +36,8 @@ public class ImplicitValueInitExprParser extends AClangNodeParser<ImplicitValueI
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
         checkNoChildren(node);
 
-        return ClavaNodeFactory.implicitValueInitExpr(exprData, info(node));
+        // return ClavaNodeFactory.implicitValueInitExpr(exprData, info(node));
+        throw new RuntimeException("deprecated");
     }
 
 }

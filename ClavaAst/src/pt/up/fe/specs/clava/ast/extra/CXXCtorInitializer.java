@@ -98,7 +98,7 @@ public class CXXCtorInitializer extends ClavaNode {
         case ANY_MEMBER_INITIALIZER:
             return anyMemberData.getDeclName() + "(" + initExpr.getCode() + ")";
         case BASE_INITIALIZER:
-            return initType.getCode() + "()";
+            return initType.getCode(this) + "()";
         default:
             throw new RuntimeException("Case not implemented: " + kind + " (loc:" + getParent().getLocation() + ")");
 

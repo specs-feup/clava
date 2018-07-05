@@ -13,35 +13,37 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class IncompleteArrayType extends ArrayType {
 
-    public IncompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info, Type elementType) {
-        this(arrayTypeData, typeData, info, Arrays.asList(elementType));
+    public IncompleteArrayType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private IncompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(arrayTypeData, typeData, info, children);
-    }
+    // public IncompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info, Type elementType)
+    // {
+    // this(arrayTypeData, typeData, info, Arrays.asList(elementType));
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new IncompleteArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // private IncompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(arrayTypeData, typeData, info, children);
+    // }
 
-    @Override
-    public Type getElementType() {
-        return getChild(Type.class, 0);
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new IncompleteArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
+    // }
+
+    // @Override
+    // public Type getElementType() {
+    // return getChild(Type.class, 0);
+    // }
 
     /*
     @Override

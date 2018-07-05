@@ -359,6 +359,13 @@ extern const std::string clava::VISIBILITY[]{
         "Default"
 };
 
+extern const std::string clava::ARRAY_SIZE_MODIFIER[] {
+        "Normal",
+        "Static",
+        "Star"
+};
+
+
 
 
 //const std::string BUILTIN_KIND[] {};

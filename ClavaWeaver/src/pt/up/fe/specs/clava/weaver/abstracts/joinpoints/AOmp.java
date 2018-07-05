@@ -75,6 +75,13 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * 
+     */
+    public void defNumThreadsImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def numThreads with type String not implemented ");
+    }
+
+    /**
      * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
     public abstract String getProcBindImpl();
@@ -95,6 +102,13 @@ public abstract class AOmp extends APragma {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "procBind", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defProcBindImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def procBind with type String not implemented ");
     }
 
     /**
@@ -1051,6 +1065,15 @@ public abstract class AOmp extends APragma {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aPragma.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aPragma.insertBeforeImpl(node);
     }
@@ -1206,6 +1229,20 @@ public abstract class AOmp extends APragma {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "numThreads": {
+        	if(value instanceof String){
+        		this.defNumThreadsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "procBind": {
+        	if(value instanceof String){
+        		this.defProcBindImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -1321,8 +1358,10 @@ public abstract class AOmp extends APragma {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -1340,15 +1379,18 @@ public abstract class AOmp extends APragma {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

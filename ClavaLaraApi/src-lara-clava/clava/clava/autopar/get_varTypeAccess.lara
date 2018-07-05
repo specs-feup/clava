@@ -1,0 +1,77 @@
+/**************************************************************
+* 
+*                       get_varTypeAccess
+* 
+**************************************************************/
+aspectdef get_varTypeAccess
+	input $varJP, op end
+	output varTypeAccess, varUse, varName, vardecl end
+
+
+	op = (typeof op !== 'undefined') ? op : 'all';
+
+	varTypeAccess = null;
+	varUse = null;
+	varName = null;
+	vardecl = null;
+
+	if (
+			$varJP.joinpointType === 'arrayAccess' && 
+			['BuiltinType','QualType'].indexOf($varJP.type.astName) !== -1
+		)
+		{
+			if ($varJP.arrayVar.joinpointType === 'memberAccess')
+			{
+				varTypeAccess = 'memberArrayAccess';
+			}
+			else if ($varJP.arrayVar.joinpointType === 'varref')
+			{
+				varTypeAccess = 'arrayAccess';
+			}
+		}
+
+	if (
+			$varJP.joinpointType === 'memberAccess' && 
+			['BuiltinType','QualType'].indexOf($varJP.type.astName) !== -1
+		)
+		{
+			varTypeAccess = 'memberAccess';
+		}
+
+	if (
+			$varJP.joinpointType === 'varref' && 
+			['BuiltinType','QualType','PointerType'].indexOf($varJP.type.astName) !== -1
+		)
+		{
+			varTypeAccess = 'varref';
+		}
+
+
+	if (op !== 'all')
+		return;
+
+	if (varTypeAccess === 'memberArrayAccess')
+	{
+		varUse = $varJP.use;
+		varName = normalizeVarName($varJP.code);
+	}
+	else if (varTypeAccess === 'arrayAccess')
+	{
+		vardecl = $varJP.arrayVar.vardecl;
+		varUse = $varJP.use;
+		varName = normalizeVarName($varJP.code);
+	}
+	else if (varTypeAccess === 'memberAccess')
+	{
+		varUse = $varJP.use;
+		varName = normalizeVarName($varJP.code);
+	}
+	else if (varTypeAccess === 'varref')
+	{
+		varUse = $varJP.useExpr.use;
+		vardecl = $varJP.vardecl;
+		varName = normalizeVarName($varJP.code);
+	}
+
+end
+

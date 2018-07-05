@@ -90,8 +90,8 @@ public class QualType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
-        String type = getUnqualifiedType().getCode(name);
+    public String getCode(ClavaNode sourceNode, String name) {
+        String type = getUnqualifiedType().getCode(sourceNode, name);
 
         // System.out.println("QUAL:" + getExtendedId());
         // If not a top-level qualifier, has to be put after the type, but before the name

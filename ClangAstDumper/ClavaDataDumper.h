@@ -96,7 +96,9 @@ namespace clava {
         // DECLS
 
         void DumpDeclData(const Decl *D);
-        void DumpNamedDeclData(const NamedDecl *D); // Not being called yet in ClangAstDumper
+        void DumpNamedDeclData(const NamedDecl *D);
+        void DumpTypeDeclData(const TypeDecl *D);
+        void DumpValueDeclData(const ValueDecl *D);
         void DumpFunctionDeclData(const FunctionDecl *D);
         void DumpCXXMethodDeclData(const CXXMethodDecl *D);
         void DumpVarDeclData(const VarDecl *D);
@@ -115,10 +117,14 @@ namespace clava {
         void DumpCharacterLiteralData(const CharacterLiteral *E);
         void DumpIntegerLiteralData(const IntegerLiteral *E);
         void DumpFloatingLiteralData(const FloatingLiteral *E);
+        void DumpStringLiteralData(const StringLiteral *E);
         void DumpCXXBoolLiteralExprData(const CXXBoolLiteralExpr *E);
+        void DumpCompoundLiteralExprData(const CompoundLiteralExpr *E);
+        void DumpInitListExprData(const InitListExpr *E);
 
 
-        // TYPES
+
+            // TYPES
         void DumpTypeData(const Type *T);
         void DumpTypeData(const Type *T, Qualifiers &qualifiers);
         //void DumpTypeData(const QualType &T);
@@ -128,8 +134,12 @@ namespace clava {
         void DumpFunctionTypeData(const FunctionType *T);
         void DumpFunctionProtoTypeData(const FunctionProtoType *T);
         void DumpTagTypeData(const TagType *T);
+        void DumpArrayTypeData(const ArrayType *T);
+        void DumpConstantArrayTypeData(const ConstantArrayType *T);
+        void DumpVariableArrayTypeData(const VariableArrayType *T);
 
-        // ATTRS
+
+            // ATTRS
 
         void DumpAttrData(const Attr *A);
         void DumpAlignedAttrData(const AlignedAttr *A);

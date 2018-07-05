@@ -21,7 +21,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class CXXBoolLiteralExpr extends Expr {
+// public class CXXBoolLiteralExpr extends Expr {
+public class CXXBoolLiteralExpr extends Literal {
 
     /// DATAKEYS BEGIN
 

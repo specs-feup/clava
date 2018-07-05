@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -21,18 +23,26 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
+import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.context.ClavaIdGenerator;
@@ -139,6 +149,16 @@ public class LegacyToDataStore {
         return this;
     }
 
+    public LegacyToDataStore setArrayType(ArrayTypeData data) {
+        nodeData.add(ArrayType.ARRAY_SIZE_MODIFIER, ArraySizeModifier.values()[data.getArraySizeType().ordinal()]);
+        nodeData.add(ArrayType.INDEX_TYPE_QUALIFIERS,
+                data.getQualifiers().stream()
+                        .map(Qualifier::toC99Qualifier)
+                        .collect(Collectors.toList()));
+
+        return this;
+    }
+
     /// EXPRS
 
     public LegacyToDataStore setExpr(ExprData data) {
@@ -156,6 +176,21 @@ public class LegacyToDataStore {
 
         nodeData.add(Attribute.IS_IMPLICIT, data.isImplicit());
         nodeData.add(Attribute.IS_INHERITED, data.isInherited());
+
+        return this;
+    }
+
+    /// DECLS
+
+    public LegacyToDataStore setDecl(DeclData data) {
+
+        nodeData.add(Decl.IS_IMPLICIT, data.isImplicit());
+        nodeData.add(Decl.IS_USED, data.isUsed());
+        nodeData.add(Decl.IS_REFERENCED, data.isReferenced());
+        nodeData.add(Decl.IS_INVALID_DECL, data.isInvalid());
+
+        nodeData.add(NamedDecl.IS_HIDDEN, data.isHidden());
+        nodeData.add(FunctionDecl.IS_CONSTEXPR, data.isConstexpr());
 
         return this;
     }

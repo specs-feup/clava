@@ -13,10 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 
 public enum BuiltinKind {
     Void,
@@ -119,16 +123,70 @@ public enum BuiltinKind {
 
     }
 
-    public String getCode(ClavaContext context) {
+    /**
+     * For built-in kinds that always have the same code.
+     */
+    private static final Map<BuiltinKind, String> BUILTIN_CODE;
+    static {
+        BUILTIN_CODE = new HashMap<>();
+        BUILTIN_CODE.put(Void, "void");
+        BUILTIN_CODE.put(Int, "int");
+        BUILTIN_CODE.put(Long, "long");
+        BUILTIN_CODE.put(LongLong, "long long");
+        BUILTIN_CODE.put(Float, "float");
+        BUILTIN_CODE.put(Double, "double");
+    }
 
-        switch (this) {
-        case Void:
-            return "void";
-        case Int:
-            return "int";
-        default:
-            throw new RuntimeException("Case not defined:" + this);
+    // public String getCode(ClavaContext context) {
+    // return getCodeTry(context)
+    // .orElseThrow(() -> new RuntimeException("Not implemented yet for kind '" + this + "'"));
+    // }
+
+    public Optional<String> getCodeTry(ClavaNode sourceNode) {
+        return Optional.ofNullable(getCodePrivate(sourceNode));
+    }
+
+    private String getCodePrivate(ClavaNode sourceNode) {
+
+        // Check if in fixed code table
+        String code = BUILTIN_CODE.get(this);
+        if (code != null) {
+            return code;
         }
+
+        // Special cases
+        switch (this) {
+        case Bool:
+            return getCodeBool(sourceNode);
+        default:
+            return null;
+        // throw new RuntimeException("Case not defined:" + this);
+        }
+    }
+
+    private String getCodeBool(ClavaNode sourceNode) {
+
+        if (sourceNode == null) {
+            return "bool";
+        }
+
+        // Get translation unit
+        TranslationUnit tunit = sourceNode.getAncestorTry(TranslationUnit.class).orElse(null);
+        if (tunit == null) {
+            return "bool";
+        }
+
+        // If C++, just return bool
+        if (tunit.get(TranslationUnit.LANGUAGE).get(Language.C_PLUS_PLUS)) {
+            return "bool";
+        }
+
+        // C code, check if stdbool.h is an include
+        if (tunit.hasInclude("stdbool.h", true)) {
+            return "bool";
+        }
+
+        return "_Bool";
     }
 
     public static BuiltinKind newInstance(String literalKind) {
@@ -155,5 +213,9 @@ public enum BuiltinKind {
 
     public boolean isFloatingPoint() {
         return this.ordinal() >= Half.ordinal() && this.ordinal() <= LongDouble.ordinal();
+    }
+
+    public String getCode() {
+        return getCodePrivate(null);
     }
 }

@@ -137,7 +137,8 @@ public class DeclRefExpr extends Expr implements Nameable {
         if (!idSuffix.isPresent()) {
             throw new RuntimeException("Could not find id suffix in '" + getExtendedId() + "'");
         }
-
+        // System.out.println("DECL DATA:" + declData);
+        // System.out.println("ID SUFFIX:" + idSuffix);
         String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
         Optional<ClavaNode> declTry = getApp().getNodeTry(varDeclId);
 

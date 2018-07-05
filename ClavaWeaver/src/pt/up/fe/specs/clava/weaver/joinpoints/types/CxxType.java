@@ -158,4 +158,9 @@ public class CxxType extends AType {
     public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
         type.setTemplateArgumentType(index, (Type) templateArgType.getNode());
     }
+
+    @Override
+    public AType getNormalizeImpl() {
+        return CxxJoinpoints.create(type.normalize(), this, AType.class);
+    }
 }

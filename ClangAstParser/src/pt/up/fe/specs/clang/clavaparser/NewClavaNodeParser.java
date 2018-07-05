@@ -20,6 +20,8 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
+import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -65,10 +67,12 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // List<ClavaNode> children = parseChildren(node);
         List<ClavaNode> children = parseChildren(node.getChildrenStream(), getClass().getSimpleName(), isType);
 
+        children = pruneChildren(clavaNode, children);
+
         // getConfig().get(ClavaNode.CONTEXT)
         // .get(ClavaContext.FACTORY)
         // .newNode()
-        return clavaNode.newInstance(nodeClass, children);
+        return clavaNode.newInstance(true, nodeClass, children);
         // return newClavaNode(nodeClass, clavaNode.getDataI(), children);
         /*
         if (clavaNode.hasDataI()) {
@@ -77,6 +81,23 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         
         return newClavaNode(nodeClass, clavaNode.getData(), children);
         */
+    }
+
+    private List<ClavaNode> pruneChildren(ClavaNode clavaNode, List<ClavaNode> children) {
+        // Check if it has a filler node
+        if (clavaNode instanceof InitListExpr) {
+            if (children.size() > 0
+                    && (children.get(0) instanceof Undefined)) {
+
+                String content = children.get(0).toContentString();
+                Preconditions.checkArgument(content.equals("array - filler"),
+                        "Content of node is not 'array - filler:'" + content);
+
+                return children.subList(1, children.size());
+            }
+        }
+
+        return children;
     }
 
     @Override

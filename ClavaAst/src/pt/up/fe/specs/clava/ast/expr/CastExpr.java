@@ -92,7 +92,7 @@ public abstract class CastExpr extends Expr {
 
         this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        put(CAST_KIND, castKind);
+        set(CAST_KIND, castKind);
         // this.castKind = castKind;
     }
 

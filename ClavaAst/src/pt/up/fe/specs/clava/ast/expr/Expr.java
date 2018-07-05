@@ -79,7 +79,7 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public void setType(Type type) {
-        put(TYPE, type);
+        set(TYPE, type);
     }
 
     public Optional<Type> getExprTypeTry() {
@@ -145,7 +145,7 @@ public abstract class Expr extends ClavaNode implements Typable {
     }
 
     public void setImplicitCast(ImplicitCastExpr implicitCast) {
-        put(IMPLICIT_CAST, implicitCast);
+        set(IMPLICIT_CAST, implicitCast);
     }
 
     public Optional<ImplicitCastExpr> getImplicitCast() {

@@ -49,25 +49,28 @@ public class CxxActions {
      * @param position
      * @param from
      */
-    public static void insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
+    public static AJoinPoint insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
 
         switch (insert) {
         case BEFORE:
             // NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
-            NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeParser.parseStmt(code));
-            break;
+            Stmt beforeNode = ClavaNodeParser.parseStmt(code);
+            NodeInsertUtils.insertBefore(getValidStatement(target), beforeNode);
+            return CxxJoinpoints.create(beforeNode, null);
 
         case AFTER:
             // NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
-            NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeParser.parseStmt(code));
-            break;
+            Stmt afterNode = ClavaNodeParser.parseStmt(code);
+            NodeInsertUtils.insertAfter(getValidStatement(target), afterNode);
+            return CxxJoinpoints.create(afterNode, null);
 
         case AROUND:
         case REPLACE:
             // Has to replace with a node of the same "kind" (e.g., Expr, Stmt...)
+            ClavaNode replaceNode = ClavaNodes.toLiteral(code, CxxWeaver.getFactory().nullType(), target);
             weaver.clearUserField(target);
-            NodeInsertUtils.replace(target, ClavaNodes.toLiteral(code, CxxWeaver.getFactory().nullType(), target));
-            break;
+            NodeInsertUtils.replace(target, replaceNode);
+            return CxxJoinpoints.create(replaceNode, null);
         default:
             throw new RuntimeException("Case not defined:" + insert);
         }

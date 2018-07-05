@@ -22,6 +22,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
@@ -30,6 +33,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.utils.IncludeManager;
 import pt.up.fe.specs.clava.utils.SourceType;
@@ -46,6 +50,10 @@ import pt.up.fe.specs.util.utilities.StringLines;
  */
 public class TranslationUnit extends ClavaNode {
 
+    public static final DataKey<Language> LANGUAGE = KeyFactory.object("language", Language.class)
+            // TODO: Remove this after parsing of header files is implemented
+            .setDefault(() -> new Language());
+
     // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
     // private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
 
@@ -60,13 +68,13 @@ public class TranslationUnit extends ClavaNode {
 
     private final Lazy<Boolean> isCxxUnit;
 
-    private File sourcePath;
+    private String relativePath;
 
-    public TranslationUnit(String filename, String relativePath, Collection<Decl> declarations) {
-        super(createInfo(new ArrayList<>(declarations), relativePath + filename), declarations);
+    public TranslationUnit(String filename, String filePath, Collection<Decl> declarations) {
+        super(createInfo(new ArrayList<>(declarations), filePath + filename), declarations);
 
         this.filename = filename;
-        path = relativePath;
+        path = processFilePath(filePath);
 
         List<IncludeDecl> includesList = declarations.stream()
                 .filter(decl -> decl instanceof IncludeDecl)
@@ -77,7 +85,21 @@ public class TranslationUnit extends ClavaNode {
 
         isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
 
-        sourcePath = null;
+        relativePath = null;
+    }
+
+    private String processFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+
+        if (filePath.isEmpty()) {
+            return null;
+        }
+
+        // Should convert to absolute?
+
+        return SpecsIo.getCanonicalPath(new File(filePath));
     }
 
     public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
@@ -119,12 +141,34 @@ public class TranslationUnit extends ClavaNode {
         return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, startLine, startCol, endLine, endCol));
     }
 
-    public static String getRelativePath(File sourcePath, File baseSourceFolder) {
-        // If source path does not exist yet, or no base source folder specified, just return source path
-        if (!sourcePath.exists() || baseSourceFolder == null) {
+    public static String getRelativePath(File filepath, File baseSourceFolder) {
+
+        // Normalize baseSourceFolder
+        if (baseSourceFolder != null && baseSourceFolder.getPath().isEmpty()) {
+            baseSourceFolder = null;
+        }
+
+        // If source path does not exist yet, or no base source folder specified, just return filename
+        // if (!filepath.exists() || baseSourceFolder == null) {
+        if (baseSourceFolder == null) {
+            // System.out.println("FILEPATH:" + filepath);
             // Only return complete resource path if it is not absolute
-            return sourcePath.isAbsolute() ? sourcePath.getName() : sourcePath.getPath();
+            String relativePath = filepath.isAbsolute() ? filepath.getName() : filepath.getPath();
+            // System.out.println("BASESOURCE FOLDER:" + baseSourceFolder);
+            // System.out.println("FILEPATH:" + filepath);
+            // System.out.println("IS ABSOLUTE:" + filepath.isAbsolute());
+            // System.out.println("FILEPATH GETNAME:" + filepath.getName());
+            // System.out.println("RELATIVE PATH BEFORE:" + relativePath);
+
+            // if (baseSourceFolder != null) {
+            // relativePath = new File(baseSourceFolder, relativePath).getPath();
+            // }
+            // System.out.println("RELATIVE PATH AFTER:" + relativePath);
             // return sourcePath.getPath();
+            // System.out.println("getRelativePath:" + relativePath);
+
+            // return filepath.getName();
+            return relativePath;
         }
 
         // No base input folder specified, just return source path
@@ -133,7 +177,7 @@ public class TranslationUnit extends ClavaNode {
         // }
 
         // Calculate relative path
-        String relativePath = SpecsIo.getRelativePath(sourcePath, baseSourceFolder);
+        String relativePath = SpecsIo.getRelativePath(filepath, baseSourceFolder);
 
         // Avoid writing outside of the destination folder, if relative path has '../', remove them
         // while (relativePath.startsWith("../")) {
@@ -171,12 +215,28 @@ public class TranslationUnit extends ClavaNode {
      *
      * @return if set, returns the original source path of this translation unit
      */
-    public Optional<File> getSourcePath() {
-        return Optional.ofNullable(sourcePath);
+    /**
+     * Relative path refers to the last portion of the path of this file that should be considered as not part of the
+     * original source folder.
+     * <p>
+     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
+     * be /folder1, this method returns folder2.
+     * 
+     * @return
+     */
+    /*
+    public Optional<String> getRelativePath() {
+        return Optional.ofNullable(relativePath);
     }
+    */
 
-    public void setSourcePath(File sourcePath) {
-        this.sourcePath = sourcePath;
+    public void setRelativePath(String relativePath) {
+        if (relativePath == null) {
+            this.relativePath = null;
+            return;
+        }
+
+        this.relativePath = relativePath.isEmpty() ? null : relativePath;
     }
 
     private String getChildCode(ClavaNode decl) {
@@ -228,8 +288,8 @@ public class TranslationUnit extends ClavaNode {
      *
      * @return the path to the folder of this file
      */
-    public String getFolderpath() {
-        return path;
+    public Optional<String> getFolderpath() {
+        return Optional.ofNullable(path);
     }
 
     public String getFilepath() {
@@ -237,7 +297,7 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public File getFile() {
-        if (path.isEmpty()) {
+        if (path == null) {
             return new File(filename);
         }
 
@@ -348,13 +408,17 @@ public class TranslationUnit extends ClavaNode {
     }
 
     // public void write(File destinationFolder, File baseInputFolder) {
-    public void write(File destinationFolder) {
-        String relativePath = getRelativeFolderpath();
-
-        File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
+    public File write(File destinationFolder) {
+        // String relativePath = getRelativeFolderpath();
+        File actualDestinationFolder = getRelativeFolderpath()
+                .map(relativePath -> SpecsIo.mkdir(new File(destinationFolder, relativePath)))
+                .orElse(destinationFolder);
+        // File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
         File destinationFile = new File(actualDestinationFolder, getFilename());
 
         SpecsIo.write(destinationFile, getCode());
+
+        return destinationFile;
     }
 
     /**
@@ -378,12 +442,57 @@ public class TranslationUnit extends ClavaNode {
     }
     */
 
+    // * <p>
+    // * Relative path example: if this file is included using "folder/header.h", returns "folder".
+
     /**
-     *
+     * The folder of this file, relative to the include folders of the project.
+     * 
+     * <p>
+     * Relative path refers to the last portion of the path of this file that should be considered as not part of the
+     * original source folder.
+     * <p>
+     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
+     * be /folder1, this method returns folder2.
+     * 
+     * *
+     * 
+     * 
      * @return
      */
-    public String getRelativeFolderpath() {
-        return getRelativePath(new File(path), sourcePath);
+    public Optional<String> getRelativeFolderpath() {
+        return Optional.ofNullable(relativePath);
+        // System.out.println("FILE:" + path);
+        // System.out.println("SOURCE PATH:" + sourcePath);
+        /*
+        if (relativePath == null) {
+            return Optional.empty();
+        }
+        
+        if (relativePath.isEmpty()) {
+            return Optional.empty();
+        }
+        
+        return Optional.of(relativePath);
+        */
+        /*
+        if (path == null) {
+            return Optional.of(sourcePath);
+        }
+        
+        
+        String relativePath = getRelativePath(new File(path), sourcePath);
+        // System.out.println("PATH:" + path);
+        // System.out.println("SOURCE PATH:" + sourcePath);
+        // System.out.println("RELATIVE PATH BETWEEN EMPTY AND SOURCE:" + getRelativePath(new File(null), sourcePath));
+        if (relativePath.isEmpty()) {
+            return Optional.empty();
+        }
+        
+        return Optional.of(relativePath);
+        // return Optional.of(getRelativePath(new File(path), sourcePath));
+        
+         */
     }
 
     /**
@@ -407,42 +516,94 @@ public class TranslationUnit extends ClavaNode {
     */
 
     /**
-     *
+     * The path of this file, relative to the include folders of the project.
+     * 
      * @return
      */
     public String getRelativeFilepath() {
-        return getRelativePath(getFile(), sourcePath);
+        return getRelativeFolderpath()
+                .map(relativePath -> relativePath + "/" + getFilename())
+                .orElse(getFilename());
+
+        // return getRelativePath(getFile(), sourcePath);
     }
 
+    /**
+     * The base destination folder of the file. If a sourcePath is defined, it is not taken into account for the
+     * destination folder.
+     * 
+     * @param baseFolder
+     * @param flattenFolder
+     * @return
+     */
     public File getDestinationFolder(File baseFolder, boolean flattenFolder) {
         if (flattenFolder) {
             return baseFolder;
         }
 
-        if (!getSourcePath().isPresent()) {
+        // Check if there is a path defined
+        Optional<String> folderpathTry = getFolderpath();
+        // System.out.println("FOLDERPATH:" + folderpath);
+        if (!folderpathTry.isPresent()) {
             return baseFolder;
         }
 
+        String folderpath = folderpathTry.get();
+        File folder = new File(folderpath);
+
+        // If folderpath is absolute, return only last name; otherwise, use it fully
+        String path = folder.isAbsolute() ? folder.getName() : folderpath;
+        return new File(baseFolder, path);
+
+        /*
+        // If no source path present, use folder where file is located
+        if (!getSourcePath().isPresent()) {
+            // return baseFolder;
+            return new File(baseFolder, getFile().getParent());
+        }
+        
+        return baseFolder;
+        */
+        /*        
         File sourcePath = getSourcePath().get();
         File sourceFolder = sourcePath.isDirectory() ? sourcePath : sourcePath.getParentFile();
-
+        
         if (sourceFolder == null) {
             return baseFolder;
         }
-
+        
         // If parent name is not null, create destination folder that mimics original input source
         return SpecsIo.mkdir(new File(baseFolder, sourceFolder.getName()));
+        */
     }
 
     public File getDestinationFile(File destinationFolder, boolean flattenFolders) {
-        File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
+        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
+        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
 
-        String relativePath = getRelativeFolderpath();
+        File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
+        // System.out.println("ACTUAL DESTINATION FOLDER:" + actualDestinationFolder);
+
+        // String relativePath = getRelativeFolderpath();
 
         // Build destination path
-        actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
+        File adjustedDestinationFolder = getRelativeFolderpath()
+                .map(relativePath -> SpecsIo.mkdir(new File(actualDestinationFolder, relativePath)))
+                .orElse(actualDestinationFolder);
+        // actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
 
-        return new File(actualDestinationFolder, getFilename());
+        // System.out.println("ADJUSTED ACTUAL DESTI ATION:" + actualDestinationFolder);
+        // System.out.println("FILE:" + new File(actualDestinationFolder, getFilename()));
+
+        return new File(adjustedDestinationFolder, getFilename());
+    }
+
+    public void setLanguage(Language language) {
+        set(LANGUAGE, language);
+    }
+
+    public boolean hasInclude(String includeName, boolean isAngled) {
+        return getIncludes().hasInclude(includeName, isAngled);
     }
 
 }

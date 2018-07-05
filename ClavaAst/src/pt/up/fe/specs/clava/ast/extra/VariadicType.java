@@ -41,7 +41,7 @@ public class VariadicType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         if (name != null) {
             throw new RuntimeException("Not implemented when name is not null");
         }

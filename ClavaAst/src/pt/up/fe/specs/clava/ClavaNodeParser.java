@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
@@ -42,7 +43,8 @@ public class ClavaNodeParser {
 
         // Check if single line
         if (codeLines.size() != 1) {
-            return ClavaNodeFactory.literalStmt(code);
+            LegacyToDataStore.getFactory().literalStmt(code);
+            // return ClavaNodeFactory.literalStmt(code);
         }
 
         String currentCode = code.trim();
@@ -80,7 +82,7 @@ public class ClavaNodeParser {
         }
 
         // Case not supported
-        return ClavaNodeFactory.literalStmt(code);
+        return LegacyToDataStore.getFactory().literalStmt(code);
     }
 
     // private static String extractPragmaPrefix(String currentCode) {

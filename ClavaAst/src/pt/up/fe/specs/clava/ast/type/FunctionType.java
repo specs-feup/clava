@@ -140,7 +140,7 @@ public abstract class FunctionType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // A name (*) means that it has been called from PointerType with null name
         // if (name != null && !name.isEmpty() && !name.equals("(*)")) {
         // SpecsLogs.msgWarn(
@@ -150,10 +150,10 @@ public abstract class FunctionType extends Type {
 
         StringBuilder code = new StringBuilder();
 
-        code.append(getReturnType().getCode(name));
+        code.append(getReturnType().getCode(sourceNode, name));
 
         String paramsCode = getParamTypes().stream()
-                .map(type -> type.getCode())
+                .map(type -> type.getCode(sourceNode))
                 .collect(Collectors.joining(", "));
 
         if (isVariadic()) {

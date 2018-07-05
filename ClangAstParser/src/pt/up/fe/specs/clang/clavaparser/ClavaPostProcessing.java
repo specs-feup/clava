@@ -15,11 +15,12 @@ package pt.up.fe.specs.clang.clavaparser;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeIterator;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
+import pt.up.fe.specs.clava.utils.Typable;
 
 /**
  * Utility methods for post processing.
@@ -73,7 +74,8 @@ public class ClavaPostProcessing {
                 continue;
             }
 
-            NamedDecl anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
+            // NamedDecl anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
+            Typable anonymousDecl = getAnonymousDecl(currentNode, lastRecordDecl);
             if (anonymousDecl == null) {
                 continue;
             }
@@ -124,48 +126,35 @@ public class ClavaPostProcessing {
 
     }
 
-    private static NamedDecl getAnonymousDecl(ClavaNode node, RecordDecl lastRecordDecl) {
-        if (!(node instanceof NamedDecl)) {
-            return null;
-        }
-
-        NamedDecl namedDecl = (NamedDecl) node;
-
-        // if (namedDecl instanceof DeclaratorDecl) {
-        // DeclaratorDecl declaratorDecl = (DeclaratorDecl) namedDecl;
-        // if (declaratorDecl.getType().isAnonymous()) {
-        // return declaratorDecl;
-        // }
-        // }
-
-        // If there is no last RecordDecl, there is nothing more that can be done
-        // if (lastRecordDecl == null) {
+    // private static NamedDecl getAnonymousDecl(ClavaNode node, RecordDecl lastRecordDecl) {
+    private static Typable getAnonymousDecl(ClavaNode node, RecordDecl lastRecordDecl) {
+        // if (!(node instanceof NamedDecl)) {
         // return null;
         // }
 
-        // System.out.println("TYPE:" + namedDecl.getType());
+        if (!(node instanceof Decl)) {
+            return null;
+        }
+
+        if (!(node instanceof Typable)) {
+            return null;
+        }
+
+        // NamedDecl namedDecl = (NamedDecl) node;
+        Typable typableDecl = (Typable) node;
+
         // Check if type has a record type
-        RecordType recordType = namedDecl.getType().toTry(RecordType.class).orElse(null);
+        // RecordType recordType = namedDecl.getType().toTry(RecordType.class).orElse(null);
+        RecordType recordType = typableDecl.getType().toTry(RecordType.class).orElse(null);
 
         if (recordType != null // It has a RecordType
                 && lastRecordDecl.getRecordDeclData().isAnonymous() // Last record is anonymous
-                && recordType.getRecordName().equals(lastRecordDecl.getType().getCode())) { // They are the same type
+                && recordType.getRecordName().equals(lastRecordDecl.getTypeCode())) { // They are the same type
 
-            // System.out.println("RECORD TYPE:" + recordType.getRecordName());
-            // System.out.println("LAST RECORD:" + lastRecordDecl.getType().getCode());
-
-            return namedDecl;
+            // return namedDecl;
+            return typableDecl;
         }
 
-        // Condition
-        // assert varDecl.getType().get(0).isAnonynous() == varDecl.getType().get(0).getStringType().get()
-        // .contains("(anonymous ");
-
-        // If not anonymous type, continue
-        // if (!(varDecl.getType() instanceof NullType)) {
-        // continue;
-        // }
-        // if (!declaratorDecl.getType().isAnonymous()) {
         return null;
     }
 

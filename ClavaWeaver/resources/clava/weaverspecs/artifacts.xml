@@ -84,7 +84,16 @@
 		</attribute>
 		<attribute name="parentRegion" type="joinpoint" />
 		<attribute name="currentRegion" type="joinpoint" />
-		<!--  <attribute name="pragmas" type="joinpoint[]" />  -->
+		<attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
+		<attribute name="data" type="Object" tooltip="JS object with the parsed data of #pragma clava data, associated with this node"/>
+		<attribute name="keys" type="String[]" tooltip="A list of the properties currently supported by this node"/>
+		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
+			<parameter name="key" type="String" />	
+		</attribute>
+		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
+			<parameter name="key" type="String" />	
+			<parameter name="value" type="Object" />				
+		</attribute>		
 	</global>
 
 
@@ -168,6 +177,12 @@
 	</artifact>
 
 
+	<!-- ENUM DECL -->
+	<artifact class="enumDecl" default="name">
+		<attribute name="enumerators" type="enumeratorDecl[]" />
+	</artifact>
+
+
 	<!-- LOOP -->
 	<artifact class="loop" default="kind">
 		<attribute name="kind" type="{for,while}" />
@@ -182,13 +197,19 @@
 			<def type="string"/>
 		</attribute>
 		<attribute name="iterations" type="Integer" />
+		<attribute name="iterationsExpr" type="expression" />
 		<attribute name="isInterchangeable" type="Boolean" tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
 			<parameter name="otherLoop" type="loop" />	
+		</attribute>
+		<attribute name="init" type="statement" tooltip="The statement of the loop initialization">
+			<def type="string"/>
 		</attribute>
 		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
 			<def/>
 		</attribute>		
 		<attribute name="endValue" type="String" tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')"/>
+		<attribute name="stepValue" type="String" tooltip="The expression of the iteration step"/>		
+		<attribute name="condRelation" type="Relation"/>
 	</artifact>
 
 
@@ -201,6 +222,7 @@
 		<attribute name="stmts" type="statement[]" />
 		<attribute name="firstStmt" type="statement" />
 		<attribute name="lastStmt" type="statement" />
+		<attribute name="owner" type="joinpoint" tooltip="The statement that owns the scope (e.g., function, loop...)"/>
 	</artifact>
 
 
@@ -280,7 +302,10 @@
 		</attribute>
 		<attribute name="body" type="joinpoint" />
 		<attribute name="paramNames" type="String[]"/>
-		<attribute name="params" type="joinpoint[]"/>
+		<attribute name="params" type="param[]">
+			<def type="param[]"/>
+			<def type="String[]"/>		
+		</attribute>
 		<attribute name="id" type="String"/>
 		<attribute name="isInline" type="Boolean"/>
 		<attribute name="isVirtual" type="Boolean"/>
@@ -288,6 +313,7 @@
 		<attribute name="isPure" type="Boolean"/>
 		<attribute name="isDelete" type="Boolean"/>
 		<attribute name="storageClass" type="StorageClass"/>
+		<attribute name="calls" type="call[]"/>		
 	</artifact>
 
 
@@ -414,6 +440,7 @@
 		<attribute name="isBuiltin" type="Boolean" />
 		<attribute name="constant" type="Boolean" />
 		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
+		<attribute name="normalize" type="type" tooltip="Ignores certain types (e.g., DecayedType)" />
 	</artifact>
 
 
@@ -472,8 +499,12 @@
 	<!-- OMP -->
 	<artifact class="omp" default="kind">
 		<attribute name="kind" type="String" tooltip="The kind of the directive"/>
-		<attribute name="numThreads" type="String" tooltip="An integer expression, or undefined if no 'num_threads' clause is defined"/>
-		<attribute name="procBind" type="String" tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined"/>
+		<attribute name="numThreads" type="String" tooltip="An integer expression, or undefined if no 'num_threads' clause is defined">
+			<def/>
+		</attribute>
+		<attribute name="procBind" type="String" tooltip="One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined">
+			<def/>
+		</attribute>
 		<attribute name="private" type="String[]" tooltip="The variable names of all private clauses, or empty array if no private clause is defined"/>
 		<attribute name="hasClause" type="Boolean" tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
 			<parameter name="clauseName" type="String" />
@@ -509,5 +540,16 @@
 		<value name="REGISTER"/>
 		<value name="STATIC"/>
 	</enum>
+	
+	<enum name="Relation">	
+		<value name="LE"/>
+		<value name="LT"/>
+		<value name="GE"/>
+		<value name="GT"/>
+		<value name="EQ"/>		
+		<value name="NE"/>
+	</enum>
+	
+
 
 </artifacts>

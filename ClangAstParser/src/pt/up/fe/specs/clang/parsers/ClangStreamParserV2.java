@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
+import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.version.Clang_3_8;
@@ -33,6 +33,7 @@ public class ClangStreamParserV2 {
         addWorker(VisitedChildrenParser::new);
         addWorker(IdToFilenameParser::new);
         addWorker(IncludesParser::new);
+        addWorker(LanguageParser::new);
         TopLevelNodesParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
         NodeDataParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
     }
@@ -47,8 +48,8 @@ public class ClangStreamParserV2 {
     }
 
     // public static LineStreamParserV2 newInstance(List<String> arguments) {
-    public static LineStreamParserV2 newInstance(ClavaContext context) {
-        LineStreamParserV2 streamParser = LineStreamParserV2.newInstance(WORKERS);
+    public static LineStreamParser newInstance(ClavaContext context) {
+        LineStreamParser streamParser = LineStreamParser.newInstance(WORKERS);
 
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));

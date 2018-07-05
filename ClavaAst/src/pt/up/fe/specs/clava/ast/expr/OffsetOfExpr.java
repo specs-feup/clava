@@ -49,7 +49,7 @@ public class OffsetOfExpr extends Expr {
     @Override
     public String getCode() {
         String componentCode = getComponentsCode();
-        return "offsetof(" + offsetOfData.getSourceType().getCode() + ", " + componentCode + ")";
+        return "offsetof(" + offsetOfData.getSourceType().getCode(this) + ", " + componentCode + ")";
         // return getSubExpr().getCode();
         /*
         if (!hasChildren()) {

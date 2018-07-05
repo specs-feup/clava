@@ -11,15 +11,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
+import org.suikasoft.jOptions.Datakey.DataKey;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeParser;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
@@ -27,12 +31,15 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.stringsplitter.StringSplitter;
+import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -57,6 +64,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public CxxWeaver getWeaverEngine() {
         return super.getWeaverEngine();
+    }
+
+    public ClavaFactory getFactory() {
+        return CxxWeaver.getFactory();
     }
 
     /**
@@ -409,6 +420,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         // Return input joinpoint
         return node;
+
+    }
+
+    @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return CxxActions.insertAsStmt(getNode(), node, Insert.REPLACE, getWeaverEngine());
     }
 
     @Override
@@ -819,4 +836,83 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
     }
 
+    @Override
+    public APragma[] getPragmasArrayImpl() {
+        return ClavaNodes.getPragmas(getNode()).stream()
+                .map(pragma -> CxxJoinpoints.create(pragma, this))
+                .toArray(APragma[]::new);
+    }
+
+    @Override
+    public Object getDataImpl() {
+        final String dataKeyword = "data";
+
+        for (APragma pragmaJp : getPragmasArrayImpl()) {
+            Pragma pragma = (Pragma) pragmaJp.getNode();
+
+            if (!pragma.getName().toLowerCase().equals("clava")) {
+                continue;
+            }
+
+            // Parse content
+            StringSplitter splitter = new StringSplitter(pragma.getContent());
+            boolean isDataDirective = splitter.parseTry(StringSplitterRules::string)
+                    .filter(string -> string.toLowerCase().equals(dataKeyword))
+                    .isPresent();
+
+            if (!isDataDirective) {
+                continue;
+            }
+
+            try {
+                return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
+                // getWeaverEngine().getScriptEngine().eval("{" + splitter.toString() + "};");
+            } catch (Exception e) {
+                SpecsLogs.msgWarn(
+                        "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
+                                + "', returning empty object",
+                        e);
+                return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
+            }
+
+            // System.out.println("NAME:" + pragma.getName());
+            // System.out.println("CONTENT:" + pragma.getContent());
+        }
+
+        // Return empty object
+        return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
+        // return getWeaverEngine().getScriptEngine().eval("var _data = {a:30, b:40}; _data;");
+
+        // return getWeaverEngine().getScriptEngine().eval("var _data = {a:10, b:20}; _data;");
+    }
+
+    @Override
+    public String[] getKeysArrayImpl() {
+        return getNode().getKeys()
+                .getKeyMap()
+                .keySet()
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public Object getValueImpl(String key) {
+        // Get key
+        DataKey<?> datakey = getNode().getKeys().getKey(key);
+
+        return getNode().get(datakey);
+    }
+
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        // Get key
+        DataKey<Object> datakey = getNode().getKeys().getKeyRaw(key);
+
+        // If string, use decoder
+        if (value instanceof String) {
+            value = datakey.decode((String) value);
+        }
+
+        // Returns new join point of the node, using the same parent
+        return CxxJoinpoints.create(getNode().set(datakey, value), getParentImpl());
+    }
 }

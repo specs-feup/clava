@@ -71,7 +71,7 @@ public class ElaboratedType extends TypeWithKeyword {
     */
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // HACK Set of Type classes whose .getCode() is not working properly, using bare type
 
         // System.out.println("ELABORATED:" + namedType);
@@ -124,7 +124,7 @@ public class ElaboratedType extends TypeWithKeyword {
 
             if (hasTemplateArgs) {
                 String templateArgs = namedType.getTemplateArgumentTypes().stream()
-                        .map(Type::getCode)
+                        .map(type -> type.getCode(sourceNode))
                         .collect(Collectors.joining(", "));
                 bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
             }
@@ -155,7 +155,7 @@ public class ElaboratedType extends TypeWithKeyword {
      * @return
      */
     public ElaboratedType setTypeAsString(String typeAsString) {
-        put(ElaboratedType.TYPE_AS_STRING, typeAsString);
+        set(ElaboratedType.TYPE_AS_STRING, typeAsString);
         /*
         if (hasDataI()) {
             getDataI().set(ElaboratedType.TYPE_AS_STRING, typeAsString);

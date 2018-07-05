@@ -11,7 +11,10 @@
 
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"BuiltinType", clava::TypeNode::BUILTIN_TYPE},
-        {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE}
+        {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
+        {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE},
+        {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
+        {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -41,10 +44,16 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 //            DumpQualTypeData(static_cast<const QualType *>(T)); break;
         case clava::TypeNode::BUILTIN_TYPE:
             DumpBuiltinTypeData(static_cast<const BuiltinType *>(T)); break;
-        case clava::TypeNode::FUNCTION_TYPE:
-            DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
+        //case clava::TypeNode::FUNCTION_TYPE:
+        //    DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
         case clava::TypeNode::FUNCTION_PROTO_TYPE:
             DumpFunctionProtoTypeData(static_cast<const FunctionProtoType *>(T)); break;
+        case clava::TypeNode::ARRAY_TYPE:
+            DumpArrayTypeData(static_cast<const ArrayType *>(T)); break;
+        case clava::TypeNode::CONSTANT_ARRAY_TYPE:
+            DumpConstantArrayTypeData(static_cast<const ConstantArrayType *>(T)); break;
+        case clava::TypeNode::VARIABLE_ARRAY_TYPE:
+            DumpVariableArrayTypeData(static_cast<const VariableArrayType *>(T)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump(TypeNode): Case not implemented, '"+ getName(typeNode) +"'");
     }
 }
@@ -117,6 +126,8 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
 
 
     // Dump C99 qualifiers
+    clava::dump(qualifiers, Context);
+/*
     auto c99Qualifiers = qualifiers.getCVRQualifiers();
     const int numBits = std::numeric_limits<decltype(c99Qualifiers)>::digits;
     size_t numSetBits = std::bitset<numBits>(c99Qualifiers).count();
@@ -131,7 +142,7 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
             clava::dump("RESTRICT");
     }
     if(qualifiers.hasVolatile()) {clava::dump("VOLATILE");}
-
+*/
     // Dumps address space
     unsigned addrspace = T.getAddressSpace();
     if(addrspace) {
@@ -209,5 +220,34 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
 
 
 void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
+    DumpTypeData(T);
+
     clava::dump(clava::getId(T->getDecl(), id));
+}
+
+
+void clava::ClavaDataDumper::DumpArrayTypeData(const ArrayType *T) {
+    DumpTypeData(T);
+
+    clava::dump(clava::ARRAY_SIZE_MODIFIER[T->getSizeModifier()]);
+    //clava::dump(QualType::getAsString(T->getArrayElementTypeNoTypeQual(), T->getIndexTypeQualifiers()));
+    //clava::dump(T->getIndexTypeQualifiers().getAsString());
+    // Dump C99 qualifiers of element type
+    clava::dump(T->getIndexTypeQualifiers(), Context);
+
+}
+
+void clava::ClavaDataDumper::DumpConstantArrayTypeData(const ConstantArrayType *T) {
+    // Hierarchy
+    DumpArrayTypeData(T);
+
+    //clava::dump(T->getSize().VAL);
+    clava::dump(T->getSize().toString(10, false));
+}
+
+void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *T) {
+    // Hierarchy
+    DumpArrayTypeData(T);
+
+    //clava::dump(clava::getId(T->getSizeExpr(), id));
 }

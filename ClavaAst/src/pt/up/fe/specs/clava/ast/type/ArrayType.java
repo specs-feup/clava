@@ -13,25 +13,54 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 
 public abstract class ArrayType extends Type {
 
-    private final ArrayTypeData arrayTypeData;
+    /// DATAKEYS BEGIN
 
-    protected ArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
+    public final static DataKey<ArraySizeModifier> ARRAY_SIZE_MODIFIER = KeyFactory
+            .enumeration("arraySizeModifier", ArraySizeModifier.class)
+            .setDefault(() -> ArraySizeModifier.Normal);
 
-        this.arrayTypeData = arrayTypeData;
+    public final static DataKey<List<C99Qualifier>> INDEX_TYPE_QUALIFIERS = KeyFactory
+            .generic("indexTypeQualifiers", new ArrayList<>());
+
+    /// DATAKEYS END
+
+    public ArrayType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // arrayTypeData = null;
     }
 
-    abstract public Type getElementType();
+    // private ArrayTypeData arrayTypeData;
+    // TODO: For compatibility, remove afterwards
+    // private Standard standard;
+
+    // protected ArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore().setArrayType(arrayTypeData).setType(typeData).setNodeInfo(info).getData(),
+    // children);
+    //
+    // standard = arrayTypeData.getStandard();
+    // }
+
+    // abstract public Type getElementType();
+    public Type getElementType() {
+        return getChild(Type.class, 0);
+    }
 
     /**
      *
@@ -39,19 +68,24 @@ public abstract class ArrayType extends Type {
      */
     abstract protected String getArrayCode();
 
-    public ArrayTypeData getArrayTypeData() {
-        return arrayTypeData;
-    }
+    // public ArrayTypeData getArrayTypeData() {
+    // return DataStoreToLegacy.getArrayType(getData(), standard);
+    // // return arrayTypeData;
+    // }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         String nameCode = name == null ? "" : name;
 
         Type elementType = getElementType();
 
         // String qualifierString = ClavaCode.getQualifiersCode(arrayTypeData.getQualifiers(), isCxx);
-        String qualifierString = arrayTypeData.getQualifiersCode();
-        String arraySizeType = arrayTypeData.getArraySizeType().getCode();
+        // String qualifierString = arrayTypeData.getQualifiersCode();
+        String qualifierString = get(INDEX_TYPE_QUALIFIERS).stream()
+                .map(C99Qualifier::getCode)
+                .collect(Collectors.joining(" "));
+        // String arraySizeType = arrayTypeData.getArraySizeType().getCode();
+        String arraySizeType = get(ARRAY_SIZE_MODIFIER).getCode();
 
         StringBuilder arrayContentCode = new StringBuilder(qualifierString);
         if (!qualifierString.isEmpty() && !arraySizeType.isEmpty()) {
@@ -68,10 +102,10 @@ public abstract class ArrayType extends Type {
 
         // If element type is itself an ArrayType, put this array code in front of the name
         if (elementType instanceof ArrayType) {
-            return elementType.getCode(nameCode + "[" + arrayContentCode + "]");
+            return elementType.getCode(sourceNode, nameCode + "[" + arrayContentCode + "]");
         }
 
-        return getElementType().getCode() + " " + nameCode + "[" + arrayContentCode + "]";
+        return getElementType().getCode(sourceNode) + " " + nameCode + "[" + arrayContentCode + "]";
     }
 
     @Override

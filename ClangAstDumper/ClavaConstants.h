@@ -25,6 +25,7 @@ namespace clava {
         DECL,
         NAMED_DECL,
         VALUE_DECL,
+        TYPE_DECL,
         FUNCTION_DECL,
         CXX_METHOD_DECL,
         VAR_DECL,
@@ -49,7 +50,10 @@ namespace clava {
         CHARACTER_LITERAL,
         INTEGER_LITERAL,
         FLOATING_LITERAL,
-        CXX_BOOL_LITERAL_EXPR
+        CXX_BOOL_LITERAL_EXPR,
+        COMPOUND_LITERAL_EXPR,
+        INIT_LIST_EXPR,
+        STRING_LITERAL
     };
 
     /**
@@ -69,7 +73,11 @@ namespace clava {
         BUILTIN_TYPE,
         FUNCTION_TYPE,
         FUNCTION_PROTO_TYPE,
-        TAG_TYPE
+        TAG_TYPE,
+        ARRAY_TYPE,
+        CONSTANT_ARRAY_TYPE,
+        INCOMPLETE_ARRAY_TYPE,
+        VARIABLE_ARRAY_TYPE,
     };
 
 

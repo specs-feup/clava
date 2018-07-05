@@ -15,10 +15,14 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.utils.Typable;
 
 /**
  * Represents the declaration of a variable, function or enum constant.
@@ -26,11 +30,35 @@ import pt.up.fe.specs.clava.ast.type.Type;
  * @author JoaoBispo
  *
  */
-public abstract class ValueDecl extends NamedDecl {
+public abstract class ValueDecl extends NamedDecl implements Typable {
+
+    /// DATAKEYS BEGIN
+
+    /**
+     * The type associated with this ValueDecl.
+     */
+    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+
+    /**
+     * True if this symbol is weakly-imported, or declared with the weak or weak-reference attribute.
+     */
+    public final static DataKey<Boolean> IS_WEAK = KeyFactory.bool("is_weak");
+
+    /// DATAKEYS END
 
     public ValueDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(declName, type, declData, info, children);
+    }
+
+    @Override
+    public Type getType() {
+        return get(TYPE);
+    }
+
+    @Override
+    public void setType(Type type) {
+        set(TYPE, type);
     }
 
 }

@@ -21,10 +21,47 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraApiResource implements LaraResourceProvider {
 
+    // Gprofer
+    GPROFER("gprofer/Gprofer.lara"),
+    GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
+
+    // AUTOPAR
+    ADDITIONAL_CONDITIONS_CHECK("autopar/additionalConditionsCheck.lara"),
+    ADD_OPENMP_DIRECTIVES("autopar/AddOpenMPDirectivesForLoop.lara"),
+    AUTOPAR_UTILS("autopar/AutoParUtils.lara"),
+    AUTOPAR_1("autopar/BuildPetitFileInput.lara"),
+    AUTOPAR_2("autopar/checkForFunctionCalls.lara"),
+    AUTOPAR_3("autopar/checkForInvalidStmts.lara"),
+    AUTOPAR_4("autopar/checkForOpenMPCanonicalForm.lara"),
+    AUTOPAR_5("autopar/checkvarreReduction.lara"),
+    AUTOPAR_6("autopar/ExecPetitDependencyTest.lara"),
+    AUTOPAR_7("autopar/FindReductionArrays.lara"),
+    AUTOPAR_8("autopar/get_varTypeAccess.lara"),
+    AUTOPAR_9("autopar/InlineFunctionCalls.lara"),
+    AUTOPAR_10("autopar/NormalizedBinaryOp.lara"),
+    AUTOPAR_11("autopar/ParallelizeLoop.lara"),
+    AUTOPAR_12("autopar/RemoveNakedloops.lara"),
+    AUTOPAR_13("autopar/SetArrayAccessOpenMPscoping.lara"),
+    AUTOPAR_14("autopar/SetMemberAccessOpenMPscoping.lara"),
+    AUTOPAR_15("autopar/SetVariableAccess.lara"),
+    AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
+    AUTOPAR_17("autopar/Parallelize.lara"),
+
+    // MPI
+    MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
+    MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.lara"),
+    MPI_UTILS("mpi/MpiUtils.lara"),
+
+    // MPI Patterns
+    ITERATION_VARIABLE_PATTERN("mpi/patterns/IterationVariablePattern.lara"),
+    MPI_ACCESS_PATTERNS("mpi/patterns/MpiAccessPatterns.lara"),
+    SCALAR_PATTERN("mpi/patterns/ScalarPattern.lara"),
+
     // OpenCL
     OPENCL_CALL("opencl/OpenCLCall.lara"),
     OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
     OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
+    OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
 
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),

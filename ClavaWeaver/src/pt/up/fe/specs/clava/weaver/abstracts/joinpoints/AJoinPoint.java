@@ -69,6 +69,7 @@ public abstract class AJoinPoint extends JoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         actions.add("replaceWith(AJoinPoint node)");
+        actions.add("replaceWith(String node)");
         actions.add("insertBefore(AJoinPoint node)");
         actions.add("insertBefore(String node)");
         actions.add("insertAfter(AJoinPoint node)");
@@ -94,6 +95,33 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param node 
      */
     public final AJoinPoint replaceWith(AJoinPoint node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), node);
+        	}
+        	AJoinPoint result = this.replaceWithImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "replaceWith", this, Optional.ofNullable(result), node);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "replaceWith", e);
+        }
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    public AJoinPoint replaceWithImpl(String node) {
+        throw new UnsupportedOperationException(get_class()+": Action replaceWith not implemented ");
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    public final AJoinPoint replaceWith(String node) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), node);
@@ -413,6 +441,11 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("userField(String fieldName)");
         attributes.add("parentRegion");
         attributes.add("currentRegion");
+        attributes.add("pragmas");
+        attributes.add("data");
+        attributes.add("keys");
+        attributes.add("getValue(String key)");
+        attributes.add("setValue(String key, Object value)");
     }
 
     /**
@@ -1353,6 +1386,151 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "currentRegion", e);
+        }
+    }
+
+    /**
+     * Get value on attribute pragmas
+     * @return the attribute's value
+     */
+    public abstract APragma[] getPragmasArrayImpl();
+
+    /**
+     * The pragmas associated with this node
+     */
+    public Bindings getPragmasImpl() {
+        APragma[] aPragmaArrayImpl0 = getPragmasArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aPragmaArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The pragmas associated with this node
+     */
+    public final Object getPragmas() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pragmas", Optional.empty());
+        	}
+        	Bindings result = this.getPragmasImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "pragmas", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "pragmas", e);
+        }
+    }
+
+    /**
+     * JS object with the parsed data of #pragma clava data, associated with this node
+     */
+    public abstract Object getDataImpl();
+
+    /**
+     * JS object with the parsed data of #pragma clava data, associated with this node
+     */
+    public final Object getData() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "data", Optional.empty());
+        	}
+        	Object result = this.getDataImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "data", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "data", e);
+        }
+    }
+
+    /**
+     * Get value on attribute keys
+     * @return the attribute's value
+     */
+    public abstract String[] getKeysArrayImpl();
+
+    /**
+     * A list of the properties currently supported by this node
+     */
+    public Bindings getKeysImpl() {
+        String[] stringArrayImpl0 = getKeysArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * A list of the properties currently supported by this node
+     */
+    public final Object getKeys() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "keys", Optional.empty());
+        	}
+        	Bindings result = this.getKeysImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "keys", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "keys", e);
+        }
+    }
+
+    /**
+     * 
+     * @param key
+     * @return 
+     */
+    public abstract Object getValueImpl(String key);
+
+    /**
+     * 
+     * @param key
+     * @return 
+     */
+    public final Object getValue(String key) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getValue", Optional.empty(), key);
+        	}
+        	Object result = this.getValueImpl(key);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getValue", Optional.ofNullable(result), key);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getValue", e);
+        }
+    }
+
+    /**
+     * 
+     * @param key
+     * @param value
+     * @return 
+     */
+    public abstract AJoinPoint setValueImpl(String key, Object value);
+
+    /**
+     * 
+     * @param key
+     * @param value
+     * @return 
+     */
+    public final Object setValue(String key, Object value) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "setValue", Optional.empty(), key, value);
+        	}
+        	AJoinPoint result = this.setValueImpl(key, value);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "setValue", Optional.ofNullable(result), key, value);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "setValue", e);
         }
     }
 

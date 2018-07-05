@@ -118,7 +118,7 @@ Clava.findJp = function($jp) {
 	
 	var $newJp = CxxWeaverApi.findJp($file.filepath, $jp.astId);
 	if($newJp === null) {
-		info("Could not find the given '" + $jp + "' in the current AST", "Clava.findJp");
+		info("Could not find the given '" + $jp + "' in the current AST. Please verify if a rebuild was done", "Clava.findJp");
 		return undefined;
 	}
 	
@@ -160,6 +160,16 @@ Clava.getAvailableIncludes = function() {
 	return CxxWeaverApi.getAvailableUserIncludes();
 }
 
+/**
+ *
+ * @return {J#Set<String>} a set with paths to the include folders of the current configuration.
+ */
+Clava.getIncludeFolders = function() {	
+	return CxxWeaverApi.getIncludeFolders();
+}
+
+
+
 /*
  *
  */
@@ -173,3 +183,10 @@ Clava.getFactory = function() {
 	return new AstFactory(Clava.getContext());
 }
 */
+
+/**** PRIVATE ****/
+
+Clava._getApiUtils = function() {	
+	return Java.type("pt.up.fe.specs.clava.weaver.ClavaApiUtils");
+}
+

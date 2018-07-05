@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 
 public interface ClangParserKeys {
 
@@ -54,6 +56,9 @@ public interface ClangParserKeys {
 
     DataKey<Set<String>> TOP_LEVEL_ATTR_IDS = KeyFactory.generic("clang_parser_stream_top_level_attr_ids",
             new HashSet<>());
+
+    DataKey<Map<File, Language>> FILE_LANGUAGE_DATA = KeyFactory
+            .generic("clang_parser_stream_file_language_data", () -> new HashMap<>());
 
     /**
      * Enables debug prints.

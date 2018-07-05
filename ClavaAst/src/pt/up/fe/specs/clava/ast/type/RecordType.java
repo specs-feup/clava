@@ -56,7 +56,7 @@ public class RecordType extends TagType {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // ClavaLog.warning("RecordType.getCode() is not working properly yet");
 
         String baseType = getRecordName();

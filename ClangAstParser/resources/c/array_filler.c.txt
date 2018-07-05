@@ -1,0 +1,6 @@
+int main() {
+   int i;
+   int mor_s_v[4] = {0,};
+   
+   return 0;
+}

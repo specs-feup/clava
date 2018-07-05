@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
+import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import com.google.common.base.Preconditions;
 
@@ -113,23 +113,19 @@ public class ClangAstParser {
 
     private final boolean dumpStdout;
     private final boolean useCustomResources;
-    private final boolean disableNewParsingMethod;
+    // private final boolean disableNewParsingMethod;
     private final FileResourceManager clangAstResources;
 
     public ClangAstParser() {
-        this(false, false, false);
+        this(false, false);
 
     }
 
-    // public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
-    // this(dumpStdout, useCustomResources, false);
-    // }
-
-    public ClangAstParser(boolean dumpStdout, boolean useCustomResources, boolean disableNewParsingMethod) {
+    // public ClangAstParser(boolean dumpStdout, boolean useCustomResources, boolean disableNewParsingMethod) {
+    public ClangAstParser(boolean dumpStdout, boolean useCustomResources) {
         this.dumpStdout = dumpStdout;
         this.useCustomResources = useCustomResources;
-        this.disableNewParsingMethod = disableNewParsingMethod;
-        // this.disableNewParsingMethod = true;
+        // this.disableNewParsingMethod = disableNewParsingMethod;
 
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
 
@@ -138,12 +134,6 @@ public class ClangAstParser {
         }
 
     }
-
-    // public ClangAstParser() {
-    // if (SwingUtils.isSwingAvailable()) {
-    // (new HeapWindow()).run();
-    // }
-    // }
 
     public ClangRootNode parse(Collection<String> files, List<String> options) {
 
@@ -202,7 +192,7 @@ public class ClangAstParser {
         config.add(ClavaNode.CONTEXT, context);
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        LineStreamParserV2 lineStreamParser = ClangStreamParserV2.newInstance(context);
+        LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context);
         if (SpecsSystem.isDebug()) {
             lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
         }
@@ -303,16 +293,13 @@ public class ClangAstParser {
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
         // Check if no new nodes should be used
-        Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
-                : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
+        // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        Map<String, ClavaNode> newNodes = lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
 
-        // ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-        // isTemporary, ompDirectives, enumToIntegerType, stderr, clangStreamParser.getParsedNodes());
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
                 newNodes);
-        // lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES));
-        // new HashMap<>());
 
         return new ClangRootNode(clangRootData, clangDump);
     }
@@ -326,7 +313,7 @@ public class ClangAstParser {
         return clangDump;
     }
 
-    private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParserV2 lineStreamParser) {
+    private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParser lineStreamParser) {
         File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
 
         // TODO: Temporary, needs to be set again, since this will run in a separate thread
@@ -529,7 +516,7 @@ public class ClangAstParser {
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         ClavaContext context = new ClavaContext();
-        LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance(context);
+        LineStreamParser clangStreamParser = ClangStreamParserV2.newInstance(context);
         ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
                         clangStreamParser));
@@ -783,69 +770,8 @@ public class ClangAstParser {
         }
 
         return executable.getFile();
-
-        /*
-        if (Platforms.isWindows()) {
-            // return IoUtils.resourceCopyVersioned(ClangAstResource.WIN_EXE, resourceFolder, false).getFile();
-            for (FileResourceProvider resource : ClangAstWebResource.getWindowsResources()) {
-                resource.writeVersioned(resourceFolder, ClangAstParser.class);
-                // IoUtils.resourceCopyVersioned(resource, resourceFolder, false);
-            }
-        
-            return new File(resourceFolder, ClangAstWebResource.WIN_EXE.getFilename());
-        }
-        */
-
-        /*
-        // CentOS 6
-        if (System.getProperty("os.version").contains(".el6.")) {
-            // Copy executable
-            ResourceWriteData file = ClangAstWebResource.CENTOS6_EXE.writeVersioned(resourceFolder,
-                    ClangAstParser.class);
-        
-            // Make file executable
-            if (file.isNewFile()) {
-                ProcessUtils.runProcess(Arrays.asList("chmod", "+x", file.getFile().getAbsolutePath()), false, true);
-            }
-        
-            return file.getFile();
-        }
-        */
-        /*
-        if (Platforms.isLinux()) {
-            // Copy executable
-            ResourceWriteData file = ClangAstWebResource.LINUX_EXE.writeVersioned(resourceFolder, ClangAstParser.class);
-            // ResourceCopyData file = IoUtils.resourceCopyVersioned(ClangAstResource.LINUX_EXE, resourceFolder, false);
-        
-            // Make file executable
-            if (file.isNewFile()) {
-                ProcessUtils.runProcess(Arrays.asList("chmod", "+x", file.getFile().getAbsolutePath()), false, true);
-            }
-        
-            return file.getFile();
-        }
-        */
-
-        // throw new RuntimeException("Platform currently not supported: " + System.getProperty("os.name"));
     }
 
-    /*
-    private static FileResourceProvider getExecutableResource(SupportedPlatform platform) {
-        
-        switch (platform) {
-        case WINDOWS:
-            return ClangAstWebResource.WIN_EXE;
-        case CENTOS6:
-            return ClangAstWebResource.CENTOS6_EXE;
-        case LINUX:
-            return ClangAstWebResource.LINUX_EXE;
-        case MAC_OS:
-            return ClangAstWebResource.MAC_OS_EXE;
-        default:
-            throw new RuntimeException("Case not defined: '" + platform + "'");
-        }
-    }
-    */
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
 
         switch (platform) {

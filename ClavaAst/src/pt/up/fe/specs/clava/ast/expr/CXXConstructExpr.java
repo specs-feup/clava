@@ -78,7 +78,7 @@ public class CXXConstructExpr extends Expr {
 
     @Override
     public String getCode() {
-        String typeCode = getExprType() instanceof NullType ? null : getExprType().getCode();
+        String typeCode = getExprType() instanceof NullType ? null : getExprType().getCode(this);
         return getCode(typeCode);
         // return getCode(getExprType().getCode());
     }

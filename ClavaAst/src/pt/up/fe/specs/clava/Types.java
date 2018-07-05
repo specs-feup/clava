@@ -248,6 +248,10 @@ public class Types {
 
     }
 
+    public static int hashCode(Type type) {
+        return toComparable(type).getCode().hashCode();
+    }
+
     private static Type toComparable(Type type) {
         if (type instanceof AutoType) {
             return toComparable(((AutoType) type).getDeducedType());

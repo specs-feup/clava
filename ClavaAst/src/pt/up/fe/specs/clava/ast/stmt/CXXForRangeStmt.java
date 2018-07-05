@@ -75,7 +75,7 @@ public class CXXForRangeStmt extends Stmt {
         VarDecl loopVar = (VarDecl) getLoopVar().getDecls().get(0);
 
         // String loopVarType = loopVar.getTypeCode().trim();
-        String loopVarType = loopVar.getType().getCode().trim();
+        String loopVarType = loopVar.getTypeCode().trim();
         if (loopVarType.endsWith(" &")) {
             loopVarType = loopVarType.substring(0, loopVarType.length() - 1) + "auto&";
         }

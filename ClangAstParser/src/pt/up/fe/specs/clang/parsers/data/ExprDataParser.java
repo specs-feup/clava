@@ -16,15 +16,17 @@ package pt.up.fe.specs.clang.parsers.data;
 import java.math.BigInteger;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
+import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
@@ -47,8 +49,8 @@ public class ExprDataParser {
         DataStore data = NodeDataParser.parseNodeData(lines, dataStore);
         // TODO: ClavaNodes.getType, should be in ClavaContext?
         data.add(Expr.TYPE, ClavaNodes.getType(dataStore, lines.nextLine()));
-        data.add(Expr.VALUE_KIND, GeneralParsers.enumFromInt(ValueKind.getEnumHelper(), lines));
-        data.add(Expr.OBJECT_KIND, GeneralParsers.enumFromInt(ObjectKind.getEnumHelper(), lines));
+        data.add(Expr.VALUE_KIND, LineStreamParsers.enumFromInt(ValueKind.getEnumHelper(), lines));
+        data.add(Expr.OBJECT_KIND, LineStreamParsers.enumFromInt(ObjectKind.getEnumHelper(), lines));
 
         return data;
     }
@@ -56,7 +58,7 @@ public class ExprDataParser {
     public static DataStore parseCastExprData(LineStream lines, DataStore dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        data.add(CastExpr.CAST_KIND, GeneralParsers.enumFromName(CastKind.getHelper(), lines));
+        data.add(CastExpr.CAST_KIND, LineStreamParsers.enumFromName(CastKind.getHelper(), lines));
 
         return data;
     }
@@ -64,7 +66,7 @@ public class ExprDataParser {
     public static DataStore parseLiteralData(LineStream lines, DataStore dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        data.add(Literal.SOURCE_LITERAL, lines.nextLine());
+        data.add(Literal.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
 
         return data;
     }
@@ -72,8 +74,8 @@ public class ExprDataParser {
     public static DataStore parseCharacterLiteralData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(CharacterLiteral.VALUE, GeneralParsers.parseLong(lines));
-        data.add(CharacterLiteral.KIND, GeneralParsers.enumFromInt(CharacterKind.getEnumHelper(), lines));
+        data.add(CharacterLiteral.VALUE, LineStreamParsers.longInt(lines));
+        data.add(CharacterLiteral.KIND, LineStreamParsers.enumFromInt(CharacterKind.getEnumHelper(), lines));
 
         return data;
     }
@@ -94,10 +96,38 @@ public class ExprDataParser {
         return data;
     }
 
+    public static DataStore parseStringLiteralData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseLiteralData(lines, dataStore);
+
+        // data.add(StringLiteral.STRING, ClavaDataParsers.literalSource(lines));
+
+        return data;
+    }
+
     public static DataStore parseCXXBoolLiteralExprData(LineStream lines, DataStore dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
-        data.add(CXXBoolLiteralExpr.VALUE, GeneralParsers.parseOneOrZero(lines.nextLine()));
+        data.add(CXXBoolLiteralExpr.VALUE, LineStreamParsers.oneOrZero(lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseCompoundlLiteralExprData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseLiteralData(lines, dataStore);
+
+        data.add(CompoundLiteralExpr.IS_FILE_SCOPE, LineStreamParsers.oneOrZero(lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseInitListExprData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(InitListExpr.ARRAY_FILLER, ClavaNodes.getExpr(dataStore, lines.nextLine()));
+        // data.add(InitListExpr.INITIALIZED_FIELD_IN_UNION, (FieldDecl) ClavaNodes.getDecl(dataStore,
+        // lines.nextLine()));
+        data.add(InitListExpr.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
+        data.add(InitListExpr.IS_STRING_LITERAL_INIT, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }

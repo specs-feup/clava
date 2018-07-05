@@ -22,7 +22,6 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
@@ -41,6 +40,7 @@ import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
@@ -226,14 +226,14 @@ public class CxxFile extends AFile {
 
     @Override
     public String getPathImpl() {
-        return tunit.getFolderpath();
+        return tunit.getFolderpath().orElse(null);
         /*
         String filename = tunit.getFilename();
         String path = tunit.getFilepath();
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-
+        
         return path;
         */
     }
@@ -245,6 +245,7 @@ public class CxxFile extends AFile {
 
         // String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
         String includePath = includeFile.getNode().getRelativeFilepath();
+
         tunit.addInclude(includePath, false);
         // tunit.addInclude(includeFile.getNode(), getWeaverEngine().getBaseSourceFolder());
 
@@ -261,7 +262,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String getRelativeFolderpathImpl() {
-        return tunit.getRelativeFolderpath();
+        return tunit.getRelativeFolderpath().orElse(null);
         // return CxxWeaver.getRelativeFolderpath(tunit);
     }
 
@@ -285,21 +286,22 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public void addGlobalImpl(String name, AJoinPoint type, String initValue) {
+    public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
 
         // Check if joinpoint is a CxxType
         if (!(type instanceof CxxType)) {
             SpecsLogs.msgInfo("addGlobal: the provided join point (" + type.getJoinpointType() + ") is not a type");
-            return;
+            return null;
         }
 
         Type typeNode = ((CxxType) type).getNode();
+        LiteralExpr literalExpr = CxxWeaver.getFactory().literalExpr(initValue, typeNode);
+        // LiteralExpr literalExpr = ClavaNodeFactory.literalExpr(initValue,
+        // ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
 
-        LiteralExpr literalExpr = ClavaNodeFactory.literalExpr(initValue,
-                ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
+        VarDecl global = tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
 
-        tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
-
+        return CxxJoinpoints.create(global, this, AVardecl.class);
     }
 
     @Override
@@ -374,7 +376,8 @@ public class CxxFile extends AFile {
         // File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
         // tunit.write(destinationFolder, baseSourceFolder);
 
-        tunit.write(destinationFolder);
+        File writtenFile = tunit.write(destinationFolder);
+        getWeaverEngine().getWeaverData().addManualWrittenFile(writtenFile);
     }
 
     @Override
@@ -389,7 +392,9 @@ public class CxxFile extends AFile {
 
     @Override
     public String getBaseSourcePathImpl() {
-        return tunit.getSourcePath().map(File::getPath).orElse(null);
+        SpecsLogs.msgWarn(
+                "Attribute $file.baseSourcePath is deprecated, please use attribute $file.relativeFolderpath, which returns the same.");
+        return tunit.getRelativeFolderpath().orElse(null);
     }
 
     @Override

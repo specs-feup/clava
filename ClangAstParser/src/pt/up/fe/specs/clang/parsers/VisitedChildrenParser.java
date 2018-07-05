@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -44,13 +45,12 @@ public class VisitedChildrenParser implements LineStreamWorker {
 
         String key = lineStream.nextLine();
 
-        int numChildren = GeneralParsers.parseInt(lineStream);
+        int numChildren = LineStreamParsers.integer(lineStream);
         List<String> childrenIds = parseChildren(lineStream, numChildren);
 
         // Check after consuming all elements from the stream
-        GeneralParsers.checkDuplicate(PARSER_ID, key, childrenIds, children);
+        LineStreamParsers.checkDuplicate(PARSER_ID, key, childrenIds, children);
         children.put(key, childrenIds);
-
     }
 
     private List<String> parseChildren(LineStream linestream, int numChildren) {

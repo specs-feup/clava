@@ -9,6 +9,7 @@
 
 const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDREN_MAP = {
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
+        {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -31,6 +32,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitTypeChildren(T, visitedChildren); break;
         case clava::TypeNode::FUNCTION_PROTO_TYPE:
             VisitFunctionProtoTypeChildren(static_cast<const FunctionProtoType *>(T), visitedChildren); break;
+        case clava::TypeNode::VARIABLE_ARRAY_TYPE:
+            VisitVariableArrayTypeChildren(static_cast<const VariableArrayType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -92,4 +95,23 @@ void ClangAstDumper::VisitFunctionProtoTypeChildren(const FunctionProtoType *T, 
 void ClangAstDumper::VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren) {
     // Just visit decl
     VisitDeclTop(T->getDecl());
+}
+
+void ClangAstDumper::VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    // Element type
+    VisitTypeTop(T->getElementType());
+    visitedChildren.push_back(clava::getId(T->getElementType(), id));
+}
+
+void ClangAstDumper::VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitArrayTypeChildren(T, visitedChildren);
+
+
+    // Visit and add size expression
+    VisitStmtTop(T->getSizeExpr());
+    visitedChildren.push_back(clava::getId(T->getSizeExpr(), id));
 }

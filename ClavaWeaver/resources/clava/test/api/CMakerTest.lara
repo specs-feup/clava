@@ -4,7 +4,7 @@ import clava.Clava;
 
 aspectdef CMakerTest
 
-	var cmaker = new CMaker("testapp")
+	var cmaker = (new CMaker("testapp"))
 		.setMinimumVersion("3.0.2")
 		.setGenerator("MinGW Makefiles")
 		.setMakeCommand("mingw32-make")

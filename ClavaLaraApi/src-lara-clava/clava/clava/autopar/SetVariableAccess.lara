@@ -1,0 +1,257 @@
+/**************************************************************
+* 
+*                       SetVariableAccess
+* 
+**************************************************************/
+// should I have checking for pointerAccessVarNames !!!
+import lara.Strings;
+import clava.autopar.get_varTypeAccess;
+
+aspectdef SetVariableAccess
+	input $ForStmt end
+
+	var loopindex = GetLoopIndex($ForStmt);
+	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
+		return;
+
+
+	var innerloopsControlVarname = [];
+	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
+	innerloopsControlVarname = innerloopsControlVarname.concat(LoopOmpAttributes[loopindex].innerloopsControlVarname);
+
+
+	LoopOmpAttributes[loopindex].varAccess = [];
+
+	var functionvarrefset = orderedVarrefs3($ForStmt.astAncestor('FunctionDecl'));
+	var loopvarrefset = orderedVarrefs3($ForStmt);
+
+
+	var noVarrefVariables = [];
+
+	for(var index = 0; index < loopvarrefset.length; index++)
+	{
+		var $varref = loopvarrefset[index];
+
+		call o : get_varTypeAccess($varref);
+		var varTypeAccess = o.varTypeAccess;
+
+
+		if (varTypeAccess === null)
+		{
+			continue;
+		}
+
+
+		var vardecl = o.vardecl;		
+		var varUse = o.varUse;
+		var declpos = null;
+		var varName = o.varName;
+
+		if (varTypeAccess !== 'varref' && noVarrefVariables.indexOf(varName) === -1)
+			noVarrefVariables.push(varName);
+
+		
+		var useExpr = (varUse === 'read') ? 'R' : (varUse === 'write') ? 'W' : 'RW';
+
+		if (vardecl !== null)
+		{
+			var vardeclRegion = vardecl.currentRegion.joinpointType;
+			if ($ForStmt.contains(vardecl) === true)
+				declpos = 'inside';
+			else if (vardecl.joinpointType === 'param')
+				declpos = 'param';
+			else if (vardeclRegion === 'file')
+				declpos = 'global';
+			else if (vardeclRegion === 'function')
+				declpos = 'outside';
+			else if (vardeclRegion === 'loop')
+				declpos = 'outside';
+			else
+				{
+					Add_msgError(LoopOmpAttributes, $ForStmt,'declpos for Variable ' + $varref.name + ' can not be specified');
+					return;
+				}			
+		}
+
+
+		if (
+			(varTypeAccess === 'varref' && (innerloopsControlVarname.indexOf($varref.name) !== -1 || loopControlVarname === $varref.name)) // is loop control variable
+			)
+			continue;
+
+		if ($varref.isFunctionArgument === true)
+		{
+			var callJP = $varref.ancestor('call');
+			if (safefunctionCallslist.indexOf(callJP.name) === -1)
+			{
+				Add_msgError(LoopOmpAttributes, $ForStmt,'Variable Access for ' + $varref.name + ' Can not be traced inside of function ' + callJP.name + 'calling at line #' + callJP.line);
+				return;
+			}
+		}
+		
+		var hasDescendantOfArrayAccess = false;
+		if ($varref.descendantsAndSelf('arrayAccess').length > 0)
+			hasDescendantOfArrayAccess = true;					
+
+		var varUsage = null;
+		var arraysizeStr = null;
+	
+		varUsage = {
+					line : $varref.line,
+					use : useExpr, 
+					code : $varref.code, 
+					isInsideLoopHeader : $varref.isInsideLoopHeader,
+					parentlooprank : $varref.astAncestor('ForStmt').rank
+					};		
+
+		if (varTypeAccess === 'memberArrayAccess' || varTypeAccess === 'arrayAccess')
+		{
+			varUsage.subscript = $varref.subscript;
+			if (vardecl !== null)
+			{
+				arraysizeStr = vardecl.code;
+				arraysizeStr = arraysizeStr.slice(arraysizeStr.indexOf('['),arraysizeStr.lastIndexOf(']')+1);
+				if (arraysizeStr.length === 0) // parameter pass as : int *array
+					arraysizeStr = null;
+			}			
+		}
+		
+		if (hasDescendantOfArrayAccess === true)
+		{
+			var subscriptVarNamelist = [];
+			for(var arrayAccessobj of  $varref.descendantsAndSelf('arrayAccess'))
+			{
+				call retsubscriptVars(arrayAccessobj,subscriptVarNamelist);
+			}
+			
+			varUsage.IsdependentCurrentloop = false;
+			if (subscriptVarNamelist.indexOf(loopControlVarname) !== -1)
+				varUsage.IsdependentCurrentloop = true;
+				
+			varUsage.IsdependentInnerloop = false;
+			for( var innerloopsVarname of innerloopsControlVarname)
+				if (subscriptVarNamelist.indexOf(innerloopsVarname) !== -1)
+					{
+						varUsage.IsdependentInnerloop = true;
+						break;
+					}
+
+			varUsage.IsdependentOuterloop = false;
+			for( var  subscriptVarName of subscriptVarNamelist)
+				if (
+						subscriptVarName !== loopControlVarname && 
+						innerloopsControlVarname.indexOf(subscriptVarName) === -1
+					)
+				{
+
+					var varObj = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'varref', name : subscriptVarName});
+
+					if (varObj.length !== 0 && varObj[0].use.indexOf('W') !== -1)
+						break; 
+					varUsage.IsdependentOuterloop = true;
+					break;
+				}
+
+
+			var strdep = '';
+			strdep = strdep + (varUsage.IsdependentCurrentloop === true ? 'dependentCurrentloop\t' : '');
+			strdep = strdep + (varUsage.IsdependentInnerloop === true ? 'dependentInnerloop' : '');
+			strdep = strdep + (varUsage.IsdependentOuterloop === true ? 'IsdependentOuterloop' : '');
+		}
+
+		var varObj = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : varTypeAccess, name : varName});
+
+		if (varObj.length ===0)
+		{
+			var varNextUse = FindVariableNextUse(functionvarrefset, LoopOmpAttributes[loopindex].end, varTypeAccess, varName);
+
+			LoopOmpAttributes[loopindex].varAccess.push({
+				name : varName,
+				varTypeAccess : varTypeAccess,
+				isInsideLoopHeader : $varref.isInsideLoopHeader,
+				declpos : declpos,
+				usedInClause : false,
+				use : useExpr,
+				useT : useExpr,
+				nextUse : varNextUse,
+				varUsage : [varUsage],
+				ArraySize : arraysizeStr,
+				hasDescendantOfArrayAccess : hasDescendantOfArrayAccess
+			});
+		}
+		else
+		{
+			for(var i=0;i<useExpr.length;i++)
+				if ( varObj[0].use[varObj[0].use.length-1] != useExpr[i] )
+				{
+					varObj[0].use += useExpr[i];
+				}
+			
+			varObj[0].use = Strings.replacer(varObj[0].use,'WRW','W');
+			//varobj[0].use = Strings.replacer(varobj[0].use,'RWR','W');
+			varObj[0].varUsage.push(varUsage);		
+			varObj[0].useT += useExpr;
+		}
+		
+
+	}
+
+
+
+	// should be improved !!!!!!!!
+	for(var index = 0 ; index < LoopOmpAttributes[loopindex].varAccess.length; index++)
+	{
+		var varObj = LoopOmpAttributes[loopindex].varAccess[index];
+		if (varObj.varTypeAccess === 'varref' && noVarrefVariables.indexOf(varObj.name) !== -1)
+		{
+			LoopOmpAttributes[loopindex].varAccess.splice(index,1);
+			index--;
+		}
+	}
+
+	LoopOmpAttributes[loopindex].privateVars = [];
+	LoopOmpAttributes[loopindex].firstprivateVars = [];
+	LoopOmpAttributes[loopindex].lastprivateVars = [];
+	LoopOmpAttributes[loopindex].reduction = [];
+
+end
+
+/**************************************************************
+* 
+*                       FindVariableNextUse
+* 
+**************************************************************/
+
+function FindVariableNextUse(functionvarrefset, loopEndline, varTypeAccess, varName)
+{
+	var varNextUse = null;
+
+	for(var index = 0; index < functionvarrefset.length; index++)
+		if (functionvarrefset[index].line > loopEndline)
+		{
+			var $varobj = functionvarrefset[index];
+			call o : get_varTypeAccess($varobj);
+			if (o.varTypeAccess === varTypeAccess && o.varName === varName)
+			{
+				varNextUse = (o.varUse == 'read') ? 'R' : (o.varUse == 'write') ? 'W' : 'RW';
+				break;
+			}
+		}
+
+	return varNextUse;	 
+}
+
+aspectdef retsubscriptVars
+	input $stmt, varNamelist end
+
+	select $stmt.subscript end
+	apply
+		for($varref of $subscript.descendantsAndSelf("varref"))
+			if (varNamelist.indexOf($varref.name) === -1)
+				varNamelist.push($varref.name);
+	end
+
+end
+
+
+

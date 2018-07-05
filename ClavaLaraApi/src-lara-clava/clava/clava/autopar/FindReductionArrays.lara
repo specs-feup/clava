@@ -1,0 +1,171 @@
+/**************************************************************
+* 
+*                       FindReductionArrays
+* 
+**************************************************************/
+aspectdef FindReductionArrays
+	input $ForStmt, candidateArrayName, exprline, isdependentInnerloop, isdependentCurrentloop, isdependentOuterloop end
+	output isReductionArrays end
+	var reduction = [];
+
+	isReductionArrays = false;
+	
+	var check1 = (isdependentInnerloop === true) && (isdependentCurrentloop === false) && (isdependentOuterloop === false);
+	var check2 = (isdependentInnerloop === false) && (isdependentCurrentloop === false) && (isdependentOuterloop === true);
+
+	if (check1 === false && check2 === false)
+		return;
+	
+	var loopindex = GetLoopIndex($ForStmt);
+	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
+
+
+	var candidateArray = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {usedInClause : false, name : candidateArrayName})[0];
+
+	var count = (candidateArray.useT.match(/RW/g) || []);
+
+
+	if (count.length >1 || count.length === 0)
+		return;
+
+
+	// check for similar dependency of all occurrence for candidateArray
+	for(var i = 1; i < candidateArray.varUsage.length; i++)
+		if (
+			candidateArray.varUsage[i].IsdependentCurrentloop !== candidateArray.varUsage[0].IsdependentCurrentloop ||
+			candidateArray.varUsage[i].IsdependentInnerloop !== candidateArray.varUsage[0].IsdependentInnerloop ||
+			candidateArray.varUsage[i].IsdependentOuterloop !== candidateArray.varUsage[0].IsdependentOuterloop
+			)
+			return;
+	select $ForStmt.body.expr end
+	apply
+
+			call o: retReductionOpArray($expr, candidateArray, isdependentInnerloop);
+			reduction = o.reduction;
+			break #$ForStmt;
+		
+	end
+	condition $expr.line === exprline end
+
+	if (reduction.length > 0)
+	{
+		LoopOmpAttributes[loopindex].reduction = LoopOmpAttributes[loopindex].reduction.concat(reduction);
+		isReductionArrays = true;
+	}
+	return;
+
+
+end	
+
+
+
+/**************************************************************
+* 
+*                       retReductionOpArray
+* 
+**************************************************************/
+aspectdef retReductionOpArray
+	input $expr, candidateVar, isdependentInnerloop end
+	output reduction end
+
+
+	reduction = [];
+	var candidateVarUse = null;
+
+	var exprvarrefset = orderedVarrefs3($expr);
+	var candidateVarOp = [];
+	var otherVarUsednumber = 0; // number of other varref in expr
+	for(var j = 0; j < exprvarrefset.length; j++)
+	{	
+		if (exprvarrefset[j].name === candidateVar.name)
+		{
+			if (exprvarrefset[j].useExpr.use.indexOf('write') !== -1)
+				candidateVarUse = exprvarrefset[j].useExpr.code;
+
+			if (typeof(exprvarrefset[j].ancestor('expression')) !== 'undefined' && exprvarrefset[j].ancestor('expression').astName === 'ParenExpr')
+			{
+				candidateVarOp = [];
+				break; // candidateVar should not be in any ParenExpr
+			}
+
+			var op = null;
+			if (typeof(exprvarrefset[j].ancestor('unaryOp')) !== 'undefined')
+				op = exprvarrefset[j].ancestor('unaryOp').kind;
+			else if (typeof(exprvarrefset[j].ancestor('binaryOp')) !== 'undefined')
+				op = exprvarrefset[j].ancestor('binaryOp').kind + 
+					(( exprvarrefset[j].ancestor('binaryOp').kind !== 'assign' && exprvarrefset[j].ancestor('binaryOp').isAssignment === true) ? '-assign' :'');										
+			if (op === 'sub' &&
+				typeof(exprvarrefset[j].ancestor('binaryOp').right.vardecl) !== 'undefined' && 
+				exprvarrefset[j].ancestor('binaryOp').right.vardecl.name === candidateVar.name
+				)
+			{
+				candidateVarOp = [];
+				break; // x = expr - x  not acceptable
+			}
+
+			candidateVarOp.push(op);
+		}
+	}
+	
+	var op = null;
+	if (candidateVarOp.length == 1)
+	{
+		op = candidateVarOp[0];
+	}
+	else if(candidateVarOp.length == 2 && 
+			candidateVarOp[1] == 'assign' &&
+			(
+				['add-assign', 'sub-assign', 'mul-assign','and-assign', 'or-assign' , 'xor-assign'].indexOf(candidateVarOp[0]) !== -1 ||
+				['add', 'mul', 'sub', 'and', 'or', 'l_and' , 'l_or'].indexOf(candidateVarOp[0]) !== -1
+			)
+		)
+	{
+		op = candidateVarOp[0];
+	}
+	else
+	{
+		return;
+	}
+
+
+	var arraysizeStr = null;
+
+	if (isdependentInnerloop === true)
+		arraysizeStr = candidateVar.name + candidateVar.ArraySize.allReplace({'\\[':'[:'});
+	else if (isdependentInnerloop === false)		
+	{
+		arraysizeStr = candidateVarUse;
+	}	
+	else
+	{
+		return;
+	}
+
+
+	var findOpflag = true;
+	if ( ['pre_dec', 'post_dec', 'sub', 'sub-assign'].indexOf(op) !== -1 )
+		reduction.push('reduction (-:' +  arraysizeStr + ')');
+	else if ( ['pre_inc', 'post_inc', 'add', 'add-assign'].indexOf(op) !== -1 )
+		reduction.push('reduction (+:' + arraysizeStr + ')');
+	else if ( ['mul' , 'mul-assign'].indexOf(op) !== -1 )
+		reduction.push('reduction (*:' + arraysizeStr + ')');
+	else if ( ['and' , 'and-assign'].indexOf(op) !== -1 )
+		reduction.push('reduction (&:' + arraysizeStr + ')');
+	else if ( ['xor' , 'xor-assign'].indexOf(op) !== -1 )
+		reduction.push('reduction (^:' + arraysizeStr + ')');
+	else if ( ['or' , 'or-assign'].indexOf(op) !== -1 )
+		reduction.push('reduction (|:' + arraysizeStr + ')');
+	else if ( ['l_and'].indexOf(op) !== -1 )
+		reduction.push('reduction (&&:' + arraysizeStr + ')');
+	else if ( ['l_or'].indexOf(op) !== -1 )
+		reduction.push('reduction (||:' + arraysizeStr + ')');
+	else
+		findOpflag = false;
+
+	if (findOpflag === true)
+		candidateVar.usedInClause = true;
+	else
+		println('something wrong for reduction Op detection !!!');			
+
+
+end

@@ -154,6 +154,15 @@ public abstract class AArrayAccess extends AExpression {
      * @param node 
      */
     @Override
+    public AJoinPoint replaceWithImpl(String node) {
+        return this.aExpression.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         return this.aExpression.insertBeforeImpl(node);
     }
@@ -367,8 +376,10 @@ public abstract class AArrayAccess extends AExpression {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -386,15 +397,18 @@ public abstract class AArrayAccess extends AExpression {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

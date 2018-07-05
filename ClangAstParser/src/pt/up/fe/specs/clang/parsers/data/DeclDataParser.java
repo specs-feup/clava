@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
@@ -27,6 +27,8 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.TypeDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
@@ -49,12 +51,12 @@ public class DeclDataParser {
 
         DataStore data = NodeDataParser.parseNodeData(lines, dataStore);
 
-        data.add(Decl.IS_IMPLICIT, GeneralParsers.parseOneOrZero(lines));
-        data.add(Decl.IS_USED, GeneralParsers.parseOneOrZero(lines));
-        data.add(Decl.IS_REFERENCED, GeneralParsers.parseOneOrZero(lines));
-        data.add(Decl.IS_INVALID_DECL, GeneralParsers.parseOneOrZero(lines));
+        data.add(Decl.IS_IMPLICIT, LineStreamParsers.oneOrZero(lines));
+        data.add(Decl.IS_USED, LineStreamParsers.oneOrZero(lines));
+        data.add(Decl.IS_REFERENCED, LineStreamParsers.oneOrZero(lines));
+        data.add(Decl.IS_INVALID_DECL, LineStreamParsers.oneOrZero(lines));
 
-        List<Attribute> attributes = GeneralParsers.parseStringList(lines).stream()
+        List<Attribute> attributes = LineStreamParsers.stringList(lines).stream()
                 .map(attrId -> ClavaNodes.getAttr(dataStore, attrId))
                 .collect(Collectors.toList());
 
@@ -70,16 +72,35 @@ public class DeclDataParser {
 
         data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
         data.add(NamedDecl.DECL_NAME, lines.nextLine());
-        data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
+        data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
 
-        data.add(NamedDecl.IS_HIDDEN, GeneralParsers.parseOneOrZero(lines));
-        data.add(NamedDecl.IS_CXX_CLASS_MEMBER, GeneralParsers.parseOneOrZero(lines));
-        data.add(NamedDecl.IS_CXX_INSTANCE_MEMBER, GeneralParsers.parseOneOrZero(lines));
+        data.add(NamedDecl.IS_HIDDEN, LineStreamParsers.oneOrZero(lines));
+        data.add(NamedDecl.IS_CXX_CLASS_MEMBER, LineStreamParsers.oneOrZero(lines));
+        data.add(NamedDecl.IS_CXX_INSTANCE_MEMBER, LineStreamParsers.oneOrZero(lines));
 
-        data.add(NamedDecl.LINKAGE, GeneralParsers.enumFromName(Linkage.class, lines));
-        data.add(NamedDecl.VISIBILITY, GeneralParsers.enumFromName(Visibility.class, lines));
+        data.add(NamedDecl.LINKAGE, LineStreamParsers.enumFromName(Linkage.class, lines));
+        data.add(NamedDecl.VISIBILITY, LineStreamParsers.enumFromName(Visibility.class, lines));
 
         // data.add(NamedDecl.UNDERLYING_DECL, ClavaNodes.getDecl(dataStore, lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseTypeDeclData(LineStream lines, DataStore dataStore) {
+        // Parse NamedDecl data
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        data.add(TypeDecl.TYPE_FOR_DECL, ClavaNodes.getType(dataStore, lines.nextLine()));
+
+        return data;
+    }
+
+    public static DataStore parseValueDeclData(LineStream lines, DataStore dataStore) {
+        // Parse NamedDecl data
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        data.add(ValueDecl.TYPE, ClavaNodes.getType(dataStore, lines.nextLine()));
+        data.add(ValueDecl.IS_WEAK, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }
@@ -87,10 +108,10 @@ public class DeclDataParser {
     public static DataStore parseFunctionDeclData(LineStream lines, DataStore dataStore) {
 
         // Parse NamedDecl data
-        DataStore data = parseNamedDeclData(lines, dataStore);
+        DataStore data = parseValueDeclData(lines, dataStore);
 
-        data.add(FunctionDecl.IS_CONSTEXPR, GeneralParsers.parseOneOrZero(lines));
-        data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
+        data.add(FunctionDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
 
         return data;
     }
@@ -108,18 +129,18 @@ public class DeclDataParser {
     public static DataStore parseVarDeclData(LineStream lines, DataStore dataStore) {
 
         // Parse NamedDecl data
-        DataStore data = parseNamedDeclData(lines, dataStore);
+        DataStore data = parseValueDeclData(lines, dataStore);
 
-        data.add(VarDecl.STORAGE_CLASS, GeneralParsers.enumFromInt(StorageClass.getHelper(), lines));
-        data.add(VarDecl.TLS_KIND, GeneralParsers.enumFromInt(TLSKind.getHelper(), lines));
-        data.add(VarDecl.IS_MODULE_PRIVATE, GeneralParsers.parseOneOrZero(lines));
-        data.add(VarDecl.IS_NRVO_VARIABLE, GeneralParsers.parseOneOrZero(lines));
-        data.add(VarDecl.INIT_STYLE, GeneralParsers.enumFromInt(InitializationStyle.getHelper(), lines));
+        data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromInt(StorageClass.getHelper(), lines));
+        data.add(VarDecl.TLS_KIND, LineStreamParsers.enumFromInt(TLSKind.getHelper(), lines));
+        data.add(VarDecl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines));
+        data.add(VarDecl.IS_NRVO_VARIABLE, LineStreamParsers.oneOrZero(lines));
+        data.add(VarDecl.INIT_STYLE, LineStreamParsers.enumFromInt(InitializationStyle.getHelper(), lines));
 
-        data.add(VarDecl.IS_CONSTEXPR, GeneralParsers.parseOneOrZero(lines));
-        data.add(VarDecl.IS_STATIC_DATA_MEMBER, GeneralParsers.parseOneOrZero(lines));
-        data.add(VarDecl.IS_OUT_OF_LINE, GeneralParsers.parseOneOrZero(lines));
-        data.add(VarDecl.HAS_GLOBAL_STORAGE, GeneralParsers.parseOneOrZero(lines));
+        data.add(VarDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
+        data.add(VarDecl.IS_STATIC_DATA_MEMBER, LineStreamParsers.oneOrZero(lines));
+        data.add(VarDecl.IS_OUT_OF_LINE, LineStreamParsers.oneOrZero(lines));
+        data.add(VarDecl.HAS_GLOBAL_STORAGE, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }
@@ -128,7 +149,7 @@ public class DeclDataParser {
         // Parse VarDecl data
         DataStore data = parseVarDeclData(lines, dataStore);
 
-        data.add(ParmVarDecl.HAS_INHERITED_DEFAULT_ARG, GeneralParsers.parseOneOrZero(lines));
+        data.add(ParmVarDecl.HAS_INHERITED_DEFAULT_ARG, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }

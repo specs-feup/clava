@@ -74,7 +74,7 @@ public class BuiltinTypeLegacy extends BuiltinType {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         // String type = getBareType();
         String type = keywords.stream()
                 .map(keyword -> keyword.getCode())

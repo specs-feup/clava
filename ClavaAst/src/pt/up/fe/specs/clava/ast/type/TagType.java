@@ -26,12 +26,28 @@ public abstract class TagType extends Type {
     private final DeclRef declInfo;
     private final TagKind tagKind;
 
+    // HACK
+    private final boolean tempNode;
+
+    /*
+    public TagType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    
+        // TODO: TEMPORARY, ADD DATA
+        this.declInfo = new DeclRef("place_holder_1", "place_holder_2", "place_holder_3");
+        this.tagKind = TagKind.NO_KIND;
+    
+        tempNode = true;
+    }
+    */
     public TagType(DeclRef declInfo, TagKind tagKind, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(typeData, info, children);
 
         this.declInfo = declInfo;
         this.tagKind = tagKind;
+
+        tempNode = false;
     }
 
     public DeclRef getDeclInfo() {
@@ -48,7 +64,14 @@ public abstract class TagType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
+        if (tempNode) {
+            if (name == null) {
+                return get(TYPE_AS_STRING);
+            }
+            return get(TYPE_AS_STRING) + " " + get(TYPE_AS_STRING);
+        }
+
         // System.out.println("TAGTYPE:" + getTagKind());
         // System.out.println("DECL INFO:" + getDeclInfo());
         // System.out.println("TAG KIND:" + getTagKind());

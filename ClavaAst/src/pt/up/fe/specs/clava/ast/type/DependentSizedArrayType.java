@@ -15,17 +15,23 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class DependentSizedArrayType extends ArrayType {
+
+    public DependentSizedArrayType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
             Type elementType, Expr sizeExpr) {
@@ -35,19 +41,20 @@ public class DependentSizedArrayType extends ArrayType {
 
     private DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-
-        super(arrayTypeData, typeData, info, children);
+        this(new LegacyToDataStore().setArrayType(arrayTypeData).setType(typeData).setNodeInfo(info).getData(),
+                children);
+        // super(arrayTypeData, typeData, info, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DependentSizedArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DependentSizedArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
-    @Override
-    public Type getElementType() {
-        return getChild(Type.class, 0);
-    }
+    // @Override
+    // public Type getElementType() {
+    // return getChild(Type.class, 0);
+    // }
 
     public Optional<Expr> getSizeExpr() {
         Expr sizeExpr = getChild(Expr.class, 1);

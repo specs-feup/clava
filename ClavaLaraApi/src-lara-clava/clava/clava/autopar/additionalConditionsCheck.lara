@@ -1,0 +1,40 @@
+/**************************************************************
+* 
+*                   additionalConditionsCheck
+* 
+**************************************************************/
+import clava.autopar.checkForFunctionCalls;
+
+aspectdef additionalConditionsCheck	
+	input $ForStmt end
+
+	var loopindex = GetLoopIndex($ForStmt);
+	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
+		return;
+
+
+	
+	call o : checkForFunctionCalls($ForStmt);
+	if (o.FunctionCalls.length > 0)
+	{
+		Add_msgError(LoopOmpAttributes, $ForStmt, 'Found function call inside loop that prevented parallelization: ' + o.FunctionCalls.join(','));
+	}
+	
+
+	// check non-affine array subscript A[B[j]].... ????
+	//------------------------------------------------------------
+	// check for usage of array access as the subscript A[B[.]]
+	//------------------------------------------------------------
+	select $ForStmt.arrayAccess.subscript end
+	apply
+		if ($subscript.descendantsAndSelf('arrayAccess').length > 0)
+		{
+			Add_msgError(LoopOmpAttributes, $ForStmt,' Array access ' + $arrayAccess.code + ' has subscript of arrayType ' + $subscript.code);
+			println($subscript.code);
+			return;
+		}
+	end
+
+
+
+end

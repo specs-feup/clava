@@ -12,7 +12,6 @@
 
 namespace clava {
 
-    //extern const std::string BUILTIN_KIND[];
     extern const std::string CAST_KIND[];
     extern const std::string ATTRIBUTES[];
     extern const std::string CALLING_CONVENTION[];
@@ -21,6 +20,7 @@ namespace clava {
     extern const std::string LINKAGE[];
     extern const std::string VISIBILITY[];
     extern const std::string BUILTIN_KIND[];
+    extern const std::string ARRAY_SIZE_MODIFIER[];
 };
 
 #endif //CLANGASTDUMPER_CLANGENUMS_H

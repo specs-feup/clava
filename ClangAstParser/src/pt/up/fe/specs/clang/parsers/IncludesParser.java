@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clava.Include;
@@ -31,8 +32,8 @@ public class IncludesParser implements LineStreamWorker {
 
         File sourceFile = new File(lineStream.nextLine());
         String include = lineStream.nextLine();
-        int line = GeneralParsers.parseInt(lineStream);
-        boolean isAngled = GeneralParsers.parseOneOrZero(lineStream);
+        int line = LineStreamParsers.integer(lineStream);
+        boolean isAngled = LineStreamParsers.oneOrZero(lineStream);
 
         includes.add(new Include(sourceFile, include, line, isAngled));
     }

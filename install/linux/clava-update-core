@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+
+# Absolute path to this script, e.g. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f "$0")
+# Absolute path this script is in, thus /home/user/bin
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+
+# Should be running on the folder where Clava.jar will by
+# get the jar and save it inside a Clava directory
+wget -N specs.fe.up.pt/tools/clava.jar
+# get the clang_ast.resources file
+wget -N specs.fe.up.pt/tools/clang_ast.resources
+
+# Go to the previous folder
+cd ..
+
+
+# get the clava script
+wget -N specs.fe.up.pt/tools/clava/clava
+chmod +x clava
+
+# get the clava-unit script
+wget -N specs.fe.up.pt/tools/clava/clava-unit
+chmod +x clava-unit
+
+# get the clava-doc script
+wget -N specs.fe.up.pt/tools/clava/clava-doc
+chmod +x clava-doc
+
+# get CMake modules
+mkdir /usr/local/lib/clava
+cd /usr/local/lib/clava
+# It seems that GitHub does not store time-stamping information?
+#wget https://raw.githubusercontent.com/specs-feup/clava/master/CMake/ClavaConfig.cmake -O $SCRIPTPATH/ClavaConfig.cmake
+#wget https://raw.githubusercontent.com/specs-feup/clava/master/CMake/ApplyLARA.cmake -O $SCRIPTPATH/ApplyLARA.cmake
+#wget https://raw.githubusercontent.com/specs-feup/clava/master/CMake/ClavaConfig.cmake -O ClavaConfig.cmake
+#wget https://raw.githubusercontent.com/specs-feup/clava/master/CMake/ApplyLARA.cmake -O ApplyLARA.cmake
+#rm ClavaConfig.cmake
+#wget -N https://rawgithub.com/specs-feup/clava/master/CMake/ClavaConfig.cmake
+#rm ApplyLARA.cmake
+#wget -N https://rawgithub.com/specs-feup/clava/master/CMake/ApplyLARA.cmake
+
+wget -N specs.fe.up.pt/tools/clava/ClavaConfig.cmake
+wget -N specs.fe.up.pt/tools/clava/ApplyLARA.cmake
+echo -n "$SCRIPTPATH/clava.jar" > clava-installation-jar.txt
+
+mkdir clava
+cd clava
+wget -N specs.fe.up.pt/tools/clava/ClavaGenerate.cmake
+wget -N specs.fe.up.pt/tools/clava/ClavaWeave.cmake
+cd ..

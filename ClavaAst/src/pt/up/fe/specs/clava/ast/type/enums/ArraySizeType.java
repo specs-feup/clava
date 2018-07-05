@@ -13,6 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
+/**
+ * @deprecated replaced by ArraySizeModifier
+ * @author JoaoBispo
+ *
+ */
 public enum ArraySizeType {
     NORMAL(""),
     STATIC("static"),

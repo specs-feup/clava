@@ -13,14 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
+import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 /**
  * Represents a C array with a specified constant size.
@@ -37,65 +37,53 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  */
 public class ConstantArrayType extends ArrayType {
 
-    private final int constant;
+    /// DATAKEYS BEGIN
 
-    public ConstantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Type elementType) {
-        this(constant, arrayTypeData, typeData, info, Arrays.asList(elementType));
+    public final static DataKey<BigInteger> ARRAY_SIZE = KeyFactory
+            .object("arraySize", BigInteger.class);
+
+    /// DATAKEYS END
+
+    public ConstantArrayType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // constant = get(ARRAY_SIZE).intValue();
     }
 
-    private ConstantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(arrayTypeData, typeData, info, children);
+    // private final int constant;
 
-        this.constant = constant;
-    }
+    // public ConstantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Type elementType) {
+    // this(constant, arrayTypeData, typeData, info, Arrays.asList(elementType));
+    // }
+
+    // private ConstantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(arrayTypeData, typeData, info, children);
+    //
+    // setInPlace(ARRAY_SIZE, BigInteger.valueOf(constant));
+    // // this.constant = constant;
+    // }
 
     public int getConstant() {
-        return constant;
+        return get(ARRAY_SIZE).intValue();
+        // return constant;
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ConstantArrayType(constant, getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public Type getElementType() {
-        return getChild(Type.class, 0);
-    }
-
-    // @Override
-    // public Type getElementType() {
-    // return getChild(Type.class, 0);
+    // public BigInteger getConstant() {
+    // return get(ARRAY_SIZE);
+    // // return constant;
     // }
 
     // @Override
-    // public String getCode() {
-    // Type elementType = getElementType();
-    // String space = elementType instanceof ConstantArrayType ? "" : " ";
-    //
-    // return elementType.getCode() + space + "[" + constant + "]";
+    // protected ClavaNode copyPrivate() {
+    // return new ConstantArrayType(constant, getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
     // }
-
-    /*
-    @Override
-    public String getCode(String name) {
-        String nameCode = name == null ? "" : name;
-    
-        Type elementType = getElementType();
-        // If element type is itself a ConstantArrayType, add constant to the name
-        if (elementType instanceof ArrayType) {
-            return elementType.getCode(nameCode + "[" + constant + "]");
-        }
-    
-        return getElementType().getCode() + " " + nameCode + "[" + constant + "]";
-    }
-    */
 
     @Override
     protected String getArrayCode() {
-        return Integer.toString(constant);
+        return get(ARRAY_SIZE).toString();
+        // return Integer.toString(constant);
     }
 
 }

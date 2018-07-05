@@ -45,6 +45,17 @@ public class EnumDecl extends TagDecl {
     private final boolean isModulePrivate;
     private final Type integerType;
 
+    /*
+    public EnumDecl(DataStore data, Collection<? extends EnumConstantDecl> children) {
+        super(data, children);
+    
+        // TODO: THIS IS TEMPORARY!!!!
+        this.enumScopeType = EnumScopeType.CLASS;
+        this.isModulePrivate = false;
+        this.integerType = getFactory().builtinType("int");
+    }
+    */
+
     public EnumDecl(EnumScopeType enumScopeType, String tagName, boolean isModulePrivate, Type integerType,
             EnumType type, DeclData declData,
             ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
@@ -119,8 +130,8 @@ public class EnumDecl extends TagDecl {
         return builder.toString();
     }
 
-    private static void addType(Type type, StringBuilder builder) {
-        String typeCode = type.getCode();
+    private void addType(Type type, StringBuilder builder) {
+        String typeCode = type.getCode(this);
 
         // Only append if not a default type
         if (DEFAULT_TYPES.contains(typeCode)) {
@@ -139,8 +150,9 @@ public class EnumDecl extends TagDecl {
         STRUCT,
         NO_SCOPE;
 
-        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(EnumScopeType.class,
-                NO_SCOPE);
+        private static final Lazy<EnumHelperWithValue<EnumScopeType>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(EnumScopeType.class,
+                        NO_SCOPE);
 
         public static EnumHelperWithValue<EnumScopeType> getEnumHelper() {
             return ENUM_HELPER.get();

@@ -1,0 +1,31 @@
+/**************************************************************
+* 
+*                      checkForInvalidStmts
+* 
+**************************************************************/
+aspectdef checkForInvalidStmts
+ 	input $ForStmt end
+ 	output InvalidStmts end
+ 	InvalidStmts = [];
+ 	
+ 	// check for [exit] at any subregion
+	select $ForStmt.call{'exit'} end
+	apply
+		InvalidStmts.push($call.name + '#' + $call.line);
+		return;
+	end
+
+	// check for [break,return]
+	select $ForStmt.body.stmt end
+	apply
+		if (
+			$stmt.astName === 'ReturnStmt'  ||
+			($stmt.astName === 'BreakStmt' && $stmt.astAncestor('ForStmt').line === $ForStmt.line)
+			)
+			{
+				InvalidStmts.push($stmt.astName + '#' + $stmt.line);
+				return;
+			}
+	end
+	condition $stmt.astName === 'ReturnStmt' || $stmt.astName === 'BreakStmt' end
+end

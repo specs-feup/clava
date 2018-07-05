@@ -29,13 +29,13 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
-import org.suikasoft.jOptions.streamparser.LineStreamParserV2;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
+import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.clang.parsers.GeneralParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
@@ -110,7 +110,7 @@ public class StreamParser {
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
-    private final LineStreamParserV2 lineStreamParser;
+    private final LineStreamParser lineStreamParser;
 
     // public StreamParser(DataStore clavaData) {
     // this(clavaData, null, ClangStreamParserV2.newInstance());
@@ -119,7 +119,7 @@ public class StreamParser {
     /**
      * We need a new instance every time we want to parse a String.
      */
-    public StreamParser(DataStore clavaData, File dumpFile, LineStreamParserV2 lineStreamParser) {
+    public StreamParser(DataStore clavaData, File dumpFile, LineStreamParser lineStreamParser) {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
@@ -720,7 +720,7 @@ public class StreamParser {
         // memberName (String)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isArrow = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isArrow = LineStreamParsers.oneOrZero(lines.nextLine());
         String memberName = lines.nextLine();
 
         map.put(key, new CxxMemberExprInfo(isArrow, memberName));
@@ -750,16 +750,16 @@ public class StreamParser {
         // captureKinds (List<LambdaCaptureKind)
 
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
-        boolean isGenericLambda = GeneralParsers.parseOneOrZero(lines.nextLine());
-        boolean isMutable = GeneralParsers.parseOneOrZero(lines.nextLine());
-        boolean hasExplicitParameters = GeneralParsers.parseOneOrZero(lines.nextLine());
-        boolean hasExplicitResultType = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isGenericLambda = LineStreamParsers.oneOrZero(lines.nextLine());
+        boolean isMutable = LineStreamParsers.oneOrZero(lines.nextLine());
+        boolean hasExplicitParameters = LineStreamParsers.oneOrZero(lines.nextLine());
+        boolean hasExplicitResultType = LineStreamParsers.oneOrZero(lines.nextLine());
 
-        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(GeneralParsers.parseInt(lines));
-        int numCaptures = GeneralParsers.parseInt(lines);
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(LineStreamParsers.integer(lines));
+        int numCaptures = LineStreamParsers.integer(lines);
         List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
         for (int i = 0; i < numCaptures; i++) {
-            captureKinds.add(LambdaCaptureKind.getHelper().fromValue(GeneralParsers.parseInt(lines)));
+            captureKinds.add(LambdaCaptureKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
         }
 
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
@@ -796,7 +796,7 @@ public class StreamParser {
         // isTypeOperator (boolean)
         // operatorId (String)
 
-        boolean isTypeOperator = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isTypeOperator = LineStreamParsers.oneOrZero(lines.nextLine());
         String operatorId = lines.nextLine();
 
         map.put(key, new TypeidData(isTypeOperator, operatorId));
@@ -822,7 +822,7 @@ public class StreamParser {
         // Format:
         // isExplicit (boolean)
 
-        boolean isExplicit = GeneralParsers.parseOneOrZero(lines.nextLine());
+        boolean isExplicit = LineStreamParsers.oneOrZero(lines.nextLine());
 
         InitListExprInfo info = new InitListExprInfo(isExplicit);
 

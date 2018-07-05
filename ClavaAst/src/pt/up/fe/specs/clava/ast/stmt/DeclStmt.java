@@ -75,7 +75,7 @@ public class DeclStmt extends Stmt {
 
         DeclStmtType declStmtType = isRecordDecl ? DeclStmtType.RECORD_DECL : DeclStmtType.DECL_LIST;
 
-        put(DECL_STMT_TYPE, declStmtType);
+        set(DECL_STMT_TYPE, declStmtType);
 
         // Check if children after the first are VarDecl
         if (isRecordDecl) {
@@ -243,7 +243,7 @@ public class DeclStmt extends Stmt {
     }
 
     public DeclStmt setHasSemicolon(boolean hasSemicolon) {
-        put(HAS_SEMICOLON, hasSemicolon);
+        set(HAS_SEMICOLON, hasSemicolon);
         return this;
     }
 

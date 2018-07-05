@@ -58,7 +58,8 @@ import pt.up.fe.specs.util.treenode.TreeNodeUtils;
 public class CxxFunction extends AFunction {
 
     // TODO: Move this to generated enums
-    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue.newLazyHelperWithValue(StorageClass.class);
+    private static final Lazy<EnumHelperWithValue<StorageClass>> STORAGE_CLASS = EnumHelperWithValue
+            .newLazyHelperWithValue(StorageClass.class);
 
     private final FunctionDecl function;
     private final ACxxWeaverJoinPoint parent;
@@ -334,8 +335,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint[] getParamsArrayImpl() {
-        return selectParam().toArray(new AJoinPoint[0]);
+    public AParam[] getParamsArrayImpl() {
+        return selectParam().toArray(new AParam[0]);
     }
 
     @Override
@@ -463,5 +464,54 @@ public class CxxFunction extends AFunction {
         return function.getDescendants(Decl.class).stream()
                 .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ACall[] getCallsArrayImpl() {
+        return function.getCalls().stream()
+                .map(call -> CxxJoinpoints.create(call, this, ACall.class))
+                .toArray(ACall[]::new);
+    }
+
+    @Override
+    public void defParamsImpl(AParam[] value) {
+        List<ParmVarDecl> newParams = Arrays.stream(value)
+                .map(param -> (ParmVarDecl) param.getNode())
+                .collect(Collectors.toList());
+
+        function.setParamters(newParams);
+    }
+
+    @Override
+    public void defParamsImpl(String[] value) {
+        AParam[] params = new AParam[value.length];
+
+        // Each value is a type - varName pair, separate them by last space
+        for (int i = 0; i < value.length; i++) {
+            String typeVarname = value[i];
+
+            typeVarname = typeVarname.trim();
+            int indexOfSpace = typeVarname.lastIndexOf(' ');
+            if (indexOfSpace == -1) {
+                throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
+            }
+
+            String type = typeVarname.substring(0, indexOfSpace).trim();
+            String varName = typeVarname.substring(indexOfSpace + 1).trim();
+
+            params[i] = CxxJoinpoints.create(ClavaNodeFactory.parmVarDecl(type, varName), this, AParam.class);
+        }
+
+        defParamsImpl(params);
+    }
+
+    @Override
+    public void setParamsImpl(AParam[] params) {
+        defParamsImpl(params);
+    }
+
+    @Override
+    public void setParamsFromStringsImpl(String[] params) {
+        defParamsImpl(params);
     }
 }

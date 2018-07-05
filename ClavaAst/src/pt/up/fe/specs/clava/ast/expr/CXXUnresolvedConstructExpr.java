@@ -62,7 +62,7 @@ public class CXXUnresolvedConstructExpr extends Expr {
 
     @Override
     public String getCode() {
-        return getTypeAsWritten().getCode() + "("
+        return getTypeAsWritten().getCode(this) + "("
                 + getArguments().stream().map(ClavaNode::getCode).collect(Collectors.joining(", ")) + ")";
     }
 

@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -75,21 +76,21 @@ public class CXXFunctionalCastExpr extends CastExpr {
 
         super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        put(CastExpr.CAST_KIND, castKind);
+        set(CastExpr.CAST_KIND, castKind);
 
         // super(castKind, exprData, info, children);
 
         // this.targetType = description;
     }
 
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXFunctionalCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
-    // }
+    @Override
+    protected ClavaNode copyPrivate() {
+        return new CXXFunctionalCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
+    }
 
     @Override
     public String getCode() {
-        return getType().getCode() + "(" + getSubExpr().getCode() + ")";
+        return getTypeCode() + "(" + getSubExpr().getCode() + ")";
     }
 
     // public String getTargetType() {

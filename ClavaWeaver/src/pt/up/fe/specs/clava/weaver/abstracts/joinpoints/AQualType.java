@@ -205,6 +205,15 @@ public abstract class AQualType extends AType {
     }
 
     /**
+     * Get value on attribute normalize
+     * @return the attribute's value
+     */
+    @Override
+    public AType getNormalizeImpl() {
+        return this.aType.getNormalizeImpl();
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -217,6 +226,15 @@ public abstract class AQualType extends AType {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
+        return this.aType.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(String node) {
         return this.aType.replaceWithImpl(node);
     }
 
@@ -458,12 +476,15 @@ public abstract class AQualType extends AType {
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
         UNWRAP("unwrap"),
+        NORMALIZE("normalize"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -481,15 +502,18 @@ public abstract class AQualType extends AType {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

@@ -52,7 +52,7 @@ public class CStyleCastExpr extends ExplicitCastExpr {
 
     @Override
     public String getCode() {
-        return "(" + getExprType().getCode() + ") " + getSubExpr().getCode();
+        return "(" + getExprType().getCode(this) + ") " + getSubExpr().getCode();
     }
 
 }

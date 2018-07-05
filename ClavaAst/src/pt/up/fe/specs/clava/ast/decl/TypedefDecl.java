@@ -53,7 +53,7 @@ public class TypedefDecl extends TypedefNameDecl {
         // In this case, desugar type
         Type type = super.getType();
 
-        if (type.getCode().equals(getDeclName())) {
+        if (type.getCode(this).equals(getDeclName())) {
             return type.desugar();
         }
 
@@ -77,7 +77,7 @@ public class TypedefDecl extends TypedefNameDecl {
                     .orElseThrow(() -> new RuntimeException("Could not find source for location " + getLocation()));
         }
 
-        String typeCode = type.getCode();
+        String typeCode = type.getCode(this);
         String code = "typedef " + typeCode + " " + getTypelessCode();
 
         // if (typeCode.equals("std::set<double>::const_iterator")) {

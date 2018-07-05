@@ -108,7 +108,7 @@ public class LambdaExpr extends Expr {
 
         if (lambdaData.isHasExplicitResultType()) {
             code.append("-> ");
-            code.append(operatorPar.getReturnType().getCode()).append(" ");
+            code.append(operatorPar.getReturnType().getCode(this)).append(" ");
         }
 
         CompoundStmt body = getBody();

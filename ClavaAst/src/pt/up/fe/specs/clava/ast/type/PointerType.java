@@ -37,7 +37,7 @@ public class PointerType extends Type {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         Type pointeeType = getPointeeType();
 
         // Special case for pointers to arrays
@@ -45,12 +45,12 @@ public class PointerType extends Type {
         if (PointerType.isPointerToParenType(this)) {
             // if (pointeeType instanceof ParenType) {
             String parsedName = name != null ? name : "";
-            return ((ParenType) pointeeType).getInnerType().getCode("(*" + parsedName + ")");
+            return ((ParenType) pointeeType).getInnerType().getCode(sourceNode, "(*" + parsedName + ")");
             // return pointeeType.getCode("*" + name);
         }
 
         String nameString = name == null ? "" : " " + name;
-        String pointeeCode = pointeeType.getCode();
+        String pointeeCode = pointeeType.getCode(sourceNode);
         String pointeeSuffix = pointeeCode.endsWith("*") ? "" : " ";
         return pointeeCode + pointeeSuffix + "*" + nameString;
         // return getPointeeType().getCode(name) + "*";

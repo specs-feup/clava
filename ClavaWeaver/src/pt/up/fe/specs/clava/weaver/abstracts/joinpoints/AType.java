@@ -371,6 +371,29 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Ignores certain types (e.g., DecayedType)
+     */
+    public abstract AType getNormalizeImpl();
+
+    /**
+     * Ignores certain types (e.g., DecayedType)
+     */
+    public final Object getNormalize() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "normalize", Optional.empty());
+        	}
+        	AType result = this.getNormalizeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "normalize", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "normalize", e);
+        }
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -481,6 +504,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("isBuiltin");
         attributes.add("constant");
         attributes.add("unwrap");
+        attributes.add("normalize");
     }
 
     /**
@@ -526,12 +550,15 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
         UNWRAP("unwrap"),
+        NORMALIZE("normalize"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -549,15 +576,18 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

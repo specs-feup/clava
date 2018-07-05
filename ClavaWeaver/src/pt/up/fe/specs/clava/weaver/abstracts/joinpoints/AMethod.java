@@ -112,7 +112,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getParamsArrayImpl() {
+    public AParam[] getParamsArrayImpl() {
         return this.aFunction.getParamsArrayImpl();
     }
 
@@ -180,6 +180,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute callsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public ACall[] getCallsArrayImpl() {
+        return this.aFunction.getCallsArrayImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -233,10 +242,33 @@ public abstract class AMethod extends AFunction {
 
     /**
      * 
+     */
+    public void defParamsImpl(AParam[] value) {
+        this.aFunction.defParamsImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(String[] value) {
+        this.aFunction.defParamsImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
+        return this.aFunction.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(String node) {
         return this.aFunction.replaceWithImpl(node);
     }
 
@@ -376,6 +408,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    @Override
+    public void setParamsImpl(AParam[] params) {
+        this.aFunction.setParamsImpl(params);
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    @Override
+    public void setParamsFromStringsImpl(String[] params) {
+        this.aFunction.setParamsFromStringsImpl(params);
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -451,6 +501,17 @@ public abstract class AMethod extends AFunction {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "params": {
+        	if(value instanceof AParam[]){
+        		this.defParamsImpl((AParam[])value);
+        		return;
+        	}
+        	if(value instanceof String[]){
+        		this.defParamsImpl((String[])value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -531,14 +592,17 @@ public abstract class AMethod extends AFunction {
         ISPURE("isPure"),
         ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
+        CALLS("calls"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -556,15 +620,18 @@ public abstract class AMethod extends AFunction {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

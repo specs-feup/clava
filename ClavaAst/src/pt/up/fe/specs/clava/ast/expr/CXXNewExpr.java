@@ -130,7 +130,7 @@ public class CXXNewExpr extends Expr {
                     exprType = Types.getPointeeType(exprType);
                 }
 
-                code.append(exprType.getCode()).append("(").append(expr.getCode()).append(")");
+                code.append(exprType.getCode(this)).append("(").append(expr.getCode()).append(")");
             } else {
                 code.append(expr.getCode());
             }
@@ -140,7 +140,7 @@ public class CXXNewExpr extends Expr {
             if (Types.isPointer(exprType)) {
                 exprType = Types.getPointeeType(exprType);
             }
-            code.append(exprType.getCode());
+            code.append(exprType.getCode(this));
         }
 
         getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));

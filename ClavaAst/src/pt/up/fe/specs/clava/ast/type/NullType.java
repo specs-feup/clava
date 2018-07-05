@@ -50,7 +50,7 @@ public class NullType extends Type implements NullNode {
     // }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         if (name != null) {
             return getBareType() + " " + name;
         }

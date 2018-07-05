@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -38,7 +39,7 @@ public class IdToFilenameParser implements LineStreamWorker {
     @Override
     public void apply(LineStream lineStream, DataStore data) {
         Map<String, String> map = data.get(ClangParserKeys.ID_TO_FILENAME_MAP);
-        GeneralParsers.parseStringMap(PARSER_ID, lineStream, map);
+        LineStreamParsers.stringMap(PARSER_ID, lineStream, map);
     }
 
 }

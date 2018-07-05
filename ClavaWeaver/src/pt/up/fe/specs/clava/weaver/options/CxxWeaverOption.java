@@ -55,6 +55,9 @@ public interface CxxWeaverOption {
     DataKey<Boolean> GENERATE_MODIFIED_CODE_ONLY = KeyFactory.bool("Generate Modified Code Only")
             .setLabel("Generate code from AST only if tree is modified (otherwise copies original file)");
 
+    DataKey<Boolean> GENERATE_CMAKE_HELPER_FILES = KeyFactory.bool("Generate CMake Integration Helper Files")
+            .setLabel("Generate helper files to be used by Clava CMake integration modules");
+
     DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten woven code folder structure");
 
     DataKey<Boolean> UNIT_TESTING_MODE = KeyFactory.bool("Unit Testing Mode")
@@ -64,7 +67,8 @@ public interface CxxWeaverOption {
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
                     HEADER_INCLUDES, SYSTEM_INCLUDES, DISABLE_WEAVING, DISABLE_CODE_GENERATION,
-                    GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
+                    // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
+                    GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .build();
 

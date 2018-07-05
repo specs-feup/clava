@@ -18,10 +18,13 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CharacterLiteral", clava::StmtNode::CHARACTER_LITERAL},
         {"IntegerLiteral", clava::StmtNode::INTEGER_LITERAL},
         {"FloatingLiteral", clava::StmtNode::FLOATING_LITERAL},
-        {"FloatingLiteral", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
+        //{"FloatingLiteral", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CastExpr", clava::StmtNode::CAST_EXPR},
         //{"CXXFunctionalCastExpr", clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR},
         {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
+        {"CompoundLiteralExpr", clava::StmtNode::COMPOUND_LITERAL_EXPR},
+        {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
+        {"StringLiteral", clava::StmtNode::STRING_LITERAL},
 };
 
 
@@ -68,8 +71,14 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpIntegerLiteralData(static_cast<const IntegerLiteral *>(S)); break;
         case clava::StmtNode ::FLOATING_LITERAL:
             DumpFloatingLiteralData(static_cast<const FloatingLiteral *>(S)); break;
+        case clava::StmtNode ::STRING_LITERAL:
+            DumpStringLiteralData(static_cast<const StringLiteral *>(S)); break;
         case clava::StmtNode ::CXX_BOOL_LITERAL_EXPR:
             DumpCXXBoolLiteralExprData(static_cast<const CXXBoolLiteralExpr *>(S)); break;
+        case clava::StmtNode ::COMPOUND_LITERAL_EXPR:
+            DumpCompoundLiteralExprData(static_cast<const CompoundLiteralExpr *>(S)); break;
+        case clava::StmtNode ::INIT_LIST_EXPR:
+            DumpInitListExprData(static_cast<const InitListExpr *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
@@ -187,11 +196,38 @@ void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
 */
 }
 
+void clava::ClavaDataDumper::DumpStringLiteralData(const StringLiteral *E) {
+    DumpLiteralData(E);
+
+    //E->getString() cannot be used when literal is not a single char wide
+//    clava::dump(E->getString().str());
+//    clava::dump("\n%CLAVA_SOURCE_END%");
+}
+
 
 void clava::ClavaDataDumper::DumpCXXBoolLiteralExprData(const CXXBoolLiteralExpr *E) {
     DumpLiteralData(E);
 
     clava::dump(E->getValue());
+}
+
+
+void clava::ClavaDataDumper::DumpCompoundLiteralExprData(const CompoundLiteralExpr *E) {
+    DumpLiteralData(E);
+
+    clava::dump(E->isFileScope());
+}
+
+void clava::ClavaDataDumper::DumpInitListExprData(const InitListExpr *E) {
+    DumpExprData(E);
+    //std::cout << "Hello\n";
+    //std::cout << "INIT FIELD: " << E->getInitializedFieldInUnion() << "\n";
+    clava::dump(clava::getId(E->getArrayFiller(), id));
+    //clava::dump(clava::getId(E->getInitializedFieldInUnion(), id)); // Apparently not supported in old parser
+    clava::dump(const_cast<InitListExpr*>(E)->isExplicit()); // isExplicit() could be const
+    clava::dump(E->isStringLiteralInit()); // isExplicit() could be const
+
+
 }
 
 

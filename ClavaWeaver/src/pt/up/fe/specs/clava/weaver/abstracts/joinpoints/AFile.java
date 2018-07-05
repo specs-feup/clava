@@ -475,7 +475,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * @param type 
      * @param initValue 
      */
-    public void addGlobalImpl(String name, AJoinPoint type, String initValue) {
+    public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
         throw new UnsupportedOperationException(get_class()+": Action addGlobal not implemented ");
     }
 
@@ -485,15 +485,16 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * @param type 
      * @param initValue 
      */
-    public final void addGlobal(String name, AJoinPoint type, String initValue) {
+    public final AVardecl addGlobal(String name, AJoinPoint type, String initValue) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addGlobal", this, Optional.empty(), name, type, initValue);
         	}
-        	this.addGlobalImpl(name, type, initValue);
+        	AVardecl result = this.addGlobalImpl(name, type, initValue);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.empty(), name, type, initValue);
+        		eventTrigger().triggerAction(Stage.END, "addGlobal", this, Optional.ofNullable(result), name, type, initValue);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addGlobal", e);
         }
@@ -784,7 +785,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void addInclude(string, boolean)");
         actions.add("void addInclude(string)");
         actions.add("void addIncludeJp(joinpoint)");
-        actions.add("void addGlobal(String, joinpoint, String)");
+        actions.add("vardecl addGlobal(String, joinpoint, String)");
         actions.add("void write(String)");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");
@@ -820,8 +821,10 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -839,15 +842,18 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

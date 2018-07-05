@@ -181,6 +181,7 @@ private:
     // Children visitors for Decls
     void VisitDeclChildren(const Decl *D, std::vector<std::string> &children);
     void VisitNamedDeclChildren(const NamedDecl *D, std::vector<std::string> &children);
+    void VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
@@ -197,7 +198,9 @@ private:
 
     // Children visitors for Exprs
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
-    //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
+    void VisitInitListExprChildren(const InitListExpr *E, std::vector<std::string> &children);
+
+        //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
 
 
     // Children visitors for Attributes
@@ -216,6 +219,8 @@ private:
     void VisitFunctionTypeChildren(const FunctionType *T, std::vector<std::string> &visitedChildren);
     void VisitFunctionProtoTypeChildren(const FunctionProtoType *T, std::vector<std::string> &visitedChildren);
     void VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren);
+    void VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren);
+    void VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren);
 
 
     /* Utility methods for DECLS */

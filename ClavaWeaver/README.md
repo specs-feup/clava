@@ -1,7 +1,7 @@
 
 ## Building Clava
 
-Download [eclipse-build](http://specs.fe.up.pt/tools/eclipse-build.jar) and run the following command:
+Download [eclipse-build](http://specs.fe.up.pt/tools/eclipse-build.jar) [GitHub](https://github.com/specs-feup/specs-java-tools/tree/master/EclipseBuild) and run the following command:
 
 `java -jar eclipse-build.jar --config https://raw.githubusercontent.com/specs-feup/clava/master/ClavaWeaver/eclipse.build`
 

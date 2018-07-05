@@ -55,7 +55,7 @@ public class DummyType extends Type implements DummyNode {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         return ClavaNodes.toCode(getNodeCode(), this);
     }
 

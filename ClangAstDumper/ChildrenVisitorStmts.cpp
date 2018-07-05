@@ -13,7 +13,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
-
+        {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR}
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -53,6 +53,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
 
         case clava::StmtNode::EXPR:
             VisitExprChildren(static_cast<const Expr *>(S), visitedChildren); break;
+        case clava::StmtNode::INIT_LIST_EXPR:
+            VisitInitListExprChildren(static_cast<const InitListExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::CAST_EXPR:
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
 
@@ -107,6 +109,18 @@ void ClangAstDumper::VisitExprChildren(const Expr *E, std::vector<std::string> &
     // Visit type
     VisitTypeTop(E->getType());
     dumpTopLevelType(E->getType());
+}
+
+void ClangAstDumper::VisitInitListExprChildren(const InitListExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    // Visit array filler
+    VisitStmtTop(E->getArrayFiller());
+
+    // Visit field
+    //VisitDeclTop(E->getInitializedFieldInUnion());
+
 }
 
 

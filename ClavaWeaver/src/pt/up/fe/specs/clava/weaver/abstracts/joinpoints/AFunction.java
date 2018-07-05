@@ -196,15 +196,15 @@ public abstract class AFunction extends ANamedDecl {
      * Get value on attribute params
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getParamsArrayImpl();
+    public abstract AParam[] getParamsArrayImpl();
 
     /**
      * Get value on attribute params
      * @return the attribute's value
      */
     public Bindings getParamsImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getParamsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AParam[] aParamArrayImpl0 = getParamsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aParamArrayImpl0);
         return nativeArray0;
     }
 
@@ -225,6 +225,20 @@ public abstract class AFunction extends ANamedDecl {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "params", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(AParam[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def params with type AParam not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public void defParamsImpl(String[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def params with type String not implemented ");
     }
 
     /**
@@ -403,6 +417,41 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public abstract ACall[] getCallsArrayImpl();
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public Bindings getCallsImpl() {
+        ACall[] aCallArrayImpl0 = getCallsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute calls
+     * @return the attribute's value
+     */
+    public final Object getCalls() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
+        	}
+        	Bindings result = this.getCallsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "calls", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -556,6 +605,58 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    public void setParamsImpl(AParam[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParams not implemented ");
+    }
+
+    /**
+     * Sets the parameters of the function
+     * @param params 
+     */
+    public final void setParams(AParam[] params) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), params);
+        	}
+        	this.setParamsImpl(params);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), params);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParams", e);
+        }
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    public void setParamsFromStringsImpl(String[] params) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamsFromStrings not implemented ");
+    }
+
+    /**
+     * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
+     * @param params 
+     */
+    public final void setParamsFromStrings(String[] params) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), params);
+        	}
+        	this.setParamsFromStringsImpl(params);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), params);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParamsFromStrings", e);
+        }
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -639,6 +740,15 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
+        return this.aNamedDecl.replaceWithImpl(node);
+    }
+
+    /**
+     * 
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(String node) {
         return this.aNamedDecl.replaceWithImpl(node);
     }
 
@@ -793,6 +903,17 @@ public abstract class AFunction extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "params": {
+        	if(value instanceof AParam[]){
+        		this.defParamsImpl((AParam[])value);
+        		return;
+        	}
+        	if(value instanceof String[]){
+        		this.defParamsImpl((String[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
@@ -824,6 +945,7 @@ public abstract class AFunction extends ANamedDecl {
         attributes.add("isPure");
         attributes.add("isDelete");
         attributes.add("storageClass");
+        attributes.add("calls");
     }
 
     /**
@@ -848,6 +970,8 @@ public abstract class AFunction extends ANamedDecl {
         actions.add("String cloneOnFile(String, String)");
         actions.add("void insertReturn(joinpoint)");
         actions.add("void insertReturn(String)");
+        actions.add("void setParams(param[])");
+        actions.add("void setParamsFromStrings(String[])");
         actions.add("void setName(String)");
         actions.add("call newCall(joinpoint[])");
     }
@@ -891,14 +1015,17 @@ public abstract class AFunction extends ANamedDecl {
         ISPURE("isPure"),
         ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
+        CALLS("calls"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
+        DATA("data"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
+        KEYS("keys"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),
@@ -916,15 +1043,18 @@ public abstract class AFunction extends ANamedDecl {
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         ASTID("astId"),
+        GETVALUE("getValue"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
+        PRAGMAS("pragmas"),
         HASPARENT("hasParent");
         private String name;
 

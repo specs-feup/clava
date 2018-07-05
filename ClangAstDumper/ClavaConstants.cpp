@@ -12,6 +12,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::DECL: return "Decl";
         case clava::DeclNode::NAMED_DECL: return "NamedDecl";
         case clava::DeclNode::VALUE_DECL: return "ValueDecl";
+        case clava::DeclNode::TYPE_DECL: return "TypeDecl";
         case clava::DeclNode::FUNCTION_DECL: return "FunctionDecl";
         case clava::DeclNode::CXX_METHOD_DECL: return "CXXMethodDecl";
         case clava::DeclNode::VAR_DECL: return "VarDecl";
@@ -42,6 +43,9 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::INTEGER_LITERAL: return "IntegerLiteral";
         case clava::StmtNode::FLOATING_LITERAL: return "FloatingLiteral";
         case clava::StmtNode::CXX_BOOL_LITERAL_EXPR: return "CXXBoolLiteralExpr";
+        case clava::StmtNode::COMPOUND_LITERAL_EXPR: return "CompoundLiteralExpr";
+        case clava::StmtNode::INIT_LIST_EXPR: return "InitListExpr";
+        case clava::StmtNode::STRING_LITERAL: return "StringLiteral";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
@@ -58,6 +62,10 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::FUNCTION_TYPE: return "FunctionType";
         case clava::TypeNode::FUNCTION_PROTO_TYPE: return "FunctionProtoType";
         case clava::TypeNode::TAG_TYPE: return "TagType";
+        case clava::TypeNode::ARRAY_TYPE: return "ArrayType";
+        case clava::TypeNode::CONSTANT_ARRAY_TYPE: return "ConstantArrayType";
+        case clava::TypeNode::INCOMPLETE_ARRAY_TYPE: return "IncompleteArrayType";
+        case clava::TypeNode::VARIABLE_ARRAY_TYPE: return "VariableArrayType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

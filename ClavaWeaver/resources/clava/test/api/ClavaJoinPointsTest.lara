@@ -1,0 +1,12 @@
+import clava.ClavaJoinPoints;
+
+aspectdef ClavaJoinPointsTest
+
+	// Type Literal of user defined type
+	println("User literal type: " + ClavaJoinPoints.typeLiteral("xpto").code);
+	
+	// Stmt Literal
+	println("Literal statement: " + ClavaJoinPoints.stmtLiteral("int a = 0;").code);	
+	
+
+end

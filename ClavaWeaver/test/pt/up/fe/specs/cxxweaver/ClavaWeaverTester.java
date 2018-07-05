@@ -186,12 +186,16 @@ public class ClavaWeaverTester {
         data.add(LaraiKeys.OUTPUT_FOLDER, workFolder);
         data.add(LaraiKeys.WORKSPACE_FOLDER, FileList.newInstance(workFolder));
         data.add(LaraiKeys.VERBOSE, VerboseLevel.errors);
+        data.add(LaraiKeys.TRACE_MODE, true);
         // data.add(LaraiKeys.DEBUG_MODE, true);
         data.add(LaraiKeys.LOG_JS_OUTPUT, Boolean.TRUE);
         data.add(LaraiKeys.LOG_FILE, OptionalFile.newInstance(getWeaverLog().getAbsolutePath()));
 
-        // Set CxxWeaver configurations
-        data.set(ClavaOptions.STANDARD, standard);
+        // Set CxxWeaver configurations~
+        if (standard != null) {
+            data.set(ClavaOptions.STANDARD, standard);
+        }
+
         data.set(ClavaOptions.FLAGS, compilerFlags);
         data.set(CxxWeaverOption.CHECK_SYNTAX, checkWovenCodeSyntax);
         data.set(CxxWeaverOption.DISABLE_CLAVA_INFO, false);

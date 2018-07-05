@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 /**
  * Interface for literal nodes.
@@ -34,12 +33,13 @@ public interface LiteralNode {
 
     /// DATAKEYS END
 
-    DataStore getData();
+    <T> T get(DataKey<T> key);
 
     default String getLiteralCode() {
-        return getData().get(LITERAL_CODE);
+        return get(LITERAL_CODE);
     }
 
+    // Does not override already implemented methods
     // default String getCode() {
     // return getLiteralCode();
     // }

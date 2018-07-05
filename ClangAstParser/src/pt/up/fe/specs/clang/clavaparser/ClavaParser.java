@@ -90,8 +90,6 @@ import pt.up.fe.specs.clang.clavaparser.expr.ExprWithCleanupsParser;
 import pt.up.fe.specs.clang.clavaparser.expr.FloatingLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.GNUNullExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ImplicitCastExprParser;
-import pt.up.fe.specs.clang.clavaparser.expr.ImplicitValueInitExprParser;
-import pt.up.fe.specs.clang.clavaparser.expr.InitListExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.IntegerLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.LambdaExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.MaterializeTemporaryExprParser;
@@ -119,7 +117,6 @@ import pt.up.fe.specs.clang.clavaparser.stmt.CXXForRangeStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CXXTryStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CapturedStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.CaseStmtParser;
-import pt.up.fe.specs.clang.clavaparser.stmt.CompoundStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.ContinueStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DefaultStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DoStmtParser;
@@ -176,6 +173,7 @@ import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.ast.DummyNode;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
@@ -276,7 +274,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("CXXConversionDecl", CXXConversionDeclParser::new);
 
         /* stmt */
-        converter.put("CompoundStmt", CompoundStmtParser::new);
+        // converter.put("CompoundStmt", CompoundStmtParser::new);
         converter.put("SwitchStmt", SwitchStmtParser::new);
         converter.put("CaseStmt", CaseStmtParser::new);
         converter.put("DefaultStmt", DefaultStmtParser::new);
@@ -333,7 +331,8 @@ public class ClavaParser implements AutoCloseable {
         converter.put("CompoundAssignOperator", CompoundAssignOperatorParser::new);
         converter.put("CXXDeleteExpr", CXXDeleteExprParser::new);
         converter.put("CXXStdInitializerListExpr", CXXStdInitializerListExprParser::new);
-        converter.put("InitListExpr", InitListExprParser::new);
+        // converter.put("InitListExpr", InitListExprParser::new);
+        converter.put("InitListExpr", conv -> new NewClavaNodeParser<>(conv, InitListExpr.class));
         converter.put("UnresolvedLookupExpr", UnresolvedLookupExprParser::new);
         converter.put("CXXStaticCastExpr", CXXNamedCastExprParser::new);
         converter.put("CXXReinterpretCastExpr", CXXNamedCastExprParser::new);
@@ -342,7 +341,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("UserDefinedLiteral", UserDefinedLiteralParser::new);
         converter.put("CXXThrowExpr", CXXThrowExprParser::new);
         converter.put("GNUNullExpr", GNUNullExprParser::new);
-        converter.put("ImplicitValueInitExpr", ImplicitValueInitExprParser::new);
+        // converter.put("ImplicitValueInitExpr", ImplicitValueInitExprParser::new);
         converter.put("PredefinedExpr", PredefinedExprParser::new);
         converter.put("CXXDependentScopeMemberExpr", CXXDependentScopeMemberExprParser::new);
         converter.put("StmtExpr", StmtExprParser::new);

@@ -37,9 +37,9 @@ public class RValueReferenceType extends ReferenceType {
     }
 
     @Override
-    public String getCode(String name) {
+    public String getCode(ClavaNode sourceNode, String name) {
         StringBuilder code = new StringBuilder();
-        code.append(getReferencee().getCode(null)).append("&&");
+        code.append(getReferencee().getCode(sourceNode, null)).append("&&");
 
         if (name != null) {
             code.append(" ").append(name);

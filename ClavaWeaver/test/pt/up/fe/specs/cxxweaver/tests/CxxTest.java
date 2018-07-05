@@ -191,4 +191,14 @@ public class CxxTest {
     // newTester().test("Class.lara", "class.cpp");
     // }
 
+    @Test
+    public void testPragmaData() {
+        newTester().test("PragmaData.lara", "pragma_data.cpp");
+    }
+
+    @Test
+    public void testGlobalAttributes() {
+        newTester().test("GlobalAttributes.lara", "global_attributes.cpp");
+    }
+
 }

@@ -60,7 +60,7 @@ public class ClavaNodeParser implements LineStreamWorker {
         // Get nodeId and classname
         String nodeId = lineStream.nextLine();
         String classname = lineStream.nextLine();
-
+        // System.out.println("CLASS NAMES:" + classname);
         Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
 
         // Check if node was already parsed

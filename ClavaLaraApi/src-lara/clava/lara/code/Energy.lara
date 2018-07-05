@@ -6,6 +6,13 @@ import lara.code.Logger;
 import lara.util.IdGenerator;
 import lara.util.PrintOnce;
 
+/**
+ * Current SpecsRapl library measures uJ.
+ */
+Energy.prototype.getPrintUnit = function() {
+    return "uJ";
+}
+
 Energy.prototype.measure = function($start, prefix, $end){
 	//Check for valid joinpoints and additional conditions
 

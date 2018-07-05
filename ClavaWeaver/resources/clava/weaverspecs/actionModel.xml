@@ -9,6 +9,10 @@
 	<action name="replaceWith" return="joinpoint">
 		<parameter name="node" type="joinpoint" />
 	</action>
+	
+	<action name="replaceWith" return="joinpoint">
+		<parameter name="node" type="String" />
+	</action>
 
 	<!-- Inserts node before the given node -->
 	<action name="insertBefore" return="joinpoint">
@@ -102,7 +106,7 @@
 		<parameter name="jp" type="joinpoint" />
 	</action>
 
-	<action name="addGlobal" class="file">
+	<action name="addGlobal" class="file" return="vardecl">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
 		<parameter name="initValue" type="String" />
@@ -218,6 +222,14 @@
 	<action name="insertReturn" class="function" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)">
 		<parameter name="code" type="String" />
 	</action>
+	
+	<action name="setParams" class="function" tooltip="Sets the parameters of the function">
+		<parameter name="params" type="param[]" />
+	</action>	
+	
+	<action name="setParamsFromStrings" class="function" tooltip="Overload that accepts strings that represent type-varname pairs (e.g., int param1)">
+		<parameter name="params" type="String[]" />
+	</action>	
 
 
 
@@ -230,11 +242,15 @@
 		<parameter name="kind" type="String" />
 	</action>
 	
-	<action name="setInit" class="loop" tooltip="DEPRECATED: use setInitValue instead.">
+	<action name="setInit" class="loop" tooltip="Sets the init statement of the loop.">
 		<parameter name="initCode" type="String"/>
 	</action>
 	
-	<action name="setInitValue" class="loop" tooltip="Sets the init statement of the loop. Works with loops of kind 'for'.">
+	<action name="setInitValue" class="loop" tooltip="Sets the init value of the loop. Works with loops of kind 'for'.">
+		<parameter name="initCode" type="String"/>
+	</action>
+
+	<action name="setEndValue" class="loop" tooltip="Sets the end value of the loop. Works with loops of kind 'for'.">
 		<parameter name="initCode" type="String"/>
 	</action>
 	

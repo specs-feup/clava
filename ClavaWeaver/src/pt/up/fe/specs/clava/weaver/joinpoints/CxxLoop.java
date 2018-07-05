@@ -16,11 +16,9 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.lara.interpreter.utils.DefMap;
 
@@ -30,26 +28,27 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.transform.loop.LoopAnalysisUtils;
 import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.ALoopKindEnum;
 import pt.up.fe.specs.clava.weaver.defs.CxxLoopDefs;
+import pt.up.fe.specs.clava.weaver.enums.Relation;
 import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
@@ -352,11 +351,34 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void setInitImpl(String initCode) {
-        ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
-        setInitValue(initCode);
+    public void defInitImpl(String value) {
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        LiteralStmt literalStmt = getFactory().literalStmt(value + ";");
+
+        ((ForStmt) loop).setInit(literalStmt);
     }
 
+    @Override
+    public void setInitImpl(String initCode) {
+        defInitImpl(initCode);
+        /*
+        // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
+        // setInitValue(initCode);
+        
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+        
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
+        
+        ((ForStmt) loop).setInit(literalStmt);
+        */
+    }
+
+    /*
     @Override
     public void setInitValueImpl(String initCode) {
         // if (!(loop instanceof ForStmt)) {
@@ -368,6 +390,23 @@ public class CxxLoop extends ALoop {
         // ((ForStmt) loop).setInit(literalStmt);
         defInitValueImpl(initCode);
     }
+    
+    @Override
+    public void defInitValueImpl(String value) {
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+    
+        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
+    
+        ((ForStmt) loop).setInit(literalStmt);
+    }
+    */
+
+    @Override
+    public void setInitValueImpl(String initCode) {
+        defInitValueImpl(initCode);
+    }
 
     @Override
     public void defInitValueImpl(String value) {
@@ -375,9 +414,20 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
+        Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
 
-        ((ForStmt) loop).setInit(literalStmt);
+        ((ForStmt) loop).setInitValue(CxxWeaver.getFactory().literalExpr(value, intType));
+    }
+
+    @Override
+    public void setEndValueImpl(String value) {
+        if (!(loop instanceof ForStmt)) {
+            return; // TODO: warn user?
+        }
+
+        Type intType = CxxWeaver.getFactory().builtinType(BuiltinKind.Int);
+
+        ((ForStmt) loop).setConditionValue(CxxWeaver.getFactory().literalExpr(value, intType));
     }
 
     @Override
@@ -387,7 +437,7 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(condCode + ";");
+        LiteralStmt literalStmt = getFactory().literalStmt(condCode + ";");
 
         ((ForStmt) loop).setCond(literalStmt);
     }
@@ -399,7 +449,7 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(stepCode);
+        LiteralStmt literalStmt = getFactory().literalStmt(stepCode);
 
         ((ForStmt) loop).setInc(literalStmt);
     }
@@ -407,75 +457,132 @@ public class CxxLoop extends ALoop {
     @Override
     public String getInitValueImpl() {
 
-        if ((loop instanceof ForStmt)) {
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
 
-            Optional<Stmt> initOpt = ((ForStmt) loop).getInit();
+        String initValue = ((ForStmt) loop).getInitValueExpr()
+                .map(ClavaNode::getCode)
+                .orElse(null);
 
-            if (initOpt.isPresent()) {
+        if (initValue == null) {
+            ClavaLog.warning(
+                    "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
+        }
 
-                Stmt init = initOpt.get();
-
-                ClavaNode child = init.getChild(0);
-
-                if (child instanceof VarDecl) {
-
-                    VarDecl decl = (VarDecl) child;
-
-                    Optional<Expr> declInitOpt = decl.getInit();
-                    if (declInitOpt.isPresent()) {
-
-                        return declInitOpt.get().getCode();
-                    }
-                } else if (child instanceof BinaryOperator) {
-
-                    BinaryOperator binOp = (BinaryOperator) child;
-                    if (binOp.getOp() == BinaryOperatorKind.ASSIGN) {
-
-                        return binOp.getRhs().getCode();
-                    }
+        return initValue;
+        /*
+        Optional<Stmt> initOpt = ((ForStmt) loop).getInit();
+        
+        if (initOpt.isPresent()) {
+        
+            Stmt init = initOpt.get();
+        
+            ClavaNode child = init.getChild(0);
+        
+            if (child instanceof VarDecl) {
+        
+                VarDecl decl = (VarDecl) child;
+        
+                Optional<Expr> declInitOpt = decl.getInit();
+                if (declInitOpt.isPresent()) {
+        
+                    return declInitOpt.get().getCode();
+                }
+            } else if (child instanceof BinaryOperator) {
+        
+                BinaryOperator binOp = (BinaryOperator) child;
+                if (binOp.getOp() == BinaryOperatorKind.ASSIGN) {
+        
+                    return binOp.getRhs().getCode();
                 }
             }
         }
-
+        
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
+        */
     }
 
     @Override
     public String getEndValueImpl() {
 
-        Set<BinaryOperatorKind> ops = new HashSet<>();
-        ops.add(BinaryOperatorKind.LE);
-        ops.add(BinaryOperatorKind.LT);
-        ops.add(BinaryOperatorKind.GE);
-        ops.add(BinaryOperatorKind.GT);
-        ops.add(BinaryOperatorKind.NE);
+        // Set<BinaryOperatorKind> ops = new HashSet<>();
+        // ops.add(BinaryOperatorKind.LE);
+        // ops.add(BinaryOperatorKind.LT);
+        // ops.add(BinaryOperatorKind.GE);
+        // ops.add(BinaryOperatorKind.GT);
+        // ops.add(BinaryOperatorKind.NE);
 
-        if ((loop instanceof ForStmt)) {
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
 
-            Optional<Stmt> condOpt = ((ForStmt) loop).getCond();
+        ForStmt forLoop = (ForStmt) loop;
+        String endValue = forLoop.getConditionValueExpr()
+                .map(ClavaNode::getCode)
+                .orElse(null);
+        // String endValue = forLoop.getCondOperator()
+        // .filter(binOp -> ops.contains(binOp.getOp()))
+        // .map(binOp -> binOp.getRhs().getCode())
+        // .orElse(null);
 
-            if (condOpt.isPresent()) {
+        if (endValue == null) {
+            ClavaLog.warning(
+                    "Could not determine the end value of the loop. The condition statement should be a Canonical Loop Form test expression, as defined by the OpenMP standard.");
+        }
 
-                Stmt cond = condOpt.get();
-
-                ClavaNode child = cond.getChild(0);
-
-                if (child instanceof BinaryOperator) {
-
-                    BinaryOperator binOp = (BinaryOperator) child;
-                    if (ops.contains(binOp.getOp())) {
-
-                        return binOp.getRhs().getCode();
-                    }
+        return endValue;
+        /*
+        Optional<Stmt> condOpt = forLoop.getCond();
+        
+        if (condOpt.isPresent()) {
+        
+            Stmt cond = condOpt.get();
+        
+            ClavaNode child = cond.getChild(0);
+        
+            if (child instanceof BinaryOperator) {
+        
+                BinaryOperator binOp = (BinaryOperator) child;
+                if (ops.contains(binOp.getOp())) {
+        
+                    return binOp.getRhs().getCode();
                 }
             }
         }
-
+        
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
+        */
+    }
+
+    @Override
+    public Relation getCondRelationImpl() {
+
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
+
+        ForStmt forLoop = (ForStmt) loop;
+        BinaryOperator binOp = forLoop.getCondOperator().orElse(null);
+
+        if (binOp == null) {
+            ClavaLog.warning(
+                    "Could not obtain the condition operator for the expression '"
+                            + forLoop.getCond().map(ClavaNode::getCode).orElse("") + "'");
+            return null;
+        }
+
+        return Relation.getHelper().fromNameTry(binOp.getOp().name()).orElse(null);
     }
 
     @Override
@@ -533,4 +640,48 @@ public class CxxLoop extends ALoop {
         defIsParallelImpl(isParallel);
     }
 
+    @Override
+    public AExpression getIterationsExprImpl() {
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
+
+        return ((ForStmt) loop).getIterationsExpr()
+                .map(expr -> CxxJoinpoints.create(expr, this, AExpression.class))
+                .orElse(null);
+    }
+
+    @Override
+    public String getStepValueImpl() {
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
+
+        String stepValue = ((ForStmt) loop).getStepValueExpr()
+                .map(ClavaNode::getCode)
+                .orElse(null);
+
+        if (stepValue == null) {
+            ClavaLog.warning(
+                    "Could not determine the step value of the loop. The step statement should be a Canonical Loop Form increment expression, as defined by the OpenMP standard.");
+        }
+
+        return stepValue;
+    }
+
+    @Override
+    public AStatement getInitImpl() {
+        if (!(loop instanceof ForStmt)) {
+            ClavaLog.warning(
+                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            return null;
+        }
+
+        return ((ForStmt) loop).getInit().map(init -> CxxJoinpoints.create(init, this, AStatement.class)).orElse(null);
+
+    }
 }

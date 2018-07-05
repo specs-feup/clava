@@ -1,0 +1,26 @@
+/**************************************************************
+* 
+*                      checkForFunctionCalls
+* 
+**************************************************************/
+aspectdef checkForFunctionCalls
+ 	input $ForStmt end
+ 	output FunctionCalls end
+ 	FunctionCalls = [];
+ 		
+	// Check if there are user-defined safe function
+	var userSafeFunctions = $ForStmt.data["safeFunctions"];
+	if(userSafeFunctions === undefined) {
+		userSafeFunctions = [];
+	}
+		
+	// check for calling functions
+
+	select $ForStmt.call end
+	apply				
+		if (safefunctionCallslist.indexOf($call.name) === -1 && userSafeFunctions.indexOf($call.name) === -1)
+			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
+	end
+	condition $call.astName === 'CallExpr' end
+	
+end
