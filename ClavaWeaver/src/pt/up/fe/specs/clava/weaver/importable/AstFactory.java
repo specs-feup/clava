@@ -58,10 +58,7 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.ReferenceType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 import pt.up.fe.specs.clava.language.Standard;
@@ -304,8 +301,16 @@ public class AstFactory {
     }
 
     // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
+    /**
+     * TODO: Standard string not required
+     * 
+     * @param outType
+     * @param standardString
+     * @param dims
+     * @return
+     */
     public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
-        Standard standard = Standard.getEnumHelper().fromValue(standardString);
+        // Standard standard = Standard.getEnumHelper().fromValue(standardString);
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -315,20 +320,23 @@ public class AstFactory {
         ListIterator<Integer> li = dims.listIterator(dims.size());
         while (li.hasPrevious()) {
 
-            ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
-            TypeData typeData = new TypeData(outType.getCode());
-            ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+            // ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
+            // TypeData typeData = new TypeData(outType.getCode());
+            // ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
 
             inType = outType;
-            outType = ClavaNodeFactory.constantArrayType(li.previous(), arrayTypeData, typeData, info, inType);
+            // outType = ClavaNodeFactory.constantArrayType(li.previous(), arrayTypeData, typeData, info, inType);
+            outType = CxxWeaver.getFactory().constantArrayType(inType, li.previous());
         }
 
         return CxxJoinpoints.create(outType, null);
     }
 
     public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
-        Type variableArrayType = ClavaNodeFactory.variableArrayType((Type) elementType.getNode(),
+        Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
                 (Expr) sizeExpr.getNode());
+        // Type variableArrayType = ClavaNodeFactory.variableArrayType((Type) elementType.getNode(),
+        // (Expr) sizeExpr.getNode());
 
         return CxxJoinpoints.create(variableArrayType, null, AType.class);
     }
