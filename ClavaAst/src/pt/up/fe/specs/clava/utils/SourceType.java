@@ -40,7 +40,7 @@ public enum SourceType {
     private final static Lazy<Map<String, SourceType>> EXTENSIONS_MAP = Lazy
             .newInstance(SourceType::buildExtensionsMap);
 
-    private static final Set<String> C_EXTENSIONS = new HashSet<>(Arrays.asList("c"));
+    private static final Set<String> C_EXTENSIONS = new HashSet<>(Arrays.asList("c", "h"));
     private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp", "cc"));
 
     private static Set<String> buildPermittedExtensions() {
