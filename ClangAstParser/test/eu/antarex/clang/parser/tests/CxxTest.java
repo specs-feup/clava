@@ -192,4 +192,9 @@ public class CxxTest {
         new CxxTester("attribute.cpp").test();
     }
 
+    @Test
+    public void testTypes() {
+        new CxxTester("types.cpp").test();
+    }
+
 }

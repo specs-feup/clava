@@ -92,4 +92,8 @@ public class CTest {
         new CTester("compound_literal.c").test();
     }
 
+    @Test
+    public void testTypes() {
+        new CTester("types.c").test();
+    }
 }
