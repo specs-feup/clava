@@ -161,7 +161,8 @@ public class ClangAstParser {
         arguments.add("--");
 
         // Add standard
-        arguments.add(config.get(ClavaOptions.STANDARD).getFlag());
+        config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
+        // arguments.add(config.get(ClavaOptions.STANDARD).getFlag());
 
         List<String> systemIncludes = new ArrayList<>();
 
