@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.context;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,12 +45,15 @@ import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
@@ -162,6 +166,25 @@ public class ClavaFactory {
                 .put(LiteralNode.LITERAL_CODE, code);
 
         return new LiteralType(data, Collections.emptyList());
+    }
+
+    public ConstantArrayType constantArrayType(Type elementType, int size) {
+        return constantArrayType(elementType, BigInteger.valueOf(size));
+    }
+
+    public ConstantArrayType constantArrayType(Type elementType, BigInteger size) {
+        DataStore data = newTypeDataStore()
+                .put(ConstantArrayType.ARRAY_SIZE, size)
+                .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
+
+        return new ConstantArrayType(data, Arrays.asList(elementType));
+    }
+
+    public VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
+        DataStore data = newTypeDataStore()
+                .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
+
+        return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
     }
 
     /// EXPRS

@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -27,16 +29,20 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.context.ClavaIdGenerator;
@@ -139,6 +145,16 @@ public class LegacyToDataStore {
     public LegacyToDataStore setQualType(QualTypeData data) {
         nodeData.add(QualType.ADDRESS_SPACE_QUALIFIER, data.getAddressSpaceQualifier().toV2());
         nodeData.add(QualType.C99_QUALIFIERS, data.getC99Qualifiers());
+
+        return this;
+    }
+
+    public LegacyToDataStore setArrayType(ArrayTypeData data) {
+        nodeData.add(ArrayType.ARRAY_SIZE_MODIFIER, ArraySizeModifier.values()[data.getArraySizeType().ordinal()]);
+        nodeData.add(ArrayType.INDEX_TYPE_QUALIFIERS,
+                data.getQualifiers().stream()
+                        .map(Qualifier::toC99Qualifier)
+                        .collect(Collectors.toList()));
 
         return this;
     }

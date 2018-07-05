@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -186,7 +185,6 @@ import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
-import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
@@ -195,7 +193,6 @@ import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.IncompleteArrayType;
 import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
 import pt.up.fe.specs.clava.ast.type.LValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
@@ -215,14 +212,11 @@ import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
-import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
-import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
@@ -824,22 +818,22 @@ public class ClavaNodeFactory {
         return new DecayedType(typeData, info, originalType, adjustedType);
     }
 
-    public static ConstantArrayType constantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData,
-            ClavaNodeInfo info,
-            Type elementType) {
-        return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
-    }
+    // public static ConstantArrayType constantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData,
+    // ClavaNodeInfo info,
+    // Type elementType) {
+    // return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
+    // }
 
-    public static ConstantArrayType constantArrayType(int constant, Type elementType, Standard standard) {
-        ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, new ArrayList<Qualifier>(), standard);
-        return new ConstantArrayType(constant, arrayTypeData, null, null, elementType);
-        // return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
-    }
+    // public static ConstantArrayType constantArrayType(int constant, Type elementType, Standard standard) {
+    // ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, new ArrayList<Qualifier>(), standard);
+    // return new ConstantArrayType(constant, arrayTypeData, null, null, elementType);
+    // // return new ConstantArrayType(constant, arrayTypeData, typeData, info, elementType);
+    // }
 
-    public static IncompleteArrayType incompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
-            ClavaNodeInfo info, Type elementType) {
-        return new IncompleteArrayType(arrayTypeData, typeData, info, elementType);
-    }
+    // public static IncompleteArrayType incompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
+    // ClavaNodeInfo info, Type elementType) {
+    // return new IncompleteArrayType(arrayTypeData, typeData, info, elementType);
+    // }
 
     public static AttributedType attributedType(TypeData typeData, ClavaNodeInfo info, Type modifiedType,
             Type equivalentType) {
@@ -865,18 +859,18 @@ public class ClavaNodeFactory {
         return new UnaryTransformType(kind, data, info, baseType, underlyingType);
     }
 
-    public static VariableArrayType variableArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
-            ClavaNodeInfo info, Type elementType,
-            Expr sizeExpr) {
-        return new VariableArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
-    }
+    // public static VariableArrayType variableArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
+    // ClavaNodeInfo info, Type elementType,
+    // Expr sizeExpr) {
+    // return new VariableArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
+    // }
 
-    public static VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
-        ArrayTypeData arrayTypeData = new ArrayTypeData();
-        TypeData typeData = new TypeData(elementType.getCode());
-
-        return variableArrayType(arrayTypeData, typeData, ClavaNodeInfo.undefinedInfo(), elementType, sizeExpr);
-    }
+    // public static VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
+    // ArrayTypeData arrayTypeData = new ArrayTypeData();
+    // TypeData typeData = new TypeData(elementType.getCode());
+    //
+    // return variableArrayType(arrayTypeData, typeData, ClavaNodeInfo.undefinedInfo(), elementType, sizeExpr);
+    // }
 
     public static InjectedClassNameType injectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
         return new InjectedClassNameType(declInfo, data, info);

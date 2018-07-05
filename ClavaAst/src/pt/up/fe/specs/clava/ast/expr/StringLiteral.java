@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -25,7 +23,7 @@ public class StringLiteral extends Literal {
 
     /// DATAKEY BEGIN
 
-    public final static DataKey<String> STRING = KeyFactory.string("string");
+    // public final static DataKey<String> STRING = KeyFactory.string("string");
 
     /// DATAKEY END
 
@@ -53,25 +51,29 @@ public class StringLiteral extends Literal {
         // return string;
     }
 
-    public String getStringContents() {
-        return get(STRING);
-        // String literalString = getString();
-        // return literalString.substring(1, literalString.length() - 1);
-        // String stringContents = string;
-        // if (stringContents.startsWith("\"")) {
-        // stringContents = stringContents.substring(1);
-        // }
-        // if (stringContents.endsWith("\"")) {
-        //
-        // }
-        //
-        // return string;
-    }
+    // public String getStringContents() {
+    // // return get(STRING);
+    // String literalString = getString();
+    // return literalString.substring(1, literalString.length() - 1);
+    // String stringContents = string;
+    // if (stringContents.startsWith("\"")) {
+    // stringContents = stringContents.substring(1);
+    // }
+    // if (stringContents.endsWith("\"")) {
+    //
+    // }
+    //
+    // return string;
+    // }
 
     @Override
     public String getCode() {
-        // return getString();
-        return "\"" + getStringContents() + "\"";
+        return getLiteral();
+        // System.out.println("STRING CONTENTS:" + getStringContents());
+        // System.out.println("LITERAL:" + getLiteral());
+        // System.out.println("ESCAPED:" + SpecsStrings.escapeJson(getStringContents()));
+        // // return getString();
+        // return "\"" + SpecsStrings.escapeJson(getStringContents()) + "\"";
     }
 
     // @Override

@@ -13,40 +13,51 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class VariableArrayType extends ArrayType {
 
+    /// DATAKEYS BEGIN
+
+    // public final static DataKey<Expr> SIZE_EXPR = KeyFactory.object("sizeExpr", Expr.class);
+
+    /// DATAKEYS END
+
+    public VariableArrayType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     // Dummy
-    public VariableArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info, Type elementType,
-            Expr sizeExpr) {
-        this(arrayTypeData, typeData, info, Arrays.asList(elementType, sizeExpr));
-    }
+    // public VariableArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info, Type elementType,
+    // Expr sizeExpr) {
+    // this(sizeExpr, arrayTypeData, typeData, info, Arrays.asList(elementType, sizeExpr));
+    // }
 
-    protected VariableArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(arrayTypeData, typeData, info, children);
-    }
+    // protected VariableArrayType(Expr sizeExpr, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(arrayTypeData, typeData, info, children);
+    //
+    // // setInPlace(SIZE_EXPR, sizeExpr);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new VariableArrayType((Expr) getExpr().copy(), getArrayTypeData(), getTypeData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new VariableArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    }
-
-    @Override
-    public Type getElementType() {
-        return getChild(Type.class, 0);
-    }
+    // @Override
+    // public Type getElementType() {
+    // return getChild(Type.class, 0);
+    // }
 
     public Expr getExpr() {
+        // return get(SIZE_EXPR);
         return getChild(Expr.class, 1);
     }
 

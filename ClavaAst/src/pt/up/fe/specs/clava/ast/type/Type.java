@@ -131,6 +131,18 @@ public abstract class Type extends ClavaNode {
         return set(key, value, true);
     }
 
+    /**
+     * Since the normal set of Type nodes creates a copy, this is a helper method to be used internally, in case a value
+     * needs to be set in place (e.g., compatibility constructors).
+     * 
+     * @param key
+     * @param value
+     * @return
+     */
+    protected <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
+        return set(key, value, false);
+    }
+
     protected <T, E extends T> ClavaNode set(DataKey<T> key, E value, boolean createCopy) {
         Type typeToChange = createCopy ? copy() : this;
 

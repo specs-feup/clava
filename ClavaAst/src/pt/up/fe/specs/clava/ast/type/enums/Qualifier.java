@@ -63,4 +63,20 @@ public enum Qualifier {
             throw new RuntimeException("Not a C99 Qualifier:" + this);
         }
     }
+
+    public static Qualifier parse(C99Qualifier c99Qualifier) {
+        switch (c99Qualifier) {
+        case CONST:
+            return CONST;
+        case RESTRICT:
+        case RESTRICT_C99:
+            return RESTRICT;
+        case VOLATILE:
+            return Qualifier.VOLATILE;
+        default:
+            throw new RuntimeException("Not a Qualifier:" + c99Qualifier);
+
+        }
+    }
+
 }
