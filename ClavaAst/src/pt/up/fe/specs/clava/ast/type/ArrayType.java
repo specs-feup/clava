@@ -35,7 +35,8 @@ public abstract class ArrayType extends Type {
             .setDefault(() -> ArraySizeModifier.Normal);
 
     public final static DataKey<List<C99Qualifier>> INDEX_TYPE_QUALIFIERS = KeyFactory
-            .generic("indexTypeQualifiers", new ArrayList<>());
+            .generic("indexTypeQualifiers", (List<C99Qualifier>) new ArrayList<C99Qualifier>())
+            .setDefault(() -> new ArrayList<>());
 
     /// DATAKEYS END
 

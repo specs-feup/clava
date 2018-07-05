@@ -13,8 +13,6 @@
 
 package pt.up.fe.specs.clava.ast;
 
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaId;
@@ -28,14 +26,9 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.ArraySizeType;
-import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
-import pt.up.fe.specs.clava.language.Standard;
 
 public class DataStoreToLegacy {
 
@@ -68,15 +61,15 @@ public class DataStoreToLegacy {
                 data.get(Type.IS_FROM_AST));
     }
 
-    public static ArrayTypeData getArrayType(DataStore data, Standard standard) {
-
-        return new ArrayTypeData(
-                ArraySizeType.values()[data.get(ArrayType.ARRAY_SIZE_MODIFIER).ordinal()],
-                data.get(ArrayType.INDEX_TYPE_QUALIFIERS).stream()
-                        .map(Qualifier::parse)
-                        .collect(Collectors.toList()),
-                standard);
-    }
+    // public static ArrayTypeData getArrayType(DataStore data, Standard standard) {
+    //
+    // return new ArrayTypeData(
+    // ArraySizeType.values()[data.get(ArrayType.ARRAY_SIZE_MODIFIER).ordinal()],
+    // data.get(ArrayType.INDEX_TYPE_QUALIFIERS).stream()
+    // .map(Qualifier::parse)
+    // .collect(Collectors.toList()),
+    // standard);
+    // }
 
     /// ATTRS
 
