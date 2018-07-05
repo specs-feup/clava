@@ -1,0 +1,21 @@
+aspectdef GproferGetCxxFunction
+	input name end
+	output $func end
+	
+	$func = undefined;
+	
+	/* decode name based on gprof format */
+end
+
+aspectdef GproferGetCFunction
+	input name end
+	output $func end
+	
+	$func = undefined;
+	
+	select function{name} end
+	apply
+		$func = $function;
+		return;
+	end
+end

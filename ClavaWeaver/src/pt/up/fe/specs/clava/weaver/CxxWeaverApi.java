@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -87,6 +88,10 @@ public class CxxWeaverApi {
                 .map(ClavaNodeFactory::include)
                 .map(includeDecl -> (AInclude) CxxJoinpoints.create(includeDecl, null))
                 .collect(Collectors.toList());
+    }
+
+    public static Set<String> getIncludeFolders() {
+        return CxxWeaver.getCxxWeaver().getIncludeFolders();
     }
 
 }

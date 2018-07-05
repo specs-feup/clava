@@ -160,6 +160,16 @@ Clava.getAvailableIncludes = function() {
 	return CxxWeaverApi.getAvailableUserIncludes();
 }
 
+/**
+ *
+ * @return {J#Set<String>} a set with paths to the include folders of the current configuration.
+ */
+Clava.getIncludeFolders = function() {	
+	return CxxWeaverApi.getIncludeFolders();
+}
+
+
+
 /*
  *
  */

@@ -21,8 +21,11 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraApiResource implements LaraResourceProvider {
 
-    // AUTOPAR
+    // Gprofer
+    GPROFER("gprofer/Gprofer.lara"),
+    GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
 
+    // AUTOPAR
     ADDITIONAL_CONDITIONS_CHECK("autopar/additionalConditionsCheck.lara"),
     ADD_OPENMP_DIRECTIVES("autopar/AddOpenMPDirectivesForLoop.lara"),
     AUTOPAR_UTILS("autopar/AutoParUtils.lara"),
