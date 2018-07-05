@@ -54,7 +54,8 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         StringBuilder code = new StringBuilder();
 
         code.append(cxxNamedCastExprdata.getCastName());
-        code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
+        // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
+        code.append("<").append(getTypeCode()).append(">");
         code.append("(").append(getSubExpr().getCode()).append(")");
 
         return code.toString();
