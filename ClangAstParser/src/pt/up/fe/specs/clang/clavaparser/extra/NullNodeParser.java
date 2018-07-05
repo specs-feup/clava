@@ -33,7 +33,6 @@ public class NullNodeParser extends AClangNodeParser<NullNode> {
 
         // Make sure it has no children
         Preconditions.checkArgument(node.getNumChildren() == 0, "Expected no children");
-
         return ClavaNodeFactory.nullNode(info(node));
     }
 

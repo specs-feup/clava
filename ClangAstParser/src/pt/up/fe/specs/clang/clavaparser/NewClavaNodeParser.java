@@ -20,8 +20,11 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
+import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -97,7 +100,31 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             }
         }
 
+        // Check if any of the children is a NullNode
+        boolean hasNullNode = children.stream()
+                .filter(child -> child instanceof NullNode)
+                .findFirst()
+                .isPresent();
+
+        if (hasNullNode) {
+            processNullNodes(clavaNode, children);
+        }
+
         return children;
+    }
+
+    private void processNullNodes(ClavaNode clavaNode, List<ClavaNode> children) {
+        if (clavaNode instanceof DependentSizedArrayType) {
+            // Only second child can be null
+            Preconditions
+                    .checkArgument(!(children.get(0) instanceof NullNode) && (children.get(1) instanceof NullNode));
+
+            // Replace with NullExpr
+            children.set(1, LegacyToDataStore.getFactory().nullExpr());
+            return;
+        }
+
+        throw new RuntimeException("NullNode not being handled in class " + clavaNode.getClass());
     }
 
     @Override
