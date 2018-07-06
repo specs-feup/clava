@@ -78,6 +78,7 @@ namespace clava {
         CONSTANT_ARRAY_TYPE,
         INCOMPLETE_ARRAY_TYPE,
         VARIABLE_ARRAY_TYPE,
+        POINTER_TYPE,
     };
 
 

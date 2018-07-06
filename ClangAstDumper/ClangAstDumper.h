@@ -221,6 +221,7 @@ private:
     void VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren);
     void VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren);
+    void VisitPointerTypeChildren(const PointerType *T, std::vector<std::string> &visitedChildren);
 
 
     /* Utility methods for DECLS */

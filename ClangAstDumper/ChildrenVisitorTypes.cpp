@@ -10,6 +10,7 @@
 const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDREN_MAP = {
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
+        {"PointerType", clava::TypeNode::POINTER_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -34,6 +35,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitFunctionProtoTypeChildren(static_cast<const FunctionProtoType *>(T), visitedChildren); break;
         case clava::TypeNode::VARIABLE_ARRAY_TYPE:
             VisitVariableArrayTypeChildren(static_cast<const VariableArrayType *>(T), visitedChildren); break;
+        case clava::TypeNode::POINTER_TYPE:
+            VisitPointerTypeChildren(static_cast<const PointerType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -114,4 +117,14 @@ void ClangAstDumper::VisitVariableArrayTypeChildren(const VariableArrayType *T, 
     // Visit and add size expression
     VisitStmtTop(T->getSizeExpr());
     visitedChildren.push_back(clava::getId(T->getSizeExpr(), id));
+}
+
+void ClangAstDumper::VisitPointerTypeChildren(const PointerType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+
+    // Visit pointee
+    VisitTypeTop(T->getPointeeType());
+    visitedChildren.push_back(clava::getId(T->getPointeeType(), id));
 }
