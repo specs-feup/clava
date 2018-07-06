@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang.clavaparser.type;
 
+import java.util.Arrays;
 import java.util.List;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
@@ -20,7 +21,7 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -46,7 +47,9 @@ public class PointerTypeParser extends AClangNodeParser<PointerType> {
 
         Type pointeeType = toType(children.get(0));
 
-        return ClavaNodeFactory.pointerType(typeData, node.getInfo(), pointeeType);
+        return new PointerType(new LegacyToDataStore().setType(typeData).setNodeInfo(node.getInfo()).getData(),
+                Arrays.asList(pointeeType));
+        // return ClavaNodeFactory.pointerType(typeData, node.getInfo(), pointeeType);
     }
 
 }
