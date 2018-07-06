@@ -21,6 +21,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -121,6 +122,12 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
             // Replace with NullExpr
             children.set(1, LegacyToDataStore.getFactory().nullExpr());
+            return;
+        }
+
+        if (clavaNode instanceof AlignedExprAttr) {
+            Preconditions.checkArgument(children.size() == 1);
+            children.set(0, LegacyToDataStore.getFactory().nullExpr());
             return;
         }
 
