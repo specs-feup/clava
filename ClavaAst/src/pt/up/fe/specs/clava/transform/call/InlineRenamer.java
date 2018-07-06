@@ -42,7 +42,6 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -335,8 +334,9 @@ public class InlineRenamer {
 
         Type newType = elementType;
         for (int i = 0; i < pointerArity; i++) {
-            newType = ClavaNodeFactory.pointerType(new TypeData("dummy"), ClavaNodeInfo.undefinedInfo(),
-                    newType);
+            newType = factory.pointerType(newType);
+            // newType = ClavaNodeFactory.pointerType(new TypeData("dummy"), ClavaNodeInfo.undefinedInfo(),
+            // newType);
         }
 
         Expr exprWithCast = ClavaNodeFactory.cStyleCastExpr(CastKind.NO_OP, new ExprData(newType),

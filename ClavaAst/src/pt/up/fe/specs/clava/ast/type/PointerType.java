@@ -13,28 +13,30 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class PointerType extends Type {
 
-    public PointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
-        this(typeData, info, Arrays.asList(pointeeType));
+    public PointerType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private PointerType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
+    // public PointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
+    // this(typeData, info, Arrays.asList(pointeeType));
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new PointerType(getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // private PointerType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new PointerType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
@@ -52,6 +54,7 @@ public class PointerType extends Type {
         String nameString = name == null ? "" : " " + name;
         String pointeeCode = pointeeType.getCode(sourceNode);
         String pointeeSuffix = pointeeCode.endsWith("*") ? "" : " ";
+
         return pointeeCode + pointeeSuffix + "*" + nameString;
         // return getPointeeType().getCode(name) + "*";
         // If pointee type is not a pointer, add a space
@@ -85,44 +88,5 @@ public class PointerType extends Type {
 
         return 1 + ((PointerType) pointee).getPointerLevels();
     }
-
-    /*
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((getTypeData() == null) ? 0 : getTypeData().hashCode());
-        result = prime * result + ((getPointeeType() == null) ? 0 : getPointeeType().hashCode());
-        return result;
-    }
-    */
-
-    /*
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-    
-        PointerType other = (PointerType) obj;
-    
-        // Test pointee type
-        if (getPointeeType() == null) {
-            if (other.getPointeeType() != null) {
-                return false;
-            }
-        } else if (!getPointeeType().equals(other.getPointeeType())) {
-            return false;
-        }
-    
-        return true;
-    }
-    */
 
 }

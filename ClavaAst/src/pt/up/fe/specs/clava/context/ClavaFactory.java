@@ -50,6 +50,7 @@ import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
@@ -183,6 +184,13 @@ public class ClavaFactory {
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
         return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
+    }
+
+    public PointerType pointerType(Type pointeeType) {
+        DataStore data = newTypeDataStore();
+        // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
+
+        return new PointerType(data, Arrays.asList(pointeeType));
     }
 
     /// EXPRS

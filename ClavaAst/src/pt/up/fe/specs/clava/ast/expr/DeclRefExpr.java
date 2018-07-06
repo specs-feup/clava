@@ -112,6 +112,10 @@ public class DeclRefExpr extends Expr implements Nameable {
         return builder.toString();
     }
 
+    public String getValueDeclType() {
+        return declData.getValueDeclType().get(0);
+    }
+
     public String getRefName() {
         return declData.getDeclName();
     }

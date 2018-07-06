@@ -199,7 +199,6 @@ import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.ParenType;
-import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.RValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
@@ -690,9 +689,9 @@ public class ClavaNodeFactory {
         return new QualType(qualTypeData, typeData, info, qualifiedType);
     }
 
-    public static PointerType pointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
-        return new PointerType(typeData, info, pointeeType);
-    }
+    // public static PointerType pointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
+    // return new PointerType(typeData, info, pointeeType);
+    // }
 
     public static EnumType enumType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info) {
         return new EnumType(declInfo, typeData, info);
