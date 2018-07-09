@@ -101,6 +101,7 @@ public class TextParser {
     }
 
     private void addElements(TranslationUnit tu) {
+
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
 
@@ -128,8 +129,9 @@ public class TextParser {
 
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
-            int textStartLine = textElement.getLocation().getStartLine();
 
+            int textStartLine = textElement.getLocation().getStartLine();
+            // System.out.println("TEXT START LINE:" + textStartLine);
             // Get node that has a line number greater than the text element
             while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine()) {
 

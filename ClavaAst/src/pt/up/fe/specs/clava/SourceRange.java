@@ -58,8 +58,7 @@ public class SourceRange {
     }
 
     public SourceRange(SourceRange sourceRange) {
-        this.start = sourceRange.start;
-        this.end = sourceRange.end;
+        this(sourceRange.start, sourceRange.end);
     }
 
     public SourceLocation getStart() {
@@ -69,10 +68,6 @@ public class SourceRange {
     public SourceLocation getEnd() {
         return end;
     }
-
-    // public String getFilepath() {
-    // return start.getFilepath();
-    // }
 
     public String getFilepath() {
         // Check start is null

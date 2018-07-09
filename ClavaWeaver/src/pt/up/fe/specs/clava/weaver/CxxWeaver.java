@@ -532,6 +532,14 @@ public class CxxWeaver extends ACxxWeaver {
 
     public App createApp(List<File> sources, List<String> parserOptions) {
 
+        // App newApp = new CodeParser().parseParallel(sources, parserOptions);
+        // System.out.println("APP SOURCE:" + newApp.getCode());
+
+        // List<File> allSourceFolders = getInputSourceFolders(sources, parserOptions);
+        // Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
+        // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
+        // System.out.println("ALL SOURCES:" + allSources);
+
         // All files, header and implementation
         Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
 

@@ -276,4 +276,195 @@ public class RootParser extends AClangNodeParser<App> {
     public Set<String> getUndefinedNodes() {
         return ClangConverterTable.getUndefinedNodes();
     }
+
+    public TranslationUnit parseTranslationUnit(ClangRootNode clangAst, File sourceFile) {
+        // Create StringParser from node content
+        StringParser parser = new StringParser(clangAst.getContentTry().orElse("").trim());
+
+        // Store original string of parser, for debugging
+        String originalContent = parser.toString();
+
+        // Parse node
+        TranslationUnit clavaNode = parseTranslationUnit(clangAst, parser, sourceFile);
+
+        if (!parser.toString().trim().isEmpty()) {
+            throw new RuntimeException("ClangNodeParser '" + getClass().getSimpleName()
+                    + "' did not consume StringParser completely, current string is '" + parser
+                    + "'.\nOriginal string was:" + originalContent + "\nLocation:" + clangAst.getLocation());
+        }
+
+        // Mark node
+        if (isLegacyParser()) {
+            clavaNode.setIsLegacyNode(true);
+        }
+
+        return clavaNode;
+    }
+
+    /**
+     * Only accepts nodes of type ClangRootNode.
+     */
+    public TranslationUnit parseTranslationUnit(ClangRootNode node, StringParser parser, File sourceFile) {
+
+        // For each enty in MultiMap, create a Translation Unit
+        ClangIncludes includes = node.getClangRoot().getIncludes();
+
+        List<Decl> tuDecls = new ArrayList<>();
+        // File canonicalSourceFile = SpecsIo.getCanonicalFile(sourceFile);
+
+        // Add includes
+        List<Include> includeList = includes.getIncludes(sourceFile);
+
+        List<Include> uniqueIncludes = SpecsCollections.filter(includeList, include -> include.toString());
+
+        // Set<String> addedIncludes = new HashSet<>();
+
+        // Add includes
+        uniqueIncludes.stream()
+                .map(include -> ClavaNodeFactory.include(include, null)) // PATH?
+                .forEach(tuDecls::add);
+
+        // If either the file in start location or end location is the current file, then it belongs to the translation
+        // unit
+        for (ClangNode child : node.getChildren()) {
+            if (!sourceFile.equals(child.getLocation().getStartFile())
+                    && !sourceFile.equals(child.getLocation().getEndFile())) {
+                // System.out.println("Discarding node " + child.getLocation());
+
+                continue;
+            }
+
+            // Parse node
+            ClavaNode clavaNode = getConverter().parse(child);
+
+            // If Undefined, transform to DummyDecl
+            if (clavaNode instanceof Undefined) {
+                clavaNode = LegacyToDataStore.getFactory().dummyDecl(clavaNode);
+            }
+
+            if (!(clavaNode instanceof Decl)) {
+                throw new RuntimeException(
+                        "Expecting a DeclNode, found a '" + clavaNode.getClass().getSimpleName() + "'");
+            }
+
+            Decl decl = (Decl) clavaNode;
+            tuDecls.add(decl);
+        }
+
+        // LegacyToDataStore.getFactory().
+        // return new TranslationUnit(sourceFile.getName(), sourceFile.getParent(), tuDecls);
+        return new TranslationUnit(sourceFile, tuDecls);
+        /*
+        
+        // Parse all children, include them in a Clava App node
+        //
+        // Each child of the root node belongs to a file, maintain a map of what nodes belong to each file, in the end
+        // create the file nodes and add them to a root node
+        
+        // Using LinkedHashMap to maintain order of keys
+        MultiMap<String, Decl> declarations = new MultiMap<>(() -> new LinkedHashMap<>());
+        
+        // There can be repeated top level declarations, with different values for the addresses.
+        // Because the parser uses the addresses as ids, it can be problematic if declarations with mismatched addresses
+        // appear in the final AST tree.
+        //
+        // To solve this, use the location of the node to remove repetitions,
+        // and create a map between repeated ids and normalized ids
+        
+        NormalizedClangNodes normalizedClangNodes = normalizeClangNodes((ClangRootNode) node);
+        
+        for (ClangNode child : normalizedClangNodes.getUniqueNodes()) {
+            // Normalize node source path
+            String filepath = child.getLocation().getFilepath();
+            if (filepath == null) {
+                // throw new RuntimeException("Filepath null, check if ok");
+                SpecsLogs.msgWarn("Filepath null, check if ok. Skipping node:\n" + child.getContent());
+                continue;
+            }
+        
+            String canonicalPath = SpecsIo.getCanonicalPath(new File(filepath));
+        
+            // Parse node
+            ClavaNode clavaNode = getConverter().parse(child);
+        
+            // If Undefined, transform to DummyDecl
+            if (clavaNode instanceof Undefined) {
+                clavaNode = LegacyToDataStore.getFactory().dummyDecl(clavaNode);
+            }
+        
+            if (!(clavaNode instanceof Decl)) {
+                throw new RuntimeException(
+                        "Expecting a DeclNode, found a '" + clavaNode.getClass().getSimpleName() + "'");
+            }
+        
+            Decl decl = (Decl) clavaNode;
+        
+            declarations.put(canonicalPath, decl);
+        }
+        
+        double newNodesFraction = (double) getConverter().getNewParsedNodes() / getConverter().getTotalParsedNodes();
+        SpecsLogs.msgInfo("New nodes ratio: " + SpecsStrings.toPercentage(newNodesFraction) + " (from a total of "
+                + getConverter().getTotalParsedNodes() + " parsed nodes)");
+        
+        // For each enty in MultiMap, create a Translation Unit
+        ClangIncludes includes = node.getClangRoot().getIncludes();
+        
+        List<TranslationUnit> tUnits = new ArrayList<>();
+        for (String path : declarations.keySet()) {
+            // Set<Decl> decls = new LinkedHashSet<>();
+            List<Decl> decls = new ArrayList<>();
+        
+            // Build filename
+            String filename = new File(path).getName();
+            int endIndex = path.length() - filename.length();
+            String filenamePath = path.substring(0, endIndex);
+        
+            // Declaration nodes of the translation unit
+            List<Decl> declNodes = declarations.get(path);
+        
+            // Remove ParmVarDecl nodes
+            declNodes = declNodes.stream()
+                    .filter(decl -> !(decl instanceof ParmVarDecl))
+                    .collect(Collectors.toList());
+        
+            // Add includes
+            List<Include> includeList = includes.getIncludes(new File(path));
+        
+            List<Include> uniqueIncludes = SpecsCollections.filter(includeList, include -> include.toString());
+        
+            // Set<String> addedIncludes = new HashSet<>();
+        
+            // Add includes
+            uniqueIncludes.stream()
+                    .map(include -> ClavaNodeFactory.include(include, path))
+                    .forEach(decls::add);
+        
+            // Add declarations
+            decls.addAll(declNodes);
+        
+            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
+        
+            Language language = getStdErr().get(ClangParserKeys.FILE_LANGUAGE_DATA)
+                    .get(new File(filenamePath, filename));
+            if (language != null) {
+                tUnit.setLanguage(language);
+            }
+            // Clean translation unit
+            // ClavaPostProcessing.applyPostPasses(tUnit);
+        
+            tUnits.add(tUnit);
+        }
+        
+        // Create App
+        // App app = ClavaNodeFactory.app(tUnits);
+        App app = getConfig()
+                .get(ClavaNode.CONTEXT)
+                .get(ClavaContext.FACTORY)
+                .app(tUnits);
+        
+        app.setIdsAlias(normalizedClangNodes.getRepeatedIdsMap());
+        
+        return app;
+        */
+    }
 }

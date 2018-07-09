@@ -63,3 +63,10 @@ deps/*/*/*
 
 # deploy credentials
 *.creds
+
+# deprecated files
+*.deprecated
+
+#debug files
+debug
+stderr.txt

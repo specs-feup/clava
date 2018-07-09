@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -252,6 +253,10 @@ public class ClavaNodeFactory {
     // public static App app(Collection<TranslationUnit> translationUnits) {
     // return new App(translationUnits);
     // }
+
+    public static TranslationUnit translationUnit(File sourceFile, Collection<Decl> declarations) {
+        return new TranslationUnit(sourceFile, declarations);
+    }
 
     public static TranslationUnit translationUnit(String filename, String path, Collection<Decl> declarations) {
         return new TranslationUnit(filename, path, declarations);

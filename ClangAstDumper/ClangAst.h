@@ -24,7 +24,7 @@ using namespace clang;
 class DumpResources {
 
 public:
-    static void init();
+    static void init(int runId);
     static void finish();
 
     static void writeCounter(int set);
@@ -38,6 +38,7 @@ public:
     static std::ofstream enum_integer_type;
     static std::ofstream consumer_order;
     static std::ofstream types_with_templates;
+    static int runId;
 
 private:
 

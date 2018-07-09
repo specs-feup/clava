@@ -13,7 +13,9 @@ void voidFoo(int *a) {
 	(*a)++;
 }
 
+
 int main() {
+
 
 	foo(10);
 	fooNoDecl(20);

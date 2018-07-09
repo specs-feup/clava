@@ -70,11 +70,11 @@ public class TranslationUnit extends ClavaNode {
 
     private String relativePath;
 
-    public TranslationUnit(String filename, String filePath, Collection<Decl> declarations) {
-        super(createInfo(new ArrayList<>(declarations), filePath + filename), declarations);
+    public TranslationUnit(String filename, String folderPath, Collection<Decl> declarations) {
+        super(createInfo(new ArrayList<>(declarations), new File(folderPath, filename).getPath()), declarations);
 
         this.filename = filename;
-        path = processFilePath(filePath);
+        path = processFilePath(folderPath);
 
         List<IncludeDecl> includesList = declarations.stream()
                 .filter(decl -> decl instanceof IncludeDecl)
@@ -86,6 +86,10 @@ public class TranslationUnit extends ClavaNode {
         isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
 
         relativePath = null;
+    }
+
+    public TranslationUnit(File sourceFile, Collection<Decl> declarations) {
+        this(sourceFile.getName(), sourceFile.getParent(), declarations);
     }
 
     private String processFilePath(String filePath) {
