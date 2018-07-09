@@ -30,8 +30,12 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangDumperParser;
+import pt.up.fe.specs.clang.textparser.TextParser;
+import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaOptions;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
@@ -180,10 +184,13 @@ public class CodeParser {
 
         List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
-        System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
-        System.out.println("ALL SOURCES:" + allSources);
+        // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
+        // System.out.println("ALL SOURCES:" + allSources);
 
+        // Map<String, TranslationUnit> tunits = new HashMap<>();
+        List<TranslationUnit> tUnits = new ArrayList<>();
         // Parse files, individually
+        int id = 1;
         for (Entry<String, File> sourceFile : allSources.entrySet()) {
             DataStore options = ClavaOptions.toDataStore(compilerOptions);
 
@@ -191,14 +198,80 @@ public class CodeParser {
             adaptOptions(options, new File(sourceFile.getKey()));
 
             ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
-                    Arrays.asList(sourceFile.getKey()),
-                    options);
+                    Arrays.asList(sourceFile.getKey()), options, id);
 
-            System.out.println("sourceFile:" + sourceFile.getKey());
-            System.out.println("AST:" + ast);
+            // Increment id
+            id++;
+
+            if (showClangDump) {
+                SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
+            }
+
+            if (showClangAst) {
+                SpecsLogs.msgInfo("Clang AST:\n" + ast);
+            }
+
+            // System.out.println("sourceFile:" + sourceFile.getKey());
+            // System.out.println("AST:" + ast);
+
+            // Parse dump information
+            try (ClavaParser clavaParser = new ClavaParser(ast)) {
+                TranslationUnit tunit = clavaParser.parseTranslationUnit(new File(sourceFile.getKey()));
+                // tunits.put(sourceFile.getKey(), tunit);
+                tUnits.add(tunit);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
-        return null;
+        App app = LegacyToDataStore.getFactory().app(tUnits);
+
+        app.setSourcesFromStrings(allSources);
+        app.addConfig(ClavaOptions.toDataStore(compilerOptions));
+
+        // Add text elements (comments, pragmas) to the tree
+        new TextParser(app.getContext()).addElements(app);
+
+        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
+        // original clang tree
+        new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
+
+        // Perform second pass over types
+        // processTypesSecondPass();
+
+        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
+        // original clang tree
+        // if (sourceTree) {
+        // processSourceTree(app);
+        // }
+
+        SpecsLogs.msgInfo("--- AST parsing report ---");
+        // checkUndefinedNodes(app);
+
+        return app;
+
+        // Create App
+        // App app = ClavaNodeFactory.app(tUnits);
+        // App app = getConfig()
+        // .get(ClavaNode.CONTEXT)
+        // .get(ClavaContext.FACTORY)
+        // .app(tUnits);
+        // setAliasIds
+        //
+        // App clavaAst = clavaParser.parse();
+        // clavaAst.setSourcesFromStrings(allFiles);
+        // clavaAst.addConfig(ast.getConfig());
+
+        // if (showClavaAst) {
+        // SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst.toTree());
+        // }
+        //
+        // if (showCode) {
+        // SpecsLogs.msgInfo("Code:\n" + clavaAst.getCode());
+        // }
+        //
+        // return clavaAst;
         /*
         
         

@@ -143,6 +143,10 @@ public class ClangAstParser {
     }
 
     public ClangRootNode parse(Collection<String> files, DataStore config) {
+        return parse(files, config, null);
+    }
+
+    public ClangRootNode parse(Collection<String> files, DataStore config, Integer id) {
 
         DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.LOCAL_OPTIONS_FILE, getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
@@ -157,6 +161,10 @@ public class ClangAstParser {
         arguments.add(clangExecutable.getAbsolutePath());
 
         arguments.addAll(files);
+
+        if (id != null) {
+            arguments.add("-id=" + id);
+        }
 
         arguments.add("--");
 

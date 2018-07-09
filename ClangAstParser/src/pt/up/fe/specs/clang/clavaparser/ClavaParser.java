@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clang.clavaparser;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -175,6 +176,7 @@ import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
@@ -224,6 +226,10 @@ public class ClavaParser implements AutoCloseable {
         converter = buildConverter_3_8(clangAst.getClangRootData());
         this.sourceTree = sourceTree;
         this.clangAst = clangAst;
+    }
+
+    public static Collection<ClavaRule> getPostParsingRules() {
+        return POST_PARSING_RULES;
     }
 
     /**
@@ -652,6 +658,35 @@ public class ClavaParser implements AutoCloseable {
     @Override
     public void close() throws Exception {
         converter.close();
+    }
+
+    public TranslationUnit parseTranslationUnit(File sourceFile) {
+        converter.setClangRootData(clangAst.getClangRootData());
+
+        // Parse types
+        Map<String, Type> types = new ClangTypesParser(converter).parse(clangAst.getClangRootData().getClangTypes());
+
+        // Add original types to converter
+        converter.setOriginalTypes(types);
+
+        Map<String, Type> nodeTypes = buildNodeTypes(types, clangAst.getClangRootData());
+
+        // Add types mapping to converter
+        converter.setTypesMapping(nodeTypes);
+
+        // Perform second pass over types
+        processTypesSecondPass();
+
+        // Process Clang nodes to add extra information (e.g., namespace and RecordDecl names to CXXMethodDecl)
+        new ClangAstProcessor(converter).process(clangAst);
+
+        // Apply post-processing to ClavaData
+        // clavaDataPostProcessing();
+
+        // Parse root node
+        RootParser rootParser = new RootParser(converter);
+
+        return rootParser.parseTranslationUnit(clangAst, sourceFile);
     }
 
 }

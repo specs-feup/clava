@@ -187,6 +187,7 @@ public abstract class AClangAstTester {
         File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        // App clavaAst = codeParser.parseParallel(Arrays.asList(workFolder), compilerOptions);
 
         clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
         if (onePass) {
@@ -200,6 +201,7 @@ public abstract class AClangAstTester {
         File firstOutputFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst");
 
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
+        // App testClavaAst = testCodeParser.parseParallel(Arrays.asList(firstOutputFolder), compilerOptions);
         testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
 
         // Test if files from first and second are the same
