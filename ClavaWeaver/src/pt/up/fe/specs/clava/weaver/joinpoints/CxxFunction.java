@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -290,8 +291,7 @@ public class CxxFunction extends AFunction {
             if (!file.isPresent()) {
 
                 // String path = getRootImpl().getBaseFolderImpl();
-                TranslationUnit tu = ClavaNodeFactory.translationUnit(fileName, "",
-                        Collections.emptyList());
+                TranslationUnit tu = ClavaNodeFactory.translationUnit(new File(fileName), Collections.emptyList());
 
                 app.addFile(tu);
 

@@ -240,23 +240,34 @@ public class AstFactory {
      * @param joinpoint
      * @return
      */
-    public static AFile file(String filename, String path) {
+    public static AFile file(File file, String relativePath) {
         // Test if path is absolute
-        if (path != null && new File(path).isAbsolute()) {
+        if (relativePath != null && new File(relativePath).isAbsolute()) {
             ClavaLog.warning(
-                    "Cannot use absolute paths for new 'file' join points, replacing '" + path + "' with null");
-            path = null;
+                    "Cannot use absolute paths for new 'file' join points, replacing '" + relativePath + "' with null");
+            relativePath = null;
         }
 
         // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList());
         // New files do not have a path
-        TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, null, Collections.emptyList());
+        TranslationUnit tUnit = ClavaNodeFactory.translationUnit(file, Collections.emptyList());
 
-        if (path != null) {
-            tUnit.setRelativePath(path);
+        if (relativePath != null) {
+            tUnit.setRelativePath(relativePath);
         }
 
         return CxxJoinpoints.create(tUnit, null, AFile.class);
+    }
+
+    /**
+     * Overload that accepts a String instead of a File.
+     * 
+     * @param filename
+     * @param relativePath
+     * @return
+     */
+    public static AFile file(String filename, String relativePath) {
+        return file(new File(filename), relativePath);
     }
 
     public static AJoinPoint externC(AJoinPoint jpDecl) {
