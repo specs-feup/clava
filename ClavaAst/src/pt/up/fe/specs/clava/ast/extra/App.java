@@ -451,8 +451,13 @@ public class App extends ClavaNode {
             File newSourceFile = new File(newSourcePath, originalRelativePath);
             // System.out.println("NEW SOURCE FILE:" + newSourceFile);
 
-            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(newSourceFile.getName(),
-                    newSourcePath.getAbsolutePath(), Collections.emptyList());
+            // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(newSourceFile.getName(),
+            // newSourcePath.getAbsolutePath(), Collections.emptyList());
+            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(newSourceFile, Collections.emptyList());
+            tUnit.setRelativePath(new File(originalRelativePath).getParent());
+            // System.out.println("NEW SOURCE FILE:" + newSourceFile);
+            // System.out.println("NEW SOURCE PATH:" + newSourcePath);
+            // System.out.println("RELATIVE FOLDER:" + new File(originalRelativePath).getParent());
 
             files.put(newSourceFile, tUnit.getCode());
             /*
