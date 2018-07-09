@@ -16,13 +16,11 @@ package pt.up.fe.specs.clang.clavaparser.extra;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
@@ -142,20 +140,13 @@ public class RootParser extends AClangNodeParser<App> {
             List<Decl> decls = new ArrayList<>();
 
             // Build filename
-            String filename = new File(path).getName();
-            int endIndex = path.length() - filename.length();
-            String filenamePath = path.substring(0, endIndex);
+            File sourcePath = new File(path);
+            // String filename = sourcePath.getName();
+            // int endIndex = path.length() - filename.length();
+            // String filenamePath = path.substring(0, endIndex);
 
             // Declaration nodes of the translation unit
             List<Decl> declNodes = declarations.get(path);
-
-            /*
-            List<Decl> parmVarDeclNodes = declNodes.stream()
-            .filter(decl -> decl instanceof ParmVarDecl)
-            .collect(Collectors.toList());
-            
-            System.out.println("THESE NODES WILL BE REMOVED:" + parmVarDeclNodes);
-            */
 
             // Remove ParmVarDecl nodes
             declNodes = declNodes.stream()
@@ -167,41 +158,19 @@ public class RootParser extends AClangNodeParser<App> {
 
             List<Include> uniqueIncludes = SpecsCollections.filter(includeList, include -> include.toString());
 
-            // Set<String> addedIncludes = new HashSet<>();
-
             // Add includes
             uniqueIncludes.stream()
                     .map(include -> ClavaNodeFactory.include(include, path))
                     .forEach(decls::add);
-            /*
-            // Only add includes that are not in the line number range of the declarations
-            if (!uniqueIncludes.isEmpty()) {
-                Set<Integer> lineNumbers = getLineNumbers(declNodes);
-            
-                for (Include include : uniqueIncludes) {
-            
-                    // Only add include if line number of the include is not contained in declaration numbers
-                    if (lineNumbers.contains(include.getLine())) {
-                        continue;
-                    }
-            
-                    // Check if include was not already added
-                    // if (addedIncludes.contains(include.toString())) {
-                    // continue;
-                    // }
-                    //
-                    // addedIncludes.add(include.toString());
-                    decls.add(ClavaNodeFactory.include(include, path));
-                }
-            }
-            */
             // Add declarations
             decls.addAll(declNodes);
 
-            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
+            // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
+            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
 
             Language language = getStdErr().get(ClangParserKeys.FILE_LANGUAGE_DATA)
-                    .get(new File(filenamePath, filename));
+                    // .get(new File(filenamePath, filename));
+                    .get(sourcePath);
             if (language != null) {
                 tUnit.setLanguage(language);
             }
@@ -260,18 +229,18 @@ public class RootParser extends AClangNodeParser<App> {
         return new NormalizedClangNodes(uniqueNodes, repeatedIdsMap);
     }
 
-    private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes) {
-        Set<Integer> lineNumbers = new HashSet<>();
-
-        for (ClavaNode node : nodes) {
-            int startLine = node.getLocation().getStartLine();
-            int endLine = node.getLocation().getEndLine();
-
-            IntStream.range(startLine, endLine + 1).forEach(index -> lineNumbers.add(index));
-        }
-
-        return lineNumbers;
-    }
+    // private static <N extends ClavaNode> Set<Integer> getLineNumbers(List<N> nodes) {
+    // Set<Integer> lineNumbers = new HashSet<>();
+    //
+    // for (ClavaNode node : nodes) {
+    // int startLine = node.getLocation().getStartLine();
+    // int endLine = node.getLocation().getEndLine();
+    //
+    // IntStream.range(startLine, endLine + 1).forEach(index -> lineNumbers.add(index));
+    // }
+    //
+    // return lineNumbers;
+    // }
 
     public Set<String> getUndefinedNodes() {
         return ClangConverterTable.getUndefinedNodes();

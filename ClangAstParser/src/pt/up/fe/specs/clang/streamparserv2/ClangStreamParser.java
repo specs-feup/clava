@@ -208,9 +208,10 @@ public class ClangStreamParser {
             List<Decl> decls = new ArrayList<>();
 
             // Build filename
-            String filename = new File(path).getName();
-            int endIndex = path.length() - filename.length();
-            String filenamePath = path.substring(0, endIndex);
+            File sourcePath = new File(path);
+            // String filename = new File(path).getName();
+            // int endIndex = path.length() - filename.length();
+            // String filenamePath = path.substring(0, endIndex);
 
             // Declaration nodes of the translation unit
             List<Decl> declNodes = declarations.get(path);
@@ -235,27 +236,14 @@ public class ClangStreamParser {
             uniqueIncludes.stream()
                     .map(include -> ClavaNodeFactory.include(include, path))
                     .forEach(decls::add);
-            /*
-            // Only add includes that are not in the line number range of the declarations
-            if (!uniqueIncludes.isEmpty()) {
-                Set<Integer> lineNumbers = getLineNumbers(declNodes, declFile);
-            
-                for (Include include : uniqueIncludes) {
-            
-                    // Only add include if line number of the include is not contained in declaration numbers
-                    if (lineNumbers.contains(include.getLine())) {
-                        continue;
-                    }
-            
-                    decls.add(ClavaNodeFactory.include(include, path));
-                }
-            }
-            */
+
             // Add declarations
             decls.addAll(declNodes);
 
-            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
-            Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
+            // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
+            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
+            // Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
+            Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(sourcePath);
             if (language != null) {
                 tUnit.setLanguage(language);
             }
