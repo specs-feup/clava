@@ -22,8 +22,14 @@ int main(int argc, const char *argv[])
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
 
+    /*
+    for(auto source : OptionsParser.getSourcePathList()) {
+        llvm::errs() << "SOURCE:" << source << "\n";
+    }
+     */
+
     // Making it static/global because I do not know how to create actions with arbitrary arguments using newFrontendActionFactory
-    DumpResources::init();
+    DumpResources::init(UserIdOption.getValue());
 
     int returnCode = Tool.run(newFrontendActionFactory<DumpIncludesAction>().get());
 

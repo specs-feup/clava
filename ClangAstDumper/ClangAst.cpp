@@ -394,7 +394,15 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
     // For each source file provided to the tool, a new FrontendAction is created.
     std::unique_ptr<ASTConsumer> DumpAstAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
         int counter = GLOBAL_COUNTER.fetch_add(1);
+
+        // If runId greater than 0, use it instead of global counter
+        if(DumpResources::runId  > 0) {
+            counter = DumpResources::runId;
+        }
+
         DumpResources::writeCounter(counter);
+
+        //llvm::errs() << "CUSTOM ID: " << DumpResources::runId  << "\n";
 
 
         dumpCompilerInstanceData(CI, file);
@@ -405,6 +413,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         llvm::errs() << file << "\n";
 
         ASTContext *Context = &CI.getASTContext();
+
         ClangAstDumper dumper(Context, counter);
 
         return llvm::make_unique<MyASTConsumer>(Context, counter, dumper);
@@ -577,6 +586,7 @@ std::ofstream DumpResources::omp;
 std::ofstream DumpResources::enum_integer_type;
 std::ofstream DumpResources::consumer_order;
 std::ofstream DumpResources::types_with_templates;
+int DumpResources::runId;
 
 
 void DumpResources::writeCounter(int id) {
@@ -591,7 +601,9 @@ void DumpResources::writeCounter(int id) {
 
 }
 
-void DumpResources::init() {
+void DumpResources::init(int runId) {
+
+    DumpResources::runId = runId;
 
     // Clear files
     DumpResources::includes.open("includes.txt", std::ofstream::out | std::fstream::trunc);
