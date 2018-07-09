@@ -543,7 +543,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     /**
+     * Tries to return a value from the DataStore.
+     * 
+     * <p>
+     * Does not use default values. If the key is not in the map, or there is no value mapped to the given key, returns
+     * an empty Optional.
+     * 
+     * @param key
+     * @return
+     */
+    public <T> Optional<T> getTry(DataKey<T> key) {
+        return dataI.getTry(key);
+    }
+
+    /**
      * Generic method for setting values.
+     * 
+     * <p>
+     * If null is passed as value, removes current value associated with given key.
      * 
      * @param key
      * @param value
@@ -561,6 +578,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         dataI.put(key, value);
 
         return this;
+    }
+
+    /**
+     * 
+     * @param key
+     * @return true, if it contains a non-null value for the given key, not considering default values
+     */
+    public <T> boolean hasValue(DataKey<T> key) {
+        return dataI.hasValue(key);
     }
 
     public ClavaContext getContext() {

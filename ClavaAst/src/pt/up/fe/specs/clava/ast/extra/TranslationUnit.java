@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.ast.extra;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,11 +23,13 @@ import java.util.stream.IntStream;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -38,6 +39,7 @@ import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.utils.IncludeManager;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.utilities.StringLines;
@@ -50,9 +52,31 @@ import pt.up.fe.specs.util.utilities.StringLines;
  */
 public class TranslationUnit extends ClavaNode {
 
+    /// DATAKEYS BEGIN
+
+    /**
+     * The path corresponding to this Translation Unit.
+     */
+    public static final DataKey<File> SOURCE_FILE = KeyFactory.object("sourceFile", File.class);
+
+    /**
+     * Language-related information about how this Translation Unit.
+     */
     public static final DataKey<Language> LANGUAGE = KeyFactory.object("language", Language.class)
             // TODO: Remove this after parsing of header files is implemented
             .setDefault(() -> new Language());
+
+    /**
+     * (Optional)<br>
+     * Relative path refers to the last portion of the path of this file that should be considered as not part of the
+     * original source folder.
+     * <p>
+     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
+     * be /folder1, this method returns folder2.
+     */
+    public static final DataKey<String> RELATIVE_PATH = KeyFactory.string("relativePath");
+
+    /// DATAKEYS END
 
     // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
     // private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
@@ -61,22 +85,21 @@ public class TranslationUnit extends ClavaNode {
     // return HEADER_EXTENSIONS;
     // }
 
-    private final String filename;
-    private final String path;
+    // private final String filename;
+    // private final String path;
 
     private final IncludeManager includes;
 
     private final Lazy<Boolean> isCxxUnit;
 
-    private String relativePath;
+    // private String relativePath;
 
-    public TranslationUnit(String filename, String folderPath, Collection<Decl> declarations) {
-        super(createInfo(new ArrayList<>(declarations), new File(folderPath, filename).getPath()), declarations);
+    public TranslationUnit(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
 
-        this.filename = filename;
-        path = processFilePath(folderPath);
-
-        List<IncludeDecl> includesList = declarations.stream()
+        List<IncludeDecl> includesList = children.stream()
+                // All children must be Decls
+                .map(Decl.class::cast)
                 .filter(decl -> decl instanceof IncludeDecl)
                 .map(include -> (IncludeDecl) include)
                 .collect(Collectors.toList());
@@ -84,32 +107,55 @@ public class TranslationUnit extends ClavaNode {
         includes = new IncludeManager(includesList, this);
 
         isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
-
-        relativePath = null;
     }
+
+    /*
+    private TranslationUnit(String filename, String folderPath, Collection<Decl> declarations) {
+        super(createInfo(new ArrayList<>(declarations), new File(folderPath, filename).getPath()), declarations);
+    
+        this.filename = filename;
+        path = processFilePath(folderPath);
+    
+        List<IncludeDecl> includesList = declarations.stream()
+                .filter(decl -> decl instanceof IncludeDecl)
+                .map(include -> (IncludeDecl) include)
+                .collect(Collectors.toList());
+    
+        includes = new IncludeManager(includesList, this);
+    
+        isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
+    
+        // relativePath = null;
+    }
+    */
 
     public TranslationUnit(File sourceFile, Collection<Decl> declarations) {
-        this(sourceFile.getName(), sourceFile.getParent(), declarations);
+        this(new LegacyToDataStore()
+                .setNodeInfo(createInfo(new ArrayList<>(declarations), sourceFile.getPath()))
+                .set(SOURCE_FILE, sourceFile).getData(), declarations);
     }
 
+    /*
     private String processFilePath(String filePath) {
         if (filePath == null) {
             return null;
         }
-
+    
         if (filePath.isEmpty()) {
             return null;
         }
-
+    
         // Should convert to absolute?
-
+    
         return SpecsIo.getCanonicalPath(new File(filePath));
     }
-
+    */
     public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
         if (declarations.isEmpty()) {
             return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, 1, 1, 1, 1));
         }
+
+        // TODO: Only consider locations which have the same source file
 
         Decl firstDecl = declarations.get(0);
         int startLine = firstDecl.getLocation().getStartLine();
@@ -191,10 +237,10 @@ public class TranslationUnit extends ClavaNode {
         return relativePath;
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new TranslationUnit(filename, path, Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new TranslationUnit(filename, path, Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
@@ -234,13 +280,49 @@ public class TranslationUnit extends ClavaNode {
     }
     */
 
+    /**
+     * 
+     * @param relativePath
+     */
     public void setRelativePath(String relativePath) {
-        if (relativePath == null) {
-            this.relativePath = null;
+        if (relativePath == null || relativePath.isEmpty()) {
+            set(RELATIVE_PATH, null);
+            return;
+        }
+        // if (relativePath == null) {
+        // this.relativePath = null;
+        // return;
+        // }
+
+        // Verify relative path
+        if (!isRelativePathValid(relativePath)) {
+            SpecsLogs.msgInfo("Could not set relative path '" + relativePath
+                    + "', it does not match the end of the translation unit path: " + getFolderpath());
             return;
         }
 
-        this.relativePath = relativePath.isEmpty() ? null : relativePath;
+        set(RELATIVE_PATH, relativePath);
+        // this.relativePath = relativePath.isEmpty() ? null : relativePath;
+    }
+
+    public boolean isRelativePathValid(String relativePath) {
+        File path = get(SOURCE_FILE).getParentFile();
+        if (path != null) {
+            // File currentPath = new File(path);
+            File currentPath = path;
+            File currentRelativePath = new File(relativePath);
+            while (currentRelativePath != null) {
+
+                if (!currentRelativePath.getName().equals(currentPath.getName())) {
+                    return false;
+                }
+
+                currentRelativePath = currentRelativePath.getParentFile();
+                currentPath = currentPath.getParentFile();
+            }
+        }
+
+        return true;
     }
 
     private String getChildCode(ClavaNode decl) {
@@ -267,7 +349,7 @@ public class TranslationUnit extends ClavaNode {
         StringBuilder builder = new StringBuilder();
 
         // Replace '.' with '_' and surround id with "_", to avoid problems such as the id starting with a number
-        String filenameId = "_" + filename.replace(".", "_") + "_";
+        String filenameId = "_" + getFilename().replace(".", "_") + "_";
 
         // Other sanitizations
         filenameId = filenameId.replace("-", "_");
@@ -285,7 +367,8 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public String getFilename() {
-        return filename;
+        return get(SOURCE_FILE).getName();
+        // return filename;
     }
 
     /**
@@ -293,7 +376,8 @@ public class TranslationUnit extends ClavaNode {
      * @return the path to the folder of this file
      */
     public Optional<String> getFolderpath() {
-        return Optional.ofNullable(path);
+        return Optional.ofNullable(get(SOURCE_FILE).getParent());
+        // return Optional.ofNullable(path);
     }
 
     public String getFilepath() {
@@ -301,22 +385,23 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public File getFile() {
-        if (path == null) {
-            return new File(filename);
-        }
-
-        return new File(path, filename);
+        return get(SOURCE_FILE);
+        // if (path == null) {
+        // return new File(filename);
+        // }
+        //
+        // return new File(path, filename);
     }
 
     public boolean isHeaderFile() {
-        String extension = SpecsIo.getExtension(filename);
+        String extension = SpecsIo.getExtension(getFilename());
 
         // return HEADER_EXTENSIONS.contains(extension.toLowerCase());
         return SourceType.HEADER.hasExtension(extension);
     }
 
     public boolean isOpenCLFile() {
-        String extension = SpecsIo.getExtension(filename);
+        String extension = SpecsIo.getExtension(getFilename());
 
         return extension.toLowerCase().equals("cl");
     }
@@ -329,7 +414,7 @@ public class TranslationUnit extends ClavaNode {
         // 1) Check if file has CXX extension.
         // Cannot test for C extensions because you can have C++ code inside .c files, for instance.
         // if (CXX_EXTENSIONS.contains(SpecsIo.getExtension(filename))) {
-        if (SourceType.isCxxExtension(SpecsIo.getExtension(filename))) {
+        if (SourceType.isCxxExtension(SpecsIo.getExtension(getFilename()))) {
             return true;
         }
 
@@ -341,10 +426,10 @@ public class TranslationUnit extends ClavaNode {
                 .isPresent();
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + filename + " ";
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + filename + " ";
+    // }
 
     public IncludeManager getIncludes() {
         return includes;
@@ -465,38 +550,9 @@ public class TranslationUnit extends ClavaNode {
      * @return
      */
     public Optional<String> getRelativeFolderpath() {
-        return Optional.ofNullable(relativePath);
-        // System.out.println("FILE:" + path);
-        // System.out.println("SOURCE PATH:" + sourcePath);
-        /*
-        if (relativePath == null) {
-            return Optional.empty();
-        }
-        
-        if (relativePath.isEmpty()) {
-            return Optional.empty();
-        }
-        
-        return Optional.of(relativePath);
-        */
-        /*
-        if (path == null) {
-            return Optional.of(sourcePath);
-        }
-        
-        
-        String relativePath = getRelativePath(new File(path), sourcePath);
-        // System.out.println("PATH:" + path);
-        // System.out.println("SOURCE PATH:" + sourcePath);
-        // System.out.println("RELATIVE PATH BETWEEN EMPTY AND SOURCE:" + getRelativePath(new File(null), sourcePath));
-        if (relativePath.isEmpty()) {
-            return Optional.empty();
-        }
-        
-        return Optional.of(relativePath);
-        // return Optional.of(getRelativePath(new File(path), sourcePath));
-        
-         */
+        return getTry(RELATIVE_PATH);
+
+        // return Optional.ofNullable(relativePath);
     }
 
     /**

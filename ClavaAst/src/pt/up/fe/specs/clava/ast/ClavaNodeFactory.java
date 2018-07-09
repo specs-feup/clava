@@ -258,9 +258,9 @@ public class ClavaNodeFactory {
         return new TranslationUnit(sourceFile, declarations);
     }
 
-    public static TranslationUnit translationUnit(String filename, String path, Collection<Decl> declarations) {
-        return new TranslationUnit(filename, path, declarations);
-    }
+    // public static TranslationUnit translationUnit(String filename, String path, Collection<Decl> declarations) {
+    // return new TranslationUnit(filename, path, declarations);
+    // }
 
     public static IncludeDecl include(String include, boolean isAngled) {
         return new IncludeDecl(include, isAngled);

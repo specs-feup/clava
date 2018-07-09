@@ -56,6 +56,21 @@ import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
+/**
+ * Factory methods for ClavaNodes that use the DataStore format.
+ * 
+ * <p>
+ * This class provides minimal methods for building new nodes, further specialization should be done using the .set()
+ * method of the respective node.
+ * 
+ * <p>
+ * IMPORTANT: Type nodes (e.g., BuiltinType) are immutable, the .set() method returns a copy of the node with changes in
+ * the respective parameter. Types nodes are immutable since they can be shared among several nodes. If type nodes were
+ * mutable, the .set() method could provoke unintended changes.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class ClavaFactory {
 
     private static final String TYPE_ID_PREFIX = "type_";
