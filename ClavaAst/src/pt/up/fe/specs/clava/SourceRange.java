@@ -428,4 +428,33 @@ public class SourceRange {
                 .orElse(false);
     }
 
+    /**
+     * The start line, considering the source path.<br>
+     * - If the start file path is the same as the given source path, returns startLine;<br>
+     * - Otherwise, if the end file path is the same as the given source path, returns endLine;<br>
+     * - Otherwise, returns -1;
+     * 
+     * @param tuFilepath
+     * @return the start line, considering the given source path
+     */
+    public int getStartLine(String sourcePath) {
+        // System.out.println("SOURCE PATH:" + sourcePath);
+        // System.out.println("START FILE PATH:" + getStartFilepath());
+        // System.out.println("END FILE PATH:" + getEndFilepath());
+
+        if (sourcePath == null) {
+            return getStartLine();
+        }
+
+        if (sourcePath.equals(getStartFilepath())) {
+            return getStartLine();
+        }
+
+        if (sourcePath.equals(getEndFilepath())) {
+            return getEndLine();
+        }
+
+        return -1;
+    }
+
 }
