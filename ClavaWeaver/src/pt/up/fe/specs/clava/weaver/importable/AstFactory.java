@@ -250,7 +250,7 @@ public class AstFactory {
 
         // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList());
         // New files do not have a path
-        TranslationUnit tUnit = ClavaNodeFactory.translationUnit(file, Collections.emptyList());
+        TranslationUnit tUnit = CxxWeaver.getFactory().translationUnit(file, Collections.emptyList());
 
         if (relativePath != null) {
             tUnit.setRelativePath(relativePath);
