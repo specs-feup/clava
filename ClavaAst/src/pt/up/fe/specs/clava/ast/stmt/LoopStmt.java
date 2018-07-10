@@ -183,7 +183,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
     public String getLoopId() {
         String fileId = "file$"
                 + getAncestorTry(TranslationUnit.class)
-                        .map(TranslationUnit::getFilepath)
+                        .map(tunit -> tunit.getFile().getPath())
                         .orElse("<no_file>");
 
         String functionId = "function$" + getAncestorTry(FunctionDecl.class)

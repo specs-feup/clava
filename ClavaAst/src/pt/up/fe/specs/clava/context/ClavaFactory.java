@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.context;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
@@ -137,6 +138,13 @@ public class ClavaFactory {
     public App app(List<TranslationUnit> tUnits) {
         DataStore data = newExtraDataStore();
         return new App(data, tUnits);
+    }
+
+    public TranslationUnit translationUnit(File sourceFile, Collection<Decl> declarations) {
+        DataStore data = newExtraDataStore();
+        TranslationUnit.setDataStore(sourceFile, data);
+
+        return new TranslationUnit(data, declarations);
     }
 
     /// TYPES

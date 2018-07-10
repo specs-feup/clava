@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -155,7 +154,6 @@ import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.omp.OMPParallelDirective;
@@ -254,9 +252,9 @@ public class ClavaNodeFactory {
     // return new App(translationUnits);
     // }
 
-    public static TranslationUnit translationUnit(File sourceFile, Collection<Decl> declarations) {
-        return new TranslationUnit(sourceFile, declarations);
-    }
+    // public static TranslationUnit translationUnit(File sourceFile, Collection<Decl> declarations) {
+    // return new TranslationUnit(sourceFile, declarations);
+    // }
 
     // public static TranslationUnit translationUnit(String filename, String path, Collection<Decl> declarations) {
     // return new TranslationUnit(filename, path, declarations);

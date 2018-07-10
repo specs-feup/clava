@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava;
 
 import java.io.File;
 
+import pt.up.fe.specs.util.SpecsIo;
+
 public class SourceLocation {
 
     private static final int INVALID_POSITION = -1;
@@ -38,7 +40,8 @@ public class SourceLocation {
 
     public SourceLocation(String filepath, int line, int col) {
         // Normalize filepath
-        this.filepath = filepath != null ? new File(filepath).getAbsolutePath() : null;
+        // this.filepath = filepath != null ? new File(filepath).getAbsolutePath() : null;
+        this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
         this.line = line;
         this.column = col;
     }

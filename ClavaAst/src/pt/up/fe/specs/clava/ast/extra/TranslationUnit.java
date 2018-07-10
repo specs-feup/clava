@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.extra;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -26,10 +25,8 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -42,6 +39,7 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
+import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -129,11 +127,11 @@ public class TranslationUnit extends ClavaNode {
     }
     */
 
-    public TranslationUnit(File sourceFile, Collection<Decl> declarations) {
-        this(new LegacyToDataStore()
-                .setNodeInfo(createInfo(new ArrayList<>(declarations), sourceFile.getPath()))
-                .set(SOURCE_FILE, sourceFile).getData(), declarations);
-    }
+    // public TranslationUnit(File sourceFile, Collection<Decl> declarations) {
+    // this(new LegacyToDataStore()
+    // .setNodeInfo(createInfo(new ArrayList<>(declarations), sourceFile.getPath()))
+    // .set(SOURCE_FILE, sourceFile).getData(), declarations);
+    // }
 
     /*
     private String processFilePath(String filePath) {
@@ -150,22 +148,35 @@ public class TranslationUnit extends ClavaNode {
         return SpecsIo.getCanonicalPath(new File(filePath));
     }
     */
+
+    /*
     public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
         if (declarations.isEmpty()) {
             return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, 1, 1, 1, 1));
         }
-
-        // TODO: Only consider locations which have the same source file
-
+    
+        // TODO: Only consider locations which have the same source file?
+        System.out.println("FILEPATH:" + filepath);
         Decl firstDecl = declarations.get(0);
         int startLine = firstDecl.getLocation().getStartLine();
         int startCol = firstDecl.getLocation().getStartCol();
         int endLine = firstDecl.getLocation().getEndLine();
         int endCol = firstDecl.getLocation().getEndCol();
-
+        System.out.println("FIRST DECL START FILEPATH:" + firstDecl.getLocation().getStartFilepath());
+        System.out.println("FIRST DECL END FILEPATH:" + firstDecl.getLocation().getEndFilepath());
+        // if (!firstDecl.getLocation().getFilepath().equals(filepath)) {
+        // throw new RuntimeException("First decl filepath '" + firstDecl.getLocation().getFilepath()
+        // + "' diff than given filepath '" + filepath + "'");
+        // }
         for (int i = 1; i < declarations.size(); i++) {
             Decl decl = declarations.get(i);
-
+            System.out.println("DECL START FILEPATH:" + decl.getLocation().getStartFilepath());
+            System.out.println("DECL END FILEPATH:" + decl.getLocation().getEndFilepath());
+            // if (!decl.getLocation().getFilepath().equals(filepath)) {
+            // throw new RuntimeException(" decl filepath '" + decl.getLocation().getFilepath()
+            // + "' diff than given filepath '" + filepath + "'");
+            // }
+    
             // If line came first, replace
             if (decl.getLocation().getStartLine() < startLine) {
                 startLine = decl.getLocation().getStartLine();
@@ -175,20 +186,63 @@ public class TranslationUnit extends ClavaNode {
             else if (decl.getLocation().getStartLine() == startLine) {
                 startCol = Math.min(decl.getLocation().getStartCol(), startCol);
             }
-
+    
             // If last line came last, use it
             if (decl.getLocation().getEndLine() > endLine) {
                 endLine = decl.getLocation().getEndLine();
                 endCol = decl.getLocation().getEndCol();
             }
-
+    
             else if (decl.getLocation().getEndLine() == endLine) {
                 endCol = Math.max(decl.getLocation().getEndCol(), endCol);
             }
+    
+        }
+    
+        return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, startLine, startCol, endLine, endCol));
+    }
+    */
 
+    public static void setDataStore(File sourceFile, DataStore data) {
+        data.set(TranslationUnit.SOURCE_FILE, sourceFile);
+
+        // Normalize path
+        String filepath = SpecsIo.getCanonicalPath(sourceFile);
+
+        // If source file does not exist, return default values
+
+        // if (declarations.isEmpty()) {
+        if (!sourceFile.isFile()) {
+            data.set(ClavaNode.LOCATION, new SourceRange(filepath, 1, 1, 1, 1));
+            // return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, 1, 1, 1, 1));
+            return;
         }
 
-        return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, startLine, startCol, endLine, endCol));
+        // Start line and col of tunit is always 1
+        int startLine = 1;
+        int startCol = 1;
+        int endLine = -1;
+        int endCol = -1;
+
+        // Count number of lines, and number of characters in the last line
+        try (LineStream lineStream = LineStream.newInstance(sourceFile)) {
+            int numLines = 0;
+            String lastLine = null;
+            while (lineStream.hasNextLine()) {
+                lastLine = lineStream.nextLine();
+                numLines++;
+            }
+
+            if (lastLine == null) {
+                endLine = 1;
+                endCol = 1;
+            } else {
+                endLine = numLines;
+                endCol = lastLine.length();
+            }
+        }
+
+        data.set(ClavaNode.LOCATION, new SourceRange(filepath, startLine, startCol, endLine, endCol));
     }
 
     public static String getRelativePath(File filepath, File baseSourceFolder) {
@@ -380,9 +434,11 @@ public class TranslationUnit extends ClavaNode {
         // return Optional.ofNullable(path);
     }
 
+    /*
     public String getFilepath() {
         return getLocation().getFilepath();
     }
+    */
 
     public File getFile() {
         return get(SOURCE_FILE);
