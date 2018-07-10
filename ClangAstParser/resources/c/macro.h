@@ -1,0 +1,1 @@
+#define declInt(x,y)    int x = y;

@@ -1,0 +1,9 @@
+#include "macro.h"
+
+// Macro that instantiates a declaration
+int a = 0;
+
+int main() {
+   
+   return 0;
+}

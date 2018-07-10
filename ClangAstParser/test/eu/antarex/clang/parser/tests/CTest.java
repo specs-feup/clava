@@ -96,4 +96,9 @@ public class CTest {
     public void testTypes() {
         new CTester("types.c").test();
     }
+
+    @Test
+    public void testMacro() {
+        new CTester("macro.c", "macro.h").test();
+    }
 }
