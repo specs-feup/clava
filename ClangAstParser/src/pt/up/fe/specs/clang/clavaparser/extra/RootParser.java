@@ -166,7 +166,8 @@ public class RootParser extends AClangNodeParser<App> {
             decls.addAll(declNodes);
 
             // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
-            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
+            // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
+            TranslationUnit tUnit = LegacyToDataStore.getFactory().translationUnit(sourcePath, decls);
 
             Language language = getStdErr().get(ClangParserKeys.FILE_LANGUAGE_DATA)
                     // .get(new File(filenamePath, filename));
@@ -322,7 +323,8 @@ public class RootParser extends AClangNodeParser<App> {
 
         // LegacyToDataStore.getFactory().
         // return new TranslationUnit(sourceFile.getName(), sourceFile.getParent(), tuDecls);
-        return new TranslationUnit(sourceFile, tuDecls);
+        // return new TranslationUnit(sourceFile, tuDecls);
+        return LegacyToDataStore.getFactory().translationUnit(sourceFile, tuDecls);
         /*
         
         // Parse all children, include them in a Clava App node

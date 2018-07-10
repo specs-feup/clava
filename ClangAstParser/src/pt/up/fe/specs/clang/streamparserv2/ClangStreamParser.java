@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -73,6 +74,10 @@ public class ClangStreamParser {
 
     public ClangStreamParser(DataStore data, boolean debug) {
         this.data = data;
+    }
+
+    private ClavaFactory getFactory() {
+        return data.get(ClavaNode.CONTEXT).get(ClavaContext.FACTORY);
     }
 
     public App parse() {
@@ -241,7 +246,9 @@ public class ClangStreamParser {
             decls.addAll(declNodes);
 
             // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
-            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
+            // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
+            TranslationUnit tUnit = getFactory().translationUnit(sourcePath, decls);
+
             // Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
             Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(sourcePath);
             if (language != null) {
@@ -254,7 +261,8 @@ public class ClangStreamParser {
         }
 
         // App app = ClavaNodeFactory.app(tUnits);
-        App app = data.get(ClavaNode.CONTEXT).get(ClavaContext.FACTORY).app(tUnits);
+        // App app = data.get(ClavaNode.CONTEXT).get(ClavaContext.FACTORY).app(tUnits);
+        App app = getFactory().app(tUnits);
 
         app.setIdsAlias(normalizedNodes.getRepeatedIdsMap());
 
