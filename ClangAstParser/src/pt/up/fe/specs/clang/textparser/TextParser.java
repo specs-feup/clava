@@ -101,6 +101,8 @@ public class TextParser {
     }
 
     private void addElements(TranslationUnit tu) {
+        // TranslationUnit path
+        String tuFilepath = tu.getFile().getPath();
 
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
@@ -124,16 +126,19 @@ public class TextParser {
 
         Preconditions.checkArgument(currentNodeTry.isPresent(), "After adding guards, this should not be possible");
         ClavaNode currentNode = currentNodeTry.get();
+        // System.out.println("NODE:" + currentNode.getClass());
+        // System.out.println("Current node (1) start line:" + currentNode.getLocation().getStartLine(tuFilepath));
+        // System.out.println("Current node start line:" + currentNode.getLocation().getStartLine());
+        // System.out.println("Current node end line:" + currentNode.getLocation().getEndLine());
 
         boolean hasNodes = true;
-
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
 
             int textStartLine = textElement.getLocation().getStartLine();
             // System.out.println("TEXT START LINE:" + textStartLine);
             // Get node that has a line number greater than the text element
-            while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine()) {
+            while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine(tuFilepath)) {
 
                 // If no more nodes, stop
                 Optional<ClavaNode> nextNodeTry = next(iterator);
@@ -144,10 +149,17 @@ public class TextParser {
                 }
 
                 currentNode = nextNodeTry.get();
-
+                // System.out.println("NODE:" + currentNode.getClass());
+                // System.out.println("Current node (2) start line:" +
+                // currentNode.getLocation().getStartLine(tuFilepath));
+                // System.out.println("Current node (2) start path:" + currentNode.getLocation().getStartFilepath());
+                // System.out.println("Current node (2) end path:" + currentNode.getLocation().getEndFilepath());
+                // System.out.println("Current node (2) start line:" + currentNode.getLocation().getStartLine());
+                // System.out.println("Current node (2) end line:" + currentNode.getLocation().getEndLine());
             }
 
-            // System.out.println("Current line:" + currentNode.getLocation().getStartLine());
+            // System.out.println("Current node start line:" + currentNode.getLocation().getStartLine());
+            // System.out.println("Current node end line:" + currentNode.getLocation().getEndLine());
 
             // Check if should insert text element as Stmt
             Optional<Stmt> statement = ClavaNodes.getStatement(currentNode);
@@ -175,13 +187,13 @@ public class TextParser {
             }
 
             // If current node has start line greater than text element, insert before
-            if (textStartLine <= insertionPoint.getLocation().getStartLine()) {
+            if (textStartLine <= insertionPoint.getLocation().getStartLine(tuFilepath)) {
                 queue.moveBefore(insertionPoint, textElement);
                 continue;
             }
 
             // If current node has start line smaller than text element, insert after
-            if (textStartLine > insertionPoint.getLocation().getStartLine()) {
+            if (textStartLine > insertionPoint.getLocation().getStartLine(tuFilepath)) {
                 queue.moveAfter(insertionPoint, textElement);
                 continue;
             }
@@ -244,19 +256,20 @@ public class TextParser {
         Iterator<ClavaNode> iterator = getIterator(tu);
 
         // Build NavigableMap
-
         NavigableMap<Integer, InlineComment> textElements = new TreeMap<>();
+
         for (InlineComment comment : associatedInlineComments) {
             textElements.put(comment.getLocation().getStartLine(), comment);
         }
 
         Map<InlineComment, ClavaNode> associatedNodes = new LinkedHashMap<>();
+        String tuFilepath = tu.getFile().getPath();
 
         while (iterator.hasNext()) {
             ClavaNode currentNode = iterator.next();
 
             // Check that interval is valid
-            int startLine = currentNode.getLocation().getStartLine();
+            int startLine = currentNode.getLocation().getStartLine(tuFilepath);
             int endLine = currentNode.getLocation().getEndLine();
 
             if (startLine == -1 || endLine == -1) {
@@ -346,7 +359,7 @@ public class TextParser {
 
     private List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
         // Guard nodes for the translation unit
-        SourceRange dummyStartLoc = new SourceRange(tu.getFilepath(), 0, 0, 0, 0);
+        SourceRange dummyStartLoc = new SourceRange(tu.getLocation().getFilepath(), 0, 0, 0, 0);
         // ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
         //
         // DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
@@ -367,7 +380,7 @@ public class TextParser {
         // Get last end line
         int endLine = SpecsCollections.last(tu.getChildren()).getLocation().getEndLine();
 
-        SourceRange dummyEndLoc = new SourceRange(tu.getFilepath(), endLine + 1, 0, endLine + 1, 0);
+        SourceRange dummyEndLoc = new SourceRange(tu.getLocation().getFilepath(), endLine + 1, 0, endLine + 1, 0);
         // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
         // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
         // Collections.emptyList());
