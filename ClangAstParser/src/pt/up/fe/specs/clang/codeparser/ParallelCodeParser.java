@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
@@ -51,7 +52,7 @@ public class ParallelCodeParser extends ACodeParser {
 
     @Override
     public App parse(List<File> sources, List<String> compilerOptions) {
-        ClangParser clangParser = new AstDumpParser();
+        ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES));
 
         List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
@@ -71,31 +72,15 @@ public class ParallelCodeParser extends ACodeParser {
             TranslationUnit tunit = clangParser.parse(new File(sourceFile.getKey()), options);
             tUnits.add(tunit);
 
-            // ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
-            // Arrays.asList(sourceFile.getKey()), options, id);
+            if (get(SHOW_CLANG_DUMP)) {
+                SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
+            }
 
-            // Increment id
-            // id++;
-
-            // if (get(SHOW_CLANG_DUMP)) {
-            // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-            // }
-            //
-            // if (get(SHOW_CLANG_AST)) {
-            // SpecsLogs.msgInfo("Clang AST:\n" + ast);
-            // }
-
-            // System.out.println("sourceFile:" + sourceFile.getKey());
-            // System.out.println("AST:" + ast);
-
-            // Parse dump information
-            // try (ClavaParser clavaParser = new ClavaParser(ast)) {
-            // TranslationUnit tunit = clavaParser.parseTranslationUnit(new File(sourceFile.getKey()));
-            // // tunits.put(sourceFile.getKey(), tunit);
-            // tUnits.add(tunit);
-            // } catch (Exception e) {
-            // throw new RuntimeException(e);
-            // }
+            // if (showClangAst) {
+            if (get(SHOW_CLANG_AST)) {
+                // TODO: Flag in dumper that dumps Clang AST to file
+                SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
+            }
 
         }
 
@@ -119,6 +104,15 @@ public class ParallelCodeParser extends ACodeParser {
         // if (sourceTree) {
         // processSourceTree(app);
         // }
+
+        if (get(SHOW_CLAVA_AST)) {
+            SpecsLogs.msgInfo("CLAVA AST:\n" + app.toTree());
+        }
+
+        // if (showCode) {
+        if (get(SHOW_CODE)) {
+            SpecsLogs.msgInfo("Code:\n" + app.getCode());
+        }
 
         SpecsLogs.msgInfo("--- AST parsing report ---");
         // checkUndefinedNodes(app);

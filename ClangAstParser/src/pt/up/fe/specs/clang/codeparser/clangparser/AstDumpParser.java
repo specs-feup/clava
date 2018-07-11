@@ -62,9 +62,17 @@ import pt.up.fe.specs.util.system.ProcessOutput;
 public class AstDumpParser implements ClangParser {
 
     private int currentId;
+    private final boolean dumpStdOut;
+    private final boolean useCustomResources;
 
     public AstDumpParser() {
+        this(false, false);
+    }
+
+    public AstDumpParser(boolean dumpStdOut, boolean useCustomResources) {
         this.currentId = 0;
+        this.dumpStdOut = dumpStdOut;
+        this.useCustomResources = useCustomResources;
     }
 
     private int nextId() {
@@ -98,7 +106,7 @@ public class AstDumpParser implements ClangParser {
     private ClangRootNode parseSource(File sourceFile, DataStore config) {
 
         // Create instance of ClangAstParser
-        ClangAstParser clangAstParser = new ClangAstParser();
+        ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
 
         DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.getLocalOptionsFile(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());

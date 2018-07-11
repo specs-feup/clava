@@ -38,7 +38,7 @@ import pt.up.fe.specs.util.SpecsLogs;
 public class MonolithicCodeParser extends ACodeParser {
 
     private static final boolean ONLY_NEW_PARSE_METHOD = false;
-    private static final boolean ONLY_PARALLEL_PARSING = true;
+    private static final boolean ONLY_PARALLEL_PARSING = false;
 
     // private boolean showClangDump;
     // private boolean showClangAst;
