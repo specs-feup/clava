@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.MonolithicCodeParser;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
@@ -178,11 +179,15 @@ public abstract class AClangAstTester {
     public void testProper() {
         // Parse files
 
-        MonolithicCodeParser codeParser = new MonolithicCodeParser()
-                .setShowClangAst(showClangAst)
-                .setShowClangDump(showClangDump)
-                .setShowClavaAst(showClavaAst)
-                .setShowCode(showCode);
+        CodeParser codeParser = new MonolithicCodeParser()
+                .set(CodeParser.SHOW_CLANG_AST, showClangAst)
+                .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
+                .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
+                .set(CodeParser.SHOW_CODE, showCode);
+        // .setShowClangAst(showClangAst)
+        // .setShowClangDump(showClangDump)
+        // .setShowClavaAst(showClavaAst)
+        // .setShowCode(showCode);
 
         File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 

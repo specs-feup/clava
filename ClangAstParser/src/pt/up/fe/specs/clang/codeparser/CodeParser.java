@@ -39,4 +39,12 @@ public interface CodeParser {
 
     App parse(List<File> sources, List<String> compilerOptions);
 
+    /**
+     * Currently returns a MonolithicCodeParser, which has higher compatibility than ParallelCodeParser.
+     * 
+     * @return
+     */
+    static CodeParser newInstance() {
+        return new MonolithicCodeParser();
+    }
 }

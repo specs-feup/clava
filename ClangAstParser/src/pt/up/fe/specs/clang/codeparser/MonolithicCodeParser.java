@@ -35,66 +35,67 @@ import pt.up.fe.specs.util.SpecsLogs;
  * @author JoaoBispo
  *
  */
-public class MonolithicCodeParser {
+public class MonolithicCodeParser extends ACodeParser {
 
     private static final boolean ONLY_NEW_PARSE_METHOD = false;
-    private static final boolean ONLY_PARALLEL_PARSING = false;
+    private static final boolean ONLY_PARALLEL_PARSING = true;
 
-    private boolean showClangDump;
-    private boolean showClangAst;
-    private boolean showClavaAst;
-    private boolean showCode;
-    private boolean useCustomResources;
-    // private boolean disableNewParsingMethod;
+    // private boolean showClangDump;
+    // private boolean showClangAst;
+    // private boolean showClavaAst;
+    // private boolean showCode;
+    // private boolean useCustomResources;
 
     public MonolithicCodeParser() {
-        showClangDump = false;
-        showClangAst = false;
-        showClavaAst = false;
-        showCode = false;
-        useCustomResources = false;
-        // disableNewParsingMethod = false;
+        // showClangDump = false;
+        // showClangAst = false;
+        // showClavaAst = false;
+        // showCode = false;
+        // useCustomResources = false;
+
     }
 
-    public MonolithicCodeParser setShowClangDump(boolean showClangDump) {
-        this.showClangDump = showClangDump;
-        return this;
-    }
-
-    public MonolithicCodeParser setShowClangAst(boolean showClangAst) {
-        this.showClangAst = showClangAst;
-        return this;
-    }
-
-    public MonolithicCodeParser setShowClavaAst(boolean showClavaAst) {
-        this.showClavaAst = showClavaAst;
-        return this;
-    }
-
-    public MonolithicCodeParser setShowCode(boolean showCode) {
-        this.showCode = showCode;
-        return this;
-    }
+    // public MonolithicCodeParser setShowClangDump(boolean showClangDump) {
+    // this.showClangDump = showClangDump;
+    // return this;
+    // }
+    //
+    // public MonolithicCodeParser setShowClangAst(boolean showClangAst) {
+    // this.showClangAst = showClangAst;
+    // return this;
+    // }
+    //
+    // public MonolithicCodeParser setShowClavaAst(boolean showClavaAst) {
+    // this.showClavaAst = showClavaAst;
+    // return this;
+    // }
+    //
+    // public MonolithicCodeParser setShowCode(boolean showCode) {
+    // this.showCode = showCode;
+    // return this;
+    // }
 
     // public CodeParser setDisableNewParsingMethod(boolean disableNewParsingMethod) {
     // this.disableNewParsingMethod = disableNewParsingMethod;
     // return this;
     // }
 
-    public MonolithicCodeParser setUseCustomResources(boolean useCustomResources) {
-        this.useCustomResources = useCustomResources;
-        return this;
-    }
+    // public MonolithicCodeParser setUseCustomResources(boolean useCustomResources) {
+    // this.useCustomResources = useCustomResources;
+    // return this;
+    // }
 
+    @Override
     public App parse(List<File> sources, List<String> compilerOptions) {
 
         if (ONLY_PARALLEL_PARSING) {
             return new ParallelCodeParser()
-                    .set(CodeParser.SHOW_CLANG_AST, showClangAst)
-                    .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
-                    .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
-                    .set(CodeParser.SHOW_CODE, showCode)
-                    .set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources)
+                    .set(this)
+                    // .set(CodeParser.SHOW_CLANG_AST, showClangAst)
+                    // .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
+                    // .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
+                    // .set(CodeParser.SHOW_CODE, showCode)
+                    // .set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources)
                     .parse(sources, compilerOptions);
         }
 
@@ -112,15 +113,18 @@ public class MonolithicCodeParser {
 
         // Parse files
         // ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources, disableNewParsingMethod).parse(
-        ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
+        // ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
+        ClangRootNode ast = new ClangAstParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES)).parse(
                 implementationFiles,
                 compilerOptions);
 
-        if (showClangDump) {
+        // if (showClangDump) {
+        if (get(SHOW_CLANG_DUMP)) {
             SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
         }
 
-        if (showClangAst) {
+        // if (showClangAst) {
+        if (get(SHOW_CLANG_AST)) {
             SpecsLogs.msgInfo("Clang AST:\n" + ast);
         }
 
@@ -130,11 +134,13 @@ public class MonolithicCodeParser {
             clavaAst.setSourcesFromStrings(allFiles);
             clavaAst.addConfig(ast.getConfig());
 
-            if (showClavaAst) {
+            // if (showClavaAst) {
+            if (get(SHOW_CLAVA_AST)) {
                 SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst.toTree());
             }
 
-            if (showCode) {
+            // if (showCode) {
+            if (get(SHOW_CODE)) {
                 SpecsLogs.msgInfo("Code:\n" + clavaAst.getCode());
             }
 
@@ -146,6 +152,13 @@ public class MonolithicCodeParser {
 
     }
 
+    /**
+     * TODO: After refactoring of ClavaNodes, use this as basis for new parser.
+     * 
+     * @param sources
+     * @param compilerOptions
+     * @return
+     */
     private App parseNewMethod(List<File> sources, List<String> compilerOptions) {
 
         // Collect implementation files
@@ -156,22 +169,22 @@ public class MonolithicCodeParser {
                 .collect(Collectors.toList());
 
         // Parse files
-        App app = new ClangDumperParser(showClangDump, useCustomResources).parse(implementationFiles,
+        App app = new ClangDumperParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES)).parse(implementationFiles,
                 compilerOptions);
 
-        if (showClangDump) {
+        if (get(SHOW_CLANG_DUMP)) {
             SpecsLogs.msgInfo("Clang Dump not supported in new parse method");
         }
 
-        if (showClangAst) {
+        if (get(SHOW_CLANG_AST)) {
             SpecsLogs.msgInfo("Clang AST not supported in new parse method");
         }
 
-        if (showClavaAst) {
+        if (get(SHOW_CLAVA_AST)) {
             SpecsLogs.msgInfo("CLAVA AST:\n" + app.toTree());
         }
 
-        if (showCode) {
+        if (get(SHOW_CODE)) {
             SpecsLogs.msgInfo("Code:\n" + app.getCode());
         }
 
