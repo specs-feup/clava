@@ -14,29 +14,15 @@
 package pt.up.fe.specs.clang.codeparser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangDumperParser;
-import pt.up.fe.specs.clang.textparser.TextParser;
-import pt.up.fe.specs.clang.transforms.TreeTransformer;
-import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -199,40 +185,41 @@ public class MonolithicCodeParser {
      * @param compilerOptions
      * @return
      */
+    /*
     public App parseParallel(List<File> sources, List<String> compilerOptions) {
-
+    
         List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
         // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
         // System.out.println("ALL SOURCES:" + allSources);
-
+    
         // Map<String, TranslationUnit> tunits = new HashMap<>();
         List<TranslationUnit> tUnits = new ArrayList<>();
         // Parse files, individually
         int id = 1;
         for (Entry<String, File> sourceFile : allSources.entrySet()) {
             DataStore options = ClavaOptions.toDataStore(compilerOptions);
-
+    
             // Adapt compiler options according to the file
             adaptOptions(options, new File(sourceFile.getKey()));
-
+    
             ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
                     Arrays.asList(sourceFile.getKey()), options, id);
-
+    
             // Increment id
             id++;
-
+    
             if (showClangDump) {
                 SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
             }
-
+    
             if (showClangAst) {
                 SpecsLogs.msgInfo("Clang AST:\n" + ast);
             }
-
+    
             // System.out.println("sourceFile:" + sourceFile.getKey());
             // System.out.println("AST:" + ast);
-
+    
             // Parse dump information
             try (ClavaParser clavaParser = new ClavaParser(ast)) {
                 TranslationUnit tunit = clavaParser.parseTranslationUnit(new File(sourceFile.getKey()));
@@ -241,35 +228,35 @@ public class MonolithicCodeParser {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
+    
         }
-
+    
         App app = LegacyToDataStore.getFactory().app(tUnits);
-
+    
         app.setSourcesFromStrings(allSources);
         app.addConfig(ClavaOptions.toDataStore(compilerOptions));
-
+    
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
-
+    
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
-
+    
         // Perform second pass over types
         // processTypesSecondPass();
-
+    
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         // if (sourceTree) {
         // processSourceTree(app);
         // }
-
+    
         SpecsLogs.msgInfo("--- AST parsing report ---");
         // checkUndefinedNodes(app);
-
+    
         return app;
-
+    
         // Create App
         // App app = ClavaNodeFactory.app(tUnits);
         // App app = getConfig()
@@ -281,7 +268,7 @@ public class MonolithicCodeParser {
         // App clavaAst = clavaParser.parse();
         // clavaAst.setSourcesFromStrings(allFiles);
         // clavaAst.addConfig(ast.getConfig());
-
+    
         // if (showClavaAst) {
         // SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst.toTree());
         // }
@@ -291,56 +278,24 @@ public class MonolithicCodeParser {
         // }
         //
         // return clavaAst;
-        /*
-        
-        
-        
-        if (showClangDump) {
-            SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-        }
-        
-        if (showClangAst) {
-            SpecsLogs.msgInfo("Clang AST:\n" + ast);
-        }
-        
-        // Parse dump information
-        try (ClavaParser clavaParser = new ClavaParser(ast)) {
-            App clavaAst = clavaParser.parse();
-            clavaAst.setSourcesFromStrings(allFiles);
-            clavaAst.addConfig(ast.getConfig());
-        
-            if (showClavaAst) {
-                SpecsLogs.msgInfo("CLAVA AST:\n" + clavaAst.toTree());
-            }
-        
-            if (showCode) {
-                SpecsLogs.msgInfo("Code:\n" + clavaAst.getCode());
-            }
-        
-            return clavaAst;
-        
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        */
-
     }
-
+    */
+    /*
     private void adaptOptions(DataStore options, File source) {
         // Check if the standard is compatible with the file type
         Standard standard = options.getTry(ClavaOptions.STANDARD).orElse(null);
-
+    
         // Remove standard if extensions do not match
         if (standard != null) {
             if ((SourceType.isCExtension(SpecsIo.getExtension(source)) && standard.isCxx())
                     || SourceType.isCxxExtension(SpecsIo.getExtension(source)) && !standard.isCxx()) {
-
+    
                 options.remove(ClavaOptions.STANDARD);
             }
         }
-
+    
     }
-
+    */
     /**
      * Collects all source folders, taking into account given sources to compile, and include folders in flags.
      * 
@@ -348,48 +303,50 @@ public class MonolithicCodeParser {
      * @param parserOptions
      * @return
      */
+    /*
     private List<File> getInputSourceFolders(List<File> sources, List<String> parserOptions) {
-
+    
         Set<File> sourceFolders = new HashSet<>();
-
+    
         // Add folders of sources
         for (File source : sources) {
             if (source.isDirectory()) {
                 sourceFolders.add(SpecsIo.getCanonicalFile(source));
                 continue;
             }
-
+    
             if (source.isFile()) {
                 sourceFolders.add(SpecsIo.getCanonicalFile(source.getParentFile()));
                 continue;
             }
-
+    
             SpecsLogs.msgWarn("Could not process source '" + source + "'");
         }
-
+    
         // Add folders of includes
         for (String parserOption : parserOptions) {
             // Remove possible quotes
             if (parserOption.startsWith("\"")) {
                 parserOption = parserOption.substring(1);
             }
-
+    
             if (parserOption.endsWith("\"")) {
                 parserOption = parserOption.substring(0, parserOption.length() - 1);
             }
-
+    
             if (parserOption.startsWith("-I")) {
                 sourceFolders
                         .add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption.substring("-I".length()))));
                 continue;
             }
         }
-
+    
         // Reorder source folders, shortest to longest
         List<File> orderedSources = new ArrayList<>(sourceFolders);
         Collections.sort(orderedSources);
-
+    
         return orderedSources;
     }
+    */
 
 }
