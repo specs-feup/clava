@@ -13,11 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.extra.data;
 
-import org.suikasoft.jOptions.DataStore.DataClass;
+import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-public class Language extends DataClass<Language> {
+public class Language extends ADataClass<Language> {
 
     /**
      * True if supports '//' comments.

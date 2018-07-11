@@ -18,13 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.suikasoft.jOptions.DataStore.DataClass;
+import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 
-public class ClavaContext extends DataClass<ClavaContext> {
+public class ClavaContext extends ADataClass<ClavaContext> {
 
     /// DATAKEYS BEGIN
 

@@ -13,8 +13,8 @@
 
 package pt.up.fe.specs.clang.codeparser;
 
-import org.suikasoft.jOptions.DataStore.DataClass;
+import org.suikasoft.jOptions.DataStore.ADataClass;
 
-public abstract class ACodeParser extends DataClass<ACodeParser> implements CodeParser {
+public abstract class ACodeParser extends ADataClass<ACodeParser> implements CodeParser {
 
 }
