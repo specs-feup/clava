@@ -21,6 +21,12 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.extra.App;
 
+/**
+ * Parses C/C++/OpenCL code into a Clava AST.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public interface CodeParser {
 
     // BEGIN DATAKEY

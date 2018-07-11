@@ -39,11 +39,10 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
- * Parses C/C++/OpenCL code into a Clava AST.
+ * Calls the dumper once per file.
  * <p>
- * This implementation can parse code in parallel, one process per compilation file.
- * <p>
- * It also supports compilation of header files, and mixed compilation (e.g., C +OpenCL).
+ * This allows parallelization of the parsing (e.g., one process per compilation file) and compilation of header files
+ * and mixed compilation (e.g., C + OpenCL).
  * 
  * @author JoaoBispo
  *

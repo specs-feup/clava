@@ -42,6 +42,8 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
+ * Parses the source files using a single call to the dumper.
+ * <p>
  * TODO: Make this class extend ACodeParser
  * 
  * @author JoaoBispo
