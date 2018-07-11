@@ -47,7 +47,7 @@ import pt.up.fe.specs.util.SpecsLogs;
  * @author JoaoBispo
  *
  */
-public class TraditionalCodeParser {
+public class MonolithicCodeParser {
 
     private static final boolean ONLY_NEW_PARSE_METHOD = false;
     private static final boolean ONLY_PARALLEL_PARSING = false;
@@ -59,7 +59,7 @@ public class TraditionalCodeParser {
     private boolean useCustomResources;
     // private boolean disableNewParsingMethod;
 
-    public TraditionalCodeParser() {
+    public MonolithicCodeParser() {
         showClangDump = false;
         showClangAst = false;
         showClavaAst = false;
@@ -68,22 +68,22 @@ public class TraditionalCodeParser {
         // disableNewParsingMethod = false;
     }
 
-    public TraditionalCodeParser setShowClangDump(boolean showClangDump) {
+    public MonolithicCodeParser setShowClangDump(boolean showClangDump) {
         this.showClangDump = showClangDump;
         return this;
     }
 
-    public TraditionalCodeParser setShowClangAst(boolean showClangAst) {
+    public MonolithicCodeParser setShowClangAst(boolean showClangAst) {
         this.showClangAst = showClangAst;
         return this;
     }
 
-    public TraditionalCodeParser setShowClavaAst(boolean showClavaAst) {
+    public MonolithicCodeParser setShowClavaAst(boolean showClavaAst) {
         this.showClavaAst = showClavaAst;
         return this;
     }
 
-    public TraditionalCodeParser setShowCode(boolean showCode) {
+    public MonolithicCodeParser setShowCode(boolean showCode) {
         this.showCode = showCode;
         return this;
     }
@@ -93,7 +93,7 @@ public class TraditionalCodeParser {
     // return this;
     // }
 
-    public TraditionalCodeParser setUseCustomResources(boolean useCustomResources) {
+    public MonolithicCodeParser setUseCustomResources(boolean useCustomResources) {
         this.useCustomResources = useCustomResources;
         return this;
     }
