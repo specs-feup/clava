@@ -19,12 +19,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
@@ -36,6 +38,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -48,41 +51,69 @@ import pt.up.fe.specs.util.SpecsLogs;
  * @author JoaoBispo
  *
  */
-public class ParallelCodeParser extends ACodeParser {
+// public class ParallelCodeParser extends ACodeParser<ParallelCodeParser> {
+public class ParallelCodeParser extends CodeParser {
+
+    /// DATAKEY BEGIN
+    public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing").setDefault(() -> true);
+    /// DATAKEY END
 
     @Override
     public App parse(List<File> sources, List<String> compilerOptions) {
-        ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES));
 
         List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
+
+        ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
+        // ConcurrentLinkedQueue<File> workingFolders = new ConcurrentLinkedQueue<>();
+
+        List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
+                .map(sourceFile -> parseSource(new File(sourceFile), compilerOptions, clangDump))
+                .collect(Collectors.toList());
+
+        if (get(SHOW_CLANG_DUMP)) {
+            SpecsLogs.msgInfo(clangDump.stream().collect(Collectors.joining("\n")));
+        }
+
+        // if (showClangAst) {
+        if (get(SHOW_CLANG_AST)) {
+            SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
+        }
+
+        // if (get(CLEAN)) {
+        // workingFolders.stream().forEach(SpecsIo::deleteFolder);
+        // }
+
         // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
         // System.out.println("ALL SOURCES:" + allSources);
 
         // Map<String, TranslationUnit> tunits = new HashMap<>();
-        List<TranslationUnit> tUnits = new ArrayList<>();
+        // List<TranslationUnit> tUnits = new ArrayList<>();
         // Parse files, individually
         // int id = 1;
-        for (Entry<String, File> sourceFile : allSources.entrySet()) {
-            DataStore options = ClavaOptions.toDataStore(compilerOptions);
 
-            // Adapt compiler options according to the file
-            adaptOptions(options, new File(sourceFile.getKey()));
-
-            TranslationUnit tunit = clangParser.parse(new File(sourceFile.getKey()), options);
-            tUnits.add(tunit);
-
-            if (get(SHOW_CLANG_DUMP)) {
-                SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-            }
-
-            // if (showClangAst) {
-            if (get(SHOW_CLANG_AST)) {
-                // TODO: Flag in dumper that dumps Clang AST to file
-                SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
-            }
-
-        }
+        // for (Entry<String, File> sourceFile : allSources.entrySet()) {
+        // DataStore options = ClavaOptions.toDataStore(compilerOptions);
+        //
+        // // Adapt compiler options according to the file
+        // adaptOptions(options, new File(sourceFile.getKey()));
+        //
+        // ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES));
+        //
+        // TranslationUnit tunit = clangParser.parse(new File(sourceFile.getKey()), options);
+        // tUnits.add(tunit);
+        //
+        // if (get(SHOW_CLANG_DUMP)) {
+        // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
+        // }
+        //
+        // // if (showClangAst) {
+        // if (get(SHOW_CLANG_AST)) {
+        // // TODO: Flag in dumper that dumps Clang AST to file
+        // SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
+        // }
+        //
+        // }
 
         App app = LegacyToDataStore.getFactory().app(tUnits);
 
@@ -119,6 +150,50 @@ public class ParallelCodeParser extends ACodeParser {
 
         return app;
 
+    }
+    //
+    // private <T> Stream<T> getSourceFileStream(Collection<T> sourceFiles) {
+    // if (get(PARALLEL_PARSING)) {
+    // return sourceFiles.parallelStream();
+    // }
+    //
+    // return sourceFiles.stream();
+    // }
+
+    private TranslationUnit parseSource(File sourceFile, List<String> compilerOptions,
+            ConcurrentLinkedQueue<String> clangDump) {
+        // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
+        DataStore options = ClavaOptions.toDataStore(compilerOptions);
+
+        // Adapt compiler options according to the file
+        adaptOptions(options, sourceFile);
+
+        // Disable streaming of console output if parsing is to be done in parallel
+        boolean streamConsoleOutput = !get(PARALLEL_PARSING);
+        ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
+                streamConsoleOutput);
+
+        TranslationUnit tunit = clangParser.parse(sourceFile, options);
+
+        if (get(SHOW_CLANG_DUMP)) {
+            // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
+            // SpecsLogs.msgInfo(clangParser.getClangDump());
+            clangDump.add(clangParser.getClangDump());
+        }
+
+        if (get(CLEAN)) {
+            // if (clangParser.getLastWorkingFolder() == null) {
+            // workingFolders.add(clangParser.getLastWorkingFolder());
+            // }
+            if (clangParser.getLastWorkingFolder() == null) {
+                SpecsLogs.msgInfo("No working folder found for source file '" + sourceFile + "'");
+            } else {
+                SpecsIo.deleteFolder(clangParser.getLastWorkingFolder());
+            }
+
+        }
+
+        return tunit;
     }
 
     private void adaptOptions(DataStore options, File source) {

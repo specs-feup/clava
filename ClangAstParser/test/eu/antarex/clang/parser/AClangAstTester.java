@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
-import pt.up.fe.specs.clang.codeparser.MonolithicCodeParser;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -179,7 +178,7 @@ public abstract class AClangAstTester {
     public void testProper() {
         // Parse files
 
-        CodeParser codeParser = new MonolithicCodeParser()
+        CodeParser codeParser = CodeParser.newInstance()
                 .set(CodeParser.SHOW_CLANG_AST, showClangAst)
                 .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
                 .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
@@ -199,7 +198,7 @@ public abstract class AClangAstTester {
             return;
         }
 
-        MonolithicCodeParser testCodeParser = new MonolithicCodeParser();
+        CodeParser testCodeParser = CodeParser.newInstance();
 
         // Parse output again, check if files are the same
 

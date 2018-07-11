@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.codeparser;
 import java.io.File;
 import java.util.List;
 
+import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
@@ -27,7 +28,9 @@ import pt.up.fe.specs.clava.ast.extra.App;
  * @author JoaoBispo
  *
  */
-public interface CodeParser {
+// public interface CodeParser<T extends CodeParser<T>> extends DataClass<T> {
+// public interface CodeParser extends DataClass<CodeParser> {
+public abstract class CodeParser extends ADataClass<CodeParser> {
 
     // BEGIN DATAKEY
     public static final DataKey<Boolean> SHOW_CLANG_DUMP = KeyFactory.bool("showClangDump");
@@ -35,16 +38,17 @@ public interface CodeParser {
     public static final DataKey<Boolean> SHOW_CLAVA_AST = KeyFactory.bool("showClavaAst");
     public static final DataKey<Boolean> SHOW_CODE = KeyFactory.bool("showCode");
     public static final DataKey<Boolean> USE_CUSTOM_RESOURCES = KeyFactory.bool("useCustomResources");
+    public static final DataKey<Boolean> CLEAN = KeyFactory.bool("clean").setDefault(() -> true);
     // BEGIN DATAKEY
 
-    App parse(List<File> sources, List<String> compilerOptions);
+    public abstract App parse(List<File> sources, List<String> compilerOptions);
 
     /**
      * Currently returns a MonolithicCodeParser, which has higher compatibility than ParallelCodeParser.
      * 
      * @return
      */
-    static CodeParser newInstance() {
+    public static CodeParser newInstance() {
         return new MonolithicCodeParser();
     }
 }

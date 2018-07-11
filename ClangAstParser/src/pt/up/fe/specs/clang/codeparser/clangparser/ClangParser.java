@@ -23,4 +23,8 @@ public interface ClangParser {
 
     TranslationUnit parse(File file, DataStore config);
 
+    File getLastWorkingFolder();
+
+    String getClangDump();
+
 }

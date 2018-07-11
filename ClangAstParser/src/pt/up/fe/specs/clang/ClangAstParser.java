@@ -318,7 +318,11 @@ public class ClangAstParser {
     }
 
     public List<ClangNode> processOutput(InputStream inputStream) {
-        File dumpfile = dumpStdout | isDebug() ? new File(CLANG_DUMP_FILENAME) : null;
+        return processOutput(inputStream, new File(CLANG_DUMP_FILENAME));
+    }
+
+    public List<ClangNode> processOutput(InputStream inputStream, File clangDumpFilename) {
+        File dumpfile = dumpStdout | isDebug() ? clangDumpFilename : null;
 
         // Parse Clang output
         List<ClangNode> clangDump = new AstParser(dumpfile).parse(inputStream);
@@ -329,7 +333,13 @@ public class ClangAstParser {
     public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
             LineStreamParser lineStreamParser) {
 
-        File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
+        return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
+    }
+
+    public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
+            LineStreamParser lineStreamParser, File stderrDumpFilename) {
+
+        File dumpfile = isDebug() ? stderrDumpFilename : null;
 
         // TODO: Temporary, needs to be set again, since this will run in a separate thread
         LegacyToDataStore.CLAVA_CONTEXT.set(lineStreamParser.getData().get(ClavaNode.CONTEXT));

@@ -61,18 +61,41 @@ import pt.up.fe.specs.util.system.ProcessOutput;
  */
 public class AstDumpParser implements ClangParser {
 
+    private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
+    private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+
     private int currentId;
     private final boolean dumpStdOut;
     private final boolean useCustomResources;
+    /**
+     * TODO: Not implemented yet
+     * <p>
+     * If true, displays the output of the dumper while it executes. If false, stores the output and only shows it after
+     * execution.
+     * <p>
+     * Usually should be disabled when executing several versions of the parser concurrently.
+     */
+    private final boolean streamConsoleOutput;
+
+    private final List<File> workingFolders;
+    private File lastWorkingFolder;
 
     public AstDumpParser() {
-        this(false, false);
+        this(false, false, true);
     }
 
-    public AstDumpParser(boolean dumpStdOut, boolean useCustomResources) {
+    public AstDumpParser(boolean dumpStdOut, boolean useCustomResources, boolean streamConsoleOutput) {
         this.currentId = 0;
         this.dumpStdOut = dumpStdOut;
         this.useCustomResources = useCustomResources;
+        this.streamConsoleOutput = streamConsoleOutput;
+        this.workingFolders = new ArrayList<>();
+        this.lastWorkingFolder = null;
+    }
+
+    @Override
+    public File getLastWorkingFolder() {
+        return lastWorkingFolder;
     }
 
     private int nextId() {
@@ -165,9 +188,16 @@ public class AstDumpParser implements ClangParser {
             lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
         }
 
-        ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments,
-                clangAstParser::processOutput,
-                inputStream -> clangAstParser.processStdErr(config, inputStream, lineStreamParser));
+        // Create temporary working folder, in order to support running several dumps in parallel
+        // File workingFolder = SpecsIo.mkdir(UUID.randomUUID().toString());
+        lastWorkingFolder = SpecsIo.mkdir(sourceFile.getName() + "_" + id);
+        workingFolders.add(lastWorkingFolder);
+
+        ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+                inputStream -> clangAstParser.processOutput(inputStream,
+                        new File(lastWorkingFolder, CLANG_DUMP_FILENAME)),
+                inputStream -> clangAstParser.processStdErr(config, inputStream, lineStreamParser,
+                        new File(lastWorkingFolder, STDERR_DUMP_FILENAME)));
 
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
@@ -200,7 +230,7 @@ public class AstDumpParser implements ClangParser {
 
         // Always write to a file, to be able to check dump
         // IoUtils.write(new File("clangDump.txt"), clangOutput);
-        SpecsIo.write(new File("types.txt"), stderr.get(StreamKeys.TYPES));
+        SpecsIo.write(new File(lastWorkingFolder, "types.txt"), stderr.get(StreamKeys.TYPES));
         // System.out.println("OUTPUT:\n" + output.getOutput());
 
         // Parse Clang output
@@ -221,7 +251,8 @@ public class AstDumpParser implements ClangParser {
         // in the dump. However, all nodes in the dump (clangDump and types) should be
         // represented in the map.
         // Map<String, String> nodeToTypes = parseNodeToTypes(IoUtils.read(new File("nodetypes.txt")));
-        Map<String, String> nodeToTypes = ClangAstParser.parseAddrToAddr(SpecsIo.read(new File("nodetypes.txt")));
+        Map<String, String> nodeToTypes = ClangAstParser
+                .parseAddrToAddr(SpecsIo.read(new File(lastWorkingFolder, "nodetypes.txt")));
 
         // Remove top-level nodes that do not have a corresponding type
         // clangDump = cleanup(clangDump, nodeToTypes);
@@ -230,13 +261,14 @@ public class AstDumpParser implements ClangParser {
         // check(clangDump, clangTypes, nodeToTypes);
 
         // Parse includes
-        ClangIncludes includes = ClangIncludes.newInstance(SpecsIo.existingFile("includes.txt"));
+        ClangIncludes includes = ClangIncludes.newInstance(SpecsIo.existingFile(lastWorkingFolder, "includes.txt"));
 
         // Get nodes that can have template arguments
         // Set<String> hasTemplateArguments = parseTemplateArguments(SpecsIo.read("template_args.txt"));
 
         // Get nodes that are temporary
-        Set<String> isTemporary = ClangAstParser.parseIsTemporary(SpecsIo.read("is_temporary.txt"));
+        Set<String> isTemporary = ClangAstParser
+                .parseIsTemporary(SpecsIo.read(new File(lastWorkingFolder, "is_temporary.txt")));
 
         // Get OpenMP directives
         // Map<String, OMPDirective> ompDirectives = parseOmpDirectives(IoUtils.read("omp.txt"));
@@ -244,7 +276,7 @@ public class AstDumpParser implements ClangParser {
 
         // Get enum integer types
         Map<String, String> enumToIntegerType = ClangAstParser
-                .parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
+                .parseEnumIntegerTypes(SpecsIo.read(new File(lastWorkingFolder, "enum_integer_type.txt")));
 
         // Check if no new nodes should be used
         // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
@@ -256,6 +288,33 @@ public class AstDumpParser implements ClangParser {
                 newNodes);
 
         return new ClangRootNode(clangRootData, clangDump);
+    }
+
+    /**
+     * TODO: Current implementation only shows the last file, show all files
+     */
+    @Override
+    public String getClangDump() {
+        if (workingFolders.isEmpty()) {
+            SpecsLogs.msgInfo("No working folders found, returning empty clang dump");
+            return "";
+        }
+
+        StringBuilder clangDump = new StringBuilder();
+
+        for (File workingFolder : workingFolders) {
+            File clangDumpFile = new File(workingFolder, CLANG_DUMP_FILENAME);
+
+            if (!clangDumpFile.isFile()) {
+                SpecsLogs.msgInfo("Clang dump file no found: '" + clangDumpFile + "'");
+                continue;
+            }
+
+            clangDump.append("ClangDump for '" + workingFolder.getName() + "':\n");
+            clangDump.append(SpecsIo.read(clangDumpFile));
+        }
+
+        return clangDump.toString();
     }
 
 }

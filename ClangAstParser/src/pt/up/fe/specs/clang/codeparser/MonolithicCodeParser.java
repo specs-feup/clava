@@ -35,10 +35,11 @@ import pt.up.fe.specs.util.SpecsLogs;
  * @author JoaoBispo
  *
  */
-public class MonolithicCodeParser extends ACodeParser {
+// public class MonolithicCodeParser extends ACodeParser {
+public class MonolithicCodeParser extends CodeParser {
 
     private static final boolean ONLY_NEW_PARSE_METHOD = false;
-    private static final boolean ONLY_PARALLEL_PARSING = false;
+    private static final boolean ONLY_PARALLEL_PARSING = true;
 
     // private boolean showClangDump;
     // private boolean showClangAst;
