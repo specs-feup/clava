@@ -111,6 +111,10 @@ public class ClangAstParser {
         STRICT_MODE = value;
     }
 
+    public static String getLocalOptionsFile() {
+        return LOCAL_OPTIONS_FILE;
+    }
+
     private final boolean dumpStdout;
     private final boolean useCustomResources;
     // private final boolean disableNewParsingMethod;
@@ -313,7 +317,7 @@ public class ClangAstParser {
         return new ClangRootNode(clangRootData, clangDump);
     }
 
-    private List<ClangNode> processOutput(InputStream inputStream) {
+    public List<ClangNode> processOutput(InputStream inputStream) {
         File dumpfile = dumpStdout | isDebug() ? new File(CLANG_DUMP_FILENAME) : null;
 
         // Parse Clang output
@@ -322,7 +326,9 @@ public class ClangAstParser {
         return clangDump;
     }
 
-    private DataStore processStdErr(DataStore clavaData, InputStream inputStream, LineStreamParser lineStreamParser) {
+    public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
+            LineStreamParser lineStreamParser) {
+
         File dumpfile = isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
 
         // TODO: Temporary, needs to be set again, since this will run in a separate thread
@@ -332,7 +338,7 @@ public class ClangAstParser {
         return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
     }
 
-    private void addSourceRanges(List<ClangNode> clangDump, DataStore stderr) {
+    public static void addSourceRanges(List<ClangNode> clangDump, DataStore stderr) {
 
         Map<String, SourceRange> sourceRanges = stderr.get(StreamKeys.SOURCE_RANGES);
 
@@ -364,7 +370,7 @@ public class ClangAstParser {
         return new File("debug").isFile();
     }
 
-    private static void checkInterleavedExecutions() {
+    public static void checkInterleavedExecutions() {
         File consumerOrder = new File("consumer_order.txt");
         if (!consumerOrder.isFile()) {
             SpecsLogs.msgInfo("Could not find file 'consumer_order.txt'");
@@ -397,7 +403,7 @@ public class ClangAstParser {
 
     }
 
-    private static Map<String, String> parseEnumIntegerTypes(String enumIntegerTypes) {
+    public static Map<String, String> parseEnumIntegerTypes(String enumIntegerTypes) {
         return parseAddrToAddr(enumIntegerTypes);
         /*
         return StringLines.newInstance(enumIntegerTypes).stream()
@@ -408,7 +414,7 @@ public class ClangAstParser {
         		*/
     }
 
-    private List<String> prepareIncludes(File clangExecutable) {
+    public List<String> prepareIncludes(File clangExecutable) {
 
         File resourceFolder = getClangResourceFolder();
 
@@ -535,7 +541,7 @@ public class ClangAstParser {
         return foundInclude;
     }
 
-    private static Set<String> parseIsTemporary(String isTemporary) {
+    public static Set<String> parseIsTemporary(String isTemporary) {
         return parseAddrSet(isTemporary);
         // return StringLines.getLines(isTemporary).stream()
         // .map(line -> Long.decode(line))
@@ -665,7 +671,7 @@ public class ClangAstParser {
     // return removeDuplicates(types);
     // }
 
-    private static List<ClangNode> removeDuplicates(List<ClangNode> nodes) {
+    public static List<ClangNode> removeDuplicates(List<ClangNode> nodes) {
 
         // Types will not be part of the tree, multiple nodes can refer to them
         // Duplicates can be removed safely
@@ -748,7 +754,7 @@ public class ClangAstParser {
      *
      * @return path to the executable that was copied
      */
-    private File prepareResources(String version) {
+    public File prepareResources(String version) {
 
         File resourceFolder = getClangResourceFolder();
 
