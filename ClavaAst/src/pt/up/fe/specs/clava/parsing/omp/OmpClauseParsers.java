@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpReductionClause.ReductionKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpScheduleClause.ScheduleModifier;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.stringparser.ParserResult;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -188,7 +189,9 @@ public class OmpClauseParsers {
             return null;
         }
 
-        int closeParIndex = clauses.getCurrentString().indexOf(')');
+        // Find end parenthesis
+        int closeParIndex = SpecsStrings.findCloseParenthesisIndex(clauses.getCurrentString().toString());
+        // int closeParIndex = clauses.getCurrentString().indexOf(')');
         String scheduleClauseString = clauses.substring(closeParIndex + 1);
         StringParser clause = new StringParser(scheduleClauseString);
 
@@ -199,6 +202,32 @@ public class OmpClauseParsers {
 
         return clause;
     }
+
+    /*
+    private static int findCloseParIndex(String string) {
+        int openParIndex = string.indexOf('(');
+    
+        int innerOpenPars = 0;
+        for (int i = openParIndex + 1; i < string.length(); i++) {
+            if (string.charAt(i) == ')') {
+                if (innerOpenPars == 0) {
+                    return i;
+                } else {
+                    innerOpenPars--;
+                }
+    
+                continue;
+            }
+    
+            if (string.charAt(i) == '(') {
+                innerOpenPars++;
+                continue;
+            }
+        }
+    
+        throw new RuntimeException("Could not find closing parenthesis for the OpenMP pragma portion '" + string + "'");
+    }
+    */
 
     private static boolean hasParameters(StringSlice currentString, String clauseKindName) {
         int openParIndex = currentString.indexOf('(');
