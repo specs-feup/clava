@@ -255,20 +255,22 @@ public class CxxScope extends AScope {
 
     @Override
     public List<? extends AIf> selectIf() {
-        return getStatements().stream()
-                .filter(stmt -> stmt instanceof IfStmt)
-                .map(stmt -> CxxJoinpoints.create((IfStmt) stmt, this, AIf.class))
-                .collect(Collectors.toList());
+        return CxxSelects.select(AIf.class, getStatements(), true, this, IfStmt.class);
+        // return getStatements().stream()
+        // .filter(stmt -> stmt instanceof IfStmt)
+        // .map(stmt -> CxxJoinpoints.create((IfStmt) stmt, this, AIf.class))
+        // .collect(Collectors.toList());
 
     }
 
     @Override
     public List<? extends ALoop> selectLoop() {
-        return getStatements().stream()
-                .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
-                .filter(node -> node instanceof LoopStmt)
-                .map(loop -> CxxJoinpoints.create((LoopStmt) loop, this, ALoop.class))
-                .collect(Collectors.toList());
+        return CxxSelects.select(ALoop.class, getStatements(), true, this, LoopStmt.class);
+        // return getStatements().stream()
+        // .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
+        // .filter(node -> node instanceof LoopStmt)
+        // .map(loop -> CxxJoinpoints.create((LoopStmt) loop, this, ALoop.class))
+        // .collect(Collectors.toList());
     }
 
     @Override
