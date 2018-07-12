@@ -27,8 +27,15 @@ double foo() {
     for(int i=0; i<1000; i++) {
         a += bar();
     }
+	
     
     return a;
+}
+
+void complicated_omp_pragma() {
+	#pragma omp parallel for  default(shared)  num_threads((abs(1 - nz2)<1000)?1:omp_get_max_threads()) private(k, j, i, m, add) firstprivate(nz2, ny2, nx2) reduction (+:rms[:5])
+	for(int i=0; i<1000; i++) {
+	}
 }
 
 int main() {
