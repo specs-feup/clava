@@ -203,4 +203,15 @@ public class CXXMethodDecl extends FunctionDecl {
         return super.toContentString() + "implicit:" + getDeclData().isImplicit();
     }
 
+    @Override
+    public String getSignature() {
+        String baseSignature = super.getSignature();
+
+        String namespace = getMethodData().getNamespace();
+        namespace = namespace == null ? "" : namespace + "::";
+
+        String signature = namespace + baseSignature;
+
+        return signature;
+    }
 }

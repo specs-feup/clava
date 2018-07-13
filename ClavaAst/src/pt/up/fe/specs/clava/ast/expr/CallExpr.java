@@ -331,4 +331,33 @@ public class CallExpr extends Expr {
 
         return getParent() instanceof Stmt;
     }
+
+    /**
+     * Tries to return the signature of the corresponding function declaration. If not found, returns the signature of
+     * the corresponding function definition. If not found, returns the name of the call.
+     * 
+     * <p>
+     * As last resort returns simply the name of the call, because the arguments might not correspond to its signature
+     * (e.g., printf).
+     * 
+     * @return
+     */
+    /*
+    public String getSignature() {
+        return getDeclaration().map(FunctionDecl::getSignature)
+                .orElse(getDefinition().map(FunctionDecl::getSignature)
+                        .orElse(getCalleeName()));
+    }
+    */
+
+    /**
+     * 
+     * @return the function associated with this call. No guarantees are made regarding if it is the declaration or
+     *         definition of the function.
+     */
+    public FunctionDecl getFunction() {
+        return getFunctionDecl()
+                .orElseThrow(() -> new RuntimeException("No FunctionDecl associated with call '" + this + "'"));
+    }
+
 }

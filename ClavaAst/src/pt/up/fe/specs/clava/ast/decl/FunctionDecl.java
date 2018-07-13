@@ -591,4 +591,17 @@ public class FunctionDecl extends DeclaratorDecl {
         }
     }
 
+    public String getSignature() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(getDeclName());
+
+        builder.append("(");
+        builder.append(getParameters().stream()
+                .map(param -> param.getType().getCode())
+                .collect(Collectors.joining(", ")));
+        builder.append(")");
+
+        return builder.toString();
+    }
 }
