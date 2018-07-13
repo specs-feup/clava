@@ -299,4 +299,14 @@ public class CxxCall extends ACall {
     public Boolean getIsStmtCallImpl() {
         return call.isStmtCall();
     }
+
+    @Override
+    public AFunction getFunctionImpl() {
+        return CxxJoinpoints.create(call.getFunction(), this, AFunction.class);
+    }
+
+    // @Override
+    // public String getSignatureImpl() {
+    // return call.getSignature();
+    // }
 }

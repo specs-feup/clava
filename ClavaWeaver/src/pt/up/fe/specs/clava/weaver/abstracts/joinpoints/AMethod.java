@@ -189,6 +189,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute signature
+     * @return the attribute's value
+     */
+    @Override
+    public String getSignatureImpl() {
+        return this.aFunction.getSignatureImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -593,6 +602,7 @@ public abstract class AMethod extends AFunction {
         ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
         CALLS("calls"),
+        SIGNATURE("signature"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

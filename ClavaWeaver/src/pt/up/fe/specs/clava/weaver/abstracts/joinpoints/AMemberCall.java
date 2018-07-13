@@ -195,6 +195,15 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute function
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction getFunctionImpl() {
+        return this.aCall.getFunctionImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select callees
      * @return 
      */
@@ -556,6 +565,7 @@ public abstract class AMemberCall extends ACall {
         ISMEMBERACCESS("isMemberAccess"),
         MEMBERACCESS("memberAccess"),
         ISSTMTCALL("isStmtCall"),
+        FUNCTION("function"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

@@ -381,6 +381,29 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.
+     */
+    public abstract AFunction getFunctionImpl();
+
+    /**
+     * a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.
+     */
+    public final Object getFunction() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "function", Optional.empty());
+        	}
+        	AFunction result = this.getFunctionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "function", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "function", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select callees
      * @return 
      */
@@ -768,6 +791,7 @@ public abstract class ACall extends AExpression {
         attributes.add("isMemberAccess");
         attributes.add("memberAccess");
         attributes.add("isStmtCall");
+        attributes.add("function");
     }
 
     /**
@@ -831,6 +855,7 @@ public abstract class ACall extends AExpression {
         ISMEMBERACCESS("isMemberAccess"),
         MEMBERACCESS("memberAccess"),
         ISSTMTCALL("isStmtCall"),
+        FUNCTION("function"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

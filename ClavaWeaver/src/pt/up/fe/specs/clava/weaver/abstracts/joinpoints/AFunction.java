@@ -452,6 +452,29 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
+     */
+    public abstract String getSignatureImpl();
+
+    /**
+     * a string with the signature of this function (e.g., name of the function, plus the parameters types)
+     */
+    public final Object getSignature() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
+        	}
+        	String result = this.getSignatureImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "signature", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -946,6 +969,7 @@ public abstract class AFunction extends ANamedDecl {
         attributes.add("isDelete");
         attributes.add("storageClass");
         attributes.add("calls");
+        attributes.add("signature");
     }
 
     /**
@@ -1016,6 +1040,7 @@ public abstract class AFunction extends ANamedDecl {
         ISDELETE("isDelete"),
         STORAGECLASS("storageClass"),
         CALLS("calls"),
+        SIGNATURE("signature"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),

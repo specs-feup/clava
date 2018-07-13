@@ -514,4 +514,9 @@ public class CxxFunction extends AFunction {
     public void setParamsFromStringsImpl(String[] params) {
         defParamsImpl(params);
     }
+
+    @Override
+    public String getSignatureImpl() {
+        return function.getSignature();
+    }
 }

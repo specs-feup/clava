@@ -261,6 +261,7 @@
 		<attribute name="isMemberAccess" type="boolean"/>
 		<attribute name="memberAccess" type="memberAccess"/>
 		<attribute name="isStmtCall" type="boolean"/>
+		<attribute name="function" type="function" tooltip="a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function."/>		
 	</artifact>
 	
 	<!-- MEMBER CALL -->	
@@ -314,6 +315,7 @@
 		<attribute name="isDelete" type="Boolean"/>
 		<attribute name="storageClass" type="StorageClass"/>
 		<attribute name="calls" type="call[]"/>		
+		<attribute name="signature" type="String" tooltip="a string with the signature of this function (e.g., name of the function, plus the parameters types)"/>
 	</artifact>
 
 
