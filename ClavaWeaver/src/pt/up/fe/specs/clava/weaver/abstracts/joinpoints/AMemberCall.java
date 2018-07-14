@@ -204,6 +204,15 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute signature
+     * @return the attribute's value
+     */
+    @Override
+    public String getSignatureImpl() {
+        return this.aCall.getSignatureImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select callees
      * @return 
      */
@@ -566,6 +575,7 @@ public abstract class AMemberCall extends ACall {
         MEMBERACCESS("memberAccess"),
         ISSTMTCALL("isStmtCall"),
         FUNCTION("function"),
+        SIGNATURE("signature"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

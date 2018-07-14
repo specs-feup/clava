@@ -2861,6 +2861,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function",
+                  "children": [
+                           {
+                              "type": "String",
+                              \name": "signature"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
                   "children": [
                            {
@@ -16555,6 +16564,15 @@
                            {
                               "type": "type",
                               \name": "returnType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function",
+                  "children": [
+                           {
+                              "type": "String",
+                              \name": "signature"
                            }]
                },
                {

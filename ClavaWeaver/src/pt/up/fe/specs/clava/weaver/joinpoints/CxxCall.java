@@ -308,6 +308,23 @@ public class CxxCall extends ACall {
         // return CxxJoinpoints.create(call.getFunction(), this, AFunction.class);
     }
 
+    @Override
+    public String getSignatureImpl() {
+        AFunction function = getFunctionImpl();
+
+        if (function != null) {
+            return function.getSignatureImpl();
+        }
+
+        // if (getDeclarationImpl() != null) {
+        // System.out.println("DECL SIG:" + getDeclarationImpl().getSignatureImpl());
+        // }
+        // System.out.println("DECL:" + getDeclarationImpl());
+        // System.out.println("DEF:" + getDefinitionImpl());
+
+        return "<" + getNameImpl() + ">";
+    }
+
     // @Override
     // public String getSignatureImpl() {
     // return call.getSignature();

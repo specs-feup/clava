@@ -404,6 +404,29 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
+     */
+    public abstract String getSignatureImpl();
+
+    /**
+     * similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
+     */
+    public final Object getSignature() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "signature", Optional.empty());
+        	}
+        	String result = this.getSignatureImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "signature", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select callees
      * @return 
      */
@@ -792,6 +815,7 @@ public abstract class ACall extends AExpression {
         attributes.add("memberAccess");
         attributes.add("isStmtCall");
         attributes.add("function");
+        attributes.add("signature");
     }
 
     /**
@@ -856,6 +880,7 @@ public abstract class ACall extends AExpression {
         MEMBERACCESS("memberAccess"),
         ISSTMTCALL("isStmtCall"),
         FUNCTION("function"),
+        SIGNATURE("signature"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
