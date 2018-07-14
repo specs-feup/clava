@@ -13,7 +13,8 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
-        {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR}
+        {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
+        {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR}
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -55,6 +56,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitExprChildren(static_cast<const Expr *>(S), visitedChildren); break;
         case clava::StmtNode::INIT_LIST_EXPR:
             VisitInitListExprChildren(static_cast<const InitListExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::DECL_REF_EXPR:
+            VisitDeclRefExprChildren(static_cast<const DeclRefExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::CAST_EXPR:
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
 
@@ -120,7 +123,6 @@ void ClangAstDumper::VisitInitListExprChildren(const InitListExpr *E, std::vecto
 
     // Visit field
     //VisitDeclTop(E->getInitializedFieldInUnion());
-
 }
 
 
@@ -133,3 +135,17 @@ void ClangAstDumper::VisitCastExprChildren(const CastExpr *S, std::vector<std::s
     children.push_back(getId(subExprAsWritten));
 }
  */
+
+
+void ClangAstDumper::VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    // Visit decl
+    //VisitDeclTop(E->getDecl());
+    //children.push_back(clava::getId(E->getDecl(), id));
+
+    // Visit found decl as child
+    //VisitDeclTop(E->getFoundDecl());
+    //children.push_back(clava::getId(E->getFoundDecl(), id));
+}

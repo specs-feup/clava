@@ -82,6 +82,7 @@ void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
     visitChildrenAndData(static_cast<const Expr*>(Node));
 
     // Dump qualifier
+/*
     if(Node->getQualifier() != nullptr) {
         // Can use the stream processor of decl ref expression qualifiers
         llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
@@ -89,15 +90,11 @@ void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
-
-/*
-    if(Node->hasExplicitTemplateArgs()) {
-        llvm::errs() << "HAS_TEMPLATE_ARGS\n";
-        llvm::errs() << getId(Node) << "\n";
-        //DumpResources::template_args <<  D << "_" << id << "\n";
-    }
 */
+
+
     // Dump template arguments
+/*
     if(Node->hasExplicitTemplateArgs()) {
         llvm::errs() << DUMP_TEMPLATE_ARGS << "\n";
 
@@ -115,7 +112,9 @@ void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
         }
 
     }
+*/
 }
+
 
 void ClangAstDumper::VisitOffsetOfExpr(const OffsetOfExpr *Node) {
     if(dumpStmt(Node)) {

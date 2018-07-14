@@ -105,6 +105,20 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
     }
 
 
+    // Dump system header decls, that are not dumped otherwise
+    // This way they can be used as children for new nodes
+    FullSourceLoc fullLocation = Context->getFullLoc(declAddr->getLocStart());
+    if (fullLocation.isValid() && fullLocation.isInSystemHeader()) {
+        clava::dump("<System Header Node Dump Begin>");
+        clava::dump(clava::getId(declAddr, id));
+        (*declAddr).dump(llvm::errs());
+        clava::dump("<System Header Node Dump End>");
+    }
+
+    // Top-level Node
+    //llvm::errs() << "<All Decls>" << "\n";
+    //llvm::errs() << declAddr << "_" << id << "\n";
+
     //dumpIdToClassMap(declAddr, clava::getClassName(declAddr));
 
     return false;

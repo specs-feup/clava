@@ -16,7 +16,7 @@ static const std::string DUMP_NUMBER_TEMPLATE_PARAMETERS = "<Number Template Par
 // Used in FunctionDecl, such as FunctionTemplateDecl
 //static const std::string DUMP_NUMBER_TEMPLATE_ARGUMENTS = "<Number Template Arguments>";
 static const std::string DUMP_NAMESPACE_ALIAS_PREFIX = "<Namespace Alias Prefix>";
-static const std::string DUMP_TEMPLATE_ARGS = "<Template Args>";
+//static const std::string DUMP_TEMPLATE_ARGS = "<Template Args>";
 
 // Information about FieldDecl nodes
 static const std::string DUMP_FIELD_DECL_INFO = "<Field Decl Info>";

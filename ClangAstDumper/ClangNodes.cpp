@@ -336,3 +336,16 @@ const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange)
 
 
 }
+
+/*
+llvm::raw_ostream clava::stringStream() {
+    std::string stringStream;
+    llvm::raw_string_ostream llvmStringStream(stringStream);
+    return llvmStringStream;
+}
+ */
+/*
+void clava::dump(llvm::raw_string_ostream llvmStringStream) {
+    dump(llvmStringStream.str());
+}
+*/

@@ -25,6 +25,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CompoundLiteralExpr", clava::StmtNode::COMPOUND_LITERAL_EXPR},
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
         {"StringLiteral", clava::StmtNode::STRING_LITERAL},
+        {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
 };
 
 
@@ -79,6 +80,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCompoundLiteralExprData(static_cast<const CompoundLiteralExpr *>(S)); break;
         case clava::StmtNode ::INIT_LIST_EXPR:
             DumpInitListExprData(static_cast<const InitListExpr *>(S)); break;
+        case clava::StmtNode ::DECL_REF_EXPR:
+            DumpDeclRefExprData(static_cast<const DeclRefExpr *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
@@ -226,8 +229,40 @@ void clava::ClavaDataDumper::DumpInitListExprData(const InitListExpr *E) {
     //clava::dump(clava::getId(E->getInitializedFieldInUnion(), id)); // Apparently not supported in old parser
     clava::dump(const_cast<InitListExpr*>(E)->isExplicit()); // isExplicit() could be const
     clava::dump(E->isStringLiteralInit()); // isExplicit() could be const
-
-
 }
 
+void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
+    DumpExprData(E);
+
+    // Dump qualifier
+    if(E->getQualifier() != nullptr) {
+        std::string qualifierStr;
+        llvm::raw_string_ostream qualifierStream(qualifierStr);
+        E->getQualifier()->print(qualifierStream, Context->getPrintingPolicy());
+        clava::dump(qualifierStream.str());
+    } else {
+        clava::dump("");
+    }
+
+    // Dump template arguments
+    if(E->hasExplicitTemplateArgs()) {
+        // Number of template args
+        clava::dump(E->getNumTemplateArgs());
+
+        auto templateArgs = E->getTemplateArgs();
+        for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+            auto templateArg = templateArgs + i;
+            clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
+        }
+    } else {
+        clava::dump(0);
+    }
+
+    std::string declNameStr;
+    llvm::raw_string_ostream declNameStream(declNameStr);
+    declNameStream << E->getDecl()->getDeclName();
+    clava::dump(declNameStream.str());
+
+    clava::dump(clava::getId(E->getDecl(), id));
+}
 

@@ -46,6 +46,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::COMPOUND_LITERAL_EXPR: return "CompoundLiteralExpr";
         case clava::StmtNode::INIT_LIST_EXPR: return "InitListExpr";
         case clava::StmtNode::STRING_LITERAL: return "StringLiteral";
+        case clava::StmtNode::DECL_REF_EXPR: return "DeclRefExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
@@ -61,6 +62,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::BUILTIN_TYPE: return "BuiltinType";
         case clava::TypeNode::FUNCTION_TYPE: return "FunctionType";
         case clava::TypeNode::FUNCTION_PROTO_TYPE: return "FunctionProtoType";
+        case clava::TypeNode::FUNCTION_NO_PROTO_TYPE: return "FunctionNoProtoType";
         case clava::TypeNode::TAG_TYPE: return "TagType";
         case clava::TypeNode::ARRAY_TYPE: return "ArrayType";
         case clava::TypeNode::CONSTANT_ARRAY_TYPE: return "ConstantArrayType";

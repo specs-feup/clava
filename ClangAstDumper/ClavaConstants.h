@@ -53,7 +53,8 @@ namespace clava {
         CXX_BOOL_LITERAL_EXPR,
         COMPOUND_LITERAL_EXPR,
         INIT_LIST_EXPR,
-        STRING_LITERAL
+        STRING_LITERAL,
+        DECL_REF_EXPR,
     };
 
     /**
@@ -73,6 +74,7 @@ namespace clava {
         BUILTIN_TYPE,
         FUNCTION_TYPE,
         FUNCTION_PROTO_TYPE,
+        FUNCTION_NO_PROTO_TYPE,
         TAG_TYPE,
         ARRAY_TYPE,
         CONSTANT_ARRAY_TYPE,

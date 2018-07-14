@@ -94,6 +94,7 @@ namespace clava {
      */
     const std::string getSource(ASTContext *Context, SourceRange sourceRange);
 
+    //llvm::raw_ostream stringStream();
 
 
     // Value dumpers
@@ -108,6 +109,7 @@ namespace clava {
     void dump(const std::vector<Attr*> &attributes, const int id);
     void dump(const QualType& type, int id);
     void dump(const Qualifiers& qualifiers, ASTContext* Context);
+    //  void dump(llvm::raw_string_ostream llvmStringStream);
 
 
 

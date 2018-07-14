@@ -12,6 +12,7 @@
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"BuiltinType", clava::TypeNode::BUILTIN_TYPE},
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
+        {"FunctionNoProtoType", clava::TypeNode::FUNCTION_TYPE},
         {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
@@ -44,8 +45,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 //            DumpQualTypeData(static_cast<const QualType *>(T)); break;
         case clava::TypeNode::BUILTIN_TYPE:
             DumpBuiltinTypeData(static_cast<const BuiltinType *>(T)); break;
-        //case clava::TypeNode::FUNCTION_TYPE:
-        //    DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
+        case clava::TypeNode::FUNCTION_TYPE:
+            DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
         case clava::TypeNode::FUNCTION_PROTO_TYPE:
             DumpFunctionProtoTypeData(static_cast<const FunctionProtoType *>(T)); break;
         case clava::TypeNode::ARRAY_TYPE:
