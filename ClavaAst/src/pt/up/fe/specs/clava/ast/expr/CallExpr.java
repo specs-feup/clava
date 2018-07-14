@@ -165,7 +165,7 @@ public class CallExpr extends Expr {
                 functionDecl.get().getFunctionType()));
     }
 
-    protected Optional<FunctionDecl> getFunctionDecl() {
+    public Optional<FunctionDecl> getFunctionDecl() {
 
         DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
 
@@ -351,13 +351,16 @@ public class CallExpr extends Expr {
     */
 
     /**
+     * Returns the function declaration associated with this call.
      * 
-     * @return the function associated with this call. No guarantees are made regarding if it is the declaration or
-     *         definition of the function.
+     * <p>
+     * No guarantees are made regarding if it is the declaration or definition of the function. Usually, it returns the
+     * last Decl that is parsed in the code (declaration or definition).
+     * 
+     * @return the function associated with this call
      */
-    public FunctionDecl getFunction() {
-        return getFunctionDecl()
-                .orElseThrow(() -> new RuntimeException("No FunctionDecl associated with call '" + this + "'"));
-    }
+    // public Optional<FunctionDecl> getFunction() {
+    // return getFunctionDecl();
+    // }
 
 }

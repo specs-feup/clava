@@ -27,8 +27,13 @@ import pt.up.fe.specs.clava.ast.LiteralNode;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
+import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
+import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -258,6 +263,24 @@ public class ClavaFactory {
         return new LiteralExpr(data, Collections.emptyList());
     }
 
+    public DeclRefExpr declRefExpr(String declName, Type type) {
+        DataStore data = newExprDataStore()
+                .put(Expr.TYPE, type)
+                .put(DeclRefExpr.DECL_NAME, declName);
+
+        return new DeclRefExpr(data, Collections.emptyList());
+        // return new DeclRefExpr(data, Arrays.asList(dummyNamedDecl(declName)));
+    }
+    // public static DeclRefExpr declRefExpr(String refName, ValueKind valueKind, Type type, ClavaNodeInfo info) {
+    // ExprData exprData = new ExprData(type, valueKind);
+    //
+    // String qualifier = "";
+    //
+    // BareDeclData declData = BareDeclData.newInstance(refName);
+    //
+    // return declRefExpr(qualifier, Collections.emptyList(), declData, null, exprData, info);
+    // }
+
     /// DECLS
 
     public DeclStmt declStmt(Decl... decls) {
@@ -284,6 +307,25 @@ public class ClavaFactory {
     public DummyDecl dummyDecl(ClavaNode node) {
         return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
                 .setLocation(node.getLocation());
+    }
+
+    public DummyNamedDecl dummyNamedDecl(String declName) {
+        DataStore data = newDeclDataStore()
+                .put(DummyDecl.DUMMY_CONTENT, declName)
+                .put(NamedDecl.DECL_NAME, declName);
+
+        return new DummyNamedDecl(data, Collections.emptyList());
+    }
+
+    public DummyValueDecl dummyValueDecl(String declName, Type type) {
+        DataStore data = newDeclDataStore()
+                .put(DummyDecl.DUMMY_CONTENT, declName)
+                .put(NamedDecl.DECL_NAME, declName)
+                .put(ValueDecl.TYPE, type);
+
+        return new DummyValueDecl(data, Collections.emptyList());
+        // return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
+        // .setLocation(node.getLocation());
     }
 
     /// STMTS

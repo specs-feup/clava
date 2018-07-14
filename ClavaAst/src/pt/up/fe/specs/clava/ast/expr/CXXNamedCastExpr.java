@@ -57,6 +57,7 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // System.out.println("BEFORE:" + cxxNamedCastExprdata.getTypeAsWritten());
         // System.out.println("AFTER:" + getTypeCode());
         // HACK: To deal with _Bool in C++ files while it is not properly addressed
+        // ExplicitCast has the attribute 'typeAsWritten', which should be used here instead of getType()
         String typeCode = cxxNamedCastExprdata.getTypeAsWritten();
         if (typeCode.equals("_Bool") && getAncestorTry(TranslationUnit.class)
                 .map(tu -> tu.get(TranslationUnit.LANGUAGE).get(Language.C_PLUS_PLUS)).orElse(false)) {
@@ -66,7 +67,8 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // String typeCode = getTypeCode();
         // System.out.println("SUB EXPR TYPE:" + getSubExpr().toTree());
         // System.out.println("VALUE DECL TYPE:" + ((DeclRefExpr) getSubExpr()).getValueDeclType());
-
+        // System.out.println("TYPE CODE:" + typeCode);
+        // System.out.println("TYPE AS WRITTEN:" + cxxNamedCastExprdata.getTypeAsWritten());
         code.append(cxxNamedCastExprdata.getCastName());
         // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
         code.append("<").append(typeCode).append(">");

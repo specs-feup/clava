@@ -28,6 +28,12 @@ import pt.up.fe.specs.clava.language.CastKind;
  */
 public abstract class ExplicitCastExpr extends CastExpr {
 
+    /// DATAKEY BEGIN
+
+    // public final static DataKey<Type> TYPE_AS_WRITTEN = KeyFactory.object("typeAsWritten", Type.class);
+
+    /// DATAKEY END
+
     public ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
 

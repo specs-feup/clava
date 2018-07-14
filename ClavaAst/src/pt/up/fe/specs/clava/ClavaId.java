@@ -45,6 +45,7 @@ public class ClavaId {
         extendedId = id;
         nextType = type;
         this.next = next;
+
     }
 
     public String getId() {

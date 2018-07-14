@@ -94,6 +94,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
     }
 
     private DataStore dataI;
+    private boolean disableModification;
 
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
         this(new LegacyToDataStore().setNodeInfo(nodeInfo).getData(), children);
@@ -103,10 +104,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         super(children);
 
         this.dataI = dataI;
+        disableModification = false;
 
         // Set definition of DataStore
         this.dataI.setDefinition(getClass());
 
+    }
+
+    protected void setDisableModification(boolean disableModification) {
+        this.disableModification = disableModification;
     }
 
     protected String getTab() {
@@ -566,6 +572,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param value
      */
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
+        if (disableModification) {
+            SpecsLogs.msgWarn("Could not perform set: this node is a view, modifications are disabled");
+            return this;
+        }
+
         // If value is null, remove value, if present
         if (value == null) {
             if (dataI.hasValue(key)) {

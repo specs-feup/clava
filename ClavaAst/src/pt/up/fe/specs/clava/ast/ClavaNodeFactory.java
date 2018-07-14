@@ -141,7 +141,6 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
-import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
@@ -1116,19 +1115,25 @@ public class ClavaNodeFactory {
         return new UnaryOperator(opcode, position, exprData, info, subExpr);
     }
 
-    public static DeclRefExpr declRefExpr(String refName, Type type) {
-        return declRefExpr(refName, ValueKind.getDefault(), type, null);
-    }
+    // public static DeclRefExpr declRefExpr(String refName, Type type) {
+    // ExprData exprData = new ExprData(type, ValueKind.getDefault());
+    //
+    // String qualifier = "";
+    //
+    // BareDeclData declData = BareDeclData.newInstance(refName);
+    //
+    // return declRefExpr(qualifier, Collections.emptyList(), declData, null, exprData, ClavaNodeInfo.undefinedInfo());
+    // }
 
-    public static DeclRefExpr declRefExpr(String refName, ValueKind valueKind, Type type, ClavaNodeInfo info) {
-        ExprData exprData = new ExprData(type, valueKind);
-
-        String qualifier = "";
-
-        BareDeclData declData = BareDeclData.newInstance(refName);
-
-        return declRefExpr(qualifier, Collections.emptyList(), declData, null, exprData, info);
-    }
+    // public static DeclRefExpr declRefExpr(String refName, Type type, ClavaNodeInfo info) {
+    // ExprData exprData = new ExprData(type, ValueKind.getDefault());
+    //
+    // String qualifier = "";
+    //
+    // BareDeclData declData = BareDeclData.newInstance(refName);
+    //
+    // return declRefExpr(qualifier, Collections.emptyList(), declData, null, exprData, info);
+    // }
 
     /**
      *
@@ -1143,12 +1148,12 @@ public class ClavaNodeFactory {
      * @param info
      * @return
      */
-    public static DeclRefExpr declRefExpr(String qualifier, List<String> templateArguments, BareDeclData declData,
-            BareDeclData foundDeclData, ExprData exprData,
-            ClavaNodeInfo info) {
-
-        return new DeclRefExpr(qualifier, templateArguments, declData, foundDeclData, exprData, info);
-    }
+    // public static DeclRefExpr declRefExpr(String qualifier, List<String> templateArguments, BareDeclData declData,
+    // BareDeclData foundDeclData, ExprData exprData,
+    // ClavaNodeInfo info) {
+    //
+    // return new DeclRefExpr(qualifier, templateArguments, declData, foundDeclData, exprData, info);
+    // }
 
     public static ExprWithCleanups exprWithCleanups(ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {

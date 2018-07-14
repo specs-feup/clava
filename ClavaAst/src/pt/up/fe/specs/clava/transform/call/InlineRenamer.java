@@ -256,8 +256,8 @@ public class InlineRenamer {
         stmts.set(returnIndex, declStmt);
 
         // Save new name expression in callReplacement
-        callReplacement = ClavaNodeFactory.declRefExpr(returnVarName, retValue.getType());
-
+        // callReplacement = ClavaNodeFactory.declRefExpr(returnVarName, retValue.getType());
+        callReplacement = factory.declRefExpr(returnVarName, retValue.getType());
         // throw new RuntimeException("Not supported yet when function to inline has a return statement");
     }
 

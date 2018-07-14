@@ -150,7 +150,7 @@ public class CXXMemberCallExpr extends CallExpr {
     }
 
     @Override
-    protected Optional<FunctionDecl> getFunctionDecl() {
+    public Optional<FunctionDecl> getFunctionDecl() {
 
         // Get base
         Expr base = getBase();

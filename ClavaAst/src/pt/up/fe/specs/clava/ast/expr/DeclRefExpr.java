@@ -14,23 +14,24 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.language.CXXOperator;
@@ -44,30 +45,102 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
  *
  */
 public class DeclRefExpr extends Expr implements Nameable {
+
+    // DATAKEY BEGIN
+
+    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
+    public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
+            .generic("templateArguments", (List<String>) new ArrayList<String>())
+            .setDefault(() -> new ArrayList<>());
+
+    public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
+
+    public final static DataKey<String> DECL_ID = KeyFactory.string("declId");
+
+    // public final static DataKey<ValueDecl> DECL = KeyFactory.object("decl", ValueDecl.class);
+
+    // DATAKEY END
+
     private final String qualifier;
     private final List<String> templateArguments;
-    private final BareDeclData declData;
-    private final BareDeclData foundDeclData;
+    // private final BareDeclData declData;
 
-    public DeclRefExpr(String qualifier, List<String> templateArguments, BareDeclData declData,
-            BareDeclData foundDeclData,
-            ExprData exprData, ClavaNodeInfo info) {
+    // private boolean hasUniqueDeclaration;
+    // private final BareDeclData foundDeclData;
 
-        super(exprData, info, Collections.emptyList());
+    public DeclRefExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
 
-        this.qualifier = qualifier;
-        this.templateArguments = templateArguments;
-        this.declData = declData;
-        this.foundDeclData = foundDeclData;
-
+        qualifier = data.get(QUALIFIER);
+        templateArguments = get(TEMPLATE_ARGUMENTS);
+        // declData = null;
+        // foundDeclData = null;
+        // hasUniqueDeclaration = false;
+        // System.out.println("DECL REF CHILDREN:" + children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DeclRefExpr(qualifier, new ArrayList<>(templateArguments), declData.copy(), foundDeclData,
-                getExprData(),
-                getInfo());
+    // public ValueDecl getDeclaration() {
+    // ClavaNode child = getChild(0);
+    //
+    // if (child instanceof ValueDecl) {
+    // return (ValueDecl) child;
+    // }
+    //
+    // return getFactory().dummyValueDecl("dummy decl name", getFactory().dummyType("dummy type"));
+    // }
+
+    /**
+     * A version of the declaration that is "owned" by this node. Can set the parameters of the declaration without
+     * changing other nodes.
+     * 
+     * @return
+     */
+    /*
+    private ValueDecl getUniqueDeclaration() {
+        if (hasUniqueDeclaration) {
+            return getChild(ValueDecl.class, 0);
+        }
+    
+        // Copy current declaration
+        ValueDecl declarationCopy = (ValueDecl) getDeclaration().copy();
+    
+        // Replace declaration
+        setChild(0, declarationCopy);
+    
+        // Set flag
+        hasUniqueDeclaration = true;
+    
+        return declarationCopy;
     }
+    */
+
+    // public NamedDecl getFoundDeclaration() {
+    // return getChild(NamedDecl.class, 1);
+    // }
+
+    // public DeclRefExpr(String qualifier, List<String> templateArguments, BareDeclData declData,
+    // BareDeclData foundDeclData,
+    // ExprData exprData, ClavaNodeInfo info) {
+    //
+    // this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), Collections.emptyList());
+    // // super(exprData, info, Collections.emptyList());
+    //
+    // set(QUALIFIER, qualifier);
+    // set(TEMPLATE_ARGUMENTS, templateArguments);
+    // // this.qualifier = qualifier;
+    // // this.templateArguments = templateArguments;
+    // // this.declData = declData;
+    // // this.foundDeclData = foundDeclData;
+    //
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DeclRefExpr(qualifier, new ArrayList<>(templateArguments), declData.copy(), foundDeclData,
+    // getExprData(),
+    // getInfo());
+    // }
 
     @Override
     public String getCode() {
@@ -102,32 +175,38 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     }
 
-    @Override
-    public String toContentString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(super.toContentString());
-        builder.append(", refType:" + declData.getValueDeclType());
-        builder.append(", refName:" + getRefName());
+    // @Override
+    // public String toContentString() {
+    // StringBuilder builder = new StringBuilder();
+    // builder.append(super.toContentString());
+    // builder.append(", refType:" + declData.getValueDeclType());
+    // builder.append(", refName:" + getRefName());
+    //
+    // return builder.toString();
+    // }
 
-        return builder.toString();
-    }
-
-    public String getValueDeclType() {
-        return declData.getValueDeclType().get(0);
-    }
+    // public String getValueDeclType() {
+    // return getDeclaration().getType();
+    // // return declData.getValueDeclType().get(0);
+    // }
 
     public String getRefName() {
-        return declData.getDeclName();
+        return get(DECL_NAME);
+        // return getDeclaration().getDeclName();
+        // return declData.getDeclName();
     }
 
     public void setRefName(String refName) {
-        declData.setDeclName(refName);
+        set(DECL_NAME, refName);
+        // getUniqueDeclaration().setDeclName(refName);
+        // declData.setDeclName(refName);
     }
 
     /**
      * 
      * @return
      */
+
     public Optional<? extends Decl> getDeclaration() {
 
         // If no id, return
@@ -143,7 +222,8 @@ public class DeclRefExpr extends Expr implements Nameable {
         }
         // System.out.println("DECL DATA:" + declData);
         // System.out.println("ID SUFFIX:" + idSuffix);
-        String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
+        // String varDeclId = "0x" + Long.toHexString(declData.getPointer()) + idSuffix.get();
+        String varDeclId = get(DECL_ID);
         Optional<ClavaNode> declTry = getApp().getNodeTry(varDeclId);
 
         // If not present, probably declaration is outside of parsed files
@@ -181,6 +261,9 @@ public class DeclRefExpr extends Expr implements Nameable {
         }
 
         Decl decl = declTry.get();
+
+        // Decl decl = getDeclaration();
+
         /*
         Optional<String> idSuffix = getInfo().getIdSuffix();
         if (!idSuffix.isPresent()) {
