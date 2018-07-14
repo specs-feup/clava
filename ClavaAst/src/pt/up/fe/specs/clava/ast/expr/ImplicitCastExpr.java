@@ -64,10 +64,10 @@ public class ImplicitCastExpr extends CastExpr {
     /**
      * Implicit cast overrides getType() and returns the type of sub expression.
      */
-    @Override
-    public Type getType() {
-        return getSubExpr().getType();
-    }
+    // @Override
+    // public Type getType() {
+    // return getSubExpr().getType();
+    // }
 
     @Override
     public Type getCastType() {
