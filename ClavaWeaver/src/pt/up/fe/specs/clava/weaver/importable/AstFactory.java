@@ -107,7 +107,10 @@ public class AstFactory {
         boolean isNrvo = false;
 
         Type initType = (Type) init.getTypeImpl().getNode();
-
+        // System.out.println("INIT JP:" + init.getClass());
+        // System.out.println("INIT expr:" + initExpr);
+        // System.out.println("INIT expr TYPE:" + initExpr.getType());
+        // System.out.println("INIT TYPE:" + initType);
         DataStore config = CxxWeaver.getCxxWeaver().getConfig();
 
         // Check if C or C++
@@ -210,8 +213,8 @@ public class AstFactory {
 
         Type returnType = (Type) typeJp.getNode();
 
-        DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(functionName, ValueKind.L_VALUE, returnType,
-                ClavaNodeInfo.undefinedInfo());
+        // DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(functionName, returnType);
+        DeclRefExpr declRef = CxxWeaver.getFactory().declRefExpr(functionName, returnType);
 
         List<Type> argTypes = Arrays.stream(args)
                 .map(arg -> ((Typable) arg.getNode()).getType())

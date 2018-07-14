@@ -365,6 +365,9 @@ public class CallWrap {
     }
 
     private FunctionType getFunctionType() {
+        // System.out.println(
+        // "FUNCTION TYPE:"
+        // + cxxCall.getNode().getCalleeDeclRef().getType().toTry(FunctionType.class).get().getCode());
         return cxxCall.getNode().getCalleeDeclRef().getType().toTry(FunctionType.class).get();
     }
 
@@ -399,7 +402,8 @@ public class CallWrap {
         if (isVoid) {
             wrapperStmts.add(CxxWeaver.getFactory().exprStmt(callExpr));
         } else {
-            DeclRefExpr varAssigned = ClavaNodeFactory.declRefExpr(varName, returnType);
+            // DeclRefExpr varAssigned = ClavaNodeFactory.declRefExpr(varName, returnType);
+            DeclRefExpr varAssigned = factory.declRefExpr(varName, returnType);
             ExprStmt assignment = ClavaNodeFactory.exprStmtAssign(varAssigned, callExpr, returnType);
             wrapperStmts.add(assignment);
         }

@@ -210,6 +210,7 @@ public class CxxStatement extends AStatement {
         }
 
         // Filter DeclRefExprs that do not have DeclaratorDecl as decls
+
         Optional<? extends Decl> declTry = declRefExpr.getDeclaration();
         if (!declTry.isPresent()) {
             SpecsLogs.msgInfo("Could not find declaration for reference " + declRefExpr.getRefName() + " at "
@@ -220,7 +221,10 @@ public class CxxStatement extends AStatement {
         // declRefExpr.getDeclaration()
         // .orElseThrow(() -> new RuntimeException("Could not find declaration of " + declRefExpr.getExprData));
         // if (!(declRefExpr.getDeclaration() instanceof DeclaratorDecl)) {
+
+        // Decl decl = declRefExpr.getDeclaration();
         if (!(declTry.get() instanceof DeclaratorDecl)) {
+            // if (!(decl instanceof DeclaratorDecl)) {
             return false;
         }
 
