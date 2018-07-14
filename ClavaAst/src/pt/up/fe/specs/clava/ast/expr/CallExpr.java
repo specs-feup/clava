@@ -354,13 +354,23 @@ public class CallExpr extends Expr {
      * Returns the function declaration associated with this call.
      * 
      * <p>
-     * No guarantees are made regarding if it is the declaration or definition of the function. Usually, it returns the
-     * last Decl that is parsed in the code (declaration or definition).
+     * No guarantees are made regarding if it is the declaration or definition of the function. First tries to return
+     * the function definition, and if not found, the function declaration.
      * 
      * @return the function associated with this call
      */
     // public Optional<FunctionDecl> getFunction() {
-    // return getFunctionDecl();
+    // Optional<FunctionDecl> definition = getDefinition();
+    // if (definition.isPresent()) {
+    // return definition;
+    // }
+    //
+    // Optional<FunctionDecl> declaration = getDeclaration();
+    // if (declaration.isPresent()) {
+    // return declaration;
+    // }
+    //
+    // return Optional.empty();
     // }
 
 }

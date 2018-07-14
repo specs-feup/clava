@@ -191,6 +191,9 @@ public class CXXMethodDecl extends FunctionDecl {
 
     @Override
     public FunctionProtoType getFunctionType() {
+        // System.out.println("CXX METHOD DECL:" + getId());
+        // System.out.println("CXX METHOD DECL FUNCTION TYPE:" + super.getFunctionType().getId());
+        // System.out.println("CXX METHOD DECL FUNCTION TYPE IS CONST:" + super.getFunctionType().isConst());
         return (FunctionProtoType) super.getFunctionType();
     }
 
@@ -210,7 +213,18 @@ public class CXXMethodDecl extends FunctionDecl {
         String namespace = getMethodData().getNamespace();
         namespace = namespace == null ? "" : namespace + "::";
 
+        namespace = namespace + getRecordDecl().getDeclName() + "::";
+
         String signature = namespace + baseSignature;
+        // System.out.println("CXX METHOD DECL:" + this);
+        // System.out.println("RECORD TYPE:" + getRecordDecl().getType());
+        // System.out.println("METHOD TYPE:" + getType().getId());
+        // System.out.println("FUNCTION TYPE:" + getFunctionType().getId());
+        // System.out.println("IS CONST:" + getFunctionType().isConst());
+        // Check qualifiers
+        if (getFunctionType().isConst()) {
+            signature = signature + " const";
+        }
 
         return signature;
     }
