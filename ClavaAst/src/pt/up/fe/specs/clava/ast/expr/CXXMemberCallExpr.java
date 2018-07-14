@@ -151,6 +151,7 @@ public class CXXMemberCallExpr extends CallExpr {
 
     @Override
     public Optional<FunctionDecl> getFunctionDecl() {
+        // TODO: Replace with Clang method getMethodDecl () const, when refactoring to new format
 
         // Get base
         Expr base = getBase();
@@ -183,7 +184,6 @@ public class CXXMemberCallExpr extends CallExpr {
         */
 
         DeclRefExpr rootDeclRef = base.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
-
         if (rootDeclRef == null) {
             ClavaLog.warning("Expected a DeclRefExpr, got:\n" + base);
             return Optional.empty();
@@ -198,12 +198,19 @@ public class CXXMemberCallExpr extends CallExpr {
         // : initExprType.desugarTo(RecordType.class);
         //
 
-        if (!(rootDeclRef.getType() instanceof RecordType)) {
-            ClavaLog.warning("Expected a RecordType, got:\n" + rootDeclRef.getType());
+        Type rootDeclRefType = rootDeclRef.getType();
+        if (!(rootDeclRefType instanceof RecordType)) {
+            rootDeclRefType = rootDeclRefType.desugar();
+        }
+
+        if (!(rootDeclRefType instanceof RecordType)) {
+            ClavaLog.warning("Expected a RecordType, got:\n" + rootDeclRef.getType().toTree());
             return Optional.empty();
         }
 
-        RecordType recordType = (RecordType) rootDeclRef.getType();
+        RecordType recordType = (RecordType) rootDeclRefType;
+
+        // System.out.println("BASE RECORD:" + recordType);
 
         return getFunctionDeclFromRecord(recordType);
         /*
@@ -253,6 +260,9 @@ public class CXXMemberCallExpr extends CallExpr {
         // Choose the method with same argument types
         for (CXXMethodDecl methodDecl : methods) {
             FunctionProtoType functionType = methodDecl.getFunctionType();
+
+            // Same constness
+            // if(functionType.isConst() != getFunctionType().is)
 
             List<Type> paramTypes = functionType.getParamTypes();
 
