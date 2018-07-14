@@ -90,6 +90,9 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, parserData);
 
+        data.add(FunctionType.IS_CONST, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionType.IS_VOLATILE, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionType.IS_RESTRICT, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionType.NO_RETURN, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionType.PRODUCES_RESULT, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionType.HAS_REG_PARM, LineStreamParsers.oneOrZero(lines));
@@ -107,9 +110,9 @@ public class TypeDataParser {
 
         data.add(FunctionProtoType.HAS_TRAILING_RETURNS, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionProtoType.IS_VARIADIC, LineStreamParsers.oneOrZero(lines));
-        data.add(FunctionProtoType.IS_CONST, LineStreamParsers.oneOrZero(lines));
-        data.add(FunctionProtoType.IS_VOLATILE, LineStreamParsers.oneOrZero(lines));
-        data.add(FunctionProtoType.IS_RESTRICT, LineStreamParsers.oneOrZero(lines));
+        // data.add(FunctionProtoType.IS_CONST, LineStreamParsers.oneOrZero(lines));
+        // data.add(FunctionProtoType.IS_VOLATILE, LineStreamParsers.oneOrZero(lines));
+        // data.add(FunctionProtoType.IS_RESTRICT, LineStreamParsers.oneOrZero(lines));
 
         data.add(FunctionProtoType.REFERENCE_QUALIFIER,
                 LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
