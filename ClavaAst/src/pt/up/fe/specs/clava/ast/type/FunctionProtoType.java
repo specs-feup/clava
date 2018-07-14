@@ -35,11 +35,11 @@ public class FunctionProtoType extends FunctionType {
 
     public final static DataKey<Boolean> IS_VARIADIC = KeyFactory.bool("isVariadic");
 
-    public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
-
-    public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
-
-    public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
+    // public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
+    //
+    // public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
+    //
+    // public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
 
     public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
             .enumeration("referenceQualifier", ReferenceQualifier.class);
@@ -70,6 +70,7 @@ public class FunctionProtoType extends FunctionType {
 
         // Add const/volatile
         if (get(IS_CONST)) {
+            System.out.println("CONSTTTT");
             code.append(" const");
         }
         if (get(IS_VOLATILE)) {

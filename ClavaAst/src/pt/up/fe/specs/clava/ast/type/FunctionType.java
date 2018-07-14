@@ -36,6 +36,12 @@ public abstract class FunctionType extends Type {
 
     /// DATAKEYS BEGIN
 
+    public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
+
+    public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
+
+    public final static DataKey<Boolean> IS_RESTRICT = KeyFactory.bool("isRestrict");
+
     /**
      * @deprecated No need to be stored in a field, can be calculated. Use FunctionType.hasNoReturn() instead
      */
@@ -68,6 +74,11 @@ public abstract class FunctionType extends Type {
         }
 
         return getChild(Type.class, indexReturnType);
+    }
+
+    @Override
+    public boolean isConst() {
+        return get(IS_CONST);
     }
 
     /**
