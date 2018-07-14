@@ -28,4 +28,19 @@ aspectdef CallTest
 		println("Def:" + $call.definition.line);
 	end
 	
+	var functionRegex = /function*/;
+	select call end
+	apply
+		if(!functionRegex.test($call.name)) {
+			continue;
+		}
+		println("function decl of call is definition?: " + $call.function.hasDefinition);
+	end
+	
+	select function{"main"}.call{"printf"} end
+	apply
+		println("printf call has function decl?: " + ($call.function !== undefined));
+		//println("function of printf call has definition?: " + $call.function.hasDefinition);
+		break;
+	end
 end

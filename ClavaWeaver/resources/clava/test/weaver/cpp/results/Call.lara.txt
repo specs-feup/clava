@@ -2,5 +2,10 @@ foo original:foo(1, 2)
 foo new expr arg:foo(2, 2)
 foo new string arg:foo(2, 10)
 foo op arg:foo(2, 2 + 3)
-Decl:7
-Def:10
+Decl:9
+Def:12
+function decl of call is definition?: false
+function decl of call is definition?: true
+function decl of call is definition?: true
+function decl of call is definition?: false
+printf call has function decl?: false
