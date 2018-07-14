@@ -190,6 +190,10 @@ void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
 void clava::ClavaDataDumper::DumpFunctionTypeData(const FunctionType *T) {
     DumpTypeData(T);
 
+    clava::dump(T->isConst());
+    clava::dump(T->isVolatile());
+    clava::dump(T->isRestrict());
+
     auto extInfo = T->getExtInfo();
     clava::dump(extInfo.getNoReturn());
     clava::dump(extInfo.getProducesResult());
@@ -209,9 +213,9 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
     clava::dump(info.HasTrailingReturn);
     clava::dump(info.Variadic);
 
-    clava::dump(T->isConst());
-    clava::dump(T->isVolatile());
-    clava::dump(T->isRestrict());
+    //clava::dump(T->isConst());
+    //clava::dump(T->isVolatile());
+    //clava::dump(T->isRestrict());
     clava::dump(clava::REFERENCE_QUALIFIER[info.RefQualifier]);
 
     clava::dump(clava::EXCEPTION_SPECIFICATION_TYPE[info.ExceptionSpec.Type]);
