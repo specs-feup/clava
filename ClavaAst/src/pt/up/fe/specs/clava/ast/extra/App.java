@@ -617,6 +617,8 @@ public class App extends ClavaNode {
                 // Filter by type
                 // .filter(fdecl -> fdecl.getFunctionType().getCode().equals(functionType.getCode()))
                 .filter(fdecl -> fdecl.getFunctionType().equals(functionType))
+                // Filter by const
+                .filter(fdecl -> fdecl.getFunctionType().isConst() == functionType.isConst())
                 .findFirst();
 
         // Store return in cache
