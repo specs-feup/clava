@@ -195,7 +195,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         Type oldParsingType = getTypesMap().get(node.getId());
         Type nodeType = getOriginalTypes().get(typable.getType().getId());
 
-        if (nodeType != oldParsingType) {
+        if (oldParsingType != null && nodeType != oldParsingType) {
             if (SpecsSystem.isDebug()) {
                 SpecsLogs.msgWarn("Current node type different from expected type:\nExpected type:" + oldParsingType
                         + "\nCurrent type:" + nodeType);
