@@ -43,11 +43,18 @@ public class AstParser {
 
     private final BufferedStringBuilder dumpFile;
 
+    private final String customSet;
+
+    public AstParser(File dumpFile) {
+        this(dumpFile, null);
+    }
+
     /**
      * Creates a Parser that uses System.err as the default message stream.
      */
-    public AstParser(File dumpFile) {
+    public AstParser(File dumpFile, String customSet) {
         this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
+        this.customSet = customSet;
     }
 
     public AstParser() {
@@ -113,7 +120,7 @@ public class AstParser {
 
         List<ClangNode> nodes = new ArrayList<>();
 
-        String currentSet = null;
+        String currentSet = customSet;
 
         // Process Clang dump line-by-line
         while (lineReader.hasNextLine()) {

@@ -86,6 +86,9 @@ public class ClangStreamParser {
         // MultiMap<String, String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
         Set<String> topLevelTypes = data.get(ClangParserKeys.TOP_LEVEL_TYPE_IDS);
         Set<String> topLevelAttributes = data.get(ClangParserKeys.TOP_LEVEL_ATTR_IDS);
+
+        // Set<String> allDecls = data.get(ClangParserKeys.ALL_DECLS_IDS);
+        // System.out.println("ALL DECLS:" + allDecls);
         // Separate into translation units?
 
         // Parse top-level decls

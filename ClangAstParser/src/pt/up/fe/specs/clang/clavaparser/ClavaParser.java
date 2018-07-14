@@ -308,7 +308,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("IntegerLiteral", IntegerLiteralParser::new);
         converter.put("CXXFunctionalCastExpr", CXXFunctionalCastExprParser::new);
         converter.put("UnaryOperator", UnaryOperatorParser::new);
-        converter.put("DeclRefExpr", DeclRefExprParser::new);
+        // converter.put("DeclRefExpr", DeclRefExprParser::new);
         converter.put("ExprWithCleanups", ExprWithCleanupsParser::new);
         converter.put("CXXConstructExpr", CXXConstructExprParser::new);
         converter.put("MaterializeTemporaryExpr", MaterializeTemporaryExprParser::new);

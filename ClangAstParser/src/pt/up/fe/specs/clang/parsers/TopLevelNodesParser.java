@@ -31,6 +31,7 @@ public class TopLevelNodesParser {
     private static final String PARSER_ID_DECLS = "<Top Level Nodes>";
     private static final String PARSER_ID_TYPES = "<Top Level Types>";
     private static final String PARSER_ID_ATTR = "<Top Level Attributes>";
+    // private static final String PARSER_ID_ALL_DECLS = "<All Decls>";
 
     public static Collection<LineStreamWorker> getWorkers() {
         List<LineStreamWorker> workers = new ArrayList<>();
@@ -38,6 +39,7 @@ public class TopLevelNodesParser {
         workers.add(newWorker(PARSER_ID_DECLS, ClangParserKeys.TOP_LEVEL_DECL_IDS));
         workers.add(newWorker(PARSER_ID_TYPES, ClangParserKeys.TOP_LEVEL_TYPE_IDS, false));
         workers.add(newWorker(PARSER_ID_ATTR, ClangParserKeys.TOP_LEVEL_ATTR_IDS));
+        // workers.add(newWorker(PARSER_ID_ALL_DECLS, ClangParserKeys.ALL_DECLS_IDS, false));
 
         return workers;
     }

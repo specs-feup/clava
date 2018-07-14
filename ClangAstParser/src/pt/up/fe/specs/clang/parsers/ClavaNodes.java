@@ -130,4 +130,18 @@ public class ClavaNodes {
         return (Decl) node;
     }
 
+    /*
+    public static ValueDecl getValueDecl(DataStore data, String parsedDeclId) {
+        Decl decl = getDecl(data, parsedDeclId);
+    
+        if (decl instanceof ValueDecl) {
+            return (ValueDecl) decl;
+        }
+    
+        // Create dummy
+        return decl.getFactoryWithNode().dummyValueDecl("dummy value decl",
+                decl.getFactory().dummyType("type of dummy value decl"));
+    }
+    */
+
 }

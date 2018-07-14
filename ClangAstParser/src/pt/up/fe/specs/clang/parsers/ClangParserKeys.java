@@ -25,6 +25,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
@@ -59,6 +60,10 @@ public interface ClangParserKeys {
 
     DataKey<Map<File, Language>> FILE_LANGUAGE_DATA = KeyFactory
             .generic("clang_parser_stream_file_language_data", () -> new HashMap<>());
+
+    DataKey<Map<String, ClangNode>> SYSTEM_HEADERS_CLANG_NODES = KeyFactory
+            .generic("clang_parser_stream_system_headers_clang_nodes",
+                    (Map<String, ClangNode>) new HashMap<String, ClangNode>());
 
     /**
      * Enables debug prints.

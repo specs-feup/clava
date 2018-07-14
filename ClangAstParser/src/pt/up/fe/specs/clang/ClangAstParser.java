@@ -269,6 +269,12 @@ public class ClangAstParser {
         // List<ClangNode> clangDump = new AstParser().parse(output.getStdOut());
         List<ClangNode> clangDump = output.getStdOut();
 
+        // Top-level Clang Nodes
+        // Map<String, ClangNode> topLevelClangNodes = clangDump.stream()
+        // .collect(Collectors.toMap(ClangNode::getExtendedId, ClangNode::getThis));
+        // System.out.println("TOP LEVEL CLANG NODES:" + topLevelClangNodes.keySet());
+        // System.out.println("TOP LEVEL CLANG NODES:" + topLevelClangNodes);
+
         // Add Source Ranges
         addSourceRanges(clangDump, stderr);
 
@@ -312,7 +318,7 @@ public class ClangAstParser {
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
-                newNodes);
+                newNodes, clangDump);
 
         return new ClangRootNode(clangRootData, clangDump);
     }

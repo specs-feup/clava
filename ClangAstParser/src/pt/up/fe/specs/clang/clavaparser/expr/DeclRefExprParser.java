@@ -13,24 +13,26 @@
 
 package pt.up.fe.specs.clang.clavaparser.expr;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
+/**
+ * @deprecated disabled
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class DeclRefExprParser extends AClangNodeParser<DeclRefExpr> {
 
     public DeclRefExprParser(ClangConverterTable converter) {
@@ -52,7 +54,8 @@ public class DeclRefExprParser extends AClangNodeParser<DeclRefExpr> {
         String qualifier = getDeclRefExprQualifiers().get(node.getExtendedId());
 
         // Check if has template arguments
-        List<String> templateArguments = getStdErr().get(StreamKeys.TEMPLATE_ARGUMENTS).get(node.getExtendedId());
+        List<String> templateArguments = new ArrayList<>(); // DISABLED
+        // List<String> templateArguments = getStdErr().get(StreamKeys.TEMPLATE_ARGUMENTS).get(node.getExtendedId());
         // boolean hasTemplateArgs = getClangRootData().hasTemplateArguments(node.getExtendedId());
 
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
@@ -92,21 +95,24 @@ public class DeclRefExprParser extends AClangNodeParser<DeclRefExpr> {
         */
         List<ClavaNode> children = parseChildren(node);
 
+        throw new RuntimeException("Not being used");
+        /*
         if (children.isEmpty()) {
             // return ClavaNodeFactory.declRefExpr(qualifier, hasTemplateArgs, refType, declAddress, refName, type2,
             // templateString, valueKind, type, info(node));
             return ClavaNodeFactory.declRefExpr(qualifier, templateArguments, declData, foundDeclData, exprData,
                     info(node));
         }
-
+        
         Preconditions.checkArgument(node.getChildren().size() == 1, "Expected only one child:" + node);
-
+        
         if (!(children.get(0) instanceof NullNode)) {
             throw new RuntimeException("Do not know yet what to do when child is not NullNode");
         }
-
+        
         return ClavaNodeFactory.declRefExpr(qualifier, templateArguments, declData, foundDeclData, exprData,
                 info(node));
+        */
 
         // return ClavaNodeFactory.declRefExpr(qualifier, hasTemplateArgs, refType, declAddress, refName, type2,
         // templateString, valueKind, type, info(node));

@@ -285,7 +285,7 @@ public class AstDumpParser implements ClangParser {
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
-                newNodes);
+                newNodes, clangDump);
 
         return new ClangRootNode(clangRootData, clangDump);
     }

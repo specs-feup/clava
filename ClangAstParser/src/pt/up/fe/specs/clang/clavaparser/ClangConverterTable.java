@@ -23,8 +23,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clavaparser.extra.UndefinedParser;
@@ -41,7 +39,7 @@ public class ClangConverterTable implements AutoCloseable {
     private static final Set<String> PARSED_NODES = Collections.synchronizedSet(new LinkedHashSet<>());
 
     // This is currently not working
-    private static final boolean CACHE_PARSED_NODES = false;
+    // private static final boolean CACHE_PARSED_NODES = false;
     private final Map<String, ClangNodeParser<?>> converter;
     // Maps types addresses to its types
     private Map<String, Type> originalTypes;
@@ -137,7 +135,7 @@ public class ClangConverterTable implements AutoCloseable {
         // Add node name
         PARSED_NODES.add(clangNode.getNodeName());
         totalParsedNodes++;
-
+        // System.out.println("PARSING " + clangNode.getExtendedId());
         // Check if parsed nodes contains a valid node
         ClavaNode newClavaNode = getClangRootData().getNewParsedNodes().get(clangNode.getExtendedId());
         if (newClavaNode != null && !(newClavaNode instanceof DummyNode)) {
@@ -163,8 +161,10 @@ public class ClangConverterTable implements AutoCloseable {
 
         }
 
-        // Before converting, check if the node has already been converted
         Optional<String> id = clangNode.getExtendedIdTry();
+
+        /*
+        // Before converting, check if the node has already been converted
         if (CACHE_PARSED_NODES) {
             if (id.isPresent()) {
                 ClavaNode parsedClavaNode = parsedNodes.get(id.get());
@@ -173,8 +173,9 @@ public class ClangConverterTable implements AutoCloseable {
                     // return parsedClavaNode.copy();
                 }
             }
-
+        
         }
+        */
 
         /*
         if (id.isPresent() && newParsedNodes.containsKey(id.get())) {
@@ -215,12 +216,12 @@ public class ClangConverterTable implements AutoCloseable {
             }
               */
             // Store node in map if it has an id
-            if (CACHE_PARSED_NODES) {
-                if (id.isPresent()) {
-                    ClavaNode previousClavaNode = parsedNodes.put(id.get(), clavaNode);
-                    Preconditions.checkArgument(previousClavaNode == null, "Expected node to not be in the table");
-                }
-            }
+            // if (CACHE_PARSED_NODES) {
+            // if (id.isPresent()) {
+            // ClavaNode previousClavaNode = parsedNodes.put(id.get(), clavaNode);
+            // Preconditions.checkArgument(previousClavaNode == null, "Expected node to not be in the table");
+            // }
+            // }
 
             return clavaNode;
         } catch (Throwable t) {
@@ -228,6 +229,10 @@ public class ClangConverterTable implements AutoCloseable {
                     + "\nContents: " + clangNode.getContentTry().orElse("<no content>");
             throw new RuntimeException(message, t);
         }
+    }
+
+    public ClavaNode getParsedNode(String id) {
+        return parsedNodes.get(id);
     }
 
     /*

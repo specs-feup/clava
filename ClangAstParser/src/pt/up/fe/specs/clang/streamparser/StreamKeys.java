@@ -188,7 +188,7 @@ public interface StreamKeys {
             .addKey(NUMBER_TEMPLATE_PARAMETERS)
             .addKey(NUMBER_TEMPLATE_ARGUMENTS)
             .addKey(NAMESPACE_ALIAS_PREFIX)
-            .addKey(TEMPLATE_ARGUMENTS)
+            // .addKey(TEMPLATE_ARGUMENTS)
             .addKey(FIELD_DECL_INFO)
             .addKey(NAMED_DECL_WITHOUT_NAME)
             // .addKey(CXX_METHOD_DECL_PARENT)

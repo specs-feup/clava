@@ -13,13 +13,16 @@
 
 package pt.up.fe.specs.clang.clavaparser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
@@ -27,6 +30,9 @@ import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.utils.Typable;
+import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T> {
@@ -53,7 +59,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
     @Override
     protected T parse(ClangNode node, StringParser parser) {
-
+        // System.out.println("PARSING " + node.getExtendedId());
         // Discard parser contents
         parser.clear();
 
@@ -69,14 +75,69 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         boolean isType = clavaNode instanceof Type;
         // Parse children
         // List<ClavaNode> children = parseChildren(node);
-        List<ClavaNode> children = parseChildren(node.getChildrenStream(), getClass().getSimpleName(), isType);
+
+        // childrenId.stream().map(getClangRootData().getAllClangNodes()::get)
+        // .collect(Collectors.toList());
+
+        List<ClangNode> childrenClangNodes = getChildrenClangNodes(clavaNode, node);
+
+        // List<ClavaNode> children = parseChildren(node.getChildrenStream(), getClass().getSimpleName(), isType);
+        List<ClavaNode> children = parseChildren(childrenClangNodes.stream(), getClass().getSimpleName(), isType);
+
+        /*
+        if (clavaNode instanceof DeclRefExpr) {
+            System.out.println(
+                    "VISITED CHILDREN:" + getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(node.getExtendedId()));
+        
+            for (String childId : getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(node.getExtendedId())) {
+                ClangNode childNode = getClangRootData().getAllClangNodes().get(childId);
+        
+                if (childId == null) {
+                    throw new RuntimeException("No ClangNode for id " + childNode);
+                }
+            }
+        
+        }
+        */
+        // .map(nodeId -> getParsedNode(nodeId))
+
+        // getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(node.getExtendedId()).stream()
+        // .map(nodeId -> getParsedNode(nodeId))
+        // List<ClavaNode> children = parseChildren(
+        // getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(node.getExtendedId()).stream(),
+        // getClass().getSimpleName(),
+        // isType);
+
+        // if (clavaNode instanceof DeclRefExpr) {
+        // System.out.println("DeclRefExpr CHILDREN:" + children);
+        // }
 
         children = pruneChildren(clavaNode, children);
 
         // getConfig().get(ClavaNode.CONTEXT)
         // .get(ClavaContext.FACTORY)
         // .newNode()
-        return clavaNode.newInstance(true, nodeClass, children);
+        /*
+        if (!clavaNode.getClass().equals(nodeClass)) {
+            System.out.println("CLAVA NODE CLASS:" + clavaNode.getClass());
+            System.out.println("NEW CLAVA NODE CLASS:" + nodeClass);
+        }
+        
+        clavaNode.setChildren(children);
+        
+        // Additional processing on the node itself
+        processNodeCopy(clavaNode);
+        
+        return nodeClass.cast(clavaNode);
+        */
+
+        T clavaNodeCopy = clavaNode.newInstance(true, nodeClass, children);
+
+        // Additional processing on the node itself
+        processNodeCopy(clavaNodeCopy);
+
+        return clavaNodeCopy;
+
         // return newClavaNode(nodeClass, clavaNode.getDataI(), children);
         /*
         if (clavaNode.hasDataI()) {
@@ -85,6 +146,119 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         
         return newClavaNode(nodeClass, clavaNode.getData(), children);
         */
+        /*
+        // Check if children has any dummy type
+        if (children.stream().filter(DummyNode.class::isInstance)
+                .findFirst().isPresent()) {
+            System.out.println("NODE " + clavaNode);
+            System.out.println("HAS DUMMY TYPES:" + children);
+        }
+        */
+    }
+
+    private void processNodeCopy(ClavaNode clavaNodeCopy) {
+
+        // In case node has a type, replace with old node type if the type or any of its descendants it a dummy node
+        if (clavaNodeCopy instanceof Typable) {
+            // if (clavaNodeCopy instanceof DeclRefExpr) {
+            // System.out.println("DECL REF EXPR TYPE BEFORE:" + ((Typable) clavaNodeCopy).getType());
+            // }
+
+            Typable typable = (Typable) clavaNodeCopy;
+
+            boolean replaceType = checkReplaceType(clavaNodeCopy);
+
+            if (replaceType) {
+                Type oldParsingType = getTypesMap().get(clavaNodeCopy.getId());
+                typable.setType(oldParsingType);
+                // System.out.println("FOUND DUMMY TYPE!");
+                // System.out.println("COPY ID:" + clavaNodeCopy.getId());
+                // System.out.println("TYPES MAP:" + getTypesMap());
+                // System.out.println("ORIGINAL TYPE:" + getOriginalTypes().get(typable.getType().getId()));
+                // System.out.println("TYPE:" + getTypesMap().get(clavaNodeCopy.getId()));
+                // System.out.println("NODE CLASS:" + clavaNodeCopy.getClass());
+            }
+
+            // if (clavaNodeCopy instanceof DeclRefExpr) {
+            // System.out.println("DECL REF EXPR TYPE AFTER:" + ((Typable) clavaNodeCopy).getType());
+            // }
+
+        }
+        // TODO Auto-generated method stub
+
+    }
+
+    private boolean checkReplaceType(ClavaNode node) {
+        Typable typable = (Typable) node;
+
+        // Verify if the type of the node is according to the expected type from old parsing
+        Type oldParsingType = getTypesMap().get(node.getId());
+        Type nodeType = getOriginalTypes().get(typable.getType().getId());
+
+        if (nodeType != oldParsingType) {
+            if (SpecsSystem.isDebug()) {
+                SpecsLogs.msgWarn("Current node type different from expected type:\nExpected type:" + oldParsingType
+                        + "\nCurrent type:" + nodeType);
+            }
+
+            return true;
+        }
+
+        boolean hasDummyNodes = typable.getType().getDescendantsAndSelfStream()
+                .filter(DummyNode.class::isInstance)
+                .findAny()
+                .isPresent();
+
+        if (hasDummyNodes) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<ClangNode> getChildrenClangNodes(ClavaNode clavaNode, ClangNode node) {
+        // In certain cases, use new nodes children
+        if (useNewNodesChildren(clavaNode)) {
+            // Get ClangNodes of the children visited by the new node
+            List<String> childrenId = getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(node.getExtendedId());
+
+            List<ClangNode> childrenClangNodes = new ArrayList<>();
+            for (String childId : childrenId) {
+                ClangNode clangNode = getClangRootData().getAllClangNodes().get(childId);
+
+                // If null, check if system header node
+                if (clangNode == null) {
+                    // System.out.println("SYSTEM HEADER IDS:"
+                    // + getStdErr().get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).keySet());
+                    // System.out.println("SYSTEM HEADER ID:" + childId);
+                    clangNode = getStdErr().get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).get(childId);
+                    // System.out.println("CLANG NODE:" + clangNode);
+                }
+
+                if (clangNode == null) {
+                    System.out.println("Null clang node for child id " + childId);
+                    continue;
+                }
+
+                childrenClangNodes.add(clangNode);
+
+            }
+
+            return childrenClangNodes;
+        }
+
+        // AST dumper children
+        return node.getChildren();
+    }
+
+    private boolean useNewNodesChildren(ClavaNode clavaNode) {
+        // For now, only use children from Clang AST dump
+        // Decl children replace BareDecl
+        // if (clavaNode instanceof DeclRefExpr) {
+        // return true;
+        // }
+
+        return false;
     }
 
     private List<ClavaNode> pruneChildren(ClavaNode clavaNode, List<ClavaNode> children) {

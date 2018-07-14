@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
+import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
@@ -132,4 +133,15 @@ public class ExprDataParser {
         return data;
     }
 
+    public static DataStore parseDeclRefExprData(LineStream lines, DataStore dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(DeclRefExpr.QUALIFIER, lines.nextLine());
+        data.add(DeclRefExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines));
+        data.add(DeclRefExpr.DECL_NAME, lines.nextLine());
+        data.add(DeclRefExpr.DECL_ID, lines.nextLine());
+        // data.add(DeclRefExpr.DECL, ClavaNodes.getValueDecl(dataStore, data.get(DeclRefExpr.DECL_ID)));
+
+        return data;
+    }
 }

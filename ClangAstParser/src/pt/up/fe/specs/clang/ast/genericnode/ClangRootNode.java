@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.ast.genericnode;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,6 +61,8 @@ public class ClangRootNode extends ClangNode {
 
         private final Map<String, ClavaNode> newParsedNodes;
 
+        private final Map<String, ClangNode> allClangNodes;
+
         // new ClangRootData(config, includes, clangTypes, nodeToTypes,
         // stderr.get(StdErrKeys.DECLREFEXPR_QUALS), typeQualifiers, hasTemplateArguments, isTemporary,
         // ompDirectives, enumToIntegerType, stderr.get(StdErrKeys.TEMPLATE_NAMES),
@@ -69,7 +72,8 @@ public class ClangRootNode extends ClangNode {
                 Map<String, String> nodeToTypes,
                 // Set<String> hasTemplateArguments,
                 Set<String> isTemporary, Map<String, OMPDirective> ompDirectives,
-                Map<String, String> enumToIntegerType, DataStore stdErr, Map<String, ClavaNode> newParsedNodes) {
+                Map<String, String> enumToIntegerType, DataStore stdErr, Map<String, ClavaNode> newParsedNodes,
+                List<ClangNode> topLevelNodes) {
 
             this.config = config;
             this.includes = includes;
@@ -81,6 +85,17 @@ public class ClangRootNode extends ClangNode {
             this.enumToIntegerType = enumToIntegerType;
             this.stdErr = stdErr;
             this.newParsedNodes = newParsedNodes;
+
+            // All clang nodes
+            allClangNodes = new HashMap<>();
+            for (ClangNode topLevelNode : topLevelNodes) {
+                topLevelNode.getDescendantsAndSelfStream()
+                        .forEach(clangNode -> allClangNodes.put(clangNode.getExtendedId(), clangNode));
+            }
+        }
+
+        public Map<String, ClangNode> getAllClangNodes() {
+            return allClangNodes;
         }
 
         public DataStore getStdErr() {
@@ -158,6 +173,10 @@ public class ClangRootNode extends ClangNode {
 
         // this.clangOutput = clangOutput;
         this.clangRootData = clangRootData;
+
+        // Map<String, ClangNode> allClangNodes = clangDump.stream().flatMap(ClangNode::getDescendantsAndSelfStream)
+        // .collect(Collectors.toMap(ClangNode::getExtendedId, ClangNode::getThis));
+        // System.out.println("ALL CLANG NODES:" + allClangNodes.keySet());
     }
 
     public static String getRootName() {

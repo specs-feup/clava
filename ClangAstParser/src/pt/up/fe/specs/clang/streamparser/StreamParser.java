@@ -29,8 +29,8 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
-import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import com.google.common.base.Preconditions;
 
@@ -221,9 +221,9 @@ public class StreamParser {
                 SnippetParser.newInstance("<Namespace Alias Prefix>", new HashMap<String, String>(),
                         StreamParser::collectString));
 
-        snippetsMap.put(StreamKeys.TEMPLATE_ARGUMENTS,
-                SnippetParser.newInstance("<Template Args>", new MultiMap<String, String>(),
-                        StreamParser::collectToMultiMap));
+        // snippetsMap.put(StreamKeys.TEMPLATE_ARGUMENTS,
+        // SnippetParser.newInstance("<Template Args>", new MultiMap<String, String>(),
+        // StreamParser::collectToMultiMap));
 
         snippetsMap.put(StreamKeys.FIELD_DECL_INFO,
                 SnippetParser.newInstance("<Field Decl Info>", new HashMap<String, FieldDeclInfo>(),
@@ -755,7 +755,8 @@ public class StreamParser {
         boolean hasExplicitParameters = LineStreamParsers.oneOrZero(lines.nextLine());
         boolean hasExplicitResultType = LineStreamParsers.oneOrZero(lines.nextLine());
 
-        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper().fromValue(LineStreamParsers.integer(lines));
+        LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper()
+                .fromValue(LineStreamParsers.integer(lines));
         int numCaptures = LineStreamParsers.integer(lines);
         List<LambdaCaptureKind> captureKinds = new ArrayList<>(numCaptures);
         for (int i = 0; i < numCaptures; i++) {
