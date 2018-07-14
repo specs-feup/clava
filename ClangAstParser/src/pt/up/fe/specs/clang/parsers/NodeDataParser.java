@@ -78,6 +78,7 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
         STATIC_DATA_PARSERS.put("<BuiltinTypeData>", TypeDataParser::parseBuiltinTypeData);
         STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
+        STATIC_DATA_PARSERS.put("<FunctionTypeData>", TypeDataParser::parseFunctionTypeData);
         STATIC_DATA_PARSERS.put("<FunctionProtoTypeData>", TypeDataParser::parseFunctionProtoTypeData);
         STATIC_DATA_PARSERS.put("<ArrayTypeData>", TypeDataParser::parseArrayTypeData);
         STATIC_DATA_PARSERS.put("<ConstantArrayTypeData>", TypeDataParser::parseConstantArrayTypeData);
