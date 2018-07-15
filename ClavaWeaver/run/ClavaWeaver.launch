@@ -7,7 +7,7 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-c &quot;C:\Users\JoaoBispo\Desktop\shared\repositories-programming\specs-lara\Tutorial-2018-INDIN\2. Code Insertion\2.1 Logging (C).config&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-c &quot;C:\Users\JoaoBispo\Desktop\shared\repositories-programming\specs-lara\Tutorial-2018-INDIN\2. Code Insertion\2.2 Measurement (C).config&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:ClavaWeaver}/run/weaver"/>
 </launchConfiguration>

@@ -14,7 +14,7 @@ double foo() {
       rapl_monitor_start();
       a += bar();
       double clava_energy_output_0 = rapl_monitor_report();
-      std::cout << "Energy:" << clava_energy_output_0 << std::endl;
+      std::cout << "Energy:" << clava_energy_output_0 << "uJ" << std::endl;
    }
    
    return a;
@@ -25,5 +25,5 @@ int main() {
    rapl_monitor_start();
    foo();
    double clava_energy_output_1 = rapl_monitor_report();
-   std::cout << "Energy:" << clava_energy_output_1 << std::endl;
+   std::cout << "Energy:" << clava_energy_output_1 << "uJ" << std::endl;
 }
