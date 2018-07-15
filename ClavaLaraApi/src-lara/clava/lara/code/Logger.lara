@@ -309,6 +309,25 @@ Logger.prototype._log_c_file_setup = function($file, $function) {
 	return varname;
 }
 
+Logger.prototype._insertCode = function($jp, insertBefore, code) {
+    var insertBeforeString = insertBefore ? "before" : "after";
+
+	if(insertBefore) {
+	    $jp.insert(insertBeforeString, code);
+		this.afterJp = $jp;
+	} else {
+		// If $jp is a 'scope' with a 'function' parent, insert before return instead
+		if($jp.instanceOf("scope") && $jp.parent !== undefined && $jp.parent.instanceOf("function")) {
+			this.afterJp = $jp.parent.insertReturn(code);
+		} 
+		else {
+			this.afterJp = $jp.insertAfter(code);		
+		}
+
+	}
+}
+
+
 codedef _clava_logger_filename_declaration(varname, filename) %{
 FILE *[[varname]] = fopen("[[filename]]", "a+");
 if ([[varname]] == NULL)
