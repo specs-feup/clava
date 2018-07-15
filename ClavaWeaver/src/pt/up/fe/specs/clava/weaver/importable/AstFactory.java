@@ -78,7 +78,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
 import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -197,7 +196,7 @@ public class AstFactory {
     }
 
     public static AExpression exprLiteral(String code, AJoinPoint type) {
-        Type astType = type instanceof CxxType ? ((CxxType) type).getNode()
+        Type astType = type instanceof AType ? (Type) type.getNode()
                 : ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
 
         // Type astType = type == null ? ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()) : type.getNode();

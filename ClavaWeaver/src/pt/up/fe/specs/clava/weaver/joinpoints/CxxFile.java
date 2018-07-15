@@ -56,10 +56,10 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -289,12 +289,12 @@ public class CxxFile extends AFile {
     public AVardecl addGlobalImpl(String name, AJoinPoint type, String initValue) {
 
         // Check if joinpoint is a CxxType
-        if (!(type instanceof CxxType)) {
+        if (!(type instanceof AType)) {
             SpecsLogs.msgInfo("addGlobal: the provided join point (" + type.getJoinpointType() + ") is not a type");
             return null;
         }
 
-        Type typeNode = ((CxxType) type).getNode();
+        Type typeNode = (Type) type.getNode();
         LiteralExpr literalExpr = CxxWeaver.getFactory().literalExpr(initValue, typeNode);
         // LiteralExpr literalExpr = ClavaNodeFactory.literalExpr(initValue,
         // ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));

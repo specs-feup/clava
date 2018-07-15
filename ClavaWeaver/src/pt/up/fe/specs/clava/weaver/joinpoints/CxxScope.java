@@ -53,8 +53,8 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxScope extends AScope {
@@ -335,12 +335,12 @@ public class CxxScope extends AScope {
     public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
 
         // Check if joinpoint is a CxxType
-        if (!(type instanceof CxxType)) {
+        if (!(type instanceof AType)) {
             SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinpointType() + ") is not a type");
             return null;
         }
 
-        Type typeNode = ((CxxType) type).getNode();
+        Type typeNode = (Type) type.getNode();
 
         // defaults as no init
         Expr initExpr = null;
