@@ -494,7 +494,14 @@
 		<attribute name="unqualifiedType" type="type" />
 	</artifact>
 	
-	
+	<!-- BUILTIN TYPE -->
+	<artifact class="builtinType">
+		<attribute name="builtinKind" type="String" />
+		<attribute name="isInteger" type="Boolean" tooltip="true, if it is an integer type"/>
+		<attribute name="isFloat" type="Boolean" tooltip="true, if ot is a floating type (e.g., float, double)"/>
+		<attribute name="isSigned" type="Boolean" tooltip="true, if it is a signed integer type" />
+		<attribute name="isUnsigned" type="Boolean" tooltip="true, if it is an unsigned integer type" />
+	</artifact>	
 
 
 	<!-- OPENMP -->

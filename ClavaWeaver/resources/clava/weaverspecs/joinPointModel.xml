@@ -281,5 +281,9 @@
 	<!--  QUAL TYPE -->
 	<joinpoint class="qualType" extends="type">
 	</joinpoint>
+
+	<!--  BUILTIN TYPE -->
+	<joinpoint class="builtinType" extends="type">
+	</joinpoint>
 	 	
 </joinpoints>
