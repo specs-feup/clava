@@ -130,6 +130,10 @@ aspectdef retReductionOpArray
 
 	var arraysizeStr = null;
 
+	if(candidateVar.ArraySize === null) {
+		return;
+	}
+
 	if (isdependentInnerloop === true)
 		arraysizeStr = candidateVar.name + candidateVar.ArraySize.allReplace({'\\[':'[:'});
 	else if (isdependentInnerloop === false)		
