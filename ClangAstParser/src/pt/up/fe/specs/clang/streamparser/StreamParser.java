@@ -36,6 +36,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
+import pt.up.fe.specs.clang.parsers.data.ClavaDataParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
@@ -200,6 +201,11 @@ public class StreamParser {
         snippetsMap.put(StreamKeys.UNARY_OR_TYPE_TRAIT_ARG_TYPES,
                 SnippetParser.newInstance("<UnaryExprOrTypeTraitExpr ArgType>", new HashMap<>(),
                         StreamParser::parseUettArgTypes));
+
+        snippetsMap.put(StreamKeys.UNARY_OR_TYPE_TRAIT_LITERAL_CODE,
+                SnippetParser.newInstance("<UnaryExprOrTypeTraitExpr Literal Code>",
+                        (Map<String, String>) new HashMap<String, String>(),
+                        StreamParser::collectSource));
 
         snippetsMap.put(StreamKeys.CXX_CTOR_INITIALIZERS,
                 SnippetParser.newInstance("<CXXCtorInitializer>", new MultiMap<>(),
@@ -597,6 +603,21 @@ public class StreamParser {
         // String previousValue = map.put(key, value);
         // Preconditions.checkArgument(previousValue == null,
         // "Expected only one value for key '" + key + "', got two: '" + previousValue + "' and '" + value + "'");
+    }
+
+    /**
+     * Adds the next lines to a map, the first being the key and the remaining source code, dumped with clava::getSource
+     * 
+     * @param lines
+     * @param set
+     */
+    public static void collectSource(LineStream lines, Map<String, String> map) {
+        String key = lines.nextLine();
+        String value = ClavaDataParsers.literalSource(lines);
+        String previousValue = map.put(key, value);
+
+        Preconditions.checkArgument(previousValue == null,
+                "Expected only one value for key '" + key + "', got two: '" + previousValue + "' and '" + value + "'");
     }
 
     public static void collectInteger(LineStream lines, Map<String, Integer> map) {

@@ -57,6 +57,8 @@ public class UnaryExprOrTypeTraitExprParser extends AClangNodeParser<UnaryExprOr
         }
         Type argType = argTypeId == null ? null : getOriginalTypes().get(argTypeId);
 
+        String literalCode = getStdErr().get(StreamKeys.UNARY_OR_TYPE_TRAIT_LITERAL_CODE).get(node.getExtendedId());
+
         Preconditions.checkArgument(isArgType == (argType != null),
                 "Expected that if is an argument type, for the type to be non-null");
 
@@ -74,11 +76,11 @@ public class UnaryExprOrTypeTraitExprParser extends AClangNodeParser<UnaryExprOr
         // Type argType = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
         List<ClavaNode> children = parseChildren(node);
-        checkChildrenBetween(children, 0, 1);
+        // checkChildrenBetween(children, 0, 1);
 
         Expr argumentExpression = children.isEmpty() ? null : toExpr(children.get(0));
 
-        return ClavaNodeFactory.unaryExprOrTypeTraitExpr(uettKind, argType, exprData, node.getInfo(),
+        return ClavaNodeFactory.unaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, node.getInfo(),
                 argumentExpression);
         /*
         if (children.isEmpty()) {
