@@ -108,6 +108,15 @@ public abstract class AMarker extends APragma {
     }
 
     /**
+     * Method used by the lara interpreter to select targets
+     * @return 
+     */
+    @Override
+    public List<? extends AJoinPoint> selectTarget() {
+        return this.aPragma.selectTarget();
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -267,6 +276,9 @@ public abstract class AMarker extends APragma {
         switch(selectName) {
         	case "contents": 
         		joinPointList = selectContents();
+        		break;
+        	case "target": 
+        		joinPointList = selectTarget();
         		break;
         	default:
         		joinPointList = this.aPragma.select(selectName);

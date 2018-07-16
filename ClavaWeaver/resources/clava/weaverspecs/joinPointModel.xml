@@ -63,6 +63,7 @@
 	
 	<!-- PRAGMA -->
 	<joinpoint class="pragma">
+		<select alias="target" class="joinpoint"/>
 	</joinpoint>
 	
 	

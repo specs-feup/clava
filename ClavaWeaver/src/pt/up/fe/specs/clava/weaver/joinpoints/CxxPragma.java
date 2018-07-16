@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.Arrays;
+import java.util.List;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -67,6 +70,11 @@ public class CxxPragma extends APragma {
 
     public void setPragma(Pragma pragma) {
         this.pragma = pragma;
+    }
+
+    @Override
+    public List<? extends AJoinPoint> selectTarget() {
+        return Arrays.asList(getTargetImpl());
     }
 
 }

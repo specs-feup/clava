@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import org.lara.interpreter.exception.ActionException;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -1052,6 +1052,15 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Method used by the lara interpreter to select targets
+     * @return 
+     */
+    @Override
+    public List<? extends AJoinPoint> selectTarget() {
+        return this.aPragma.selectTarget();
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -1209,6 +1218,9 @@ public abstract class AOmp extends APragma {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "target": 
+        		joinPointList = selectTarget();
+        		break;
         	default:
         		joinPointList = this.aPragma.select(selectName);
         		break;

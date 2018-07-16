@@ -16336,6 +16336,11 @@
                   "alias": "contents"
                },
                {
+                  "type": "select",
+                  "clazz": "joinpoint",
+                  "alias": "target"
+               },
+               {
                   "type": "action",
                   "children": [
                            {
@@ -20894,6 +20899,11 @@
                            }]
                },
                {
+                  "type": "select",
+                  "clazz": "joinpoint",
+                  "alias": "target"
+               },
+               {
                   "type": "action",
                   "tooltip": "Removes any clause of the given kind from the OpenMP pragma",
                   "children": [
@@ -23244,6 +23254,11 @@
                               "type": "String",
                               \name": "fieldName"
                            }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "joinpoint",
+                  "alias": "target"
                },
                {
                   "type": "action",
@@ -28346,6 +28361,11 @@
                               "type": "String",
                               \name": "fieldName"
                            }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "joinpoint",
+                  "alias": "target"
                },
                {
                   "type": "action",

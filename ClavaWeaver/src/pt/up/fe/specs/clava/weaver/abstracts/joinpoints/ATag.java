@@ -3,8 +3,8 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -74,6 +74,15 @@ public abstract class ATag extends APragma {
     @Override
     public String getContentImpl() {
         return this.aPragma.getContentImpl();
+    }
+
+    /**
+     * Method used by the lara interpreter to select targets
+     * @return 
+     */
+    @Override
+    public List<? extends AJoinPoint> selectTarget() {
+        return this.aPragma.selectTarget();
     }
 
     /**
@@ -234,6 +243,9 @@ public abstract class ATag extends APragma {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "target": 
+        		joinPointList = selectTarget();
+        		break;
         	default:
         		joinPointList = this.aPragma.select(selectName);
         		break;
