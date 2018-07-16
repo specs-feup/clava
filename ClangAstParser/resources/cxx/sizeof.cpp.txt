@@ -33,7 +33,7 @@ int main() {
    //            << "size of function: "                 << sizeof(void())    << '\n'  // error
    //            << "size of incomplete type: "          << sizeof(int[])     << '\n'  // error
    //            << "size of bit field: "                << sizeof bit.bit    << '\n'  // error
-   std::cout << "size of array of 10 int: " << sizeof(int [10]) << '\n';
+   std::cout << "size of array of 10 int: " << sizeof(int[10]) << '\n';
    std::cout << "size of array of 10 int (2): " << sizeof a << '\n';
    std::cout << "length of array of 10 int: " << ((sizeof a) / (sizeof *a)) << '\n';
    std::cout << "length of array of 10 int (2): " << ((sizeof a) / (sizeof a[0])) << '\n';
