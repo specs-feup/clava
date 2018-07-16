@@ -29,7 +29,8 @@ aspectdef ExecPetitDependencyTest
 	Io.writeFile(LoopOmpAttributes[loopindex].petitInputFileAddress, petit_input_file.join('\n'));
 
 
-	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4 ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
+	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4 "' + LoopOmpAttributes[loopindex].petitInputFileAddress + '" -R"' + LoopOmpAttributes[loopindex].petitOutputFileAddress +'"';
+
 
 	// RUN petit dependency test 
 	var application = new ProcessExecutor();
