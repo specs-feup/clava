@@ -1305,9 +1305,9 @@ public class ClavaNodeFactory {
     }
 
     public static UnaryExprOrTypeTraitExpr unaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType,
-            ExprData exprData, ClavaNodeInfo info, Expr argumentExpression) {
+            String literalCode, ExprData exprData, ClavaNodeInfo info, Expr argumentExpression) {
 
-        return new UnaryExprOrTypeTraitExpr(uettKind, argType, exprData, info, argumentExpression);
+        return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, info, argumentExpression);
     }
 
     public static CompoundAssignOperator compoundAssignOperator(Type lhsType, Type resultType,

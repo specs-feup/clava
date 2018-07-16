@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -39,6 +37,8 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
 
     private final UnaryExprOrTypeTrait uettKind;
     private Type argType;
+    private final String literalCode;
+    private boolean useLiteralCode;
 
     // private final String exprName;
     // private final String argType;
@@ -48,31 +48,36 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
     // this(exprName, argType, type, info, Collections.emptyList());
     // }
 
-    public UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, ExprData exprData, ClavaNodeInfo info,
+    public UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData exprData,
+            ClavaNodeInfo info,
             Expr argumentExpression) {
 
-        this(uettKind, argType, exprData, info, SpecsCollections.ofNullable(argumentExpression));
+        this(uettKind, argType, literalCode, exprData, info, SpecsCollections.ofNullable(argumentExpression));
     }
 
-    private UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, ExprData exprData,
+    private UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData exprData,
             ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(exprData, info, children);
 
         this.uettKind = uettKind;
         this.argType = argType;
+        this.literalCode = literalCode;
+        this.useLiteralCode = false;
 
         if (argType == null) {
             // This can happen when copying nodes
             // Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
         } else {
-            Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
+            useLiteralCode = true;
+            // Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
         }
 
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new UnaryExprOrTypeTraitExpr(uettKind, argType, getExprData(), getInfo(), Collections.emptyList());
+        return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, getExprData(), getInfo(),
+                Collections.emptyList());
     }
 
     public UnaryExprOrTypeTrait getUettKind() {
@@ -105,6 +110,10 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
 
     @Override
     public String getCode() {
+        if (useLiteralCode) {
+            return literalCode;
+        }
+
         boolean useParenthesis = true;
         if (uettKind == UnaryExprOrTypeTrait.SIZE_OF && hasArgumentExpression()) {
             useParenthesis = false;
