@@ -38,9 +38,12 @@ public class LoopTiling {
     private final ClavaContext context;
     private final ClavaFactory factory;
 
+    private Stmt lastReferenceStmt;
+
     public LoopTiling(ClavaContext context) {
         this.context = context;
         this.factory = context.get(ClavaContext.FACTORY);
+        lastReferenceStmt = null;
     }
 
     public boolean apply(LoopStmt targetLoop, String blockSize) {
@@ -53,22 +56,28 @@ public class LoopTiling {
         return apply(targetLoop, referenceLoop, blockSize, true);
     }
 
-    public boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
+    // public boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
+    public boolean apply(LoopStmt targetLoop, Stmt referenceStmt, String blockSize, boolean useTernary) {
 
-        if (!test(targetLoop, referenceLoop)) {
+        if (!test(targetLoop, referenceStmt)) {
 
             return false;
         }
 
-        tile(targetLoop, referenceLoop, blockSize, useTernary);
+        lastReferenceStmt = tile(targetLoop, referenceStmt, blockSize, useTernary);
 
         return true;
     }
 
-    private void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
+    public Stmt getLastReferenceStmt() {
+        return lastReferenceStmt;
+    }
+
+    // private void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
+    private Stmt tile(LoopStmt targetLoop, Stmt referenceStmt, String blockSize, boolean useTernary) {
 
         ForStmt targetFor = (ForStmt) targetLoop;
-        ForStmt referenceFor = (ForStmt) referenceLoop;
+        // ForStmt referenceFor = (ForStmt) referenceStmt;
 
         String controlVarName = LoopAnalysisUtils.getControlVarNames(targetFor).get(0);
         String blockVarName = controlVarName + "_block"; // TODO: check for variable name collisions
@@ -79,8 +88,18 @@ public class LoopTiling {
         // test guarantees there is an upper bound
         Expr oldUpperBound = LoopAnalysisUtils.getUpperBound(targetFor).get();
 
-        changeTarget(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
-        addBlockLoop(targetFor, referenceFor, blockSize, blockVarName, oldLowerBound, oldUpperBound);
+        // addBlockLoop(targetFor, referenceFor, blockSize, blockVarName, oldLowerBound, oldUpperBound);
+
+        // In reverse order, because of insert before
+        addBlockLoop(targetFor, referenceStmt, blockSize, blockVarName, oldLowerBound, oldUpperBound);
+        Stmt limitDecl = changeTarget(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
+
+        // Corner-case
+        if (limitDecl != null && targetLoop == referenceStmt) {
+            return limitDecl;
+        }
+
+        return referenceStmt;
     }
 
     /**
@@ -89,12 +108,13 @@ public class LoopTiling {
      * in the tree and cannot be iterated through.
      *
      * @param targetFor
-     * @param referenceFor
+     * @param referenceStmt
      * @param blockSize
      * @param blockVarName
      * @param oldUpperBound
      */
-    private void addBlockLoop(ForStmt targetFor, ForStmt referenceFor, String blockSize, String blockVarName,
+    // private void addBlockLoop(ForStmt targetFor, ForStmt referenceFor, String blockSize, String blockVarName,
+    private void addBlockLoop(ForStmt targetFor, Stmt referenceStmt, String blockSize, String blockVarName,
             Expr oldLowerBound, Expr oldUpperBound) {
 
         // make header parts
@@ -111,18 +131,18 @@ public class LoopTiling {
         ForStmt newFor = ClavaNodeFactory.forStmt(ClavaNodeInfo.undefinedInfo(), init, cond, inc, emptyBody);
 
         // add loop as parent
-        NodeInsertUtils.replace(referenceFor, newFor, true);
-        newFor.getBody().addChild(referenceFor);
+        NodeInsertUtils.replace(referenceStmt, newFor, true);
+        newFor.getBody().addChild(referenceStmt);
     }
 
-    private void changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
+    private Stmt changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
             boolean useTernary) {
 
         changeInit(targetFor, blockVarName);
-        changeCond(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
+        return changeCond(targetFor, blockSize, blockVarName, oldUpperBound, useTernary);
     }
 
-    private void changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
+    private Stmt changeCond(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,
             boolean useTernary) {
 
         Type oldUpperBoundType = oldUpperBound.getType();
@@ -130,6 +150,8 @@ public class LoopTiling {
 
         Expr newLimit = null;
         String blockLimit = blockVarName + " + " + blockSize;
+
+        Stmt limitDecl = null;
 
         if (useTernary) {
 
@@ -139,21 +161,24 @@ public class LoopTiling {
         } else {
 
             // add limit check and limit variable before the target loop
-            String limitVar = makeLimitCheck(targetFor, oldUpperBoundType, oldUpperBoundCode, blockLimit);
+            List<String> controlVars = LoopAnalysisUtils.getControlVarNames(targetFor);
+            String controlVar = controlVars.get(0);
+            String limitVar = controlVar + "_limit";
+
+            limitDecl = makeLimitCheck(targetFor, oldUpperBoundType, oldUpperBoundCode, blockLimit, limitVar);
 
             // change the limit code in the target loop
             newLimit = ClavaNodeFactory.literalExpr(limitVar, oldUpperBoundType);
         }
 
         NodeInsertUtils.replace(oldUpperBound, newLimit);
+
+        return limitDecl;
     }
 
-    private String makeLimitCheck(ForStmt targetFor, Type oldUpperBoundType, String oldUpperBoundCode,
-            String blockLimit) {
+    private Stmt makeLimitCheck(ForStmt targetFor, Type oldUpperBoundType, String oldUpperBoundCode,
+            String blockLimit, String limitVar) {
 
-        List<String> controlVars = LoopAnalysisUtils.getControlVarNames(targetFor);
-        String controlVar = controlVars.get(0);
-        String limitVar = controlVar + "_limit";
         String limitVarDecl = oldUpperBoundType.unqualifiedType().getCode(targetFor) + " " + limitVar + " = "
                 + blockLimit + ";";
         String limitCheck = "if(" + limitVar + " > " + oldUpperBoundCode + ")" + limitVar + " = "
@@ -161,9 +186,12 @@ public class LoopTiling {
 
         String limitDeclCode = limitVarDecl + limitCheck;
         Stmt limitDecl = factory.literalStmt(limitDeclCode);
-        NodeInsertUtils.insertBefore(targetFor, limitDecl);
+        // NodeInsertUtils.insertBefore(targetFor, limitDecl);
+        CompoundStmt newScope = factory.compoundStmt(limitDecl);
+        NodeInsertUtils.replace(targetFor, newScope);
+        newScope.addChild(targetFor);
 
-        return limitVar;
+        return newScope;
     }
 
     /**
@@ -205,7 +233,7 @@ public class LoopTiling {
     /**
      * Tests whether the transformation can be applied. The following conditions must be met:
      *
-     * 1) Both loops are FOR loops
+     * 1) Target loop is a FOR loop
      *
      * 2) targetLoop contains init, cond and inc statements
      *
@@ -221,21 +249,24 @@ public class LoopTiling {
      *
      * @param targetLoop
      *            the loop that will be tiled
-     * @param referenceLoop
+     * @param referenceStmt
      *            the loop before which the new block-iterating loop will be introduced
      * @return true if we the transformation can be applied, false otherwise
      */
-    public boolean test(LoopStmt targetLoop, LoopStmt referenceLoop) {
+    // public boolean test(LoopStmt targetLoop, LoopStmt referenceLoop) {
+    public boolean test(LoopStmt targetLoop, Stmt referenceStmt) {
 
         // 1
-        if (!(targetLoop instanceof ForStmt && referenceLoop instanceof ForStmt)) {
+        // if (!(targetLoop instanceof ForStmt && referenceStmt instanceof ForStmt)) {
+        if (!(targetLoop instanceof ForStmt)) {
 
             return false;
         }
 
         // 6
-        if (!(targetLoop.isAncestor(referenceLoop) || targetLoop == referenceLoop)) {
-
+        if (!(targetLoop.isAncestor(referenceStmt) || targetLoop == referenceStmt)) {
+            // System.out.println("IS NOT ANCESTOR? : " + !(targetLoop.isAncestor(referenceStmt)));
+            // System.out.println("IS THE SAME? : " + (targetLoop == referenceStmt));
             return false;
         }
 
