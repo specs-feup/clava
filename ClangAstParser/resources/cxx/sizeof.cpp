@@ -29,5 +29,4 @@ int main()
     std::cout << "length of array of 10 int (2): "    << ((sizeof a) / (sizeof a[0])) << '\n';
     std::cout << "size of the Derived: "              << sizeof d          << '\n';
     std::cout << "size of the Derived through Base: " << sizeof b          << '\n';
-
  }

@@ -60,6 +60,9 @@ public interface StreamKeys {
     DataKey<Map<String, String>> UNARY_OR_TYPE_TRAIT_ARG_TYPES = KeyFactory.generic("stderr_uett_arg_types",
             new HashMap<String, String>());
 
+    DataKey<Map<String, String>> UNARY_OR_TYPE_TRAIT_LITERAL_CODE = KeyFactory.generic("stderr_uett_literal_code",
+            new HashMap<String, String>());
+
     DataKey<MultiMap<String, String>> CXX_CTOR_INITIALIZERS = KeyFactory.generic("stderr_cxx_ctor_initializers",
             new MultiMap<String, String>());
 
@@ -183,6 +186,7 @@ public interface StreamKeys {
             .addKey(CONSTRUCTOR_TYPES)
             .addKey(BASES_TYPES)
             .addKey(UNARY_OR_TYPE_TRAIT_ARG_TYPES)
+            .addKey(UNARY_OR_TYPE_TRAIT_LITERAL_CODE)
             .addKey(CXX_CTOR_INITIALIZERS)
             .addKey(SOURCE_RANGES)
             .addKey(NUMBER_TEMPLATE_PARAMETERS)

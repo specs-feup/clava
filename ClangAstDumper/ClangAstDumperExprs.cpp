@@ -71,6 +71,9 @@ void ClangAstDumper::VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExp
         llvm::errs() << Node << "_" << id << "->" << Node->getArgumentType().getTypePtr() << "_" << id << "\n";
     }
 
+    llvm::errs() << "<UnaryExprOrTypeTraitExpr Literal Code>\n";
+    llvm::errs() << Node << "_" << id << "\n";
+    llvm::errs() << clava::getSource(Context, Node->getSourceRange()) << "\n";
 }
 
 
