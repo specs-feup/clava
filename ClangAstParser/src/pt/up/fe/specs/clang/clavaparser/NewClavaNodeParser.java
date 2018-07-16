@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -302,6 +303,14 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         if (clavaNode instanceof AlignedExprAttr) {
             Preconditions.checkArgument(children.size() == 1);
             children.set(0, LegacyToDataStore.getFactory().nullExpr());
+            return;
+        }
+
+        if (clavaNode instanceof VariableArrayType) {
+            Preconditions.checkArgument(children.size() > 1);
+            if (children.get(1) instanceof NullNode) {
+                children.set(1, LegacyToDataStore.getFactory().nullExpr());
+            }
             return;
         }
 
