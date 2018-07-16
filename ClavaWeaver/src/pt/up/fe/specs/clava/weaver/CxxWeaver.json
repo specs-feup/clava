@@ -15645,7 +15645,7 @@
                   "tooltip": "Applies loop tiling to target loop.",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "statement",
                               \name": "tile"
                            },
                            {
@@ -15654,7 +15654,7 @@
                               "defaultValue": ""
                            },
                            {
-                              "type": "loop",
+                              "type": "statement",
                               "name": "reference",
                               "defaultValue": ""
                            }]
@@ -15664,7 +15664,7 @@
                   "tooltip": "Applies loop tiling to target loop.",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "statement",
                               \name": "tile"
                            },
                            {
@@ -15673,7 +15673,7 @@
                               "defaultValue": ""
                            },
                            {
-                              "type": "loop",
+                              "type": "statement",
                               "name": "reference",
                               "defaultValue": ""
                            },

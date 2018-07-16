@@ -722,7 +722,7 @@ public abstract class ALoop extends AStatement {
      * @param blockSize 
      * @param reference 
      */
-    public void tileImpl(String blockSize, ALoop reference) {
+    public AStatement tileImpl(String blockSize, AStatement reference) {
         throw new UnsupportedOperationException(get_class()+": Action tile not implemented ");
     }
 
@@ -731,15 +731,16 @@ public abstract class ALoop extends AStatement {
      * @param blockSize 
      * @param reference 
      */
-    public final void tile(String blockSize, ALoop reference) {
+    public final AStatement tile(String blockSize, AStatement reference) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference);
         	}
-        	this.tileImpl(blockSize, reference);
+        	AStatement result = this.tileImpl(blockSize, reference);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.empty(), blockSize, reference);
+        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.ofNullable(result), blockSize, reference);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
         }
@@ -751,7 +752,7 @@ public abstract class ALoop extends AStatement {
      * @param reference 
      * @param useTernary 
      */
-    public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
+    public AStatement tileImpl(String blockSize, AStatement reference, Boolean useTernary) {
         throw new UnsupportedOperationException(get_class()+": Action tile not implemented ");
     }
 
@@ -761,15 +762,16 @@ public abstract class ALoop extends AStatement {
      * @param reference 
      * @param useTernary 
      */
-    public final void tile(String blockSize, ALoop reference, Boolean useTernary) {
+    public final AStatement tile(String blockSize, AStatement reference, Boolean useTernary) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference, useTernary);
         	}
-        	this.tileImpl(blockSize, reference, useTernary);
+        	AStatement result = this.tileImpl(blockSize, reference, useTernary);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.empty(), blockSize, reference, useTernary);
+        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.ofNullable(result), blockSize, reference, useTernary);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
         }
@@ -1201,8 +1203,8 @@ public abstract class ALoop extends AStatement {
         actions.add("void setStep(String)");
         actions.add("void setIsParallel(Boolean)");
         actions.add("void interchange(loop)");
-        actions.add("void tile(String, loop)");
-        actions.add("void tile(String, loop, Boolean)");
+        actions.add("statement tile(String, statement)");
+        actions.add("statement tile(String, statement, Boolean)");
     }
 
     /**

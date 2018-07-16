@@ -272,14 +272,14 @@
 		<parameter name="otherLoop" type="loop" />
 	</action>
 	
-	<action name="tile" class="loop" tooltip="Applies loop tiling to target loop.">
+	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to target loop.">
 		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="loop" />
+		<parameter name="reference" type="statement" />
 	</action>
 	
-	<action name="tile" class="loop" tooltip="Applies loop tiling to target loop.">
+	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to target loop.">
 		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="loop" />
+		<parameter name="reference" type="statement" />
 		<parameter name="useTernary" type="Boolean"/>
 	</action>
 	
