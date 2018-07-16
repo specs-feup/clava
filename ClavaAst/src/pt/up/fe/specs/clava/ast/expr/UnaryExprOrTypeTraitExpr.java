@@ -38,7 +38,7 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
     private final UnaryExprOrTypeTrait uettKind;
     private Type argType;
     private final String literalCode;
-    private boolean useLiteralCode;
+    // private boolean useLiteralCode;
 
     // private final String exprName;
     // private final String argType;
@@ -62,13 +62,13 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         this.uettKind = uettKind;
         this.argType = argType;
         this.literalCode = literalCode;
-        this.useLiteralCode = false;
+        // this.useLiteralCode = false;
 
         if (argType == null) {
             // This can happen when copying nodes
             // Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
         } else {
-            useLiteralCode = true;
+            // useLiteralCode = true;
             // Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
         }
 
@@ -110,40 +110,26 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
 
     @Override
     public String getCode() {
+        return literalCode;
+        /*
         if (useLiteralCode) {
             return literalCode;
         }
-
+        
         boolean useParenthesis = true;
         if (uettKind == UnaryExprOrTypeTrait.SIZE_OF && hasArgumentExpression()) {
             useParenthesis = false;
         }
-
+        
         String argumentCode = hasArgumentExpression() ? getArgumentExpression().getCode()
                 : getArgumentType().get().getCode(this);
-
+        
         if (useParenthesis) {
             return uettKind.getString() + "(" + argumentCode + ")";
         }
-
+        
         return uettKind.getString() + " " + argumentCode;
-        /*        
-        if (getArgumentType().isPresent()) {
-            // System.out.println("UETT CODE 1:" + uettKind.getString() + "(" + getArgumentType().get().getCode() +
-            // ")");
-            return uettKind.getString() + "(" + getArgumentType().get().getCode() + ")";
-        }
-        
-        // System.out.println("UETT CODE 2:" + uettKind.getString() + "(" + getArgumentExpression().getCode() + ")");
-        return uettKind.getString() + "(" + getArgumentExpression().getCode() + ")";
-        
-        // if (hasArgumentExpression()) {
-        // return exprName + "(" + getArgumentExpression().getCode() + ")";
-        // // LoggingUtils.msgWarn("Code with arg expr, not tested:" + getLocation());
-        // }
-        // return exprName + "(" + getArgType() + ")";
-         
-         */
+        */
     }
 
     @Override
