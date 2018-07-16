@@ -101,4 +101,9 @@ public class CTest {
     public void testMacro() {
         new CTester("macro.c", "macro.h").test();
     }
+
+    @Test
+    public void testSizeof() {
+        new CTester("sizeof.c").test();
+    }
 }
