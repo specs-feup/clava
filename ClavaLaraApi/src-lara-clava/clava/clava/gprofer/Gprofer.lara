@@ -1,21 +1,29 @@
 import clava.gprofer._GproferAspects;
 import clava.Clava;
 import lara.cmake.CMaker;
+import lara.Io;
+import lara.Strings;
+import lara._JavaTypes;
 
 function Gprofer(runs, args) {
 	
 	this._app = Clava.getProgram();
 	
 	this._runs = defaultValue(runs, 1);
-	checkNumber(this._runs, "runs @ Gprofer(runs, args)");
+	checkNumber(this._runs, "Gprofer(runs, ...)");
 	
 	this._args = defaultValue(args, []);
-	checkArray(this._args, "args @ Gprofer(runs, args)");
+	checkArray(this._args, "Gprofer(..., args)");
+	
+	this._workingDir = undefined;
+	this._deleteWorkingDir = false;
 	
 	this._data = {};
 	this._hotSpots = {};
 	
 	this._cmaker = this._defaultCmaker();
+	
+	this._gProfer = _JavaTypes.getGprofer();
 }
 
 Gprofer.prototype.getCmaker = function() {
@@ -23,7 +31,7 @@ Gprofer.prototype.getCmaker = function() {
 	return this._cmaker;
 }
 
-Gprofer._EXE_NAME = "gprofer";
+Gprofer._EXE_NAME = "gprofer_bin";
 
 Gprofer.prototype._defaultCmaker = function($function) {
 	
@@ -92,28 +100,58 @@ Gprofer.prototype.setRuns = function(runs) {
 	return this;
 }
 
+Gprofer.prototype.setWorkingDir = function(workingDir, deleteWorkingDir) {
+	
+	checkString(workingDir, "Gprofer.setWorkingDir(workingDir, ...)");
+	this._workingDir = workingDir;
+	
+	checkBoolean(deleteWorkingDir, "Gprofer.setWorkingDir(..., deleteWorkingDir)");
+	this._deleteWorkingDir = deleteWorkingDir;
+	
+	return this;
+}
+
 Gprofer.prototype.profile = function() {
+	
+	if(this._workingDir === undefined) {
 		
+		this._workingDir = Io.getTempFolder('gprofer_' + Strings.uuid());
+		this._deleteWorkingDir = true;
+	}
+	
 	// compile the application
-	var binary = this._cmaker.build(Clava.getWeavingFolder(),  Io.getPath(Clava.getWeavingFolder(), "build"));
+	//~ var binary = this._cmaker.build(Clava.getWeavingFolder(),  Io.getPath(Clava.getWeavingFolder(), "build"));
+	var binary = this._cmaker.build(this._workingDir,  Io.getPath(this._workingDir, "build"));
+	
+
 	
 	// call java gprofer
+	var data = this._gProfer.profile(binary, this._args, this._runs, this._workingDir, this._deleteWorkingDir);
+	var json = this._gProfer.getJsonData(data);
+	
 	// fill this._data and this._hotSpots
+	var obj = JSON.parse(json);
+	this._hotSpots = obj.hotspots;
+	this._data= obj.table;
 	
 	return this;
 };
 
-Gprofer.prototype.getHotspots = function() {
+Gprofer.prototype.getHotspotNames = function() {
 	
-	// return all
+	return this._hotSpots;
 };
 
+/**
+ * 
+ * May return undefined if the desired function is a system or library function and not available in the source code.
+ * */
 Gprofer.prototype.getHotspot = function(rank) {
 	
-	var _rank = defaultValue(rank, 1);
-	checkArray(_rank, "Gprofer.getHotspot(rank)");
+	var _rank = defaultValue(rank, 0);
+	checkNumber(_rank, "Gprofer.getHotspot(rank)");
 	
-	var name = this._hotSpots[rank];
+	var name = this._hotSpots[_rank];
 	
 	var f = undefined;
 	if(Clava.isCxx()) {
@@ -132,6 +170,20 @@ Gprofer.prototype.getPercentage = function($function) {
 	checkJoinPointType($function, 'function', 'Gprofer.getPercentage($function)');
 	
 	return this._get('percentage', $function);
+};
+
+Gprofer.prototype.getCalls = function($function) {
+
+	checkJoinPointType($function, 'function', 'Gprofer.getCalls($function)');
+	
+	return this._get('calls', $function);
+};
+
+Gprofer.prototype.getSelfSeconds = function($function) {
+
+	checkJoinPointType($function, 'function', 'Gprofer.getSelfSeconds($function)');
+	
+	return this._get('selfSeconds', $function);
 };
 
 Gprofer.prototype._get = function(type, $function) {
