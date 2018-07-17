@@ -140,7 +140,7 @@ public class OmpParser implements PragmaParser {
         boolean hasClauses = !pragmaParser.toString().trim().isEmpty();
 
         // Parse clauses
-        Optional<Map<OmpClauseKind, List<OmpClause>>> clausesMap = OmpClauseParsers.parse(pragmaParser);
+        Optional<Map<OmpClauseKind, List<OmpClause>>> clausesMap = OmpClauseParsers.parse(pragmaParser, ompDirective);
 
         // If no map and there were clauses to parse, at least one of the clauses could not be parsed. Return a literal
         // pragma

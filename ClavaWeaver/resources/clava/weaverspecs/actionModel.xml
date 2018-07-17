@@ -112,7 +112,7 @@
 		<parameter name="initValue" type="String" />
 	</action>
 
-	<action name="write" class="file">
+	<action name="write" class="file" return="String">
 		<parameter name="destinationFoldername" type="String" />
 	</action>
 
@@ -272,14 +272,14 @@
 		<parameter name="otherLoop" type="loop" />
 	</action>
 	
-	<action name="tile" class="loop" tooltip="Applies loop tiling to target loop.">
+	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to target loop.">
 		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="loop" />
+		<parameter name="reference" type="statement" />
 	</action>
 	
-	<action name="tile" class="loop" tooltip="Applies loop tiling to target loop.">
+	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to target loop.">
 		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="loop" />
+		<parameter name="reference" type="statement" />
 		<parameter name="useTernary" type="Boolean"/>
 	</action>
 	

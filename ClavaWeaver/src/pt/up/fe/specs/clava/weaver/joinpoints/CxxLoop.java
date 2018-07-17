@@ -608,21 +608,29 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void tileImpl(String blockSize, ALoop reference) {
+    public AStatement tileImpl(String blockSize, AStatement reference) {
 
-        tileImpl(blockSize, reference, true);
+        return tileImpl(blockSize, reference, true);
     }
 
     @Override
-    public void tileImpl(String blockSize, ALoop reference, Boolean useTernary) {
+    public AStatement tileImpl(String blockSize, AStatement reference, Boolean useTernary) {
 
-        boolean success = new LoopTiling(CxxWeaver.getContex()).apply(loop, (LoopStmt) reference.getNode(),
+        LoopTiling loopTiling = new LoopTiling(CxxWeaver.getContex());
+
+        boolean success = loopTiling.apply(loop, (Stmt) reference.getNode(),
                 blockSize.toString(), useTernary);
 
         if (!success) {
-
-            ClavaLog.info("Could not tile the loop");
+            ClavaLog.info("Could not tile the loop: " + loop.getLocation());
         }
+
+        if (loopTiling.getLastReferenceStmt() == null) {
+            return reference;
+        }
+
+        return CxxJoinpoints.create(loopTiling.getLastReferenceStmt(), null, AStatement.class);
+
     }
 
     @Override
