@@ -29,10 +29,12 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpDefaultClause.DefaultKind;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpIfClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpIntegerExpressionClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpProcBindClause;
@@ -71,13 +73,15 @@ public class OmpClauseParsers {
         OMP_CLAUSE_PARSERS.put(COPYIN, parser -> OmpClauseParsers.parseListClause(parser, COPYIN));
     }
 
-    public static Optional<Map<OmpClauseKind, List<OmpClause>>> parse(StringParser pragmaParser) {
+    public static Optional<Map<OmpClauseKind, List<OmpClause>>> parse(StringParser pragmaParser,
+            OmpDirectiveKind directive) {
+
         Map<OmpClauseKind, List<OmpClause>> clauses = new LinkedHashMap<>();
 
         // Apply rules while there are clauses
         while (!pragmaParser.isEmpty()) {
 
-            Optional<OmpClause> parsedClause = pragmaParser.apply(OmpClauseParsers::parseOmpClause);
+            Optional<OmpClause> parsedClause = pragmaParser.apply(OmpClauseParsers::parseOmpClause, directive);
 
             // If empty, means that clause is not supported, return empty
             if (!parsedClause.isPresent()) {
@@ -100,28 +104,16 @@ public class OmpClauseParsers {
         return Optional.of(clauses);
     }
 
-    private static ParserResult<Optional<OmpClause>> parseOmpClause(StringSlice string) {
+    private static ParserResult<Optional<OmpClause>> parseOmpClause(StringSlice string, OmpDirectiveKind directive) {
         // Identify kind of clause
         OmpClauseKind clauseKind = getClauseKind(string);
+        StringParser pragmaParser = new StringParser(string);
 
-        Function<StringParser, OmpClause> clauseParser = OMP_CLAUSE_PARSERS.get(clauseKind);
+        OmpClause clause = parse(pragmaParser, clauseKind, directive);
 
-        if (clauseParser == null) {
-            ClavaLog.info("Clause not implemented yet: " + clauseKind.getString());
+        if (clause == null) {
             return new ParserResult<>(string, Optional.empty());
         }
-        // Preconditions.checkNotNull(clauseParser, "Clause not implemented yet: " + clauseKind);
-
-        // Remove unused spaces
-        // without this, the next call will fail to match any OmpClauseKind when parseClauseName is called
-        // we can also hide this trim call in parseClauseName, but we need to make sure every parsing function will
-        // call parseClauseName
-        // pragmaParser.trim();
-
-        StringParser pragmaParser = new StringParser(string);
-        // OmpClause clause = pragmaParser.applyFunction(clauseParser);
-        OmpClause clause = clauseParser.apply(pragmaParser);
-
         // clauses.put(clauseKind, clause);
 
         // Remove unused spaces
@@ -131,6 +123,32 @@ public class OmpClauseParsers {
         pragmaParser.apply(StringParsers::checkCharacter, ',');
 
         return new ParserResult<Optional<OmpClause>>(pragmaParser.getCurrentString(), Optional.of(clause));
+    }
+
+    private static OmpClause parse(StringParser pragmaParser, OmpClauseKind clauseKind, OmpDirectiveKind directive) {
+
+        // If clause, needs directive
+        if (clauseKind == OmpClauseKind.IF) {
+            return parseIf(pragmaParser, clauseKind, directive);
+        }
+
+        // Clause parsers that only need the StringParser
+        Function<StringParser, OmpClause> clauseParser = OMP_CLAUSE_PARSERS.get(clauseKind);
+
+        if (clauseParser == null) {
+            ClavaLog.info("Clause not implemented yet: " + clauseKind.getString());
+            return null;
+        }
+        // Preconditions.checkNotNull(clauseParser, "Clause not implemented yet: " + clauseKind);
+
+        // Remove unused spaces
+        // without this, the next call will fail to match any OmpClauseKind when parseClauseName is called
+        // we can also hide this trim call in parseClauseName, but we need to make sure every parsing function will
+        // call parseClauseName
+        // pragmaParser.trim();
+
+        // OmpClause clause = pragmaParser.applyFunction(clauseParser);
+        return clauseParser.apply(pragmaParser);
     }
 
     private static OmpClauseKind getClauseKind(StringSlice currentPragma) {
@@ -347,6 +365,52 @@ public class OmpClauseParsers {
         String expression = clause != null ? clause.toString() : null;
 
         return new OmpIntegerExpressionClause(kind, expression, isOptional, isConstantPositive);
+    }
+
+    private static OmpIfClause parseIf(StringParser clauses, OmpClauseKind kind, OmpDirectiveKind directive) {
+
+        StringParser clause = parseClauseName(kind, clauses, false);
+
+        // Test if it has the name directive, followed by a colon
+        Optional<String> directiveIfName = directive.getIfName();
+
+        // If no directive if name, check if CANCEL directive
+        if (!directiveIfName.isPresent() && directive != OmpDirectiveKind.CANCEL) {
+            throw new RuntimeException("Directive '" + directive + "' does not support the 'if' clause");
+        }
+
+        String directiveName = null;
+        boolean hasColon = false;
+        // System.out.println("DIRECTIVE IF NAME:" + directiveIfName);
+        if (directiveIfName.isPresent()) {
+            // System.out.println("CLAUSES BEFORE:" + clause);
+            directiveName = clause.apply(StringParsers::checkStringStarts, directiveIfName.get(), false).orElse(null);
+            // System.out.println("DIRECTIVE NAME:" + directiveName);
+            // System.out.println("CLAUSES AFTER:" + clause);
+            hasColon = clause.apply(StringParsers::checkStringStarts, ":").isPresent();
+        }
+
+        // If has colon, directive name must not be null, and this is an if clause with directive name
+        if (hasColon) {
+            Preconditions.checkNotNull(directiveName,
+                    "Since it has a colon, expected the directive name preceeding the colon:" + clauses.toString());
+
+            String expression = clause.clear();
+            return new OmpIfClause(directiveName, expression);
+        }
+
+        // If no colon, if clause just has expression
+        String expression = "";
+
+        // If directiveName is not null, use as prefix of expression
+        if (directiveName != null) {
+            expression += directiveName;
+        }
+
+        // Use remaining of the clause as suffix
+        expression += clause.clear();
+
+        return new OmpIfClause(expression);
     }
 
     private static OmpProcBindClause parseProcBind(StringParser clauses) {

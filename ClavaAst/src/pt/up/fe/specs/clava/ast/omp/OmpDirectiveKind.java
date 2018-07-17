@@ -18,8 +18,10 @@ import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -121,6 +123,10 @@ public enum OmpDirectiveKind implements StringProvider {
     private static final Lazy<EnumHelperWithValue<OmpDirectiveKind>> HELPER = new ThreadSafeLazy<>(
             () -> new EnumHelperWithValue<>(OmpDirectiveKind.class));
 
+    private static final Lazy<Set<OmpDirectiveKind>> DIRECTIVES_WITH_IF = Lazy
+            .newInstance(() -> EnumSet.of(PARALLEL, TASK, TASKLOOP, TARGET_DATA, TARGET_ENTER_DATA, TARGET_EXIT_DATA,
+                    TARGET, TARGET_UPDATE));
+
     // the set of clause kinds that each directive can have
     private final Set<OmpClauseKind> legalClauses;
 
@@ -176,4 +182,20 @@ public enum OmpDirectiveKind implements StringProvider {
         return name().replace('_', ' ').toLowerCase();
     }
 
+    /**
+     * Some directives support the 'if' clause, which can optionally have the directive name inside the clause
+     * parameters.
+     * 
+     * @return
+     */
+    public Optional<String> getIfName() {
+        // Check if directive support its name in the if
+        if (!DIRECTIVES_WITH_IF.get().contains(this)) {
+            return Optional.empty();
+        }
+
+        // Parse name
+        return Optional.of(this.name().toLowerCase().replace('_', ' '));
+
+    }
 }
