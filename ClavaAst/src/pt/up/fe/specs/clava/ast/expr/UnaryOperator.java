@@ -15,7 +15,9 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -68,12 +70,23 @@ public class UnaryOperator extends Expr {
 
         // Get code of child
         builder.append(getSubExpr().getCode());
+        String code = opcode.op;
+
         switch (position) {
         case PREFIX:
-            builder.insert(0, opcode.op);
+            if (opcode.requiresSpace()) {
+                code += " ";
+            }
+
+            builder.insert(0, code);
             break;
         case POSTFIX:
-            builder.append(opcode.op);
+
+            if (opcode.requiresSpace()) {
+                code = " " + code;
+            }
+
+            builder.append(code);
             break;
         }
 
@@ -115,6 +128,8 @@ public class UnaryOperator extends Expr {
         private static final Lazy<EnumHelperWithValue<UnaryOperatorKind>> ENUM_HELPER = EnumHelperWithValue
                 .newLazyHelperWithValue(UnaryOperatorKind.class);
 
+        private static final Set<UnaryOperatorKind> OPS_WITH_SPACE = EnumSet.of(REAL, IMAG, EXTENSION, COAWAIT);
+
         public static EnumHelperWithValue<UnaryOperatorKind> getEnumHelper() {
             return ENUM_HELPER.get();
         }
@@ -127,6 +142,10 @@ public class UnaryOperator extends Expr {
 
         public String getCode() {
             return op;
+        }
+
+        public boolean requiresSpace() {
+            return OPS_WITH_SPACE.contains(this);
         }
 
         public String getName() {
