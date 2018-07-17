@@ -512,6 +512,11 @@ public class ClangAstParser {
         // Sort them alphabetically, include order can be important
         Collections.sort(includes);
 
+        // If on linux, make folders and files accessible to all users
+        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
+            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
+        }
+
         return includes;
     }
 
@@ -537,6 +542,11 @@ public class ClangAstParser {
             SpecsLogs.msgLib("Could not find libc/licxx installed in the system");
         } else {
             SpecsLogs.msgLib("Detected libc and licxx installed in the system");
+        }
+
+        // If on linux, make folders and files accessible to all users
+        if (SupportedPlatform.getCurrentPlatform().isLinux()) {
+            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
         }
 
         return !needsLib;
@@ -798,6 +808,11 @@ public class ClangAstParser {
         // If file is new and we are in a flavor of Linux, make file executable
         if (executable.isNewFile() && platform.isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "+x", executable.getFile().getAbsolutePath()), false, true);
+        }
+
+        // If on linux, make folders and files accessible to all users
+        if (platform.isLinux()) {
+            SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", resourceFolder.getAbsolutePath()), false, true);
         }
 
         return executable.getFile();
