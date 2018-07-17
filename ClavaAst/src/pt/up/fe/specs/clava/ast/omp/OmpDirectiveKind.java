@@ -190,12 +190,16 @@ public enum OmpDirectiveKind implements StringProvider {
      */
     public Optional<String> getIfName() {
         // Check if directive support its name in the if
-        if (!DIRECTIVES_WITH_IF.get().contains(this)) {
-            return Optional.empty();
+        if (DIRECTIVES_WITH_IF.get().contains(this)) {
+            // Parse name
+            return Optional.of(this.name().toLowerCase().replace('_', ' '));
         }
 
-        // Parse name
-        return Optional.of(this.name().toLowerCase().replace('_', ' '));
+        // Check if it is a parallel directive
+        if (this.name().startsWith("PARALLEL_")) {
+            return Optional.of("parallel");
+        }
 
+        return Optional.empty();
     }
 }
