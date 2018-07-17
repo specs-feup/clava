@@ -34,7 +34,7 @@ double foo() {
 
 void ifClause(int test, int parallel, int parallel2) {
 	
-	#pragma omp parallel if( parallel : test) private(i)
+	#pragma omp parallel for if( parallel : test) private(i)
     for(int i=0; i<1000; i++) {
     }
 	
