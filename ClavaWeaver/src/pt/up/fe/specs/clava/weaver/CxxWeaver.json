@@ -11593,7 +11593,7 @@
                   "type": "action",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "String",
                               \name": "write"
                            },
                            {

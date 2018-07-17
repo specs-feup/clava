@@ -112,7 +112,7 @@
 		<parameter name="initValue" type="String" />
 	</action>
 
-	<action name="write" class="file">
+	<action name="write" class="file" return="String">
 		<parameter name="destinationFoldername" type="String" />
 	</action>
 

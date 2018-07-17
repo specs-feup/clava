@@ -366,11 +366,11 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public void writeImpl(String destinationFoldername) {
+    public String writeImpl(String destinationFoldername) {
         File destinationFolder = SpecsIo.mkdir(destinationFoldername);
         if (destinationFolder == null) {
             ClavaLog.info("$file.exec write: Could not obtain destination folder '" + destinationFoldername + "'");
-            return;
+            return null;
         }
 
         // File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
@@ -378,6 +378,8 @@ public class CxxFile extends AFile {
 
         File writtenFile = tunit.write(destinationFolder);
         getWeaverEngine().getWeaverData().addManualWrittenFile(writtenFile);
+
+        return writtenFile.getAbsolutePath();
     }
 
     @Override

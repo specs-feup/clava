@@ -504,7 +504,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * 
      * @param destinationFoldername 
      */
-    public void writeImpl(String destinationFoldername) {
+    public String writeImpl(String destinationFoldername) {
         throw new UnsupportedOperationException(get_class()+": Action write not implemented ");
     }
 
@@ -512,15 +512,16 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      * 
      * @param destinationFoldername 
      */
-    public final void write(String destinationFoldername) {
+    public final String write(String destinationFoldername) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "write", this, Optional.empty(), destinationFoldername);
         	}
-        	this.writeImpl(destinationFoldername);
+        	String result = this.writeImpl(destinationFoldername);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.empty(), destinationFoldername);
+        		eventTrigger().triggerAction(Stage.END, "write", this, Optional.ofNullable(result), destinationFoldername);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "write", e);
         }
@@ -786,7 +787,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void addInclude(string)");
         actions.add("void addIncludeJp(joinpoint)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
-        actions.add("void write(String)");
+        actions.add("String write(String)");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");
         actions.add("void insertEnd(joinpoint)");
