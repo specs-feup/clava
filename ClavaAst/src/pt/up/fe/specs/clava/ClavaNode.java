@@ -545,7 +545,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @return
      */
     public <T> T get(DataKey<T> key) {
-        return dataI.get(key);
+        try {
+            return dataI.get(key);
+        } catch (Exception e) {
+            throw new RuntimeException("Problem while accessing attribute '" + key + "' in ClavaNode: " + this, e);
+        }
+
     }
 
     /**
