@@ -70,7 +70,7 @@ public class FunctionProtoType extends FunctionType {
 
         // Add const/volatile
         if (get(IS_CONST)) {
-            System.out.println("CONSTTTT");
+            // System.out.println("CONSTTTT");
             code.append(" const");
         }
         if (get(IS_VOLATILE)) {
