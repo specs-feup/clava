@@ -171,6 +171,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
             if (replaceType) {
                 Type oldParsingType = getTypesMap().get(clavaNodeCopy.getId());
+
                 typable.setType(oldParsingType);
                 // System.out.println("FOUND DUMMY TYPE!");
                 // System.out.println("COPY ID:" + clavaNodeCopy.getId());
@@ -192,10 +193,20 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
     private boolean checkReplaceType(ClavaNode node) {
         Typable typable = (Typable) node;
 
-        // Verify if the type of the node is according to the expected type from old parsing
         Type oldParsingType = getTypesMap().get(node.getId());
-        Type nodeType = getOriginalTypes().get(typable.getType().getId());
 
+        // If no old parsing type, do not replace
+        if (oldParsingType == null) {
+            // SpecsLogs.msgWarn("Old parsing type is null, is this correct?"); // Maybe, if we are visiting nodes with
+            // the
+            // new nodes that are not visited by the
+            // old nodes.
+
+            return false;
+        }
+
+        // Verify if the type of the node is according to the expected type from old parsing
+        Type nodeType = getOriginalTypes().get(typable.getType().getId());
         if (oldParsingType != null && nodeType != oldParsingType) {
             if (SpecsSystem.isDebug()) {
                 SpecsLogs.msgWarn("Current node type different from expected type:\nExpected type:" + oldParsingType
