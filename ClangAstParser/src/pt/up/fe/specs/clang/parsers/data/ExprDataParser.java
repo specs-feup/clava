@@ -137,7 +137,8 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(DeclRefExpr.QUALIFIER, lines.nextLine());
-        data.add(DeclRefExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines));
+        data.add(DeclRefExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines,
+                ClavaDataParsers::literalSource));
         data.add(DeclRefExpr.DECL_NAME, lines.nextLine());
         data.add(DeclRefExpr.DECL_ID, lines.nextLine());
         // data.add(DeclRefExpr.DECL, ClavaNodes.getValueDecl(dataStore, data.get(DeclRefExpr.DECL_ID)));

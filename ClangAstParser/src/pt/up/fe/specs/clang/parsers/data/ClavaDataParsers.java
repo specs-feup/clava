@@ -79,6 +79,12 @@ public class ClavaDataParsers {
         return new SourceRange(startLocation, endLocation);
     }
 
+    /**
+     * Parses lines to a String until it finds a line with %CLAVA_SOURCE_END%.
+     * 
+     * @param lines
+     * @return
+     */
     public static String literalSource(LineStream lines) {
         // Append lines until terminator line is found
         StringBuilder builder = new StringBuilder();
