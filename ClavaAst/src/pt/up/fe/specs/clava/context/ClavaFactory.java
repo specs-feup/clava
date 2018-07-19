@@ -225,7 +225,8 @@ public class ClavaFactory {
 
     public DummyExpr dummyExpr(String dummyContent) {
         DataStore data = newExprDataStore()
-                .put(DummyExpr.DUMMY_CONTENT, dummyContent);
+                .put(DummyExpr.DUMMY_CONTENT, dummyContent)
+                .put(Expr.TYPE, dummyType("dummy type"));
 
         return new DummyExpr(data, Collections.emptyList());
     }
