@@ -61,3 +61,9 @@ double Distance2(const double a[3], const double b[3])
          (a[1] - b[1]) * (a[1] - b[1]) +
          (a[2] - b[2]) * (a[2] - b[2]);
 }
+
+double inputInCast(int x, int k, double v[][1][x][5]) {
+	double (*vx)[x][5] = v[k];
+	
+	return vx[0][0][0];
+}

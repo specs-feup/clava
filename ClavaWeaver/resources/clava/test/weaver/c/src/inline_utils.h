@@ -10,3 +10,4 @@ int foo_with_var_shadowing();
 void foo_with_1darray_input(int array[]);
 void foo_with_2darray_input(int array[2][2]);
 double Distance2(const double a[3], const double b[3]);
+double inputInCast(int x, int k, double v[][1][x][5]);
