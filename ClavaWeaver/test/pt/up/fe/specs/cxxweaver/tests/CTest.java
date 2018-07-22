@@ -106,6 +106,11 @@ public class CTest {
         newTester().test("Detach.lara", "detach.c");
     }
 
+    @Test
+    public void testInlineNasLu() {
+        newTester().test("InlineNasLu.lara", "inline_nas_lu.c");
+    }
+
     // TODO: Not working
     // @Test
     public void testInlineNasFt() {
