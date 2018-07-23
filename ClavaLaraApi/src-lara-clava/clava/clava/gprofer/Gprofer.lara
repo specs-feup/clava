@@ -104,7 +104,7 @@ Gprofer.prototype.setRuns = function(runs) {
 
 Gprofer.prototype.setCheckReturn = function(checkReturn) {
 	
-	checkBoolean(runs, "Gprofer.setCheckReturn(checkReturn)");
+	checkBoolean(checkReturn, "Gprofer.setCheckReturn(checkReturn)");
 	this._checkReturn = checkReturn;
 	
 	return this;
@@ -130,13 +130,10 @@ Gprofer.prototype.profile = function() {
 	}
 	
 	// compile the application
-	//~ var binary = this._cmaker.build(Clava.getWeavingFolder(),  Io.getPath(Clava.getWeavingFolder(), "build"));
 	var binary = this._cmaker.build(this._workingDir,  Io.getPath(this._workingDir, "build"));
 	
-
-	
 	// call java gprofer
-	var data = this._gProfer.profile(binary, this._args, this._runs, this._workingDir, this._deleteWorkingDir);
+	var data = this._gProfer.profile(binary, this._args, this._runs, this._workingDir, this._deleteWorkingDir, this._checkReturn);
 	var json = this._gProfer.getJsonData(data);
 	
 	// fill this._data and this._hotSpots
