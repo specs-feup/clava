@@ -18,6 +18,8 @@ function Gprofer(runs, args) {
 	this._workingDir = undefined;
 	this._deleteWorkingDir = false;
 	
+	this._checkReturn = true;
+	
 	this._data = {};
 	this._hotSpots = {};
 	
@@ -100,10 +102,18 @@ Gprofer.prototype.setRuns = function(runs) {
 	return this;
 }
 
+Gprofer.prototype.setCheckReturn = function(checkReturn) {
+	
+	checkBoolean(runs, "Gprofer.setCheckReturn(checkReturn)");
+	this._checkReturn = checkReturn;
+	
+	return this;
+}
+
 Gprofer.prototype.setWorkingDir = function(workingDir, deleteWorkingDir) {
 	
 	checkString(workingDir, "Gprofer.setWorkingDir(workingDir, ...)");
-	this._workingDir = workingDir;
+	this._workingDir = Io.getPath(workingDir);
 	
 	checkBoolean(deleteWorkingDir, "Gprofer.setWorkingDir(..., deleteWorkingDir)");
 	this._deleteWorkingDir = deleteWorkingDir;
