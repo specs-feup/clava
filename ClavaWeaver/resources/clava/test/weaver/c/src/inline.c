@@ -38,4 +38,8 @@ int main() {
 	const double atom1[3] = {1, 2, 3};
 	const double atom2[3] = {4, 5, 6};
 	double distResult = Distance2(atom1, atom2);
+	
+	int x_2 = 3;
+	double v[2][1][x_2][5];
+	double x_result = inputInCast(x_2, 1, v);
 }

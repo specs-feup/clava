@@ -48,4 +48,11 @@ int main() {
    double const atom2[3] = {4, 5, 6};
    double Distance2_return = (atom1[0] - atom2[0]) * (atom1[0] - atom2[0]) + (atom1[1] - atom2[1]) * (atom1[1] - atom2[1]) + (atom1[2] - atom2[2]) * (atom1[2] - atom2[2]);
    double distResult = Distance2_return;
+   int x_2 = 3;
+   double v[2][1][x_2][5];
+   int inputInCast_x = x_2;
+   int inputInCast_k = 1;
+   double (*inputInCast_vx)[inputInCast_x][5] = v[inputInCast_k];
+   double inputInCast_return = inputInCast_vx[0][0][0];
+   double x_result = inputInCast_return;   
 }

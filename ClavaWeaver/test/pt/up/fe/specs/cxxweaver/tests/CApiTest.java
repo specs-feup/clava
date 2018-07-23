@@ -70,4 +70,9 @@ public class CApiTest {
         }
 
     }
+
+    @Test
+    public void testCodeInserter() {
+        newTester().test("CodeInserterTest.lara", "code_inserter.c");
+    }
 }

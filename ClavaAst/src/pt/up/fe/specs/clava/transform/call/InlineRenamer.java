@@ -44,6 +44,7 @@ import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.BiConsumerClassMap;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
@@ -202,6 +203,22 @@ public class InlineRenamer {
         stmts.stream().flatMap(node -> node.getDescendantsAndSelfStream())
                 .filter(node -> node instanceof VarDecl || node instanceof DeclRefExpr)
                 .forEach(this::applyRenameAction);
+
+        // Also rename DeclRefExpr found in Types
+        stmts.stream().flatMap(node -> node.getDescendantsAndSelfStream())
+                .filter(Typable.class::isInstance)
+                .flatMap(typable -> ((Typable) typable).getType().getDescendantsAndSelfStream())
+                .filter(DeclRefExpr.class::isInstance)
+                .forEach(this::applyRenameAction);
+        // .forEach(declRefExpr -> System.out.println("Found decl ref:" + declRefExpr));
+
+        // // Add types that might refer to variables
+        // if (call.getCalleeName().equals("inputInCast")) {
+        //
+        //
+        // // System.out
+        // // .println("COPIED STATEMENTS:" + call.getArgs().get(2).getType().toTree());
+        // }
 
         replaceReturn();
         // Optional<Stmt> returnReplacement = getReturnReplacement();

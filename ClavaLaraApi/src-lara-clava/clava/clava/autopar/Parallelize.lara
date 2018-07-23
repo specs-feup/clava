@@ -2,9 +2,10 @@ import clava.autopar.InlineFunctionCalls;
 import clava.autopar.RemoveNakedloops;
 import clava.autopar.NormalizedBinaryOp;
 import clava.autopar.ParallelizeLoop;
-    
 
 import clava.Clava;
+import lara.util.CodeInserter;    
+import lara.Io;
 
 /**
  * Utility methods for parallelization.
@@ -17,6 +18,72 @@ var Parallelize = {};
  * @param $loops {$loop[]} an array of for loops to attempt to parallelize. If undefined, tries to parallelize all for loops in the program.
  */
 Parallelize.forLoops = function($loops) {
+
+	var parallelLoops = Parallelize.getForLoopsPragmas($loops);
+
+	// Add pragmas to loops
+	for(var $loop of $loops) {
+		var ompPragma = parallelLoops[$loop.astId];
+		if(ompPragma === undefined) {
+			println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
+			continue;
+		}
+
+		$loop.insertBefore(ompPragma);
+		
+		// Add include
+		$loop.ancestor("file").addInclude("omp.h",true);
+	}
+	
+    println('Parallelization finished');    
+}
+
+/**
+ *
+ */
+Parallelize.forLoopsAsText = function($loops, outputFolder) {
+
+	if(outputFolder === undefined) {
+		outputFolder = Io.getPath("./");
+	}
+
+	var parallelLoops = Parallelize.getForLoopsPragmas($loops);
+
+	var codeInserter = new CodeInserter();
+	var filesWithPragmas = {};
+	
+	// Add pragmas to loops
+	for(var $loop of $loops) {
+		var ompPragma = parallelLoops[$loop.astId];
+		if(ompPragma === undefined) {
+			println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
+			continue;
+		}
+
+		var $file = $loop.ancestor("file");
+		if($file === undefined) {
+			println("Could not find a file associated with loop@"+$loop.location);
+			continue;
+		}
+		
+		codeInserter.add($file, $loop.line, ompPragma);
+		
+		// Add file
+		filesWithPragmas[$file] = true;
+	}
+	
+	// Add includes to files that have pragmas
+	for(var $file in filesWithPragmas) {
+		codeInserter.add($file, 1, "#include <omp.h>");
+	}
+	
+	codeInserter.write(outputFolder);
+	
+    println('Parallelization finished');    	
+}
+
+
+Parallelize.getForLoopsPragmas = function($loops) {
 	
 	// Initialize loops if undefined
 	if($loops === undefined) {
@@ -81,20 +148,7 @@ Parallelize.forLoops = function($loops) {
    
 	// Revert AST changes
 	Clava.popAst();
-
-	// Add pragmas to loops
-	for(var $loop of $loops) {
-		var ompPragma = parallelLoops[$loop.astId];
-		if(ompPragma === undefined) {
-			println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
-			continue;
-		}
-
-		$loop.insertBefore(ompPragma);
-		
-		// Add include
-		$loop.ancestor("file").addInclude("omp.h",true);
-	}
 	
-    println('Parallelization finished');    
-}
+	return parallelLoops;
+}	
+	
