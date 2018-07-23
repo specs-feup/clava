@@ -3,9 +3,8 @@ import clava.autopar.RemoveNakedloops;
 import clava.autopar.NormalizedBinaryOp;
 import clava.autopar.ParallelizeLoop;
 
-
 import clava.Clava;
-import clava.util.CodeInserter;    
+import lara.util.CodeInserter;    
 import lara.Io;
 
 /**
