@@ -1,0 +1,10 @@
+#include "includes.h"
+
+int main() {
+   int include1 = 1;
+   int include2 = 10;
+   int decl1 = 2;
+   int decl_2 = 20;
+   int decl1_full = 3;
+   int decl2_full = 30;
+}

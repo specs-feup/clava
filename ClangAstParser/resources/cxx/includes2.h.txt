@@ -1,0 +1,5 @@
+#ifndef _INCLUDES2_H_
+#define _INCLUDES2_H_
+
+extern int includes2;
+#endif

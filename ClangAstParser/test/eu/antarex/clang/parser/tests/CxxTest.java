@@ -54,8 +54,7 @@ public class CxxTest {
 
     @Test
     public void testDestructor() {
-        new CxxTester("destructor.cpp")
-                .test();
+        new CxxTester("destructor.cpp").test();
     }
 
     @Test

@@ -1,0 +1,6 @@
+#ifndef _INCLUDES_H_
+#define _INCLUDES_H_
+
+#include "includes2.h"
+extern int includes1;
+#endif

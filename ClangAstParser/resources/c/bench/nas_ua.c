@@ -5529,7 +5529,7 @@ void com_dpc(int iside, int iel, int enumber, int n, int isize)
   else
   {
     // MUST NOT reachable!!
-    assert(0);
+    //assert(0);
     nn1start = 0;
     nn1end = 0;
     nn2start = 0;
@@ -5589,7 +5589,7 @@ void com_dpc(int iside, int iel, int enumber, int n, int isize)
   else
   {
     // MUST NOT reachable!!
-    assert(0);
+    //assert(0);
     anc1 = 0.0;
     ac = 0.0;
     anc2 = 0.0;

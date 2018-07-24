@@ -1,0 +1,14 @@
+#ifndef _CONSTRUCTOR_H_
+#define _CONSTRUCTOR_H_
+
+
+struct Z {
+   Z(int i);
+};
+
+
+class A {
+   
+};
+
+#endif
