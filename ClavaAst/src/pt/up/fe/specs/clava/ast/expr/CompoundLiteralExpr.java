@@ -55,9 +55,11 @@ public class CompoundLiteralExpr extends Literal {
         //
         // System.out.println("INITIALIZER CODE:" + getInitializer().getCode());
         // return "(" + getTypeCode() + ")" + getInitializer().getCode();
-        return getLiteral();
+        // System.out.println("COMPOUND CODE: " + getLiteral());
+        // System.out.println("COMPOUND CODE V2: " + "(" + getTypeCode() + ")" + getChild(0).getCode());
+        // return getLiteral();
 
-        // return "(" + getTypeCode() + ")" + getChild(0).getCode();
+        return "(" + getTypeCode() + ")" + getChild(0).getCode();
 
         // System.out.println("TYPE:" + getTypeCode());
         // System.out.println("COMPOUND AST:" + toTree());
