@@ -10,6 +10,9 @@
 const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDREN_MAP = {
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
         {"FunctionNoProtoType", clava::TypeNode::FUNCTION_TYPE},
+        {"ConstantArrayType", clava::TypeNode::ARRAY_TYPE},
+        {"DependentSizedArrayType", clava::TypeNode::ARRAY_TYPE},
+        {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"PointerType", clava::TypeNode::POINTER_TYPE},
 };
@@ -36,6 +39,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitFunctionTypeChildren(static_cast<const FunctionType *>(T), visitedChildren); break;
         case clava::TypeNode::FUNCTION_PROTO_TYPE:
             VisitFunctionProtoTypeChildren(static_cast<const FunctionProtoType *>(T), visitedChildren); break;
+        case clava::TypeNode::ARRAY_TYPE:
+            VisitArrayTypeChildren(static_cast<const ArrayType *>(T), visitedChildren); break;
         case clava::TypeNode::VARIABLE_ARRAY_TYPE:
             VisitVariableArrayTypeChildren(static_cast<const VariableArrayType *>(T), visitedChildren); break;
         case clava::TypeNode::POINTER_TYPE:

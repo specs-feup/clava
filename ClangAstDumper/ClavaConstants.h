@@ -78,6 +78,7 @@ namespace clava {
         TAG_TYPE,
         ARRAY_TYPE,
         CONSTANT_ARRAY_TYPE,
+        DEPENDENT_SIZED_ARRAY_TYPE,
         INCOMPLETE_ARRAY_TYPE,
         VARIABLE_ARRAY_TYPE,
         POINTER_TYPE,
