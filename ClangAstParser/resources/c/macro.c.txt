@@ -5,5 +5,10 @@ int a = 0;
 
 int main() {
    
+	// Macro that uses compound literal expression
+	double d1;
+	double d2;
+	double d3 = (double){(d1) + (d2)};   
+   
    return 0;
 }

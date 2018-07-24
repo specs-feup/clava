@@ -53,7 +53,7 @@ public class CBenchTest {
     }
 
     /** NOT WORKING **/
-    // @Test
+    @Test
     public void testFt() {
         new CTester("bench/nas_ft.c").test();
     }
