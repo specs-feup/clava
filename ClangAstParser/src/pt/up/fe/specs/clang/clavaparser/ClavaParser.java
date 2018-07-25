@@ -86,7 +86,6 @@ import pt.up.fe.specs.clang.clavaparser.expr.CallExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CharacterLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.CompoundAssignOperatorParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ConditionalOperatorParser;
-import pt.up.fe.specs.clang.clavaparser.expr.DeclRefExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.ExprWithCleanupsParser;
 import pt.up.fe.specs.clang.clavaparser.expr.FloatingLiteralParser;
 import pt.up.fe.specs.clang.clavaparser.expr.GNUNullExprParser;
@@ -186,6 +185,10 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
  * Parses a ClangAst into ClavaNodes.
+ * 
+ * <p>
+ * This is a low-level class to be used internally, if you want to convert C/C++ code to the ClavaAst, use the class
+ * CodeParser.
  *
  * @author JoaoBispo
  *

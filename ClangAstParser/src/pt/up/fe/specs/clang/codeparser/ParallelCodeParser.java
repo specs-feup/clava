@@ -32,6 +32,7 @@ import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
 import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -41,6 +42,8 @@ import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.SpecsSystem;
 
 /**
  * Calls the dumper once per file.
@@ -67,9 +70,16 @@ public class ParallelCodeParser extends CodeParser {
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
         // ConcurrentLinkedQueue<File> workingFolders = new ConcurrentLinkedQueue<>();
 
+        long tic = System.nanoTime();
+
         List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
                 .map(sourceFile -> parseSource(new File(sourceFile), compilerOptions, clangDump))
                 .collect(Collectors.toList());
+
+        if (get(SHOW_EXEC_INFO)) {
+            ClavaLog.metrics(SpecsStrings.takeTime("Code to TUs", tic));
+            ClavaLog.metrics("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
+        }
 
         if (get(SHOW_CLANG_DUMP)) {
             SpecsLogs.msgInfo(clangDump.stream().collect(Collectors.joining("\n")));
@@ -115,6 +125,8 @@ public class ParallelCodeParser extends CodeParser {
         //
         // }
 
+        tic = System.nanoTime();
+
         App app = LegacyToDataStore.getFactory().app(tUnits);
 
         app.setSourcesFromStrings(allSources);
@@ -126,6 +138,12 @@ public class ParallelCodeParser extends CodeParser {
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
+
+        if (get(SHOW_EXEC_INFO)) {
+            ClavaLog.metrics(SpecsStrings.takeTime("TUs to Clava AST", tic));
+            String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true));
+            ClavaLog.metrics("Current memory used (Java):" + usedSize);
+        }
 
         // Perform second pass over types
         // processTypesSecondPass();

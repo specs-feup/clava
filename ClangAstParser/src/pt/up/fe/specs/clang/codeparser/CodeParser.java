@@ -39,6 +39,10 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<Boolean> SHOW_CODE = KeyFactory.bool("showCode");
     public static final DataKey<Boolean> USE_CUSTOM_RESOURCES = KeyFactory.bool("useCustomResources");
     public static final DataKey<Boolean> CLEAN = KeyFactory.bool("clean").setDefault(() -> true);
+    /**
+     * Execution information, such as execution time and memory used.
+     */
+    public static final DataKey<Boolean> SHOW_EXEC_INFO = KeyFactory.bool("showExecInfo").setDefaultString("true");
     // BEGIN DATAKEY
 
     public abstract App parse(List<File> sources, List<String> compilerOptions);

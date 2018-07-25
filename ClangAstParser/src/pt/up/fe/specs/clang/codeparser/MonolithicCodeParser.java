@@ -22,10 +22,13 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangDumperParser;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.SpecsSystem;
 
 /**
  * Parses the source files using a single call to the dumper.
@@ -115,9 +118,16 @@ public class MonolithicCodeParser extends CodeParser {
         // Parse files
         // ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources, disableNewParsingMethod).parse(
         // ClangRootNode ast = new ClangAstParser(showClangDump, useCustomResources).parse(
+
+        long tic = System.nanoTime();
         ClangRootNode ast = new ClangAstParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES)).parse(
                 implementationFiles,
                 compilerOptions);
+
+        if (get(SHOW_EXEC_INFO)) {
+            ClavaLog.metrics(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
+            ClavaLog.metrics("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
+        }
 
         // if (showClangDump) {
         if (get(SHOW_CLANG_DUMP)) {
@@ -131,9 +141,16 @@ public class MonolithicCodeParser extends CodeParser {
 
         // Parse dump information
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
+            tic = System.nanoTime();
             App clavaAst = clavaParser.parse();
             clavaAst.setSourcesFromStrings(allFiles);
             clavaAst.addConfig(ast.getConfig());
+
+            if (get(SHOW_EXEC_INFO)) {
+                ClavaLog.metrics(SpecsStrings.takeTime("Clang AST to Clava", tic));
+                String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true));
+                ClavaLog.metrics("Current memory used (Java):" + usedSize);
+            }
 
             // if (showClavaAst) {
             if (get(SHOW_CLAVA_AST)) {
