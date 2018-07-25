@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.ClangAstParser;
-import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
-import pt.up.fe.specs.clang.clavaparser.ClavaParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.viewer.ClavaViewerKeys;
 import pt.up.fe.specs.clava.viewer.CodeViewer;
@@ -32,11 +30,11 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class ClavaAstViewer implements CodeViewer {
 
-    private final boolean processTree;
+    // private final boolean processTree;
     private final boolean printCode;
 
-    public ClavaAstViewer(boolean processTree, boolean printCode) {
-        this.processTree = processTree;
+    public ClavaAstViewer(boolean printCode) {
+        // this.processTree = processTree;
         this.printCode = printCode;
     }
 
@@ -55,9 +53,10 @@ public class ClavaAstViewer implements CodeViewer {
             options.add("-std=c++11");
         }
 
-        ClangRootNode ast = new ClangAstParser().parse(Arrays.asList(cppFile.getAbsolutePath()), options);
+        App clavaAst = CodeParser.newInstance().parse(Arrays.asList(cppFile), options);
 
-        App clavaAst = new ClavaParser(ast, processTree).parse();
+        // ClangRootNode ast = new ClangAstParser().parse(Arrays.asList(cppFile.getAbsolutePath()), options);
+        // App clavaAst = new ClavaParser(ast, processTree).parse();
 
         SpecsIo.delete(cppFile);
 
@@ -67,7 +66,7 @@ public class ClavaAstViewer implements CodeViewer {
                     .collect(Collectors.joining("\n\n/*****************/\n\n"));
         }
 
-        return clavaAst.toString();
+        return clavaAst.toTree();
     }
 
     @Override

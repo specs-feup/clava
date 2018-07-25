@@ -17,10 +17,10 @@ import pt.up.fe.specs.clava.viewer.codeprinters.ClangAstViewer;
 import pt.up.fe.specs.clava.viewer.codeprinters.ClavaAstViewer;
 
 public enum DemoMode {
-    CLANG("CLANG AST", new ClangAstViewer()),
-    CLAVA("Clava AST", new ClavaAstViewer(false, false)),
-    PROCESSED_CLAVA("Processed Clava AST", new ClavaAstViewer(true, false)),
-    CLAVA_CPP("Clava C++", new ClavaAstViewer(true, true));
+    CLANG("Clang AST", new ClangAstViewer()),
+    // CLAVA("Clava AST", new ClavaAstViewer(false, false)),
+    CLAVA_AST("Clava AST", new ClavaAstViewer(false)),
+    CLAVA_CPP("C/C++", new ClavaAstViewer(true));
 
     private final String label;
     private final CodeViewer printer;
