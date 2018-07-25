@@ -8,5 +8,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="eu.antarex.clang.parser.ClavaSandbox"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClangAstParser"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:ClangAst/run/testClava}"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:ClangAstParser/run/testClava}"/>
 </launchConfiguration>

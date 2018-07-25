@@ -17,17 +17,14 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ast.ClangNode;
-import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
-import pt.up.fe.specs.clang.clavaparser.ClavaParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
-import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.io.PathFilter;
 
 public class ClavaSandbox {
 
@@ -58,8 +55,13 @@ public class ClavaSandbox {
         // List<String> files = Arrays.asList("pdist/*.cpp");
 
         // File baseFolder = new File("betweenness/");
-        List<String> files = Arrays.asList("betweenness/*.cpp");
+        // List<String> files = Arrays.asList("betweenness/*.cpp");
 
+        List<File> files = SpecsIo.getPathsWithPattern(new File("./betweenness"), "*.cpp", true, PathFilter.FILES);
+        // List<File> files = SpecsIo.getFilesWithPattern(new File("./betweenness"), "*.cpp");
+        // System.out.println("SIMPLE GTE PATTERM:" + files);
+        // System.out.println("NEW GTE PATTERM:"
+        // + SpecsIo.getPathsWithPattern(new File("./betweenness"), "*", true, PathFilter.FOLDERS));
         // File baseFolder = new File("montecarlo/");
         // List<String> files = Arrays.asList("montecarlo/*.cpp");
 
@@ -73,16 +75,27 @@ public class ClavaSandbox {
         // "-Iinclude-antarex"
         );
 
-        long tic;
+        // long tic;
 
-        tic = System.nanoTime();
+        // tic = System.nanoTime();
+        App clavaAst = CodeParser.newInstance().parse(files, options);
+
+        SpecsIo.write(new File("clavaDump.txt"), clavaAst.toString());
+        // System.out.println("CLAVA TREE:\n" + clavaAst);
+
+        clavaAst.write(SpecsIo.mkdir("./output"));
+
+        String filename = "test.cpp";
+        clavaAst.getFile(filename).ifPresent(tu -> System.out.println(filename + ":\n" + tu));
+
+        /*        
         ClangRootNode ast = new ClangAstParser().parse(files, options);
-        SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
-        SpecsLogs.msgInfo("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
+        // SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
+        // SpecsLogs.msgInfo("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
         // LoggingUtils.msgInfo("Heap size (Java):" + ParseUtils.parseSize(Runtime.getRuntime().maxMemory()));
-
+        
         // System.out.println("CLANG AST:" + ast.getClangOutput());
-
+        
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             tic = System.nanoTime();
             App clavaAst = clavaParser.parse();
@@ -90,25 +103,26 @@ public class ClavaSandbox {
             SpecsLogs
                     .msgInfo("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
             // LoggingUtils.msgInfo("Heap size (Java):" + ParseUtils.parseSize(Runtime.getRuntime().maxMemory()));
-
+        
             // System.out.println("EXTRACTED INTS:" + IntegerLiteralParser.getCOUNTER());
-
+        
             // long integers = clavaAst.getDescendantsAndSelfStream()
             // .filter(node -> node instanceof IntegerLiteral)
             // .count();
             // System.out.println("FOUND " + integers + " integers");
             // clavaAst.writeFromTopFile(mainFile, IoUtils.safeFolder("./output"));
-
+        
             SpecsIo.write(new File("clavaDump.txt"), clavaAst.toString());
             // System.out.println("CLAVA TREE:\n" + clavaAst);
-
+        
             clavaAst.write(SpecsIo.mkdir("./output"));
-
+        
             String filename = "test.cpp";
             clavaAst.getFile(filename).ifPresent(tu -> System.out.println(filename + ":\n" + tu));
         } catch (Exception e) {
             SpecsLogs.msgWarn("Error message:\n", e);
         }
+        */
     }
 
     public static void testAst() {
