@@ -31,8 +31,7 @@ import pt.up.fe.specs.antarex.clava.AntarexClavaLaraApis;
 import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.SupportedPlatform;
-import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
-import pt.up.fe.specs.clang.clavaparser.ClavaParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -56,10 +55,9 @@ import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.SpecsStrings;
-import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.csv.CsvField;
 import pt.up.fe.specs.util.csv.CsvWriter;
@@ -557,52 +555,69 @@ public class CxxWeaver extends ACxxWeaver {
 
         boolean useCustomResources = getConfig().get(ClavaOptions.CUSTOM_RESOURCES);
 
+        CodeParser codeParser = CodeParser.newInstance();
+        codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
+        App app = codeParser.parse(SpecsCollections.map(implementationFilenames, File::new), parserOptions);
+        // Set source paths of each TranslationUnit
+        // app.setSourcesFromStrings(allFiles);
+
+        // Set options
+
+        // Set external dependencies
+        app.getExternalDependencies()
+                .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
+
+        return app;
+
+        /*
         // TODO: parse should receive File instead of String?
         long tic = System.nanoTime();
-
+        
         // boolean disableNewParsingMethod = getConfig().get(ClavaOptions.DISABLE_CLAVA_DATA_NODES);
         // ClangRootNode ast = new ClangAstParser(false, useCustomResources, disableNewParsingMethod).parse(
         ClangRootNode ast = new ClangAstParser(false, useCustomResources).parse(
                 implementationFilenames,
                 parserOptions);
-
+        
         SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
         if (SHOW_MEMORY_USAGE) {
             SpecsLogs
                     .msgInfo("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
         }
-
+        
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             tic = System.nanoTime();
             App app = clavaParser.parse();
             // System.out.println("ALL FILES: " + allFiles);
             // Set source paths of each TranslationUnit
             app.setSourcesFromStrings(allFiles);
-
+        
             // Set options
-
+        
             // Set external dependencies
             app.getExternalDependencies()
                     .setDisableRemoteDependencies(getConfig().get(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES));
-
+        
             // app.setSources(sources);
             SpecsLogs.msgInfo(SpecsStrings.takeTime("Clang AST to Clava", tic));
-
+        
             // tic = System.nanoTime();
             // ClavaPragmas.processClavaPragmas(app);
             // SpecsLogs.msgInfo(SpecsStrings.takeTime("Weaver AST processing", tic));
-
+        
             if (SHOW_MEMORY_USAGE) {
                 SpecsLogs.msgInfo("Current memory used (Java):"
                         + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
                 // LoggingUtils.msgInfo("Heap size (Java):" + ParseUtils.parseSize(Runtime.getRuntime().maxMemory()));
             }
-
+        
+            System.out.println("APP:" + app.toTree());
+        
             return app;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        */
     }
 
     // private void addFlagsFromFiles(List<File> includeFolders, List<String> filenames, List<String> parserOptions) {
