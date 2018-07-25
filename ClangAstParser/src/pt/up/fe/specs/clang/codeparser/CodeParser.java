@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 public abstract class CodeParser extends ADataClass<CodeParser> {
 
     // BEGIN DATAKEY
+
     public static final DataKey<Boolean> SHOW_CLANG_DUMP = KeyFactory.bool("showClangDump");
     public static final DataKey<Boolean> SHOW_CLANG_AST = KeyFactory.bool("showClangAst");
     public static final DataKey<Boolean> SHOW_CLAVA_AST = KeyFactory.bool("showClavaAst");
@@ -42,7 +43,15 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     /**
      * Execution information, such as execution time and memory used.
      */
-    public static final DataKey<Boolean> SHOW_EXEC_INFO = KeyFactory.bool("showExecInfo").setDefaultString("true");
+    public static final DataKey<Boolean> SHOW_EXEC_INFO = KeyFactory.bool("showExecInfo").setDefault(() -> true);
+
+    /**
+     * Applies several transformations to the Clava AST when parsing (e.g., normalization passes). By default is
+     * enabled.
+     */
+    // public static final DataKey<Boolean> PROCESS_CLAVA_AST = KeyFactory.bool("processClavaAst").setDefault(() ->
+    // true);
+
     // BEGIN DATAKEY
 
     public abstract App parse(List<File> sources, List<String> compilerOptions);

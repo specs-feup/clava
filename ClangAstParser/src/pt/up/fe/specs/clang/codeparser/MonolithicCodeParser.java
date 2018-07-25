@@ -139,6 +139,12 @@ public class MonolithicCodeParser extends CodeParser {
             SpecsLogs.msgInfo("Clang AST:\n" + ast);
         }
 
+        if (get(CLEAN)) {
+            for (String tempFile : ClangAstParser.getTempFiles()) {
+                new File(tempFile).delete();
+            }
+        }
+
         // Parse dump information
         try (ClavaParser clavaParser = new ClavaParser(ast)) {
             tic = System.nanoTime();
