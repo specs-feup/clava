@@ -53,4 +53,13 @@ public class ClavaLog extends SpecsLogger {
 
         SpecsLogs.msgInfo("[Warning] " + message);
     }
+
+    /**
+     * Info-level message prefixed with [ClavaMetrics].
+     * 
+     * @param takeTime
+     */
+    public static void metrics(String message) {
+        info("[ClavaMetrics] " + message);
+    }
 }
