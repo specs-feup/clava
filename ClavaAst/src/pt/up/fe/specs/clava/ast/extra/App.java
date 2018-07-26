@@ -72,7 +72,7 @@ public class App extends ClavaNode {
      */
     public final static DataKey<DataStore> APP_DATA = KeyFactory.object("appData", DataStore.class)
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
-            .setCopyFunction(dataStore -> dataStore.copy());
+            .setCopyFunction(dataStore -> DataStore.newInstance(dataStore.getName(), dataStore));
 
     /// DATAKEYS END
 
