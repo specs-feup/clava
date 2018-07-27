@@ -95,6 +95,10 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 }
 
 void ClangAstDumper::VisitTypeTop(const Type *T) {
+    if(T == nullptr) {
+        return;
+    }
+
     TypeVisitor::Visit(T);
 }
 
@@ -107,10 +111,18 @@ void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
 }
 
 void ClangAstDumper::VisitDeclTop(const Decl *Node) {
+    if(Node == nullptr) {
+        return;
+    }
+
     ConstDeclVisitor::Visit(Node);
 }
 
 void ClangAstDumper::VisitAttrTop(const Attr *Node) {
+    if(Node == nullptr) {
+        return;
+    }
+
     VisitAttr(Node);
 }
 
