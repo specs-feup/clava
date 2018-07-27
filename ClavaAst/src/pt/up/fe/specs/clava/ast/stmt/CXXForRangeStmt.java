@@ -24,7 +24,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
-public class CXXForRangeStmt extends Stmt {
+public class CXXForRangeStmt extends LoopStmt {
 
     public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
             Stmt body) {
@@ -62,8 +62,9 @@ public class CXXForRangeStmt extends Stmt {
         return getChild(DeclStmt.class, 4);
     }
 
-    public Stmt getBody() {
-        return getChild(Stmt.class, 5);
+    @Override
+    public CompoundStmt getBody() {
+        return getChild(CompoundStmt.class, 5);
     }
 
     @Override
@@ -90,5 +91,10 @@ public class CXXForRangeStmt extends Stmt {
         code.append(getBody().getCode());
 
         return code.toString();
+    }
+
+    @Override
+    public Optional<ClavaNode> getStmtCondition() {
+        return Optional.of(getCond());
     }
 }
