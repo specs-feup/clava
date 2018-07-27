@@ -25,6 +25,7 @@ namespace clava {
         DECL,
         NAMED_DECL,
         VALUE_DECL,
+        DECLARATOR_DECL,
         TYPE_DECL,
         FUNCTION_DECL,
         CXX_METHOD_DECL,
