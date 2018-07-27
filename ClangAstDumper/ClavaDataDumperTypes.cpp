@@ -219,7 +219,42 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
     clava::dump(clava::REFERENCE_QUALIFIER[info.RefQualifier]);
 
     clava::dump(clava::EXCEPTION_SPECIFICATION_TYPE[info.ExceptionSpec.Type]);
-    clava::dump(clava::getId(info.ExceptionSpec.NoexceptExpr, id));
+    // Dump types array
+    clava::dump(info.ExceptionSpec.Exceptions.size());
+    for(auto& exceptType : info.ExceptionSpec.Exceptions) {
+        clava::dump(clava::getId(exceptType, id));
+    }
+
+    switch(info.ExceptionSpec.Type) {
+        case EST_ComputedNoexcept:
+            clava::dump(clava::getId(info.ExceptionSpec.NoexceptExpr, id));
+            break;
+        case EST_Unevaluated:
+            clava::dump(clava::getId(info.ExceptionSpec.SourceDecl, id));
+            break;
+        case EST_Uninstantiated:
+            clava::dump(clava::getId(info.ExceptionSpec.SourceDecl, id));
+            clava::dump(clava::getId(info.ExceptionSpec.SourceTemplate, id));
+            break;
+        default:
+            // No additional information required
+            break;
+    }
+
+    //clava::dump(clava::getId(info.ExceptionSpec.NoexceptExpr, id));
+    //info.ExceptionSpec.SourceDecl
+/*
+        FunctionProtoType::ExtProtoInfo EPI = T->getExtProtoInfo();
+        switch (EPI.ExceptionSpec.Type) {
+            default: break;
+            case EST_Unevaluated:
+                OS << " noexcept-unevaluated " << EPI.ExceptionSpec.SourceDecl;
+                break;
+            case EST_Uninstantiated:
+                OS << " noexcept-uninstantiated " << EPI.ExceptionSpec.SourceTemplate;
+                break;
+        }
+*/
 
 }
 

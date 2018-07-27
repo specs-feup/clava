@@ -8,6 +8,7 @@
 #include "ClangEnums.h"
 
 #include <map>
+#include <string>
 
 const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"CXXConstructorDecl", clava::DeclNode::CXX_METHOD_DECL},
@@ -56,6 +57,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpTypeDeclData(static_cast<const TypeDecl *>(D)); break;
         case clava::DeclNode::VALUE_DECL:
             DumpValueDeclData(static_cast<const ValueDecl *>(D)); break;
+        case clava::DeclNode::DECLARATOR_DECL:
+            DumpDeclaratorDeclData(static_cast<const DeclaratorDecl *>(D)); break;
         case clava::DeclNode::FUNCTION_DECL:
             DumpFunctionDeclData(static_cast<const FunctionDecl *>(D)); break;
         case clava::DeclNode::CXX_METHOD_DECL:
@@ -81,6 +84,7 @@ void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     clava::dump(D->isUsed());
     clava::dump(D->isReferenced());
     clava::dump(D->isInvalidDecl());
+    clava::dump(D->isModulePrivate());
 
 
     // Attributes
@@ -150,19 +154,44 @@ void clava::ClavaDataDumper::DumpValueDeclData(const ValueDecl *D) {
 }
 
 
+void clava::ClavaDataDumper::DumpDeclaratorDeclData(const DeclaratorDecl *D) {
+    // Hierarchy
+    DumpValueDeclData(D);
+
+    // Nothing for now
+}
+
+
 
 
 void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     // Hierarchy
-    DumpValueDeclData(D);
+    DumpDeclaratorDeclData(D);
+
+
 
     // Print information about FunctionDecl
     clava::dump(D->isConstexpr());
     clava::dump(D->getTemplatedKind());
-//    llvm::errs() << D->isConstexpr() << "\n";
-//    llvm::errs() << D->getTemplatedKind() << "\n";
+    clava::dump(D->getStorageClass());
+    clava::dump(D->isInlineSpecified());
+    clava::dump(D->isVirtualAsWritten());
+    clava::dump(D->isPure());
+    clava::dump(D->isDeletedAsWritten());
 
 
+
+
+/*
+    if (D->getStorageClass() != SC_None) {
+        std::string storageClassStr;
+        llvm::raw_string_ostream scStream(storageClassStr);
+        scStream << VarDecl::getStorageClassSpecifierString(D->getStorageClass());
+        clava::dump(scStream.str());
+    } else {
+        clava::dump("none");
+    }
+*/
 /*
   StorageClass SC = D->getStorageClass();
   if (SC != SC_None)
@@ -200,18 +229,13 @@ void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     // Print information about VarDecl
     clava::dump(D->getStorageClass());
     clava::dump(D->getTLSKind());
-    clava::dump(D->isModulePrivate());
     clava::dump(D->isNRVOVariable());
     clava::dump(D->getInitStyle());
 
     clava::dump(D->isConstexpr());
-    clava::dump(D->isStaticDataMember() );
+    clava::dump(D->isStaticDataMember());
     clava::dump(D->isOutOfLine());
     clava::dump(D->hasGlobalStorage());
-//    llvm::errs() << D->isConstexpr() << "\n";
-//    llvm::errs() << D->isStaticDataMember() << "\n";
-//    llvm::errs() << D->isOutOfLine() << "\n";
-//    llvm::errs() << D->hasGlobalStorage() << "\n";
 
 
     /**
