@@ -41,6 +41,10 @@ void ClangAstDumper::visitChildrenAndData(const Expr *E) {
 
 bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
 
+    if(stmtAddr == nullptr) {
+        return true;
+    }
+
     if(seenStmts.count(stmtAddr) != 0) {
         return true;
     }

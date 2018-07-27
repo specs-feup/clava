@@ -75,6 +75,10 @@ void ClangAstDumper::dumpNumberTemplateParameters(const Decl *D, const TemplateP
  */
 
 bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
+    if(declAddr == nullptr) {
+        return true;
+    }
+
     if(seenDecls.count(declAddr) != 0) {
         return true;
     }
