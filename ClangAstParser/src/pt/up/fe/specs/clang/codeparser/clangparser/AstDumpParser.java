@@ -36,6 +36,7 @@ import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -293,7 +294,7 @@ public class AstDumpParser implements ClangParser {
         // Check if no new nodes should be used
         // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
         // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
-        Map<String, ClavaNode> newNodes = parsedData.get(ClangParserKeys.CLAVA_NODES);
+        ClavaNodes newNodes = parsedData.get(ClangParserKeys.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,

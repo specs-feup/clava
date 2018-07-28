@@ -14,7 +14,9 @@
 package pt.up.fe.specs.clang.parsers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -43,6 +45,23 @@ public class ClavaNodes {
     private static final Set<String> NULL_IDS = new HashSet<>(
             Arrays.asList(NULLPRT_DECL, NULLPRT_STMT, NULLPRT_EXPR, NULLPRT_TYPE, NULLPRT_ATTR));
 
+    private final DataStore data;
+    private final Map<String, ClavaNode> clavaNodes;
+
+    public ClavaNodes(DataStore data) {
+        this.data = data;
+        this.clavaNodes = new HashMap<>();
+    }
+
+    public Map<String, ClavaNode> getNodes() {
+        return clavaNodes;
+    }
+
+    public ClavaNode get(String nodeId) {
+        return clavaNodes.get(nodeId);
+    }
+
+    // TODO: Make all static methods, instance methods
     private static ClavaNode getNode(DataStore data, String id) {
         ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
 

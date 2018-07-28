@@ -15,7 +15,6 @@ package pt.up.fe.specs.clang.parsers;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +63,8 @@ public class ClavaNodeParser implements LineStreamWorker {
             throw new RuntimeException("ClavaNodeParser requires ClavaNode Factory");
         }
 
-        data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
+        // data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
+        data.add(ClangParserKeys.CLAVA_NODES, new ClavaNodes(data));
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
     }
 
@@ -80,7 +80,7 @@ public class ClavaNodeParser implements LineStreamWorker {
 
         String classname = lineStream.nextLine();
         // System.out.println("CLASS NAMES:" + classname);
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
+        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES).getNodes();
 
         // Check if node was already parsed
         if (parsedNodes.containsKey(nodeId)) {
@@ -169,7 +169,7 @@ public class ClavaNodeParser implements LineStreamWorker {
             childrenIds = Collections.emptyList();
         }
 
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
+        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES).getNodes();
 
         // Get the children nodes
         List<ClavaNode> children = new ArrayList<>(childrenIds.size());

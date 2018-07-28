@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
@@ -59,7 +60,7 @@ public class ClangRootNode extends ClangNode {
         // namespace qualifiers, such as 'std::'
         private final DataStore stdErr;
 
-        private final Map<String, ClavaNode> newParsedNodes;
+        private final ClavaNodes newParsedNodes;
 
         private final Map<String, ClangNode> allClangNodes;
 
@@ -72,7 +73,7 @@ public class ClangRootNode extends ClangNode {
                 Map<String, String> nodeToTypes,
                 // Set<String> hasTemplateArguments,
                 Set<String> isTemporary, Map<String, OMPDirective> ompDirectives,
-                Map<String, String> enumToIntegerType, DataStore stdErr, Map<String, ClavaNode> newParsedNodes,
+                Map<String, String> enumToIntegerType, DataStore stdErr, ClavaNodes newParsedNodes,
                 List<ClangNode> topLevelNodes) {
 
             this.config = config;
@@ -119,7 +120,8 @@ public class ClangRootNode extends ClangNode {
         }
 
         public Map<String, ClavaNode> getNewParsedNodes() {
-            return newParsedNodes;
+            // return newParsedNodes;
+            return newParsedNodes.getNodes();
         }
 
         public Map<String, String> getDeclRefExprQualifiers() {
