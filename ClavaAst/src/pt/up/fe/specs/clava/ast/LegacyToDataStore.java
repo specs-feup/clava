@@ -39,6 +39,7 @@ import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
@@ -132,12 +133,25 @@ public class LegacyToDataStore {
         nodeData.add(FunctionProtoType.IS_VOLATILE, data.isVolatile());
         nodeData.add(FunctionProtoType.IS_RESTRICT, data.isRestrict());
         nodeData.add(FunctionProtoType.REFERENCE_QUALIFIER, data.getReferenceQualifier());
-        nodeData.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
-                SpecsEnums.values(ExceptionSpecificationType.class)[data.getSpecifier().ordinal()]);
 
-        String noexpectExpr = data.getNoexceptExpr() == null ? "<null noexcept expr>" : data.getNoexceptExpr();
-        nodeData.add(FunctionProtoType.NOEXCEPT_EXPR,
-                getFactory().literalExpr(noexpectExpr, getFactory().dummyType("<no type>")));
+        ExceptionSpecificationType exceptType = SpecsEnums.values(ExceptionSpecificationType.class)[data.getSpecifier()
+                .ordinal()];
+
+        ExceptionSpecification exceptSpec = exceptType.newInstance();
+
+        /*
+        // TODO: Needs to convert value into node
+        String noexpectExpr = data.getNoexceptExpr() == null ? null : data.getNoexceptExpr();
+        exceptSpec.set(ComputedNoexcept.NOEXCEPT_EXPR, value);
+        */
+        nodeData.add(FunctionProtoType.EXCEPTION_SPECIFICATION, exceptSpec);
+
+        // nodeData.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
+        // SpecsEnums.values(ExceptionSpecificationType.class)[data.getSpecifier().ordinal()]);
+
+        // String noexpectExpr = data.getNoexceptExpr() == null ? "<null noexcept expr>" : data.getNoexceptExpr();
+        // nodeData.add(FunctionProtoType.NOEXCEPT_EXPR,
+        // getFactory().literalExpr(noexpectExpr, getFactory().dummyType("<no type>")));
 
         return this;
     }

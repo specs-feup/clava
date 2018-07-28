@@ -15,6 +15,10 @@ package pt.up.fe.specs.clava.ast.type.enums;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
+import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
 
 public enum ExceptionSpecificationType {
 
@@ -55,6 +59,23 @@ public enum ExceptionSpecificationType {
         default:
             ClavaLog.info("Code generation not implemented yet for Exception Specifier '" + this + "'");
             return "\n#if 0\nNOT IMPLEMENTED: " + this + "\n#endif\n";
+        }
+    }
+
+    public ExceptionSpecification newInstance() {
+        return newInstanceBase().set(ExceptionSpecification.EXCEPTION_SPECIFICATION_TYPE, this);
+    }
+
+    private ExceptionSpecification newInstanceBase() {
+        switch (this) {
+        case ComputedNoexcept:
+            return new ComputedNoexcept();
+        case Unevaluated:
+            return new UnevaluatedExceptionSpecification();
+        case Uninstantiated:
+            return new UninstantiatedExceptionSpecification();
+        default:
+            return new ExceptionSpecification();
         }
     }
 

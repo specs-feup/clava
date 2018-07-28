@@ -21,8 +21,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 
 public class FunctionProtoType extends FunctionType {
@@ -44,10 +43,13 @@ public class FunctionProtoType extends FunctionType {
     public final static DataKey<ReferenceQualifier> REFERENCE_QUALIFIER = KeyFactory
             .enumeration("referenceQualifier", ReferenceQualifier.class);
 
-    public final static DataKey<ExceptionSpecificationType> EXCEPTION_SPECIFICATION_TYPE = KeyFactory
-            .enumeration("exceptionSpecificationType", ExceptionSpecificationType.class);
+    public final static DataKey<ExceptionSpecification> EXCEPTION_SPECIFICATION = KeyFactory
+            .object("exceptionSpecification", ExceptionSpecification.class);
 
-    public final static DataKey<Expr> NOEXCEPT_EXPR = KeyFactory.object("noexceptExpr", Expr.class);
+    // public final static DataKey<ExceptionSpecificationType> EXCEPTION_SPECIFICATION_TYPE = KeyFactory
+    // .enumeration("exceptionSpecificationType", ExceptionSpecificationType.class);
+    //
+    // public final static DataKey<Expr> NOEXCEPT_EXPR = KeyFactory.object("noexceptExpr", Expr.class);
 
     /// DATAKEYS END
 
@@ -77,7 +79,8 @@ public class FunctionProtoType extends FunctionType {
             code.append(" volatile");
         }
 
-        String exceptCode = get(EXCEPTION_SPECIFICATION_TYPE).getCode(get(NOEXCEPT_EXPR));
+        // String exceptCode = get(EXCEPTION_SPECIFICATION_TYPE).getCode(get(NOEXCEPT_EXPR));
+        String exceptCode = get(EXCEPTION_SPECIFICATION).getCode(this);
         code.append(exceptCode);
 
         return code.toString();
