@@ -16,6 +16,8 @@ package pt.up.fe.specs.clava.ast.type.data.exception;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import pt.up.fe.specs.clava.ast.decl.Decl;
+
 public class UninstantiatedExceptionSpecification extends ExceptionSpecification {
 
     /// DATAKEYS BEGIN
@@ -27,16 +29,18 @@ public class UninstantiatedExceptionSpecification extends ExceptionSpecification
      * An id is used instead of a reference to the node because at parsing time, the node might be in halfway built when
      * it is needed.
      */
-    public final static DataKey<String> SOURCE_DECL_ID = KeyFactory.string("sourceDeclId");
+    // public final static DataKey<String> SOURCE_DECL_ID = KeyFactory.string("sourceDeclId");
 
     /**
-     * The function template id corresponding to the instantiation of this exception specification. *
+     * The FunctionDecl corresponding to this exception specification.
      * 
-     * <p>
-     * An id is used instead of a reference to the node because at parsing time, the node might be in halfway built when
-     * it is needed.
      */
-    public final static DataKey<String> SOURCE_TEMPLATE_ID = KeyFactory.string("sourceTemplateId");
+    public final static DataKey<Decl> SOURCE_DECL = KeyFactory.object("sourceDecl", Decl.class);
+
+    /**
+     * The function template corresponding to the instantiation of this exception specification.
+     */
+    public final static DataKey<Decl> SOURCE_TEMPLATE = KeyFactory.object("sourceTemplate", Decl.class);
 
     /// DATAKEYS END
 

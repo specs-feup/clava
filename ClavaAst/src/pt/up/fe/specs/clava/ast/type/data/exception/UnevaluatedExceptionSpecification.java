@@ -16,11 +16,8 @@ package pt.up.fe.specs.clava.ast.type.data.exception;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
 
@@ -33,14 +30,21 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
      * An id is used instead of a reference to the node because at parsing time, the node might be in halfway built when
      * it is needed.
      */
-    public final static DataKey<String> SOURCE_DECL_ID = KeyFactory.string("sourceDeclId");
+    // public final static DataKey<String> SOURCE_DECL_ID = KeyFactory.string("sourceDeclId");
+
+    /**
+     * The FunctionDecl corresponding to this exception specification.
+     * 
+     */
+    public final static DataKey<Decl> SOURCE_DECL = KeyFactory.object("sourceDecl", Decl.class);
 
     /// DATAKEYS END
 
     @Override
     public String getCode(FunctionProtoType type) {
 
-        // FunctionDecl sourceDecl = getSourceDecl(type);
+        Decl sourceDecl = getSourceDecl(type);
+        // System.out.println("SOURCE DECL:" + sourceDecl);
         // FunctionType sourceDeclType = sourceDecl.getFunctionType();
         //
         // System.out.println("EXCEPTION TYPE:" + type.getId());
@@ -52,12 +56,13 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
         // return super.getCode();
     }
 
-    public FunctionDecl getSourceDecl(FunctionProtoType type) {
-        ClavaNode clavaNode = type.getContext().get(ClavaContext.APP).getNode(get(SOURCE_DECL_ID));
-
-        SpecsCheck.checkArgument(clavaNode instanceof FunctionDecl,
-                () -> "Expected SourceDecl to be a FunctionDecl, is '" + clavaNode.getClass() + "'");
-
-        return (FunctionDecl) clavaNode;
+    public Decl getSourceDecl(FunctionProtoType type) {
+        return get(SOURCE_DECL);
+        // ClavaNode clavaNode = type.getContext().get(ClavaContext.APP).getNode(get(SOURCE_DECL_ID));
+        //
+        // SpecsCheck.checkArgument(clavaNode instanceof FunctionDecl,
+        // () -> "Expected SourceDecl to be a FunctionDecl, is '" + clavaNode.getClass() + "'");
+        //
+        // return (FunctionDecl) clavaNode;
     }
 }
