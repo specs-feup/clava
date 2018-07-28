@@ -23,6 +23,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.extra.App;
 
 public class ClavaContext extends ADataClass<ClavaContext> {
 
@@ -43,6 +44,9 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
     public final static DataKey<ClavaFactory> FACTORY = KeyFactory
             .object("factory", ClavaFactory.class);
+
+    public final static DataKey<App> APP = KeyFactory
+            .object("app", App.class);
 
     /**
      * Temporary measure due to TextParser being called more than once over the same nodes.
