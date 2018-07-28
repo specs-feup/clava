@@ -129,7 +129,7 @@ public class ClangDataParsers {
 
         StringParser parser = new StringParser(string);
 
-        StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelper(),
+        StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelperDeprecated(),
                 StorageClass.NONE);
         boolean isInline = parser.apply(ClangGenericParsers::checkWord, "inline");
         boolean isVirtual = parser.apply(ClangGenericParsers::checkWord, "virtual");
@@ -431,7 +431,7 @@ public class ClangDataParsers {
         // DataStore streamData, DataKey<Map<String, T>> key) {
         StringParser parser = new StringParser(string);
 
-        StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelper(),
+        StorageClass storageClass = parser.apply(ClangGenericParsers::checkEnum, StorageClass.getHelperDeprecated(),
                 StorageClass.NONE);
         TLSKind tlsKind = parser.apply(ClangGenericParsers::checkEnum, TLSKind.getHelper(), TLSKind.NONE);
 

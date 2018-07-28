@@ -43,9 +43,11 @@ public class ClavaNodes {
     private static final Set<String> NULL_IDS = new HashSet<>(
             Arrays.asList(NULLPRT_DECL, NULLPRT_STMT, NULLPRT_EXPR, NULLPRT_TYPE, NULLPRT_ATTR));
 
-    public static ClavaNode getNode(DataStore data, String id) {
+    private static ClavaNode getNode(DataStore data, String id) {
         ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
-        SpecsCheck.checkNotNull(clavaNode, () -> "No ClavaNode found for id '" + id + "'");
+
+        Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + id
+                + "'. Check if node is being visited, or if there is a cycle in the tree.");
 
         return clavaNode;
 

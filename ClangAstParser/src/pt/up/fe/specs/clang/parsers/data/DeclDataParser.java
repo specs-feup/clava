@@ -55,6 +55,7 @@ public class DeclDataParser {
         data.add(Decl.IS_USED, LineStreamParsers.oneOrZero(lines));
         data.add(Decl.IS_REFERENCED, LineStreamParsers.oneOrZero(lines));
         data.add(Decl.IS_INVALID_DECL, LineStreamParsers.oneOrZero(lines));
+        data.add(Decl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines));
 
         List<Attribute> attributes = LineStreamParsers.stringList(lines).stream()
                 .map(attrId -> ClavaNodes.getAttr(dataStore, attrId))
@@ -112,6 +113,17 @@ public class DeclDataParser {
 
         data.add(FunctionDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
+        data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromInt(StorageClass.getHelper(), lines));
+        data.add(FunctionDecl.IS_INLINE, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_DELETED, LineStreamParsers.oneOrZero(lines));
+
+        // data.add(FunctionDecl.STORAGE_CLASS, StorageClass.getHelper().fromValue(lines.nextLine()));
+
+        // if (data.get(FunctionDecl.STORAGE_CLASS) != StorageClass.NONE) {
+        // throw new RuntimeException("STOP:" + data.get(FunctionDecl.STORAGE_CLASS));
+        // }
 
         return data;
     }
@@ -133,7 +145,7 @@ public class DeclDataParser {
 
         data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromInt(StorageClass.getHelper(), lines));
         data.add(VarDecl.TLS_KIND, LineStreamParsers.enumFromInt(TLSKind.getHelper(), lines));
-        data.add(VarDecl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines));
+        // data.add(VarDecl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines)); // Moved to Decl
         data.add(VarDecl.IS_NRVO_VARIABLE, LineStreamParsers.oneOrZero(lines));
         data.add(VarDecl.INIT_STYLE, LineStreamParsers.enumFromInt(InitializationStyle.getHelper(), lines));
 

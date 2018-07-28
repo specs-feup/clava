@@ -18,7 +18,6 @@ import java.math.BigInteger;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -32,7 +31,6 @@ import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
-import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -117,10 +115,8 @@ public class TypeDataParser {
         data.add(FunctionProtoType.REFERENCE_QUALIFIER,
                 LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
 
-        data.add(FunctionProtoType.EXCEPTION_SPECIFICATION_TYPE,
-                LineStreamParsers.enumFromName(ExceptionSpecificationType.class, lines));
+        data.add(FunctionProtoType.EXCEPTION_SPECIFICATION, ClavaDataParsers.exceptionSpecification(lines, parserData));
 
-        data.add(FunctionProtoType.NOEXCEPT_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
         /*
         
         

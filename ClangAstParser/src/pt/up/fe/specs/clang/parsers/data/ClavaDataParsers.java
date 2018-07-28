@@ -13,12 +13,23 @@
 
 package pt.up.fe.specs.clang.parsers.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
+import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -100,6 +111,46 @@ public class ClavaDataParsers {
         }
 
         return builder.toString();
+    }
+
+    public static ExceptionSpecification exceptionSpecification(LineStream lines, DataStore parserData) {
+
+        ExceptionSpecificationType exceptionSpecificationType = LineStreamParsers
+                .enumFromName(ExceptionSpecificationType.class, lines);
+
+        ExceptionSpecification exceptionSpecification = exceptionSpecificationType.newInstance();
+
+        int numTypes = LineStreamParsers.integer(lines);
+        List<Type> exceptionTypes = new ArrayList<>(numTypes);
+        for (int i = 0; i < numTypes; i++) {
+            exceptionTypes.add(ClavaNodes.getType(parserData, lines.nextLine()));
+        }
+        exceptionSpecification.set(ExceptionSpecification.EXCEPTION_TYPES, exceptionTypes);
+
+        switch (exceptionSpecificationType) {
+
+        case ComputedNoexcept:
+            return exceptionSpecification
+                    .set(ComputedNoexcept.NOEXCEPT_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
+
+        case Unevaluated:
+            return exceptionSpecification
+                    .set(UnevaluatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine());
+        // .set(UnevaluatedExceptionSpecification.SOURCE_DECL,
+        // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
+
+        case Uninstantiated:
+            return exceptionSpecification
+                    .set(UnevaluatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine())
+                    .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE_ID, lines.nextLine());
+        // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
+        // .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
+        // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
+        default:
+            // Nothing more to do
+            return exceptionSpecification;
+        }
+
     }
 
 }
