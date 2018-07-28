@@ -31,8 +31,24 @@ public enum StorageClass implements StringProvider {
     REGISTER,
     STATIC;
 
-    private static final Lazy<EnumHelperWithValue<StorageClass>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(StorageClass.class, NONE);
+    private static final Lazy<EnumHelperWithValue<StorageClass>> HELPER_DEPRECATED = EnumHelperWithValue
+            .newLazyHelperWithValue(StorageClass.class, NONE);
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    public static EnumHelperWithValue<StorageClass> getHelperDeprecated() {
+        return HELPER_DEPRECATED.get();
+    }
+
+    private static final Lazy<EnumHelperWithValue<StorageClass>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(StorageClass.class);
+
+    /**
+     * @return
+     */
     public static EnumHelperWithValue<StorageClass> getHelper() {
         return HELPER.get();
     }
