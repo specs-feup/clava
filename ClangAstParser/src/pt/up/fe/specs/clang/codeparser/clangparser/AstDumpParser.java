@@ -182,28 +182,40 @@ public class AstDumpParser implements ClangParser {
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
 
+        DataStore parsedData = null;
+        ProcessOutput<List<ClangNode>, DataStore> output = null;
+
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context);
-        if (SpecsSystem.isDebug()) {
-            lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+        try (LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+
+            if (SpecsSystem.isDebug()) {
+                lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+            }
+
+            // Create temporary working folder, in order to support running several dumps in parallel
+            // File workingFolder = SpecsIo.mkdir(UUID.randomUUID().toString());
+            lastWorkingFolder = SpecsIo.mkdir(sourceFile.getName() + "_" + id);
+            workingFolders.add(lastWorkingFolder);
+
+            output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
+                    inputStream -> clangAstParser.processOutput(inputStream,
+                            new File(lastWorkingFolder, CLANG_DUMP_FILENAME)),
+                    inputStream -> clangAstParser.processStdErr(config, inputStream, lineStreamParser,
+                            new File(lastWorkingFolder, STDERR_DUMP_FILENAME)));
+
+            parsedData = lineStreamParser.getData();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while running Clang AST dumper", e);
         }
-
-        // Create temporary working folder, in order to support running several dumps in parallel
-        // File workingFolder = SpecsIo.mkdir(UUID.randomUUID().toString());
-        lastWorkingFolder = SpecsIo.mkdir(sourceFile.getName() + "_" + id);
-        workingFolders.add(lastWorkingFolder);
-
-        ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
-                inputStream -> clangAstParser.processOutput(inputStream,
-                        new File(lastWorkingFolder, CLANG_DUMP_FILENAME)),
-                inputStream -> clangAstParser.processStdErr(config, inputStream, lineStreamParser,
-                        new File(lastWorkingFolder, STDERR_DUMP_FILENAME)));
 
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
 
-        ClangStreamParser clangStreamParser = new ClangStreamParser(lineStreamParser.getData(), SpecsSystem.isDebug());
+        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug());
         App newApp = clangStreamParser.parse();
+
+        // Set app in context
+        context.set(ClavaContext.APP, newApp);
 
         if (SpecsSystem.isDebug()) {
             // App newApp = new ClangStreamParser(stderr).parse();
@@ -281,7 +293,7 @@ public class AstDumpParser implements ClangParser {
         // Check if no new nodes should be used
         // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
         // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
-        Map<String, ClavaNode> newNodes = lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        Map<String, ClavaNode> newNodes = parsedData.get(ClangParserKeys.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,

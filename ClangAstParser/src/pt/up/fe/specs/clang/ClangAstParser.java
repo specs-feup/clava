@@ -204,20 +204,33 @@ public class ClangAstParser {
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
 
-        // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context);
-        if (SpecsSystem.isDebug()) {
-            lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
-        }
+        DataStore parsedData = null;
 
-        ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                inputStream -> processStdErr(config, inputStream, lineStreamParser));
+        ProcessOutput<List<ClangNode>, DataStore> output = null;
+
+        // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
+        try (LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+            if (SpecsSystem.isDebug()) {
+                lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+            }
+
+            // ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
+            output = SpecsSystem.runProcess(arguments, this::processOutput,
+                    inputStream -> processStdErr(config, inputStream, lineStreamParser));
+
+            parsedData = lineStreamParser.getData();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while running Clang AST dumper", e);
+        }
 
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
 
-        ClangStreamParser clangStreamParser = new ClangStreamParser(lineStreamParser.getData(), SpecsSystem.isDebug());
+        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug());
         App newApp = clangStreamParser.parse();
+
+        // Set app in context
+        context.set(ClavaContext.APP, newApp);
 
         if (SpecsSystem.isDebug()) {
             // App newApp = new ClangStreamParser(stderr).parse();
@@ -314,7 +327,8 @@ public class ClangAstParser {
         // Check if no new nodes should be used
         // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
         // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
-        Map<String, ClavaNode> newNodes = lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        // Map<String, ClavaNode> newNodes = lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
+        Map<String, ClavaNode> newNodes = parsedData.get(ClangParserKeys.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
@@ -557,14 +571,20 @@ public class ClangAstParser {
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         ClavaContext context = new ClavaContext();
-        LineStreamParser clangStreamParser = ClangStreamParserV2.newInstance(context);
-        ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
-                inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
-                        clangStreamParser));
 
-        boolean foundInclude = !output.getStdOut().isEmpty();
+        try (LineStreamParser clangStreamParser = ClangStreamParserV2.newInstance(context)) {
 
-        return foundInclude;
+            ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
+                    inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
+                            clangStreamParser));
+
+            boolean foundInclude = !output.getStdOut().isEmpty();
+
+            return foundInclude;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while testing include", e);
+        }
     }
 
     public static Set<String> parseIsTemporary(String isTemporary) {

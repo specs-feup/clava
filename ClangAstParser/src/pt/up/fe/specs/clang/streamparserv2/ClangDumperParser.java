@@ -162,30 +162,38 @@ public class ClangDumperParser {
         checkInterleavedExecutions();
 
         ClangStreamParser clangStreamParser = new ClangStreamParser(output.getStdErr(), SpecsSystem.isDebug());
-        return clangStreamParser.parse();
+        App app = clangStreamParser.parse();
+
+        // Set app in context
+        context.set(ClavaContext.APP, app);
+
+        return app;
     }
 
     private DataStore processStdErr(InputStream inputStream, ClavaContext context) {
         // Create LineStreamParser
-        LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context);
+        try (LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context)) {
 
-        // Set debug
-        if (SpecsSystem.isDebug()) {
-            lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+            // Set debug
+            if (SpecsSystem.isDebug()) {
+                lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+            }
+
+            // Dump file
+            File dumpfile = SpecsSystem.isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
+
+            // Parse input stream
+            String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
+
+            // Add lines not parsed to DataStore
+            DataStore data = lineStreamParser.getData();
+            data.add(LINES_NOT_PARSED, linesNotParsed);
+
+            // Return data
+            return data;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while parsing output of Clang AST dumper", e);
         }
-
-        // Dump file
-        File dumpfile = SpecsSystem.isDebug() ? new File(STDERR_DUMP_FILENAME) : null;
-
-        // Parse input stream
-        String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
-
-        // Add lines not parsed to DataStore
-        DataStore data = lineStreamParser.getData();
-        data.add(LINES_NOT_PARSED, linesNotParsed);
-
-        // Return data
-        return data;
 
     }
 

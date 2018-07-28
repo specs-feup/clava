@@ -30,10 +30,18 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class ClavaNodeParser implements LineStreamWorker {
+
+    /// DATAKEYS BEGIN
+
+    // public final static DataKey<Set<String>> NODES_CURRENTLY_BEING_PARSED = KeyFactory
+    // .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>());
+
+    /// DATAKEYS END
 
     private static final String PARSER_ID = "<Id to Class Map>";
 
@@ -52,13 +60,24 @@ public class ClavaNodeParser implements LineStreamWorker {
 
     @Override
     public void init(DataStore data) {
+        if (!data.hasValue(ClavaContext.FACTORY)) {
+            throw new RuntimeException("ClavaNodeParser requires ClavaNode Factory");
+        }
+
         data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
+        // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
     }
 
     @Override
     public void apply(LineStream lineStream, DataStore data) {
         // Get nodeId and classname
         String nodeId = lineStream.nextLine();
+
+        // if(data.get(NODES_CURRENTLY_BEING_PARSED).contains(nodeId)) {
+        // throw new RuntimeException("Found ");
+        // }
+        // System.out.println("PARSING NODE " + nodeId);
+
         String classname = lineStream.nextLine();
         // System.out.println("CLASS NAMES:" + classname);
         Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES);
@@ -187,6 +206,10 @@ public class ClavaNodeParser implements LineStreamWorker {
         return DummyNode.newInstance(clavaNodeClass, nodeData, children, false);
         // return new UnsupportedNode(classname, clavaData, children);
 
+    }
+
+    @Override
+    public void close(DataStore data) {
     }
 
 }

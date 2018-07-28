@@ -50,7 +50,7 @@ public class ClangStreamParserV2 {
 
     // public static LineStreamParserV2 newInstance(List<String> arguments) {
     public static LineStreamParser newInstance(ClavaContext context) {
-        LineStreamParser streamParser = LineStreamParser.newInstance(WORKERS);
+        LineStreamParser streamParser = LineStreamParser.newInstance(context.getData(), WORKERS);
 
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
