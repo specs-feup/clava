@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
@@ -134,15 +135,27 @@ public class ClavaDataParsers {
                     .set(ComputedNoexcept.NOEXCEPT_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
 
         case Unevaluated:
-            return exceptionSpecification
-                    .set(UnevaluatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine());
+            // At parsing time, the node might be halfway-built
+            // node, key, nodeId
+            parserData.get(ClangParserKeys.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+                    UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
+
+            return exceptionSpecification;
+        // return exceptionSpecification
+        // .set(UnevaluatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine());
         // .set(UnevaluatedExceptionSpecification.SOURCE_DECL,
         // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
 
         case Uninstantiated:
-            return exceptionSpecification
-                    .set(UnevaluatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine())
-                    .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE_ID, lines.nextLine());
+            parserData.get(ClangParserKeys.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+                    UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
+
+            parserData.get(ClangParserKeys.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+                    UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
+
+            return exceptionSpecification;
+        // .set(UninstantiatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine())
+        // .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE_ID, lines.nextLine());
         // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
         // .set(UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
         // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));

@@ -13,12 +13,16 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.suikasoft.jOptions.DataStore.ADataClass;
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
@@ -35,6 +39,10 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 public class ClavaNodes {
 
+    // interface TriConsumer<A, B, C> {
+    // void accept(A a, B b, C c);
+    // }
+
     // private static final String NULLPRT = "nullptr";
     private static final String NULLPRT_DECL = "nullptr_decl";
     private static final String NULLPRT_STMT = "nullptr_stmt";
@@ -47,29 +55,44 @@ public class ClavaNodes {
 
     private final DataStore data;
     private final Map<String, ClavaNode> clavaNodes;
+    private final List<Runnable> delayedNodesToAdd;
 
     public ClavaNodes(DataStore data) {
         this.data = data;
         this.clavaNodes = new HashMap<>();
+        this.delayedNodesToAdd = new ArrayList<>();
     }
 
     public Map<String, ClavaNode> getNodes() {
         return clavaNodes;
     }
 
-    public ClavaNode get(String nodeId) {
-        return clavaNodes.get(nodeId);
+    public List<Runnable> getDelayedNodesToAdd() {
+        return delayedNodesToAdd;
     }
 
-    // TODO: Make all static methods, instance methods
-    private static ClavaNode getNode(DataStore data, String id) {
-        ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
+    public ClavaNode get(String nodeId) {
+        ClavaNode clavaNode = clavaNodes.get(nodeId);
 
-        Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + id
+        Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + nodeId
                 + "'. Check if node is being visited, or if there is a cycle in the tree.");
 
         return clavaNode;
 
+    }
+
+    // TODO: Make all static methods, instance methods
+
+    private static ClavaNode getNode(DataStore data, String id) {
+        return data.get(ClangParserKeys.CLAVA_NODES).get(id);
+        /*
+        ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
+        
+        Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + id
+                + "'. Check if node is being visited, or if there is a cycle in the tree.");
+        
+        return clavaNode;
+        */
         // ClavaNode node = dataStore.get(ClangParserKeys.CLAVA_NODES).get(nodeId);
         // Preconditions.checkNotNull(node, "Could not find ClavaNode with id '" + nodeId + "'");
         // return node;
@@ -149,6 +172,23 @@ public class ClavaNodes {
                 () -> "Expected id '" + parsedDeclId + "' to be a Decl, is a " + node.getClass().getSimpleName());
 
         return (Decl) node;
+    }
+
+    public void addNodeAtClosing(ADataClass<?> dataClass, DataKey<? extends ClavaNode> key, String nodeIdToAdd) {
+
+        @SuppressWarnings("unchecked") // Check is being done manually
+        Runnable nodeToAdd = () -> {
+            ClavaNode clavaNode = get(nodeIdToAdd);
+
+            // Check if node is compatible with key
+            Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"
+                    + clavaNode.getClass() + "' not compatible with key accepts values of type '" + key.getValueClass()
+                    + "'");
+
+            dataClass.set((DataKey<ClavaNode>) key, clavaNode);
+        };
+
+        delayedNodesToAdd.add(nodeToAdd);
     }
 
     /*
