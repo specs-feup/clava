@@ -54,7 +54,15 @@ public abstract class Decl extends ClavaNode {
      */
     public final static DataKey<Boolean> IS_REFERENCED = KeyFactory.bool("isReferenced");
 
+    /**
+     * True if the node has a semantic error.
+     */
     public final static DataKey<Boolean> IS_INVALID_DECL = KeyFactory.bool("isInvalidDecl");
+
+    /**
+     * True if this declaration was marked as being private to the module in which it was defined.
+     */
+    public final static DataKey<Boolean> IS_MODULE_PRIVATE = KeyFactory.bool("isModulePrivate");
 
     /**
      * A list of attributes associated with this Decl.

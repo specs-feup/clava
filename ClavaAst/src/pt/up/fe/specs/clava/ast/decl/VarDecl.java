@@ -48,6 +48,9 @@ public class VarDecl extends DeclaratorDecl {
 
     /// DATAKEYS BEGIN
 
+    /**
+     * The storage class as written in the source.
+     */
     public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
             .enumeration("storageClass", StorageClass.class)
             .setDefault(() -> StorageClass.NONE);
@@ -56,20 +59,57 @@ public class VarDecl extends DeclaratorDecl {
             .enumeration("tlsKind", TLSKind.class)
             .setDefault(() -> TLSKind.NONE);
 
-    public final static DataKey<Boolean> IS_MODULE_PRIVATE = KeyFactory.bool("isModulePrivate");
+    // public final static DataKey<Boolean> IS_MODULE_PRIVATE = KeyFactory.bool("isModulePrivate");
 
+    /**
+     * True if this local variable can be used with the named return value optimization (NRVO).
+     */
     public final static DataKey<Boolean> IS_NRVO_VARIABLE = KeyFactory.bool("isNRVOVariable");
 
+    /**
+     * The style of initialization for this declaration.
+     * 
+     * <p>
+     * C-style initialization is "int x = 1;". Call-style initialization is a C++98 direct-initializer, e.g. "int
+     * x(1);". The Init expression will be the expression inside the parens or a "ClassType(a,b,c)" class constructor
+     * expression for class types. List-style initialization is C++11 syntax, e.g. "int x{1};". Clients can distinguish
+     * between different forms of initialization by checking this value. In particular, "int x = {1};" is C-style, "int
+     * x({1})" is call-style, and "int x{1};" is list-style; the Init expression in all three cases is an InitListExpr.
+     */
     public final static DataKey<InitializationStyle> INIT_STYLE = KeyFactory
             .enumeration("initStyle", InitializationStyle.class)
             .setDefault(() -> InitializationStyle.NO_INIT);
 
+    /**
+     * True if this variable is (C++11) constexpr.
+     */
     public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
 
+    /**
+     * True if this is a static data member.
+     * 
+     * <p>
+     * This will only be true in C++, and applies to, e.g., the variable 'x' in:<br>
+     * 
+     * <pre>
+     struct S {
+         static int x;
+     };
+     * </pre>
+     */
     public final static DataKey<Boolean> IS_STATIC_DATA_MEMBER = KeyFactory.bool("isStaticDataMember");
 
+    /**
+     * True if this is or was instantiated from an out-of-line definition of a static data member.
+     */
     public final static DataKey<Boolean> IS_OUT_OF_LINE = KeyFactory.bool("isOutOfLine");
 
+    /**
+     * True if this variable does not have local storage.
+     * 
+     * <p>
+     * This includes all global variables as well as static variables declared within a function.
+     */
     public final static DataKey<Boolean> HAS_GLOBAL_STORAGE = KeyFactory.bool("hasGlobalStorage");
 
     /// DATAKEYS END
