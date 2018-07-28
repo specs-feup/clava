@@ -99,7 +99,7 @@ public abstract class NamedDecl extends Decl {
     @Deprecated
     public NamedDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-        super(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
+        this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
 
         set(DECL_NAME, processDeclName(declName));
         set(ValueDecl.TYPE, processType(type));
@@ -119,12 +119,12 @@ public abstract class NamedDecl extends Decl {
         // this.type.setApp(type.getApp());
     }
 
-    private String processDeclName(String declName) {
+    protected String processDeclName(String declName) {
         // return declName == null ? "" : declName;
         return declName != null && declName.isEmpty() ? null : declName;
     }
 
-    private Type processType(Type type) {
+    protected Type processType(Type type) {
         return type == null ? LegacyToDataStore.getFactory().nullType() : type.copy();
     }
 

@@ -51,9 +51,23 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
         super(data, children);
     }
 
+    /**
+     * @deprecated
+     * @param declName
+     * @param type
+     * @param declData
+     * @param info
+     * @param children
+     */
+    @Deprecated
     public ValueDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(declName, type, declData, info, children);
+
+        // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
+        //
+        // set(DECL_NAME, processDeclName(declName));
+        // set(ValueDecl.TYPE, processType(type));
     }
 
     @Override

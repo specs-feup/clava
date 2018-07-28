@@ -57,11 +57,44 @@ public class FunctionDecl extends DeclaratorDecl {
 
     /// DATAKEYS BEGIN
 
+    /**
+     * True if this is a (C++11) constexpr function or constexpr constructor.
+     */
     public final static DataKey<Boolean> IS_CONSTEXPR = KeyFactory.bool("isConstexpr");
 
-    public final static DataKey<TemplateKind> TEMPLATE_KIND = KeyFactory.enumeration("templateKind",
-            TemplateKind.class)
+    /**
+     * The kind of templated function.
+     */
+    public final static DataKey<TemplateKind> TEMPLATE_KIND = KeyFactory
+            .enumeration("templateKind", TemplateKind.class)
             .setDefault(() -> TemplateKind.NON_TEMPLATE);
+
+    /**
+     * The storage class as written in the source.
+     */
+    public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
+            .enumeration("storageClass", StorageClass.class)
+            .setDefault(() -> StorageClass.NONE);
+
+    /**
+     * True if the "inline" keyword was specified for this function.
+     */
+    public final static DataKey<Boolean> IS_INLINE = KeyFactory.bool("isInline");
+
+    /**
+     * True if this function is explicitly marked as virtual.
+     */
+    public final static DataKey<Boolean> IS_VIRTUAL = KeyFactory.bool("isVirtual");
+
+    /**
+     * True if this virtual function is pure, i.e. makes the containing class abstract.
+     */
+    public final static DataKey<Boolean> IS_PURE = KeyFactory.bool("isPure");
+
+    /**
+     * True if this function was deleted (via the C++0x "= delete" syntax).
+     */
+    public final static DataKey<Boolean> IS_DELETED = KeyFactory.bool("isDeleted");
 
     /// DATAKEYS END
 
