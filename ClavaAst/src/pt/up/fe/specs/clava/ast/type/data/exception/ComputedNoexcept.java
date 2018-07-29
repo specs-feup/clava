@@ -17,6 +17,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 
 public class ComputedNoexcept extends ExceptionSpecification {
 
@@ -28,4 +29,9 @@ public class ComputedNoexcept extends ExceptionSpecification {
     public final static DataKey<Expr> NOEXCEPT_EXPR = KeyFactory.object("noexceptExpr", Expr.class);
 
     /// DATAKEYS END
+
+    @Override
+    public String getCode(FunctionProtoType type) {
+        return " noexcept(" + get(NOEXCEPT_EXPR).getCode() + ")";
+    }
 }
