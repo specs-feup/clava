@@ -178,7 +178,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
 
             // Check if nullptr
             if (child == null && ClavaNodes.isNullId(childId)) {
-                child = ClavaNodes.nullNode(childId);
+                child = data.get(ClangParserKeys.CLAVA_NODES).nullNode(childId);
             }
 
             Preconditions.checkNotNull(child, "Did not find ClavaNode for child with id '" + childId + "'");
