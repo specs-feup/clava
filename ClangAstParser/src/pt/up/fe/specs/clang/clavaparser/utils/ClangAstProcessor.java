@@ -45,7 +45,7 @@ public class ClangAstProcessor {
 
     private final ClangConverterTable converter;
 
-    static class ClavaParserHelper<T extends AClangNodeParser, TC extends ClavaNode> {
+    static class ClavaParserHelper<T extends AClangNodeParser<?>, TC extends ClavaNode> {
         private final T parser;
         private final Class<TC> parsedClass;
 

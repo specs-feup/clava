@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
@@ -33,8 +32,8 @@ public class TopLevelNodesParser {
     private static final String PARSER_ID_ATTR = "<Top Level Attributes>";
     // private static final String PARSER_ID_ALL_DECLS = "<All Decls>";
 
-    public static Collection<LineStreamWorker> getWorkers() {
-        List<LineStreamWorker> workers = new ArrayList<>();
+    public static Collection<LineStreamWorker<ClangParserKeys>> getWorkers() {
+        List<LineStreamWorker<ClangParserKeys>> workers = new ArrayList<>();
 
         workers.add(newWorker(PARSER_ID_DECLS, ClangParserKeys.TOP_LEVEL_DECL_IDS));
         workers.add(newWorker(PARSER_ID_TYPES, ClangParserKeys.TOP_LEVEL_TYPE_IDS, false));
@@ -44,20 +43,22 @@ public class TopLevelNodesParser {
         return workers;
     }
 
-    private static LineStreamWorker newWorker(String id, DataKey<Set<String>> key) {
+    private static LineStreamWorker<ClangParserKeys> newWorker(String id, DataKey<Set<String>> key) {
         return newWorker(id, key, true);
     }
 
-    private static LineStreamWorker newWorker(String id, DataKey<Set<String>> key, boolean checkDuplicate) {
+    private static LineStreamWorker<ClangParserKeys> newWorker(String id, DataKey<Set<String>> key,
+            boolean checkDuplicate) {
+
         return LineStreamWorker.newInstance(id, data -> init(key, data),
                 (lines, data) -> apply(id, key, lines, data, checkDuplicate));
     }
 
-    private static void init(DataKey<Set<String>> key, DataStore data) {
-        data.add(key, new HashSet<>());
+    private static void init(DataKey<Set<String>> key, ClangParserKeys data) {
+        data.set(key, new HashSet<>());
     }
 
-    private static void apply(String id, DataKey<Set<String>> key, LineStream lines, DataStore data,
+    private static void apply(String id, DataKey<Set<String>> key, LineStream lines, ClangParserKeys data,
             boolean checkDuplicate) {
 
         LineStreamParsers.stringSet(id, lines, data.get(key), checkDuplicate);

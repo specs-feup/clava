@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang.parsers;
 import java.util.HashMap;
 import java.util.List;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +25,7 @@ import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class SystemHeadersClangNodes implements LineStreamWorker {
+public class SystemHeadersClangNodes implements LineStreamWorker<ClangParserKeys> {
 
     private static final String PARSER_ID = "<System Header Node Dump Begin>";
     private static final String END_ID = "<System Header Node Dump End>";
@@ -37,12 +36,12 @@ public class SystemHeadersClangNodes implements LineStreamWorker {
     }
 
     @Override
-    public void init(DataStore data) {
-        data.add(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES, new HashMap<>());
+    public void init(ClangParserKeys data) {
+        data.set(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, DataStore data) {
+    public void apply(LineStream lineStream, ClangParserKeys data) {
         // First line is id
         String nodeId = lineStream.nextLine();
 

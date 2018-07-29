@@ -205,12 +205,12 @@ public class ClangAstParser {
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
 
-        DataStore parsedData = null;
+        ClangParserKeys parsedData = null;
 
         ProcessOutput<List<ClangNode>, DataStore> output = null;
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        try (LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserKeys> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
             if (SpecsSystem.isDebug()) {
                 lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
             }
@@ -352,13 +352,13 @@ public class ClangAstParser {
     }
 
     public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-            LineStreamParser lineStreamParser) {
+            LineStreamParser<ClangParserKeys> lineStreamParser) {
 
         return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
     }
 
     public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-            LineStreamParser lineStreamParser, File stderrDumpFilename) {
+            LineStreamParser<ClangParserKeys> lineStreamParser, File stderrDumpFilename) {
 
         File dumpfile = isDebug() ? stderrDumpFilename : null;
 
@@ -573,7 +573,7 @@ public class ClangAstParser {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         ClavaContext context = new ClavaContext();
 
-        try (LineStreamParser clangStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserKeys> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
 
             ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                     inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
@@ -595,12 +595,14 @@ public class ClangAstParser {
         // .collect(Collectors.toSet());
     }
 
+    /*
     private static Set<String> parseTemplateArguments(String templateArgs) {
         return parseAddrSet(templateArgs);
         // return StringLines.getLines(templateArgs).stream()
         // .map(line -> Long.decode(line))
         // .collect(Collectors.toSet());
     }
+    */
 
     /*
     private static Map<String, List<Qualifier>> parseTypeQualifiers(String typeQualifiersString) {

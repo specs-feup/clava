@@ -19,13 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class VisitedChildrenParser implements LineStreamWorker {
+public class VisitedChildrenParser implements LineStreamWorker<ClangParserKeys> {
 
     private static final String PARSER_ID = "<Visited Children>";
 
@@ -35,12 +34,12 @@ public class VisitedChildrenParser implements LineStreamWorker {
     }
 
     @Override
-    public void init(DataStore data) {
-        data.add(ClangParserKeys.VISITED_CHILDREN, new HashMap<>());
+    public void init(ClangParserKeys data) {
+        data.set(ClangParserKeys.VISITED_CHILDREN, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, DataStore data) {
+    public void apply(LineStream lineStream, ClangParserKeys data) {
         Map<String, List<String>> children = data.get(ClangParserKeys.VISITED_CHILDREN);
 
         String key = lineStream.nextLine();

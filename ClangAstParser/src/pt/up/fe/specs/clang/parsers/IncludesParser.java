@@ -17,14 +17,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class IncludesParser implements LineStreamWorker {
+public class IncludesParser implements LineStreamWorker<ClangParserKeys> {
 
     private static final String PARSER_ID = "<Includes>";
 
@@ -44,12 +43,12 @@ public class IncludesParser implements LineStreamWorker {
     }
 
     @Override
-    public void init(DataStore data) {
-        data.add(ClangParserKeys.INCLUDES, new ArrayList<>());
+    public void init(ClangParserKeys data) {
+        data.set(ClangParserKeys.INCLUDES, new ArrayList<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, DataStore data) {
+    public void apply(LineStream lineStream, ClangParserKeys data) {
         List<Include> includes = data.get(ClangParserKeys.INCLUDES);
         parseInclude(lineStream, includes);
     }

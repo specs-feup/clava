@@ -21,12 +21,11 @@ import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.version.Clang_3_8;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
 public class ClangStreamParserV2 {
 
-    private static final Map<String, LineStreamWorker> WORKERS;
+    private static final Map<String, LineStreamWorker<ClangParserKeys>> WORKERS;
     static {
         WORKERS = new HashMap<>();
         addWorker(() -> new ClavaNodeParser(Clang_3_8.getClassesService()));
@@ -39,22 +38,24 @@ public class ClangStreamParserV2 {
         addWorker(SystemHeadersClangNodes::new);
     }
 
-    private static void addWorker(Supplier<LineStreamWorker> workerSupplier) {
+    private static void addWorker(Supplier<LineStreamWorker<ClangParserKeys>> workerSupplier) {
         addWorker(workerSupplier.get());
     }
 
-    private static void addWorker(LineStreamWorker worker) {
+    private static void addWorker(LineStreamWorker<ClangParserKeys> worker) {
         // Add worker
         WORKERS.put(worker.getId(), worker);
     }
 
     // public static LineStreamParserV2 newInstance(List<String> arguments) {
-    public static LineStreamParser newInstance(ClavaContext context) {
-        LineStreamParser streamParser = LineStreamParser.newInstance(context.getData(), WORKERS);
+    public static LineStreamParser<ClangParserKeys> newInstance(ClavaContext context) {
+        ClangParserKeys clangParserData = new ClangParserKeys();
+        clangParserData.set(ClangParserKeys.CONTEXT, context);
+        LineStreamParser<ClangParserKeys> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
 
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
-        streamParser.getData().add(ClavaNode.CONTEXT, context);
+        // streamParser.getData().add(ClavaNode.CONTEXT, context);
 
         return streamParser;
         // return LineStreamParserV2.newInstance(WORKERS);

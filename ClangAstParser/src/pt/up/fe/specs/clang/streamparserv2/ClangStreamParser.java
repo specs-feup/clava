@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
-
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.parsers.ClangParserKeys;
@@ -70,9 +68,9 @@ public class ClangStreamParser {
             // new RecoverStdMacros(),
             new MoveImplicitCasts());
 
-    private final DataStore data;
+    private final ClangParserKeys data;
 
-    public ClangStreamParser(DataStore data, boolean debug) {
+    public ClangStreamParser(ClangParserKeys data, boolean debug) {
         this.data = data;
     }
 

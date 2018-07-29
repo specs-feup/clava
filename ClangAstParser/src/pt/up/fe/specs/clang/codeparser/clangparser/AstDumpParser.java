@@ -183,11 +183,11 @@ public class AstDumpParser implements ClangParser {
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
 
-        DataStore parsedData = null;
+        ClangParserKeys parsedData = null;
         ProcessOutput<List<ClangNode>, DataStore> output = null;
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        try (LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserKeys> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
 
             if (SpecsSystem.isDebug()) {
                 lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);

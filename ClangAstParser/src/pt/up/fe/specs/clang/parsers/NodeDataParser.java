@@ -45,7 +45,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class NodeDataParser {
 
-    private static final Map<String, BiFunction<LineStream, DataStore, DataStore>> STATIC_DATA_PARSERS;
+    private static final Map<String, BiFunction<LineStream, ClangParserKeys, DataStore>> STATIC_DATA_PARSERS;
     static {
         STATIC_DATA_PARSERS = new HashMap<>();
 
@@ -90,13 +90,15 @@ public class NodeDataParser {
 
     }
 
-    public static Collection<LineStreamWorker> getWorkers() {
-        List<LineStreamWorker> workers = new ArrayList<>(STATIC_DATA_PARSERS.size());
+    public static Collection<LineStreamWorker<ClangParserKeys>> getWorkers() {
+        List<LineStreamWorker<ClangParserKeys>> workers = new ArrayList<>(STATIC_DATA_PARSERS.size());
 
-        for (Entry<String, BiFunction<LineStream, DataStore, DataStore>> entry : STATIC_DATA_PARSERS.entrySet()) {
-            BiConsumer<LineStream, DataStore> apply = (lines, data) -> parseNodeDataTop(entry.getValue(), lines, data);
+        for (Entry<String, BiFunction<LineStream, ClangParserKeys, DataStore>> entry : STATIC_DATA_PARSERS.entrySet()) {
+            BiConsumer<LineStream, ClangParserKeys> apply = (lines, data) -> parseNodeDataTop(entry.getValue(), lines,
+                    data);
 
-            LineStreamWorker worker = LineStreamWorker.newInstance(entry.getKey(), NodeDataParser::nodeDataInit,
+            LineStreamWorker<ClangParserKeys> worker = LineStreamWorker.newInstance(entry.getKey(),
+                    NodeDataParser::nodeDataInit,
                     apply);
 
             workers.add(worker);
@@ -117,17 +119,17 @@ public class NodeDataParser {
 
     }
 
-    private static void nodeDataInit(DataStore data) {
+    private static void nodeDataInit(ClangParserKeys data) {
         // If already initialized, return
         if (data.hasValue(ClangParserKeys.NODE_DATA)) {
             return;
         }
 
-        data.add(ClangParserKeys.NODE_DATA, new HashMap<>());
+        data.set(ClangParserKeys.NODE_DATA, new HashMap<>());
     }
 
-    private static void parseNodeDataTop(BiFunction<LineStream, DataStore, DataStore> dataParser,
-            LineStream lines, DataStore data) {
+    private static void parseNodeDataTop(BiFunction<LineStream, ClangParserKeys, DataStore> dataParser,
+            LineStream lines, ClangParserKeys data) {
 
         DataStore clavaData = dataParser.apply(lines, data);
 
@@ -141,11 +143,11 @@ public class NodeDataParser {
 
     }
 
-    public static DataStore parseNodeData(LineStream lines, DataStore dataStore) {
+    public static DataStore parseNodeData(LineStream lines, ClangParserKeys dataStore) {
         return parseNodeData(lines, true, dataStore);
     }
 
-    public static DataStore parseNodeData(LineStream lines, boolean hasLocation, DataStore dataStore) {
+    public static DataStore parseNodeData(LineStream lines, boolean hasLocation, ClangParserKeys dataStore) {
 
         String id = lines.nextLine();
 

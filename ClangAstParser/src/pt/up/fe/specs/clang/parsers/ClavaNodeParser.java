@@ -29,11 +29,10 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class ClavaNodeParser implements LineStreamWorker {
+public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
 
     /// DATAKEYS BEGIN
 
@@ -58,18 +57,19 @@ public class ClavaNodeParser implements LineStreamWorker {
     }
 
     @Override
-    public void init(DataStore data) {
-        if (!data.hasValue(ClavaContext.FACTORY)) {
-            throw new RuntimeException("ClavaNodeParser requires ClavaNode Factory");
+    public void init(ClangParserKeys data) {
+
+        if (!data.hasValue(ClangParserKeys.CONTEXT)) {
+            throw new RuntimeException("ClavaNodeParser requires ClavaContext");
         }
 
         // data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
-        data.add(ClangParserKeys.CLAVA_NODES, new ClavaNodes(data));
+        data.set(ClangParserKeys.CLAVA_NODES, new ClavaNodes(data));
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, DataStore data) {
+    public void apply(LineStream lineStream, ClangParserKeys data) {
         // Get nodeId and classname
         String nodeId = lineStream.nextLine();
 
@@ -135,7 +135,7 @@ public class ClavaNodeParser implements LineStreamWorker {
         throw new RuntimeException("ClavaData class not supported:" + data.getClass());
     }
     */
-    private ClavaNode parseNode(String nodeId, String classname, DataStore data) {
+    private ClavaNode parseNode(String nodeId, String classname, ClangParserKeys data) {
         boolean debug = data.get(ClangParserKeys.DEBUG);
 
         if (classname == null) {
@@ -209,7 +209,7 @@ public class ClavaNodeParser implements LineStreamWorker {
     }
 
     @Override
-    public void close(DataStore data) {
+    public void close(ClangParserKeys data) {
         data.get(ClangParserKeys.CLAVA_NODES).getDelayedNodesToAdd().stream()
                 .forEach(Runnable::run);
     }

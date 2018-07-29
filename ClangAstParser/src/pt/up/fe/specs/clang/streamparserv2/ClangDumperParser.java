@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.JOptionsUtils;
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
@@ -55,8 +53,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 public class ClangDumperParser {
-
-    public final static DataKey<String> LINES_NOT_PARSED = KeyFactory.string("clang_dumper_parser_warnings");
 
     // private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
@@ -143,10 +139,10 @@ public class ClangDumperParser {
         // lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
         // }
 
-        ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
+        ProcessOutput<String, ClangParserKeys> output = SpecsSystem.runProcess(arguments, this::processOutput,
                 inputStream -> processStdErr(inputStream, context));
 
-        String warnings = output.getStdErr().get(LINES_NOT_PARSED);
+        String warnings = output.getStdErr().get(ClangParserKeys.LINES_NOT_PARSED);
 
         // Throw exception if there as any error
         if (output.getReturnValue() != 0) {
@@ -170,9 +166,9 @@ public class ClangDumperParser {
         return app;
     }
 
-    private DataStore processStdErr(InputStream inputStream, ClavaContext context) {
+    private ClangParserKeys processStdErr(InputStream inputStream, ClavaContext context) {
         // Create LineStreamParser
-        try (LineStreamParser lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserKeys> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
 
             // Set debug
             if (SpecsSystem.isDebug()) {
@@ -186,8 +182,8 @@ public class ClangDumperParser {
             String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
 
             // Add lines not parsed to DataStore
-            DataStore data = lineStreamParser.getData();
-            data.add(LINES_NOT_PARSED, linesNotParsed);
+            ClangParserKeys data = lineStreamParser.getData();
+            data.set(ClangParserKeys.LINES_NOT_PARSED, linesNotParsed);
 
             // Return data
             return data;
@@ -372,7 +368,7 @@ public class ClangDumperParser {
         ClavaContext context = new ClavaContext();
 
         // LineStreamParserV2 clangStreamParser = ClangStreamParserV2.newInstance();
-        ProcessOutput<String, DataStore> output = SpecsSystem.runProcess(arguments,
+        ProcessOutput<String, ClangParserKeys> output = SpecsSystem.runProcess(arguments,
                 this::processOutput, inputStream -> processStdErr(inputStream, context));
 
         boolean foundInclude = !output.getStdOut().isEmpty();

@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang.parsers.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import com.google.common.base.Preconditions;
@@ -51,7 +50,7 @@ public class ClavaDataParsers {
      * @param dataStore
      * @return
      */
-    public static SourceRange parseLocation(LineStream lines, DataStore dataStore) {
+    public static SourceRange parseLocation(LineStream lines, ClangParserKeys dataStore) {
         // Next line will tell if is an invalid location or if to continue parsing
         String firstPart = lines.nextLine();
 
@@ -114,17 +113,20 @@ public class ClavaDataParsers {
         return builder.toString();
     }
 
-    public static ExceptionSpecification exceptionSpecification(LineStream lines, DataStore parserData) {
+    public static ExceptionSpecification exceptionSpecification(LineStream lines, ClangParserKeys parserData) {
 
         ExceptionSpecificationType exceptionSpecificationType = LineStreamParsers
                 .enumFromName(ExceptionSpecificationType.class, lines);
 
         ExceptionSpecification exceptionSpecification = exceptionSpecificationType.newInstance();
 
+        ClavaNodes clavaNodes = parserData.get(ClangParserKeys.CLAVA_NODES);
+
         int numTypes = LineStreamParsers.integer(lines);
         List<Type> exceptionTypes = new ArrayList<>(numTypes);
         for (int i = 0; i < numTypes; i++) {
-            exceptionTypes.add(ClavaNodes.getType(parserData, lines.nextLine()));
+            // exceptionTypes.add(ClavaNodes.getType(parserData, lines.nextLine()));
+            exceptionTypes.add(clavaNodes.getType(lines.nextLine()));
         }
         exceptionSpecification.set(ExceptionSpecification.EXCEPTION_TYPES, exceptionTypes);
 
@@ -132,7 +134,7 @@ public class ClavaDataParsers {
 
         case ComputedNoexcept:
             return exceptionSpecification
-                    .set(ComputedNoexcept.NOEXCEPT_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
+                    .set(ComputedNoexcept.NOEXCEPT_EXPR, clavaNodes.getExpr(lines.nextLine()));
 
         case Unevaluated:
             // At parsing time, the node might be halfway-built

@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
+import pt.up.fe.specs.clang.parsers.ClangParserKeys;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -44,7 +45,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class TypeDataParser {
 
-    public static DataStore parseTypeData(LineStream lines, DataStore dataStore) {
+    public static DataStore parseTypeData(LineStream lines, ClangParserKeys dataStore) {
 
         // Types do not have location
         DataStore clavaData = NodeDataParser.parseNodeData(lines, false, dataStore);
@@ -59,7 +60,7 @@ public class TypeDataParser {
         return clavaData;
     }
 
-    public static DataStore parseBuiltinTypeData(LineStream lines, DataStore dataStore) {
+    public static DataStore parseBuiltinTypeData(LineStream lines, ClangParserKeys dataStore) {
 
         DataStore data = parseTypeData(lines, dataStore);
 
@@ -71,7 +72,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseQualTypeData(LineStream lines, DataStore dataStore) {
+    public static DataStore parseQualTypeData(LineStream lines, ClangParserKeys dataStore) {
 
         DataStore data = parseTypeData(lines, dataStore);
 
@@ -84,7 +85,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseFunctionTypeData(LineStream lines, DataStore parserData) {
+    public static DataStore parseFunctionTypeData(LineStream lines, ClangParserKeys parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -100,7 +101,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseFunctionProtoTypeData(LineStream lines, DataStore parserData) {
+    public static DataStore parseFunctionProtoTypeData(LineStream lines, ClangParserKeys parserData) {
 
         DataStore data = parseFunctionTypeData(lines, parserData);
 
@@ -127,7 +128,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseArrayTypeData(LineStream lines, DataStore parserData) {
+    public static DataStore parseArrayTypeData(LineStream lines, ClangParserKeys parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -138,7 +139,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseConstantArrayTypeData(LineStream lines, DataStore parserData) {
+    public static DataStore parseConstantArrayTypeData(LineStream lines, ClangParserKeys parserData) {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 
@@ -148,7 +149,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseVariableArrayTypeData(LineStream lines, DataStore parserData) {
+    public static DataStore parseVariableArrayTypeData(LineStream lines, ClangParserKeys parserData) {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 

@@ -21,9 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.suikasoft.jOptions.DataStore.ADataClass;
+import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
@@ -31,9 +30,10 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
-import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
@@ -53,14 +53,16 @@ public class ClavaNodes {
     private static final Set<String> NULL_IDS = new HashSet<>(
             Arrays.asList(NULLPRT_DECL, NULLPRT_STMT, NULLPRT_EXPR, NULLPRT_TYPE, NULLPRT_ATTR));
 
-    private final DataStore data;
+    private final ClangParserKeys data;
     private final Map<String, ClavaNode> clavaNodes;
     private final List<Runnable> delayedNodesToAdd;
+    private final ClavaFactory factory;
 
-    public ClavaNodes(DataStore data) {
+    public ClavaNodes(ClangParserKeys data) {
         this.data = data;
         this.clavaNodes = new HashMap<>();
         this.delayedNodesToAdd = new ArrayList<>();
+        this.factory = data.get(ClangParserKeys.CONTEXT).get(ClavaContext.FACTORY);
     }
 
     public Map<String, ClavaNode> getNodes() {
@@ -81,37 +83,13 @@ public class ClavaNodes {
 
     }
 
-    // TODO: Make all static methods, instance methods
-
-    private static ClavaNode getNode(DataStore data, String id) {
-        return data.get(ClangParserKeys.CLAVA_NODES).get(id);
-        /*
-        ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
-        
-        Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + id
-                + "'. Check if node is being visited, or if there is a cycle in the tree.");
-        
-        return clavaNode;
-        */
-        // ClavaNode node = dataStore.get(ClangParserKeys.CLAVA_NODES).get(nodeId);
-        // Preconditions.checkNotNull(node, "Could not find ClavaNode with id '" + nodeId + "'");
-        // return node;
-    }
-
-    // public static ClavaNode getNode(DataStore data, String id) {
-    // ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
-    // SpecsCheck.checkNotNull(clavaNode, () -> "No ClavaNode found for id '" + id + "'");
-    //
-    // return clavaNode;
-    // }
-
-    public static Type getType(DataStore data, String parsedTypeId) {
-        // if (NULLPRT.equals(parsedTypeId)) {
+    public Type getType(String parsedTypeId) {
         if (NULLPRT_TYPE.equals(parsedTypeId)) {
-            return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+            return factory.nullType();
+            // return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
         }
 
-        ClavaNode node = getNode(data, parsedTypeId);
+        ClavaNode node = get(parsedTypeId);
 
         SpecsCheck.checkArgument(node instanceof Type,
                 () -> "Expected id '" + parsedTypeId + "' to be a Type, is a " + node.getClass().getSimpleName());
@@ -119,22 +97,12 @@ public class ClavaNodes {
         return (Type) node;
     }
 
-    public static Attribute getAttr(DataStore data, String parsedAttrId) {
-        Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
-
-        ClavaNode node = getNode(data, parsedAttrId);
-
-        SpecsCheck.checkArgument(node instanceof Attribute,
-                () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
-        return (Attribute) node;
-    }
-
-    public static Expr getExpr(DataStore data, String parsedExprId) {
+    public Expr getExpr(String parsedExprId) {
         if (NULLPRT_EXPR.equals(parsedExprId)) {
-            return ClavaNodeFactory.nullExpr();
+            return factory.nullExpr();
         }
 
-        ClavaNode node = getNode(data, parsedExprId);
+        ClavaNode node = get(parsedExprId);
 
         SpecsCheck.checkArgument(node instanceof Expr,
                 () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
@@ -142,6 +110,86 @@ public class ClavaNodes {
         return (Expr) node;
     }
 
+    public Attribute getAttr(String parsedAttrId) {
+        Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
+
+        ClavaNode node = get(parsedAttrId);
+
+        SpecsCheck.checkArgument(node instanceof Attribute,
+                () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
+        return (Attribute) node;
+    }
+
+    public void addNodeAtClosing(DataClass<?> dataClass, DataKey<? extends ClavaNode> key, String nodeIdToAdd) {
+
+        @SuppressWarnings("unchecked") // Check is being done manually
+        Runnable nodeToAdd = () -> {
+            ClavaNode clavaNode = get(nodeIdToAdd);
+
+            // Check if node is compatible with key
+            Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"
+                    + clavaNode.getClass() + "' not compatible with key accepts values of type '" + key.getValueClass()
+                    + "'");
+
+            dataClass.set((DataKey<ClavaNode>) key, clavaNode);
+        };
+
+        delayedNodesToAdd.add(nodeToAdd);
+    }
+
+    // TODO: Make all static methods, instance methods
+    /*
+    private static ClavaNode getNode(DataStore data, String id) {
+        return data.get(ClangParserKeys.CLAVA_NODES).get(id);
+        // ClavaNode node = dataStore.get(ClangParserKeys.CLAVA_NODES).get(nodeId);
+        // Preconditions.checkNotNull(node, "Could not find ClavaNode with id '" + nodeId + "'");
+        // return node;
+    }
+    */
+    // public static ClavaNode getNode(DataStore data, String id) {
+    // ClavaNode clavaNode = data.get(ClangParserKeys.CLAVA_NODES).get(id);
+    // SpecsCheck.checkNotNull(clavaNode, () -> "No ClavaNode found for id '" + id + "'");
+    //
+    // return clavaNode;
+    // }
+    /*
+    public static Type getType(DataStore data, String parsedTypeId) {
+        // if (NULLPRT.equals(parsedTypeId)) {
+        if (NULLPRT_TYPE.equals(parsedTypeId)) {
+            return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+        }
+    
+        ClavaNode node = getNode(data, parsedTypeId);
+    
+        SpecsCheck.checkArgument(node instanceof Type,
+                () -> "Expected id '" + parsedTypeId + "' to be a Type, is a " + node.getClass().getSimpleName());
+    
+        return (Type) node;
+    }
+    
+    public static Attribute getAttr(DataStore data, String parsedAttrId) {
+        Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
+    
+        ClavaNode node = getNode(data, parsedAttrId);
+    
+        SpecsCheck.checkArgument(node instanceof Attribute,
+                () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
+        return (Attribute) node;
+    }
+    
+    public static Expr getExpr(DataStore data, String parsedExprId) {
+        if (NULLPRT_EXPR.equals(parsedExprId)) {
+            return ClavaNodeFactory.nullExpr();
+        }
+    
+        ClavaNode node = getNode(data, parsedExprId);
+    
+        SpecsCheck.checkArgument(node instanceof Expr,
+                () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
+    
+        return (Expr) node;
+    }
+    */
     public static boolean isNullId(String nullId) {
         return NULL_IDS.contains(nullId);
     }
@@ -161,35 +209,20 @@ public class ClavaNodes {
         }
     }
 
+    /*
     public static Decl getDecl(DataStore data, String parsedDeclId) {
         if (NULLPRT_DECL.equals(parsedDeclId)) {
             return ClavaNodeFactory.nullDecl(ClavaNodeInfo.undefinedInfo());
         }
-
+    
         ClavaNode node = getNode(data, parsedDeclId);
-
+    
         SpecsCheck.checkArgument(node instanceof Decl,
                 () -> "Expected id '" + parsedDeclId + "' to be a Decl, is a " + node.getClass().getSimpleName());
-
+    
         return (Decl) node;
     }
-
-    public void addNodeAtClosing(ADataClass<?> dataClass, DataKey<? extends ClavaNode> key, String nodeIdToAdd) {
-
-        @SuppressWarnings("unchecked") // Check is being done manually
-        Runnable nodeToAdd = () -> {
-            ClavaNode clavaNode = get(nodeIdToAdd);
-
-            // Check if node is compatible with key
-            Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"
-                    + clavaNode.getClass() + "' not compatible with key accepts values of type '" + key.getValueClass()
-                    + "'");
-
-            dataClass.set((DataKey<ClavaNode>) key, clavaNode);
-        };
-
-        delayedNodesToAdd.add(nodeToAdd);
-    }
+    */
 
     /*
     public static ValueDecl getValueDecl(DataStore data, String parsedDeclId) {
