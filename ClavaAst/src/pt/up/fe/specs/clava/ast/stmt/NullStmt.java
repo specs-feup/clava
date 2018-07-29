@@ -16,6 +16,8 @@ package pt.up.fe.specs.clava.ast.stmt;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.utils.NullNode;
@@ -29,6 +31,10 @@ import pt.up.fe.specs.clava.utils.NullNode;
  *
  */
 public class NullStmt extends Stmt implements NullNode {
+
+    public NullStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public NullStmt(ClavaNodeInfo info) {
         this(info, Collections.emptyList());

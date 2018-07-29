@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -48,6 +49,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
+import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -284,18 +286,8 @@ public class ClavaFactory {
 
     /// DECLS
 
-    public DeclStmt declStmt(Decl... decls) {
-        return declStmt(Arrays.asList(decls));
-    }
-
-    public DeclStmt declStmt(List<Decl> decls) {
-        DataStore data = newDeclDataStore();
-        return new DeclStmt(data, decls);
-    }
-
-    public DeclStmt declStmt(RecordDecl recordDecl, List<VarDecl> varDecls) {
-        DataStore data = newDeclDataStore();
-        return new DeclStmt(data, SpecsCollections.concat(recordDecl, varDecls));
+    public NullDecl nullDecl() {
+        return new NullDecl(newDeclDataStore(), Collections.emptyList());
     }
 
     public DummyDecl dummyDecl(String dummyContent) {
@@ -330,6 +322,24 @@ public class ClavaFactory {
     }
 
     /// STMTS
+
+    public NullStmt nullStmt() {
+        return new NullStmt(newStmtDataStore(), Collections.emptyList());
+    }
+
+    public DeclStmt declStmt(Decl... decls) {
+        return declStmt(Arrays.asList(decls));
+    }
+
+    public DeclStmt declStmt(List<Decl> decls) {
+        DataStore data = newStmtDataStore();
+        return new DeclStmt(data, decls);
+    }
+
+    public DeclStmt declStmt(RecordDecl recordDecl, List<VarDecl> varDecls) {
+        DataStore data = newStmtDataStore();
+        return new DeclStmt(data, SpecsCollections.concat(recordDecl, varDecls));
+    }
 
     public ReturnStmt returnStmt(Expr retValue) {
         return new ReturnStmt(newStmtDataStore(), Arrays.asList(retValue));
