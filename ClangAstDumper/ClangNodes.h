@@ -9,6 +9,8 @@
 #include "clang/AST/Decl.h"
 #include "clang/AST/Stmt.h"
 #include "clang/AST/Type.h"
+#include "clang/AST/NestedNameSpecifier.h"
+
 
 #include <string>
 #include <sstream>
@@ -109,7 +111,9 @@ namespace clava {
     void dump(const std::vector<Attr*> &attributes, const int id);
     void dump(const QualType& type, int id);
     void dump(const Qualifiers& qualifiers, ASTContext* Context);
-    //  void dump(llvm::raw_string_ostream llvmStringStream);
+    void dump(NestedNameSpecifier* qualifier, ASTContext* Context);
+
+        //  void dump(llvm::raw_string_ostream llvmStringStream);
 
 
 

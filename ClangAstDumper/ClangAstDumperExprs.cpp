@@ -198,11 +198,9 @@ void ClangAstDumper::VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMem
 
 }
 
-void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node, bool isTopCall) {
-    if(isTopCall) {
-        if (dumpStmt(Node)) {
-            return;
-        }
+void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node) {
+    if (dumpStmt(Node)) {
+        return;
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
@@ -246,7 +244,16 @@ void ClangAstDumper::VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node)
     visitChildrenAndData(static_cast<const Expr*>(Node));
 
     // Call parent in hierarchy
-    VisitOverloadExpr(Node, false);
+    //VisitOverloadExpr(Node, false);
+
+    // Duplicated from ClangAstDumper::VisitOverloadExpr
+    if(Node->getQualifier() != nullptr) {
+        // Can use the stream processor of decl ref expression qualifiers
+        llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
+        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
+        Node->getQualifier()->dump();
+        llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
+    }
 }
 
 

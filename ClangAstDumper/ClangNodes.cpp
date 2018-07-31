@@ -337,6 +337,20 @@ const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange)
 
 }
 
+void clava::dump(NestedNameSpecifier* qualifier, ASTContext* Context) {
+
+    // Dump qualifier
+    if (qualifier != nullptr) {
+        std::string qualifierStr;
+        llvm::raw_string_ostream qualifierStream(qualifierStr);
+        qualifier->print(qualifierStream, Context->getPrintingPolicy());
+        clava::dump(qualifierStream.str());
+    } else {
+        clava::dump("");
+    }
+}
+
+
 /*
 llvm::raw_ostream clava::stringStream() {
     std::string stringStream;
