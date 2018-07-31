@@ -21,7 +21,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class IdToFilenameParser implements LineStreamWorker<ClangParserKeys> {
+public class IdToFilenameParser implements LineStreamWorker<ClangParserData> {
 
     private static final String PARSER_ID = "<Id-File Map>";
 
@@ -31,13 +31,13 @@ public class IdToFilenameParser implements LineStreamWorker<ClangParserKeys> {
     }
 
     @Override
-    public void init(ClangParserKeys data) {
-        data.set(ClangParserKeys.ID_TO_FILENAME_MAP, new HashMap<>());
+    public void init(ClangParserData data) {
+        data.set(ClangParserData.ID_TO_FILENAME_MAP, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserKeys data) {
-        Map<String, String> map = data.get(ClangParserKeys.ID_TO_FILENAME_MAP);
+    public void apply(LineStream lineStream, ClangParserData data) {
+        Map<String, String> map = data.get(ClangParserData.ID_TO_FILENAME_MAP);
         LineStreamParsers.stringMap(PARSER_ID, lineStream, map);
     }
 

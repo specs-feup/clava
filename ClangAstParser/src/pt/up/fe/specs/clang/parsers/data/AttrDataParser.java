@@ -16,7 +16,7 @@ package pt.up.fe.specs.clang.parsers.data;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
@@ -28,7 +28,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class AttrDataParser {
 
-    public static DataStore parseAttributeData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseAttributeData(LineStream lines, ClangParserData dataStore) {
 
         DataStore clavaData = NodeDataParser.parseNodeData(lines, dataStore);
 
@@ -41,7 +41,7 @@ public class AttrDataParser {
         return clavaData;
     }
 
-    public static DataStore parseAlignedAttrData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseAlignedAttrData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(AlignedAttr.SPELLING, lines.nextLine());

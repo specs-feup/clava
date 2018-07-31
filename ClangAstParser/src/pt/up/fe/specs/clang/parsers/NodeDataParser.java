@@ -45,7 +45,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class NodeDataParser {
 
-    private static final Map<String, BiFunction<LineStream, ClangParserKeys, DataStore>> STATIC_DATA_PARSERS;
+    private static final Map<String, BiFunction<LineStream, ClangParserData, DataStore>> STATIC_DATA_PARSERS;
     static {
         STATIC_DATA_PARSERS = new HashMap<>();
 
@@ -91,14 +91,14 @@ public class NodeDataParser {
 
     }
 
-    public static Collection<LineStreamWorker<ClangParserKeys>> getWorkers() {
-        List<LineStreamWorker<ClangParserKeys>> workers = new ArrayList<>(STATIC_DATA_PARSERS.size());
+    public static Collection<LineStreamWorker<ClangParserData>> getWorkers() {
+        List<LineStreamWorker<ClangParserData>> workers = new ArrayList<>(STATIC_DATA_PARSERS.size());
 
-        for (Entry<String, BiFunction<LineStream, ClangParserKeys, DataStore>> entry : STATIC_DATA_PARSERS.entrySet()) {
-            BiConsumer<LineStream, ClangParserKeys> apply = (lines, data) -> parseNodeDataTop(entry.getValue(), lines,
+        for (Entry<String, BiFunction<LineStream, ClangParserData, DataStore>> entry : STATIC_DATA_PARSERS.entrySet()) {
+            BiConsumer<LineStream, ClangParserData> apply = (lines, data) -> parseNodeDataTop(entry.getValue(), lines,
                     data);
 
-            LineStreamWorker<ClangParserKeys> worker = LineStreamWorker.newInstance(entry.getKey(),
+            LineStreamWorker<ClangParserData> worker = LineStreamWorker.newInstance(entry.getKey(),
                     NodeDataParser::nodeDataInit,
                     apply);
 
@@ -110,31 +110,31 @@ public class NodeDataParser {
 
     public static Optional<DataStore> getNodeData(DataStore dataStore, String nodeId) {
 
-        if (!dataStore.hasValue(ClangParserKeys.NODE_DATA)) {
+        if (!dataStore.hasValue(ClangParserData.NODE_DATA)) {
             return Optional.empty();
         }
 
-        DataStore nodeData = dataStore.get(ClangParserKeys.NODE_DATA).get(nodeId);
+        DataStore nodeData = dataStore.get(ClangParserData.NODE_DATA).get(nodeId);
 
         return Optional.ofNullable(nodeData);
 
     }
 
-    private static void nodeDataInit(ClangParserKeys data) {
+    private static void nodeDataInit(ClangParserData data) {
         // If already initialized, return
-        if (data.hasValue(ClangParserKeys.NODE_DATA)) {
+        if (data.hasValue(ClangParserData.NODE_DATA)) {
             return;
         }
 
-        data.set(ClangParserKeys.NODE_DATA, new HashMap<>());
+        data.set(ClangParserData.NODE_DATA, new HashMap<>());
     }
 
-    private static void parseNodeDataTop(BiFunction<LineStream, ClangParserKeys, DataStore> dataParser,
-            LineStream lines, ClangParserKeys data) {
+    private static void parseNodeDataTop(BiFunction<LineStream, ClangParserData, DataStore> dataParser,
+            LineStream lines, ClangParserData data) {
 
         DataStore clavaData = dataParser.apply(lines, data);
 
-        DataStore previousValue = data.get(ClangParserKeys.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
+        DataStore previousValue = data.get(ClangParserData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
 
         if (previousValue != null) {
             throw new RuntimeException(
@@ -144,11 +144,11 @@ public class NodeDataParser {
 
     }
 
-    public static DataStore parseNodeData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseNodeData(LineStream lines, ClangParserData dataStore) {
         return parseNodeData(lines, true, dataStore);
     }
 
-    public static DataStore parseNodeData(LineStream lines, boolean hasLocation, ClangParserKeys dataStore) {
+    public static DataStore parseNodeData(LineStream lines, boolean hasLocation, ClangParserData dataStore) {
 
         String id = lines.nextLine();
 

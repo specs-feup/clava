@@ -24,7 +24,7 @@ import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.extra.data.OpenCLVersion;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class LanguageParser implements LineStreamWorker<ClangParserKeys> {
+public class LanguageParser implements LineStreamWorker<ClangParserData> {
 
     private static final String PARSER_ID = "<Compiler Instance Data>";
 
@@ -34,13 +34,13 @@ public class LanguageParser implements LineStreamWorker<ClangParserKeys> {
     }
 
     @Override
-    public void init(ClangParserKeys data) {
-        data.set(ClangParserKeys.FILE_LANGUAGE_DATA, new HashMap<>());
+    public void init(ClangParserData data) {
+        data.set(ClangParserData.FILE_LANGUAGE_DATA, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserKeys data) {
-        Map<File, Language> map = data.get(ClangParserKeys.FILE_LANGUAGE_DATA);
+    public void apply(LineStream lineStream, ClangParserData data) {
+        Map<File, Language> map = data.get(ClangParserData.FILE_LANGUAGE_DATA);
 
         File file = new File(lineStream.nextLine());
         Language language = new Language()

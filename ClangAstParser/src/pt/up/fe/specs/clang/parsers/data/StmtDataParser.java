@@ -15,7 +15,7 @@ package pt.up.fe.specs.clang.parsers.data;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -28,7 +28,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class StmtDataParser {
 
-    public static DataStore parseStmtData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseStmtData(LineStream lines, ClangParserData dataStore) {
         return NodeDataParser.parseNodeData(lines, dataStore);
     }
 

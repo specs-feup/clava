@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
@@ -50,7 +50,7 @@ public class ClavaDataParsers {
      * @param dataStore
      * @return
      */
-    public static SourceRange parseLocation(LineStream lines, ClangParserKeys dataStore) {
+    public static SourceRange parseLocation(LineStream lines, ClangParserData dataStore) {
         // Next line will tell if is an invalid location or if to continue parsing
         String firstPart = lines.nextLine();
 
@@ -113,14 +113,14 @@ public class ClavaDataParsers {
         return builder.toString();
     }
 
-    public static ExceptionSpecification exceptionSpecification(LineStream lines, ClangParserKeys parserData) {
+    public static ExceptionSpecification exceptionSpecification(LineStream lines, ClangParserData parserData) {
 
         ExceptionSpecificationType exceptionSpecificationType = LineStreamParsers
                 .enumFromName(ExceptionSpecificationType.class, lines);
 
         ExceptionSpecification exceptionSpecification = exceptionSpecificationType.newInstance();
 
-        ClavaNodes clavaNodes = parserData.get(ClangParserKeys.CLAVA_NODES);
+        ClavaNodes clavaNodes = parserData.get(ClangParserData.CLAVA_NODES);
 
         int numTypes = LineStreamParsers.integer(lines);
         List<Type> exceptionTypes = new ArrayList<>(numTypes);
@@ -139,7 +139,7 @@ public class ClavaDataParsers {
         case Unevaluated:
             // At parsing time, the node might be halfway-built
             // node, key, nodeId
-            parserData.get(ClangParserKeys.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+            parserData.get(ClangParserData.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
                     UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
             return exceptionSpecification;
@@ -149,10 +149,10 @@ public class ClavaDataParsers {
         // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
 
         case Uninstantiated:
-            parserData.get(ClangParserKeys.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+            parserData.get(ClangParserData.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
                     UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
-            parserData.get(ClangParserKeys.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+            parserData.get(ClangParserData.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
                     UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
 
             return exceptionSpecification;

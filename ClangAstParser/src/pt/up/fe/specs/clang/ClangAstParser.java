@@ -39,7 +39,7 @@ import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
@@ -205,14 +205,14 @@ public class ClangAstParser {
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
 
-        ClangParserKeys parsedData = null;
+        ClangParserData parsedData = null;
 
         ProcessOutput<List<ClangNode>, DataStore> output = null;
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        try (LineStreamParser<ClangParserKeys> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
             if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+                lineStreamParser.getData().set(ClangParserData.DEBUG, true);
             }
 
             // ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
@@ -329,7 +329,7 @@ public class ClangAstParser {
         // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
         // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
         // Map<String, ClavaNode> newNodes = lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
-        ClavaNodes newNodes = parsedData.get(ClangParserKeys.CLAVA_NODES);
+        ClavaNodes newNodes = parsedData.get(ClangParserData.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,
@@ -352,13 +352,13 @@ public class ClangAstParser {
     }
 
     public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-            LineStreamParser<ClangParserKeys> lineStreamParser) {
+            LineStreamParser<ClangParserData> lineStreamParser) {
 
         return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
     }
 
     public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-            LineStreamParser<ClangParserKeys> lineStreamParser, File stderrDumpFilename) {
+            LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
 
         File dumpfile = isDebug() ? stderrDumpFilename : null;
 
@@ -573,7 +573,7 @@ public class ClangAstParser {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         ClavaContext context = new ClavaContext();
 
-        try (LineStreamParser<ClangParserKeys> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserData> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
 
             ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments, this::processOutput,
                     inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,

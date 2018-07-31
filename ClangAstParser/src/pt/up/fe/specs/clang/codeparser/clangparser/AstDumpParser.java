@@ -34,7 +34,7 @@ import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
@@ -183,14 +183,14 @@ public class AstDumpParser implements ClangParser {
         // Add context to config
         config.add(ClavaNode.CONTEXT, context);
 
-        ClangParserKeys parsedData = null;
+        ClangParserData parsedData = null;
         ProcessOutput<List<ClangNode>, DataStore> output = null;
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        try (LineStreamParser<ClangParserKeys> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangParserData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
 
             if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangParserKeys.DEBUG, true);
+                lineStreamParser.getData().set(ClangParserData.DEBUG, true);
             }
 
             // Create temporary working folder, in order to support running several dumps in parallel
@@ -294,7 +294,7 @@ public class AstDumpParser implements ClangParser {
         // Check if no new nodes should be used
         // Map<String, ClavaNode> newNodes = disableNewParsingMethod ? new HashMap<>()
         // : lineStreamParser.getData().get(ClangParserKeys.CLAVA_NODES);
-        ClavaNodes newNodes = parsedData.get(ClangParserKeys.CLAVA_NODES);
+        ClavaNodes newNodes = parsedData.get(ClangParserData.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
                 isTemporary, ompDirectives, enumToIntegerType, stderr,

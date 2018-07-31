@@ -36,7 +36,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.linestreamparser.SnippetParser;
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.data.ClavaDataParsers;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
@@ -112,7 +112,7 @@ public class StreamParser {
     // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
-    private final LineStreamParser<ClangParserKeys> lineStreamParser;
+    private final LineStreamParser<ClangParserData> lineStreamParser;
 
     // public StreamParser(DataStore clavaData) {
     // this(clavaData, null, ClangStreamParserV2.newInstance());
@@ -121,7 +121,7 @@ public class StreamParser {
     /**
      * We need a new instance every time we want to parse a String.
      */
-    public StreamParser(DataStore clavaData, File dumpFile, LineStreamParser<ClangParserKeys> lineStreamParser) {
+    public StreamParser(DataStore clavaData, File dumpFile, LineStreamParser<ClangParserData> lineStreamParser) {
         // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;

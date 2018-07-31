@@ -25,7 +25,7 @@ import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class SystemHeadersClangNodes implements LineStreamWorker<ClangParserKeys> {
+public class SystemHeadersClangNodes implements LineStreamWorker<ClangParserData> {
 
     private static final String PARSER_ID = "<System Header Node Dump Begin>";
     private static final String END_ID = "<System Header Node Dump End>";
@@ -36,12 +36,12 @@ public class SystemHeadersClangNodes implements LineStreamWorker<ClangParserKeys
     }
 
     @Override
-    public void init(ClangParserKeys data) {
-        data.set(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES, new HashMap<>());
+    public void init(ClangParserData data) {
+        data.set(ClangParserData.SYSTEM_HEADERS_CLANG_NODES, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserKeys data) {
+    public void apply(LineStream lineStream, ClangParserData data) {
         // First line is id
         String nodeId = lineStream.nextLine();
 
@@ -64,7 +64,7 @@ public class SystemHeadersClangNodes implements LineStreamWorker<ClangParserKeys
         ClangNode clangNode = clangDump.get(0);
         clangNode.getInfo().setId(nodeId);
 
-        data.get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).put(nodeId, clangNode);
+        data.get(ClangParserData.SYSTEM_HEADERS_CLANG_NODES).put(nodeId, clangNode);
 
     }
 

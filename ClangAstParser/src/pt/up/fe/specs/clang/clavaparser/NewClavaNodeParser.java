@@ -20,7 +20,7 @@ import java.util.function.Function;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
@@ -232,7 +232,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // In certain cases, use new nodes children
         if (useNewNodesChildren(clavaNode)) {
             // Get ClangNodes of the children visited by the new node
-            List<String> childrenId = getStdErr().get(ClangParserKeys.VISITED_CHILDREN).get(node.getExtendedId());
+            List<String> childrenId = getStdErr().get(ClangParserData.VISITED_CHILDREN).get(node.getExtendedId());
 
             List<ClangNode> childrenClangNodes = new ArrayList<>();
             for (String childId : childrenId) {
@@ -243,7 +243,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                     // System.out.println("SYSTEM HEADER IDS:"
                     // + getStdErr().get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).keySet());
                     // System.out.println("SYSTEM HEADER ID:" + childId);
-                    clangNode = getStdErr().get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).get(childId);
+                    clangNode = getStdErr().get(ClangParserData.SYSTEM_HEADERS_CLANG_NODES).get(childId);
                     // System.out.println("CLANG NODE:" + clangNode);
                 }
 

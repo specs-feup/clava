@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
@@ -68,9 +68,9 @@ public class ClangStreamParser {
             // new RecoverStdMacros(),
             new MoveImplicitCasts());
 
-    private final ClangParserKeys data;
+    private final ClangParserData data;
 
-    public ClangStreamParser(ClangParserKeys data, boolean debug) {
+    public ClangStreamParser(ClangParserData data, boolean debug) {
         this.data = data;
     }
 
@@ -80,10 +80,10 @@ public class ClangStreamParser {
 
     public App parse() {
         // Get top-level nodes
-        Set<String> topLevelDecls = data.get(ClangParserKeys.TOP_LEVEL_DECL_IDS);
+        Set<String> topLevelDecls = data.get(ClangParserData.TOP_LEVEL_DECL_IDS);
         // MultiMap<String, String> topLevelDecls = data.get(TopLevelNodesParser.getDataKey());
-        Set<String> topLevelTypes = data.get(ClangParserKeys.TOP_LEVEL_TYPE_IDS);
-        Set<String> topLevelAttributes = data.get(ClangParserKeys.TOP_LEVEL_ATTR_IDS);
+        Set<String> topLevelTypes = data.get(ClangParserData.TOP_LEVEL_TYPE_IDS);
+        Set<String> topLevelAttributes = data.get(ClangParserData.TOP_LEVEL_ATTR_IDS);
 
         // Set<String> allDecls = data.get(ClangParserKeys.ALL_DECLS_IDS);
         // System.out.println("ALL DECLS:" + allDecls);
@@ -96,7 +96,7 @@ public class ClangStreamParser {
         List<ClavaNode> topLevelDeclNodes = new ArrayList<>();
         // for (String topLevelDeclId : topLevelDecls.flatValues()) {
         for (String topLevelDeclId : topLevelDecls) {
-            ClavaNode parsedNode = data.get(ClangParserKeys.CLAVA_NODES).get(topLevelDeclId);
+            ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelDeclId);
             Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
             // Check
             topLevelDeclNodes.add(parsedNode);
@@ -104,14 +104,14 @@ public class ClangStreamParser {
 
         // Parse top-level types
         for (String topLevelTypeId : topLevelTypes) {
-            ClavaNode parsedNode = data.get(ClangParserKeys.CLAVA_NODES).get(topLevelTypeId);
+            ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelTypeId);
             Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
 
         }
 
         // Parse top-level attributes
         for (String topLevelAttributeId : topLevelAttributes) {
-            ClavaNode parsedNode = data.get(ClangParserKeys.CLAVA_NODES).get(topLevelAttributeId);
+            ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelAttributeId);
             Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
         }
 
@@ -127,7 +127,7 @@ public class ClangStreamParser {
         // .forEach(node -> ClavaDataUtils.applyPostProcessing(node.getData(), postData));
 
         // Create App node
-        App app = createApp(topLevelDeclNodes, data.get(ClangParserKeys.INCLUDES));
+        App app = createApp(topLevelDeclNodes, data.get(ClangParserData.INCLUDES));
 
         // Set app in Type nodes
         /*
@@ -251,7 +251,7 @@ public class ClangStreamParser {
             TranslationUnit tUnit = getFactory().translationUnit(sourcePath, decls);
 
             // Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
-            Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(sourcePath);
+            Language language = data.get(ClangParserData.FILE_LANGUAGE_DATA).get(sourcePath);
             if (language != null) {
                 tUnit.setLanguage(language);
             }

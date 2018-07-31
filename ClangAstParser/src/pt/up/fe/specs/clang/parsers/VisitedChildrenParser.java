@@ -24,7 +24,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class VisitedChildrenParser implements LineStreamWorker<ClangParserKeys> {
+public class VisitedChildrenParser implements LineStreamWorker<ClangParserData> {
 
     private static final String PARSER_ID = "<Visited Children>";
 
@@ -34,13 +34,13 @@ public class VisitedChildrenParser implements LineStreamWorker<ClangParserKeys> 
     }
 
     @Override
-    public void init(ClangParserKeys data) {
-        data.set(ClangParserKeys.VISITED_CHILDREN, new HashMap<>());
+    public void init(ClangParserData data) {
+        data.set(ClangParserData.VISITED_CHILDREN, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserKeys data) {
-        Map<String, List<String>> children = data.get(ClangParserKeys.VISITED_CHILDREN);
+    public void apply(LineStream lineStream, ClangParserData data) {
+        Map<String, List<String>> children = data.get(ClangParserData.VISITED_CHILDREN);
 
         String key = lineStream.nextLine();
 

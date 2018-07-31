@@ -27,7 +27,7 @@ import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -169,7 +169,7 @@ public class RootParser extends AClangNodeParser<App> {
             // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
             TranslationUnit tUnit = LegacyToDataStore.getFactory().translationUnit(sourcePath, decls);
 
-            Language language = getStdErr().get(ClangParserKeys.FILE_LANGUAGE_DATA)
+            Language language = getStdErr().get(ClangParserData.FILE_LANGUAGE_DATA)
                     // .get(new File(filenamePath, filename));
                     .get(sourcePath);
             if (language != null) {

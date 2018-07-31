@@ -33,7 +33,7 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
+public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
     /// DATAKEYS BEGIN
 
@@ -58,20 +58,20 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
     }
 
     @Override
-    public void init(ClangParserKeys data) {
+    public void init(ClangParserData data) {
 
-        if (!data.hasValue(ClangParserKeys.CONTEXT)) {
+        if (!data.hasValue(ClangParserData.CONTEXT)) {
             throw new RuntimeException("ClavaNodeParser requires ClavaContext");
         }
 
         // data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
-        ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserKeys.CONTEXT).get(ClavaContext.FACTORY));
-        data.set(ClangParserKeys.CLAVA_NODES, clavaNodes);
+        ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserData.CONTEXT).get(ClavaContext.FACTORY));
+        data.set(ClangParserData.CLAVA_NODES, clavaNodes);
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserKeys data) {
+    public void apply(LineStream lineStream, ClangParserData data) {
         // Get nodeId and classname
         String nodeId = lineStream.nextLine();
 
@@ -82,7 +82,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
 
         String classname = lineStream.nextLine();
         // System.out.println("CLASS NAMES:" + classname);
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES).getNodes();
+        Map<String, ClavaNode> parsedNodes = data.get(ClangParserData.CLAVA_NODES).getNodes();
 
         // Check if node was already parsed
         if (parsedNodes.containsKey(nodeId)) {
@@ -137,8 +137,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
         throw new RuntimeException("ClavaData class not supported:" + data.getClass());
     }
     */
-    private ClavaNode parseNode(String nodeId, String classname, ClangParserKeys data) {
-        boolean debug = data.get(ClangParserKeys.DEBUG);
+    private ClavaNode parseNode(String nodeId, String classname, ClangParserData data) {
+        boolean debug = data.get(ClangParserData.DEBUG);
 
         if (classname == null) {
             throw new RuntimeException("No classname for node '" + nodeId + "");
@@ -148,7 +148,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
         }
 
         // DataStore mapped to the node id
-        DataStore nodeData = data.get(ClangParserKeys.NODE_DATA).get(nodeId);
+        DataStore nodeData = data.get(ClangParserData.NODE_DATA).get(nodeId);
 
         if (nodeData == null) {
             throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
@@ -163,7 +163,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
         Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, nodeData);
 
         // Get children ids
-        List<String> childrenIds = data.get(ClangParserKeys.VISITED_CHILDREN).get(nodeId);
+        List<String> childrenIds = data.get(ClangParserData.VISITED_CHILDREN).get(nodeId);
 
         if (childrenIds == null) {
             SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
@@ -171,7 +171,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
             childrenIds = Collections.emptyList();
         }
 
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserKeys.CLAVA_NODES).getNodes();
+        Map<String, ClavaNode> parsedNodes = data.get(ClangParserData.CLAVA_NODES).getNodes();
 
         // Get the children nodes
         List<ClavaNode> children = new ArrayList<>(childrenIds.size());
@@ -180,7 +180,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
 
             // Check if nullptr
             if (child == null && ClavaNodes.isNullId(childId)) {
-                child = data.get(ClangParserKeys.CLAVA_NODES).nullNode(childId);
+                child = data.get(ClangParserData.CLAVA_NODES).nullNode(childId);
             }
 
             Preconditions.checkNotNull(child, "Did not find ClavaNode for child with id '" + childId + "'");
@@ -211,8 +211,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
     }
 
     @Override
-    public void close(ClangParserKeys data) {
-        data.get(ClangParserKeys.CLAVA_NODES).getDelayedNodesToAdd().stream()
+    public void close(ClangParserData data) {
+        data.get(ClangParserData.CLAVA_NODES).getDelayedNodesToAdd().stream()
                 .forEach(Runnable::run);
     }
 

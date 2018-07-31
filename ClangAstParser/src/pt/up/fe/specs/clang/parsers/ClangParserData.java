@@ -31,7 +31,7 @@ import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
-public class ClangParserKeys extends ADataClass<ClangParserKeys> {
+public class ClangParserData extends ADataClass<ClangParserData> {
 
     /// DATAKEYS BEGIN
 

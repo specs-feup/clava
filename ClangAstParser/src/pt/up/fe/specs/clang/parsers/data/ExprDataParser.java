@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.parsers.ClangParserKeys;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
@@ -46,7 +46,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class ExprDataParser {
 
-    public static DataStore parseExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseExprData(LineStream lines, ClangParserData dataStore) {
 
         DataStore data = NodeDataParser.parseNodeData(lines, dataStore);
         // TODO: ClavaNodes.getType, should be in ClavaContext?
@@ -57,7 +57,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseCastExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseCastExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(CastExpr.CAST_KIND, LineStreamParsers.enumFromName(CastKind.getHelper(), lines));
@@ -65,7 +65,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseLiteralData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseLiteralData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(Literal.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
@@ -73,7 +73,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseCharacterLiteralData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseCharacterLiteralData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(CharacterLiteral.VALUE, LineStreamParsers.longInt(lines));
@@ -82,7 +82,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseIntegerLiteralData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseIntegerLiteralData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(IntegerLiteral.VALUE, new BigInteger(lines.nextLine()));
@@ -90,7 +90,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseFloatingLiteralData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseFloatingLiteralData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(FloatingLiteral.VALUE, Double.parseDouble(lines.nextLine()));
@@ -98,7 +98,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseStringLiteralData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseStringLiteralData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         // data.add(StringLiteral.STRING, ClavaDataParsers.literalSource(lines));
@@ -106,7 +106,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseCXXBoolLiteralExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseCXXBoolLiteralExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(CXXBoolLiteralExpr.VALUE, LineStreamParsers.oneOrZero(lines.nextLine()));
@@ -114,7 +114,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseCompoundlLiteralExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseCompoundlLiteralExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(CompoundLiteralExpr.IS_FILE_SCOPE, LineStreamParsers.oneOrZero(lines.nextLine()));
@@ -122,7 +122,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseInitListExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseInitListExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(InitListExpr.ARRAY_FILLER, dataStore.getClavaNodes().getExpr(lines.nextLine()));
@@ -134,7 +134,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseDeclRefExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseDeclRefExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(DeclRefExpr.QUALIFIER, lines.nextLine());
@@ -147,7 +147,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseOverloadExprData(LineStream lines, ClangParserKeys dataStore) {
+    public static DataStore parseOverloadExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(OverloadExpr.QUALIFIER, lines.nextLine());

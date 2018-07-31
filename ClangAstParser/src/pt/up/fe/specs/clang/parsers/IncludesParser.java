@@ -23,7 +23,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class IncludesParser implements LineStreamWorker<ClangParserKeys> {
+public class IncludesParser implements LineStreamWorker<ClangParserData> {
 
     private static final String PARSER_ID = "<Includes>";
 
@@ -43,13 +43,13 @@ public class IncludesParser implements LineStreamWorker<ClangParserKeys> {
     }
 
     @Override
-    public void init(ClangParserKeys data) {
-        data.set(ClangParserKeys.INCLUDES, new ArrayList<>());
+    public void init(ClangParserData data) {
+        data.set(ClangParserData.INCLUDES, new ArrayList<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserKeys data) {
-        List<Include> includes = data.get(ClangParserKeys.INCLUDES);
+    public void apply(LineStream lineStream, ClangParserData data) {
+        List<Include> includes = data.get(ClangParserData.INCLUDES);
         parseInclude(lineStream, includes);
     }
 }

@@ -25,7 +25,7 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 
 public class ClangStreamParserV2 {
 
-    private static final Map<String, LineStreamWorker<ClangParserKeys>> WORKERS;
+    private static final Map<String, LineStreamWorker<ClangParserData>> WORKERS;
     static {
         WORKERS = new HashMap<>();
         addWorker(() -> new ClavaNodeParser(Clang_3_8.getClassesService()));
@@ -38,20 +38,20 @@ public class ClangStreamParserV2 {
         addWorker(SystemHeadersClangNodes::new);
     }
 
-    private static void addWorker(Supplier<LineStreamWorker<ClangParserKeys>> workerSupplier) {
+    private static void addWorker(Supplier<LineStreamWorker<ClangParserData>> workerSupplier) {
         addWorker(workerSupplier.get());
     }
 
-    private static void addWorker(LineStreamWorker<ClangParserKeys> worker) {
+    private static void addWorker(LineStreamWorker<ClangParserData> worker) {
         // Add worker
         WORKERS.put(worker.getId(), worker);
     }
 
     // public static LineStreamParserV2 newInstance(List<String> arguments) {
-    public static LineStreamParser<ClangParserKeys> newInstance(ClavaContext context) {
-        ClangParserKeys clangParserData = new ClangParserKeys();
-        clangParserData.set(ClangParserKeys.CONTEXT, context);
-        LineStreamParser<ClangParserKeys> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
+    public static LineStreamParser<ClangParserData> newInstance(ClavaContext context) {
+        ClangParserData clangParserData = new ClangParserData();
+        clangParserData.set(ClangParserData.CONTEXT, context);
+        LineStreamParser<ClangParserData> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
 
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
