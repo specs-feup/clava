@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -64,7 +65,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserKeys> {
         }
 
         // data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
-        data.set(ClangParserKeys.CLAVA_NODES, new ClavaNodes(data));
+        ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserKeys.CONTEXT).get(ClavaContext.FACTORY));
+        data.set(ClangParserKeys.CLAVA_NODES, clavaNodes);
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
     }
 

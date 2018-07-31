@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -51,16 +50,16 @@ public class ClavaNodes {
     private static final Set<String> NULL_IDS = new HashSet<>(
             Arrays.asList(NULLPRT_DECL, NULLPRT_STMT, NULLPRT_EXPR, NULLPRT_TYPE, NULLPRT_ATTR));
 
-    private final ClangParserKeys data;
+    // private final ClangParserKeys data;
     private final Map<String, ClavaNode> clavaNodes;
     private final List<Runnable> delayedNodesToAdd;
     private final ClavaFactory factory;
 
-    public ClavaNodes(ClangParserKeys data) {
-        this.data = data;
+    public ClavaNodes(ClavaFactory factory) {
+        // this.data = data;
         this.clavaNodes = new HashMap<>();
         this.delayedNodesToAdd = new ArrayList<>();
-        this.factory = data.get(ClangParserKeys.CONTEXT).get(ClavaContext.FACTORY);
+        this.factory = factory;
     }
 
     public Map<String, ClavaNode> getNodes() {
