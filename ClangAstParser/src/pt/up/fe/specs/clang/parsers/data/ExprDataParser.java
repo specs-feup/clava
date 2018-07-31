@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
+import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -142,6 +143,14 @@ public class ExprDataParser {
         data.add(DeclRefExpr.DECL_NAME, lines.nextLine());
         data.add(DeclRefExpr.DECL_ID, lines.nextLine());
         // data.add(DeclRefExpr.DECL, ClavaNodes.getValueDecl(dataStore, data.get(DeclRefExpr.DECL_ID)));
+
+        return data;
+    }
+
+    public static DataStore parseOverloadExprData(LineStream lines, ClangParserKeys dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(OverloadExpr.QUALIFIER, lines.nextLine());
 
         return data;
     }

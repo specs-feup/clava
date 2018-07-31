@@ -73,6 +73,7 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<InitListExprData>", ExprDataParser::parseInitListExprData);
         STATIC_DATA_PARSERS.put("<StringLiteralData>", ExprDataParser::parseStringLiteralData);
         STATIC_DATA_PARSERS.put("<DeclRefExprData>", ExprDataParser::parseDeclRefExprData);
+        STATIC_DATA_PARSERS.put("<OverloadExprData>", ExprDataParser::parseOverloadExprData);
 
         // TYPES
         STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
