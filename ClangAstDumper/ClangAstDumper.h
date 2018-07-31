@@ -87,7 +87,7 @@ public:
     void VisitDeclRefExpr(const DeclRefExpr *Node);
     void VisitOffsetOfExpr(const OffsetOfExpr *Node);
     void VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *Node);
-    void VisitOverloadExpr(const OverloadExpr *Node, bool isTopCall = true);
+    void VisitOverloadExpr(const OverloadExpr *Node);
     void VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node);
     void VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node);
     void VisitLambdaExpr(const LambdaExpr *Node);
