@@ -43,7 +43,7 @@ public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
     @Override
     public String getCode(FunctionProtoType type) {
 
-        Decl sourceDecl = getSourceDecl(type);
+        // Decl sourceDecl = getSourceDecl(type);
         // System.out.println("SOURCE DECL:" + sourceDecl);
         // FunctionType sourceDeclType = sourceDecl.getFunctionType();
         //

@@ -16,8 +16,13 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
@@ -28,17 +33,44 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public abstract class OverloadExpr extends Expr {
 
-    private final String qualifier;
+    /// DATAKEYS BEGIN
+
+    /**
+     * The nested-name qualifier that precedes the name, or empty string if it has none.
+     */
+    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
+    /// DATAKEYS END
+
+    // private final String qualifier;
+
+    public OverloadExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // this.qualifier = null;
+    }
 
     public OverloadExpr(String qualifier, ExprData exprData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
+        super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
 
-        this.qualifier = qualifier;
+        if (qualifier != null && !qualifier.isEmpty()) {
+            set(QUALIFIER, qualifier);
+        }
+
+        // super(exprData, info, children);
+
+        // this.qualifier = qualifier;
     }
 
     public Optional<String> getQualifier() {
-        return Optional.ofNullable(qualifier);
+        String qualifier = get(QUALIFIER);
+
+        return qualifier.isEmpty() ? Optional.empty() : Optional.of(qualifier);
+
+        // return hasValue(QUALIFIER) ? Optional.of(get(QUALIFIER)) : Optional.empty();
+
+        // return Optional.ofNullable(qualifier);
     }
 
 }

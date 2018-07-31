@@ -48,6 +48,9 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     // DATAKEY BEGIN
 
+    /**
+     * The nested-name qualifier that precedes the name, or empty string if it has none.
+     */
     public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
 
     public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
