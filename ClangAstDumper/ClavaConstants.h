@@ -56,6 +56,10 @@ namespace clava {
         INIT_LIST_EXPR,
         STRING_LITERAL,
         DECL_REF_EXPR,
+        DEPENDENT_SCOPE_DECL_REF_EXPR,
+        OVERLOAD_EXPR,
+        UNRESOLVED_LOOKUP_EXPR,
+        UNRESOLVED_MEMBER_EXPR,
     };
 
     /**

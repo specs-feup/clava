@@ -123,6 +123,7 @@ namespace clava {
         void DumpCompoundLiteralExprData(const CompoundLiteralExpr *E);
         void DumpInitListExprData(const InitListExpr *E);
         void DumpDeclRefExprData(const DeclRefExpr *E);
+        void DumpOverloadExprData(const OverloadExpr *E);
 
 
 

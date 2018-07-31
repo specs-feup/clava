@@ -26,6 +26,8 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
         {"StringLiteral", clava::StmtNode::STRING_LITERAL},
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
+        {"UnresolvedLookupExpr", clava::StmtNode::OVERLOAD_EXPR},
+        {"UnresolvedMemberExpr", clava::StmtNode::OVERLOAD_EXPR},
 };
 
 
@@ -82,6 +84,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpInitListExprData(static_cast<const InitListExpr *>(S)); break;
         case clava::StmtNode ::DECL_REF_EXPR:
             DumpDeclRefExprData(static_cast<const DeclRefExpr *>(S)); break;
+        case clava::StmtNode ::OVERLOAD_EXPR:
+            DumpOverloadExprData(static_cast<const OverloadExpr *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
@@ -235,6 +239,8 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
     DumpExprData(E);
 
     // Dump qualifier
+    clava::dump(E->getQualifier(), Context);
+    /*
     if(E->getQualifier() != nullptr) {
         std::string qualifierStr;
         llvm::raw_string_ostream qualifierStream(qualifierStr);
@@ -243,6 +249,7 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
     } else {
         clava::dump("");
     }
+    */
 
     // Dump template arguments
     if(E->hasExplicitTemplateArgs()) {
@@ -263,6 +270,13 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
     declNameStream << E->getDecl()->getDeclName();
     clava::dump(declNameStream.str());
 
+
     clava::dump(clava::getId(E->getDecl(), id));
 }
 
+void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
+    DumpExprData(E);
+
+    // Dump qualifier
+    clava::dump(E->getQualifier(), Context);
+}

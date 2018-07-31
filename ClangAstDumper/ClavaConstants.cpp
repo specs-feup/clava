@@ -48,6 +48,10 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::INIT_LIST_EXPR: return "InitListExpr";
         case clava::StmtNode::STRING_LITERAL: return "StringLiteral";
         case clava::StmtNode::DECL_REF_EXPR: return "DeclRefExpr";
+        case clava::StmtNode::DEPENDENT_SCOPE_DECL_REF_EXPR: return "DependentScopeDeclRefExpr";
+        case clava::StmtNode::OVERLOAD_EXPR: return "OverloadExpr";
+        case clava::StmtNode::UNRESOLVED_LOOKUP_EXPR: return "UnresolvedLookupExpr";
+        case clava::StmtNode::UNRESOLVED_MEMBER_EXPR: return "UnresolvedMemberExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
