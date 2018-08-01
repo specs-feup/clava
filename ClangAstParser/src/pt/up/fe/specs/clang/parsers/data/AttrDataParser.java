@@ -22,8 +22,8 @@ import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class AttrDataParser {
@@ -50,7 +50,10 @@ public class AttrDataParser {
         String nodeId = lines.nextLine();
 
         if (isExpr) {
-            data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
+            data.add(AlignedAttr.ALIGNED_ATTR_KIND, AlignedAttrKind.EXPR);
+            // data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
+            // data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
+            dataStore.getClavaNodes().setExpr(data, AlignedExprAttr.EXPR, nodeId);
             // data.add(ClavaNodeI.NODE_CLASS, AlignedExprAttr.class);
 
             // data.setDefinition(AlignedExprAttr.class);
@@ -59,8 +62,10 @@ public class AttrDataParser {
             // dummyData.set(DummyAttr.CLASSNAME, "<classname>");
             // System.out.println("DUMMY DATA:" + dummyData);
         } else {
-            Type type = dataStore.getClavaNodes().getType(nodeId);
-            data.add(AlignedTypeAttr.TYPE, type);
+            data.add(AlignedAttr.ALIGNED_ATTR_KIND, AlignedAttrKind.TYPE);
+            // Type type = dataStore.getClavaNodes().getType(nodeId);
+            // data.add(AlignedTypeAttr.TYPE, type);
+            dataStore.getClavaNodes().setType(data, AlignedTypeAttr.TYPE, nodeId);
             // data.setDefinition(AlignedTypeAttr.class);
             // data.setStoreDefinition(StoreDefinition.fromInterface(AlignedTypeAttrI.class));
             // data.add(ClavaNodeI.NODE_CLASS, AlignedTypeAttr.class);

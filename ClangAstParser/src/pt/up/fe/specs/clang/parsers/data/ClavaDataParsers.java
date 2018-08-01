@@ -133,13 +133,19 @@ public class ClavaDataParsers {
         switch (exceptionSpecificationType) {
 
         case ComputedNoexcept:
-            return exceptionSpecification
-                    .set(ComputedNoexcept.NOEXCEPT_EXPR, clavaNodes.getExpr(lines.nextLine()));
+            parserData.getClavaNodes().setExpr(exceptionSpecification,
+                    ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
+
+            return exceptionSpecification;
+        // return exceptionSpecification
+        // .set(ComputedNoexcept.NOEXCEPT_EXPR, clavaNodes.getExpr(lines.nextLine()));
 
         case Unevaluated:
             // At parsing time, the node might be halfway-built
             // node, key, nodeId
-            parserData.get(ClangParserData.CLAVA_NODES).addNodeDelayed(exceptionSpecification,
+            // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
+            // UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
+            parserData.getClavaNodes().setDecl(exceptionSpecification,
                     UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
             return exceptionSpecification;
@@ -149,11 +155,17 @@ public class ClavaDataParsers {
         // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
 
         case Uninstantiated:
-            parserData.get(ClangParserData.CLAVA_NODES).addNodeDelayed(exceptionSpecification,
+            // setNode(parserData, exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
+            // lines.nextLine());
+            parserData.getClavaNodes().setDecl(exceptionSpecification,
                     UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
+            // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
+            // UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
-            parserData.get(ClangParserData.CLAVA_NODES).addNodeDelayed(exceptionSpecification,
+            parserData.getClavaNodes().setDecl(exceptionSpecification,
                     UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
+            // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
+            // UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
 
             return exceptionSpecification;
         // .set(UninstantiatedExceptionSpecification.SOURCE_DECL_ID, lines.nextLine())
@@ -167,5 +179,11 @@ public class ClavaDataParsers {
         }
 
     }
+
+    // public static void setNode(ClangParserData parserData, DataClass<?> dataClass, DataKey<? extends ClavaNode> key,
+    // String valueNodeId) {
+    //
+    // parserData.get(ClangParserData.CLAVA_NODES).setNodeDelayed(dataClass, key, valueNodeId);
+    // }
 
 }

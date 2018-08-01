@@ -91,7 +91,8 @@ public class DeclDataParser {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
 
-        data.add(TypeDecl.TYPE_FOR_DECL, dataStore.getClavaNodes().getType(lines.nextLine()));
+        // data.add(TypeDecl.TYPE_FOR_DECL, dataStore.getClavaNodes().getType(lines.nextLine()));
+        dataStore.getClavaNodes().setType(data, TypeDecl.TYPE_FOR_DECL, lines.nextLine());
 
         return data;
     }
@@ -100,7 +101,8 @@ public class DeclDataParser {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
 
-        data.add(ValueDecl.TYPE, dataStore.getClavaNodes().getType(lines.nextLine()));
+        // data.add(ValueDecl.TYPE, dataStore.getClavaNodes().getType(lines.nextLine()));
+        dataStore.getClavaNodes().setType(data, ValueDecl.TYPE, lines.nextLine());
         data.add(ValueDecl.IS_WEAK, LineStreamParsers.oneOrZero(lines));
 
         return data;

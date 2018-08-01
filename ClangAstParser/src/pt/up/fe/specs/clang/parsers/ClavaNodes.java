@@ -20,14 +20,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
+import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.w3c.dom.Attr;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
@@ -94,6 +99,14 @@ public class ClavaNodes {
         return (Type) node;
     }
 
+    public void setType(DataClass<?> dataClass, DataKey<? extends Type> key, String valueNodeId) {
+        setNodeDelayed(dataClass, key, valueNodeId, id -> getType(id));
+    }
+
+    public void setType(DataStore data, DataKey<? extends Type> key, String valueNodeId) {
+        setType(new GenericDataClass<>(data), key, valueNodeId);
+    }
+
     public Expr getExpr(String parsedExprId) {
         if (NULLPRT_EXPR.equals(parsedExprId)) {
             return factory.nullExpr();
@@ -107,6 +120,14 @@ public class ClavaNodes {
         return (Expr) node;
     }
 
+    public void setExpr(DataClass<?> dataClass, DataKey<? extends Expr> key, String valueNodeId) {
+        setNodeDelayed(dataClass, key, valueNodeId, id -> getExpr(id));
+    }
+
+    public void setExpr(DataStore data, DataKey<? extends Expr> key, String valueNodeId) {
+        setExpr(new GenericDataClass<>(data), key, valueNodeId);
+    }
+
     public Attribute getAttr(String parsedAttrId) {
         Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
 
@@ -115,6 +136,35 @@ public class ClavaNodes {
         SpecsCheck.checkArgument(node instanceof Attribute,
                 () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
         return (Attribute) node;
+    }
+
+    public void setAttr(DataClass<?> dataClass, DataKey<? extends Attr> key, String valueNodeId) {
+        setNodeDelayed(dataClass, key, valueNodeId, id -> getAttr(id));
+    }
+
+    public void setAttr(DataStore data, DataKey<? extends Attr> key, String valueNodeId) {
+        setAttr(new GenericDataClass<>(data), key, valueNodeId);
+    }
+
+    public Decl getDecl(String parsedDeclId) {
+        if (NULLPRT_DECL.equals(parsedDeclId)) {
+            return factory.nullDecl();
+        }
+
+        ClavaNode node = get(parsedDeclId);
+
+        SpecsCheck.checkArgument(node instanceof Decl,
+                () -> "Expected id '" + parsedDeclId + "' to be a Decl, is a " + node.getClass().getSimpleName());
+
+        return (Decl) node;
+    }
+
+    public void setDecl(DataClass<?> dataClass, DataKey<? extends Decl> key, String valueNodeId) {
+        setNodeDelayed(dataClass, key, valueNodeId, id -> getDecl(id));
+    }
+
+    public void setDecl(DataStore data, DataKey<? extends Decl> key, String valueNodeId) {
+        setDecl(new GenericDataClass<>(data), key, valueNodeId);
     }
 
     public ClavaNode nullNode(String nullId) {
@@ -132,11 +182,12 @@ public class ClavaNodes {
         }
     }
 
-    public void addNodeDelayed(DataClass<?> dataClass, DataKey<? extends ClavaNode> key, String nodeIdToAdd) {
+    private void setNodeDelayed(DataClass<?> dataClass, DataKey<?> key, String nodeIdToAdd,
+            Function<String, ClavaNode> nodeSupplier) {
 
         @SuppressWarnings("unchecked") // Check is being done manually
         Runnable nodeToAdd = () -> {
-            ClavaNode clavaNode = get(nodeIdToAdd);
+            ClavaNode clavaNode = nodeSupplier.apply(nodeIdToAdd);
 
             // Check if node is compatible with key
             Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"

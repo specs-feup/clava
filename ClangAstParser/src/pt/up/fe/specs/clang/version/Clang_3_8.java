@@ -18,6 +18,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clang.streamparserv2.CustomClassnameMapper;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -37,14 +38,24 @@ public class Clang_3_8 {
     }
 
     private static Class<? extends ClavaNode> alignedAttrMapper(DataStore data) {
+        switch (data.get(AlignedAttr.ALIGNED_ATTR_KIND)) {
+        case EXPR:
+            return AlignedExprAttr.class;
+        case TYPE:
+            return AlignedTypeAttr.class;
+        default:
+            throw new CaseNotDefinedException(data);
+        }
+        /*
         if (data.hasValue(AlignedExprAttr.EXPR)) {
             return AlignedExprAttr.class;
         }
-
+        
         if (data.hasValue(AlignedTypeAttr.TYPE)) {
             return AlignedTypeAttr.class;
         }
-
+        
         throw new CaseNotDefinedException(data);
+        */
     }
 }
