@@ -21,12 +21,15 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 
 public abstract class AlignedAttr extends Attribute {
 
     /// DATAKEYS BEGIN
 
     public final static DataKey<String> SPELLING = KeyFactory.string("spelling");
+    public final static DataKey<AlignedAttrKind> ALIGNED_ATTR_KIND = KeyFactory
+            .enumeration("alignedAttrKind", AlignedAttrKind.class);
 
     /// DATAKEYS END
 
