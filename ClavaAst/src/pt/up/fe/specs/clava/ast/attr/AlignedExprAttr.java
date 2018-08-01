@@ -27,7 +27,7 @@ public class AlignedExprAttr extends AlignedAttr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Expr> EXPR = KeyFactory.object("expr", Expr.class);
+    public final static DataKey<Optional<Expr>> EXPR = KeyFactory.optional("expr");
 
     /// DATAKEYS END
 
@@ -46,9 +46,10 @@ public class AlignedExprAttr extends AlignedAttr {
 
     @Override
     protected Optional<String> getValueCode() {
-        Expr expr = getData().get(EXPR);
-
-        return expr.isNullNode() ? Optional.empty() : Optional.of(expr.getCode());
+        return getData().get(EXPR).map(Expr::getCode);
+        // Expr expr = getData().get(EXPR);
+        //
+        // return expr.isNullNode() ? Optional.empty() : Optional.of(expr.getCode());
     }
 
 }

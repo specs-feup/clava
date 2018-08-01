@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -36,10 +37,10 @@ public class InitListExpr extends Expr {
     /// DATAKEY BEGIN
 
     /**
-     * If this initializer list initializes an array with more elements than there are initializers in the list,
-     * specifies an expression to be used for value initialization of the rest of the elements.
+     * OPTIONAL - If this initializer list initializes an array with more elements than there are initializers in the
+     * list, specifies an expression to be used for value initialization of the rest of the elements.
      */
-    public final static DataKey<Expr> ARRAY_FILLER = KeyFactory.object("arrayFiller", Expr.class);
+    public final static DataKey<Optional<Expr>> ARRAY_FILLER = KeyFactory.optional("arrayFiller");
     public final static DataKey<FieldDecl> INITIALIZED_FIELD_IN_UNION = KeyFactory.object("initializedFieldInUnion",
             FieldDecl.class);
 
@@ -114,7 +115,8 @@ public class InitListExpr extends Expr {
     }
 
     public boolean hasArrayFiller() {
-        return !(get(ARRAY_FILLER) instanceof NullExpr);
+        // return !(get(ARRAY_FILLER) instanceof NullExpr);
+        return get(ARRAY_FILLER).isPresent();
     }
 
     @Override
@@ -153,11 +155,10 @@ public class InitListExpr extends Expr {
                 .collect(Collectors.joining(", "));
 
         // if (arrayFiller != null) {
-        Expr arrayFiller = get(ARRAY_FILLER);
 
         if (hasArrayFiller() && !get(IS_STRING_LITERAL_INIT)) {
 
-            String exprClassName = arrayFiller.getClass().getSimpleName();
+            String exprClassName = get(ARRAY_FILLER).get().getClass().getSimpleName();
             switch (exprClassName) {
             case "ImplicitValueInitExpr":
                 list = list + ",";
