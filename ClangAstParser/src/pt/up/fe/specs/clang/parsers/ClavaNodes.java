@@ -132,7 +132,7 @@ public class ClavaNodes {
         }
     }
 
-    public void addNodeAtClosing(DataClass<?> dataClass, DataKey<? extends ClavaNode> key, String nodeIdToAdd) {
+    public void addNodeDelayed(DataClass<?> dataClass, DataKey<? extends ClavaNode> key, String nodeIdToAdd) {
 
         @SuppressWarnings("unchecked") // Check is being done manually
         Runnable nodeToAdd = () -> {

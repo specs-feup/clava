@@ -120,7 +120,7 @@ public class ClavaDataParsers {
 
         ExceptionSpecification exceptionSpecification = exceptionSpecificationType.newInstance();
 
-        ClavaNodes clavaNodes = parserData.get(ClangParserData.CLAVA_NODES);
+        ClavaNodes clavaNodes = parserData.getClavaNodes();
 
         int numTypes = LineStreamParsers.integer(lines);
         List<Type> exceptionTypes = new ArrayList<>(numTypes);
@@ -139,7 +139,7 @@ public class ClavaDataParsers {
         case Unevaluated:
             // At parsing time, the node might be halfway-built
             // node, key, nodeId
-            parserData.get(ClangParserData.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+            parserData.get(ClangParserData.CLAVA_NODES).addNodeDelayed(exceptionSpecification,
                     UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
             return exceptionSpecification;
@@ -149,10 +149,10 @@ public class ClavaDataParsers {
         // (FunctionDecl) ClavaNodes.getDecl(parserData, lines.nextLine()));
 
         case Uninstantiated:
-            parserData.get(ClangParserData.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+            parserData.get(ClangParserData.CLAVA_NODES).addNodeDelayed(exceptionSpecification,
                     UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
-            parserData.get(ClangParserData.CLAVA_NODES).addNodeAtClosing(exceptionSpecification,
+            parserData.get(ClangParserData.CLAVA_NODES).addNodeDelayed(exceptionSpecification,
                     UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
 
             return exceptionSpecification;
