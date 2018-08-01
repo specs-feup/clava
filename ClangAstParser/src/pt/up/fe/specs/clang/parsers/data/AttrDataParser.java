@@ -53,7 +53,7 @@ public class AttrDataParser {
             data.add(AlignedAttr.ALIGNED_ATTR_KIND, AlignedAttrKind.EXPR);
             // data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
             // data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
-            dataStore.getClavaNodes().setExpr(data, AlignedExprAttr.EXPR, nodeId);
+            dataStore.getClavaNodes().queueSetNode(data, AlignedExprAttr.EXPR, nodeId);
             // data.add(ClavaNodeI.NODE_CLASS, AlignedExprAttr.class);
 
             // data.setDefinition(AlignedExprAttr.class);
@@ -65,7 +65,7 @@ public class AttrDataParser {
             data.add(AlignedAttr.ALIGNED_ATTR_KIND, AlignedAttrKind.TYPE);
             // Type type = dataStore.getClavaNodes().getType(nodeId);
             // data.add(AlignedTypeAttr.TYPE, type);
-            dataStore.getClavaNodes().setType(data, AlignedTypeAttr.TYPE, nodeId);
+            dataStore.getClavaNodes().queueSetNode(data, AlignedTypeAttr.TYPE, nodeId);
             // data.setDefinition(AlignedTypeAttr.class);
             // data.setStoreDefinition(StoreDefinition.fromInterface(AlignedTypeAttrI.class));
             // data.add(ClavaNodeI.NODE_CLASS, AlignedTypeAttr.class);

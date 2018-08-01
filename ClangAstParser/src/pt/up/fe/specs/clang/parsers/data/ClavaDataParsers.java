@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
@@ -123,18 +122,26 @@ public class ClavaDataParsers {
         ClavaNodes clavaNodes = parserData.getClavaNodes();
 
         int numTypes = LineStreamParsers.integer(lines);
-        List<Type> exceptionTypes = new ArrayList<>(numTypes);
+
+        List<String> exceptionTypeIds = new ArrayList<>(numTypes);
         for (int i = 0; i < numTypes; i++) {
-            // exceptionTypes.add(ClavaNodes.getType(parserData, lines.nextLine()));
-            exceptionTypes.add(clavaNodes.getType(lines.nextLine()));
+            exceptionTypeIds.add(lines.nextLine());
         }
-        exceptionSpecification.set(ExceptionSpecification.EXCEPTION_TYPES, exceptionTypes);
+        // parserData.getClavaNodes().setTypes(exceptionSpecification, ExceptionSpecification.EXCEPTION_TYPES,
+        // exceptionTypeIds);
+        clavaNodes.queueSetNodeList(exceptionSpecification, ExceptionSpecification.EXCEPTION_TYPES, exceptionTypeIds);
+
+        // List<Type> exceptionTypes = new ArrayList<>(numTypes);
+        // for (int i = 0; i < numTypes; i++) {
+        // // exceptionTypes.add(ClavaNodes.getType(parserData, lines.nextLine()));
+        // exceptionTypes.add(clavaNodes.getType(lines.nextLine()));
+        // }
+        // exceptionSpecification.set(ExceptionSpecification.EXCEPTION_TYPES, exceptionTypes);
 
         switch (exceptionSpecificationType) {
 
         case ComputedNoexcept:
-            parserData.getClavaNodes().setExpr(exceptionSpecification,
-                    ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
+            clavaNodes.queueSetNode(exceptionSpecification, ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
 
             return exceptionSpecification;
         // return exceptionSpecification
@@ -145,8 +152,8 @@ public class ClavaDataParsers {
             // node, key, nodeId
             // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
             // UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
-            parserData.getClavaNodes().setDecl(exceptionSpecification,
-                    UnevaluatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
+            clavaNodes.queueSetNode(exceptionSpecification, UnevaluatedExceptionSpecification.SOURCE_DECL,
+                    lines.nextLine());
 
             return exceptionSpecification;
         // return exceptionSpecification
@@ -157,13 +164,13 @@ public class ClavaDataParsers {
         case Uninstantiated:
             // setNode(parserData, exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
             // lines.nextLine());
-            parserData.getClavaNodes().setDecl(exceptionSpecification,
-                    UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
+            clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_DECL,
+                    lines.nextLine());
             // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
             // UninstantiatedExceptionSpecification.SOURCE_DECL, lines.nextLine());
 
-            parserData.getClavaNodes().setDecl(exceptionSpecification,
-                    UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
+            clavaNodes.queueSetNode(exceptionSpecification, UninstantiatedExceptionSpecification.SOURCE_TEMPLATE,
+                    lines.nextLine());
             // parserData.getClavaNodes().setNodeDelayed(exceptionSpecification,
             // UninstantiatedExceptionSpecification.SOURCE_TEMPLATE, lines.nextLine());
 

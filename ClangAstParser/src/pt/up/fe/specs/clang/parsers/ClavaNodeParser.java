@@ -212,7 +212,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
     @Override
     public void close(ClangParserData data) {
-        data.get(ClangParserData.CLAVA_NODES).getDelayedNodesToAdd().stream()
+        data.get(ClangParserData.CLAVA_NODES).getQueuedNodesToSet().stream()
                 .forEach(Runnable::run);
     }
 

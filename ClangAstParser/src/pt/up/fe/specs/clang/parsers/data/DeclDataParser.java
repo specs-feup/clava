@@ -13,15 +13,11 @@
 
 package pt.up.fe.specs.clang.parsers.data;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
-import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -57,12 +53,15 @@ public class DeclDataParser {
         data.add(Decl.IS_INVALID_DECL, LineStreamParsers.oneOrZero(lines));
         data.add(Decl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines));
 
+        dataStore.getClavaNodes().queueSetNodeList(data, Decl.ATTRIBUTES, LineStreamParsers.stringList(lines));
+
+        /*
         List<Attribute> attributes = LineStreamParsers.stringList(lines).stream()
                 .map(attrId -> dataStore.getClavaNodes().getAttr(attrId))
                 .collect(Collectors.toList());
-
+        
         data.add(Decl.ATTRIBUTES, attributes);
-
+        */
         return data;
     }
 
@@ -92,7 +91,7 @@ public class DeclDataParser {
         DataStore data = parseNamedDeclData(lines, dataStore);
 
         // data.add(TypeDecl.TYPE_FOR_DECL, dataStore.getClavaNodes().getType(lines.nextLine()));
-        dataStore.getClavaNodes().setType(data, TypeDecl.TYPE_FOR_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, TypeDecl.TYPE_FOR_DECL, lines.nextLine());
 
         return data;
     }
@@ -102,7 +101,7 @@ public class DeclDataParser {
         DataStore data = parseNamedDeclData(lines, dataStore);
 
         // data.add(ValueDecl.TYPE, dataStore.getClavaNodes().getType(lines.nextLine()));
-        dataStore.getClavaNodes().setType(data, ValueDecl.TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, ValueDecl.TYPE, lines.nextLine());
         data.add(ValueDecl.IS_WEAK, LineStreamParsers.oneOrZero(lines));
 
         return data;

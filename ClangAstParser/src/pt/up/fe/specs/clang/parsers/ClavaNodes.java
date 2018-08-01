@@ -20,21 +20,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.w3c.dom.Attr;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.attr.Attribute;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -71,7 +66,7 @@ public class ClavaNodes {
         return clavaNodes;
     }
 
-    public List<Runnable> getDelayedNodesToAdd() {
+    public List<Runnable> getQueuedNodesToSet() {
         return delayedNodesToAdd;
     }
 
@@ -84,88 +79,88 @@ public class ClavaNodes {
         return clavaNode;
 
     }
+    //
+    // public Type getType(String parsedTypeId) {
+    // if (NULLPRT_TYPE.equals(parsedTypeId)) {
+    // return factory.nullType();
+    // // return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+    // }
+    //
+    // ClavaNode node = get(parsedTypeId);
+    //
+    // SpecsCheck.checkArgument(node instanceof Type,
+    // () -> "Expected id '" + parsedTypeId + "' to be a Type, is a " + node.getClass().getSimpleName());
+    //
+    // return (Type) node;
+    // }
 
-    public Type getType(String parsedTypeId) {
-        if (NULLPRT_TYPE.equals(parsedTypeId)) {
-            return factory.nullType();
-            // return ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
-        }
+    // public void setType(DataClass<?> dataClass, DataKey<? extends Type> key, String valueNodeId) {
+    // setNodeDelayed(dataClass, key, valueNodeId, id -> getType(id));
+    // }
+    //
+    // public void setType(DataStore data, DataKey<? extends Type> key, String valueNodeId) {
+    // setType(new GenericDataClass<>(data), key, valueNodeId);
+    // }
 
-        ClavaNode node = get(parsedTypeId);
+    // public Expr getExpr(String parsedExprId) {
+    // if (NULLPRT_EXPR.equals(parsedExprId)) {
+    // return factory.nullExpr();
+    // }
+    //
+    // ClavaNode node = get(parsedExprId);
+    //
+    // SpecsCheck.checkArgument(node instanceof Expr,
+    // () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
+    //
+    // return (Expr) node;
+    // }
+    //
+    // public void setExpr(DataClass<?> dataClass, DataKey<? extends Expr> key, String valueNodeId) {
+    // setNodeDelayed(dataClass, key, valueNodeId, id -> getExpr(id));
+    // }
+    //
+    // public void setExpr(DataStore data, DataKey<? extends Expr> key, String valueNodeId) {
+    // setExpr(new GenericDataClass<>(data), key, valueNodeId);
+    // }
 
-        SpecsCheck.checkArgument(node instanceof Type,
-                () -> "Expected id '" + parsedTypeId + "' to be a Type, is a " + node.getClass().getSimpleName());
+    // public Attribute getAttr(String parsedAttrId) {
+    // Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
+    //
+    // ClavaNode node = get(parsedAttrId);
+    //
+    // SpecsCheck.checkArgument(node instanceof Attribute,
+    // () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
+    // return (Attribute) node;
+    // }
 
-        return (Type) node;
-    }
+    // public void setAttr(DataClass<?> dataClass, DataKey<? extends Attr> key, String valueNodeId) {
+    // setNodeDelayed(dataClass, key, valueNodeId, id -> getAttr(id));
+    // }
+    //
+    // public void setAttr(DataStore data, DataKey<? extends Attr> key, String valueNodeId) {
+    // setAttr(new GenericDataClass<>(data), key, valueNodeId);
+    // }
 
-    public void setType(DataClass<?> dataClass, DataKey<? extends Type> key, String valueNodeId) {
-        setNodeDelayed(dataClass, key, valueNodeId, id -> getType(id));
-    }
-
-    public void setType(DataStore data, DataKey<? extends Type> key, String valueNodeId) {
-        setType(new GenericDataClass<>(data), key, valueNodeId);
-    }
-
-    public Expr getExpr(String parsedExprId) {
-        if (NULLPRT_EXPR.equals(parsedExprId)) {
-            return factory.nullExpr();
-        }
-
-        ClavaNode node = get(parsedExprId);
-
-        SpecsCheck.checkArgument(node instanceof Expr,
-                () -> "Expected id '" + parsedExprId + "' to be an Expr, is a " + node.getClass().getSimpleName());
-
-        return (Expr) node;
-    }
-
-    public void setExpr(DataClass<?> dataClass, DataKey<? extends Expr> key, String valueNodeId) {
-        setNodeDelayed(dataClass, key, valueNodeId, id -> getExpr(id));
-    }
-
-    public void setExpr(DataStore data, DataKey<? extends Expr> key, String valueNodeId) {
-        setExpr(new GenericDataClass<>(data), key, valueNodeId);
-    }
-
-    public Attribute getAttr(String parsedAttrId) {
-        Preconditions.checkArgument(!NULLPRT_ATTR.equals(parsedAttrId), "Did not expect 'nullptr'");
-
-        ClavaNode node = get(parsedAttrId);
-
-        SpecsCheck.checkArgument(node instanceof Attribute,
-                () -> "Expected id '" + parsedAttrId + "' to be an Attribute, is a " + node.getClass().getSimpleName());
-        return (Attribute) node;
-    }
-
-    public void setAttr(DataClass<?> dataClass, DataKey<? extends Attr> key, String valueNodeId) {
-        setNodeDelayed(dataClass, key, valueNodeId, id -> getAttr(id));
-    }
-
-    public void setAttr(DataStore data, DataKey<? extends Attr> key, String valueNodeId) {
-        setAttr(new GenericDataClass<>(data), key, valueNodeId);
-    }
-
-    public Decl getDecl(String parsedDeclId) {
-        if (NULLPRT_DECL.equals(parsedDeclId)) {
-            return factory.nullDecl();
-        }
-
-        ClavaNode node = get(parsedDeclId);
-
-        SpecsCheck.checkArgument(node instanceof Decl,
-                () -> "Expected id '" + parsedDeclId + "' to be a Decl, is a " + node.getClass().getSimpleName());
-
-        return (Decl) node;
-    }
-
-    public void setDecl(DataClass<?> dataClass, DataKey<? extends Decl> key, String valueNodeId) {
-        setNodeDelayed(dataClass, key, valueNodeId, id -> getDecl(id));
-    }
-
-    public void setDecl(DataStore data, DataKey<? extends Decl> key, String valueNodeId) {
-        setDecl(new GenericDataClass<>(data), key, valueNodeId);
-    }
+    // public Decl getDecl(String parsedDeclId) {
+    // if (NULLPRT_DECL.equals(parsedDeclId)) {
+    // return factory.nullDecl();
+    // }
+    //
+    // ClavaNode node = get(parsedDeclId);
+    //
+    // SpecsCheck.checkArgument(node instanceof Decl,
+    // () -> "Expected id '" + parsedDeclId + "' to be a Decl, is a " + node.getClass().getSimpleName());
+    //
+    // return (Decl) node;
+    // }
+    //
+    // public void setDecl(DataClass<?> dataClass, DataKey<? extends Decl> key, String valueNodeId) {
+    // setNodeDelayed(dataClass, key, valueNodeId, id -> getDecl(id));
+    // }
+    //
+    // public void setDecl(DataStore data, DataKey<? extends Decl> key, String valueNodeId) {
+    // setDecl(new GenericDataClass<>(data), key, valueNodeId);
+    // }
 
     public ClavaNode nullNode(String nullId) {
         switch (nullId) {
@@ -181,27 +176,107 @@ public class ClavaNodes {
             throw new CaseNotDefinedException(nullId);
         }
     }
+    //
+    // private void setNodeDelayed(DataClass<?> dataClass, DataKey<?> key, String nodeIdToAdd,
+    // Function<String, ClavaNode> nodeSupplier) {
+    //
+    // @SuppressWarnings("unchecked") // Check is being done manually
+    // Runnable nodeToAdd = () -> {
+    // ClavaNode clavaNode = nodeSupplier.apply(nodeIdToAdd);
+    //
+    // // Check if node is compatible with key
+    // Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"
+    // + clavaNode.getClass() + "' not compatible with key accepts values of type '" + key.getValueClass()
+    // + "'");
+    //
+    // dataClass.set((DataKey<ClavaNode>) key, clavaNode);
+    // };
+    //
+    // delayedNodesToAdd.add(nodeToAdd);
+    // }
 
-    private void setNodeDelayed(DataClass<?> dataClass, DataKey<?> key, String nodeIdToAdd,
-            Function<String, ClavaNode> nodeSupplier) {
+    public static boolean isNullId(String nullId) {
+        return NULL_IDS.contains(nullId);
+    }
 
-        @SuppressWarnings("unchecked") // Check is being done manually
+    // private <T> void setNodesDelayed(DataClass<?> dataClass, DataKey<List<T>> key, List<String> nodeIds,
+    // Function<String, T> nodeSupplier) {
+    //
+    // // @SuppressWarnings("unchecked") // Check is being done manually
+    // Runnable nodeToAdd = () -> {
+    // List<T> nodes = nodeIds.stream().map(nodeSupplier::apply).collect(Collectors.toList());
+    // // ClavaNode clavaNode = nodeSupplier.apply(nodeIdToAdd);
+    //
+    // // Check if each node is compatible with key
+    // for (T clavaNode : nodes) {
+    // Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"
+    // + clavaNode.getClass() + "' not compatible with key accepts values of type '"
+    // + key.getValueClass()
+    // + "'");
+    // }
+    //
+    // dataClass.set(key, nodes);
+    // };
+    //
+    // delayedNodesToAdd.add(nodeToAdd);
+    // }
+    //
+    // public void setTypes(DataClass<?> dataClass, DataKey<List<Type>> key,
+    // List<String> valueNodeIds) {
+    //
+    // setNodesDelayed(dataClass, key, valueNodeIds, id -> getType(id));
+    // }
+    //
+    // public void setTypes(DataStore data, DataKey<List<Type>> key, List<String> valueNodeIds) {
+    // setTypes(new GenericDataClass<>(data), key, valueNodeIds);
+    // }
+
+    public <T extends ClavaNode> void queueSetNode(DataStore data, DataKey<T> key, String nodeId) {
+        queueSetNode(new GenericDataClass<>(data), key, nodeId);
+    }
+
+    public <T extends ClavaNode> void queueSetNode(DataClass<?> dataClass, DataKey<T> key, String nodeId) {
+
         Runnable nodeToAdd = () -> {
-            ClavaNode clavaNode = nodeSupplier.apply(nodeIdToAdd);
 
-            // Check if node is compatible with key
-            Preconditions.checkArgument(key.getValueClass().isInstance(clavaNode), "Value of type '"
-                    + clavaNode.getClass() + "' not compatible with key accepts values of type '" + key.getValueClass()
-                    + "'");
+            // If null id, just return
+            if (isNullId(nodeId)) {
+                return;
+            }
 
-            dataClass.set((DataKey<ClavaNode>) key, clavaNode);
+            // Get node
+            ClavaNode node = get(nodeId);
+
+            Class<T> valueClass = key.getValueClass();
+
+            SpecsCheck.checkArgument(valueClass.isInstance(node),
+                    () -> "Expected id '" + nodeId + "' to be '" + valueClass.getSimpleName() + "', is "
+                            + node.getClass().getSimpleName());
+
+            dataClass.set(key, valueClass.cast(node));
         };
 
         delayedNodesToAdd.add(nodeToAdd);
     }
 
-    public static boolean isNullId(String nullId) {
-        return NULL_IDS.contains(nullId);
+    public <T extends ClavaNode> void queueSetNodeList(DataStore data, DataKey<List<T>> key,
+            List<String> nodeIds) {
+
+        queueSetNodeList(new GenericDataClass<>(data), key, nodeIds);
+    }
+
+    public <T extends ClavaNode> void queueSetNodeList(DataClass<?> dataClass, DataKey<List<T>> key,
+            List<String> nodeIds) {
+
+        Runnable nodeToAdd = () -> {
+
+            @SuppressWarnings("unchecked") // If the nodes exist, they should be of the requested type
+            List<T> nodes = nodeIds.stream().map(id -> (T) get(id)).collect(Collectors.toList());
+
+            dataClass.set(key, nodes);
+        };
+
+        delayedNodesToAdd.add(nodeToAdd);
     }
 
 }
