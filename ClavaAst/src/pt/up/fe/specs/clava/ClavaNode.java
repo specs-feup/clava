@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.DataStore.DataClass;
+import org.suikasoft.jOptions.DataStore.GenericDataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -45,7 +47,7 @@ import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
-public abstract class ClavaNode extends ATreeNode<ClavaNode> {
+public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClass<ClavaNode> {
 
     /// DATAKEYS BEGIN
 
@@ -93,7 +95,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return nodes.stream().map(ClavaNode::toTree).collect(Collectors.joining("\n"));
     }
 
-    private DataStore dataI;
+    private final DataStore dataI;
+    private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
 
     public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
@@ -109,6 +112,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         // Set definition of DataStore
         this.dataI.setDefinition(getClass());
 
+        this.dataClass = new GenericDataClass<>(this.dataI);
     }
 
     protected void setDisableModification(boolean disableModification) {
@@ -544,6 +548,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param key
      * @return
      */
+    @Override
     public <T> T get(DataKey<T> key) {
         try {
             return dataI.get(key);
@@ -576,6 +581,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
      * @param key
      * @param value
      */
+    @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
         if (disableModification) {
             SpecsLogs.msgWarn("Could not perform set: this node is a view, modifications are disabled");
@@ -596,13 +602,24 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> {
         return this;
     }
 
+    @Override
+    public ClavaNode set(ClavaNode instance) {
+        return dataClass.set(instance);
+    }
+
     /**
      * 
      * @param key
      * @return true, if it contains a non-null value for the given key, not considering default values
      */
+    @Override
     public <T> boolean hasValue(DataKey<T> key) {
         return dataI.hasValue(key);
+    }
+
+    @Override
+    public Collection<DataKey<?>> keysWithValues() {
+        return dataClass.keysWithValues();
     }
 
     public ClavaContext getContext() {
