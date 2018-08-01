@@ -128,7 +128,7 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         // data.add(InitListExpr.ARRAY_FILLER, dataStore.getClavaNodes().getExpr(lines.nextLine()));
-        dataStore.getClavaNodes().queueSetNode(data, InitListExpr.ARRAY_FILLER, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, InitListExpr.ARRAY_FILLER, lines.nextLine());
         // data.add(InitListExpr.INITIALIZED_FIELD_IN_UNION, (FieldDecl) ClavaNodes.getDecl(dataStore,
         // lines.nextLine()));
         data.add(InitListExpr.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));

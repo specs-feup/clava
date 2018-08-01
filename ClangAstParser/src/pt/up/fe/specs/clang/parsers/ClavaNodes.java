@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -254,6 +255,49 @@ public class ClavaNodes {
                             + node.getClass().getSimpleName());
 
             dataClass.set(key, valueClass.cast(node));
+        };
+
+        delayedNodesToAdd.add(nodeToAdd);
+    }
+
+    public <T extends ClavaNode> void queueSetOptionalNode(DataStore data, DataKey<Optional<T>> key,
+            String nodeId) {
+
+        queueSetOptionalNode(new GenericDataClass<>(data), key, nodeId);
+    }
+
+    public <T extends ClavaNode> void queueSetOptionalNode(DataClass<?> dataClass, DataKey<Optional<T>> key,
+            String nodeId) {
+
+        Runnable nodeToAdd = () -> {
+
+            Optional<T> value = isNullId(nodeId) ? Optional.empty()
+                    : key.getValueClass().cast(Optional.of(get(nodeId)));
+
+            /*
+            Optional<T> value;
+            
+            // If null id, empty
+            if (isNullId(nodeId)) {
+                value = Optional.empty();
+            }
+            // Otherwise, get node
+            else {
+            
+                // Get node
+                // ClavaNode node = ;
+            
+                Class<Optional<T>> valueClass = key.getValueClass();
+                value = valueClass.cast(Optional.of(get(nodeId)));
+            
+                // SpecsCheck.checkArgument(valueClass.isInstance(node),
+                // () -> "Expected id '" + nodeId + "' to be '" + valueClass.getSimpleName() + "', is "
+                // + node.getClass().getSimpleName());
+                //
+                // value = Optional.of(valueClass.cast(node));
+            }
+            */
+            dataClass.set(key, value);
         };
 
         delayedNodesToAdd.add(nodeToAdd);

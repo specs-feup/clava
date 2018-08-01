@@ -53,7 +53,7 @@ public class AttrDataParser {
             data.add(AlignedAttr.ALIGNED_ATTR_KIND, AlignedAttrKind.EXPR);
             // data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
             // data.add(AlignedExprAttr.EXPR, dataStore.getClavaNodes().getExpr(nodeId));
-            dataStore.getClavaNodes().queueSetNode(data, AlignedExprAttr.EXPR, nodeId);
+            dataStore.getClavaNodes().queueSetOptionalNode(data, AlignedExprAttr.EXPR, nodeId);
             // data.add(ClavaNodeI.NODE_CLASS, AlignedExprAttr.class);
 
             // data.setDefinition(AlignedExprAttr.class);
