@@ -20,8 +20,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -61,7 +59,9 @@ public abstract class Expr extends ClavaNode implements Typable {
         super(data, children);
 
         // Type is required
-        Preconditions.checkArgument(data.hasValue(TYPE), "Expected data of Expr node to have a defined TYPE");
+        // UPDATE: Removed check to enable to possibility to set the Type after the node is created (e.g., delayed node
+        // setting)
+        // Preconditions.checkArgument(data.hasValue(TYPE), "Expected data of Expr node to have a defined TYPE");
     }
 
     /**
