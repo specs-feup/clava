@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -67,9 +66,17 @@ public interface ClavaOptions extends StoreDefinitionProvider {
                 Standard standard = Standard.getEnumHelper().getValuesTranslationMap()
                         .get(flag.substring(stdPrefix.length()));
                 // config.add(ClavaOptions.STANDARD, standard);
-                Optional<Standard> previousStd = config.set(ClavaOptions.STANDARD, standard);
-                previousStd
-                        .ifPresent(std -> ClavaLog.info("Overriding previous standard " + std + " with " + standard));
+
+                if (config.hasValue(ClavaOptions.STANDARD)) {
+                    ClavaLog.info("Overriding previous standard " + config.get(ClavaOptions.STANDARD) + " with "
+                            + standard);
+                }
+
+                config.set(ClavaOptions.STANDARD, standard);
+
+                // Optional<Standard> previousStd = config.set(ClavaOptions.STANDARD, standard);
+                // previousStd
+                // .ifPresent(std -> ClavaLog.info("Overriding previous standard " + std + " with " + standard));
 
                 continue;
             }
