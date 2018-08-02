@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava;
 
 import java.util.function.Supplier;
 
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.logging.SpecsLogger;
 
@@ -50,8 +49,8 @@ public class ClavaLog extends SpecsLogger {
     }
 
     public static void warning(String message) {
-
-        SpecsLogs.msgInfo("[Warning] " + message);
+        logger().msgWarn(message);
+        // SpecsLogs.msgInfo("[Warning] " + message);
     }
 
     /**
