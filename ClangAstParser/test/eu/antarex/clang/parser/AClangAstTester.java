@@ -191,6 +191,7 @@ public abstract class AClangAstTester {
         File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
 
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
+        // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
         // App clavaAst = codeParser.parseParallel(Arrays.asList(workFolder), compilerOptions);
 
         clavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"));
@@ -207,7 +208,7 @@ public abstract class AClangAstTester {
         App testClavaAst = testCodeParser.parse(Arrays.asList(firstOutputFolder), compilerOptions);
         // App testClavaAst = testCodeParser.parseParallel(Arrays.asList(firstOutputFolder), compilerOptions);
         testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
-
+        // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
         // Test if files from first and second are the same
 
         Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
