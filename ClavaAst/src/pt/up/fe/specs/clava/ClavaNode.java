@@ -484,8 +484,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * 
      * @return the underlying DataStore of this node
      */
-    @Override
-    public DataStore getData() {
+    protected DataStore getData() {
         return dataI;
     }
 
