@@ -653,7 +653,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Could not create constructor for ClavaNode:" + e.getMessage());
+            // throw new RuntimeException("Could not create constructor for ClavaNode:" + e.getMessage());
+            throw new RuntimeException("Could not create constructor for ClavaNode", e);
         }
     }
 

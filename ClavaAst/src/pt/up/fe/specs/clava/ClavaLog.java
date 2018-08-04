@@ -46,8 +46,11 @@ public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
     // }
 
     public static void deprecated(String message) {
-        // CLAVA_LOGGER.info(ClavaLoggerTag.DEPRECATED, message);
         CLAVA_LOGGER.deprecated(message);
+    }
+
+    public static void debug(String message) {
+        CLAVA_LOGGER.debug(message);
     }
 
     public static void info(String message) {
