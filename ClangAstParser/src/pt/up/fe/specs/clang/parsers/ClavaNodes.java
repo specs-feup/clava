@@ -244,6 +244,7 @@ public class ClavaNodes {
             }
 
             // Get node
+            // ClavaNode node = getWithoutDummy(key, nodeId);
             ClavaNode node = get(nodeId);
 
             Class<T> valueClass = key.getValueClass();
@@ -257,6 +258,17 @@ public class ClavaNodes {
 
         delayedNodesToAdd.add(nodeToAdd);
     }
+
+    // private <T extends ClavaNode> ClavaNode getWithoutDummy(DataKey<T> key, String nodeId) {
+    // ClavaNode node = get(nodeId);
+    //
+    // // If dummy node, create "empty" node with DummyNode information
+    // if (node instanceof DummyNode) {
+    // return node.newInstance(false, key.getValueClass(), node.getChildren());
+    // }
+    //
+    // return node;
+    // }
 
     // public <T extends ClavaNode> void queueSetOptionalNode(DataClass<?> dataClass, DataKey<Optional<T>> key,
     // String nodeId) {

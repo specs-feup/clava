@@ -59,6 +59,10 @@ public class CxxTest {
 
     @Test
     public void testDecl() {
+        // SpecsSystem.programStandardInit();
+        // ClavaLog.getLogger().debug("Debug from logger object");
+        // ClavaLog.warning("Warning from static method");
+        // ClavaLog.getLogger().deprecated("Deprecated message");
         new CxxTester("decl.cpp").test();
     }
 
