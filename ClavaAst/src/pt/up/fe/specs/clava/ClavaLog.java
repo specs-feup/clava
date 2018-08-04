@@ -15,28 +15,43 @@ package pt.up.fe.specs.clava;
 
 import java.util.function.Supplier;
 
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.logging.SpecsLogger;
+import pt.up.fe.specs.util.logging.EnumLogger;
+import pt.up.fe.specs.util.logging.TagLogger;
+import pt.up.fe.specs.util.logging.TagLoggerUser;
 
-public class ClavaLog extends SpecsLogger {
+// public class ClavaLog extends SpecsLogger {
+public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
 
-    private static final String CLAVA_WEAVER_TAG = buildLoggerName(ClavaLog.class);
-    private static final Lazy<ClavaLog> LOGGER = buildLazy(ClavaLog::new);
+    // private static final String CLAVA_WEAVER_TAG = buildLoggerName(ClavaLog.class);
+    // private static final Lazy<ClavaLog> LOGGER = buildLazy(ClavaLog::new);
 
-    public static ClavaLog logger() {
-        return LOGGER.get();
+    static final EnumLogger<ClavaLoggerTag> CLAVA_LOGGER = EnumLogger.newInstance(ClavaLoggerTag.class)
+            .addToIgnoreList(ClavaLog.class);
+
+    public static EnumLogger<ClavaLoggerTag> getLogger() {
+        return CLAVA_LOGGER;
     }
 
-    private ClavaLog() {
-        super(CLAVA_WEAVER_TAG);
+    @Override
+    default TagLogger<ClavaLoggerTag> logger() {
+        return CLAVA_LOGGER;
     }
+
+    // private static ClavaLog logger() {
+    // return LOGGER.get();
+    // }
+
+    // private ClavaLog() {
+    // super(CLAVA_WEAVER_TAG);
+    // }
 
     public static void deprecated(String message) {
-        logger().msgInfo("[DEPRECATED] " + message);
+        // CLAVA_LOGGER.info(ClavaLoggerTag.DEPRECATED, message);
+        CLAVA_LOGGER.deprecated(message);
     }
 
     public static void info(String message) {
-        logger().msgInfo(message);
+        CLAVA_LOGGER.info(message);
     }
 
     public static void info(Supplier<String> message) {
@@ -49,7 +64,10 @@ public class ClavaLog extends SpecsLogger {
     }
 
     public static void warning(String message) {
-        logger().msgWarn(message);
+        // TODO: Implemented as info for now
+        CLAVA_LOGGER.warn(message);
+        // throw new RuntimeException("Not implemented yet");
+        // CLAVA_LOGGER.warn(message);
         // SpecsLogs.msgInfo("[Warning] " + message);
     }
 
@@ -59,6 +77,6 @@ public class ClavaLog extends SpecsLogger {
      * @param takeTime
      */
     public static void metrics(String message) {
-        info("[ClavaMetrics] " + message);
+        CLAVA_LOGGER.info(ClavaLoggerTag.METRICS, message);
     }
 }
