@@ -120,6 +120,11 @@ public class DeclDataParser {
         data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_DELETED, LineStreamParsers.oneOrZero(lines));
 
+        dataStore.getClavaNodes().queueSetNode(data, FunctionDecl.PREVIOUS_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, FunctionDecl.CANONICAL_DECL, lines.nextLine());
+
+        data.add(FunctionDecl.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
+
         // data.add(FunctionDecl.STORAGE_CLASS, StorageClass.getHelper().fromValue(lines.nextLine()));
 
         // if (data.get(FunctionDecl.STORAGE_CLASS) != StorageClass.NONE) {

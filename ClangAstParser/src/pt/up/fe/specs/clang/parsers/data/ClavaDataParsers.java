@@ -24,11 +24,16 @@ import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -183,6 +188,37 @@ public class ClavaDataParsers {
         default:
             // Nothing more to do
             return exceptionSpecification;
+        }
+
+    }
+
+    public static List<TemplateArgument> templateArguments(LineStream lines, ClangParserData parserData) {
+        // Number of template arguments
+        int size = LineStreamParsers.integer(lines);
+
+        List<TemplateArgument> templateArgs = new ArrayList<>(size);
+        for (int i = 0; i < size; ++i) {
+            templateArgs.add(templateArgument(lines, parserData));
+        }
+
+        return templateArgs;
+    }
+
+    public static TemplateArgument templateArgument(LineStream lines, ClangParserData parserData) {
+        // Kind of template argument
+        TemplateArgumentKind kind = LineStreamParsers.enumFromName(TemplateArgumentKind.class, lines);
+
+        switch (kind) {
+        case Type:
+            TemplateArgumentType type = new TemplateArgumentType(kind);
+            parserData.getClavaNodes().queueSetNode(type, TemplateArgumentType.TYPE, lines.nextLine());
+            return type;
+        case Expression:
+            TemplateArgumentExpr expr = new TemplateArgumentExpr(kind);
+            parserData.getClavaNodes().queueSetNode(expr, TemplateArgumentExpr.EXPR, lines.nextLine());
+            return expr;
+        default:
+            throw new NotImplementedException(kind);
         }
 
     }

@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -269,6 +270,11 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // if (clavaNode instanceof DeclRefExpr) {
         // return true;
         // }
+
+        if (clavaNode instanceof FunctionDecl) {
+            // SpecsLogs.debug("FUNCTION DECL CHILDREN: " + clavaNode.getChildren());
+            return true;
+        }
 
         return false;
     }
