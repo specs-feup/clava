@@ -15,62 +15,80 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
-import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
 
 public class CXXRecordDecl extends RecordDecl {
 
-    private final List<RecordBase> recordBases;
+    /// DATAKEYS BEGIN
 
+    /**
+     * A list of the base specifiers of this CXXRecordDecl.
+     */
+    public final static DataKey<List<CXXBaseSpecifier>> RECORD_BASES = KeyFactory
+            .generic("recordBases", (List<CXXBaseSpecifier>) new ArrayList<CXXBaseSpecifier>());
+
+    /// DATAKEYS END
+
+    public CXXRecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // recordBases = null;
+    }
+
+    // private final List<RecordBase> recordBases;
+
+    /*
     public CXXRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type, DeclData declData,
             ClavaNodeInfo info,
             List<? extends Decl> children) {
-
+    
         this(recordBases, recordDeclData, type, declData, info, SpecsCollections.cast(children, ClavaNode.class));
     }
-
+    
     protected CXXRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type, DeclData declData,
             ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-
+    
         super(recordDeclData, type, declData, info, children);
-
+    
         this.recordBases = recordBases;
     }
-
+    
+    
     @Override
     protected ClavaNode copyPrivate() {
         return new CXXRecordDecl(new ArrayList<>(recordBases), getRecordDeclData().copy(), getType(), getDeclData(),
                 getInfo(), Collections.emptyList());
     }
+    */
 
-    public List<RecordBase> getRecordBases() {
-        return recordBases;
-    }
-
+    // public List<RecordBase> getRecordBases() {
+    // return recordBases;
+    // }
+    /*
     @Override
     public String toContentString() {
         String bases = getRecordBases().stream()
                 .map(base -> base.getTypeCode())
                 .collect(Collectors.joining(","));
-
+    
         bases = bases.isEmpty() ? "" : ", bases{" + bases + "}";
-
+    
         return super.toContentString() + bases;
     }
-
+    */
     @Override
     public String getCode() {
-        String bases = getRecordBases().stream()
+        // String bases = getRecordBases().stream()
+        String bases = get(RECORD_BASES).stream()
                 .map(recordBase -> recordBase.getCode(this))
                 .collect(Collectors.joining(", "));
 

@@ -25,12 +25,9 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
@@ -117,16 +114,6 @@ public class FunctionDecl extends DeclaratorDecl {
 
     /// DATAKEYS END
 
-    public FunctionDecl(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-        // this.functionDeclData = null;
-        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
-        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
-
-        SpecsLogs.debug("FUNCTION DECL CHILDREN:" + children);
-
-    }
-
     // private final FunctionDeclData functionDeclData;
 
     private Lazy<FunctionDecl> declaration;
@@ -151,14 +138,26 @@ public class FunctionDecl extends DeclaratorDecl {
     // functionDeclData = null;
     // }
 
+    public FunctionDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+        // this.functionDeclData = null;
+        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
+        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
+
+        // SpecsLogs.debug("FUNCTION DECL CHILDREN:" + children);
+
+    }
+
     /**
      * Constructor for a function definition.
      */
+    /*
     public FunctionDecl(String declName, List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData,
             DeclData declData, ClavaNodeInfo info, Stmt definition) {
-
+    
         this(declName, functionType, functionDeclData, declData, info, inputs, definition);
     }
+    */
 
     /**
      * 
@@ -170,29 +169,29 @@ public class FunctionDecl extends DeclaratorDecl {
      * @param info
      * @param definition
      */
-    protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
-            ClavaNodeInfo info, List<ParmVarDecl> inputs, Stmt definition) {
+    // protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
+    // ClavaNodeInfo info, List<ParmVarDecl> inputs, Stmt definition) {
+    //
+    // this(declName, functionType, functionDeclData, declData, info, SpecsCollections.concat(inputs, definition));
+    //
+    // checkDefinition(definition);
+    // }
 
-        this(declName, functionType, functionDeclData, declData, info, SpecsCollections.concat(inputs, definition));
-
-        checkDefinition(definition);
-    }
-
-    protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
-            ClavaNodeInfo info, List<? extends ClavaNode> children) {
-
-        super(new LegacyToDataStore().setFunctionDecl(functionDeclData).setDecl(declData).setNodeInfo(info).getData(),
-                children);
-        // super(declName, functionType, declData, info, children);
-
-        set(NamedDecl.DECL_NAME, processDeclName(declName));
-        set(ValueDecl.TYPE, processType(functionType));
-
-        // this.functionDeclData = functionDeclData;
-        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
-        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
-
-    }
+    // protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
+    // ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    //
+    // super(new LegacyToDataStore().setFunctionDecl(functionDeclData).setDecl(declData).setNodeInfo(info).getData(),
+    // children);
+    // // super(declName, functionType, declData, info, children);
+    //
+    // set(NamedDecl.DECL_NAME, processDeclName(declName));
+    // set(ValueDecl.TYPE, processType(functionType));
+    //
+    // // this.functionDeclData = functionDeclData;
+    // this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
+    // this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
+    //
+    // }
 
     protected void checkDefinition(Stmt definition) {
 
@@ -209,11 +208,11 @@ public class FunctionDecl extends DeclaratorDecl {
         throw new RuntimeException("Stmt now allowed as a definition of FunctionDecl: " + definition.getClass());
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FunctionDecl(getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(), getInfo(),
-                Collections.emptyList(), null);
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new FunctionDecl(getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public FunctionType getFunctionType() {
         return Types.getFunctionType(getType());

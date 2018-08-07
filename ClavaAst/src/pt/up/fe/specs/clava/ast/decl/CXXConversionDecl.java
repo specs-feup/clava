@@ -13,39 +13,39 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCollections;
 
 public class CXXConversionDecl extends CXXMethodDecl {
 
-    public CXXConversionDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+    public CXXConversionDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /*
+    public CXXConversionDecl(String declName, Type functionType,
             FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
             Stmt definition) {
-
-        this(methodData, declName, functionType, functionDeclData, declData, info,
+    
+        this(declName, functionType, functionDeclData, declData, info,
                 SpecsCollections.concat(inputs, definition));
     }
-
-    private CXXConversionDecl(CXXMethodDeclData methodData, String declName,
+    
+    private CXXConversionDecl(String declName,
             Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
-
-        super(methodData, declName, functionType, functionDeclData, declData, info, children);
+    
+        super(declName, functionType, functionDeclData, declData, info, children);
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
-        return new CXXConversionDecl(getMethodData(), getDeclName(), getFunctionType(), getFunctionDeclData(),
+        return new CXXConversionDecl(getDeclName(), getFunctionType(), getFunctionDeclData(),
                 getDeclData(), getInfo(), Collections.emptyList());
     }
+    */
 
 }

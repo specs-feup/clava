@@ -13,22 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a C++ class method declaration or definition.
@@ -45,17 +40,24 @@ public class CXXMethodDecl extends FunctionDecl {
 
     /// DATAKEYS BEGIN
 
+    // TODO: Change to CXXRecordDecl
+    public final static DataKey<Decl> RECORD = KeyFactory.object("record", Decl.class);
+
     public final static DataKey<String> RECORD_ID = KeyFactory.string("recordId");
 
     /// DATAKEYS END
 
-    private static final long NULL_EXCEPT_ADDRESS = 0;
+    // private static final long NULL_EXCEPT_ADDRESS = 0;
+    //
+    // public static long getNullExceptAddress() {
+    // return NULL_EXCEPT_ADDRESS;
+    // }
 
-    public static long getNullExceptAddress() {
-        return NULL_EXCEPT_ADDRESS;
+    // private final CXXMethodDeclData methodData;
+
+    public CXXMethodDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
-
-    private final CXXMethodDeclData methodData;
 
     /**
      * 
@@ -67,14 +69,16 @@ public class CXXMethodDecl extends FunctionDecl {
      * @param info
      * @param children
      */
-    public CXXMethodDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+    /*
+    public CXXMethodDecl(String declName, Type functionType,
             FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
             Stmt definition) {
-
-        super(declName, functionType, functionDeclData, declData, info, inputs, definition);
-
-        this.methodData = methodData;
+    
+        this(declName, functionType, functionDeclData, declData, info, SpecsCollections.concat(inputs, definition));
+    
+        // this.methodData = methodData;
     }
+    */
 
     /**
      * Constructor for copy() function and derived classes.
@@ -87,22 +91,25 @@ public class CXXMethodDecl extends FunctionDecl {
      * @param info
      * @param children
      */
-    protected CXXMethodDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+    /*
+    protected CXXMethodDecl(String declName, Type functionType,
             FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
-
+    
         super(declName, functionType, functionDeclData, declData, info, children);
-
-        this.methodData = methodData;
+    
+        // this.methodData = methodData;
     }
-
+    */
+    /*
     @Override
     protected ClavaNode copyPrivate() {
-
-        return new CXXMethodDecl(methodData, getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(),
+    
+        // return new CXXMethodDecl(methodData, getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(),
+        return new CXXMethodDecl(getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(),
                 getInfo(), Collections.emptyList());
     }
-
+    */
     protected boolean isInsideRecordDecl() {
         return getAncestorTry(CXXRecordDecl.class).isPresent();
     }
@@ -111,9 +118,9 @@ public class CXXMethodDecl extends FunctionDecl {
         return getAncestorTry(NamespaceDecl.class).isPresent();
     }
 
-    public CXXMethodDeclData getMethodData() {
-        return methodData;
-    }
+    // public CXXMethodDeclData getMethodData() {
+    // return methodData;
+    // }
 
     @Override
     public String getCode() {
@@ -160,15 +167,17 @@ public class CXXMethodDecl extends FunctionDecl {
 
         // Add namespace if not inside namespace decl
         if (!isInsideNamespaceDecl()) {
-            String namespace = getMethodData().getNamespace();
-            namespace = namespace == null ? "" : namespace + "::";
+            String namespace = getNamespace().map(str -> str + "::").orElse("");
+            // String namespace = getMethodData().getNamespace();
+            // namespace = namespace == null ? "" : namespace + "::";
 
             code.append(namespace);
         }
 
         // Add record if not inside record decl
         if (!isInsideRecordDecl()) {
-            code.append(getMethodData().getRecord()).append("::");
+            // code.append(getMethodData().getRecord()).append("::");
+            code.append(getRecordName()).append("::");
         }
 
         code.append(getTypelessCode());
@@ -181,11 +190,13 @@ public class CXXMethodDecl extends FunctionDecl {
     }
 
     public CXXRecordDecl getRecordDecl() {
-        // Check if this node is inside the record
-        Optional<CXXRecordDecl> ancestor = getAncestorTry(CXXRecordDecl.class);
-
-        return ancestor.orElse(
-                getApp().getCXXRecordDecl(getMethodData().getNamespace(), getMethodData().getRecord()));
+        return (CXXRecordDecl) getApp().getNode(get(RECORD_ID));
+        // // Check if this node is inside the record
+        // Optional<CXXRecordDecl> ancestor = getAncestorTry(CXXRecordDecl.class);
+        //
+        // return ancestor.orElse(
+        // // getApp().getCXXRecordDecl(getMethodData().getNamespace(), getMethodData().getRecord()));
+        // getApp().getCXXRecordDecl(getNamespace().orElse(null), getRecordName()));
 
     }
 
@@ -210,8 +221,9 @@ public class CXXMethodDecl extends FunctionDecl {
     public String getSignature() {
         String baseSignature = super.getSignature();
 
-        String namespace = getMethodData().getNamespace();
-        namespace = namespace == null ? "" : namespace + "::";
+        String namespace = getNamespace().map(str -> str + "::").orElse("");
+        // String namespace = getMethodData().getNamespace();
+        // namespace = namespace == null ? "" : namespace + "::";
 
         namespace = namespace + getRecordDecl().getDeclName() + "::";
 
@@ -227,5 +239,56 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         return signature;
+    }
+
+    // public CXXRecordDecl getRecord() {
+    // return (CXXRecordDecl) get(RECORD);
+    // }
+
+    public Optional<String> getNamespace() {
+        // Qualified name has full name
+        String qualifiedName = get(QUALIFIED_NAME);
+
+        if (qualifiedName.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // Remove decl name
+        String declName = "::" + get(DECL_NAME);
+        SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
+                () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
+
+        String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
+
+        // TODO: Replace with RECORD, after CXXRecordDecl is implemented
+        // CXXRecordDecl record = getRecordDecl();
+        // String recordName = record.getDeclName();
+        String recordName = getRecordName();
+        SpecsCheck.checkArgument(currentString.endsWith(recordName),
+                () -> "Expected current string '" + currentString + "' to end with '" + recordName + "'");
+
+        // Remove record name
+        String namespace = currentString.substring(0, currentString.length() - recordName.length());
+
+        // Remove ::, if present
+        if (namespace.endsWith("::")) {
+            namespace = namespace.substring(0, namespace.length() - "::".length());
+        }
+
+        return !namespace.isEmpty() ? Optional.of(namespace) : Optional.empty();
+
+        /*
+        String namespace = parseKeyValue(parser, "namespace");
+        // SpecsLogs.debug("NAMESPACE:" + namespace);
+        // Check record and store next word
+        String record = parseKeyValue(parser, "record");
+        // SpecsLogs.debug("RECORD:" + record);
+        // SpecsLogs.debug("QUALIFIED NAME:" + data.get(CXXMethodDecl.QUALIFIED_NAME));
+        // SpecsLogs.debug("DECL NAME:" + data.get(NamedDecl.DECL_NAME));
+        */
+    }
+
+    public String getRecordName() {
+        return getRecordDecl().getDeclName();
     }
 }

@@ -19,35 +19,36 @@ import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum TagKind implements StringProvider {
 
-    STRUCT(),
+    STRUCT,
     INTERFACE("__interface"),
-    UNION(),
-    CLASS(),
-    ENUM(),
+    UNION,
+    CLASS,
+    ENUM,
     NO_KIND("<no_kind_tag>");
 
-    private static final Lazy<EnumHelperWithValue<TagKind>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(TagKind.class, NO_KIND);
+    private static final Lazy<EnumHelperWithValue<TagKind>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(TagKind.class, NO_KIND);
 
     public static EnumHelperWithValue<TagKind> getHelper() {
-	return HELPER.get();
+        return HELPER.get();
     }
 
     private final String code;
 
     private TagKind() {
-	this.code = name().toLowerCase();
+        this.code = name().toLowerCase();
     }
 
     private TagKind(String code) {
-	this.code = code;
+        this.code = code;
     }
 
     public String getCode() {
-	return code;
+        return code;
     }
 
     @Override
     public String getString() {
-	return getCode();
+        return getCode();
     }
 }

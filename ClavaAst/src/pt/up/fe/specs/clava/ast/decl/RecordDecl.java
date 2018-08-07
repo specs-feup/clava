@@ -15,17 +15,15 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Common class of struct, union and class.
@@ -35,31 +33,52 @@ import pt.up.fe.specs.util.SpecsCollections;
  */
 public class RecordDecl extends TagDecl {
 
-    private final RecordDeclData recordDeclData;
+    /// DATAKEYS BEGIN
 
-    public RecordDecl(RecordDeclData recordDeclData, Type type, DeclData declData, ClavaNodeInfo info,
+    /**
+     * True if this is an anonymous struct or union.
+     * 
+     * <p>
+     * To be an anonymous struct or union, it must have been declared without a name and there must be no objects of
+     * this type declared.
+     */
+    public final static DataKey<Boolean> IS_ANONYMOUS = KeyFactory.bool("isAnonymous");
+
+    /// DATAKEYS END
+
+    // private final RecordDeclData recordDeclData;
+
+    public RecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // recordDeclData = null;
+    }
+
+    /*
+    public RecordDecl(Type type, DeclData declData, ClavaNodeInfo info,
             List<? extends Decl> decls) {
-
-        this(recordDeclData, type, declData, info, SpecsCollections.cast(decls, ClavaNode.class));
+    
+        this(type, declData, info, SpecsCollections.cast(decls, ClavaNode.class));
     }
-
-    protected RecordDecl(RecordDeclData recordDeclData, Type type, DeclData declData, ClavaNodeInfo info,
+    
+    protected RecordDecl(Type type, DeclData declData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-
+    
         super(recordDeclData.getRecordKind(), recordDeclData.getRecordName(), type, declData, info, children);
-
-        this.recordDeclData = recordDeclData;
+    
+        // this.recordDeclData = rsecordDeclData;
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
-        return new RecordDecl(recordDeclData.copy(), getType(),
+        return new RecordDecl(getType(),
                 getDeclData(), getInfo(), Collections.emptyList());
     }
+    */
 
-    public RecordDeclData getRecordDeclData() {
-        return recordDeclData;
-    }
+    // public RecordDeclData getRecordDeclData() {
+    // return recordDeclData;
+    // }
     /*
     @Override
     public String getDeclName() {
@@ -141,7 +160,8 @@ public class RecordDecl extends TagDecl {
         // Add attributes
         // recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
 
-        String preAttributesCode = recordDeclData.getAttributes().stream()
+        // String preAttributesCode = recordDeclData.getAttributes().stream()
+        String preAttributesCode = get(ATTRIBUTES).stream()
                 .filter(attr -> !attr.isPostAttr())
                 .map(Attribute::getCode)
                 .collect(Collectors.joining(" "));
@@ -151,11 +171,13 @@ public class RecordDecl extends TagDecl {
             code.append(" ").append(preAttributesCode);
         }
 
-        if (recordDeclData.isCompleteDefinition()) {
+        // if (recordDeclData.isCompleteDefinition()) {
+        if (get(IS_COMPLETE_DEFINITION)) {
             code.append(getDefinitionCode());
         }
 
-        String postAttributesCode = recordDeclData.getAttributes().stream()
+        // String postAttributesCode = recordDeclData.getAttributes().stream()
+        String postAttributesCode = get(ATTRIBUTES).stream()
                 .filter(attr -> attr.isPostAttr())
                 .map(Attribute::getCode)
                 .collect(Collectors.joining(" "));
@@ -210,6 +232,16 @@ public class RecordDecl extends TagDecl {
         }
 
         return functions;
+    }
+
+    @Override
+    public String getDeclName() {
+        // If anonymous, create name
+        if (get(IS_ANONYMOUS)) {
+            return "anonymous_" + get(ID);
+        }
+
+        return super.getDeclName();
     }
 
 }

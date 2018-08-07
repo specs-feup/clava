@@ -41,6 +41,11 @@ public abstract class TagDecl extends TypeDecl {
      */
     public final static DataKey<TagKind> TAG_KIND = KeyFactory.enumeration("tagKind", TagKind.class);
 
+    /**
+     * True if this decl has its body fully specified.
+     */
+    public final static DataKey<Boolean> IS_COMPLETE_DEFINITION = KeyFactory.bool("isCompleteDefinition");
+
     /// DATAKEYS END
 
     // private final TagKind tagKind;

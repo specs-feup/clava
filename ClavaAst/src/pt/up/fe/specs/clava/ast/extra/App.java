@@ -33,7 +33,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
@@ -76,7 +75,7 @@ public class App extends ClavaNode {
 
     /// DATAKEYS END
 
-    private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
+    // private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
 
     // private List<File> sources;
     // private Map<String, File> sourceFiles;
@@ -89,6 +88,8 @@ public class App extends ClavaNode {
 
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
+
+    private FunctionDecl noFunctionFound = null;
 
     // private ExternalDependencies externalDependencies;
     // private Map<String, String> idsAlias;
@@ -600,7 +601,7 @@ public class App extends ClavaNode {
         FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
         if (cachedNode != null) {
             // Check if no function is available
-            if (cachedNode == NO_FUNCTION_FOUND) {
+            if (cachedNode == getNoFunctionFound()) {
                 return Optional.empty();
             }
 
@@ -622,7 +623,7 @@ public class App extends ClavaNode {
                 .findFirst();
 
         // Store return in cache
-        cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(NO_FUNCTION_FOUND));
+        cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(getNoFunctionFound()));
 
         return functionDeclaration;
     }
@@ -797,4 +798,15 @@ public class App extends ClavaNode {
         // return appData.get(ClavaOptions.STANDARD);
     }
 
+    private FunctionDecl getNoFunctionFound() {
+        if (noFunctionFound == null) {
+            noFunctionFound = getFactory().functionDecl("No Function Found",
+                    getFactory().dummyType("dummy function type"));
+        }
+
+        return noFunctionFound;
+        // private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function
+        // Found");
+
+    }
 }

@@ -13,20 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -43,6 +40,14 @@ import pt.up.fe.specs.util.SpecsCollections;
  */
 public class CXXConstructorDecl extends CXXMethodDecl {
 
+    /// DATAKEYS BEGIN
+
+    /// DATAKEYS END
+
+    public CXXConstructorDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     // public CXXConstructorDecl(CXXMethodDeclData methodData, List<CXXCtorInitializer> defaultInits, String declName,
     // List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
     // ClavaNodeInfo info) {
@@ -51,37 +56,40 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     // Collections.emptyList());
     // }
 
-    public CXXConstructorDecl(CXXMethodDeclData methodData, List<CXXCtorInitializer> defaultInits, String declName,
+    /*
+    public CXXConstructorDecl(List<CXXCtorInitializer> defaultInits, String declName,
             List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
             ClavaNodeInfo info, Stmt definition) {
-
-        this(methodData, declName, functionType, functionDeclData, declData, info, inputs, defaultInits, definition);
+    
+        this(declName, functionType, functionDeclData, declData, info, inputs, defaultInits, definition);
     }
-
-    public CXXConstructorDecl(CXXMethodDeclData methodData, String declName,
+    
+    public CXXConstructorDecl(String declName,
             Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             List<ParmVarDecl> inputs, List<CXXCtorInitializer> defaultInits, Stmt definition) {
-
-        this(methodData, declName, functionType, functionDeclData, declData, info,
+    
+        this(declName, functionType, functionDeclData, declData, info,
                 SpecsCollections.concat(SpecsCollections.concat(inputs, defaultInits), definition));
-
+    
         checkDefinition(definition);
-
+    
     }
-
-    private CXXConstructorDecl(CXXMethodDeclData methodData, String declName,
+    
+    // private CXXConstructorDecl(CXXMethodDeclData methodData, String declName,
+    private CXXConstructorDecl(String declName,
             Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
-
-        super(methodData, declName, functionType, functionDeclData, declData, info, children);
+    
+        super(declName, functionType, functionDeclData, declData, info, children);
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
-
-        return new CXXConstructorDecl(getMethodData(), getDeclName(), getFunctionType(), getFunctionDeclData(),
+    
+        return new CXXConstructorDecl(getDeclName(), getFunctionType(), getFunctionDeclData(),
                 getDeclData(), getInfo(), Collections.emptyList());
     }
+    */
 
     public List<CXXCtorInitializer> getInitializers() {
         // Default inits appear after parameters and definition

@@ -71,6 +71,8 @@ public class DeclStmt extends Stmt {
                 .filter(child -> child instanceof RecordDecl)
                 .isPresent();
 
+        // System.out.println("DECLSTMT CHILDREN:" + children);
+        // System.out.println("IS RECORD DECL:" + isRecordDecl);
         // TODO: If RecordDecl, verify if remaining children are VarDecl nodes?
 
         DeclStmtType declStmtType = isRecordDecl ? DeclStmtType.RECORD_DECL : DeclStmtType.DECL_LIST;

@@ -13,39 +13,42 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 public class CXXDestructorDecl extends CXXMethodDecl {
 
-    public CXXDestructorDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+    public CXXDestructorDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /*
+    public CXXDestructorDecl(String declName, Type functionType,
             FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
             Stmt definition) {
-
-        super(methodData, declName, functionType, functionDeclData, declData, info, inputs, definition);
+    
+        super(declName, functionType, functionDeclData, declData, info, inputs, definition);
     }
-
-    protected CXXDestructorDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+    
+    // protected CXXDestructorDecl(CXXMethodDeclData methodData, String declName, Type functionType,
+    protected CXXDestructorDecl(String declName, Type functionType,
             FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             List<? extends ClavaNode> children) {
-
-        super(methodData, declName, functionType, functionDeclData, declData, info, children);
+    
+        // super(methodData, declName, functionType, functionDeclData, declData, info, children);
+        super(declName, functionType, functionDeclData, declData, info, children);
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
-
-        return new CXXDestructorDecl(getMethodData(), getDeclName(), getFunctionType(), getFunctionDeclData(),
+    
+        return new CXXDestructorDecl(getDeclName(), getFunctionType(), getFunctionDeclData(),
                 getDeclData(), getInfo(), Collections.emptyList());
     }
+    */
 
     @Override
     public String getCode() {

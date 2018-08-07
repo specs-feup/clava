@@ -36,10 +36,6 @@ import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -48,7 +44,6 @@ import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
@@ -58,7 +53,6 @@ import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
-import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeAliasDecl;
@@ -68,11 +62,7 @@ import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.RecordBase;
-import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -472,19 +462,19 @@ public class ClavaNodeFactory {
      * @param definition
      * @return
      */
-    public static FunctionDecl functionDecl(String functionName, List<ParmVarDecl> inputs,
-            Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            Stmt definition) {
+    // public static FunctionDecl functionDecl(String functionName, List<ParmVarDecl> inputs,
+    // Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
+    // Stmt definition) {
+    //
+    // return new FunctionDecl(functionName, inputs, functionType, functionDeclData, declData, info, definition);
+    // }
 
-        return new FunctionDecl(functionName, inputs, functionType, functionDeclData, declData, info, definition);
-    }
-
-    public static FunctionDecl dummyFunctionDecl(String functionName) {
-        return new FunctionDecl(functionName, Collections.emptyList(),
-                dummyType("dummy function type", ClavaNodeInfo.undefinedInfo(), Collections.emptyList()),
-                new FunctionDeclData(), new DeclData(), ClavaNodeInfo.undefinedInfo(),
-                null);
-    }
+    // public static FunctionDecl dummyFunctionDecl(String functionName) {
+    // return new FunctionDecl(functionName, Collections.emptyList(),
+    // dummyType("dummy function type", ClavaNodeInfo.undefinedInfo(), Collections.emptyList()),
+    // new FunctionDeclData(), new DeclData(), ClavaNodeInfo.undefinedInfo(),
+    // null);
+    // }
 
     public static ParmVarDecl parmVarDecl(String varName, Type type) {
         return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), ClavaNodeInfo.undefinedInfo(),
@@ -509,10 +499,11 @@ public class ClavaNodeFactory {
         return new ParmVarDecl(hasInheritedDefaultArg, data, varName, type, declData, info, initExpr);
     }
 
-    public static RecordDecl recordDecl(RecordDeclData recordDeclData, Type type, DeclData declData, ClavaNodeInfo info,
-            List<? extends Decl> decls) {
-        return new RecordDecl(recordDeclData, type, declData, info, decls);
-    }
+    // public static RecordDecl recordDecl(RecordDeclData recordDeclData, Type type, DeclData declData, ClavaNodeInfo
+    // info,
+    // List<? extends Decl> decls) {
+    // return new RecordDecl(recordDeclData, type, declData, info, decls);
+    // }
 
     public static FieldDecl fieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type,
             DeclData declData,
@@ -521,12 +512,12 @@ public class ClavaNodeFactory {
         return new FieldDecl(isMutable, isModulePrivate, declName, type, declData, info, bitwidth, inClassInitializer);
     }
 
-    public static CXXRecordDecl cxxRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type,
-            DeclData declData,
-            ClavaNodeInfo info, List<? extends Decl> children) {
-
-        return new CXXRecordDecl(recordBases, recordDeclData, type, declData, info, children);
-    }
+    // public static CXXRecordDecl cxxRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type,
+    // DeclData declData,
+    // ClavaNodeInfo info, List<? extends Decl> children) {
+    //
+    // return new CXXRecordDecl(recordBases, recordDeclData, type, declData, info, children);
+    // }
 
     // public static CXXConstructorDecl cxxConstructorDecl(CXXMethodDeclData methodData,
     // List<CXXCtorInitializer> defaultInits, String declName, List<ParmVarDecl> inputs,
@@ -536,35 +527,39 @@ public class ClavaNodeFactory {
     // declData, info);
     // }
 
-    public static CXXConstructorDecl cxxConstructorDecl(CXXMethodDeclData methodData,
+    /*
+    public static CXXConstructorDecl cxxConstructorDecl(
             List<CXXCtorInitializer> defaultInits, String declName, List<ParmVarDecl> inputs,
             Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             Stmt definition) {
-
-        return new CXXConstructorDecl(methodData, defaultInits, declName, inputs, functionType, functionDeclData,
+    
+        return new CXXConstructorDecl(defaultInits, declName, inputs, functionType, functionDeclData,
                 declData, info, definition);
     }
+    */
 
-    public static CXXMethodDecl cxxMethodDecl(CXXMethodDeclData methodData, String declName,
-            Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            List<ParmVarDecl> inputs, Stmt definition) {
-
-        return new CXXMethodDecl(methodData, declName, functionType, functionDeclData, declData, info, inputs,
-                definition);
-    }
+    // public static CXXMethodDecl cxxMethodDecl(String declName,
+    // Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
+    // List<ParmVarDecl> inputs, Stmt definition) {
+    //
+    // return new CXXMethodDecl(declName, functionType, functionDeclData, declData, info, inputs,
+    // definition);
+    // }
 
     public static AccessSpecDecl accessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData,
             ClavaNodeInfo info) {
         return new AccessSpecDecl(accessSpecifier, declData, info);
     }
 
-    public static CXXDestructorDecl cxxDestructorDecl(CXXMethodDeclData methodData, String declName,
+    /*
+    public static CXXDestructorDecl cxxDestructorDecl(String declName,
             Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
             List<ParmVarDecl> inputs, Stmt definition) {
-
-        return new CXXDestructorDecl(methodData, declName, functionType, functionDeclData, declData, info, inputs,
+    
+        return new CXXDestructorDecl(declName, functionType, functionDeclData, declData, info, inputs,
                 definition);
     }
+    */
 
     public static FriendDecl friendDecl(DeclData declData, ClavaNodeInfo info, ClavaNode friendNode) {
         return new FriendDecl(declData, info, friendNode);
@@ -627,14 +622,14 @@ public class ClavaNodeFactory {
         return new NamespaceAliasDecl(nestedPrefix, declInfo, declName, declData, info);
     }
 
-    public static CXXConversionDecl cxxConversionDecl(CXXMethodDeclData methodData, String declName, Type functionType,
-            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
-            Stmt definition) {
-
-        return new CXXConversionDecl(methodData, declName, functionType, functionDeclData, declData, info, inputs,
-                definition);
-
-    }
+    // public static CXXConversionDecl cxxConversionDecl(String declName, Type functionType,
+    // FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
+    // Stmt definition) {
+    //
+    // return new CXXConversionDecl(declName, functionType, functionDeclData, declData, info, inputs,
+    // definition);
+    //
+    // }
 
     /*
      * 'type' nodes
