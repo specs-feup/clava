@@ -363,6 +363,15 @@ void clava::dump(TemplateArgument& templateArg, int id) {
     }
 }
 
+
+
+void clava::dump(const CXXBaseSpecifier& base, int id) {
+     clava::dump(base.isVirtual());
+     clava::dump(base.isPackExpansion());
+     clava::dump(ACCESS_SPECIFIER[base.getAccessSpecifierAsWritten()]);
+     clava::dump(ACCESS_SPECIFIER[base.getAccessSpecifier()]);
+     clava::dump(clava::getId(base.getType(), id));
+}
 /*
 llvm::raw_ostream clava::stringStream() {
     std::string stringStream;

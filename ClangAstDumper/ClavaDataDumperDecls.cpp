@@ -15,7 +15,6 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
-        {"CXXRecordDecl", clava::DeclNode::TYPE_DECL},
         {"FieldDecl", clava::DeclNode::NAMED_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"NamespaceAliasDecl", clava::DeclNode::NAMED_DECL},
@@ -26,6 +25,8 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
         {"EnumDecl", clava::DeclNode::TYPE_DECL},
+        {"RecordDecl", clava::DeclNode::RECORD_DECL},
+        {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL}
 };
 
@@ -55,6 +56,12 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpNamedDeclData(static_cast<const NamedDecl *>(D)); break;
         case clava::DeclNode::TYPE_DECL:
             DumpTypeDeclData(static_cast<const TypeDecl *>(D)); break;
+        case clava::DeclNode::TAG_DECL:
+            DumpTagDeclData(static_cast<const TagDecl *>(D)); break;
+        case clava::DeclNode::RECORD_DECL:
+            DumpRecordDeclData(static_cast<const RecordDecl *>(D)); break;
+        case clava::DeclNode::CXX_RECORD_DECL:
+            DumpCXXRecordDeclData(static_cast<const CXXRecordDecl *>(D)); break;
         case clava::DeclNode::VALUE_DECL:
             DumpValueDeclData(static_cast<const ValueDecl *>(D)); break;
         case clava::DeclNode::DECLARATOR_DECL:
@@ -143,6 +150,34 @@ void clava::ClavaDataDumper::DumpTypeDeclData(const TypeDecl *D) {
     clava::dump(clava::getId(D->getTypeForDecl(), id));
 }
 
+void clava::ClavaDataDumper::DumpTagDeclData(const TagDecl *D) {
+    // Hierarchy
+    DumpTypeDeclData(D);
+
+    clava::dump(clava::TAG_KIND[D->getTagKind()]);
+    clava::dump(D->isCompleteDefinition());
+
+}
+
+void clava::ClavaDataDumper::DumpRecordDeclData(const RecordDecl *D) {
+    // Hierarchy
+    DumpTagDeclData(D);
+
+    clava::dump(D->isAnonymousStructOrUnion());
+
+    //D->isCompleteDefinition();
+    //clava::dump(clava::TAG_KIND[D->getTagKind()]);
+}
+
+void clava::ClavaDataDumper::DumpCXXRecordDeclData(const CXXRecordDecl *D) {
+    // Hierarchy
+    DumpRecordDeclData(D);
+
+    clava::dump(D->getNumBases());
+    for (const auto &I : D->bases()) {
+        clava::dump(I, id);
+    }
+}
 
 
 void clava::ClavaDataDumper::DumpValueDeclData(const ValueDecl *D) {

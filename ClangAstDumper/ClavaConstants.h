@@ -31,6 +31,8 @@ namespace clava {
         CXX_METHOD_DECL,
         VAR_DECL,
         PARM_VAR_DECL,
+        TAG_DECL,
+        RECORD_DECL,
         CXX_RECORD_DECL
     };
 

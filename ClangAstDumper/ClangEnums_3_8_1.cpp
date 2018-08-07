@@ -378,6 +378,23 @@ extern const std::string clava::TEMPLATE_ARG_KIND[] {
         "Pack"
 };
 
+extern const std::string clava::TAG_KIND[] {
+        "STRUCT",
+        "INTERFACE",
+        "UNION",
+        "CLASS",
+        "ENUM"
+};
+
+extern const std::string clava::ACCESS_SPECIFIER[] {
+        "PUBLIC",
+        "PROTECTED",
+        "PRIVATE",
+        "NONE"
+};
+
+
+
 
 
 

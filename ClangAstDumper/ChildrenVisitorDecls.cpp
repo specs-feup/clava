@@ -11,10 +11,10 @@
 
 
 const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDREN_MAP = {
-        {"CXXConstructorDecl", clava::DeclNode::FUNCTION_DECL},
-        {"CXXConversionDecl", clava::DeclNode::FUNCTION_DECL},
-        {"CXXDestructorDecl", clava::DeclNode::FUNCTION_DECL},
-        {"CXXMethodDecl", clava::DeclNode::FUNCTION_DECL},
+        {"CXXConstructorDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL},
@@ -53,6 +53,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
             VisitFunctionDeclChildren(static_cast<const FunctionDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::CXX_METHOD_DECL:
+            VisitCXXMethodDeclChildren(static_cast<const CXXMethodDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_RECORD_DECL:
             VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VAR_DECL:
@@ -158,8 +160,8 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     }
 
     // Visit body
-    if(D->hasBody()) {
-    //if (D->doesThisDeclarationHaveABody()) {
+    //if(D->hasBody()) {
+    if (D->doesThisDeclarationHaveABody()) {
         //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
         VisitStmtTop(D->getBody());
         children.push_back(clava::getId(D->getBody(), id));
@@ -168,11 +170,26 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
 }
 
 
+void ClangAstDumper::VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitFunctionDeclChildren(D, children);
+
+
+    // Visit record decl
+    VisitDeclTop(D->getParent());
+
+}
+
 
 
 void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children) {
     // Hierarchy
     VisitTypeDeclChildren(D, children);
+
+    // Visit types in bases
+     for (const auto &I : D->bases()) {
+        VisitTypeTop(I.getType());
+    }
 }
 
 

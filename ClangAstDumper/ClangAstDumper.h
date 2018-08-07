@@ -184,7 +184,7 @@ private:
     void VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
-    //void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D);
+    void VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vector<std::string> &children);
     void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
 
     void VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children);
