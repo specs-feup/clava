@@ -366,6 +366,19 @@ extern const std::string clava::ARRAY_SIZE_MODIFIER[] {
 };
 
 
+extern const std::string clava::TEMPLATE_ARG_KIND[] {
+        "Null",
+        "Type",
+        "Declaration",
+        "NullPtr",
+        "Integral",
+        "Template",
+        "TemplateExpansion",
+        "Expression",
+        "Pack"
+};
+
+
 
 
 //const std::string BUILTIN_KIND[] {};

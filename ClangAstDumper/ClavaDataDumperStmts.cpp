@@ -36,6 +36,7 @@ void clava::ClavaDataDumper::dump(const Stmt* S) {
     // Get classname
     const std::string classname = clava::getClassName(S);
 
+
     // Get corresponding DeclNode
     StmtNode stmtNode = STMT_DATA_MAP.count(classname) == 1 ? STMT_DATA_MAP.find(classname)->second : StmtNode::STMT;
 

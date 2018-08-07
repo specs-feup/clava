@@ -112,6 +112,7 @@ namespace clava {
     void dump(const QualType& type, int id);
     void dump(const Qualifiers& qualifiers, ASTContext* Context);
     void dump(NestedNameSpecifier* qualifier, ASTContext* Context);
+    void dump(TemplateArgument& templateArg, int id);
 
         //  void dump(llvm::raw_string_ostream llvmStringStream);
 

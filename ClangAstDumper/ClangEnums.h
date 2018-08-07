@@ -21,6 +21,7 @@ namespace clava {
     extern const std::string VISIBILITY[];
     extern const std::string BUILTIN_KIND[];
     extern const std::string ARRAY_SIZE_MODIFIER[];
+    extern const std::string TEMPLATE_ARG_KIND[];
 };
 
 #endif //CLANGASTDUMPER_CLANGENUMS_H

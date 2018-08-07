@@ -5,8 +5,10 @@
 #include "ClangAstDumper.h"
 #include "ClangNodes.h"
 #include "ClavaConstants.h"
+#include "ClangEnums.h"
 
 #include <string>
+
 
 const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDREN_MAP = {
         {"CXXConstructorDecl", clava::DeclNode::FUNCTION_DECL},
@@ -111,6 +113,28 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     // Hierarchy
     VisitValueDeclChildren(D, children);
 
+    // Visit canonical and previous decls
+    VisitDeclTop(D->getPreviousDecl());
+    VisitDeclTop(D->getCanonicalDecl());
+
+    // Visit template arguments
+    auto templateSpecializationArgs = D->getTemplateSpecializationArgs();
+    if(templateSpecializationArgs != nullptr) {
+        for(auto templateArg : templateSpecializationArgs->asArray()) {
+            switch(templateArg.getKind()) {
+                case TemplateArgument::ArgKind::Type:
+                    VisitTypeTop(templateArg.getAsType());
+                    break;
+                case TemplateArgument::ArgKind::Expression:
+                    VisitStmtTop(templateArg.getAsExpr());
+                    break;
+                default: throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+            }
+        }
+    }
+
+
+
     // Visit parameters
     for(auto param : D->parameters()) {
         VisitDeclTop(param);
@@ -134,8 +158,8 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     }
 
     // Visit body
-    //if(D->hasBody()) {
-    if (D->doesThisDeclarationHaveABody()) {
+    if(D->hasBody()) {
+    //if (D->doesThisDeclarationHaveABody()) {
         //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
         VisitStmtTop(D->getBody());
         children.push_back(clava::getId(D->getBody(), id));

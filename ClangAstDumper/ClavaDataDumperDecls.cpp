@@ -179,6 +179,32 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     clava::dump(D->isPure());
     clava::dump(D->isDeletedAsWritten());
 
+    clava::dump(clava::getId(D->getPreviousDecl(), id));
+    clava::dump(clava::getId(D->getCanonicalDecl(), id));
+
+    // Template specialization args
+    auto templateSpecializationArgs = D->getTemplateSpecializationArgs();
+    if(templateSpecializationArgs != nullptr) {
+        clava::dump(templateSpecializationArgs->size());
+        for(auto templateArg : templateSpecializationArgs->asArray()) {
+            clava::dump(templateArg, id);
+        }
+    } else {
+        clava::dump(0);
+    }
+
+
+/*
+    if (const FunctionTemplateSpecializationInfo* FTSI =
+            D->getTemplateSpecializationInfo()) {
+
+        for (unsigned i = 0, e = FTSI->size(); i < e; ++i) {
+
+        }
+            dumpTemplateArgumentLoc(TALI[i]);
+
+    }
+     */
 
 
 

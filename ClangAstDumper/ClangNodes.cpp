@@ -350,6 +350,18 @@ void clava::dump(NestedNameSpecifier* qualifier, ASTContext* Context) {
     }
 }
 
+void clava::dump(TemplateArgument& templateArg, int id) {
+    clava::dump(clava::TEMPLATE_ARG_KIND[templateArg.getKind()]);
+    switch(templateArg.getKind()) {
+        case TemplateArgument::ArgKind::Type:
+            clava::dump(clava::getId(templateArg.getAsType(), id));
+            break;
+        case TemplateArgument::ArgKind::Expression:
+            clava::dump(clava::getId(templateArg.getAsExpr(), id));
+            break;
+        default: throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+    }
+}
 
 /*
 llvm::raw_ostream clava::stringStream() {
@@ -363,3 +375,4 @@ void clava::dump(llvm::raw_string_ostream llvmStringStream) {
     dump(llvmStringStream.str());
 }
 */
+
