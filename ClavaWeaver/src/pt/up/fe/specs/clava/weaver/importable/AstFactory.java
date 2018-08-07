@@ -34,7 +34,6 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -165,10 +164,13 @@ public class AstFactory {
         // FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
         // new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
         // Collections.emptyList());
-        FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
-                new FunctionDeclData(), new DeclData(),
-                ClavaNodeInfo.undefinedInfo(),
-                CxxWeaver.getFactory().compoundStmt());
+        // FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
+        // new FunctionDeclData(), new DeclData(),
+        // ClavaNodeInfo.undefinedInfo(),
+        // CxxWeaver.getFactory().compoundStmt());
+
+        FunctionDecl functionDecl = CxxWeaver.getFactory().functionDecl(name, functionType);
+        functionDecl.setBody(CxxWeaver.getFactory().compoundStmt());
 
         return (CxxFunction) CxxJoinpoints.create(functionDecl, null);
     }

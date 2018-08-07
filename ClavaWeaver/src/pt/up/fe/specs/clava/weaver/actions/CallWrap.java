@@ -26,15 +26,12 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -257,10 +254,14 @@ public class CallWrap {
                 .mapToObj(i -> ClavaNodeFactory.parmVarDecl(paramNames.get(i), paramTypes.get(i)))
                 .collect(Collectors.toList());
 
-        FunctionDeclData functionDeclData = new FunctionDeclData();
-        DeclData declData = new DeclData();
-        FunctionDecl declaration = ClavaNodeFactory.functionDecl(name, inputs, functionType, functionDeclData, declData,
-                ClavaNodeInfo.undefinedInfo(), null);
+        // FunctionDeclData functionDeclData = new FunctionDeclData();
+        // DeclData declData = new DeclData();
+        // FunctionDecl declaration = ClavaNodeFactory.functionDecl(name, inputs, functionType, functionDeclData,
+        // declData,
+        // ClavaNodeInfo.undefinedInfo(), null);
+
+        FunctionDecl declaration = factory.functionDecl(name, functionType);
+        declaration.setParameters(inputs);
 
         addWrapperFunction(name, declaration);
 
