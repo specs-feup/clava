@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -63,8 +62,9 @@ public class FunctionDeclParser extends AClangNodeParser<FunctionDecl> {
 
         checkNumChildren(parsedChildren.getList(), 0);
 
-        return ClavaNodeFactory.functionDecl(functionName, data.getParameters(), type, data.getFunctionDeclData(),
-                declData, info(node), data.getDefinition());
+        throw new RuntimeException("Deprecated");
+        // return ClavaNodeFactory.functionDecl(functionName, data.getParameters(), type, data.getFunctionDeclData(),
+        // declData, info(node), data.getDefinition());
 
         // Expects a ParmVarDecl child for each parameter, followed by a single node if it is a function definition
         // TODO: In reality, it expects a lot more stuff, implement on as-needed basis

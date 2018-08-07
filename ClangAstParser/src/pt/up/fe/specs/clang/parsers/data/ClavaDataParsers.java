@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parsers.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
@@ -24,6 +25,7 @@ import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
@@ -33,6 +35,7 @@ import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -221,6 +224,35 @@ public class ClavaDataParsers {
             throw new NotImplementedException(kind);
         }
 
+    }
+
+    public static <T> List<T> list(LineStream lines, ClangParserData parserData,
+            BiFunction<LineStream, ClangParserData, T> parser) {
+
+        // First line is number of objects
+        int size = LineStreamParsers.integer(lines);
+
+        List<T> parsedObjects = new ArrayList<>(size);
+        for (int i = 0; i < size; ++i) {
+            parsedObjects.add(parser.apply(lines, parserData));
+        }
+
+        return parsedObjects;
+    }
+
+    public static CXXBaseSpecifier baseSpecifier(LineStream lines, ClangParserData parserData) {
+        CXXBaseSpecifier base = new CXXBaseSpecifier();
+
+        base.set(CXXBaseSpecifier.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
+        base.set(CXXBaseSpecifier.IS_PACK_EXPANSION, LineStreamParsers.oneOrZero(lines));
+        base.set(CXXBaseSpecifier.ACCESS_SPECIFIER_AS_WRITTEN,
+                LineStreamParsers.enumFromName(AccessSpecifier.class, lines));
+        base.set(CXXBaseSpecifier.ACCESS_SPECIFIER_SEMANTIC,
+                LineStreamParsers.enumFromName(AccessSpecifier.class, lines));
+
+        parserData.getClavaNodes().queueSetNode(base, CXXBaseSpecifier.TYPE, lines.nextLine());
+
+        return base;
     }
 
     // public static void setNode(ClangParserData parserData, DataClass<?> dataClass, DataKey<? extends ClavaNode> key,

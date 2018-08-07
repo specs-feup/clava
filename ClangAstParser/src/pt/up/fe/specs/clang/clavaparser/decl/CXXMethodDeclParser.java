@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -77,9 +76,12 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
 
         // Check namespace and store next word
         String namespace = parseKeyValue(parser, "namespace");
-
+        // SpecsLogs.debug("NAMESPACE:" + namespace);
         // Check record and store next word
         String record = parseKeyValue(parser, "record");
+        // SpecsLogs.debug("RECORD:" + record);
+        // SpecsLogs.debug("QUALIFIED NAME:" + data.get(CXXMethodDecl.QUALIFIED_NAME));
+        // SpecsLogs.debug("DECL NAME:" + data.get(NamedDecl.DECL_NAME));
 
         // Get corresponding record id
         String recordId = data.get(CXXMethodDecl.RECORD_ID);
@@ -113,9 +115,10 @@ public class CXXMethodDeclParser extends AClangNodeParser<CXXMethodDecl> {
 
         checkNumChildren(children.getList(), 0);
 
-        return ClavaNodeFactory.cxxMethodDecl(methodData, name, type, functionDeclParserdata.getFunctionDeclData(),
-                declData,
-                node.getInfo(), functionDeclParserdata.getParameters(), functionDeclParserdata.getDefinition());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxMethodDecl(name, type, functionDeclParserdata.getFunctionDeclData(),
+        // declData,
+        // node.getInfo(), functionDeclParserdata.getParameters(), functionDeclParserdata.getDefinition());
 
     }
 

@@ -19,10 +19,13 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -33,6 +36,8 @@ import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.language.TLSKind;
+import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -96,6 +101,36 @@ public class DeclDataParser {
         return data;
     }
 
+    public static DataStore parseTagDeclData(LineStream lines, ClangParserData dataStore) {
+        // Parse TypeDecl data
+        DataStore data = parseTypeDeclData(lines, dataStore);
+
+        data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.class, lines));
+        data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseRecordDeclData(LineStream lines, ClangParserData dataStore) {
+        // Parse TagDecl data
+        DataStore data = parseTagDeclData(lines, dataStore);
+
+        data.add(RecordDecl.IS_ANONYMOUS, LineStreamParsers.oneOrZero(lines));
+
+        // System.out.println("RECORD NAME:" + data.get(NamedDecl.DECL_NAME));
+        // System.out.println("RECORD QUAL NAME:" + data.get(NamedDecl.QUALIFIED_NAME));
+        return data;
+    }
+
+    public static DataStore parseCXXRecordDeclData(LineStream lines, ClangParserData dataStore) {
+        // Parse RecordDecl data
+        DataStore data = parseRecordDeclData(lines, dataStore);
+
+        data.add(CXXRecordDecl.RECORD_BASES, ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::baseSpecifier));
+        SpecsLogs.debug("RECORD BASES:" + data.get(CXXRecordDecl.RECORD_BASES));
+        return data;
+    }
+
     public static DataStore parseValueDeclData(LineStream lines, ClangParserData dataStore) {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
@@ -140,6 +175,7 @@ public class DeclDataParser {
         DataStore data = parseFunctionDeclData(lines, dataStore);
 
         data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
 
         return data;
     }

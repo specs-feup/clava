@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.FunctionDeclParserResult;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.data.CXXMethodDeclData;
@@ -100,9 +99,10 @@ public class CXXDestructorDeclParser extends AClangNodeParser<CXXDestructorDecl>
 
         checkNumChildren(children.getList(), 0);
 
-        return ClavaNodeFactory.cxxDestructorDecl(methodData, className, type,
-                functionDeclParserdata.getFunctionDeclData(), declData,
-                node.getInfo(), functionDeclParserdata.getParameters(), functionDeclParserdata.getDefinition());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxDestructorDecl(className, type,
+        // functionDeclParserdata.getFunctionDeclData(), declData,
+        // node.getInfo(), functionDeclParserdata.getParameters(), functionDeclParserdata.getDefinition());
     }
 
 }

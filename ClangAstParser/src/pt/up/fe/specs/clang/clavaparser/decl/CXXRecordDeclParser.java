@@ -27,7 +27,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -125,7 +124,8 @@ public class CXXRecordDeclParser extends AClangNodeParser<CXXRecordDecl> {
         // of another CXXRecordDecl.
         Type type = getTypesMap().get(node.getExtendedId());
 
-        return ClavaNodeFactory.cxxRecordDecl(recordBases, recordDeclData, type, declData, info, decls);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxRecordDecl(recordBases, recordDeclData, type, declData, info, decls);
     }
 
 }

@@ -2,6 +2,8 @@
 
 using namespace std;
 
+namespace testspace {
+
 class BondMap {
    
    
@@ -23,6 +25,7 @@ class Top2 {};
 class Derived1 : public Top {};
 class Derived2 : public virtual Top, public Top2 {};
 
+}
 
 //template<class... Mixins>
 //class X : public Mixins... {
