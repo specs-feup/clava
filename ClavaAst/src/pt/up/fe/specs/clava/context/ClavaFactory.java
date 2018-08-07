@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
@@ -317,6 +318,16 @@ public class ClavaFactory {
                 .put(ValueDecl.TYPE, type);
 
         return new DummyValueDecl(data, Collections.emptyList());
+        // return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
+        // .setLocation(node.getLocation());
+    }
+
+    public FunctionDecl functionDecl(String declName, Type type) {
+        DataStore data = newDeclDataStore()
+                .put(NamedDecl.DECL_NAME, declName)
+                .put(ValueDecl.TYPE, type);
+
+        return new FunctionDecl(data, Collections.emptyList());
         // return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
         // .setLocation(node.getLocation());
     }

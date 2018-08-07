@@ -134,20 +134,20 @@ public class CXXMethodDecl extends FunctionDecl {
         StringBuilder code = new StringBuilder();
 
         // if (getFunctionDeclData().getStorageClass() == StorageClass.STATIC) {
-        if (getFunctionDeclData().getStorageClass() != StorageClass.NONE) {
-            code.append(getFunctionDeclData().getStorageClass().getString()).append(" ");
+        if (get(STORAGE_CLASS) != StorageClass.NONE) {
+            code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
 
-        if (getFunctionDeclData().isInline()) {
+        if (get(IS_INLINE)) {
             code.append("inline ");
         }
 
-        if (getFunctionDeclData().isVirtual()) {
+        if (get(IS_VIRTUAL)) {
             code.append("virtual ");
             // throwNoCodeGeneration();
         }
 
-        if (getFunctionDeclData().isModulePrivate()) {
+        if (get(IS_MODULE_PRIVATE)) {
             // code.append("__module_private__ ");
             throwNoCodeGeneration();
         }

@@ -14,28 +14,34 @@
 package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public class OpenCLKernelAttr extends Attribute {
 
-    public OpenCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-        this(AttributeKind.OpenCLKernel, attrData, nodeInfo, Collections.emptyList());
+    public OpenCLKernelAttr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private OpenCLKernelAttr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
-            Collection<? extends ClavaNode> children) {
-        super(kind, attrData, nodeInfo, children);
-    }
+    // public OpenCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
+    // this(AttributeKind.OpenCLKernel, attrData, nodeInfo, Collections.emptyList());
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new OpenCLKernelAttr(getKind(), getAttrData(), getInfo(), Collections.emptyList());
-    }
+    // private OpenCLKernelAttr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // this(new LegacyToDataStore().setAttribute(attrData).setNodeInfo(nodeInfo).getData(), children);
+    //
+    // set(KIND, kind);
+    // // super(kind, attrData, nodeInfo, children);
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new OpenCLKernelAttr(getKind(), getAttrData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

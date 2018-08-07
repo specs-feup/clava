@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +22,17 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -96,9 +103,31 @@ public class FunctionDecl extends DeclaratorDecl {
      */
     public final static DataKey<Boolean> IS_DELETED = KeyFactory.bool("isDeleted");
 
+    // TODO: Change to FunctionDecl when refactoring is complete
+    public final static DataKey<Decl> PREVIOUS_DECL = KeyFactory.object("previousDecl", Decl.class);
+
+    // TODO: Change to FunctionDecl when refactoring is complete
+    public final static DataKey<Decl> CANONICAL_DECL = KeyFactory.object("canonicalDecl", Decl.class);
+
+    /**
+     * Template arguments of this function, if any.
+     */
+    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
+            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>());
+
     /// DATAKEYS END
 
-    private final FunctionDeclData functionDeclData;
+    public FunctionDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+        // this.functionDeclData = null;
+        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
+        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
+
+        SpecsLogs.debug("FUNCTION DECL CHILDREN:" + children);
+
+    }
+
+    // private final FunctionDeclData functionDeclData;
 
     private Lazy<FunctionDecl> declaration;
     private Lazy<FunctionDecl> definition;
@@ -152,9 +181,14 @@ public class FunctionDecl extends DeclaratorDecl {
     protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
             ClavaNodeInfo info, List<? extends ClavaNode> children) {
 
-        super(declName, functionType, declData, info, children);
+        super(new LegacyToDataStore().setFunctionDecl(functionDeclData).setDecl(declData).setNodeInfo(info).getData(),
+                children);
+        // super(declName, functionType, declData, info, children);
 
-        this.functionDeclData = functionDeclData;
+        set(NamedDecl.DECL_NAME, processDeclName(declName));
+        set(ValueDecl.TYPE, processType(functionType));
+
+        // this.functionDeclData = functionDeclData;
         this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
         this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
 
@@ -177,7 +211,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new FunctionDecl(getDeclName(), getFunctionType(), functionDeclData, getDeclData(), getInfo(),
+        return new FunctionDecl(getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(), getInfo(),
                 Collections.emptyList(), null);
     }
 
@@ -189,12 +223,20 @@ public class FunctionDecl extends DeclaratorDecl {
         return getFunctionType().getReturnType();
     }
 
-    public FunctionDeclData getFunctionDeclData() {
-        return functionDeclData;
+    /**
+     * @deprecated to remove
+     * @return
+     */
+    @Deprecated
+    protected FunctionDeclData getFunctionDeclData() {
+        return DataStoreToLegacy.getFunctionDecl(getData());
+
+        // return functionDeclData;
     }
 
     public boolean isInline() {
-        return functionDeclData.isInline();
+        return get(IS_INLINE);
+        // return functionDeclData.isInline();
     }
 
     /**
@@ -306,16 +348,25 @@ public class FunctionDecl extends DeclaratorDecl {
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
 
-        if (getFunctionDeclData().hasOpenCLKernelAttr()) {
+        if (hasAttribute(AttributeKind.OpenCLKernel)) {
             code.append("__kernel ");
         }
+        // get(ATTRIBUTES).stream()
+        // .filter(attr -> attr instanceof OpenCLKernelAttr)
+        // .findFirst()
+        // .ifPresent(attr -> code.append("__kernel "));
 
-        if (getFunctionDeclData().isInline()) {
+        // if (getFunctionDeclData().hasOpenCLKernelAttr()) {
+        // code.append("__kernel ");
+        // }
+
+        // if (getFunctionDeclData().isInline()) {
+        if (get(IS_INLINE)) {
             code.append("inline ");
         }
 
-        if (getFunctionDeclData().getStorageClass() != StorageClass.NONE) {
-            code.append(getFunctionDeclData().getStorageClass().getString()).append(" ");
+        if (get(STORAGE_CLASS) != StorageClass.NONE) {
+            code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
 
         if (useReturnType) {
@@ -436,7 +487,7 @@ public class FunctionDecl extends DeclaratorDecl {
         // String functionName = getDeclName();
 
         // Determine scope of change. If static, only change calls inside the file
-        boolean isStatic = getFunctionDeclData().getStorageClass() == StorageClass.STATIC;
+        boolean isStatic = get(STORAGE_CLASS) == StorageClass.STATIC;
         ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
 
         Optional<FunctionDecl> decl = getDeclaration();
@@ -614,7 +665,7 @@ public class FunctionDecl extends DeclaratorDecl {
                 .collect(Collectors.toList());
     }
 
-    public void setParamters(List<ParmVarDecl> params) {
+    public void setParameters(List<ParmVarDecl> params) {
         // Remove current parameters
         removeChildren(ParmVarDecl.class);
 

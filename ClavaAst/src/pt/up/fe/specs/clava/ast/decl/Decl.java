@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 /**
@@ -95,6 +96,13 @@ public abstract class Decl extends ClavaNode {
     @Deprecated
     public DeclData getDeclData() {
         return DataStoreToLegacy.getDecl(getData());
+    }
+
+    public boolean hasAttribute(AttributeKind kind) {
+        return get(ATTRIBUTES).stream()
+                .filter(attr -> attr.get(Attribute.KIND) == kind)
+                .findFirst()
+                .isPresent();
     }
 
 }

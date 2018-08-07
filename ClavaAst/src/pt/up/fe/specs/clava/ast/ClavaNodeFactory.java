@@ -24,7 +24,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.attr.FinalAttr;
-import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.comment.BlockContentComment;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -1455,9 +1454,9 @@ public class ClavaNodeFactory {
         return new FinalAttr(attrData, nodeInfo);
     }
 
-    public static OpenCLKernelAttr openCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-        return new OpenCLKernelAttr(attrData, nodeInfo);
-    }
+    // public static OpenCLKernelAttr openCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
+    // return new OpenCLKernelAttr(attrData, nodeInfo);
+    // }
 
     // public static CompoundStmt compoundStmt(ClavaNodeInfo info, String code) {
     // // return compoundStmt(info, Arrays.asList(literalStmt(code)));

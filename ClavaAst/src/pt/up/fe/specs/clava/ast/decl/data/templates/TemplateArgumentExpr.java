@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 SPeCS.
+ * Copyright 2018 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,23 +11,22 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.extra;
+package pt.up.fe.specs.clava.ast.decl.data.templates;
 
-import java.util.Collection;
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 
-/**
- * @deprecated replaced by class with same name in pt.up.fe.specs.clava.ast.decl.data.templates
- * @author JoaoBispo
- *
- */
-@Deprecated
-public abstract class TemplateArgument extends ClavaNode {
+public class TemplateArgumentExpr extends TemplateArgument {
 
-    protected TemplateArgument(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
-        super(nodeInfo, children);
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Expr> EXPR = KeyFactory.object("expr", Expr.class);
+
+    /// DATAKEYS END
+
+    public TemplateArgumentExpr(TemplateArgumentKind kind) {
+        super(kind);
     }
-
 }

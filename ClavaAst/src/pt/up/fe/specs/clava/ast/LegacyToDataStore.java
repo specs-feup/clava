@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
@@ -205,6 +206,18 @@ public class LegacyToDataStore {
 
         nodeData.add(NamedDecl.IS_HIDDEN, data.isHidden());
         nodeData.add(FunctionDecl.IS_CONSTEXPR, data.isConstexpr());
+
+        return this;
+    }
+
+    public LegacyToDataStore setFunctionDecl(FunctionDeclData data) {
+        nodeData.add(FunctionDecl.STORAGE_CLASS, data.getStorageClass());
+        nodeData.add(FunctionDecl.IS_INLINE, data.isInline());
+        nodeData.add(FunctionDecl.IS_VIRTUAL, data.isVirtual());
+        nodeData.add(FunctionDecl.IS_MODULE_PRIVATE, data.isModulePrivate());
+        nodeData.add(FunctionDecl.IS_PURE, data.isPure());
+        nodeData.add(FunctionDecl.IS_DELETED, data.isDelete());
+        nodeData.add(FunctionDecl.TEMPLATE_KIND, data.getTemplateKind());
 
         return this;
     }
