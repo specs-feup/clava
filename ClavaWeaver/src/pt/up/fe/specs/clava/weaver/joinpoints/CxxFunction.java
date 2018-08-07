@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
@@ -32,6 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
@@ -228,7 +228,7 @@ public class CxxFunction extends AFunction {
 
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
-        Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
+        CompoundStmt definition = function.getFunctionDefinition().map(stmt -> (CompoundStmt) stmt.copy()).orElse(null);
 
         // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
         // .getDescendants();
@@ -253,13 +253,19 @@ public class CxxFunction extends AFunction {
         // System.out.println("FINISH");
 
         // make a new function declaration with the new name
-        FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
-                function.getParameters(),
-                (FunctionType) function.getFunctionType().copy(),
-                function.getFunctionDeclData(), // check
-                function.getDeclData(), // check
-                ClavaNodeInfo.undefinedInfo(), // check
-                definition);
+
+        // FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
+        // function.getParameters(),
+        // (FunctionType) function.getFunctionType().copy(),
+        // function.getFunctionDeclData(), // check
+        // function.getDeclData(), // check
+        // ClavaNodeInfo.undefinedInfo(), // check
+        // definition);
+
+        FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
+
+        newFunc.setParameters(function.getParameters());
+        newFunc.setBody(definition);
 
         return newFunc;
     }
@@ -429,34 +435,32 @@ public class CxxFunction extends AFunction {
 
     @Override
     public StorageClass getStorageClassImpl() {
-        return STORAGE_CLASS.get().fromValue(function.getFunctionDeclData().getStorageClass().name().toLowerCase());
+        return STORAGE_CLASS.get().fromValue(function.get(FunctionDecl.STORAGE_CLASS).name().toLowerCase());
     }
 
     @Override
     public Boolean getIsInlineImpl() {
-        return function.getFunctionDeclData().isInline();
+        return function.get(FunctionDecl.IS_INLINE);
     }
 
     @Override
     public Boolean getIsVirtualImpl() {
-        return function.getFunctionDeclData().isVirtual();
+        return function.get(FunctionDecl.IS_VIRTUAL);
     }
 
     @Override
     public Boolean getIsModulePrivateImpl() {
-        return function.getFunctionDeclData().isModulePrivate();
+        return function.get(FunctionDecl.IS_MODULE_PRIVATE);
     }
 
     @Override
     public Boolean getIsPureImpl() {
-        return function.getFunctionDeclData().isPure();
-
+        return function.get(FunctionDecl.IS_PURE);
     }
 
     @Override
     public Boolean getIsDeleteImpl() {
-        return function.getFunctionDeclData().isDelete();
-
+        return function.get(FunctionDecl.IS_DELETED);
     }
 
     @Override
@@ -479,7 +483,7 @@ public class CxxFunction extends AFunction {
                 .map(param -> (ParmVarDecl) param.getNode())
                 .collect(Collectors.toList());
 
-        function.setParamters(newParams);
+        function.setParameters(newParams);
     }
 
     @Override
