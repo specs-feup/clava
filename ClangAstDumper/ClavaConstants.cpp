@@ -71,6 +71,8 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::FUNCTION_PROTO_TYPE: return "FunctionProtoType";
         case clava::TypeNode::FUNCTION_NO_PROTO_TYPE: return "FunctionNoProtoType";
         case clava::TypeNode::TAG_TYPE: return "TagType";
+        case clava::TypeNode::RECORD_TYPE: return "RecordType";
+        case clava::TypeNode::ENUM_TYPE: return "EnumType";
         case clava::TypeNode::ARRAY_TYPE: return "ArrayType";
         case clava::TypeNode::CONSTANT_ARRAY_TYPE: return "ConstantArrayType";
         case clava::TypeNode::DEPENDENT_SIZED_ARRAY_TYPE: return "DependentSizedArrayType";

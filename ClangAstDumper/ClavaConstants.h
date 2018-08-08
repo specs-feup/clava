@@ -83,6 +83,8 @@ namespace clava {
         FUNCTION_PROTO_TYPE,
         FUNCTION_NO_PROTO_TYPE,
         TAG_TYPE,
+        RECORD_TYPE,
+        ENUM_TYPE,
         ARRAY_TYPE,
         CONSTANT_ARRAY_TYPE,
         DEPENDENT_SIZED_ARRAY_TYPE,

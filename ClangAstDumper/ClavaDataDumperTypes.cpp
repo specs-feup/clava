@@ -16,6 +16,8 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
+        {"RecordType", clava::TypeNode::TAG_TYPE},
+        {"EnumType", clava::TypeNode::TAG_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -55,6 +57,10 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpConstantArrayTypeData(static_cast<const ConstantArrayType *>(T)); break;
         case clava::TypeNode::VARIABLE_ARRAY_TYPE:
             DumpVariableArrayTypeData(static_cast<const VariableArrayType *>(T)); break;
+        case clava::TypeNode::TAG_TYPE:
+            DumpTagTypeData(static_cast<const TagType *>(T)); break;
+//         case clava::TypeNode::RECORD_TYPE:
+//            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump(TypeNode): Case not implemented, '"+ getName(typeNode) +"'");
     }
 }
@@ -262,8 +268,16 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
 void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
     DumpTypeData(T);
 
+
     clava::dump(clava::getId(T->getDecl(), id));
 }
+
+/*
+void clava::ClavaDataDumper::DumpRecordTypeData(const RecordType *T) {
+    DumpTagTypeData(T);
+
+}
+*/
 
 
 void clava::ClavaDataDumper::DumpArrayTypeData(const ArrayType *T) {

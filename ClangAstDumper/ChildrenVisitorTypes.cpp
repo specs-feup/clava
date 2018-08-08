@@ -15,6 +15,8 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"PointerType", clava::TypeNode::POINTER_TYPE},
+        {"EnumType", clava::TypeNode::TAG_TYPE},
+        {"RecordType", clava::TypeNode::TAG_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -45,6 +47,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitVariableArrayTypeChildren(static_cast<const VariableArrayType *>(T), visitedChildren); break;
         case clava::TypeNode::POINTER_TYPE:
             VisitPointerTypeChildren(static_cast<const PointerType *>(T), visitedChildren); break;
+        case clava::TypeNode::TAG_TYPE:
+            VisitTagTypeChildren(static_cast<const TagType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -121,6 +125,9 @@ void ClangAstDumper::VisitFunctionProtoTypeChildren(const FunctionProtoType *T, 
 }
 
 void ClangAstDumper::VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
     // Just visit decl
     VisitDeclTop(T->getDecl());
 }
