@@ -251,7 +251,8 @@ public class CallWrap {
                 .collect(Collectors.toList());
 
         List<ParmVarDecl> inputs = IntStream.range(0, numParameters)
-                .mapToObj(i -> ClavaNodeFactory.parmVarDecl(paramNames.get(i), paramTypes.get(i)))
+                // .mapToObj(i -> ClavaNodeFactory.parmVarDecl(paramNames.get(i), paramTypes.get(i)))
+                .mapToObj(i -> factory.parmVarDecl(paramNames.get(i), paramTypes.get(i)))
                 .collect(Collectors.toList());
 
         // FunctionDeclData functionDeclData = new FunctionDeclData();
@@ -386,7 +387,8 @@ public class CallWrap {
         boolean isVoid = isVoid(returnType);
         String varName = "result";
         if (!isVoid) {
-            VarDecl varDecl = ClavaNodeFactory.varDecl(varName, ftype.getReturnType());
+            VarDecl varDecl = factory.varDecl(varName, ftype.getReturnType());
+            // VarDecl varDecl = ClavaNodeFactory.varDecl(varName, ftype.getReturnType());
 
             wrapperStmts.add(factory.declStmt(varDecl));
             // wrapperStmts.add(ClavaNodeFactory.declStmt(null, Arrays.asList(varDecl)));

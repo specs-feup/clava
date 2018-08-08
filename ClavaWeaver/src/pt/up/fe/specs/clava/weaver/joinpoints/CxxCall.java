@@ -20,10 +20,6 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
@@ -37,7 +33,6 @@ import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -111,11 +106,16 @@ public class CxxCall extends ACall {
         // DeclStmt -> VarDecl -> Call
         if (declareVariable) {
 
-            VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, false,
-                    InitializationStyle.CINIT, false);
-            DeclData declData = new DeclData(false, false, true, false, false, false);
-            VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, variableName, returnType, declData, call.getInfo(),
-                    call);
+            // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, false,
+            // InitializationStyle.CINIT, false);
+            // DeclData declData = new DeclData(false, false, true, false, false, false);
+            // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, variableName, returnType, declData,
+            // call.getInfo(),
+            // call);
+
+            VarDecl varDecl = getFactory().varDecl(variableName, returnType);
+            varDecl.setInit(call);
+            varDecl.set(VarDecl.IS_USED);
 
             DeclStmt declStmt = call.getFactoryWithNode().declStmt(varDecl);
             // DeclStmt declStmt = ClavaNodeFactory.declStmt(call.getInfo(), Arrays.asList(varDecl));

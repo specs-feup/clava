@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeParser;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -503,7 +502,9 @@ public class CxxFunction extends AFunction {
             String type = typeVarname.substring(0, indexOfSpace).trim();
             String varName = typeVarname.substring(indexOfSpace + 1).trim();
 
-            params[i] = CxxJoinpoints.create(ClavaNodeFactory.parmVarDecl(type, varName), this, AParam.class);
+            ParmVarDecl parmVarDecl = getFactory().parmVarDecl(varName, getFactory().literalType(type));
+
+            params[i] = CxxJoinpoints.create(parmVarDecl, this, AParam.class);
         }
 
         defParamsImpl(params);

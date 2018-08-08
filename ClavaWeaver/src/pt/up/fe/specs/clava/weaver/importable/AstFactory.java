@@ -34,10 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -61,7 +58,6 @@ import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -116,11 +112,15 @@ public class AstFactory {
 
         Type type = getVarDeclType(standard, initType);
 
-        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-                InitializationStyle.CINIT, false);
-        DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
-        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, ClavaNodeInfo.undefinedInfo(),
-                initExpr);
+        // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
+        // InitializationStyle.CINIT, false);
+        // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData,
+        // ClavaNodeInfo.undefinedInfo(),
+        // initExpr);
+
+        VarDecl varDecl = CxxWeaver.getFactory().varDecl(varName, type);
+        varDecl.setInit(initExpr);
 
         return CxxJoinpoints.create(varDecl, null, AVardecl.class);
     }
@@ -134,7 +134,8 @@ public class AstFactory {
      */
     public static AJoinPoint varDeclNoInit(String varName, AType type) {
 
-        VarDecl varDecl = ClavaNodeFactory.varDecl(varName, (Type) type.getNode());
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(varName, (Type) type.getNode());
+        VarDecl varDecl = CxxWeaver.getFactory().varDecl(varName, (Type) type.getNode());
         return CxxJoinpoints.create(varDecl, null, AVardecl.class);
     }
 

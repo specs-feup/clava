@@ -20,16 +20,10 @@ import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
@@ -38,7 +32,6 @@ import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -344,25 +337,31 @@ public class CxxScope extends AScope {
 
         // defaults as no init
         Expr initExpr = null;
-        InitializationStyle initStyle = InitializationStyle.NO_INIT;
+        // InitializationStyle initStyle = InitializationStyle.NO_INIT;
 
         if (initValue != null) {
 
-            initExpr = ClavaNodeFactory.literalExpr(initValue,
-                    ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
+            initExpr = getFactory().literalExpr(initValue, getFactory().nullType());
 
-            initStyle = InitializationStyle.CINIT;
+            // initStyle = InitializationStyle.CINIT;
         }
 
-        boolean isUsed = true;
-        boolean isImplicit = false;
-        boolean isNrvo = false;
+        // boolean isUsed = true;
+        // boolean isImplicit = false;
+        // boolean isNrvo = false;
 
-        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle, false);
-        DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
+        // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle, false);
+        // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
 
-        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode, declData, ClavaNodeInfo.undefinedInfo(),
-                initExpr);
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode, declData,
+        // ClavaNodeInfo.undefinedInfo(),
+        // initExpr);
+
+        VarDecl varDecl = getFactory().varDecl(name, typeNode);
+        if (initExpr != null) {
+            varDecl.setInit(initExpr);
+        }
+        varDecl.set(VarDecl.IS_USED);
 
         AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl, this);
 
