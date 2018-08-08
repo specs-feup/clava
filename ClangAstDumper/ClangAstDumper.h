@@ -182,10 +182,12 @@ private:
     void VisitDeclChildren(const Decl *D, std::vector<std::string> &children);
     void VisitNamedDeclChildren(const NamedDecl *D, std::vector<std::string> &children);
     void VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::string> &children);
+    void VisitTagDeclChildren(const TagDecl *D, std::vector<std::string> &children);
+    void VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children);
+    void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     void VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vector<std::string> &children);
-    void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
 
     void VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children);
     void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);

@@ -74,6 +74,7 @@ namespace clava {
      * @return
      */
     const std::string getId(const Decl* addr, int id);
+    //const std::string getId(Decl* addr, int id);
     const std::string getId(const Stmt* addr, int id);
     const std::string getId(const Expr* addr, int id);
     const std::string getId(const Type* addr, int id);

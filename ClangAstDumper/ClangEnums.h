@@ -24,6 +24,9 @@ namespace clava {
     extern const std::string TEMPLATE_ARG_KIND[];
     extern const std::string TAG_KIND[];
     extern const std::string ACCESS_SPECIFIER[];
+    extern const std::string INIT_STYLE[];
+    extern const std::string STORAGE_CLASS[];
+    extern const std::string TLS_KIND[];
 };
 
 #endif //CLANGASTDUMPER_CLANGENUMS_H

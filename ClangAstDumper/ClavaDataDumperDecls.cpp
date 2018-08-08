@@ -177,6 +177,15 @@ void clava::ClavaDataDumper::DumpCXXRecordDeclData(const CXXRecordDecl *D) {
     for (const auto &I : D->bases()) {
         clava::dump(I, id);
     }
+
+    /*
+    if (D->hasDefinition()) {
+        clava::dump(clava::getId(D->getDefinition(), id));
+    } else {
+        clava::dump(clava::getId((const Decl*)nullptr, id));
+    }
+     */
+
 }
 
 
@@ -208,7 +217,7 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     // Print information about FunctionDecl
     clava::dump(D->isConstexpr());
     clava::dump(D->getTemplatedKind());
-    clava::dump(D->getStorageClass());
+    clava::dump(clava::STORAGE_CLASS[D->getStorageClass()]);
     clava::dump(D->isInlineSpecified());
     clava::dump(D->isVirtualAsWritten());
     clava::dump(D->isPure());
@@ -288,10 +297,10 @@ void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     DumpValueDeclData(D);
 
     // Print information about VarDecl
-    clava::dump(D->getStorageClass());
-    clava::dump(D->getTLSKind());
+    clava::dump(clava::STORAGE_CLASS[D->getStorageClass()]);
+    clava::dump(clava::TLS_KIND[D->getTLSKind()]);
     clava::dump(D->isNRVOVariable());
-    clava::dump(D->getInitStyle());
+    clava::dump(clava::INIT_STYLE[D->getInitStyle()]);
 
     clava::dump(D->isConstexpr());
     clava::dump(D->isStaticDataMember());

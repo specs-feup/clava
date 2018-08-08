@@ -393,7 +393,26 @@ extern const std::string clava::ACCESS_SPECIFIER[] {
         "NONE"
 };
 
+extern const std::string clava::INIT_STYLE[] {
+        "CINIT",
+        "CALL_INIT",
+        "LIST_INIT"
+};
 
+extern const std::string clava::STORAGE_CLASS[] {
+        "NONE",
+        "EXTERN",
+        "STATIC",
+        "PRIVATE_EXTERN",
+        "AUTO",
+        "REGISTER"
+};
+
+extern const std::string clava::TLS_KIND[] {
+        "NONE",
+        "STATIC",
+        "DYNAMIC"
+};
 
 
 

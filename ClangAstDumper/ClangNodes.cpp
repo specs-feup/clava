@@ -124,6 +124,11 @@ const std::string clava::getId(const Decl* addr, int id) {
 
     return getId((void*) addr, id);
 }
+/*
+const std::string clava::getId(Decl* addr, int id) {
+    return getId(const_cast<const Decl*>(addr), id);
+}
+ */
 
 const std::string clava::getId(const Stmt* addr, int id) {
     if(addr == nullptr) {

@@ -49,6 +49,10 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitNamedDeclChildren(static_cast<const NamedDecl *>(D), visitedChildren); break;
         case clava::DeclNode::TYPE_DECL:
             VisitTypeDeclChildren(static_cast<const TypeDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::TAG_DECL:
+            VisitTagDeclChildren(static_cast<const TagDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::RECORD_DECL:
+            VisitRecordDeclChildren(static_cast<const RecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VALUE_DECL:
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
@@ -76,6 +80,7 @@ void ClangAstDumper::VisitDeclChildren(const Decl *D, std::vector<std::string> &
         VisitAttrTop(attr);
         dumpTopLevelAttr(attr);
     }
+
 }
 
 void ClangAstDumper::VisitNamedDeclChildren(const NamedDecl *D, std::vector<std::string> &children) {
@@ -96,8 +101,53 @@ void ClangAstDumper::VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::s
     VisitTypeTop(D->getTypeForDecl());
     dumpType(D->getTypeForDecl());
 
+}
+
+void ClangAstDumper::VisitTagDeclChildren(const TagDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitTypeDeclChildren(D, children);
+
+    //std::string cxxRecordName = "CXXRecord";
+
+    //for (auto I = D->getFirstDecl(), E = D->getDecl; I != E; ++I) {
+    //llvm::errs() << "TagDecl id: " << clava::getId(D, id) << "\n";
+    //int declCounter = 0;
+    for(auto decl : D->decls()) {
+        // If CXXRecordDecl without definition, skip
+        if (const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(decl)) {
+            if(!recordDecl->hasDefinition()) {
+                continue;
+            }
+        }
+
+        VisitDeclTop(decl);
+        children.push_back(clava::getId(decl, id));
+
+        // Skip if the first child, and if current TagDecl is a CXXRecord, and
+
+        //llvm::errs() << "TagDecl child: " << decl->getDeclKindName() << " " << clava::getId(decl, id) << "\n";
+
+
+        //if(cxxRecordName.compare(decl->getDeclKindName()) == 0) {
+        //    llvm::errs() << "Is record\n";
+        //    llvm::errs() << "Has def? " << static_cast<const CXXRecordDecl *>(decl)->hasDefinition() << "\n";
+        //}
+        //VisitDeclTop(decl);
+        //children.push_back(clava::getId(decl, id));
+        //declCounter++;
+    }
+
+    /*
+    for(auto decl : D->noload_decls()) {
+        llvm::errs() << "No load TagDecl child: " << decl->getDeclKindName() << " " << clava::getId(decl, id) << "\n";
+
+        //VisitDeclTop(decl);
+        //children.push_back(clava::getId(decl, id));
+    }
+     */
 
 }
+
 
 void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
     // Hierarchy
@@ -177,19 +227,75 @@ void ClangAstDumper::VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vec
 
     // Visit record decl
     VisitDeclTop(D->getParent());
+}
+
+void ClangAstDumper::VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitTagDeclChildren(D, children);
+
+    //D->decls_begin()
+    /*
+    // Visit fields
+    for (auto field : D->fields()) {
+        VisitDeclTop(field);
+        children.push_back(clava::getId(field, id));
+    }
+     */
+
 
 }
 
-
-
 void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children) {
     // Hierarchy
-    VisitTypeDeclChildren(D, children);
+    VisitRecordDeclChildren(D, children);
 
     // Visit types in bases
-     for (const auto &I : D->bases()) {
+    for (const auto &I : D->bases()) {
         VisitTypeTop(I.getType());
     }
+
+    //llvm::errs() << "CXX RECORD HAS DEF: " << D->hasDefinition() << "\n";
+
+
+
+    /*
+    llvm::errs() << "CXXRECORDDECL CANONICAL: " << clava::getId(D->getCanonicalDecl(), id) << "\n";
+    llvm::errs() << "CXXRECORDDECL PREVIOUS: " << clava::getId(D->getPreviousDecl(), id) << "\n";
+    llvm::errs() << "CXXRECORDDECL MOST RECENT: " << clava::getId(D->getMostRecentDecl(), id) << "\n";
+    llvm::errs() << "CXXRECORDDECL INSTANTIATED: " << clava::getId(D->getInstantiatedFromMemberClass(), id) << "\n";
+    llvm::errs() << "CXXRECORDDECL TEMPLATE: " << clava::getId(D->getTemplateInstantiationPattern(), id) << "\n";
+*/
+    if (D->hasDefinition()) {
+        //llvm::errs() << "CXXRECORDDECL DEF: " << clava::getId(D->getDefinition(), id) << "\n";
+        VisitDeclTop(D->getDefinition());
+    }
+
+    // Visit constructors
+    /*
+    for (auto ctor : D->ctors()) {
+        VisitDeclTop(ctor);
+        children.push_back(clava::getId(ctor, id));
+    }
+     */
+
+
+    // Visit methods
+    // This makes the program explode
+/*
+    for(auto method = D->method_begin(); method != D->method_end(); method++) {
+        VisitDeclTop(*method);
+        children.push_back(clava::getId(*method, id));
+    }
+    */
+/*
+    for (auto method : D->methods()) {
+        VisitDeclTop(method);
+        children.push_back(clava::getId(method, id));
+    }
+*/
+
+
+
 }
 
 
