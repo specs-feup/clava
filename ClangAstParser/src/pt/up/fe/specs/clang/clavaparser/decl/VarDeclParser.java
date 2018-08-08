@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -89,7 +88,8 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
 
         Expr initExpr = hasInit ? toExpr(children.get(0)) : null;
 
-        return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, info(node), initExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, info(node), initExpr);
     }
 
     private static Type adaptTypeConstToConstexpr(String name, Type type) {

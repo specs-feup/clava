@@ -18,6 +18,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -35,9 +36,9 @@ import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -115,10 +116,24 @@ public class DeclDataParser {
         // Parse TagDecl data
         DataStore data = parseTagDeclData(lines, dataStore);
 
+        // This does not catch all cases where RecordDecls might not have a name
         data.add(RecordDecl.IS_ANONYMOUS, LineStreamParsers.oneOrZero(lines));
 
-        // System.out.println("RECORD NAME:" + data.get(NamedDecl.DECL_NAME));
-        // System.out.println("RECORD QUAL NAME:" + data.get(NamedDecl.QUALIFIED_NAME));
+        // If RecordDecl has no name, give it a name
+        if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
+            String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
+            data.set(NamedDecl.DECL_NAME, anonName);
+
+            // After all nodes are parsed, also set the name of the corresponding decl type
+            dataStore.getClavaNodes()
+                    .queueAction(
+                            () -> data.get(RecordDecl.TYPE_FOR_DECL).setInPlace(Type.TYPE_AS_STRING, anonName));
+
+            // dataStore.getClavaNodes()
+            // .queueAction(() -> System.out.println("TYPE FOR DECL:" + data.get(RecordDecl.TYPE_FOR_DECL)));
+
+        }
+
         return data;
     }
 
@@ -127,7 +142,14 @@ public class DeclDataParser {
         DataStore data = parseRecordDeclData(lines, dataStore);
 
         data.add(CXXRecordDecl.RECORD_BASES, ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::baseSpecifier));
-        SpecsLogs.debug("RECORD BASES:" + data.get(CXXRecordDecl.RECORD_BASES));
+        // SpecsLogs.debug("RECORD BASES:" + data.get(CXXRecordDecl.RECORD_BASES));
+        // data.add(CXXRecordDecl.RECORD_DEFINITION_ID, lines.nextLine());
+
+        // String definitionId = lines.nextLine();
+        // if (!data.get(ClavaNode.ID).equals(definitionId)) {
+        // dataStore.getClavaNodes().queueSetOptionalNode(data, CXXRecordDecl.RECORD_DEFINITION, definitionId);
+        // }
+
         return data;
     }
 
@@ -149,7 +171,7 @@ public class DeclDataParser {
 
         data.add(FunctionDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
-        data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromInt(StorageClass.getHelper(), lines));
+        data.add(FunctionDecl.STORAGE_CLASS, LineStreamParsers.enumFromName(StorageClass.class, lines));
         data.add(FunctionDecl.IS_INLINE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
@@ -185,11 +207,11 @@ public class DeclDataParser {
         // Parse NamedDecl data
         DataStore data = parseValueDeclData(lines, dataStore);
 
-        data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromInt(StorageClass.getHelper(), lines));
-        data.add(VarDecl.TLS_KIND, LineStreamParsers.enumFromInt(TLSKind.getHelper(), lines));
+        data.add(VarDecl.STORAGE_CLASS, LineStreamParsers.enumFromName(StorageClass.class, lines));
+        data.add(VarDecl.TLS_KIND, LineStreamParsers.enumFromName(TLSKind.class, lines));
         // data.add(VarDecl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines)); // Moved to Decl
         data.add(VarDecl.IS_NRVO_VARIABLE, LineStreamParsers.oneOrZero(lines));
-        data.add(VarDecl.INIT_STYLE, LineStreamParsers.enumFromInt(InitializationStyle.getHelper(), lines));
+        data.add(VarDecl.INIT_STYLE, LineStreamParsers.enumFromName(InitializationStyle.class, lines));
 
         data.add(VarDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
         data.add(VarDecl.IS_STATIC_DATA_MEMBER, LineStreamParsers.oneOrZero(lines));

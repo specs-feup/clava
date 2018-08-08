@@ -161,13 +161,14 @@ public abstract class AClangAstTester {
         // return;
         // }
 
-        // Delete resources under test
-        File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
-        SpecsIo.deleteFolderContents(outputFolder);
-        outputFolder.delete();
-
         // Delete ClangAst files
         if (CLEAN_CLANG_FILES) {
+
+            // Delete resources under test
+            File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
+            SpecsIo.deleteFolderContents(outputFolder);
+            outputFolder.delete();
+
             ClangAstParser.getTempFiles().stream()
                     .forEach(filename -> new File(filename).delete());
         }

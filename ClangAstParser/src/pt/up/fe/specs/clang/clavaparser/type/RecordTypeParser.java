@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
@@ -54,7 +53,9 @@ public class RecordTypeParser extends AClangNodeParser<RecordType> {
 
         DeclRef declInfo = parseDeclRef(node.getChild(0));
         // System.out.println("PARSED RECORD TYPE:" + node.getExtendedId());
-        return ClavaNodeFactory.recordType(recordName, declInfo, tagKind, typeData, node.getInfo());
+
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.recordType(recordName, declInfo, tagKind, typeData, node.getInfo());
     }
 
 }

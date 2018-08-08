@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parsers.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
@@ -260,5 +261,14 @@ public class ClavaDataParsers {
     //
     // parserData.get(ClangParserData.CLAVA_NODES).setNodeDelayed(dataClass, key, valueNodeId);
     // }
+
+    public static String createAnonName(SourceRange location) {
+        if (!location.isValid()) {
+            return "anon_" + UUID.randomUUID().toString();
+        }
+
+        String sanitizedFilename = location.getFilename().replace('.', '_');
+        return "anon_" + sanitizedFilename + "_" + location.getStartLine();
+    }
 
 }

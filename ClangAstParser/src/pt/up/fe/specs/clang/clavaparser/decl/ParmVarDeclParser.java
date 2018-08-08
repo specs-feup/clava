@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
@@ -80,8 +79,9 @@ public class ParmVarDeclParser extends AClangNodeParser<ParmVarDecl> {
         boolean hasInheritedDefaultArg = getStdErr().get(StreamKeys.PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG)
                 .contains(node.getExtendedId());
 
-        return ClavaNodeFactory.parmVarDecl(hasInheritedDefaultArg, varDeclData, varName, type, declData,
-                node.getInfo(), initExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.parmVarDecl(hasInheritedDefaultArg, varDeclData, varName, type, declData,
+        // node.getInfo(), initExpr);
 
         /*
         // return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, info(node), initExpr);

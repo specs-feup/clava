@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
+import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
@@ -157,6 +158,15 @@ public class TypeDataParser {
 
         return data;
 
+    }
+
+    public static DataStore parseTagTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, TagType.DECL, lines.nextLine());
+
+        return data;
     }
 
 }

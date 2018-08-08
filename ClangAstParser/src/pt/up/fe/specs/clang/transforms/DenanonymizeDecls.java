@@ -29,7 +29,7 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
- * Clang always parse bool types as _Bool, even if we are parsing C++ objects.
+ * Creates names for anonymous decls.
  * 
  * @author JoaoBispo
  *

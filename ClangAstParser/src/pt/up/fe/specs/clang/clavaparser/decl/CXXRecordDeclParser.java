@@ -124,6 +124,8 @@ public class CXXRecordDeclParser extends AClangNodeParser<CXXRecordDecl> {
         // of another CXXRecordDecl.
         Type type = getTypesMap().get(node.getExtendedId());
 
+        // System.out.println("RECORD DECL DATA:" + recordDeclData);
+        // System.out.println("DECLS:" + decls);
         throw new RuntimeException("deprecated");
         // return ClavaNodeFactory.cxxRecordDecl(recordBases, recordDeclData, type, declData, info, decls);
     }

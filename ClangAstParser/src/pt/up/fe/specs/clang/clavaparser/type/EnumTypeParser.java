@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
@@ -41,7 +40,8 @@ public class EnumTypeParser extends AClangNodeParser<EnumType> {
 
         DeclRef declInfo = parseDeclRef(node.getChild(0));
 
-        return ClavaNodeFactory.enumType(declInfo, typeData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.enumType(declInfo, typeData, node.getInfo());
     }
 
 }

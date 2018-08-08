@@ -61,6 +61,14 @@ public interface ClangNodeParser<T extends ClavaNode> {
         // boolean isTypeParser = getClass().getSimpleName().endsWith("TypeParser");
         // System.out.println("IS TYPE PARSER:" + isTypeParser);
         return stream.map(child -> parseChild(child, isTypeParser))
+                // return stream.map(child -> {
+                //
+                // if (child.getName().equals("CXXRecordDecl")) {
+                // SpecsLogs.debug("Has CXXRECORDDECL CHILD:" + parentNodeName);
+                // }
+                //
+                // return parseChild(child, isTypeParser);
+                // })
                 // Remove full comment nodes
                 .filter(clavaNode -> !(clavaNode instanceof FullComment))
                 .collect(Collectors.toList());

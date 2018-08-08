@@ -333,4 +333,7 @@ public class ClavaNodes {
         delayedNodesToAdd.add(nodeToAdd);
     }
 
+    public void queueAction(Runnable runnable) {
+        delayedNodesToAdd.add(runnable);
+    }
 }

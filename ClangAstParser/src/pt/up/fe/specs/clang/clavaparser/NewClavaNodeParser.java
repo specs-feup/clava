@@ -25,7 +25,9 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
+import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -82,7 +84,6 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // .collect(Collectors.toList());
 
         List<ClangNode> childrenClangNodes = getChildrenClangNodes(clavaNode, node);
-
         // List<ClavaNode> children = parseChildren(node.getChildrenStream(), getClass().getSimpleName(), isType);
         List<ClavaNode> children = parseChildren(childrenClangNodes.stream(), getClass().getSimpleName(), isType);
 
@@ -132,7 +133,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         
         return nodeClass.cast(clavaNode);
         */
-
+        // System.out.println("NODE CLASS:" + nodeClass);
         T clavaNodeCopy = clavaNode.newInstance(true, nodeClass, children);
 
         // Additional processing on the node itself
@@ -271,7 +272,9 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // return true;
         // }
 
-        if (clavaNode instanceof FunctionDecl) {
+        if (clavaNode instanceof FunctionDecl
+                || clavaNode instanceof CXXRecordDecl
+                || clavaNode instanceof VarDecl) {
             // SpecsLogs.debug("FUNCTION DECL CHILDREN: " + clavaNode.getChildren());
             return true;
         }

@@ -85,7 +85,8 @@ public class ClangAstProcessor {
     }
 
     public void process(ClangRootNode clangDump) {
-        addNamespaceAndRecordToMethods(clangDump);
+        // No longer needed?
+        // addNamespaceAndRecordToMethods(clangDump);
     }
 
     /**

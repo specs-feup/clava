@@ -130,7 +130,7 @@ public class CxxTest {
 
     @Test
     public void testQualifiers() {
-        new CxxTester("qualifiers.cpp").test();
+        new CxxTester("qualifiers.cpp").showCode().onePass().test();
     }
 
     @Test

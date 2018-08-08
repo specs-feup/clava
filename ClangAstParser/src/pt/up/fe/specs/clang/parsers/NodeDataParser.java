@@ -87,6 +87,7 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<ArrayTypeData>", TypeDataParser::parseArrayTypeData);
         STATIC_DATA_PARSERS.put("<ConstantArrayTypeData>", TypeDataParser::parseConstantArrayTypeData);
         STATIC_DATA_PARSERS.put("<VariableArrayTypeData>", TypeDataParser::parseVariableArrayTypeData);
+        STATIC_DATA_PARSERS.put("<TagTypeData>", TypeDataParser::parseTagTypeData);
 
         // ATTRIBUTES
         STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
