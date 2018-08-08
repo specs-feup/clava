@@ -123,6 +123,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         return "   ";
     }
 
+    @Override
+    public String getDataClassName() {
+        return dataI.getName();
+    }
+
     public String indentCode(String code) {
         return ClavaNodes.indentCode(getTab(), code);
     }

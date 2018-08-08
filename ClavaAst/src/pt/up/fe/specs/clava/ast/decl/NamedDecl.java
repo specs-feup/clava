@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -27,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a decl with a name.
@@ -223,5 +225,48 @@ public abstract class NamedDecl extends Decl {
     // public String toContentString() {
     // return super.toContentString() + "declName:" + declName + ", type:" + getTypeCode();
     // }
+
+    public Optional<String> getNamespace(String recordName) {
+        // Qualified name has full name
+        String qualifiedName = get(QUALIFIED_NAME);
+
+        if (qualifiedName.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // Remove decl name
+        String declName = "::" + get(DECL_NAME);
+        SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
+                () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
+
+        String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
+
+        // TODO: Replace with RECORD, after CXXRecordDecl is implemented
+        // CXXRecordDecl record = getRecordDecl();
+        // String recordName = record.getDeclName();
+        // String recordName = getRecordName();
+        SpecsCheck.checkArgument(currentString.endsWith(recordName),
+                () -> "Expected current string '" + currentString + "' to end with '" + recordName + "'");
+
+        // Remove record name
+        String namespace = currentString.substring(0, currentString.length() - recordName.length());
+
+        // Remove ::, if present
+        if (namespace.endsWith("::")) {
+            namespace = namespace.substring(0, namespace.length() - "::".length());
+        }
+
+        return !namespace.isEmpty() ? Optional.of(namespace) : Optional.empty();
+
+        /*
+        String namespace = parseKeyValue(parser, "namespace");
+        // SpecsLogs.debug("NAMESPACE:" + namespace);
+        // Check record and store next word
+        String record = parseKeyValue(parser, "record");
+        // SpecsLogs.debug("RECORD:" + record);
+        // SpecsLogs.debug("QUALIFIED NAME:" + data.get(CXXMethodDecl.QUALIFIED_NAME));
+        // SpecsLogs.debug("DECL NAME:" + data.get(NamedDecl.DECL_NAME));
+        */
+    }
 
 }

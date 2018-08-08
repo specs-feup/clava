@@ -15,19 +15,33 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
+import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.language.TagKind;
 
 public abstract class TagType extends Type {
 
-    private final DeclRef declInfo;
-    private final TagKind tagKind;
+    /// DATAKEYS BEGIN
+
+    // TODO: Change to TagDecl
+    public final static DataKey<Decl> DECL = KeyFactory.object("decl", Decl.class);
+
+    /// DATAKEYS END
+
+    // private final DeclRef declInfo;
+    // private final TagKind tagKind;
 
     // HACK
-    private final boolean tempNode;
+    // private final boolean tempNode;
+
+    public TagType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     /*
     public TagType(DataStore data, Collection<? extends ClavaNode> children) {
@@ -40,43 +54,51 @@ public abstract class TagType extends Type {
         tempNode = true;
     }
     */
+    /*
     public TagType(DeclRef declInfo, TagKind tagKind, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(typeData, info, children);
-
+    
         this.declInfo = declInfo;
         this.tagKind = tagKind;
-
+    
         tempNode = false;
     }
+    */
 
-    public DeclRef getDeclInfo() {
-        return declInfo;
+    // public DeclRef getDeclInfo() {
+    // return declInfo;
+    // }
+
+    public TagDecl getDecl() {
+        return (TagDecl) get(DECL);
     }
 
     public TagKind getTagKind() {
-        return tagKind;
+        return getDecl().get(TagDecl.TAG_KIND);
+        // return tagKind;
     }
 
-    @Override
-    public String toContentString() {
-        return "tagKind: " + getTagKind();
-    }
+    // @Override
+    // public String toContentString() {
+    // return "tagKind: " + getTagKind();
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-        if (tempNode) {
-            if (name == null) {
-                return get(TYPE_AS_STRING);
-            }
-            return get(TYPE_AS_STRING) + " " + get(TYPE_AS_STRING);
-        }
+        // if (tempNode) {
+        // if (name == null) {
+        // return get(TYPE_AS_STRING);
+        // }
+        // return get(TYPE_AS_STRING) + " " + get(TYPE_AS_STRING);
+        // }
 
         // System.out.println("TAGTYPE:" + getTagKind());
         // System.out.println("DECL INFO:" + getDeclInfo());
         // System.out.println("TAG KIND:" + getTagKind());
         // System.out.println("TYPE DATA:" + getTypeData());
-        String baseType = getDeclInfo().getDeclType();
+        // String baseType = getDeclInfo().getDeclType();
+        String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
         if (baseType.isEmpty()) {
             baseType = getBareType();
         }

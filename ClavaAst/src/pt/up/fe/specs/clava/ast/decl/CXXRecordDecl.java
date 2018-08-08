@@ -35,11 +35,17 @@ public class CXXRecordDecl extends RecordDecl {
     public final static DataKey<List<CXXBaseSpecifier>> RECORD_BASES = KeyFactory
             .generic("recordBases", (List<CXXBaseSpecifier>) new ArrayList<CXXBaseSpecifier>());
 
+    // public final static DataKey<Optional<CXXRecordDecl>> RECORD_DEFINITION = KeyFactory.optional("recordDefinition");
+    // public final static DataKey<String> RECORD_DEFINITION_ID = KeyFactory.string("recordDefinitionId");
+
     /// DATAKEYS END
 
     public CXXRecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
+        // System.out.println("CXXRECORD '" + get(ID) + " CHILDREN:"
+        // + children.stream().map(child -> child.get(ClavaNode.ID)).collect(Collectors.joining(", ")));
+        // SpecsLogs.debug("CXXRECORD '" + get(DECL_NAME) + "' CHILDREN:" + children);
         // recordBases = null;
     }
 

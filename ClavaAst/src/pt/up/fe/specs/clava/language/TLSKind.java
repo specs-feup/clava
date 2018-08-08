@@ -17,12 +17,28 @@ import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
+/**
+ * Kinds of thread-local storage.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public enum TLSKind implements StringProvider {
+    /**
+     * Not a TLS variable.
+     */
     NONE,
+    /**
+     * TLS with a known-constant initializer.
+     */
     STATIC("tls"),
+    /**
+     * TLS with a dynamic initializer.
+     */
     DYNAMIC("tls_dynamic");
 
-    private static final Lazy<EnumHelperWithValue<TLSKind>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(TLSKind.class, NONE);
+    private static final Lazy<EnumHelperWithValue<TLSKind>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(TLSKind.class, NONE);
 
     public static EnumHelperWithValue<TLSKind> getHelper() {
         return HELPER.get();

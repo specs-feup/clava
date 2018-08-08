@@ -23,7 +23,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a C++ class method declaration or definition.
@@ -167,7 +166,7 @@ public class CXXMethodDecl extends FunctionDecl {
 
         // Add namespace if not inside namespace decl
         if (!isInsideNamespaceDecl()) {
-            String namespace = getNamespace().map(str -> str + "::").orElse("");
+            String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
             // String namespace = getMethodData().getNamespace();
             // namespace = namespace == null ? "" : namespace + "::";
 
@@ -212,16 +211,16 @@ public class CXXMethodDecl extends FunctionDecl {
         return Optional.ofNullable((FunctionProtoType) super.getFunctionType());
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + "implicit:" + getDeclData().isImplicit();
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + "implicit:" + getDeclData().isImplicit();
+    // }
 
     @Override
     public String getSignature() {
         String baseSignature = super.getSignature();
 
-        String namespace = getNamespace().map(str -> str + "::").orElse("");
+        String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
         // String namespace = getMethodData().getNamespace();
         // namespace = namespace == null ? "" : namespace + "::";
 
@@ -244,50 +243,41 @@ public class CXXMethodDecl extends FunctionDecl {
     // public CXXRecordDecl getRecord() {
     // return (CXXRecordDecl) get(RECORD);
     // }
-
+    /*
     public Optional<String> getNamespace() {
         // Qualified name has full name
         String qualifiedName = get(QUALIFIED_NAME);
-
+    
         if (qualifiedName.isEmpty()) {
             return Optional.empty();
         }
-
+    
         // Remove decl name
         String declName = "::" + get(DECL_NAME);
         SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
                 () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
-
+    
         String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
-
+    
         // TODO: Replace with RECORD, after CXXRecordDecl is implemented
         // CXXRecordDecl record = getRecordDecl();
         // String recordName = record.getDeclName();
         String recordName = getRecordName();
         SpecsCheck.checkArgument(currentString.endsWith(recordName),
                 () -> "Expected current string '" + currentString + "' to end with '" + recordName + "'");
-
+    
         // Remove record name
         String namespace = currentString.substring(0, currentString.length() - recordName.length());
-
+    
         // Remove ::, if present
         if (namespace.endsWith("::")) {
             namespace = namespace.substring(0, namespace.length() - "::".length());
         }
-
+    
         return !namespace.isEmpty() ? Optional.of(namespace) : Optional.empty();
-
-        /*
-        String namespace = parseKeyValue(parser, "namespace");
-        // SpecsLogs.debug("NAMESPACE:" + namespace);
-        // Check record and store next word
-        String record = parseKeyValue(parser, "record");
-        // SpecsLogs.debug("RECORD:" + record);
-        // SpecsLogs.debug("QUALIFIED NAME:" + data.get(CXXMethodDecl.QUALIFIED_NAME));
-        // SpecsLogs.debug("DECL NAME:" + data.get(NamedDecl.DECL_NAME));
-        */
+    
     }
-
+    */
     public String getRecordName() {
         return getRecordDecl().getDeclName();
     }

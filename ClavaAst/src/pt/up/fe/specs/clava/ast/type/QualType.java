@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
@@ -128,7 +129,7 @@ public class QualType extends Type {
             */
         }
 
-        return getCode(type, name);
+        return getCode(type, name, sourceNode);
         // Types in C++ should be read right-to-left. However, top-level qualifiers can be written on the left-side
         // http://stackoverflow.com/questions/19415674/what-does-const-mean-in-c
         // System.out.println("TOP:" + qualifier + " " + type);
@@ -141,7 +142,7 @@ public class QualType extends Type {
         // return qualifier + " " + getQualifiedType().getCode(nameString);
     }
 
-    private String getCode(String type, String name) {
+    private String getCode(String type, String name, ClavaNode sourceNode) {
         String addressQualifier = qualTypeData.getAddressSpaceQualifier().getCode();
         if (!addressQualifier.isEmpty()) {
             addressQualifier += " ";
@@ -150,6 +151,12 @@ public class QualType extends Type {
         // String qualifiersCode = ClavaCode.getQualifiersCode(getQualifiers());
         String qualifiersCode = qualTypeData.getQualifiersCode();
         // Type child = getQualifiedType();
+
+        // If constexpr, replace const with constexpr
+        boolean isConstexpr = sourceNode.get(VarDecl.IS_CONSTEXPR);
+        if (isConstexpr) {
+            qualifiersCode = qualifiersCode.replace("const", "constexpr");
+        }
 
         if (name != null) {
             // if (hasParent()) {

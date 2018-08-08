@@ -65,6 +65,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
         // super(declName, type, declData, info, children);
     }
 
+    @Override
     protected Type processType(Type type) {
         return type == null ? LegacyToDataStore.getFactory().nullType() : type.copy();
     }

@@ -29,7 +29,6 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -265,7 +264,8 @@ public class InlineRenamer {
         String returnVarName = getSimpleName(call.getCalleeName(), "return");
 
         // Create declaration for this new name
-        VarDecl varDecl = ClavaNodeFactory.varDecl(returnVarName, retValue);
+        VarDecl varDecl = factory.varDecl(returnVarName, retValue);
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(returnVarName, retValue);
 
         // Replace return with an DeclStmt to the return expression
         DeclStmt declStmt = factory.declStmt(varDecl);
@@ -362,11 +362,15 @@ public class InlineRenamer {
         // System.out.println("NEW TYPE:" + newType.getCode());
 
         // Add statement with declaration of variable
-        VarDeclData varDeclData = parmVarDecl.getVarDeclData().copy();
-        varDeclData.setInitKind(InitializationStyle.CINIT);
+        // VarDeclData varDeclData = parmVarDecl.getVarDeclData().copy();
+        // varDeclData.setInitKind(InitializationStyle.CINIT);
 
-        VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, newName, newType,
-                parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), exprWithCast);
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, newName, newType,
+        // parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), exprWithCast);
+
+        VarDecl varDecl = parmVarDecl.getFactoryWithNode().varDecl(newName, newType);
+        varDecl.set(VarDecl.INIT_STYLE, InitializationStyle.CINIT);
+        varDecl.setInit(exprWithCast);
 
         DeclStmt declStmt = factory.declStmt(varDecl);
         // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
@@ -384,15 +388,19 @@ public class InlineRenamer {
         addRenameAction(varDecl.getDeclName(), newName);
 
         // Add statement with declaration of variable
-        VarDeclData varDeclData = varDecl.getVarDeclData().copy();
-        varDeclData.setInitKind(InitializationStyle.CINIT);
+        // VarDeclData varDeclData = varDecl.getVarDeclData().copy();
+        // varDeclData.setInitKind(InitializationStyle.CINIT);
 
         // Sanitize Vardecl type (e.g., transform arrays to pointers)
         // Type varDeclType = sanitizeVarDeclType(varDecl.getType());
         Type varDeclType = expr.getType().copy();
 
-        VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDeclType,
-                varDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), expr);
+        // VarDecl newVarDecl = ClavaNodeFactory.varDecl(varDeclData, newName, varDeclType,
+        // varDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), expr);
+
+        VarDecl newVarDecl = varDecl.getFactoryWithNode().varDecl(newName, varDeclType);
+        newVarDecl.set(VarDecl.INIT_STYLE, InitializationStyle.CINIT);
+        newVarDecl.setInit(expr);
 
         DeclStmt declStmt = factory.declStmt(newVarDecl);
         // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(newVarDecl));
@@ -455,8 +463,11 @@ public class InlineRenamer {
         addRenameAction(parmVarDecl.getDeclName(), newName);
 
         // Add statement with declaration of variable
-        VarDecl varDecl = ClavaNodeFactory.varDecl(parmVarDecl.getVarDeclData(), newName, parmVarDecl.getType(),
-                parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), parmVarDecl.getInit().orElse(null));
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(parmVarDecl.getVarDeclData(), newName, parmVarDecl.getType(),
+        // parmVarDecl.getDeclData(), ClavaNodeInfo.undefinedInfo(), parmVarDecl.getInit().orElse(null));
+
+        VarDecl varDecl = parmVarDecl.getFactoryWithNode().varDecl(newName, parmVarDecl.getType());
+        varDecl.setInit(parmVarDecl.getInit().orElse(null));
 
         DeclStmt declStmt = factory.declStmt(varDecl);
         // DeclStmt declStmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));

@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -330,6 +331,28 @@ public class ClavaFactory {
         return new FunctionDecl(data, Collections.emptyList());
         // return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
         // .setLocation(node.getLocation());
+    }
+
+    public VarDecl varDecl(String declName, Type type) {
+        DataStore data = newDeclDataStore()
+                .put(NamedDecl.DECL_NAME, declName)
+                .put(ValueDecl.TYPE, type);
+
+        return new VarDecl(data, Collections.emptyList());
+    }
+
+    public VarDecl varDecl(String declName, Expr initExpr) {
+        VarDecl varDecl = varDecl(declName, initExpr.getType());
+        varDecl.setInit(initExpr);
+        return varDecl;
+    }
+
+    public ParmVarDecl parmVarDecl(String declName, Type type) {
+        DataStore data = newDeclDataStore()
+                .put(NamedDecl.DECL_NAME, declName)
+                .put(ValueDecl.TYPE, type);
+
+        return new ParmVarDecl(data, Collections.emptyList());
     }
 
     /// STMTS

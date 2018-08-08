@@ -14,29 +14,19 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
-
-import com.google.common.base.Preconditions;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
-import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
-import pt.up.fe.specs.util.SpecsCheck;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Represents a variable declaration or definition.
@@ -78,7 +68,7 @@ public class VarDecl extends DeclaratorDecl {
      */
     public final static DataKey<InitializationStyle> INIT_STYLE = KeyFactory
             .enumeration("initStyle", InitializationStyle.class)
-            .setDefault(() -> InitializationStyle.NO_INIT);
+            .setDefault(() -> InitializationStyle.CINIT);
 
     /**
      * True if this variable is (C++11) constexpr.
@@ -114,37 +104,54 @@ public class VarDecl extends DeclaratorDecl {
 
     /// DATAKEYS END
 
-    private final VarDeclData data;
-
-    public VarDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info, Expr initExpr) {
-        this(data, varName, type, declData, info, SpecsCollections.ofNullable(initExpr));
+    public VarDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    protected VarDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(varName, type, declData, info, children);
-
-        this.data = data;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new VarDecl(data.copy(), getDeclName(), getType(), getDeclData(), getInfo(), Collections.emptyList());
-    }
+    // private final VarDeclData data;
+    //
+    // public VarDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info, Expr initExpr)
+    // {
+    // this(data, varName, type, declData, info, SpecsCollections.ofNullable(initExpr));
+    // }
+    //
+    // protected VarDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(varName, type, declData, info, children);
+    //
+    // this.data = data;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new VarDecl(data.copy(), getDeclName(), getType(), getDeclData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
+        // return getCode(null);
+        // }
+
+        /**
+         * Overload which accepts an external decl name.
+         * 
+         * @param declName
+         * @return
+         */
+        // public String getCode(String externalDeclName) {
 
         StringBuilder code = new StringBuilder();
 
-        StorageClass storageClass = getVarDeclData().getStorageClass();
+        StorageClass storageClass = get(STORAGE_CLASS);
         if (storageClass != StorageClass.NONE) {
-            code.append(getVarDeclData().getStorageClass().getString()).append(" ");
+            code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
 
         String declName = getDeclNameCode();
-
+        // String declName = externalDeclName != null ? externalDeclName : getDeclNameCode();
+        // System.out.println("DECL NAME:" + getDeclNameCode());
+        // System.out.println("EXTERNAL DECL NAME:" + externalDeclName);
         // Type.getCode() accepts null if no name
         declName = declName.isEmpty() ? null : declName;
 
@@ -164,6 +171,15 @@ public class VarDecl extends DeclaratorDecl {
         return getDeclNameCode() + getInitializationCode();
     }
 
+    public String getInitializationCode() {
+        if (hasInit()) {
+            return get(INIT_STYLE).getCode(this);
+        }
+
+        return "";
+
+    }
+
     /**
      * 
      * @return the code related to the named decl, or null if no name
@@ -176,21 +192,19 @@ public class VarDecl extends DeclaratorDecl {
         String name = getDeclName();
 
         // if (!getVarDeclData().hasVarDeclDumperInfo()) {
-        if (!getVarDeclData().hasVarDeclV2()) {
-            return name;
-        }
+        // if (!getVarDeclData().hasVarDeclV2()) {
+        // return name;
+        // }
 
         // Check if it is a static member outside of the record
-        if (getVarDeclData().isStaticDataMember()
-                && getVarDeclData().isOutOfLine()) {
-            name = getVarDeclData().getQualifiedName()
-                    .orElseThrow(
-                            () -> new RuntimeException("Expected qualified name to be defined for VarDecl.\n " + this));
+        if (get(IS_STATIC_DATA_MEMBER) && get(IS_OUT_OF_LINE)) {
+            name = get(QUALIFIED_NAME);
         }
 
         return name;
     }
 
+    /*
     public String getInitializationCode() {
         // Write code according to type of declaration
         switch (data.getInitKind()) {
@@ -206,18 +220,19 @@ public class VarDecl extends DeclaratorDecl {
             throw new RuntimeException("Case not defined:" + data.getInitKind());
         }
     }
+    */
 
-    private String listInitCode() {
-        // Must be present
-        Expr initList = getInit().get();
-        SpecsCheck.checkArgument(initList instanceof InitListExpr,
-                () -> "Expected argument to be an instance of " + InitListExpr.class + ", it is a "
-                        + initList.getClass());
-
-        return initList.getCode();
-        // return getInit().map(ClavaNode::getCode)
-        // .orElseThrow(() -> new RuntimeException());
-    }
+    // private String listInitCode() {
+    // // Must be present
+    // Expr initList = getInit().get();
+    // SpecsCheck.checkArgument(initList instanceof InitListExpr,
+    // () -> "Expected argument to be an instance of " + InitListExpr.class + ", it is a "
+    // + initList.getClass());
+    //
+    // return initList.getCode();
+    // // return getInit().map(ClavaNode::getCode)
+    // // .orElseThrow(() -> new RuntimeException());
+    // }
 
     public boolean hasInit() {
         return hasChildren();
@@ -236,60 +251,60 @@ public class VarDecl extends DeclaratorDecl {
      * 
      * @return
      */
-    private String cinitCode() {
-        String prefix = " = ";
+    // private String cinitCode() {
+    // String prefix = " = ";
+    //
+    // // return " = " + getChild(0).getCode();
+    //
+    // Expr initExpr = getInit().get();
+    //
+    // // Special case: CXXConstructorExpr without args
+    // // if (initExpr instanceof CXXConstructExpr) {
+    // // if (((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
+    // // return prefix + " {}";
+    // // }
+    // // }
+    //
+    // // Special case: InitListExpr
+    // // if (initExpr instanceof InitListExpr) {
+    // // InitListExpr initListExpr = (InitListExpr) initExpr;
+    // // List<Expr> initExprs = initListExpr.getInitExprs();
+    // //
+    // // if (initExprs.size() == 1) {
+    // // if (initExprs.get(0) instanceof InitListExpr) {
+    // // return prefix + initExprs.get(0).getCode();
+    // // }
+    // // }
+    // // }
+    //
+    // return prefix + initExpr.getCode();
+    // }
 
-        // return " = " + getChild(0).getCode();
+    // private String callInitCode() {
+    // Preconditions.checkArgument(getNumChildren() == 1, "Expected one child");
+    // ClavaNode init = getChild(0);
+    //
+    // // If CXXConstructorExpr, use args code only
+    // if (init instanceof CXXConstructExpr) {
+    // return ((CXXConstructExpr) init).getArgsCode();
+    // }
+    //
+    // // If expression, just return the code
+    // Preconditions.checkArgument(init instanceof Expr,
+    // "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
+    //
+    // return "(" + init.getCode() + ")";
+    //
+    // }
 
-        Expr initExpr = getInit().get();
+    // public VarDeclData getVarDeclData() {
+    // return data;
+    // }
 
-        // Special case: CXXConstructorExpr without args
-        // if (initExpr instanceof CXXConstructExpr) {
-        // if (((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
-        // return prefix + " {}";
-        // }
-        // }
-
-        // Special case: InitListExpr
-        // if (initExpr instanceof InitListExpr) {
-        // InitListExpr initListExpr = (InitListExpr) initExpr;
-        // List<Expr> initExprs = initListExpr.getInitExprs();
-        //
-        // if (initExprs.size() == 1) {
-        // if (initExprs.get(0) instanceof InitListExpr) {
-        // return prefix + initExprs.get(0).getCode();
-        // }
-        // }
-        // }
-
-        return prefix + initExpr.getCode();
-    }
-
-    private String callInitCode() {
-        Preconditions.checkArgument(getNumChildren() == 1, "Expected one child");
-        ClavaNode init = getChild(0);
-
-        // If CXXConstructorExpr, use args code only
-        if (init instanceof CXXConstructExpr) {
-            return ((CXXConstructExpr) init).getArgsCode();
-        }
-
-        // If expression, just return the code
-        Preconditions.checkArgument(init instanceof Expr,
-                "Expected an Expr, got '" + init.getClass().getSimpleName() + "'");
-
-        return "(" + init.getCode() + ")";
-
-    }
-
-    public VarDeclData getVarDeclData() {
-        return data;
-    }
-
-    @Override
-    public String toContentString() {
-        return super.toContentString() + ", " + data;
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + ", " + data;
+    // }
 
     @Override
     public void associateComment(InlineComment inlineComment) {
@@ -310,6 +325,14 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
+    /*
+    public void setInit(Expr expression) {
+        setInit(expression, InitializationStyle.CINIT);
+    }
+    
+    public void setInit(Expr expression, InitializationStyle initStyle) {
+        */
+
     public void setInit(Expr expression) {
         // If has init, just replace expression
         if (hasInit()) {
@@ -317,9 +340,15 @@ public class VarDecl extends DeclaratorDecl {
             return;
         }
 
-        // No init, add child and set initialization method
+        // No init before, add child
         addChild(expression);
-        data.setInitKind(InitializationStyle.CINIT);
+
+        // Set initialization method if current style is no initialization
+        // if (get(INIT_STYLE) == InitializationStyle.NO_INIT) {
+        // set(INIT_STYLE, InitializationStyle.CINIT);
+        // }
+        // set(INIT_STYLE, InitializationStyle.CINIT);
+        // data.setInitKind(InitializationStyle.CINIT);
     }
 
 }

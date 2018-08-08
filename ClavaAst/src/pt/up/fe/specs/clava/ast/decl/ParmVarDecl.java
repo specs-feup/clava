@@ -14,18 +14,12 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCollections;
 
 public class ParmVarDecl extends VarDecl {
 
@@ -35,28 +29,8 @@ public class ParmVarDecl extends VarDecl {
 
     /// DATAKEYS END
 
-    private final boolean hasInheritedDefaultArg;
-
-    public ParmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type type, DeclData declData,
-            ClavaNodeInfo info,
-            Expr initExpr) {
-
-        this(hasInheritedDefaultArg, data, varName, type, declData, info, SpecsCollections.ofNullable(initExpr));
-    }
-
-    protected ParmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type type,
-            DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(data, varName, type, declData, info, children);
-
-        this.hasInheritedDefaultArg = hasInheritedDefaultArg;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ParmVarDecl(hasInheritedDefaultArg, getVarDeclData(), getDeclName(), getType(), getDeclData(),
-                getInfo(), Collections.emptyList());
+    public ParmVarDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
     /**
@@ -69,7 +43,7 @@ public class ParmVarDecl extends VarDecl {
 
     @Override
     public String getInitializationCode() {
-        if (hasInheritedDefaultArg) {
+        if (get(HAS_INHERITED_DEFAULT_ARG)) {
             return "";
         }
 

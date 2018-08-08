@@ -52,22 +52,17 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
-import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
@@ -188,7 +183,6 @@ import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.RValueReferenceType;
-import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
@@ -211,8 +205,6 @@ import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.clava.language.TLSKind;
-import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
@@ -366,16 +358,16 @@ public class ClavaNodeFactory {
         return new TypedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData, info);
     }
 
-    public static VarDecl varDecl(String varName, Type type) {
-        boolean isUsed = true;
-        boolean isImplicit = false;
-        boolean isNrvo = false;
-
-        VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-                InitializationStyle.NO_INIT, false);
-        DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
-        return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, null, null);
-    }
+    // public static VarDecl varDecl(String varName, Type type) {
+    // boolean isUsed = true;
+    // boolean isImplicit = false;
+    // boolean isNrvo = false;
+    //
+    // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
+    // InitializationStyle.NO_INIT, false);
+    // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
+    // return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, null, null);
+    // }
 
     /*
     public static VarDecl varDecl(String varName, Expr initExpr) {
@@ -399,20 +391,20 @@ public class ClavaNodeFactory {
         VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, initExpr.getInfo(), initExpr);
     }*/
 
-    public static VarDecl varDecl(String varName, Expr initExpr) {
-        // Add statement with declaration of variable
-        VarDeclData varDeclData = new VarDeclData();
-        varDeclData.setInitKind(InitializationStyle.CINIT);
+    // public static VarDecl varDecl(String varName, Expr initExpr) {
+    // // Add statement with declaration of variable
+    // VarDeclData varDeclData = new VarDeclData();
+    // varDeclData.setInitKind(InitializationStyle.CINIT);
+    //
+    // return ClavaNodeFactory.varDecl(varDeclData, varName, initExpr.getType(),
+    // new DeclData(), ClavaNodeInfo.undefinedInfo(), initExpr);
+    // }
 
-        return ClavaNodeFactory.varDecl(varDeclData, varName, initExpr.getType(),
-                new DeclData(), ClavaNodeInfo.undefinedInfo(), initExpr);
-    }
-
-    public static VarDecl varDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info,
-            Expr initExpr) {
-
-        return new VarDecl(data, varName, type, declData, info, initExpr);
-    }
+    // public static VarDecl varDecl(VarDeclData data, String varName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Expr initExpr) {
+    //
+    // return new VarDecl(data, varName, type, declData, info, initExpr);
+    // }
 
     public static EnumDecl enumDecl(EnumScopeType enumScopeType, String name, boolean isModulePrivate, Type integerType,
             EnumType type, DeclData declData, ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
@@ -476,28 +468,29 @@ public class ClavaNodeFactory {
     // null);
     // }
 
-    public static ParmVarDecl parmVarDecl(String varName, Type type) {
-        return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), ClavaNodeInfo.undefinedInfo(),
-                null);
-    }
+    // public static ParmVarDecl parmVarDecl(String varName, Type type) {
+    // return parmVarDecl(false, new VarDeclData(), varName, type, new DeclData(), ClavaNodeInfo.undefinedInfo(),
+    // null);
+    // }
 
-    public static ParmVarDecl parmVarDecl(String type, String name) {
-        boolean hasInheritedDefaultArg = false;
-        VarDeclData data = new VarDeclData();
-        String varName = name;
-        Type literalType = LegacyToDataStore.getFactory().literalType(type);
-        DeclData declData = new DeclData();
-        ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
-        Expr initExpr = null;
+    // public static ParmVarDecl parmVarDecl(String type, String name) {
+    // boolean hasInheritedDefaultArg = false;
+    // VarDeclData data = new VarDeclData();
+    // String varName = name;
+    // Type literalType = LegacyToDataStore.getFactory().literalType(type);
+    // DeclData declData = new DeclData();
+    // ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+    // Expr initExpr = null;
+    //
+    // return parmVarDecl(hasInheritedDefaultArg, data, varName, literalType, declData, info, initExpr);
+    // }
 
-        return parmVarDecl(hasInheritedDefaultArg, data, varName, literalType, declData, info, initExpr);
-    }
-
-    public static ParmVarDecl parmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type type,
-            DeclData declData, ClavaNodeInfo info, Expr initExpr) {
-
-        return new ParmVarDecl(hasInheritedDefaultArg, data, varName, type, declData, info, initExpr);
-    }
+    // public static ParmVarDecl parmVarDecl(boolean hasInheritedDefaultArg, VarDeclData data, String varName, Type
+    // type,
+    // DeclData declData, ClavaNodeInfo info, Expr initExpr) {
+    //
+    // return new ParmVarDecl(hasInheritedDefaultArg, data, varName, type, declData, info, initExpr);
+    // }
 
     // public static RecordDecl recordDecl(RecordDeclData recordDeclData, Type type, DeclData declData, ClavaNodeInfo
     // info,
@@ -689,9 +682,9 @@ public class ClavaNodeFactory {
     // return new PointerType(typeData, info, pointeeType);
     // }
 
-    public static EnumType enumType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info) {
-        return new EnumType(declInfo, typeData, info);
-    }
+    // public static EnumType enumType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info) {
+    // return new EnumType(declInfo, typeData, info);
+    // }
 
     /**
      * @deprecated use ClavaFactory
@@ -773,10 +766,10 @@ public class ClavaNodeFactory {
         return new NullType(data, Collections.emptyList());
     }
 
-    public static RecordType recordType(String recordName, DeclRef declInfo, TagKind tagKind,
-            TypeData typeData, ClavaNodeInfo info) {
-        return new RecordType(recordName, declInfo, tagKind, typeData, info);
-    }
+    // public static RecordType recordType(String recordName, DeclRef declInfo, TagKind tagKind,
+    // TypeData typeData, ClavaNodeInfo info) {
+    // return new RecordType(recordName, declInfo, tagKind, typeData, info);
+    // }
 
     public static LValueReferenceType lValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
         return new LValueReferenceType(typeData, info, referencee);

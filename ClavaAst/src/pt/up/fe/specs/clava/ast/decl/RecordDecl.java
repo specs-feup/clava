@@ -189,6 +189,10 @@ public class RecordDecl extends TagDecl {
 
         code.append(";" + ln());
 
+        // System.out.println("CXXRECORD CODE:\n" + code);
+        // System.out.println("HAS DECL NAME: " + hasDeclName());
+        // System.out.println("DECL NAME: " + getDeclName());
+
         return code.toString();
     }
 

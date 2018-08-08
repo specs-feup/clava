@@ -218,6 +218,8 @@ public class DeclStmt extends Stmt {
 
         // Write each VarDecl as a statement
         for (VarDecl varDecl : varDecls) {
+            System.out.println("RECORD NAME: " + record.get(RecordDecl.DECL_NAME));
+            System.out.println("VARDECL CODE: " + varDecl.getCode());
             code.append(varDecl.getCode()).append(";" + ln());
         }
 
