@@ -54,6 +54,8 @@ public class QualType extends Type {
 
     public final static DataKey<Long> ADDRESS_SPACE = KeyFactory.longInt("addressSpace");
 
+    // public final static DataKey<Type> UNQUALIFIED_TYPE = KeyFactory.object("unqualifiedType", Type.class);
+
     /// DATAKEYS END
 
     private final QualTypeData qualTypeData;
@@ -226,6 +228,7 @@ public class QualType extends Type {
     }
     */
     public Type getUnqualifiedType() {
+        // return get(UNQUALIFIED_TYPE);
         return getChild(Type.class, 0);
     }
 

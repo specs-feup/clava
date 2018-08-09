@@ -15,12 +15,12 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
+import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 
 /**
  * Represents Type nodes that have an ElaboratedTypeKeywordOld.
@@ -30,46 +30,35 @@ import pt.up.fe.specs.util.providers.StringProvider;
  */
 public abstract class TypeWithKeyword extends Type {
 
-    public static enum ElaboratedTypeKeyword implements StringProvider {
-        STRUCT,
-        INTERFACE,
-        UNION,
-        CLASS,
-        ENUM,
-        TYPENAME,
-        NONE;
+    /// DATAKEYS BEGIN
 
-        private static final Lazy<EnumHelperWithValue<ElaboratedTypeKeyword>> HELPER = EnumHelperWithValue
-                .newLazyHelperWithValue(ElaboratedTypeKeyword.class, NONE);
+    public final static DataKey<ElaboratedTypeKeyword> ELABORATED_TYPE_KEYWORD = KeyFactory
+            .enumeration("elaboratedTypeKeyword", ElaboratedTypeKeyword.class);
 
-        public static EnumHelperWithValue<ElaboratedTypeKeyword> getHelper() {
-            return HELPER.get();
-        }
+    /// DATAKEYS END
 
-        public String getCode() {
-            return name().toLowerCase();
-        }
+    // private final ElaboratedTypeKeyword keyword;
 
-        @Override
-        public String getString() {
-            return name().toLowerCase();
-        }
+    public TypeWithKeyword(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        // keyword = null;
     }
 
-    private final ElaboratedTypeKeyword keyword;
-
+    /*
     protected TypeWithKeyword(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-
+    
         super(typeData, info, children);
-
+    
         this.keyword = keyword;
     }
-
-    public abstract Type getNamedType();
+    */
+    // public abstract Type getNamedType();
 
     public ElaboratedTypeKeyword getKeyword() {
-        return keyword;
+        return get(ELABORATED_TYPE_KEYWORD);
+        // return keyword;
     }
 
 }

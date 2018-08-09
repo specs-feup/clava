@@ -171,7 +171,6 @@ import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
-import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -186,10 +185,8 @@ import pt.up.fe.specs.clava.ast.type.RValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
-import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType.TemplateParmData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
-import pt.up.fe.specs.clava.ast.type.TypeWithKeyword.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
@@ -779,10 +776,10 @@ public class ClavaNodeFactory {
         return new RValueReferenceType(typeData, info, referencee);
     }
 
-    public static ElaboratedType elaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData,
-            ClavaNodeInfo info, Type namedType) {
-        return new ElaboratedType(keyword, typeData, info, namedType);
-    }
+    // public static ElaboratedType elaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData,
+    // ClavaNodeInfo info, Type namedType) {
+    // return new ElaboratedType(keyword, typeData, info, namedType);
+    // }
 
     public static TemplateSpecializationType templateSpecializationType(String templateName,
             List<String> templateArgsNames, TypeData typeData, ClavaNodeInfo info,
@@ -796,11 +793,11 @@ public class ClavaNodeFactory {
         return new ParenType(typeData, info, innerType);
     }
 
-    public static TemplateTypeParmType templateTypeParmType(TemplateParmData templateParmData, DeclRef declInfo,
-            TypeData typeData, ClavaNodeInfo info) {
-
-        return new TemplateTypeParmType(templateParmData, declInfo, typeData, info);
-    }
+    // public static TemplateTypeParmType templateTypeParmType(TemplateParmData templateParmData, DeclRef declInfo,
+    // TypeData typeData, ClavaNodeInfo info) {
+    //
+    // return new TemplateTypeParmType(templateParmData, declInfo, typeData, info);
+    // }
 
     public static DecayedType decayedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
         return new DecayedType(typeData, info, originalType, adjustedType);

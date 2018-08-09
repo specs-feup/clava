@@ -38,14 +38,24 @@ public class SubstTemplateTypeParmType extends Type {
         return new SubstTemplateTypeParmType(getTypeData(), getInfo(), Collections.emptyList());
     }
 
-    public boolean isSugared() {
-        return true;
-    }
+    // public boolean isSugared() {
+    // return true;
+    // }
 
+    /**
+     * the template parameter that was substituted for.
+     * 
+     * @return
+     */
     public TemplateTypeParmType getReplaceParameter() {
         return getChild(TemplateTypeParmType.class, 0);
     }
 
+    /**
+     * The type that was substituted for the template parameter.
+     * 
+     * @return
+     */
     public Type getReplacementType() {
         return getChild(Type.class, 1);
     }

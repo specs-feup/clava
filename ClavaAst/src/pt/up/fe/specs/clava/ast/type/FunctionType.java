@@ -87,6 +87,7 @@ public abstract class FunctionType extends Type {
      * @return
      */
     public int getIndexReturnType() {
+        // return 0;
         return getIndexDesugar() + 1;
     }
 

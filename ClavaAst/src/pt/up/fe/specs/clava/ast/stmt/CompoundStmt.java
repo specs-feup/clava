@@ -150,6 +150,21 @@ public class CompoundStmt extends Stmt {
         return builder.toString();
     }
 
+    @Override
+    public void setChildren(Collection<? extends ClavaNode> children) {
+        // Check that all children are statements
+        ClavaNode nonStmtNode = children.stream()
+                .filter(child -> !(child instanceof Stmt))
+                .findFirst()
+                .orElse(null);
+
+        if (nonStmtNode != null) {
+            throw new RuntimeException("Found at least a child that is not a Stmt, " + nonStmtNode);
+        }
+
+        super.setChildren(children);
+    }
+
     public List<Stmt> getStatements() {
         return getChildren(Stmt.class);
     }

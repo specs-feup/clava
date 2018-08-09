@@ -13,61 +13,78 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 
 public class TemplateTypeParmType extends Type {
 
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Integer> DEPTH = KeyFactory.integer("depth");
+    public final static DataKey<Integer> INDEX = KeyFactory.integer("index");
+    public final static DataKey<Boolean> IS_PACKED = KeyFactory.bool("isPacked");
+    public final static DataKey<Decl> DECL = KeyFactory.object("decl", Decl.class);
+
+    /// DATAKEYS END
+
+    public TemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /*
     public static class TemplateParmData {
         private final int depth;
         private final int index;
         private final boolean isPacked;
-
+    
         public TemplateParmData(int depth, int index, boolean isPacked) {
             this.depth = depth;
             this.index = index;
             this.isPacked = isPacked;
         }
-
+    
         public int getDepth() {
             return depth;
         }
-
+    
         public int getIndex() {
             return index;
         }
-
+    
         public boolean isPacked() {
             return isPacked;
         }
     }
-
+    */
+    /*
     private final TemplateParmData templateParmData;
     private final DeclRef declInfo;
-
+    
     public TemplateTypeParmType(TemplateParmData templateParmData, DeclRef declInfo, TypeData typeData,
             ClavaNodeInfo info) {
         super(typeData, info, Collections.emptyList());
-
+    
         this.templateParmData = templateParmData;
         this.declInfo = declInfo;
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
         return new TemplateTypeParmType(templateParmData, declInfo, getTypeData(), getInfo());
     }
+    */
+    // public TemplateParmData getTemplateParmData() {
+    // return templateParmData;
+    // }
 
-    public TemplateParmData getTemplateParmData() {
-        return templateParmData;
-    }
-
-    public DeclRef getDeclInfo() {
-        return declInfo;
-    }
+    // public DeclRef getDeclInfo() {
+    // return declInfo;
+    // }
 
 }

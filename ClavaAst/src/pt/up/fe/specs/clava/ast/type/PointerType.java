@@ -21,6 +21,12 @@ import pt.up.fe.specs.clava.ClavaNode;
 
 public class PointerType extends Type {
 
+    /// DATAKEYS BEGIN
+
+    // public final static DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
+
+    /// DATAKEYS END
+
     public PointerType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
@@ -63,6 +69,7 @@ public class PointerType extends Type {
     }
 
     public Type getPointeeType() {
+        // return get(POINTEE_TYPE);
         return getChild(Type.class, 0);
     }
 

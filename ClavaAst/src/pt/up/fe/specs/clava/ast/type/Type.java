@@ -58,6 +58,9 @@ public abstract class Type extends ClavaNode {
 
     public final static DataKey<Boolean> IS_FROM_AST = KeyFactory.bool("isFromAst");
 
+    public final static DataKey<Type> UNQUALIFIED_DESUGARED_TYPE = KeyFactory.object("unqualifiedDesugaredType",
+            Type.class);
+
     /// DATAKEYS END
 
     // private TypeData data;
@@ -415,11 +418,14 @@ public abstract class Type extends ClavaNode {
             return this;
         }
 
-        return desugarImpl();
+        return get(UNQUALIFIED_DESUGARED_TYPE);
+        // return desugarImpl();
     }
 
     protected Type desugarImpl() {
-        return getChild(Type.class, 0);
+        throw new RuntimeException("deprecated, use UNQUALIFIED_DESUGARED_TYPE now");
+        // return get(UNQUALIFIED_DESUGARED_TYPE);
+        // return getChild(Type.class, 0);
 
         /*
         if (hasDataI()) {
@@ -434,12 +440,16 @@ public abstract class Type extends ClavaNode {
      * 
      * @return 0 if has sugar, -1 if it does not
      */
+
     public int getIndexDesugar() {
+        return -1;
+        /*
         if (hasSugar()) {
             return 0;
         } else {
             return -1;
         }
+        */
     }
 
     public final void setDesugar(Type desugaredType) {
@@ -447,7 +457,8 @@ public abstract class Type extends ClavaNode {
             throw new RuntimeException("Type does not have sugar:" + this);
         }
 
-        setDesugarImpl(desugaredType);
+        set(UNQUALIFIED_DESUGARED_TYPE, desugaredType);
+        // setDesugarImpl(desugaredType);
     }
 
     protected void setDesugarImpl(Type desugaredType) {

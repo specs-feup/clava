@@ -13,14 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 /**
  * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name,
@@ -36,24 +36,31 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  */
 public class ElaboratedType extends TypeWithKeyword {
 
+    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
     // private static final ClassSet<Type> BARE_TYPE_CLASSES = ClassSet.newInstance(RecordType.class);
 
+    public ElaboratedType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /*
     public ElaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
             Type namedType) {
         this(keyword, typeData, info, Arrays.asList(namedType));
     }
-
+    
     private ElaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
         super(keyword, typeData, info, children);
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
         return new ElaboratedType(getKeyword(), getTypeData(), getInfo(), Collections.emptyList());
     }
+    */
 
-    @Override
     public Type getNamedType() {
         return getChild(Type.class, 0);
     }
@@ -72,6 +79,7 @@ public class ElaboratedType extends TypeWithKeyword {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
+
         // HACK Set of Type classes whose .getCode() is not working properly, using bare type
 
         // System.out.println("ELABORATED:" + namedType);
@@ -107,11 +115,11 @@ public class ElaboratedType extends TypeWithKeyword {
         // System.out.println("HAS UPDATED:" + namedType.hasUpdatedTemplateArgTypes());
         // System.out.println("TEMPLATE ARGS:" + namedType.getTemplateArgumentTypes());
 
-        if (bareType.equals("std::set<double>::const_iterator")) {
-            // System.out.println("HELLOA!!!");
-            // System.out.println("NAMED TYPE:" + namedType);
-            // System.out.println("ARGS:" + namedType.getTemplateArgumentTypes());
-        }
+        // if (bareType.equals("std::set<double>::const_iterator")) {
+        // System.out.println("HELLOA!!!");
+        // System.out.println("NAMED TYPE:" + namedType);
+        // System.out.println("ARGS:" + namedType.getTemplateArgumentTypes());
+        // }
 
         if (namedType.hasUpdatedTemplateArgTypes()) {
 
@@ -130,6 +138,11 @@ public class ElaboratedType extends TypeWithKeyword {
             }
 
         }
+
+        System.out.println("ELABORATED TYPE:" + toTree());
+
+        // System.out.println("ELABORATED BARE TYPE:" + bareType);
+        // System.out.println("ELABORATED TYPE AS WRITTEN:" + get(TYPE_AS_STRING));
 
         if (name == null) {
             return bareType;
