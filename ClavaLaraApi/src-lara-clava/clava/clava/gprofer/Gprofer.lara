@@ -39,7 +39,11 @@ Gprofer.prototype._defaultCmaker = function($function) {
 	
 	var cmaker = new CMaker(Gprofer._EXE_NAME, false);
 	
-	cmaker.addFlags("-no-pie", "-pg");
+	if(Clava.isCxx()) {
+		cmaker.addCxxFlags("-no-pie", "-pg");
+	} else {
+		cmaker.addFlags("-no-pie", "-pg");
+	}
 	
 	// sources
 	for (var $file of this._app.descendants('file')) {
