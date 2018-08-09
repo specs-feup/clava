@@ -120,6 +120,7 @@ namespace clava {
 
 
 
-    }
+
+}
 
 #endif //CLANGASTDUMPER_CLANGNODES_H

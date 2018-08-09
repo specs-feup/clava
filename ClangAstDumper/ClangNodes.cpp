@@ -377,6 +377,8 @@ void clava::dump(const CXXBaseSpecifier& base, int id) {
      clava::dump(ACCESS_SPECIFIER[base.getAccessSpecifier()]);
      clava::dump(clava::getId(base.getType(), id));
 }
+
+
 /*
 llvm::raw_ostream clava::stringStream() {
     std::string stringStream;

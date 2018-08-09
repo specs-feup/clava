@@ -27,6 +27,7 @@ namespace clava {
     extern const std::string INIT_STYLE[];
     extern const std::string STORAGE_CLASS[];
     extern const std::string TLS_KIND[];
-};
+    extern const std::string ELABORATED_TYPE_KEYWORD[];
 
+}
 #endif //CLANGASTDUMPER_CLANGENUMS_H

@@ -79,6 +79,15 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::INCOMPLETE_ARRAY_TYPE: return "IncompleteArrayType";
         case clava::TypeNode::VARIABLE_ARRAY_TYPE: return "VariableArrayType";
         case clava::TypeNode::POINTER_TYPE: return "PointerType";
+        case clava::TypeNode::TYPE_WITH_KEYWORD: return "TypeWithKeyword";
+        case clava::TypeNode::ELABORATED_TYPE: return "ElaboratedType";
+        case clava::TypeNode::REFERENCE_TYPE: return "ReferenceType";
+        case clava::TypeNode::LVALUE_REFERENCE_TYPE: return "LValueReferenceType";
+        case clava::TypeNode::RVALUE_REFERENCE_TYPE: return "RValueReferenceType";
+        case clava::TypeNode::INJECTED_CLASS_NAME_TYPE: return "InjectedClassNameType";
+        case clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE: return "TemplateTypeParmType";
+        case clava::TypeNode::TYPEDEF_TYPE: return "TypedefType";
+        case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE: return "SubstTemplateTypeParmType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

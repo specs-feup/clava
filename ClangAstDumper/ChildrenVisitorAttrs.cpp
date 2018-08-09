@@ -44,8 +44,9 @@ void ClangAstDumper::VisitAlignedAttrChildren(const AlignedAttr * A, std::vector
     // No hierarchy
 
     if(A->isAlignmentExpr()) {
-        VisitStmtTop(A->getAlignmentExpr());
-        children.push_back(clava::getId(A->getAlignmentExpr(), id));
+        addChild(A->getAlignmentExpr(), children);
+        //VisitStmtTop(A->getAlignmentExpr());
+        //children.push_back(clava::getId(A->getAlignmentExpr(), id));
     } else {
         VisitTypeTop(A->getAlignmentType()->getType());
         dumpTopLevelType(A->getAlignmentType()->getType());

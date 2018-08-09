@@ -137,6 +137,7 @@ namespace clava {
 
             //void DumpQualTypeData(const QualType *T);
         void DumpBuiltinTypeData(const BuiltinType *T);
+        void DumpPointerTypeData(const PointerType *T);
         void DumpFunctionTypeData(const FunctionType *T);
         void DumpFunctionProtoTypeData(const FunctionProtoType *T);
         void DumpTagTypeData(const TagType *T);
@@ -144,6 +145,8 @@ namespace clava {
         void DumpArrayTypeData(const ArrayType *T);
         void DumpConstantArrayTypeData(const ConstantArrayType *T);
         void DumpVariableArrayTypeData(const VariableArrayType *T);
+        void DumpTypeWithKeywordData(const TypeWithKeyword *T);
+        void DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T);
 
 
             // ATTRS

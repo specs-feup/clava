@@ -120,8 +120,15 @@ void ClangAstDumper::VisitTagDeclChildren(const TagDecl *D, std::vector<std::str
             }
         }
 
-        VisitDeclTop(decl);
-        children.push_back(clava::getId(decl, id));
+        if(decl == nullptr) {
+            continue;
+        }
+
+
+        //VisitDecl(decl);
+        addChild(decl, children);
+        //VisitDeclTop(decl);
+        //children.push_back(clava::getId(decl, id));
 
         // Skip if the first child, and if current TagDecl is a CXXRecord, and
 
@@ -189,8 +196,9 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
 
     // Visit parameters
     for(auto param : D->parameters()) {
-        VisitDeclTop(param);
-        children.push_back(clava::getId(param, id));
+        addChild(param, children);
+        //VisitDeclTop(param);
+        //children.push_back(clava::getId(param, id));
     }
     /*
     for (auto I = D->param_begin(), E = D->param_end(); I != E; ++I) {
@@ -203,18 +211,22 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
      */
 
     // Visit decls in prototype scope
+/*
     for (ArrayRef<NamedDecl *>::iterator I = D->getDeclsInPrototypeScope().begin(),
                  E = D->getDeclsInPrototypeScope().end(); I != E; ++I) {
-        VisitDeclTop(*I);
-        children.push_back(clava::getId(*I, id));
-    }
 
+        addChild(*I, children);
+        //VisitDeclTop(*I);
+        //children.push_back(clava::getId(*I, id));
+    }
+*/
     // Visit body
     //if(D->hasBody()) {
     if (D->doesThisDeclarationHaveABody()) {
         //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
-        VisitStmtTop(D->getBody());
-        children.push_back(clava::getId(D->getBody(), id));
+        addChild(D->getBody(), children);
+        //VisitStmtTop(D->getBody());
+        //children.push_back(clava::getId(D->getBody(), id));
     }
 
 }
@@ -314,8 +326,9 @@ void ClangAstDumper::VisitVarDeclChildren(const VarDecl *D, std::vector<std::str
     VisitValueDeclChildren(D, children);
 
     if (D->hasInit()) {
-        VisitStmtTop(D->getInit());
-        children.push_back(clava::getId(D->getInit(), id));
+        addChild(D->getInit(), children);
+        //VisitStmtTop(D->getInit());
+        //children.push_back(clava::getId(D->getInit(), id));
     }
 
 }

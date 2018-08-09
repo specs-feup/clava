@@ -71,4 +71,8 @@ static const std::string ID_FILE_MAP = "<Id-File Map>";
 
 static const std::string COMPILER_INSTANCE_DATA = "<Compiler Instance Data>";
 
+static const std::string VISIT_START = "<Visit Start>";
+
+static const std::string VISIT_END = "<Visit End>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

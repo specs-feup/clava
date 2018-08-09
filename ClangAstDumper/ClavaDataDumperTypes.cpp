@@ -11,6 +11,7 @@
 
 const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"BuiltinType", clava::TypeNode::BUILTIN_TYPE},
+        {"PointerType", clava::TypeNode::POINTER_TYPE},
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
         {"FunctionNoProtoType", clava::TypeNode::FUNCTION_TYPE},
         {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE},
@@ -18,6 +19,8 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"EnumType", clava::TypeNode::TAG_TYPE},
+        {"ElaboratedType", clava::TypeNode::TYPE_WITH_KEYWORD},
+        {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -47,6 +50,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
 //            DumpQualTypeData(static_cast<const QualType *>(T)); break;
         case clava::TypeNode::BUILTIN_TYPE:
             DumpBuiltinTypeData(static_cast<const BuiltinType *>(T)); break;
+        case clava::TypeNode::POINTER_TYPE:
+            DumpPointerTypeData(static_cast<const PointerType *>(T)); break;
         case clava::TypeNode::FUNCTION_TYPE:
             DumpFunctionTypeData(static_cast<const FunctionType *>(T)); break;
         case clava::TypeNode::FUNCTION_PROTO_TYPE:
@@ -59,6 +64,11 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpVariableArrayTypeData(static_cast<const VariableArrayType *>(T)); break;
         case clava::TypeNode::TAG_TYPE:
             DumpTagTypeData(static_cast<const TagType *>(T)); break;
+        case clava::TypeNode::TYPE_WITH_KEYWORD:
+            DumpTypeWithKeywordData(static_cast<const TypeWithKeyword *>(T)); break;
+        case clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE:
+            DumpTemplateTypeParmTypeData(static_cast<const TemplateTypeParmType *>(T)); break;
+
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
         default: throw std::invalid_argument("ClangDataDumper::dump(TypeNode): Case not implemented, '"+ getName(typeNode) +"'");
@@ -112,6 +122,8 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     clava::dump(T->isVariablyModifiedType());
     clava::dump(T->containsUnexpandedParameterPack());
     clava::dump(T->isFromAST());
+    clava::dump(clava::getId(T->getUnqualifiedDesugaredType(), id));
+
 
 }
 
@@ -165,6 +177,9 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
     }
     clava::dump(addrspace);
 
+    // Unqualified type
+    //clava::dump(clava::getId(T.getTypePtr(), id));
+
 /*    DumpTypeData(T.getTypePtr());
 
     DumpTypeData(const_cast<Type*>(static_cast<Type*>(T.getAsOpaquePtr())));
@@ -191,6 +206,12 @@ void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
     clava::dump(clava::BUILTIN_KIND[T->getKind()]);
     clava::dump(T->getName(Context->getPrintingPolicy()));
 
+}
+
+void clava::ClavaDataDumper::DumpPointerTypeData(const PointerType *T) {
+    DumpTypeData(T);
+
+    //clava::dump(clava::getId(T->getPointeeType(), id));
 }
 
 void clava::ClavaDataDumper::DumpFunctionTypeData(const FunctionType *T) {
@@ -297,6 +318,7 @@ void clava::ClavaDataDumper::DumpConstantArrayTypeData(const ConstantArrayType *
 
     //clava::dump(T->getSize().VAL);
     clava::dump(T->getSize().toString(10, false));
+
 }
 
 void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *T) {
@@ -304,4 +326,21 @@ void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *
     DumpArrayTypeData(T);
 
     //clava::dump(clava::getId(T->getSizeExpr(), id));
+}
+
+void clava::ClavaDataDumper::DumpTypeWithKeywordData(const TypeWithKeyword *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::ELABORATED_TYPE_KEYWORD[T->getKeyword()]);
+}
+
+void clava::ClavaDataDumper::DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(T->getDepth());
+    clava::dump(T->getIndex());
+    clava::dump(T->isParameterPack());
+    clava::dump(clava::getId(T->getDecl(), id));
 }

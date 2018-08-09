@@ -414,6 +414,16 @@ extern const std::string clava::TLS_KIND[] {
         "DYNAMIC"
 };
 
+extern const std::string clava::ELABORATED_TYPE_KEYWORD[] {
+        "STRUCT",
+        "INTERFACE",
+        "UNION",
+        "CLASS",
+        "ENUM",
+        "TYPENAME",
+        "NONE"
+};
+
 
 
 

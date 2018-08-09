@@ -149,6 +149,22 @@ public:
 
 
 
+    /**
+     * Adds a child.
+     *
+     * @param addr
+     * @param id
+     * @return
+     */
+    const void addChild(const Decl *addr, std::vector<std::string> &children);
+    const void addChild(const Stmt *addr, std::vector<std::string> &children);
+    const void addChild(const Expr *addr, std::vector<std::string> &children);
+    const void addChild(const Type *addr, std::vector<std::string> &children);
+    const void addChild(const QualType &addr, std::vector<std::string> &children);
+    const void addChild(const Attr *addr, std::vector<std::string> &children);
+
+
+
     // Private functions
 private:
 
@@ -226,6 +242,12 @@ private:
     void VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitPointerTypeChildren(const PointerType *T, std::vector<std::string> &visitedChildren);
+    void VisitElaboratedTypeChildren(const ElaboratedType *T, std::vector<std::string> &visitedChildren);
+    void VisitReferenceTypeChildren(const ReferenceType *T, std::vector<std::string> &visitedChildren);
+    void VisitInjectedClassNameTypeChildren(const InjectedClassNameType *T, std::vector<std::string> &visitedChildren);
+    void VisitTemplateTypeParmTypeChildren(const TemplateTypeParmType *T, std::vector<std::string> &visitedChildren);
+    //void VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren);
+    void VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateTypeParmType *T, std::vector<std::string> &visitedChildren);
 
 
     /* Utility methods for DECLS */
