@@ -23,16 +23,20 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
+import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.TagType;
+import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
+import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -58,6 +62,8 @@ public class TypeDataParser {
         clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
         clavaData.add(Type.IS_FROM_AST, LineStreamParsers.oneOrZero(lines));
 
+        dataStore.getClavaNodes().queueSetNode(clavaData, Type.UNQUALIFIED_DESUGARED_TYPE, lines.nextLine());
+
         return clavaData;
     }
 
@@ -73,6 +79,15 @@ public class TypeDataParser {
         return data;
     }
 
+    public static DataStore parsePointerTypeData(LineStream lines, ClangParserData dataStore) {
+
+        DataStore data = parseTypeData(lines, dataStore);
+
+        // dataStore.getClavaNodes().queueSetNode(data, PointerType.POINTEE_TYPE, lines.nextLine());
+
+        return data;
+    }
+
     public static DataStore parseQualTypeData(LineStream lines, ClangParserData dataStore) {
 
         DataStore data = parseTypeData(lines, dataStore);
@@ -81,6 +96,8 @@ public class TypeDataParser {
         data.add(QualType.ADDRESS_SPACE_QUALIFIER, LineStreamParsers.enumFromName(AddressSpaceQualifierV2.getHelper(),
                 lines));
         data.add(QualType.ADDRESS_SPACE, LineStreamParsers.longInt(lines));
+
+        // dataStore.getClavaNodes().queueSetNode(data, QualType.UNQUALIFIED_TYPE, lines.nextLine());
 
         return data;
 
@@ -165,6 +182,37 @@ public class TypeDataParser {
         DataStore data = parseTypeData(lines, parserData);
 
         parserData.getClavaNodes().queueSetNode(data, TagType.DECL, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseTypeWithKeywordData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        data.add(TypeWithKeyword.ELABORATED_TYPE_KEYWORD,
+                LineStreamParsers.enumFromName(ElaboratedTypeKeyword.class, lines));
+
+        return data;
+    }
+
+    public static DataStore parseElaboratedTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeWithKeywordData(lines, parserData);
+
+        data.add(ElaboratedType.QUALIFIER, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseTemplateTypeParmTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        data.add(TemplateTypeParmType.DEPTH, LineStreamParsers.integer(lines));
+        data.add(TemplateTypeParmType.INDEX, LineStreamParsers.integer(lines));
+        data.add(TemplateTypeParmType.IS_PACKED, LineStreamParsers.oneOrZero(lines));
+        parserData.getClavaNodes().queueSetNode(data, TemplateTypeParmType.DECL, lines.nextLine());
 
         return data;
     }

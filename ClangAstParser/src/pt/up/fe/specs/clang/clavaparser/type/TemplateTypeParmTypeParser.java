@@ -18,9 +18,7 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
-import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType.TemplateParmData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -47,13 +45,14 @@ public class TemplateTypeParmTypeParser extends AClangNodeParser<TemplateTypePar
 
         boolean isPacked = parser.apply(ClangGenericParsers::checkWord, "pack");
 
-        TemplateParmData tData = new TemplateParmData(depth, index, isPacked);
+        // TemplateParmData tData = new TemplateParmData(depth, index, isPacked);
 
         // One child, that is a DeclInfo
         checkNumChildren(node.getChildren(), 1);
         DeclRef declInfo = parseDeclRef(node.getChild(0));
 
-        return ClavaNodeFactory.templateTypeParmType(tData, declInfo, typeData, node.getInfo());
+        throw new RuntimeException("deprecated, node " + node.getExtendedId());
+        // return ClavaNodeFactory.templateTypeParmType(tData, declInfo, typeData, node.getInfo());
     }
 
 }

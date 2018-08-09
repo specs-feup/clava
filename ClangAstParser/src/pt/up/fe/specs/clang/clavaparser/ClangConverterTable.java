@@ -83,6 +83,10 @@ public class ClangConverterTable implements AutoCloseable {
         return types;
     }
 
+    public boolean isTypesMapInitialized() {
+        return !types.isEmpty();
+    }
+
     public FileService getFileService() {
         return fileService;
     }

@@ -22,11 +22,10 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.TypeWithKeyword.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
+import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class ElaboratedTypeParser extends AClangNodeParser<ElaboratedType> {
@@ -59,7 +58,8 @@ public class ElaboratedTypeParser extends AClangNodeParser<ElaboratedType> {
 
         Type namedType = toType(children.get(0));
 
-        return ClavaNodeFactory.elaboratedType(keyword, typeData, node.getInfo(), namedType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.elaboratedType(keyword, typeData, node.getInfo(), namedType);
 
     }
 

@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clang.parsers;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,6 +52,22 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS = new HashMap<>();
 
         // DECLS
+        addDataParserClass(STATIC_DATA_PARSERS, DeclDataParser.class);
+
+        // STMTS
+        addDataParserClass(STATIC_DATA_PARSERS, StmtDataParser.class);
+
+        // EXPRS
+        addDataParserClass(STATIC_DATA_PARSERS, ExprDataParser.class);
+
+        // TYPES
+        addDataParserClass(STATIC_DATA_PARSERS, TypeDataParser.class);
+
+        // ATTRIBUTES
+        addDataParserClass(STATIC_DATA_PARSERS, AttrDataParser.class);
+
+        /*
+        // DECLS
         STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
         STATIC_DATA_PARSERS.put("<NamedDeclData>", DeclDataParser::parseNamedDeclData);
         STATIC_DATA_PARSERS.put("<TypeDeclData>", DeclDataParser::parseTypeDeclData);
@@ -61,10 +79,14 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<CXXMethodDeclData>", DeclDataParser::parseCXXMethodDeclData);
         STATIC_DATA_PARSERS.put("<VarDeclData>", DeclDataParser::parseVarDeclData);
         STATIC_DATA_PARSERS.put("<ParmVarDeclData>", DeclDataParser::parseParmVarDeclData);
+        */
 
+        /*
         // STMTS
         STATIC_DATA_PARSERS.put("<StmtData>", StmtDataParser::parseStmtData);
+        */
 
+        /*
         // EXPRS
         STATIC_DATA_PARSERS.put("<ExprData>", ExprDataParser::parseExprData);
         STATIC_DATA_PARSERS.put("<CastExprData>", ExprDataParser::parseCastExprData);
@@ -77,10 +99,13 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<StringLiteralData>", ExprDataParser::parseStringLiteralData);
         STATIC_DATA_PARSERS.put("<DeclRefExprData>", ExprDataParser::parseDeclRefExprData);
         STATIC_DATA_PARSERS.put("<OverloadExprData>", ExprDataParser::parseOverloadExprData);
+        */
 
+        /*
         // TYPES
         STATIC_DATA_PARSERS.put("<TypeData>", TypeDataParser::parseTypeData);
         STATIC_DATA_PARSERS.put("<BuiltinTypeData>", TypeDataParser::parseBuiltinTypeData);
+        STATIC_DATA_PARSERS.put("<PointerTypeData>", TypeDataParser::parsePointerTypeData);
         STATIC_DATA_PARSERS.put("<QualTypeData>", TypeDataParser::parseQualTypeData);
         STATIC_DATA_PARSERS.put("<FunctionTypeData>", TypeDataParser::parseFunctionTypeData);
         STATIC_DATA_PARSERS.put("<FunctionProtoTypeData>", TypeDataParser::parseFunctionProtoTypeData);
@@ -88,11 +113,15 @@ public class NodeDataParser {
         STATIC_DATA_PARSERS.put("<ConstantArrayTypeData>", TypeDataParser::parseConstantArrayTypeData);
         STATIC_DATA_PARSERS.put("<VariableArrayTypeData>", TypeDataParser::parseVariableArrayTypeData);
         STATIC_DATA_PARSERS.put("<TagTypeData>", TypeDataParser::parseTagTypeData);
+        STATIC_DATA_PARSERS.put("<TypeWithKeywordData>", TypeDataParser::parseTypeWithKeywordData);
+        STATIC_DATA_PARSERS.put("<TemplateTypeParmTypeData>", TypeDataParser::parseTemplateTypeParmTypeData);
+        */
 
+        /*
         // ATTRIBUTES
         STATIC_DATA_PARSERS.put("<AttributeData>", AttrDataParser::parseAttributeData);
         STATIC_DATA_PARSERS.put("<AlignedAttrData>", AttrDataParser::parseAlignedAttrData);
-
+        */
     }
 
     public static Collection<LineStreamWorker<ClangParserData>> getWorkers() {
@@ -110,6 +139,71 @@ public class NodeDataParser {
         }
 
         return workers;
+    }
+
+    private static void addDataParserClass(
+            Map<String, BiFunction<LineStream, ClangParserData, DataStore>> dataParsers,
+            Class<?> classWithParsers) {
+
+        for (Method method : classWithParsers.getMethods()) {
+
+            // Filter non-static methods
+            if (!Modifier.isStatic(method.getModifiers())) {
+                continue;
+            }
+
+            // Only methods with two parameters
+            if (method.getParameterCount() != 2) {
+                continue;
+            }
+
+            // First parameter should be a LineStream
+            Class<?> param1Class = method.getParameterTypes()[0];
+            if (!LineStream.class.isAssignableFrom(param1Class)) {
+                continue;
+            }
+
+            // Second parameter should be ClangParserData
+            Class<?> param2Class = method.getParameterTypes()[1];
+            if (!ClangParserData.class.isAssignableFrom(param2Class)) {
+                continue;
+            }
+
+            // Return type should be DataStore
+            if (!DataStore.class.isAssignableFrom(method.getReturnType())) {
+                continue;
+            }
+
+            String methodName = method.getName();
+
+            if (!methodName.startsWith("parse")) {
+                continue;
+            }
+
+            String dataParserName = methodName.substring("parse".length());
+
+            String key = "<" + dataParserName + ">";
+
+            BiFunction<LineStream, ClangParserData, DataStore> parser = (lines, clangParser) -> {
+                try {
+                    return (DataStore) method.invoke(null, lines, clangParser);
+                } catch (Exception e) {
+                    throw new RuntimeException("Could not invoke data parser '" + key + "'", e);
+                }
+            };
+
+            dataParsers.put(key, parser);
+
+            // System.out.println("DECL KEY:" + key);
+            // STATIC_DATA_PARSERS.put("<DeclData>", DeclDataParser::parseDeclData);
+
+            // dataParsers.put(key, parser);
+            // (lines, clangParser) -> method.
+        }
+
+        // String simpleName = classWithParsers.getSimpleName();
+        // simpleName.endsWith("DataParser");
+
     }
 
     public static Optional<DataStore> getNodeData(DataStore dataStore, String nodeId) {

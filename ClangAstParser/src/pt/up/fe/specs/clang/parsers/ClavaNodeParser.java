@@ -24,12 +24,13 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -38,7 +39,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
     /// DATAKEYS BEGIN
 
     // public final static DataKey<Set<String>> NODES_CURRENTLY_BEING_PARSED = KeyFactory
-    // .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>());
+    // .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>())
+    // .setDefault(() -> new HashSet<>());
 
     /// DATAKEYS END
 
@@ -75,9 +77,14 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         // Get nodeId and classname
         String nodeId = lineStream.nextLine();
 
-        // if(data.get(NODES_CURRENTLY_BEING_PARSED).contains(nodeId)) {
-        // throw new RuntimeException("Found ");
-        // }
+        /*
+        if (data.get(ClangParserData.NODES_CURRENTLY_BEING_PARSED).contains(nodeId)) {
+            throw new RuntimeException("Found circular dependence when parsing node '" + nodeId + "'");
+        } else {
+            data.get(ClangParserData.NODES_CURRENTLY_BEING_PARSED).add(nodeId);
+            System.out.println("NODES BEING PARSED:" + data.get(ClangParserData.NODES_CURRENTLY_BEING_PARSED));
+        }
+        */
         // System.out.println("PARSING NODE " + nodeId);
 
         String classname = lineStream.nextLine();
@@ -96,6 +103,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
         // Store node
         parsedNodes.put(nodeId, node);
+
+        // data.get(ClangParserData.NODES_CURRENTLY_BEING_PARSED).remove(nodeId);
     }
 
     /*
@@ -163,6 +172,81 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, nodeData);
 
         // Get children ids
+        List<String> childrenIds = getChildrenIds(nodeId, classname, data);
+
+        Map<String, ClavaNode> parsedNodes = data.get(ClangParserData.CLAVA_NODES).getNodes();
+
+        List<ClavaNode> children = Collections.emptyList();
+        /*
+        // Get the children nodes
+        List<ClavaNode> children = new ArrayList<>(childrenIds.size());
+        // for (String childId : childrenIds) {
+        
+        for (int i = 0; i < childrenIds.size(); i++) {
+            String childId = childrenIds.get(i);
+            ClavaNode child = parsedNodes.get(childId);
+        
+            // Check if nullptr
+            if (child == null && ClavaNodes.isNullId(childId)) {
+                child = data.get(ClangParserData.CLAVA_NODES).nullNode(childId);
+            }
+        
+            int index = i;
+            SpecsCheck.checkNotNull(child,
+                    () -> "Did not find ClavaNode for child with index '" + index + "' and id '" + childId
+                            + "' when parsing "
+                            + clavaNodeClass.getSimpleName() + " -> " + nodeData);
+        
+            children.add(child);
+        }
+        */
+
+        ClavaNode clavaNode = buildChildlessNode(nodeId, children, classname, debug, nodeData, clavaNodeClass);
+
+        // Queue setting the children
+        data.getClavaNodes().queueAction(() -> {
+            // Get the children nodes
+            List<ClavaNode> newChildren = new ArrayList<>(childrenIds.size());
+            // for (String childId : childrenIds) {
+
+            for (int i = 0; i < childrenIds.size(); i++) {
+                String childId = childrenIds.get(i);
+                ClavaNode child = parsedNodes.get(childId);
+
+                // Check if nullptr
+                if (child == null && ClavaNodes.isNullId(childId)) {
+                    child = data.get(ClangParserData.CLAVA_NODES).nullNode(childId);
+                }
+
+                int index = i;
+                SpecsCheck.checkNotNull(child,
+                        () -> "Did not find ClavaNode for child with index '" + index + "' and id '" + childId
+                                + "' when parsing "
+                                + clavaNodeClass.getSimpleName() + " -> " + nodeData);
+
+                child = processChild(child, clavaNodeClass, data);
+
+                newChildren.add(child);
+            }
+
+            clavaNode.setChildren(newChildren);
+        });
+
+        return clavaNode;
+    }
+
+    private ClavaNode processChild(ClavaNode child, Class<? extends ClavaNode> clavaNodeClass, ClangParserData data) {
+        if (clavaNodeClass.equals(CompoundStmt.class)) {
+            // If child is an expression, wrap a Stmt around
+            if (child instanceof Expr) {
+                return data.getFactory().exprStmt((Expr) child);
+            }
+        }
+
+        return child;
+    }
+
+    private List<String> getChildrenIds(String nodeId, String classname, ClangParserData data) {
         List<String> childrenIds = data.get(ClangParserData.VISITED_CHILDREN).get(nodeId);
 
         if (childrenIds == null) {
@@ -170,29 +254,19 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
             childrenIds = Collections.emptyList();
         }
+        return childrenIds;
+    }
 
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserData.CLAVA_NODES).getNodes();
-
-        // Get the children nodes
-        List<ClavaNode> children = new ArrayList<>(childrenIds.size());
-        for (String childId : childrenIds) {
-            ClavaNode child = parsedNodes.get(childId);
-
-            // Check if nullptr
-            if (child == null && ClavaNodes.isNullId(childId)) {
-                child = data.get(ClangParserData.CLAVA_NODES).nullNode(childId);
-            }
-
-            Preconditions.checkNotNull(child, "Did not find ClavaNode for child with id '" + childId + "'");
-            children.add(child);
-        }
-
+    private ClavaNode buildChildlessNode(String nodeId, List<ClavaNode> children, String classname, boolean debug,
+            DataStore nodeData,
+            Class<? extends ClavaNode> clavaNodeClass) {
         // Get constructor based on DataStore
         BiFunction<DataStore, List<ClavaNode>, ClavaNode> dataStoreBuilder = classesService
                 .getDataStoreBuilder(clavaNodeClass);
 
         if (dataStoreBuilder != null) {
             // Build node based on data and children
+            // return dataStoreBuilder.apply(nodeData, children);
             return dataStoreBuilder.apply(nodeData, children);
         }
 
@@ -205,9 +279,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
                                 + " data, Collection<? extends ClavaNode> children)'");
         }
 
+        // return DummyNode.newInstance(clavaNodeClass, nodeData, children, false);
         return DummyNode.newInstance(clavaNodeClass, nodeData, children, false);
-        // return new UnsupportedNode(classname, clavaData, children);
-
     }
 
     @Override

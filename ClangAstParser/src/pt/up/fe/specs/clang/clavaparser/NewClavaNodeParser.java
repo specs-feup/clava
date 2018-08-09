@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.utils.Typable;
@@ -195,6 +196,11 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
     private boolean checkReplaceType(ClavaNode node) {
         Typable typable = (Typable) node;
 
+        // If types map is not yet initialized, return false
+        // if (!getConverter().isTypesMapInitialized()) {
+        // return false;
+        // }
+
         Type oldParsingType = getTypesMap().get(node.getId());
 
         // If no old parsing type, do not replace
@@ -274,7 +280,8 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
         if (clavaNode instanceof FunctionDecl
                 || clavaNode instanceof CXXRecordDecl
-                || clavaNode instanceof VarDecl) {
+                || clavaNode instanceof VarDecl
+                || clavaNode instanceof QualType) {
             // SpecsLogs.debug("FUNCTION DECL CHILDREN: " + clavaNode.getChildren());
             return true;
         }

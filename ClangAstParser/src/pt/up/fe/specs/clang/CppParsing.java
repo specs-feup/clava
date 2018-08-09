@@ -138,6 +138,18 @@ public class CppParsing {
     }
 
     public static boolean isTypeNodeName(String nodeName) {
+        if (nodeName.equals("TypeWithKeyword")) {
+            return true;
+        }
+
         return nodeName.endsWith("Type");
+    }
+
+    public static boolean isDeclNodeName(String nodeName) {
+        if (nodeName.equals("CXXRecord")) {
+            return true;
+        }
+
+        return nodeName.endsWith("Decl");
     }
 }

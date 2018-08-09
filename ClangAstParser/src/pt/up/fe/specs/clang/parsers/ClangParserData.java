@@ -30,6 +30,7 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 
 public class ClangParserData extends ADataClass<ClangParserData> {
 
@@ -82,12 +83,22 @@ public class ClangParserData extends ADataClass<ClangParserData> {
 
     public final static DataKey<String> LINES_NOT_PARSED = KeyFactory.string("clang_dumper_parser_warnings");
 
+    public final static DataKey<Set<String>> NODES_CURRENTLY_BEING_PARSED = KeyFactory
+            .generic("nodesCurrentlyBeingParsed", (Set<String>) new HashSet<String>());
+
+    public final static DataKey<List<String>> CURRENT_NODE_VISIT_CHAIN = KeyFactory
+            .generic("currentNodeVisitChain", (List<String>) new ArrayList<String>());
+
     /**
      * Enables debug prints.
      */
     public final static DataKey<Boolean> DEBUG = KeyFactory.bool("clang_parser_stream_debug");
 
     /// DATAKEYS END
+
+    // public ClangParserData() {
+    // set(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
+    // }
 
     /**
      * Helper method.
@@ -96,5 +107,9 @@ public class ClangParserData extends ADataClass<ClangParserData> {
      */
     public ClavaNodes getClavaNodes() {
         return get(CLAVA_NODES);
+    }
+
+    public ClavaFactory getFactory() {
+        return get(CONTEXT).get(ClavaContext.FACTORY);
     }
 }

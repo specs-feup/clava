@@ -27,6 +27,7 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.CppParsing;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
+import pt.up.fe.specs.clang.clava.parser.DelayedParsingDecl;
 import pt.up.fe.specs.clang.clava.parser.DelayedParsingExpr;
 import pt.up.fe.specs.clang.clavaparser.extra.DeclInfoParser;
 import pt.up.fe.specs.clang.clavaparser.extra.TemplateArgumentParser;
@@ -459,9 +460,20 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         // System.out.println("IS DELAYED? " + CppParsing.isExprNodeName(node.getName()));
         // }
 
+        // boolean delayedNodeParsing = CppParsing.isExprNodeName(node.getName())
+        // || CppParsing.isDeclNodeName(node.getName());
         if (isTypeParser && CppParsing.isExprNodeName(node.getName())) {
             return new DelayedParsingExpr(node);
         }
+
+        // If not a type name, assume decl
+        if (isTypeParser && !CppParsing.isTypeNodeName(node.getName())) {
+            return new DelayedParsingDecl(node);
+        }
+
+        // if (isTypeParser && !CppParsing.isTypeNodeName(node.getName())) {
+        // System.out.println("NOT A TYPE NAME:" + node.getName());
+        // }
 
         // If parsing a type during AST nodes parsing phase, use types table
         if (!isTypeParser && CppParsing.isTypeNodeName(node.getName())) {
