@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -80,76 +79,48 @@ public class ElaboratedType extends TypeWithKeyword {
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
-        // HACK Set of Type classes whose .getCode() is not working properly, using bare type
+        String code = getKeyword().getCode();
+        if (!code.isEmpty()) {
+            code += " ";
+        }
 
-        // System.out.println("ELABORATED:" + namedType);
-        // if (BARE_TYPE_CLASSES.contains(namedType)) {
-        // String bareType = getBareType();
-        //
-        // if (name == null) {
-        // return bareType;
-        // }
-        //
-        // return bareType + " " + name;
-        // }
+        code += get(QUALIFIER) + getNamedType().getCode(sourceNode, name);
 
-        // If named type is a TemplateSpecializationType, return its code
-        // Return code of the desugared version
-        // return getNamedType().getCode(name);
+        return code;
 
+        /*     
         String bareType = getBareType();
-
-        // HACK
-        // if (getKeyword() != ElaboratedTypeKeyword.STRUCT && ) {
-        // if (!bareType.startsWith("struct ")) {
-        // System.out.println("BEFORE:" + bareType);
-        // bareType = bareType.replaceAll("struct ", "");
-        // System.out.println("AFTER:" + bareType);
-        // }
-
+        
+             
         // If named type has template arguments, update them
         Type namedType = getNamedType();
-
-        // System.out.println("BARE TYPE:" + bareType);
-        // System.out.println("NAMED TYPE:" + namedType);
-        // System.out.println("HAS UPDATED:" + namedType.hasUpdatedTemplateArgTypes());
-        // System.out.println("TEMPLATE ARGS:" + namedType.getTemplateArgumentTypes());
-
-        // if (bareType.equals("std::set<double>::const_iterator")) {
-        // System.out.println("HELLOA!!!");
-        // System.out.println("NAMED TYPE:" + namedType);
-        // System.out.println("ARGS:" + namedType.getTemplateArgumentTypes());
-        // }
-
+        
+             
         if (namedType.hasUpdatedTemplateArgTypes()) {
-
+        
             int startIndex = bareType.indexOf('<');
             int endIndex = bareType.lastIndexOf('>');
             boolean hasTemplateArgs = startIndex != -1 && endIndex != -1;
-
+        
             // Preconditions.checkArgument(startIndex != -1 && endIndex != -1,
             // "Named type has template arguments, expected bare type to have them too: " + bareType);
-
+        
             if (hasTemplateArgs) {
                 String templateArgs = namedType.getTemplateArgumentTypes().stream()
                         .map(type -> type.getCode(sourceNode))
                         .collect(Collectors.joining(", "));
                 bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
             }
-
+        
         }
-
-        System.out.println("ELABORATED TYPE:" + toTree());
-
-        // System.out.println("ELABORATED BARE TYPE:" + bareType);
-        // System.out.println("ELABORATED TYPE AS WRITTEN:" + get(TYPE_AS_STRING));
-
+        
+             
         if (name == null) {
             return bareType;
         }
-
+        
         return bareType + " " + name;
-
+        */
     }
 
     @Override

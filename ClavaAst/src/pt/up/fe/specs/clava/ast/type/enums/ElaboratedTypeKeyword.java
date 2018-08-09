@@ -34,6 +34,10 @@ public enum ElaboratedTypeKeyword implements StringProvider {
     }
 
     public String getCode() {
+        if (this == NONE) {
+            return "";
+        }
+
         return name().toLowerCase();
     }
 

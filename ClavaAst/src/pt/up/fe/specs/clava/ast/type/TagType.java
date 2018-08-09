@@ -98,6 +98,7 @@ public abstract class TagType extends Type {
         // System.out.println("TAG KIND:" + getTagKind());
         // System.out.println("TYPE DATA:" + getTypeData());
         // String baseType = getDeclInfo().getDeclType();
+
         String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
         if (baseType.isEmpty()) {
             baseType = getBareType();
