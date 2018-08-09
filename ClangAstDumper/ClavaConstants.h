@@ -100,6 +100,7 @@ namespace clava {
         TEMPLATE_TYPE_PARM_TYPE,
         TYPEDEF_TYPE,
         SUBST_TEMPLATE_TYPE_PARM_TYPE,
+        TEMPLATE_SPECIALIZATION_TYPE,
 
     };
 

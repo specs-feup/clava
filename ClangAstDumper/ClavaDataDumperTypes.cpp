@@ -21,6 +21,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"EnumType", clava::TypeNode::TAG_TYPE},
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
+        {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -70,6 +71,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpElaboratedTypeData(static_cast<const ElaboratedType *>(T)); break;
         case clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE:
             DumpTemplateTypeParmTypeData(static_cast<const TemplateTypeParmType *>(T)); break;
+        case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
+            DumpTemplateSpecializationTypeData(static_cast<const TemplateSpecializationType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -109,8 +112,15 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     // sugar
     //QualType SingleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
     //bool hasSugar = SingleStepDesugar != T->unqu;
+
+    /*
     const Type *singleStepDesugar = T->getUnqualifiedDesugaredType();
     bool hasSugar = singleStepDesugar != T;
+    clava::dump(hasSugar);
+    */
+
+    QualType singleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
+    bool hasSugar = singleStepDesugar != QualType(T, 0);
     clava::dump(hasSugar);
 
     if(T->isDependentType()) {
@@ -124,7 +134,18 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     clava::dump(T->isVariablyModifiedType());
     clava::dump(T->containsUnexpandedParameterPack());
     clava::dump(T->isFromAST());
-    clava::dump(clava::getId(T->getUnqualifiedDesugaredType(), id));
+
+
+
+    //if(singleStepDesugar != T) {
+    if(singleStepDesugar != QualType(T, 0)) {
+        clava::dump(clava::getId(singleStepDesugar, id));
+    } else {
+        clava::dump(clava::getId(((const Type*) nullptr), id));
+    }
+
+
+    //clava::dump(clava::getId(T->getUnqualifiedDesugaredType(), id));
 
 
 }
@@ -180,7 +201,7 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
     clava::dump(addrspace);
 
     // Unqualified type
-    //clava::dump(clava::getId(T.getTypePtr(), id));
+    clava::dump(clava::getId(T.getTypePtr(), id));
 
 /*    DumpTypeData(T.getTypePtr());
 
@@ -353,4 +374,20 @@ void clava::ClavaDataDumper::DumpTemplateTypeParmTypeData(const TemplateTypeParm
     clava::dump(T->getIndex());
     clava::dump(T->isParameterPack());
     clava::dump(clava::getId(T->getDecl(), id));
+}
+
+void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(T->isTypeAlias());
+    clava::dump([&T](llvm::raw_string_ostream& stream){T->getTemplateName().dump(stream);});
+
+    int numArgs = T->getNumArgs();
+    clava::dump(numArgs);
+    for(int i=0; i<numArgs; i++) {
+        clava::dump(T->getArg(i), id);
+    }
+
+
 }

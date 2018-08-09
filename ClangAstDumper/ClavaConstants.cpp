@@ -88,10 +88,11 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE: return "TemplateTypeParmType";
         case clava::TypeNode::TYPEDEF_TYPE: return "TypedefType";
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE: return "SubstTemplateTypeParmType";
+        case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE: return "TemplateSpecializationType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));
-            throw std::invalid_argument("ClavaConstants::getDataName(TypeNode):: Case not implemented, '" + enumValue + "'");
+            throw std::invalid_argument("ClavaConstants::getName(TypeNode):: Case not implemented, '" + enumValue + "'");
         }
     }
 }

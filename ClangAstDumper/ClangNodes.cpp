@@ -355,7 +355,7 @@ void clava::dump(NestedNameSpecifier* qualifier, ASTContext* Context) {
     }
 }
 
-void clava::dump(TemplateArgument& templateArg, int id) {
+void clava::dump(const TemplateArgument& templateArg, int id) {
     clava::dump(clava::TEMPLATE_ARG_KIND[templateArg.getKind()]);
     switch(templateArg.getKind()) {
         case TemplateArgument::ArgKind::Type:
@@ -377,6 +377,36 @@ void clava::dump(const CXXBaseSpecifier& base, int id) {
      clava::dump(ACCESS_SPECIFIER[base.getAccessSpecifier()]);
      clava::dump(clava::getId(base.getType(), id));
 }
+
+/*
+void dump(Consumer<Stream> consumer) {
+    std::string string;
+    llvm::raw_string_ostream stream(string);
+    consumer.apply(stream);
+    clava::dump(stream.str());
+}
+*/
+
+void clava::dump(std::function<void(llvm::raw_string_ostream&)> dumper) {
+
+    std::string string;
+    llvm::raw_string_ostream stream(string);
+    dumper(stream);
+    clava::dump(stream.str());
+
+}
+
+/*
+void clava::dump(const TemplateName& templateName) {
+
+    //dump(stream -> templateName.(stream));
+
+    std::string string;
+    llvm::raw_string_ostream stream(string);
+    templateName.dump(stream);
+    clava::dump(stream.str());
+}
+ */
 
 
 /*

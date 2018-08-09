@@ -23,6 +23,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"InjectedClassNameType", clava::TypeNode::INJECTED_CLASS_NAME_TYPE},
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
         {"SubstTemplateTypeParmType", clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE},
+        //{"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -68,6 +69,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
         //    VisitTypedefTypeChildren(static_cast<const TypedefType *>(T), visitedChildren); break;
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE:
             VisitSubstTemplateTypeParmTypeChildren(static_cast<const SubstTemplateTypeParmType *>(T), visitedChildren); break;
+    //    case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
+    //        VisitTemplateSpecializationTypeTypeChildren(static_cast<const TemplateSpecializationType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -84,9 +87,11 @@ void ClangAstDumper::visitChildren(const QualType &T) {
     // Visit underlying (unqualified) type
     //TypeVisitor::Visit(T.getTypePtr());
 
-    addChild(T.getTypePtr(), visitedChildren);
+    //addChild(T.getTypePtr(), visitedChildren);
 
     // QualType might associate with any type node, do not add type pointer as child
+    VisitTypeTop(T.getTypePtr());
+
     //VisitTypeTop(T.getTypePtr());
     //visitedChildren.push_back(clava::getId(T.getTypePtr(), id));
 
@@ -97,8 +102,11 @@ void ClangAstDumper::visitChildren(const QualType &T) {
 void ClangAstDumper::VisitTypeChildren(const Type *T, std::vector<std::string> &visitedChildren) {
 
     // If has sugar, visit desugared type
-    const Type *singleStepDesugar = T->getUnqualifiedDesugaredType();
-    if(singleStepDesugar != T) {
+    //const Type *singleStepDesugar = T->getUnqualifiedDesugaredType();
+    QualType singleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
+
+    //if(singleStepDesugar != T) {
+    if(singleStepDesugar != QualType(T, 0)) {
         VisitTypeTop(singleStepDesugar);
         //addChild(singleStepDesugar, visitedChildren);
         //VisitTypeTop(singleStepDesugar);

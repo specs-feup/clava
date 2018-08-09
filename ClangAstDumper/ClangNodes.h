@@ -10,11 +10,13 @@
 #include "clang/AST/Stmt.h"
 #include "clang/AST/Type.h"
 #include "clang/AST/NestedNameSpecifier.h"
+#include "clang/AST/TemplateName.h"
 
 
 #include <string>
 #include <sstream>
 #include <vector>
+#include <functional>
 
 using namespace clang;
 
@@ -113,8 +115,11 @@ namespace clava {
     void dump(const QualType& type, int id);
     void dump(const Qualifiers& qualifiers, ASTContext* Context);
     void dump(NestedNameSpecifier* qualifier, ASTContext* Context);
-    void dump(TemplateArgument& templateArg, int id);
+    void dump(const TemplateArgument& templateArg, int id);
     void dump(const CXXBaseSpecifier& base, int id);
+    //void dump(const TemplateName& templateName);
+    void dump(std::function<void(llvm::raw_string_ostream&)> dumper);
+
 
         //  void dump(llvm::raw_string_ostream llvmStringStream);
 

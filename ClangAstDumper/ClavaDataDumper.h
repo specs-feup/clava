@@ -148,6 +148,7 @@ namespace clava {
         void DumpTypeWithKeywordData(const TypeWithKeyword *T);
         void DumpElaboratedTypeData(const ElaboratedType *T);
         void DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T);
+        void DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T);
 
 
             // ATTRS
