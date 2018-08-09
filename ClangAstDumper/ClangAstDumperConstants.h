@@ -75,4 +75,8 @@ static const std::string VISIT_START = "<Visit Start>";
 
 static const std::string VISIT_END = "<Visit End>";
 
+static const std::string TOP_VISIT_START = "<Top Visit Start>";
+
+static const std::string TOP_VISIT_END = "<Top Visit End>";
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

@@ -530,6 +530,7 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
     //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
     // Dump typedef source
+    // TODO: To remove, this is not taking into account code that spans more than one line
     llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";
     llvm::errs() << clava::getId(D, id) << "\n";
     llvm::errs() << loc2str(D->getLocStart(), D->getLocEnd()) << "\n";

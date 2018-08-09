@@ -110,13 +110,13 @@ void ClangAstDumper::VisitTypeTop(const Type *T) {
         return;
     }
 
-//    clava::dump(VISIT_START);
-//    clava::dump(clava::getId(T, id));
+    clava::dump(TOP_VISIT_START);
+    clava::dump(clava::getId(T, id));
 
     TypeVisitor::Visit(T);
 
-//    clava::dump(VISIT_END);
-//    clava::dump(clava::getId(T, id));
+    clava::dump(TOP_VISIT_END);
+    clava::dump(clava::getId(T, id));
 }
 
 void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
@@ -126,13 +126,13 @@ void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
         return;
     }
 
-//    clava::dump(VISIT_START);
-//    clava::dump(clava::getId(Node, id));
+    clava::dump(TOP_VISIT_START);
+    clava::dump(clava::getId(Node, id));
 
     ConstStmtVisitor::Visit(Node);
 
-//    clava::dump(VISIT_END);
-//    clava::dump(clava::getId(Node, id));
+    clava::dump(TOP_VISIT_END);
+    clava::dump(clava::getId(Node, id));
 }
 
 void ClangAstDumper::VisitDeclTop(const Decl *Node) {
@@ -140,13 +140,13 @@ void ClangAstDumper::VisitDeclTop(const Decl *Node) {
         return;
     }
 
-//    clava::dump(VISIT_START);
-//    clava::dump(clava::getId(Node, id));
+    clava::dump(TOP_VISIT_START);
+    clava::dump(clava::getId(Node, id));
 
     ConstDeclVisitor::Visit(Node);
 
-//    clava::dump(VISIT_END);
-//    clava::dump(clava::getId(Node, id));
+    clava::dump(TOP_VISIT_END);
+    clava::dump(clava::getId(Node, id));
 }
 
 void ClangAstDumper::VisitAttrTop(const Attr *Node) {
@@ -154,13 +154,13 @@ void ClangAstDumper::VisitAttrTop(const Attr *Node) {
         return;
     }
 
-//    clava::dump(VISIT_START);
-//    clava::dump(clava::getId(Node, id));
+    clava::dump(TOP_VISIT_START);
+    clava::dump(clava::getId(Node, id));
 
     VisitAttr(Node);
 
-//    clava::dump(VISIT_END);
-//    clava::dump(clava::getId(Node, id));
+    clava::dump(TOP_VISIT_END);
+    clava::dump(clava::getId(Node, id));
 }
 
 //void ClangAstDumper::log(const char* name, const void* addr) {
