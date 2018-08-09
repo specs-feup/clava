@@ -19,7 +19,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"EnumType", clava::TypeNode::TAG_TYPE},
-        {"ElaboratedType", clava::TypeNode::TYPE_WITH_KEYWORD},
+        {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
 };
 
@@ -66,6 +66,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpTagTypeData(static_cast<const TagType *>(T)); break;
         case clava::TypeNode::TYPE_WITH_KEYWORD:
             DumpTypeWithKeywordData(static_cast<const TypeWithKeyword *>(T)); break;
+        case clava::TypeNode::ELABORATED_TYPE:
+            DumpElaboratedTypeData(static_cast<const ElaboratedType *>(T)); break;
         case clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE:
             DumpTemplateTypeParmTypeData(static_cast<const TemplateTypeParmType *>(T)); break;
 
@@ -333,6 +335,14 @@ void clava::ClavaDataDumper::DumpTypeWithKeywordData(const TypeWithKeyword *T) {
     DumpTypeData(T);
 
     clava::dump(clava::ELABORATED_TYPE_KEYWORD[T->getKeyword()]);
+}
+
+void clava::ClavaDataDumper::DumpElaboratedTypeData(const ElaboratedType *T) {
+    // Hierarchy
+    DumpTypeWithKeywordData(T);
+
+    clava::dump(T->getQualifier(), Context);
+
 }
 
 void clava::ClavaDataDumper::DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T) {

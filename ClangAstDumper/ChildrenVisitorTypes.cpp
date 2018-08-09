@@ -259,7 +259,6 @@ void ClangAstDumper::VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateT
     // Hierarchy
     VisitTypeChildren(T, visitedChildren);
 
-    llvm::errs() << "ADDING CHILD " << T->getReplacedParameter() << "\n";
     addChild(T->getReplacedParameter(), visitedChildren);
     addChild(T->getReplacementType(), visitedChildren);
 };
