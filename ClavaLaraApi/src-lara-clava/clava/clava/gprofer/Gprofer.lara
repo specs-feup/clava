@@ -79,12 +79,9 @@ Gprofer.prototype._defaultCmaker = function($function) {
 Gprofer._buildName = function($function) {
 	
 	if(Clava.isCxx()) {
-		/* build name based on gprof output */
-		var func = $function.name;
-		var line = $function.line;
-		var file = $function.ancestor('file').name;
+		/* signature or qualified name */
 		
-		return file + "#" + func + "#" + line;	
+		return $function.signature;	
 	}
 	
 	return $function.name;
@@ -167,9 +164,11 @@ Gprofer.prototype.getHotspot = function(rank) {
 	var f = undefined;
 	if(Clava.isCxx()) {
 		
+		debug('finding Cxx function with signature ' + name);
 		f = call GproferGetCxxFunction(name);
 	} else {
 		
+		debug('finding C function with name ' + name);
 		f = call GproferGetCFunction(name);
 	}
 	
