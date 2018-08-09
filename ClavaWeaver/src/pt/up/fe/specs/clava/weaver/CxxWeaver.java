@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
@@ -188,8 +187,8 @@ public class CxxWeaver extends ACxxWeaver {
     // private File baseFolder = null;
     private List<String> parserOptions = new ArrayList<>();
 
-    private Logger infoLogger = null;
-    private Level previousLevel = null;
+    // private Logger infoLogger = null;
+    // private Level previousLevel = null;
 
     private Set<String> messagesToUser;
 
@@ -212,8 +211,8 @@ public class CxxWeaver extends ACxxWeaver {
         // baseFolder = null;
         parserOptions = new ArrayList<>();
 
-        infoLogger = null;
-        previousLevel = null;
+        // infoLogger = null;
+        // previousLevel = null;
 
         // Set, in order to filter repeated messages
         // Linked, to preserve order
@@ -301,12 +300,15 @@ public class CxxWeaver extends ACxxWeaver {
         //
         // Logger.getLogger(LoggingUtils.INFO_TAG).setUseParentHandlers(false);
 
-        // TODO: Temporary solution, while we do not use SpecsLoggers
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
             // Needs to keep a strong reference, or it can be garbage collected
+            /*
             infoLogger = Logger.getLogger(SpecsLogs.INFO_TAG);
             previousLevel = infoLogger.getLevel();
             infoLogger.setLevel(Level.WARNING);
+            */
+            SpecsLogs.getSpecsLogger().setLevelAll(Level.WARNING);
+            ClavaLog.getLogger().setLevelAll(Level.WARNING);
         }
 
         // boolean disableWeaving = args.get(CxxWeaverOption.DISABLE_WEAVING);
@@ -817,12 +819,15 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         // Re-enable output
-        // TODO: Temporary solution, while we do not use SpecsLoggers
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
+            /*
             Preconditions.checkNotNull(infoLogger);
             infoLogger.setLevel(previousLevel);
             infoLogger = null;
             previousLevel = null;
+            */
+            SpecsLogs.getSpecsLogger().setLevelAll(null);
+            ClavaLog.getLogger().setLevelAll(null);
         }
 
         if (!messagesToUser.isEmpty()) {

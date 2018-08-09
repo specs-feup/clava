@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
@@ -230,12 +229,12 @@ public class ClavaNodes {
     // public void setTypes(DataStore data, DataKey<List<Type>> key, List<String> valueNodeIds) {
     // setTypes(new GenericDataClass<>(data), key, valueNodeIds);
     // }
+    //
+    // public <T extends ClavaNode> void queueSetNode(DataClass<?> dataClass, DataKey<T> key, String nodeId) {
+    // queueSetNode(dataClass.getData(), key, nodeId);
+    // }
 
-    public <T extends ClavaNode> void queueSetNode(DataClass<?> dataClass, DataKey<T> key, String nodeId) {
-        queueSetNode(dataClass.getData(), key, nodeId);
-    }
-
-    public <T extends ClavaNode> void queueSetNode(DataStore data, DataKey<T> key, String nodeId) {
+    public <T extends ClavaNode> void queueSetNode(DataClass<?> data, DataKey<T> key, String nodeId) {
 
         Runnable nodeToAdd = () -> {
 
@@ -245,6 +244,7 @@ public class ClavaNodes {
             }
 
             // Get node
+            // ClavaNode node = getWithoutDummy(key, nodeId);
             ClavaNode node = get(nodeId);
 
             Class<T> valueClass = key.getValueClass();
@@ -259,13 +259,24 @@ public class ClavaNodes {
         delayedNodesToAdd.add(nodeToAdd);
     }
 
-    public <T extends ClavaNode> void queueSetOptionalNode(DataClass<?> dataClass, DataKey<Optional<T>> key,
-            String nodeId) {
+    // private <T extends ClavaNode> ClavaNode getWithoutDummy(DataKey<T> key, String nodeId) {
+    // ClavaNode node = get(nodeId);
+    //
+    // // If dummy node, create "empty" node with DummyNode information
+    // if (node instanceof DummyNode) {
+    // return node.newInstance(false, key.getValueClass(), node.getChildren());
+    // }
+    //
+    // return node;
+    // }
 
-        queueSetOptionalNode(dataClass.getData(), key, nodeId);
-    }
+    // public <T extends ClavaNode> void queueSetOptionalNode(DataClass<?> dataClass, DataKey<Optional<T>> key,
+    // String nodeId) {
+    //
+    // queueSetOptionalNode(dataClass.getData(), key, nodeId);
+    // }
 
-    public <T extends ClavaNode> void queueSetOptionalNode(DataStore data, DataKey<Optional<T>> key,
+    public <T extends ClavaNode> void queueSetOptionalNode(DataClass<?> data, DataKey<Optional<T>> key,
             String nodeId) {
 
         Runnable nodeToAdd = () -> {
@@ -302,13 +313,13 @@ public class ClavaNodes {
         delayedNodesToAdd.add(nodeToAdd);
     }
 
-    public <T extends ClavaNode> void queueSetNodeList(DataClass<?> dataClass, DataKey<List<T>> key,
-            List<String> nodeIds) {
+    // public <T extends ClavaNode> void queueSetNodeList(DataClass<?> dataClass, DataKey<List<T>> key,
+    // List<String> nodeIds) {
+    //
+    // queueSetNodeList(dataClass.getData(), key, nodeIds);
+    // }
 
-        queueSetNodeList(dataClass.getData(), key, nodeIds);
-    }
-
-    public <T extends ClavaNode> void queueSetNodeList(DataStore data, DataKey<List<T>> key,
+    public <T extends ClavaNode> void queueSetNodeList(DataClass<?> data, DataKey<List<T>> key,
             List<String> nodeIds) {
 
         Runnable nodeToAdd = () -> {
