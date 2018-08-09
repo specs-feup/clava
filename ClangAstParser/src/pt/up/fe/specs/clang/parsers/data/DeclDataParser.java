@@ -36,7 +36,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -123,11 +122,14 @@ public class DeclDataParser {
         if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
             String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
             data.set(NamedDecl.DECL_NAME, anonName);
+            data.set(NamedDecl.QUALIFIED_NAME, anonName);
 
             // After all nodes are parsed, also set the name of the corresponding decl type
-            dataStore.getClavaNodes()
-                    .queueAction(
-                            () -> data.get(RecordDecl.TYPE_FOR_DECL).setInPlace(Type.TYPE_AS_STRING, anonName));
+            // dataStore.getClavaNodes()
+            // .queueAction(
+            // () -> {
+            // data.get(RecordDecl.TYPE_FOR_DECL).setInPlace(Type.TYPE_AS_STRING, anonName);
+            // });
 
             // dataStore.getClavaNodes()
             // .queueAction(() -> System.out.println("TYPE FOR DECL:" + data.get(RecordDecl.TYPE_FOR_DECL)));
