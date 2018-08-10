@@ -11,7 +11,7 @@
 
 
 const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDREN_MAP = {
-        {"CXXConstructorDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXConstructorDecl", clava::DeclNode::CXX_CONSTRUCTOR_DECL},
         {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
@@ -59,6 +59,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitFunctionDeclChildren(static_cast<const FunctionDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_METHOD_DECL:
             VisitCXXMethodDeclChildren(static_cast<const CXXMethodDecl *>(D), visitedChildren); break;
+         case clava::DeclNode::CXX_CONSTRUCTOR_DECL:
+            VisitCXXConstructorDeclChildren(static_cast<const CXXConstructorDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_RECORD_DECL:
             VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VAR_DECL:
@@ -239,6 +241,36 @@ void ClangAstDumper::VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vec
 
     // Visit record decl
     VisitDeclTop(D->getParent());
+}
+
+void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitCXXMethodDeclChildren(D, children);
+
+
+    // Visit CXXCtorInitializers
+    for (auto init = D->init_begin(), init_last = D->init_end(); init != init_last; ++init) {
+        // Init expr
+        VisitStmtTop((*init)->getInit());
+
+        if ((*init)->isAnyMemberInitializer()) {
+            VisitDeclTop((*init)->getAnyMember());
+            continue;
+        }
+
+        if ((*init)->isBaseInitializer()) {
+            VisitTypeTop((*init)->getBaseClass());
+            continue;
+        }
+
+        if ((*init)->isDelegatingInitializer()) {
+            VisitTypeTop((*init)->getTypeSourceInfo()->getType());
+            continue;
+        }
+
+        throw std::invalid_argument(
+                "ClangDataDumper::VisitCXXConstructorDeclChildren():: CXXCtorInitializer case not implemented");
+    }
 }
 
 void ClangAstDumper::VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children) {

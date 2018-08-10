@@ -12,6 +12,11 @@
 
 namespace clava {
 
+    /* Clava Enums */
+    //extern const std::string CXX_CTOR_INIT_KIND[];
+
+    /* Clang Enums */
+
     extern const std::string CAST_KIND[];
     extern const std::string ATTRIBUTES[];
     extern const std::string CALLING_CONVENTION[];

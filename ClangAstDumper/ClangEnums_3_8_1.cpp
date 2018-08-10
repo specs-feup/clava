@@ -4,6 +4,17 @@
 
 #include "ClangEnums.h"
 
+/* Clava Enums */
+
+/*
+extern const std::string clava::CXX_CTOR_INIT_KIND[] {
+        "ANY_MEMBER_INITIALIZER",
+        "BASE_INITIALIZER",
+        "DELEGATING_INITIALIZER"
+};
+*/
+
+/* Clang Enums */
 
 const std::string clava::BUILTIN_KIND[] = {
         "Void",

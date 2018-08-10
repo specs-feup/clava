@@ -23,7 +23,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"InjectedClassNameType", clava::TypeNode::INJECTED_CLASS_NAME_TYPE},
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
         {"SubstTemplateTypeParmType", clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE},
-        //{"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
+        {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -69,8 +69,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
         //    VisitTypedefTypeChildren(static_cast<const TypedefType *>(T), visitedChildren); break;
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE:
             VisitSubstTemplateTypeParmTypeChildren(static_cast<const SubstTemplateTypeParmType *>(T), visitedChildren); break;
-    //    case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
-    //        VisitTemplateSpecializationTypeTypeChildren(static_cast<const TemplateSpecializationType *>(T), visitedChildren); break;
+        case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
+            VisitTemplateSpecializationTypeChildren(static_cast<const TemplateSpecializationType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -270,3 +270,21 @@ void ClangAstDumper::VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateT
     addChild(T->getReplacedParameter(), visitedChildren);
     addChild(T->getReplacementType(), visitedChildren);
 };
+
+void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpecializationType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    // Visit each argument
+    for(int i=0; i<T->getNumArgs(); i++) {
+        VisitTemplateArgChildren(T->getArg(i));
+    }
+};
+
+
+
+
+
+
+
+

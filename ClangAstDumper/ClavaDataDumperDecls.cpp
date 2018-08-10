@@ -11,7 +11,7 @@
 #include <string>
 
 const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
-        {"CXXConstructorDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXConstructorDecl", clava::DeclNode::CXX_CONSTRUCTOR_DECL},
         {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
@@ -70,6 +70,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpFunctionDeclData(static_cast<const FunctionDecl *>(D)); break;
         case clava::DeclNode::CXX_METHOD_DECL:
             DumpCXXMethodDeclData(static_cast<const CXXMethodDecl *>(D)); break;
+        case clava::DeclNode::CXX_CONSTRUCTOR_DECL:
+            DumpCXXConstructorDeclData(static_cast<const CXXConstructorDecl *>(D)); break;
         case clava::DeclNode::VAR_DECL:
             DumpVarDeclData(static_cast<const VarDecl *>(D)); break;
         case clava::DeclNode::PARM_VAR_DECL:
@@ -290,6 +292,38 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
     //dumper->VisitTypeTop(D->getType().getTypePtr());
 }
 
+void clava::ClavaDataDumper::DumpCXXConstructorDeclData(const CXXConstructorDecl *D) {
+    // Hierarchy
+    DumpCXXMethodDeclData(D);
+
+    // Dump CXXCtorInitializers
+    clava::dump(D->getNumCtorInitializers());
+    for (auto init = D->init_begin(), init_last = D->init_end(); init != init_last; ++init) {
+        // Init expr
+        clava::dump(clava::getId((*init)->getInit(), id));
+
+        if ((*init)->isAnyMemberInitializer()) {
+            clava::dump("ANY_MEMBER_INITIALIZER");
+            clava::dump(clava::getId((*init)->getAnyMember(), id));
+            continue;
+        }
+
+        if ((*init)->isBaseInitializer()) {
+            clava::dump("BASE_INITIALIZER");
+            clava::dump(clava::getId((*init)->getBaseClass(), id));
+            continue;
+        }
+
+        if ((*init)->isDelegatingInitializer()) {
+            clava::dump("DELEGATING_INITIALIZER");
+            clava::dump(clava::getId((*init)->getTypeSourceInfo()->getType(), id));
+            continue;
+        }
+
+        throw std::invalid_argument(
+                "ClangDataDumper::DumpCXXConstructorDeclData():: CXXCtorInitializer case not implemented");
+    }
+}
 
 void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     // Hierarchy

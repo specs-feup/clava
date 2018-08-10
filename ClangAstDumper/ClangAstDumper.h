@@ -127,7 +127,16 @@ public:
      */
     void VisitAttr(const Attr* A);
 
-    // Utility methods
+
+  /*
+   * EXTRA
+   */
+
+
+    /*
+     * Utility methods
+     */
+
     std::string loc2str(SourceLocation locStart, SourceLocation locEnd);
     //std::string getId(const void* addr);
     /*
@@ -204,6 +213,7 @@ private:
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     void VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vector<std::string> &children);
+    void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D, std::vector<std::string> &children);
 
     void VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children);
     void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);
@@ -248,7 +258,10 @@ private:
     void VisitTemplateTypeParmTypeChildren(const TemplateTypeParmType *T, std::vector<std::string> &visitedChildren);
     //void VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren);
     void VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateTypeParmType *T, std::vector<std::string> &visitedChildren);
+    void VisitTemplateSpecializationTypeChildren(const TemplateSpecializationType *T, std::vector<std::string> &visitedChildren);
 
+    // Children visitors for other types of classes
+    void VisitTemplateArgChildren(const TemplateArgument& arg);
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
