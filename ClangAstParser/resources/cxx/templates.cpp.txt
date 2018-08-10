@@ -7,7 +7,7 @@ struct MAtom {
    int a;
 };
 
-std::list<struct MAtom>::iterator it_atom1;
+std::list<MAtom>::iterator it_atom1;
 template <typename t = float>
 inline t Distance2(t const a[3], t const b[3]) {
    
