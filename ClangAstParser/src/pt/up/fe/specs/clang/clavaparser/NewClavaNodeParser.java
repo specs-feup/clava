@@ -28,21 +28,30 @@ import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.BaseInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.QualType;
+import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
+import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T> {
@@ -203,12 +212,28 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                 Expr initExpr = init.get(CXXCtorInitializer.INIT_EXPR);
 
                 if (initExpr instanceof DummyNode) {
-                    System.out.println("FOUnD DUMMY!");
-                    ClangNode expr = getClangRootData().getAllClangNodes().get(initExpr.get(ClavaNode.ID));
-                    SpecsCheck.checkNotNull(expr, () -> "E");
-                    ClavaNode nonDummyExpr = parseChild(expr, false);
-                    System.out.println("NON DUMMY EXPR:" + nonDummyExpr);
+                    ClavaNode nonDummyExpr = getOldClavaNode(initExpr);
                     init.set(CXXCtorInitializer.INIT_EXPR, (Expr) nonDummyExpr);
+
+                    CXXCtorInitializerKind kind = init.get(CXXCtorInitializer.INIT_KIND);
+                    switch (kind) {
+                    case ANY_MEMBER_INITIALIZER:
+                        Decl anyMemberDecl = init.get(AnyMemberInit.ANY_MEMBER_DECL);
+                        if (anyMemberDecl instanceof DummyNode) {
+                            init.set(AnyMemberInit.ANY_MEMBER_DECL, (Decl) getOldClavaNode(anyMemberDecl));
+                        }
+                        break;
+
+                    case BASE_INITIALIZER:
+                        Type baseClass = init.get(BaseInit.BASE_CLASS);
+                        if (baseClass instanceof DummyNode) {
+                            init.set(BaseInit.BASE_CLASS, (Type) getOldClavaNode(baseClass));
+                        }
+                        break;
+
+                    default:
+                        throw new NotImplementedException(kind);
+                    }
                     // List<ClavaNode> children = parseChildren(childrenClangNodes.stream(), getClass().getSimpleName(),
                     // isType);
 
@@ -225,8 +250,52 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             }
         }
 
-        // TODO Auto-generated method stub
+        // If type and as sugar, replace dummy unsugared type
+        if (clavaNodeCopy instanceof Type) {
+            Type type = (Type) clavaNodeCopy;
 
+            // If has dummy desugared
+            if (type.hasSugar() && (type.desugar() instanceof DummyNode)) {
+                type.set(Type.UNQUALIFIED_DESUGARED_TYPE, (Type) getOldClavaNode(type.desugar()));
+            }
+
+            if (type instanceof TemplateSpecializationType) {
+                TemplateSpecializationType tsType = (TemplateSpecializationType) type;
+                int numArgs = tsType.getTemplateArguments().size();
+                for (int i = 0; i < numArgs; i++) {
+                    TemplateArgument arg = tsType.getTemplateArgument(i);
+                    switch (arg.get(TemplateArgument.TEMPLATE_ARGUMENT_KIND)) {
+                    case Expression:
+                        if (arg.get(TemplateArgumentExpr.EXPR) instanceof DummyNode) {
+                            TemplateArgumentExpr newArgExpr = new TemplateArgumentExpr(
+                                    (Expr) getOldClavaNode(arg.get(TemplateArgumentExpr.EXPR)));
+                            tsType.setTemplateArgument(i, newArgExpr);
+                        }
+                        break;
+
+                    case Type:
+                        if (arg.get(TemplateArgumentType.TYPE) instanceof DummyNode) {
+                            TemplateArgumentType newArgType = new TemplateArgumentType(
+                                    (Type) getOldClavaNode(arg.get(TemplateArgumentType.TYPE)));
+                            tsType.setTemplateArgument(i, newArgType);
+                        }
+                        break;
+
+                    default:
+                        throw new NotImplementedException(arg.get(TemplateArgument.TEMPLATE_ARGUMENT_KIND));
+                    }
+                }
+            }
+        }
+
+    }
+
+    private ClavaNode getOldClavaNode(ClavaNode newNode) {
+        String id = newNode.get(ClavaNode.ID);
+        ClangNode clangNode = getClangRootData().getAllClangNodes().get(id);
+        SpecsCheck.checkNotNull(clangNode, () -> "Could not find old Clava node for node '" + newNode + "'");
+        ClavaNode oldNode = parseChild(clangNode, newNode instanceof Type);
+        return oldNode;
     }
 
     private boolean checkReplaceType(ClavaNode node) {
