@@ -13,18 +13,20 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Represents a C++ constructor declaration or definition.
@@ -41,6 +43,9 @@ import pt.up.fe.specs.util.SpecsCollections;
 public class CXXConstructorDecl extends CXXMethodDecl {
 
     /// DATAKEYS BEGIN
+
+    public final static DataKey<List<CXXCtorInitializer>> CONSTRUCTOR_INITS = KeyFactory.generic("constructorInits",
+            (List<CXXCtorInitializer>) new ArrayList<CXXCtorInitializer>());
 
     /// DATAKEYS END
 
@@ -92,21 +97,25 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     */
 
     public List<CXXCtorInitializer> getInitializers() {
-        // Default inits appear after parameters and definition
-        int startIndex = getNumParameters();
-
-        List<ClavaNode> initAtHead = SpecsCollections.subList(getChildren(), startIndex);
-
-        List<CXXCtorInitializer> inits = SpecsCollections.peek(initAtHead, CXXCtorInitializer.class);
-
-        return inits;
+        return get(CONSTRUCTOR_INITS);
+        // // Default inits appear after parameters and definition
+        // int startIndex = getNumParameters();
+        //
+        // List<ClavaNode> initAtHead = SpecsCollections.subList(getChildren(), startIndex);
+        //
+        // List<CXXCtorInitializer> inits = SpecsCollections.peek(initAtHead, CXXCtorInitializer.class);
+        //
+        // return inits;
     }
 
     @Override
     public String getCode() {
-        if (getDeclData().isImplicit()) {
+        if (get(IS_IMPLICIT)) {
             return "";
         }
+        // if (getDeclData().isImplicit()) {
+        // return "";
+        // }
 
         // Special case: try
         Optional<Stmt> body = getFunctionDefinition();
@@ -121,7 +130,7 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     private String getCodeInitList() {
 
         List<String> initList = getInitializers().stream()
-                .map(init -> init.getCode())
+                .map(init -> init.getCode(this))
                 .filter(initCode -> !initCode.isEmpty())
                 .collect(Collectors.toList());
 

@@ -25,6 +25,12 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class CXXCtorInitializer extends ClavaNode {
 
     // private final String fieldName;
