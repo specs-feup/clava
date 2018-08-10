@@ -134,6 +134,13 @@ public class CXXConstructorDecl extends CXXMethodDecl {
                 .filter(initCode -> !initCode.isEmpty())
                 .collect(Collectors.toList());
 
+        /*
+        for (CXXCtorInitializer init : getInitializers()) {
+            System.out.println("INIT:" + init);
+            System.out.println("INIT CODE:" + init.getCode(this));
+        }
+        */
+
         if (initList.isEmpty()) {
             return "";
         }

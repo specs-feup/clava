@@ -61,7 +61,10 @@ public class RecordType extends TagType {
     public String getCode(ClavaNode sourceNode, String name) {
         // ClavaLog.warning("RecordType.getCode() is not working properly yet");
 
-        String baseType = getRecordName();
+        // TODO: Which one should be returned? Simple or Qualified record name?
+        // String baseType = getRecordName();
+        String baseType = getSimpleRecordName();
+
         // TagKind tagKind = getTagKind();
         // if (tagKind == TagKind.STRUCT || tagKind == TagKind.UNION || tagKind == TagKind.ENUM) {
         // baseType = tagKind.getCode() + " " + baseType;

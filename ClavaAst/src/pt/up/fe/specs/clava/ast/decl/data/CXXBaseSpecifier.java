@@ -73,15 +73,26 @@ public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Ty
         StringBuilder code = new StringBuilder();
 
         // Add access specifier
-        code.append(get(ACCESS_SPECIFIER_AS_WRITTEN).getString());
+        AccessSpecifier specifier = get(ACCESS_SPECIFIER_AS_WRITTEN);
+        if (specifier != AccessSpecifier.NONE) {
+            code.append(get(ACCESS_SPECIFIER_AS_WRITTEN).getString());
+        }
 
         // Add virtual, if present
         if (get(IS_VIRTUAL)) {
-            code.append(" virtual");
+            if (code.length() != 0) {
+                code.append(" ");
+            }
+
+            code.append("virtual");
         }
 
         // Add type
-        code.append(" ").append(get(TYPE).getCode(sourceNode));
+        if (code.length() != 0) {
+            code.append(" ");
+        }
+
+        code.append(get(TYPE).getCode(sourceNode));
 
         if (get(IS_PACK_EXPANSION)) {
             code.append("...");

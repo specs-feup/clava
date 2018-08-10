@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -59,16 +58,20 @@ public class TypedefType extends Type {
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
+        String type = get(TYPE_AS_STRING);
+
+        return name == null ? type : type + " " + name;
+        /*
         // System.out.println("TYPEDEF TYPE CODE:" + super.getCode(name));
         // System.out.println("TYPEDEF TYPE CHILD CODE:" + getTypeClass().getCode(name));
         Type typeClass = getTypeClass();
-
+        
         if (typeClass instanceof ElaboratedType) {
-
+        
             if (name == null) {
                 return declInfo.getDeclType();
             }
-
+        
             return declInfo.getDeclType() + " " + name;
             // if (declInfo.getDeclType().equals("FILE")) {
             // return declInfo.getDeclType();
@@ -77,35 +80,37 @@ public class TypedefType extends Type {
             // System.out.println("TypedefType after:" + typeClass.getCode(name));
             // return typeClass.getCode(name);
         }
-
+        
         Optional<TemplateSpecializationType> templateSpecialization = typeClass.getDescendantsAndSelfStream()
                 .filter(descendent -> descendent instanceof TemplateSpecializationType)
                 .map(descendent -> (TemplateSpecializationType) descendent)
                 .findFirst();
-
+        
         if (templateSpecialization.isPresent()) {
             // System.out.println("TYPEDEF TEMPLATE:" + templateSpecialization.get());
             // System.out.println("TYPEDEF TEMPLATE CODE:" + templateSpecialization.get().getCode(name));
             return templateSpecialization.get().getCode(sourceNode, name);
         }
-
+        
         // // If typedef of a TemplateSpecializationType, might need to use more specialized type
         // if (typeClass instanceof TemplateSpecializationType || typeClass instanceof TypedefType) {
         // return getTypeClass().getCode(name);
         // }
         return super.getCode(sourceNode, name);
         // return getType() + " " + name;
-
+        
         // return getTypeClass().getCode(name);
         // System.out.println("GET CLASS CODE:" + getTypeClass().getCode(name));
         // String typeCode = getType();
-
+        
         // // HACK
         // if (typeCode.equals("string")) {
         // typeCode = "std::" + typeCode;
         // }
-
+        
         // return typeCode;
+         
+         */
     }
 
     @Override

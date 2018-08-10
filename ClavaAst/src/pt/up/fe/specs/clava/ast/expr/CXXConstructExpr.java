@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Preconditions;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -93,6 +95,15 @@ public class CXXConstructExpr extends Expr {
             return getArgs().stream()
                     .map(arg -> arg.getCode())
                     .collect(Collectors.joining(", ", "{", "}"));
+        }
+
+        // If is elidable, check that has a single non-default argument and remove
+        if (isElidable()) {
+            // System.out.println("IS ELIDABLE");
+            List<Expr> args = getArgs();
+            Preconditions.checkArgument(args.size() == 1);
+            // System.out.println("CODE: " + args.get(0).getCode());
+            return args.get(0).getCode();
         }
 
         String argsCode = getArgsCode();
