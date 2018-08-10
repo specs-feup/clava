@@ -89,8 +89,8 @@ public class ClangParserData extends ADataClass<ClangParserData> {
     public final static DataKey<List<String>> CURRENT_NODE_VISIT_CHAIN = KeyFactory
             .generic("currentNodeVisitChain", (List<String>) new ArrayList<String>());
 
-    public final static DataKey<VisitingChildren> VISITING_CHILDREN = KeyFactory
-            .object("visitingChildren", VisitingChildren.class);
+    public final static DataKey<VisitingChildrenCheck> VISITING_CHILDREN = KeyFactory
+            .object("visitingChildren", VisitingChildrenCheck.class);
 
     /**
      * Enables debug prints.
