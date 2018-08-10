@@ -145,9 +145,9 @@ public class ClangConverterTable implements AutoCloseable {
         if (newClavaNode != null) {
             boolean isDummy = newClavaNode instanceof DummyNode;
             if (!isDummy || (isDummy && clangNode.isManuallyCreated())) {
-                if (isDummy && clangNode.isManuallyCreated()) {
-                    System.out.println("MANUALLY CREATED:" + newClavaNode);
-                }
+                // if (isDummy && clangNode.isManuallyCreated()) {
+                // System.out.println("MANUALLY CREATED:" + newClavaNode);
+                // }
 
                 // TODO: Replace with map?
                 newParsedNodes++;

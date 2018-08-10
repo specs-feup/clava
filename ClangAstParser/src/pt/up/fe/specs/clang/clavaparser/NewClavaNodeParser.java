@@ -26,9 +26,12 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
+import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -37,6 +40,7 @@ import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.utils.Typable;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -192,6 +196,35 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             // }
 
         }
+
+        // If CXXConstructorDecl, replace dummy types in initializers
+        if (clavaNodeCopy instanceof CXXConstructorDecl) {
+            for (CXXCtorInitializer init : clavaNodeCopy.get(CXXConstructorDecl.CONSTRUCTOR_INITS)) {
+                Expr initExpr = init.get(CXXCtorInitializer.INIT_EXPR);
+
+                if (initExpr instanceof DummyNode) {
+                    System.out.println("FOUnD DUMMY!");
+                    ClangNode expr = getClangRootData().getAllClangNodes().get(initExpr.get(ClavaNode.ID));
+                    SpecsCheck.checkNotNull(expr, () -> "E");
+                    ClavaNode nonDummyExpr = parseChild(expr, false);
+                    System.out.println("NON DUMMY EXPR:" + nonDummyExpr);
+                    init.set(CXXCtorInitializer.INIT_EXPR, (Expr) nonDummyExpr);
+                    // List<ClavaNode> children = parseChildren(childrenClangNodes.stream(), getClass().getSimpleName(),
+                    // isType);
+
+                }
+                // if(init.get(AnyMemberInit.INIT_EXPR))
+                /*
+                switch (init.get(CXXCtorInitializer.INIT_KIND)) {
+                case ANY_MEMBER_INITIALIZER:
+                
+                default:
+                    continue;
+                }
+                */
+            }
+        }
+
         // TODO Auto-generated method stub
 
     }
