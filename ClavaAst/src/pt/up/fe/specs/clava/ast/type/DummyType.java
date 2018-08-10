@@ -51,7 +51,8 @@ public class DummyType extends Type implements DummyNode {
     }
 
     public String getNodeCode() {
-        return "// Dummy type '" + getContent() + "'";
+        // return "// Dummy type '" + getContent() + "'";
+        return "%Dummy type '" + getContent() + "'%";
     }
 
     @Override

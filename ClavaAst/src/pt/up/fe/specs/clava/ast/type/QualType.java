@@ -14,9 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,14 +25,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
-import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 
 /**
  * Represents a set of qualifiers for a type.
@@ -54,43 +47,45 @@ public class QualType extends Type {
 
     public final static DataKey<Long> ADDRESS_SPACE = KeyFactory.longInt("addressSpace");
 
-    // public final static DataKey<Type> UNQUALIFIED_TYPE = KeyFactory.object("unqualifiedType", Type.class);
+    public final static DataKey<Type> UNQUALIFIED_TYPE = KeyFactory.object("unqualifiedType", Type.class);
 
     /// DATAKEYS END
 
-    private final QualTypeData qualTypeData;
+    // private final QualTypeData qualTypeData;
     // private final List<Qualifier> qualifiers;
 
-    public QualType(DataStore data, List<? extends ClavaNode> children) {
+    public QualType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-        this.qualTypeData = null;
+        // this.qualTypeData = null;
     }
 
-    public QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info, Type qualifiedType) {
-        this(qualTypeData, typeData, info, Arrays.asList(qualifiedType));
-    }
+    // public QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info, Type qualifiedType) {
+    // this(qualTypeData, typeData, info, Arrays.asList(qualifiedType));
+    // }
+    //
+    // private QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(new LegacyToDataStore().setQualType(qualTypeData).setType(typeData).setNodeInfo(info).getData(),
+    // children);
+    //
+    // this.qualTypeData = qualTypeData;
+    // }
 
-    private QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(new LegacyToDataStore().setQualType(qualTypeData).setType(typeData).setNodeInfo(info).getData(),
-                children);
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new QualType(qualTypeData.copy(), getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
-        this.qualTypeData = qualTypeData;
-    }
+    // public List<C99Qualifier> getQualifiers() {
+    // return get(C99_QUALIFIERS);
+    // // return qualTypeData.getQualifiers();
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new QualType(qualTypeData.copy(), getTypeData(), getInfo(), Collections.emptyList());
-    }
-
-    public List<Qualifier> getQualifiers() {
-        return qualTypeData.getQualifiers();
-    }
-
-    public void setQualifiers(List<Qualifier> qualifiers) {
-        qualTypeData.setQualifiers(qualifiers);
-    }
+    // public void setQualifiers(List<C99Qualifier> qualifiers) {
+    // set(C99_QUALIFIERS, qualifiers);
+    // // qualTypeData.setQualifiers(qualifiers);
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
@@ -145,13 +140,18 @@ public class QualType extends Type {
     }
 
     private String getCode(String type, String name, ClavaNode sourceNode) {
-        String addressQualifier = qualTypeData.getAddressSpaceQualifier().getCode();
+        String addressQualifier = get(ADDRESS_SPACE_QUALIFIER).getCode(get(ADDRESS_SPACE));
+        // String addressQualifier = qualTypeData.getAddressSpaceQualifier().getCode();
         if (!addressQualifier.isEmpty()) {
             addressQualifier += " ";
         }
 
         // String qualifiersCode = ClavaCode.getQualifiersCode(getQualifiers());
-        String qualifiersCode = qualTypeData.getQualifiersCode();
+        String qualifiersCode = get(C99_QUALIFIERS).stream()
+                .map(C99Qualifier::getCode)
+                .collect(Collectors.joining(" "));
+
+        // String qualifiersCode = qualTypeData.getQualifiersCode();
         // Type child = getQualifiedType();
 
         // If constexpr, replace const with constexpr
@@ -228,15 +228,18 @@ public class QualType extends Type {
     }
     */
     public Type getUnqualifiedType() {
-        // return get(UNQUALIFIED_TYPE);
-        return getChild(Type.class, 0);
+        return get(UNQUALIFIED_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     @Override
     public boolean isConst() {
-        if (getQualifiers().contains(Qualifier.CONST) || getQualifiers().contains(Qualifier.CONSTEXPR)) {
+        if (get(C99_QUALIFIERS).contains(C99Qualifier.CONST)) {
             return true;
         }
+        // if (getQualifiers().contains(Qualifier.CONST) || getQualifiers().contains(Qualifier.CONSTEXPR)) {
+        // return true;
+        // }
 
         return getUnqualifiedType().isConst();
     }

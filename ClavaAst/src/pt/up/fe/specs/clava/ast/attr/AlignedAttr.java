@@ -23,7 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 
-public abstract class AlignedAttr extends Attribute {
+public abstract class AlignedAttr extends InheritableAttr {
 
     /// DATAKEYS BEGIN
 

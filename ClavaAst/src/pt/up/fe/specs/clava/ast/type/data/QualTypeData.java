@@ -43,9 +43,9 @@ public class QualTypeData {
         return qualifiers;
     }
 
-    public Standard getStandard() {
-        return standard;
-    }
+    // public Standard getStandard() {
+    // return standard;
+    // }
 
     public String getQualifiersCode() {
         return ClavaCode.getQualifiersCode(qualifiers, standard.isCxx());

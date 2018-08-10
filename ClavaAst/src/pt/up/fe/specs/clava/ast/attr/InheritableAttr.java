@@ -15,12 +15,18 @@ package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public abstract class InheritableAttr extends Attribute {
+
+    public InheritableAttr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public InheritableAttr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
             Collection<? extends ClavaNode> children) {

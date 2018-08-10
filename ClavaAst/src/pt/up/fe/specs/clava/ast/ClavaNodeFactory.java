@@ -180,10 +180,8 @@ import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.ParenType;
-import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.RValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
-import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
@@ -192,7 +190,6 @@ import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
-import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
@@ -669,11 +666,11 @@ public class ClavaNodeFactory {
         return new TypedefType(declInfo, typeData, info, classType);
     }
 
-    public static QualType qualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
-            Type qualifiedType) {
-
-        return new QualType(qualTypeData, typeData, info, qualifiedType);
-    }
+    // public static QualType qualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Type qualifiedType) {
+    //
+    // return new QualType(qualTypeData, typeData, info, qualifiedType);
+    // }
 
     // public static PointerType pointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
     // return new PointerType(typeData, info, pointeeType);
@@ -781,13 +778,15 @@ public class ClavaNodeFactory {
     // return new ElaboratedType(keyword, typeData, info, namedType);
     // }
 
+    /*
     public static TemplateSpecializationType templateSpecializationType(String templateName,
             List<String> templateArgsNames, TypeData typeData, ClavaNodeInfo info,
             List<TemplateArgument> templateArgs, Type aliasedType, Type desugaredType) {
-
+    
         return new TemplateSpecializationType(templateName, templateArgsNames, typeData, info,
                 templateArgs, aliasedType, desugaredType);
     }
+    */
 
     public static ParenType parenType(TypeData typeData, ClavaNodeInfo info, Type innerType) {
         return new ParenType(typeData, info, innerType);

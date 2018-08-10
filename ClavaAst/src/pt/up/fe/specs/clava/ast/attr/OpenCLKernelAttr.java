@@ -19,7 +19,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class OpenCLKernelAttr extends Attribute {
+public class OpenCLKernelAttr extends InheritableAttr {
 
     public OpenCLKernelAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

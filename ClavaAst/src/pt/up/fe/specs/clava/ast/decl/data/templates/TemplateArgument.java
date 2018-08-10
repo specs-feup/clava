@@ -17,6 +17,9 @@ import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
+
 public class TemplateArgument extends ADataClass<TemplateArgument> {
 
     /// DATAKEYS BEGIN
@@ -29,4 +32,9 @@ public class TemplateArgument extends ADataClass<TemplateArgument> {
     public TemplateArgument(TemplateArgumentKind kind) {
         set(TEMPLATE_ARGUMENT_KIND, kind);
     }
+
+    public String getCode(ClavaNode node) {
+        throw new NotImplementedException(getClass());
+    }
+
 }

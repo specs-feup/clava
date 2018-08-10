@@ -17,6 +17,11 @@ import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
 
+/**
+ * @deprecated use C99Qualifier instead
+ * @author JoaoBispo
+ *
+ */
 public enum Qualifier {
 
     CONST,

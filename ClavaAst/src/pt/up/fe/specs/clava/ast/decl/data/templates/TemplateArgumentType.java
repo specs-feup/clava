@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.decl.data.templates;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TemplateArgumentType extends TemplateArgument {
@@ -26,8 +27,18 @@ public class TemplateArgumentType extends TemplateArgument {
 
     /// DATAKEYS END
 
-    public TemplateArgumentType(TemplateArgumentKind kind) {
-        super(kind);
+    public TemplateArgumentType(Type type) {
+        this();
+
+        set(TYPE, type);
     }
 
+    public TemplateArgumentType() {
+        super(TemplateArgumentKind.Type);
+    }
+
+    @Override
+    public String getCode(ClavaNode node) {
+        return get(TYPE).getCode(node);
+    }
 }

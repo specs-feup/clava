@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -273,12 +274,20 @@ public abstract class Type extends ClavaNode {
      *
      * @return
      */
-    public List<String> getTemplateArgumentStrings() {
+    public List<String> getTemplateArgumentStrings(ClavaNode sourceNode) {
         if (!hasSugar()) {
             return Collections.emptyList();
         }
 
-        return desugar().getTemplateArgumentStrings();
+        return desugar().getTemplateArgumentStrings(sourceNode);
+    }
+
+    public List<TemplateArgument> getTemplateArguments() {
+        if (!hasSugar()) {
+            return Collections.emptyList();
+        }
+
+        return desugar().getTemplateArguments();
     }
 
     public List<Type> getTemplateArgumentTypes() {
@@ -328,7 +337,8 @@ public abstract class Type extends ClavaNode {
      * @return true if there are template arguments, false otherise
      */
     public boolean hasTemplateArgs() {
-        return !getTemplateArgumentStrings().isEmpty();
+        return !getTemplateArguments().isEmpty();
+        // return !getTemplateArgumentStrings().isEmpty();
     }
 
     public boolean hasTemplateArgTypes() {
@@ -339,6 +349,7 @@ public abstract class Type extends ClavaNode {
      * 
      * @return true if this type updated its template argument types, false otherwise
      */
+    /*
     public boolean hasUpdatedTemplateArgTypes() {
         // If no sugar, return false
         if (!hasSugar()) {
@@ -348,6 +359,7 @@ public abstract class Type extends ClavaNode {
         // System.out.println("DESUGARING:" + this.getClass().getSimpleName());
         return desugar().hasUpdatedTemplateArgTypes();
     }
+    */
 
     /**
      * 

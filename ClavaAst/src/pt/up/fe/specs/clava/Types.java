@@ -224,7 +224,7 @@ public class Types {
             Type typeClass = ((TypedefType) underlyingType).getTypeClass();
 
             // Optimization: detach to avoid copy
-            typeClass.detach();
+            // typeClass.detach();
 
             sugaredType.setDesugar(typeClass);
         }
