@@ -27,6 +27,10 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.BaseInit;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.DelegatingInit;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
@@ -37,6 +41,7 @@ import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecific
 import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
+import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -269,6 +274,30 @@ public class ClavaDataParsers {
 
         String sanitizedFilename = location.getFilename().replace('.', '_');
         return "anon_" + sanitizedFilename + "_" + location.getStartLine();
+    }
+
+    public static CXXCtorInitializer cxxCtorInitializer(LineStream lines, ClangParserData parserData) {
+        String initExprId = lines.nextLine();
+        CXXCtorInitializerKind initKind = LineStreamParsers.enumFromName(CXXCtorInitializerKind.class, lines);
+
+        CXXCtorInitializer ctorInit = CXXCtorInitializer.newInstance(initKind);
+        parserData.getClavaNodes().queueSetNode(ctorInit, CXXCtorInitializer.INIT_EXPR, initExprId);
+
+        switch (initKind) {
+        case ANY_MEMBER_INITIALIZER:
+            parserData.getClavaNodes().queueSetNode(ctorInit, AnyMemberInit.ANY_MEMBER_DECL, lines.nextLine());
+            break;
+        case BASE_INITIALIZER:
+            parserData.getClavaNodes().queueSetNode(ctorInit, BaseInit.BASE_CLASS, lines.nextLine());
+            break;
+        case DELEGATING_INITIALIZER:
+            parserData.getClavaNodes().queueSetNode(ctorInit, DelegatingInit.DELEGATED_TYPE, lines.nextLine());
+            break;
+        default:
+            throw new NotImplementedException(initKind);
+        }
+
+        return ctorInit;
     }
 
 }

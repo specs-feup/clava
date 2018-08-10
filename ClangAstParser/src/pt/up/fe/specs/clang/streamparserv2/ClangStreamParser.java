@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
@@ -104,6 +105,9 @@ public class ClangStreamParser {
 
         // Parse top-level types
         for (String topLevelTypeId : topLevelTypes) {
+            if (ClavaNodes.isNullId(topLevelTypeId)) {
+                continue;
+            }
             ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelTypeId);
             Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
 

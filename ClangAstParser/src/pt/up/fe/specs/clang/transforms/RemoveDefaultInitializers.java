@@ -13,12 +13,13 @@
 
 package pt.up.fe.specs.clang.transforms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
-import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
@@ -38,20 +39,28 @@ public class RemoveDefaultInitializers implements SimplePostClavaRule {
 
         List<CXXCtorInitializer> initializers = ((CXXConstructorDecl) node).getInitializers();
 
+        boolean hasChanges = false;
+        List<CXXCtorInitializer> newInitializers = new ArrayList<>();
         for (CXXCtorInitializer initializer : initializers) {
 
             // Remove if default initialization
-            if (initializer.getInitExpr() instanceof CXXDefaultInitExpr) {
-                queue.delete(initializer);
+            if (initializer.get(CXXCtorInitializer.INIT_EXPR) instanceof CXXDefaultInitExpr) {
+                hasChanges = true;
+                // queue.delete(initializer);
                 continue;
             }
 
+            newInitializers.add(initializer);
             // if (initializer.getAncestor(TranslationUnit.class).getFilename().equals("BondMap.cpp")) {
             // System.out.println("KIND:" + initializer.getKind());
             // System.out.println("Init Expr:" + initializer.getInitExpr());
             // }
         }
 
+        // If there are changes, set new initializers
+        if (hasChanges) {
+            node.set(CXXConstructorDecl.CONSTRUCTOR_INITS, newInitializers);
+        }
     }
 
 }

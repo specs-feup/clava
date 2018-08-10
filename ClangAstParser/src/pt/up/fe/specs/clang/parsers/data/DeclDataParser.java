@@ -13,12 +13,16 @@
 
 package pt.up.fe.specs.clang.parsers.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -30,6 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
@@ -200,6 +205,29 @@ public class DeclDataParser {
 
         data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
+
+        return data;
+    }
+
+    public static DataStore parseCXXConstructorDeclData(LineStream lines, ClangParserData dataStore) {
+
+        // Parse CXXMethodDecl data
+        DataStore data = parseCXXMethodDeclData(lines, dataStore);
+
+        // Build CXXCtorInitializers
+        int numCtorInits = LineStreamParsers.integer(lines);
+        List<CXXCtorInitializer> inits = new ArrayList<>(numCtorInits);
+
+        for (int i = 0; i < numCtorInits; i++) {
+            inits.add(ClavaDataParsers.cxxCtorInitializer(lines, dataStore));
+        }
+
+        data.set(CXXConstructorDecl.CONSTRUCTOR_INITS, inits);
+        // List<CXXCtor>
+        // dataStore.getClavaNodes().queueSetNode(data, CXXConstructorDecl.INI, data.get(CXXMethodDecl.RECORD_ID));
+
+        // data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
+        // dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
 
         return data;
     }

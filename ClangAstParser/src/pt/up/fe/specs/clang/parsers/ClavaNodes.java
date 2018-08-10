@@ -73,7 +73,7 @@ public class ClavaNodes {
         ClavaNode clavaNode = clavaNodes.get(nodeId);
 
         Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + nodeId
-                + "'. Check if node is being visited, or if there is a cycle in the tree.");
+                + "'. Check if node is being visited.");
 
         return clavaNode;
 
