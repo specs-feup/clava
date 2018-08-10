@@ -29,15 +29,22 @@ public class GenericClangNode extends ClangNode {
     private String content;
     private SourceRange location;
     private final String locationCode;
+
+    private final boolean manuallyCreated;
     // private String filepath = null;
     // Cached value for location
     // transient private Location location = null;
 
     public GenericClangNode(String name) {
-        this(name, null, null, null, null);
+        this(name, null, null, null, null, false);
     }
 
-    private GenericClangNode(String name, String address, String content, SourceRange location, String locationCode) {
+    public GenericClangNode(String name, String address, boolean manuallyCreated) {
+        this(name, address, null, null, null, manuallyCreated);
+    }
+
+    private GenericClangNode(String name, String address, String content, SourceRange location, String locationCode,
+            boolean manuallyCreated) {
         super(name);
 
         this.address = address;
@@ -45,11 +52,17 @@ public class GenericClangNode extends ClangNode {
         this.content = content;
         this.location = location;
         this.locationCode = locationCode;
+
+        this.manuallyCreated = manuallyCreated;
     }
 
     @Override
     protected ClangNode copyPrivate() {
         return new GenericClangNode(getName());
+    }
+
+    public boolean isManuallyCreated() {
+        return manuallyCreated;
     }
 
     @Override
@@ -120,7 +133,7 @@ public class GenericClangNode extends ClangNode {
     }
 
     public GenericClangNode setAddress(String address) {
-        return new GenericClangNode(getName(), address, content, location, locationCode);
+        return new GenericClangNode(getName(), address, content, location, locationCode, manuallyCreated);
     }
 
     // public GenericClangNode setContent(String content) {
@@ -136,7 +149,7 @@ public class GenericClangNode extends ClangNode {
     // }
 
     public GenericClangNode setLocationCode(String locationCode) {
-        return new GenericClangNode(getName(), address, content, location, locationCode);
+        return new GenericClangNode(getName(), address, content, location, locationCode, manuallyCreated);
     }
 
     @Override

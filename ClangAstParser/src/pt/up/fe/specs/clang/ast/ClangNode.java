@@ -59,6 +59,10 @@ public abstract class ClangNode extends ATreeNode<ClangNode> {
         return name;
     }
 
+    public boolean isManuallyCreated() {
+        return false;
+    }
+
     public abstract Optional<String> getContentTry();
 
     public void setContent(String content) {

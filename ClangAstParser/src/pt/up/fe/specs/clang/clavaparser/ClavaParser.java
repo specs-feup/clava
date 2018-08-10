@@ -537,8 +537,9 @@ public class ClavaParser implements AutoCloseable {
 
         // System.out.println("ARG TYPES:" + argTypes);
 
+        templateType.setTemplateArgumentTypes(argTypes);
         // Set template argument types, but without changing the string template arguments
-        templateType.setTemplateArgumentTypes(argTypes, false);
+        // templateType.setTemplateArgumentTypes(argTypes, false);
     }
 
     private void parseDelayedTypes() {

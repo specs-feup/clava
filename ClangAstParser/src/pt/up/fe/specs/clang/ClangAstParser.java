@@ -283,6 +283,9 @@ public class ClangAstParser {
         // List<ClangNode> clangDump = new AstParser().parse(output.getStdOut());
         List<ClangNode> clangDump = output.getStdOut();
 
+        // System.out.println(
+        // "TOP LEVEL NODES:" + clangDump.stream().map(ClangNode::getExtendedId).collect(Collectors.toList()));
+
         // Top-level Clang Nodes
         // Map<String, ClangNode> topLevelClangNodes = clangDump.stream()
         // .collect(Collectors.toMap(ClangNode::getExtendedId, ClangNode::getThis));

@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -112,8 +111,9 @@ public class TemplateSpecializationTypeParser extends AClangNodeParser<TemplateS
 
         Preconditions.checkArgument(remainingChildren.isEmpty(), "Did not expect more children:" + remainingChildren);
 
-        return ClavaNodeFactory.templateSpecializationType(templateName, templateArguments, typeData,
-                node.getInfo(), templateArgumentsNodes, aliasedType, desugaredType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.templateSpecializationType(templateName, templateArguments, typeData,
+        // node.getInfo(), templateArgumentsNodes, aliasedType, desugaredType);
     }
 
 }

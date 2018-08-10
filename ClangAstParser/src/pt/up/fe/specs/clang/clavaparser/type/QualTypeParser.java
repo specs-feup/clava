@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.QualTypeData;
@@ -62,7 +61,8 @@ public class QualTypeParser extends AClangNodeParser<QualType> {
 
         Type qualifiedType = toType(children.get(0));
 
-        return ClavaNodeFactory.qualType(qualTypeData, typeData, node.getInfo(), qualifiedType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.qualType(qualTypeData, typeData, node.getInfo(), qualifiedType);
     }
 
 }

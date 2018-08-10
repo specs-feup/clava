@@ -73,7 +73,7 @@ public class CxxTest {
 
     @Test
     public void testExceptions() {
-        new CxxTester("exceptions.cpp").test();
+        new CxxTester("exceptions.cpp").onePass().showCode().test();
     }
 
     @Test

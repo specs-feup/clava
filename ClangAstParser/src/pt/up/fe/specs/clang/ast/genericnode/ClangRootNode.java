@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -89,10 +90,31 @@ public class ClangRootNode extends ClangNode {
 
             // All clang nodes
             allClangNodes = new HashMap<>();
+
+            // Add top-level nodes
+            // System.out.println("NODES 1:" + allClangNodes.size());
             for (ClangNode topLevelNode : topLevelNodes) {
                 topLevelNode.getDescendantsAndSelfStream()
+                        .filter(clangNode -> clangNode.getExtendedId() != null)
                         .forEach(clangNode -> allClangNodes.put(clangNode.getExtendedId(), clangNode));
             }
+
+            // Add types
+            // System.out.println("NODES 2:" + allClangNodes.size());
+            for (ClangNode topLevelNode : clangTypes) {
+                topLevelNode.getDescendantsAndSelfStream()
+                        .filter(clangNode -> clangNode.getExtendedId() != null)
+                        .forEach(clangNode -> allClangNodes.put(clangNode.getExtendedId(), clangNode));
+            }
+
+            // Add system header nodes
+            // System.out.println("NODES 3:" + allClangNodes.size());
+            for (ClangNode topLevelNode : getStdErr().get(ClangParserData.SYSTEM_HEADERS_CLANG_NODES).values()) {
+                topLevelNode.getDescendantsAndSelfStream()
+                        .filter(clangNode -> clangNode.getExtendedId() != null)
+                        .forEach(clangNode -> allClangNodes.put(clangNode.getExtendedId(), clangNode));
+            }
+            // System.out.println("NODES 4:" + allClangNodes.size());
         }
 
         public Map<String, ClangNode> getAllClangNodes() {

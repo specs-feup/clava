@@ -214,11 +214,11 @@ public class ClavaDataParsers {
 
         switch (kind) {
         case Type:
-            TemplateArgumentType type = new TemplateArgumentType(kind);
+            TemplateArgumentType type = new TemplateArgumentType();
             parserData.getClavaNodes().queueSetNode(type, TemplateArgumentType.TYPE, lines.nextLine());
             return type;
         case Expression:
-            TemplateArgumentExpr expr = new TemplateArgumentExpr(kind);
+            TemplateArgumentExpr expr = new TemplateArgumentExpr();
             parserData.getClavaNodes().queueSetNode(expr, TemplateArgumentExpr.EXPR, lines.nextLine());
             return expr;
         default:

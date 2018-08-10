@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.TagType;
+import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
@@ -97,7 +98,7 @@ public class TypeDataParser {
                 lines));
         data.add(QualType.ADDRESS_SPACE, LineStreamParsers.longInt(lines));
 
-        // dataStore.getClavaNodes().queueSetNode(data, QualType.UNQUALIFIED_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, QualType.UNQUALIFIED_TYPE, lines.nextLine());
 
         return data;
 
@@ -213,6 +214,17 @@ public class TypeDataParser {
         data.add(TemplateTypeParmType.INDEX, LineStreamParsers.integer(lines));
         data.add(TemplateTypeParmType.IS_PACKED, LineStreamParsers.oneOrZero(lines));
         parserData.getClavaNodes().queueSetNode(data, TemplateTypeParmType.DECL, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseTemplateSpecializationTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        data.add(TemplateSpecializationType.IS_TYPE_ALIAS, LineStreamParsers.oneOrZero(lines));
+        data.add(TemplateSpecializationType.TEMPLATE_NAME, lines.nextLine());
+        data.add(TemplateSpecializationType.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, parserData));
 
         return data;
     }

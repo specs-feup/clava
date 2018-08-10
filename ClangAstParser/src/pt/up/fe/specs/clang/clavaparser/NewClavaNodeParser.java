@@ -20,6 +20,7 @@ import java.util.function.Function;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
+import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
@@ -64,6 +65,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
     @Override
     protected T parse(ClangNode node, StringParser parser) {
+
         // System.out.println("PARSING " + node.getExtendedId());
         // Discard parser contents
         parser.clear();
@@ -72,6 +74,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // Using parsed ClavaNodes instead of simply ClavaData to avoid manually applying
         // post-processing and other complications
         ClavaNode clavaNode = getClangRootData().getNewParsedNodes().get(node.getId());
+
         Preconditions.checkNotNull(clavaNode, "Could not find new ClavaNode for id '" + node.getId() + "'");
         // System.out.println("NODE:" + node.getContent());
         // System.out.println("CLAVA DATA:" + clavaNode.getData().getClass());
@@ -241,25 +244,55 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         if (useNewNodesChildren(clavaNode)) {
             // Get ClangNodes of the children visited by the new node
             List<String> childrenId = getStdErr().get(ClangParserData.VISITED_CHILDREN).get(node.getExtendedId());
+            // if (clavaNode instanceof ElaboratedType) {
+            // System.out.println("ELABORATED CHILDREN:" + childrenId);
+            // }
 
             List<ClangNode> childrenClangNodes = new ArrayList<>();
             for (String childId : childrenId) {
                 ClangNode clangNode = getClangRootData().getAllClangNodes().get(childId);
 
+                if (clangNode != null) {
+                    childrenClangNodes.add(clangNode);
+                    continue;
+                }
+                //
+                // if (clangNode != null) {
+                // System.out.println("NAME:" + clangNode.getName());
+                // System.out.println("ID:" + clangNode.getId());
+                // }
+
                 // If null, check if system header node
-                if (clangNode == null) {
-                    // System.out.println("SYSTEM HEADER IDS:"
-                    // + getStdErr().get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).keySet());
-                    // System.out.println("SYSTEM HEADER ID:" + childId);
-                    clangNode = getStdErr().get(ClangParserData.SYSTEM_HEADERS_CLANG_NODES).get(childId);
-                    // System.out.println("CLANG NODE:" + clangNode);
+                // if (clangNode == null) {
+                // // System.out.println("SYSTEM HEADER IDS:"
+                // // + getStdErr().get(ClangParserKeys.SYSTEM_HEADERS_CLANG_NODES).keySet());
+                // // System.out.println("SYSTEM HEADER ID:" + childId);
+                // clangNode = getStdErr().get(ClangParserData.SYSTEM_HEADERS_CLANG_NODES).get(childId);
+                // // System.out.println("CLANG NODE:" + clangNode);
+                // }
+
+                // System.out.println("CLANG NODES:" + getClangRootData().getAllClangNodes().keySet());
+                // System.out.println("REQUIRED ID:" + childId);
+                // if (true) {
+                // throw new RuntimeException("Stop");
+                // }
+
+                // Create ClangNode
+                ClavaNode childNode = getStdErr().get(ClangParserData.CLAVA_NODES).get(childId);
+
+                if (childNode == null) {
+                    throw new RuntimeException("Could not find child with id '" + childId + "' for node " + clavaNode);
                 }
 
+                // Create ClangNode
+                clangNode = new GenericClangNode(childNode.getClass().getSimpleName(), childId, true);
+                // System.out.println("CLANG NODE: " + clangNode);
+                /*
                 if (clangNode == null) {
                     System.out.println("Null clang node for child id " + childId);
                     continue;
                 }
-
+                */
                 childrenClangNodes.add(clangNode);
 
             }
@@ -272,6 +305,12 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
     }
 
     private boolean useNewNodesChildren(ClavaNode clavaNode) {
+
+        // Bypass
+        if (true) {
+            return true;
+        }
+
         // For now, only use children from Clang AST dump
         // Decl children replace BareDecl
         // if (clavaNode instanceof DeclRefExpr) {

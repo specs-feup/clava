@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clang.clavaparser.decl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -24,18 +23,14 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.VarDeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.Qualifier;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
-import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class VarDeclParser extends AClangNodeParser<VarDecl> {
 
@@ -69,7 +64,7 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
 
         // System.out.println("TYPE BEFORE:" + type + " (" + type.hashCode() + ")");
         if (varDeclData.isConstexpr()) {
-            type = adaptTypeConstToConstexpr(varName, type);
+            // type = adaptTypeConstToConstexpr(varName, type);
             // type.getDescendantsAndSelf(Type.class).stream()
             // .forEach(VarDeclParser::adaptConstToConstexpr);
         }
@@ -91,34 +86,34 @@ public class VarDeclParser extends AClangNodeParser<VarDecl> {
         throw new RuntimeException("deprecated");
         // return ClavaNodeFactory.varDecl(varDeclData, varName, type, declData, info(node), initExpr);
     }
-
+    /*
     private static Type adaptTypeConstToConstexpr(String name, Type type) {
         if (type.hasSugar()) {
             adaptTypeConstToConstexpr("desugared " + name, type.desugar());
         }
-
+    
         if (!(type instanceof QualType)) {
             return type;
         }
-
+    
         QualType qualType = (QualType) type;
-
+    
         QualType copy = (QualType) qualType.copy();
         // copy.setId(null);
         copy.setId(LegacyToDataStore.getIdGenerator().next("legacy_"));
-
-        // System.out.println("For " + name + ": " + copy.getQualifiers());
-        copy.setQualifiers(copy.getQualifiers().stream()
-                .map(qual -> qual == Qualifier.CONST ? Qualifier.CONSTEXPR : qual)
+    
+        copy.setQualifiers(copy.get(QualType.C99_QUALIFIERS).stream()
+                .map(qual -> qual == C99Qualifier.CONST ? Qualifier.CONSTEXPR : qual)
                 .collect(Collectors.toList()));
-
+    
         if (qualType.hasParent()) {
             // System.out.println("Replacing in parent");
             NodeInsertUtils.replace(qualType, copy);
         }
-
+    
         return copy;
     }
+    */
     // private static void adaptConstToConstexpr(Type type) {
     // if (!(type instanceof QualType)) {
     // return;
