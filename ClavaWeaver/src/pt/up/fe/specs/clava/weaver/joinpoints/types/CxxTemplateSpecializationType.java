@@ -54,12 +54,12 @@ public class CxxTemplateSpecializationType extends ATemplateSpecializationType {
 
     @Override
     public Integer getNumArgsImpl() {
-        return templateSpecializationType.getTemplateArgumentStrings().size();
+        return templateSpecializationType.getTemplateArguments().size();
     }
 
     @Override
     public String[] getArgsArrayImpl() {
-        return templateSpecializationType.getTemplateArgumentStrings().toArray(new String[0]);
+        return templateSpecializationType.getTemplateArgumentStrings(null).toArray(new String[0]);
     }
 
     @Override

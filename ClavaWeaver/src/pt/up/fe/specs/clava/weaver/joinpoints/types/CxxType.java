@@ -80,7 +80,7 @@ public class CxxType extends AType {
 
     @Override
     public String[] getTemplateArgsStringsArrayImpl() {
-        return type.getTemplateArgumentStrings().toArray(new String[0]);
+        return type.getTemplateArgumentStrings(null).toArray(new String[0]);
     }
 
     @Override
