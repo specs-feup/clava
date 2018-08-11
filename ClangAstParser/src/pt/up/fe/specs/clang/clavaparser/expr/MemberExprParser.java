@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -55,8 +54,9 @@ public class MemberExprParser extends AClangNodeParser<MemberExpr> {
 
         Expr base = toExpr(children.get(0));
 
-        return ClavaNodeFactory.memberExpr(memberName, isArrow, exprData, info(node),
-                base);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.memberExpr(memberName, isArrow, exprData, info(node),
+        // base);
     }
 
 }

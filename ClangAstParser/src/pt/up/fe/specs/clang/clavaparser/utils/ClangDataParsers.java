@@ -448,11 +448,11 @@ public class ClangDataParsers {
 
         // VarDeclDataV2 varDeclData2 = streamData.get(ClavaDataParser.getDataKey(varDeclClass))
         // .get(node.getExtendedId());
-        if (varDeclData2 == null) {
-            SpecsLogs.msgWarn(
-                    "ClangDataParsers.parseVarDecl: could not find varDeclDataV2 for node " + node.getExtendedId());
-            System.out.println("PARENT NODE:" + node.getParent());
-        }
+        // if (varDeclData2 == null) {
+        // SpecsLogs.msgWarn(
+        // "ClangDataParsers.parseVarDecl: could not find varDeclDataV2 for node " + node.getExtendedId());
+        // System.out.println("PARENT NODE:" + node.getParent());
+        // }
         // VarDeclDumperInfo varDeclDumperInfo =
         // streamData.get(StreamKeys.VARDECL_DUMPER_INFO).get(node.getExtendedId());
         // if (varDeclDumperInfo == null) {

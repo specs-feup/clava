@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXTemporaryObjectExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
@@ -46,8 +45,9 @@ public class CXXTemporaryObjectExprParser extends AClangNodeParser<CXXTemporaryO
         List<ClavaNode> children = parseChildren(node);
         List<Expr> args = children.stream().map(child -> toExpr(child)).collect(Collectors.toList());
 
+        throw new RuntimeException("deprecated");
         // Using R_VALUE as default, for now
-        return ClavaNodeFactory.cxxTemporaryObjectExpr(constructorData, exprData, info(node), args);
+        // return ClavaNodeFactory.cxxTemporaryObjectExpr(constructorData, exprData, info(node), args);
 
     }
 

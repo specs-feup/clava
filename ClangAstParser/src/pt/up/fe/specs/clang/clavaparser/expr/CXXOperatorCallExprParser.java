@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -55,7 +54,9 @@ public class CXXOperatorCallExprParser extends AClangNodeParser<CXXOperatorCallE
         Expr operator = toExpr(children.get(0));
         List<Expr> operands = toExpr(SpecsCollections.subList(children, 1));
 
-        return ClavaNodeFactory.cxxOperatorCallExpr(exprData, node.getInfo(), operator, operands);
+        throw new RuntimeException("deprecated");
+
+        // return ClavaNodeFactory.cxxOperatorCallExpr(exprData, node.getInfo(), operator, operands);
     }
 
 }

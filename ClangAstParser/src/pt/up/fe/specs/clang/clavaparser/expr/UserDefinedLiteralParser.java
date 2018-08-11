@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -47,7 +46,9 @@ public class UserDefinedLiteralParser extends AClangNodeParser<UserDefinedLitera
         Expr callee = toExpr(children.get(0));
         Expr cookedLiteral = toExpr(children.get(1));
 
-        return ClavaNodeFactory.userDefinedLiteral(exprData, node.getInfo(), callee, cookedLiteral);
+        throw new RuntimeException("deprecated");
+
+        // return ClavaNodeFactory.userDefinedLiteral(exprData, node.getInfo(), callee, cookedLiteral);
     }
 
 }

@@ -433,6 +433,9 @@ public class ClavaParser implements AutoCloseable {
 
         App app = rootParser.parse(clangAst);
 
+        // Replace DummyNodes with old nodes, for new nodes that are not implemented yet
+        // DummyReplacerParser.replaceDummyNodes(app, converter);
+
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
 

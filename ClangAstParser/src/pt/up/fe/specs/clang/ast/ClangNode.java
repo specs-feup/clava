@@ -43,7 +43,7 @@ public abstract class ClangNode extends ATreeNode<ClangNode> {
     // public static Map<Class<?>, Integer> classes = new HashMap<>();
     // private final boolean countInstances = false;
 
-    private final String name;
+    private String name;
     private ClavaId clavaId = null;
     // private final Lazy<ClavaNodeInfo> info;
 
@@ -57,6 +57,10 @@ public abstract class ClangNode extends ATreeNode<ClangNode> {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isManuallyCreated() {

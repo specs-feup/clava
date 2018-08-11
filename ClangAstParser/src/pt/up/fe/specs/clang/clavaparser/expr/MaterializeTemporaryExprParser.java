@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
@@ -62,7 +61,8 @@ public class MaterializeTemporaryExprParser extends AClangNodeParser<Materialize
 
         Expr temporaryExpr = toExpr(children.get(0));
 
-        return ClavaNodeFactory.materializeTemporaryExpr(exprData, extendingDecl, info(node), temporaryExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.materializeTemporaryExpr(exprData, extendingDecl, info(node), temporaryExpr);
     }
 
 }

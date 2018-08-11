@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
@@ -30,6 +31,8 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
+import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
+import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
@@ -116,7 +119,7 @@ public class ExprDataParser {
         return data;
     }
 
-    public static DataStore parseCompoundlLiteralExprData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseCompoundLiteralExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(CompoundLiteralExpr.IS_FILE_SCOPE, LineStreamParsers.oneOrZero(lines.nextLine()));
@@ -154,6 +157,32 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(OverloadExpr.QUALIFIER, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseCXXConstructExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXConstructExpr.IS_ELIDABLE, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXConstructExpr.REQUIRES_ZERO_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseMemberExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(MemberExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
+        data.add(MemberExpr.MEMBER_NAME, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseMaterializeTemporaryExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, MaterializeTemporaryExpr.EXTENDING_DECL, lines.nextLine());
 
         return data;
     }

@@ -142,6 +142,7 @@ public class ClangConverterTable implements AutoCloseable {
         // System.out.println("PARSING " + clangNode.getExtendedId());
         // Check if parsed nodes contains a valid node
         ClavaNode newClavaNode = getClangRootData().getNewParsedNodes().get(clangNode.getExtendedId());
+
         if (newClavaNode != null) {
             boolean isDummy = newClavaNode instanceof DummyNode;
             if (!isDummy || (isDummy && clangNode.isManuallyCreated())) {
@@ -154,10 +155,20 @@ public class ClangConverterTable implements AutoCloseable {
                 return newNodeParsers.get(newClavaNode.getClass()).apply(this).parse(clangNode);
 
             }
+        } else {
+            System.out.println("No new ClavaNode for id " + clangNode.getExtendedId());
         }
+
+        // If not found, try to add decl at the end
+        // if (!converter.containsKey(clangNode.getName())) {
+        // clangNode.setName(clangNode.getName() + "Decl");
+        // }
 
         // If map does not have a conversor, stop
         if (!converter.containsKey(clangNode.getName())) {
+            SpecsLogs.debug(
+                    "Creating UNDEFINED node for class '" + clangNode.getName() + "' with id " + clangNode.getId());
+
             // Check if it has content
             boolean hasContent = !clangNode.getContentTry().orElse("").isEmpty();
 

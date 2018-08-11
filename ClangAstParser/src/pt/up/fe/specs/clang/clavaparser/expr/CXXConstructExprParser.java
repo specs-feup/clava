@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
@@ -51,8 +50,9 @@ public class CXXConstructExprParser extends AClangNodeParser<CXXConstructExpr> {
 
         List<Expr> args = toExpr(children);
 
+        throw new RuntimeException("deprecated");
         // Using R_VALUE as default, for now
-        return ClavaNodeFactory.cxxConstructExpr(constructorData, exprData, info(node), args);
+        // return ClavaNodeFactory.cxxConstructExpr(constructorData, exprData, info(node), args);
     }
 
 }

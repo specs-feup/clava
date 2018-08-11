@@ -16,12 +16,14 @@ package pt.up.fe.specs.clang.clavaparser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
@@ -53,6 +55,8 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
+import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T> {
 
@@ -176,7 +180,11 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         */
     }
 
-    private void processNodeCopy(ClavaNode clavaNodeCopy) {
+    public void processNodeCopy(ClavaNode clavaNodeCopy) {
+
+        // if (true) {
+        // return;
+        // }
 
         // In case node has a type, replace with old node type if the type or any of its descendants it a dummy node
         if (clavaNodeCopy instanceof Typable) {
@@ -213,6 +221,8 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
                 if (initExpr instanceof DummyNode) {
                     ClavaNode nonDummyExpr = getOldClavaNode(initExpr);
+                    System.out.println("NON DUMMY EXPR:" + nonDummyExpr.toTree());
+                    // NodeInsertUtils.replace(initExpr, nonDummyExpr, true);
                     init.set(CXXCtorInitializer.INIT_EXPR, (Expr) nonDummyExpr);
 
                     CXXCtorInitializerKind kind = init.get(CXXCtorInitializer.INIT_KIND);
@@ -220,14 +230,18 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                     case ANY_MEMBER_INITIALIZER:
                         Decl anyMemberDecl = init.get(AnyMemberInit.ANY_MEMBER_DECL);
                         if (anyMemberDecl instanceof DummyNode) {
-                            init.set(AnyMemberInit.ANY_MEMBER_DECL, (Decl) getOldClavaNode(anyMemberDecl));
+                            Decl newAnyMemberDecl = (Decl) getOldClavaNode(anyMemberDecl);
+                            // NodeInsertUtils.replace(anyMemberDecl, newAnyMemberDecl, true);
+                            init.set(AnyMemberInit.ANY_MEMBER_DECL, newAnyMemberDecl);
                         }
                         break;
 
                     case BASE_INITIALIZER:
                         Type baseClass = init.get(BaseInit.BASE_CLASS);
                         if (baseClass instanceof DummyNode) {
-                            init.set(BaseInit.BASE_CLASS, (Type) getOldClavaNode(baseClass));
+                            Type newType = (Type) getOldClavaNode(baseClass);
+                            // NodeInsertUtils.replace(baseClass, newType, true);
+                            init.set(BaseInit.BASE_CLASS, newType);
                         }
                         break;
 
@@ -254,9 +268,17 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         if (clavaNodeCopy instanceof Type) {
             Type type = (Type) clavaNodeCopy;
 
-            // If has dummy desugared
-            if (type.hasSugar() && (type.desugar() instanceof DummyNode)) {
-                type.set(Type.UNQUALIFIED_DESUGARED_TYPE, (Type) getOldClavaNode(type.desugar()));
+            Type currentType = type;
+
+            while (currentType.hasSugar()) {
+                // If has dummy desugared
+                if (currentType.desugar() instanceof DummyNode) {
+                    Type newType = (Type) getOldClavaNode(currentType.desugar());
+                    // NodeInsertUtils.replace(currentType.desugar(), newType, true);
+                    currentType.set(Type.UNQUALIFIED_DESUGARED_TYPE, newType);
+                }
+
+                currentType = currentType.get(Type.UNQUALIFIED_DESUGARED_TYPE);
             }
 
             if (type instanceof TemplateSpecializationType) {
@@ -267,16 +289,21 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                     switch (arg.get(TemplateArgument.TEMPLATE_ARGUMENT_KIND)) {
                     case Expression:
                         if (arg.get(TemplateArgumentExpr.EXPR) instanceof DummyNode) {
-                            TemplateArgumentExpr newArgExpr = new TemplateArgumentExpr(
-                                    (Expr) getOldClavaNode(arg.get(TemplateArgumentExpr.EXPR)));
+                            Expr newExpr = (Expr) getOldClavaNode(arg.get(TemplateArgumentExpr.EXPR));
+                            // NodeInsertUtils.replace(arg.get(TemplateArgumentExpr.EXPR), newExpr);
+                            TemplateArgumentExpr newArgExpr = new TemplateArgumentExpr(newExpr);
                             tsType.setTemplateArgument(i, newArgExpr);
                         }
                         break;
 
                     case Type:
                         if (arg.get(TemplateArgumentType.TYPE) instanceof DummyNode) {
-                            TemplateArgumentType newArgType = new TemplateArgumentType(
-                                    (Type) getOldClavaNode(arg.get(TemplateArgumentType.TYPE)));
+                            Type newType = (Type) getOldClavaNode(arg.get(TemplateArgumentType.TYPE));
+                            // NodeInsertUtils.replace(arg.get(TemplateArgumentType.TYPE), newType);
+
+                            TemplateArgumentType newArgType = new TemplateArgumentType(newType);
+                            // TemplateArgumentType newArgType = new TemplateArgumentType(
+                            // (Type) getOldClavaNode(arg.get(TemplateArgumentType.TYPE)));
                             tsType.setTemplateArgument(i, newArgType);
                         }
                         break;
@@ -288,13 +315,80 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             }
         }
 
+        if (clavaNodeCopy instanceof Typable) {
+            Typable typable = (Typable) clavaNodeCopy;
+
+            // typable.getType().getDescendantsStream()
+            // .filter(DummyNode.class::isInstance)
+            // .forEach(dummyNode -> System.out.println("DUMMY NODE ID:" + dummyNode.get(ClavaNode.ID)));
+
+            TransformQueue<ClavaNode> queue = new TransformQueue<>("Dummy Types Replacement");
+
+            typable.getType().getDescendantsStream()
+                    .filter(DummyNode.class::isInstance)
+                    .filter(dummyNode -> getOldClavaNode(dummyNode, false) != null)
+                    .filter(dummyNode -> dummyNode.hasParent())
+                    .forEach(dummyNode -> queue.swap(dummyNode, getOldClavaNode(dummyNode), false));
+
+            queue.apply();
+
+            // if (typable.getType().getDescendantsStream().filter(DummyNode.class::isInstance).findFirst()
+            // .isPresent()) {
+            //
+            // throw new RuntimeException("STOP");
+            // }
+        }
+
+        // if (clavaNodeCopy instanceof CXXMethodDecl) {
+        // System.out.println("HAS DUMMY?" + clavaNodeCopy.getDescendantsAndSelfStream()
+        // .filter(DummyNode.class::isInstance)
+        // .findFirst()
+        // .isPresent());
+        // }
+
+        // if (clavaNodeCopy instanceof TagType) {
+        // Decl tagDecl = clavaNodeCopy.get(TagType.DECL);
+        //
+        // if (tagDecl instanceof DummyNode) {
+        // ClavaNode nonDummyDecl = getOldClavaNode(tagDecl);
+        // clavaNodeCopy.set(TagType.DECL, (Decl) nonDummyDecl);
+        // }
+        //
+        // }
+
     }
 
     private ClavaNode getOldClavaNode(ClavaNode newNode) {
+        return getOldClavaNode(newNode, true);
+    }
+
+    private ClavaNode getOldClavaNode(ClavaNode newNode, boolean checkNull) {
         String id = newNode.get(ClavaNode.ID);
         ClangNode clangNode = getClangRootData().getAllClangNodes().get(id);
-        SpecsCheck.checkNotNull(clangNode, () -> "Could not find old Clava node for node '" + newNode + "'");
+
+        if (checkNull) {
+            SpecsCheck.checkNotNull(clangNode, () -> "Could not find old Clava node for node '" + newNode + "'");
+        } else {
+            if (clangNode == null) {
+                return null;
+            }
+        }
+
         ClavaNode oldNode = parseChild(clangNode, newNode instanceof Type);
+
+        // Put children in a new list, so that they can be detached
+        List<ClavaNode> newChildren = newNode.getChildrenStream()
+                .collect(Collectors.toList());
+
+        // Replace children
+        newChildren.stream().forEach(ClavaNode::detach);
+        oldNode.setChildren(newChildren);
+
+        // If new node has parent, replace it
+        if (newNode.hasParent()) {
+            NodeInsertUtils.replace(newNode, oldNode);
+        }
+
         return oldNode;
     }
 
@@ -358,6 +452,12 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                     childrenClangNodes.add(clangNode);
                     continue;
                 }
+
+                if (ClavaNodes.isNullId(childId)) {
+                    childrenClangNodes.add(new pt.up.fe.specs.clang.ast.genericnode.NullNode());
+                    continue;
+                }
+
                 //
                 // if (clangNode != null) {
                 // System.out.println("NAME:" + clangNode.getName());

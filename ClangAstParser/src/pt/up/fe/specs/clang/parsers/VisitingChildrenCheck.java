@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
@@ -38,7 +39,11 @@ public class VisitingChildrenCheck {
     }
 
     public Set<String> getCurrentlyParsedNodes() {
-        SpecsCheck.checkArgument(!nodesCurrentlyBeingParsed.isEmpty(), () -> "Expected at least one element");
+        return getCurrentlyParsedNodes(() -> "Expected at least one element");
+    }
+
+    public Set<String> getCurrentlyParsedNodes(Supplier<String> message) {
+        SpecsCheck.checkArgument(!nodesCurrentlyBeingParsed.isEmpty(), message);
 
         return SpecsCollections.last(nodesCurrentlyBeingParsed);
     }
@@ -47,6 +52,17 @@ public class VisitingChildrenCheck {
         SpecsCheck.checkArgument(!currentVisitChains.isEmpty(), () -> "Expected at least one element");
 
         return SpecsCollections.last(currentVisitChains);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Nodes currently being parsed: ").append(nodesCurrentlyBeingParsed).append("\n");
+        builder.append("Current visit chains: ").append(currentVisitChains).append("\n");
+        builder.append("Top ids: " + topIds);
+
+        return builder.toString();
     }
 
     // Top node visited, add to stack
@@ -75,7 +91,9 @@ public class VisitingChildrenCheck {
     // Child visited, update
     public void childNodeVisitStart(String id) {
 
-        Set<String> visitingNodes = getCurrentlyParsedNodes();
+        Set<String> visitingNodes = getCurrentlyParsedNodes(
+                () -> "Does not have a visiting nodes set, when starting child visit to id '" + id
+                        + "'. Current status:\n" + toString());
         List<String> visitChain = getCurrentVisitChain();
 
         if (visitingNodes.contains(id)) {

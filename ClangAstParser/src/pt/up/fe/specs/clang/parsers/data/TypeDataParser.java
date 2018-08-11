@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
+import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
@@ -225,6 +226,15 @@ public class TypeDataParser {
         data.add(TemplateSpecializationType.IS_TYPE_ALIAS, LineStreamParsers.oneOrZero(lines));
         data.add(TemplateSpecializationType.TEMPLATE_NAME, lines.nextLine());
         data.add(TemplateSpecializationType.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, parserData));
+
+        return data;
+    }
+
+    public static DataStore parseTypedefTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, TypedefType.DECL, lines.nextLine());
 
         return data;
     }

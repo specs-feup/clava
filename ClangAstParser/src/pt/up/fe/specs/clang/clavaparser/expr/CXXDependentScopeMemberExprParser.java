@@ -48,6 +48,8 @@ public class CXXDependentScopeMemberExprParser extends AClangNodeParser<CXXDepen
         // Not sure if it is always one child
         checkNumChildren(children, 1);
         Expr memberExpr = toExpr(children.get(0));
+        // Expr memberExpr = !children.isEmpty() ? toExpr(children.get(0))
+        // : ClavaNodeFactory.dummyExpr(ClavaNodeFactory.nullExpr());
 
         return ClavaNodeFactory.cxxDependentScopeMemberExpr(memberExprInfo.isArrow(), memberExprInfo.getMemberName(),
                 exprData, node.getInfo(), memberExpr);

@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -51,7 +50,8 @@ public class CallExprParser extends AClangNodeParser<CallExpr> {
         Expr function = toExpr(children.get(0));
         List<Expr> args = toExpr(SpecsCollections.subList(children, 1));
 
-        return ClavaNodeFactory.callExpr(exprData, info(node), function, args);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.callExpr(exprData, info(node), function, args);
     }
 
 }

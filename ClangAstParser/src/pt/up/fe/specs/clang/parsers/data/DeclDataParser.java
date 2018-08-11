@@ -26,6 +26,8 @@ import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.EnumDecl;
+import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -112,6 +114,16 @@ public class DeclDataParser {
 
         data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.class, lines));
         data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseEnumDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseTagDeclData(lines, dataStore);
+
+        data.add(EnumDecl.ENUM_SCOPE_KIND, LineStreamParsers.enumFromName(EnumScopeType.class, lines));
+        dataStore.getClavaNodes().queueSetNode(data, EnumDecl.INTEGER_TYPE, lines.nextLine());
 
         return data;
     }

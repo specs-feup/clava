@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXBindTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -50,9 +49,10 @@ public class CXXBindTemporaryExprParser extends AClangNodeParser<CXXBindTemporar
 
         Expr subExpr = toExpr(children.get(0));
 
+        throw new RuntimeException("");
         // Using R_VALUE as default, for now
-        return ClavaNodeFactory.cXXBindTemporaryExpr(temporaryAddress, exprData, info(node),
-                subExpr);
+        // return ClavaNodeFactory.cXXBindTemporaryExpr(temporaryAddress, exprData, info(node),
+        // subExpr);
     }
 
     private static String parseAddress(String string) {

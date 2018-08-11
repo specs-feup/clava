@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -59,7 +58,8 @@ public class TypedefTypeParser extends AClangNodeParser<TypedefType> {
         DeclRef declInfo = parseDeclRef(node.getChild(0));
         Type classType = toType(children.get(1));
 
-        return ClavaNodeFactory.typedefType(declInfo, typeData, node.getInfo(), classType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.typedefType(declInfo, typeData, node.getInfo(), classType);
         // type should be contained in children
         // Preconditions.checkArgument(children.get(0).getCode().equals(type.get(0).getCode()));
 

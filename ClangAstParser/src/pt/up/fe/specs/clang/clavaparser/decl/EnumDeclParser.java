@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
@@ -75,8 +74,9 @@ public class EnumDeclParser extends AClangNodeParser<EnumDecl> {
         Type integerType = getOriginalTypes().get(integerTypeId);
         Preconditions.checkNotNull(integerType, "No type for integer type for enum at " + node.getLocation());
 
-        return ClavaNodeFactory.enumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info,
-                enumConstants);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.enumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info,
+        // enumConstants);
     }
 
 }
