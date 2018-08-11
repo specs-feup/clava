@@ -271,6 +271,12 @@ public class FunctionDecl extends DeclaratorDecl {
 
         code.append(getDeclarationId(true));
 
+        // if (code.toString().contains("%Dummy")) {
+        // System.out.println("F DECLARATION:" + code);
+        // System.out.println("F TYPE:" + getType());
+        // System.out.println("F TYPE TREE:" + getType().toTree());
+        // }
+
         /*
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");

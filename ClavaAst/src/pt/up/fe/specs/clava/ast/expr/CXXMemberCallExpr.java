@@ -14,18 +14,18 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -46,9 +46,13 @@ import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
  */
 public class CXXMemberCallExpr extends CallExpr {
 
-    public CXXMemberCallExpr(ExprData exprData, ClavaNodeInfo info, MemberExpr function, List<? extends Expr> args) {
-        super(exprData, info, function, args);
+    public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // public CXXMemberCallExpr(ExprData exprData, ClavaNodeInfo info, MemberExpr function, List<? extends Expr> args) {
+    // super(exprData, info, function, args);
+    // }
 
     /**
      * Private constructor for copy.
@@ -57,14 +61,14 @@ public class CXXMemberCallExpr extends CallExpr {
      * @param type
      * @param info
      */
-    private CXXMemberCallExpr(ExprData exprData, ClavaNodeInfo info) {
-        super(exprData, info, Collections.emptyList());
-    }
+    // private CXXMemberCallExpr(ExprData exprData, ClavaNodeInfo info) {
+    // super(exprData, info, Collections.emptyList());
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXMemberCallExpr(getExprData(), getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXMemberCallExpr(getExprData(), getInfo());
+    // }
 
     @Override
     public MemberExpr getCallee() {

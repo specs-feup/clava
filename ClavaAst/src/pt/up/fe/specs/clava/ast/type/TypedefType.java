@@ -13,39 +13,52 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 
 public class TypedefType extends Type {
 
-    private final DeclRef declInfo;
+    /// DATAKEYS BEGIN
 
+    public final static DataKey<Decl> DECL = KeyFactory.object("decl", Decl.class);
+
+    /// DATAKEYS END
+
+    public TypedefType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /*
+    private final DeclRef declInfo;
+    
     public TypedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info, Type classType) {
         this(declInfo, typeData, info, Arrays.asList(classType));
     }
-
+    
     private TypedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
             Collection<? extends ClavaNode> children) {
-
+    
         super(typeData, info, children);
-
+    
         this.declInfo = declInfo;
     }
-
+    
     @Override
     protected ClavaNode copyPrivate() {
         return new TypedefType(declInfo, getTypeData(), getInfo(), Collections.emptyList());
     }
-
+    */
+    /*
     public DeclRef getDeclInfo() {
         return declInfo;
     }
+    */
 
     public Type getTypeClass() {
         return getChild(Type.class, 0);
@@ -113,14 +126,16 @@ public class TypedefType extends Type {
          */
     }
 
+    /*
     @Override
     protected Type desugarImpl() {
         return getTypeClass();
     }
-
+    
     @Override
     protected void setDesugarImpl(Type desugaredType) {
         setTypeClass(desugaredType);
     }
+    */
 
 }

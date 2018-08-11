@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.utils.Nameable;
@@ -39,19 +39,23 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public class CallExpr extends Expr {
 
-    public CallExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
-        this(exprData, info, SpecsCollections.concat(function, SpecsCollections.cast(args, ClavaNode.class)));
+    public CallExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    protected CallExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // public CallExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
+    // this(exprData, info, SpecsCollections.concat(function, SpecsCollections.cast(args, ClavaNode.class)));
+    // }
+    //
+    // protected CallExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    // }
 
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CallExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CallExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

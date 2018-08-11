@@ -130,6 +130,7 @@ public class VarDecl extends DeclaratorDecl {
 
     @Override
     public String getCode() {
+        // System.out.println("VARDECL TYPE:" + getType().toTree());
         // return getCode(null);
         // }
 

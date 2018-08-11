@@ -13,35 +13,36 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class UserDefinedLiteral extends CallExpr {
 
-    private final String OPERATOR_PREFIX = "operator\"\"";
+    // private final String OPERATOR_PREFIX = "operator\"\"";
 
-    public UserDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Expr callee, Expr cookedLiteral) {
-        this(exprData, info, Arrays.asList(callee, cookedLiteral));
-
-        Preconditions.checkArgument(cookedLiteral instanceof Literal);
+    public UserDefinedLiteral(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private UserDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UserDefinedLiteral(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public UserDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Expr callee, Expr cookedLiteral) {
+    // this(exprData, info, Arrays.asList(callee, cookedLiteral));
+    //
+    // Preconditions.checkArgument(cookedLiteral instanceof Literal);
+    // }
+    //
+    // private UserDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UserDefinedLiteral(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public List<Expr> getArgs() {

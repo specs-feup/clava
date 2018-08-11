@@ -40,8 +40,6 @@ import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
-import pt.up.fe.specs.clava.ast.decl.EnumDecl;
-import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionTemplateDecl;
@@ -67,28 +65,22 @@ import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXBindTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultArgExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNullPtrLiteralExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXReinterpretCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStaticCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXTemporaryObjectExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
-import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
@@ -102,8 +94,6 @@ import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
-import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
-import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.PackExpansionExpr;
@@ -118,8 +108,6 @@ import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
-import pt.up.fe.specs.clava.ast.expr.UserDefinedLiteral;
-import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
@@ -171,7 +159,6 @@ import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
-import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
@@ -185,7 +172,6 @@ import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
-import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
@@ -400,10 +386,11 @@ public class ClavaNodeFactory {
     // return new VarDecl(data, varName, type, declData, info, initExpr);
     // }
 
-    public static EnumDecl enumDecl(EnumScopeType enumScopeType, String name, boolean isModulePrivate, Type integerType,
-            EnumType type, DeclData declData, ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
-        return new EnumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info, children);
-    }
+    // public static EnumDecl enumDecl(EnumScopeType enumScopeType, String name, boolean isModulePrivate, Type
+    // integerType,
+    // EnumType type, DeclData declData, ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
+    // return new EnumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info, children);
+    // }
 
     public static EnumConstantDecl enumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
         return new EnumConstantDecl(value, type, declData, info);
@@ -661,10 +648,10 @@ public class ClavaNodeFactory {
         return new BuiltinTypeLegacy(typeData, info);
     }
 
-    public static TypedefType typedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
-            Type classType) {
-        return new TypedefType(declInfo, typeData, info, classType);
-    }
+    // public static TypedefType typedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
+    // Type classType) {
+    // return new TypedefType(declInfo, typeData, info, classType);
+    // }
 
     // public static QualType qualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
     // Type qualifiedType) {
@@ -1142,31 +1129,32 @@ public class ClavaNodeFactory {
             Expr subExpr) {
         return new ExprWithCleanups(exprData, info, subExpr);
     }
+    //
+    // public static CXXConstructExpr cxxConstructExpr(CXXConstructExprData constructorData, ExprData exprData,
+    // ClavaNodeInfo info, Collection<? extends Expr> args) {
+    //
+    // return new CXXConstructExpr(constructorData, exprData, info, args);
+    // }
 
-    public static CXXConstructExpr cxxConstructExpr(CXXConstructExprData constructorData, ExprData exprData,
-            ClavaNodeInfo info, Collection<? extends Expr> args) {
+    // public static MaterializeTemporaryExpr materializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl,
+    // ClavaNodeInfo info, Expr temporaryExpr) {
+    //
+    // return new MaterializeTemporaryExpr(exprData, extendingDecl, info, temporaryExpr);
+    // }
 
-        return new CXXConstructExpr(constructorData, exprData, info, args);
-    }
+    // public static CXXBindTemporaryExpr cXXBindTemporaryExpr(String temporaryAddress, ExprData exprData,
+    // ClavaNodeInfo info, Expr subExpr) {
+    //
+    // return new CXXBindTemporaryExpr(temporaryAddress, exprData, info, subExpr);
+    // }
 
-    public static MaterializeTemporaryExpr materializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl,
-            ClavaNodeInfo info, Expr temporaryExpr) {
-
-        return new MaterializeTemporaryExpr(exprData, extendingDecl, info, temporaryExpr);
-    }
-
-    public static CXXBindTemporaryExpr cXXBindTemporaryExpr(String temporaryAddress, ExprData exprData,
-            ClavaNodeInfo info, Expr subExpr) {
-
-        return new CXXBindTemporaryExpr(temporaryAddress, exprData, info, subExpr);
-    }
-
-    public static CXXTemporaryObjectExpr cxxTemporaryObjectExpr(CXXConstructExprData constructorData, ExprData exprData,
-            ClavaNodeInfo info,
-            Collection<? extends Expr> args) {
-
-        return new CXXTemporaryObjectExpr(constructorData, exprData, info, args);
-    }
+    // public static CXXTemporaryObjectExpr cxxTemporaryObjectExpr(CXXConstructExprData constructorData, ExprData
+    // exprData,
+    // ClavaNodeInfo info,
+    // Collection<? extends Expr> args) {
+    //
+    // return new CXXTemporaryObjectExpr(constructorData, exprData, info, args);
+    // }
 
     public static CXXDefaultArgExpr cxxDefaultArgExpr(ExprData exprData, ClavaNodeInfo info) {
         return new CXXDefaultArgExpr(exprData, info);
@@ -1176,28 +1164,29 @@ public class ClavaNodeFactory {
     // return new StringLiteral(string, exprData, info);
     // }
 
-    public static CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
-        ExprData exprData = new ExprData(type);
+    // public static CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
+    // ExprData exprData = new ExprData(type);
+    //
+    // return callExpr(exprData, null, function, args);
+    // }
 
-        return callExpr(exprData, null, function, args);
-    }
+    // public static CallExpr callExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args)
+    // {
+    //
+    // return new CallExpr(exprData, info, function, args);
+    // }
+    //
+    // public static CXXMemberCallExpr cxxMemberCallExpr(ExprData exprData, ClavaNodeInfo info, MemberExpr function,
+    // List<? extends Expr> args) {
+    //
+    // return new CXXMemberCallExpr(exprData, info, function, args);
+    // }
 
-    public static CallExpr callExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
-
-        return new CallExpr(exprData, info, function, args);
-    }
-
-    public static CXXMemberCallExpr cxxMemberCallExpr(ExprData exprData, ClavaNodeInfo info, MemberExpr function,
-            List<? extends Expr> args) {
-
-        return new CXXMemberCallExpr(exprData, info, function, args);
-    }
-
-    public static MemberExpr memberExpr(String memberName, boolean isArrow,
-            ExprData exprData, ClavaNodeInfo info, Expr base) {
-
-        return new MemberExpr(memberName, isArrow, exprData, info, base);
-    }
+    // public static MemberExpr memberExpr(String memberName, boolean isArrow,
+    // ExprData exprData, ClavaNodeInfo info, Expr base) {
+    //
+    // return new MemberExpr(memberName, isArrow, exprData, info, base);
+    // }
 
     public static FloatingLiteral floatingLiteral(FloatKind floatKind, String number, ExprData exprData,
             ClavaNodeInfo info) {
@@ -1261,11 +1250,11 @@ public class ClavaNodeFactory {
         return new ConditionalOperator(exprData, info, condition, trueExpr, falseExpr);
     }
 
-    public static CXXOperatorCallExpr cxxOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Expr function,
-            List<? extends Expr> args) {
-
-        return new CXXOperatorCallExpr(exprData, info, function, args);
-    }
+    // public static CXXOperatorCallExpr cxxOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Expr function,
+    // List<? extends Expr> args) {
+    //
+    // return new CXXOperatorCallExpr(exprData, info, function, args);
+    // }
 
     // public static CharacterLiteral characterLiteral(CharacterLiteralData data) {
     // return new CharacterLiteral(data, Collections.emptyList());
@@ -1348,11 +1337,11 @@ public class ClavaNodeFactory {
         return new OffsetOfExpr(offsetOfData, exprData, info);
     }
 
-    public static UserDefinedLiteral userDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Expr callee,
-            Expr cookedLiteral) {
-
-        return new UserDefinedLiteral(exprData, info, callee, cookedLiteral);
-    }
+    // public static UserDefinedLiteral userDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Expr callee,
+    // Expr cookedLiteral) {
+    //
+    // return new UserDefinedLiteral(exprData, info, callee, cookedLiteral);
+    // }
 
     public static CXXThrowExpr cxxThrowExpr(ExprData exprData, ClavaNodeInfo info, Expr throwExpr) {
         return new CXXThrowExpr(exprData, info, throwExpr);

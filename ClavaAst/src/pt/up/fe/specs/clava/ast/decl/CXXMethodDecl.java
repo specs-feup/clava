@@ -128,10 +128,13 @@ public class CXXMethodDecl extends FunctionDecl {
     }
 
     public String getCode(boolean useReturnType) {
-        if (getDeclData().isImplicit()) {
+        if (get(IS_IMPLICIT)) {
+            // if (getDeclData().isImplicit()) {
             return "";
         }
 
+        // System.out.println("CXXMETHOD DECL CODE:" + getDeclarationId(useReturnType) + getCodeBody());
+        // System.out.println("TREE:" + toTree());
         return getDeclarationId(useReturnType) + getCodeBody();
     }
 

@@ -71,6 +71,7 @@ public abstract class TagType extends Type {
     // }
 
     public TagDecl getDecl() {
+        // System.out.println("DECL ID:" + get(DECL).get(ClavaNode.ID));
         return (TagDecl) get(DECL);
     }
 
@@ -84,6 +85,7 @@ public abstract class TagType extends Type {
     // return "tagKind: " + getTagKind();
     // }
 
+    /*
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         // if (tempNode) {
@@ -92,24 +94,36 @@ public abstract class TagType extends Type {
         // }
         // return get(TYPE_AS_STRING) + " " + get(TYPE_AS_STRING);
         // }
-
+    
         // System.out.println("TAGTYPE:" + getTagKind());
         // System.out.println("DECL INFO:" + getDeclInfo());
         // System.out.println("TAG KIND:" + getTagKind());
         // System.out.println("TYPE DATA:" + getTypeData());
         // String baseType = getDeclInfo().getDeclType();
-
-        String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
+        // System.out.println("BARE TYPE:" + getBareType());
+        // System.out.println("DECL NAME:" + getDecl().get(TagDecl.DECL_NAME));
+        // System.out.println("DECL cODE:" + getDecl().getCode());
+    
+        Type baseTypeNode = getDecl().get(TagDecl.TYPE_FOR_DECL);
+        if (baseTypeNode == this) {
+            throw new RuntimeException("Both types are the same, should this happen?");
+        }
+    
+        // String baseType = getDecl().get(TagDecl.DECL_NAME);
+        // String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
+        String baseType = baseTypeNode.getCode();
         if (baseType.isEmpty()) {
             baseType = getBareType();
         }
-
+    
         String enumType = getTagKind().getCode() + " " + baseType;
+    
         if (name == null) {
             return enumType;
         }
-
+    
         return enumType + " " + name;
     }
+    */
 
 }

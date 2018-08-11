@@ -13,43 +13,44 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXBindTemporaryExpr extends Expr {
 
-    private final String temporaryAddress;
-
-    public CXXBindTemporaryExpr(String temporaryAddress, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-        this(temporaryAddress, exprData, info, Arrays.asList(subExpr));
+    public CXXBindTemporaryExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
-
-    private CXXBindTemporaryExpr(String temporaryAddress, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-
-        this.temporaryAddress = temporaryAddress;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXBindTemporaryExpr(temporaryAddress, getExprData(), getInfo(),
-                Collections.emptyList());
-    }
+    // private final String temporaryAddress;
+    //
+    // public CXXBindTemporaryExpr(String temporaryAddress, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    // this(temporaryAddress, exprData, info, Arrays.asList(subExpr));
+    // }
+    //
+    // private CXXBindTemporaryExpr(String temporaryAddress, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    //
+    // this.temporaryAddress = temporaryAddress;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXBindTemporaryExpr(temporaryAddress, getExprData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public Expr getSubExpr() {
         return getChild(Expr.class, 0);
     }
-
-    public String getTemporaryAddress() {
-        return temporaryAddress;
-    }
+    //
+    // public String getTemporaryAddress() {
+    // return temporaryAddress;
+    // }
 
     @Override
     public String getCode() {

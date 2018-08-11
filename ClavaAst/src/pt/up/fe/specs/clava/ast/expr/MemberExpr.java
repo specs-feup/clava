@@ -19,9 +19,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -33,49 +35,64 @@ import pt.up.fe.specs.util.SpecsLogs;
  */
 public class MemberExpr extends Expr {
 
-    private String memberName;
-    private final boolean isArrow;
+    /// DATAKEYS BEGIN
 
-    public MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info, Expr base) {
+    public final static DataKey<String> MEMBER_NAME = KeyFactory.string("memberName");
 
-        this(memberName, isArrow, exprData, info, Arrays.asList(base));
+    public final static DataKey<Boolean> IS_ARROW = KeyFactory.bool("isArrow");
+
+    /// DATAKEYS END
+
+    public MemberExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
+    // private String memberName;
+    // private final boolean isArrow;
 
-        super(exprData, info, children);
+    // public MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info, Expr base) {
+    //
+    // this(memberName, isArrow, exprData, info, Arrays.asList(base));
+    // }
 
-        this.memberName = memberName;
-        this.isArrow = isArrow;
+    // private MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.memberName = memberName;
+    // this.isArrow = isArrow;
+    //
+    // }
 
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new MemberExpr(memberName, isArrow, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new MemberExpr(memberName, isArrow, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public String getMemberName() {
-        return memberName;
+        return get(MEMBER_NAME);
+        // return memberName;
     }
 
     public void setMemberName(String memberName) {
-        this.memberName = memberName;
+        set(MEMBER_NAME, memberName);
+        // this.memberName = memberName;
     }
 
     public boolean isArrow() {
-        return isArrow;
+        return get(IS_ARROW);
+        // return isArrow;
     }
 
     public Expr getBase() {
         return getChild(Expr.class, 0);
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + " " + memberName;
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + " " + memberName;
+    // }
 
     @Override
     public String getCode() {
@@ -112,7 +129,8 @@ public class MemberExpr extends Expr {
         }
 
         if (expr instanceof MemberExpr) {
-            return ((MemberExpr) expr).memberName;
+            // return ((MemberExpr) expr).memberName;
+            return ((MemberExpr) expr).getMemberName();
         }
 
         throw new RuntimeException("Case not implemented for class " + expr.getClass());

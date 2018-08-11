@@ -14,18 +14,16 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.expr.data.CXXConstructExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.NullType;
 
@@ -37,27 +35,42 @@ import pt.up.fe.specs.clava.ast.type.NullType;
  */
 public class CXXConstructExpr extends Expr {
 
-    private final CXXConstructExprData constructorData;
+    /// DATAKEYS BEGIN
 
-    public CXXConstructExpr(CXXConstructExprData constructorData, ExprData exprData,
-            ClavaNodeInfo info, Collection<? extends Expr> args) {
+    public final static DataKey<Boolean> IS_ELIDABLE = KeyFactory.bool("isElidable");
 
-        super(exprData, info, args);
+    public final static DataKey<Boolean> REQUIRES_ZERO_INITIALIZATION = KeyFactory.bool("requiresZeroInitialization");
 
-        this.constructorData = constructorData;
+    /// DATAKEYS END
+
+    public CXXConstructExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXConstructExpr(getConstructorData(), getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private final CXXConstructExprData constructorData;
 
-    public CXXConstructExprData getConstructorData() {
-        return constructorData;
-    }
+    // public CXXConstructExpr(CXXConstructExprData constructorData, ExprData exprData,
+    // ClavaNodeInfo info, Collection<? extends Expr> args) {
+    //
+    //
+    //
+    //// super(exprData, info, args);
+    //
+    //// this.constructorData = constructorData;
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXConstructExpr(getConstructorData(), getExprData(), getInfo(), Collections.emptyList());
+    // }
+
+    // public CXXConstructExprData getConstructorData() {
+    // return constructorData;
+    // }
 
     public boolean isElidable() {
-        return constructorData.isElidable();
+        return get(IS_ELIDABLE);
+        // return constructorData.isElidable();
     }
 
     /**
@@ -109,11 +122,11 @@ public class CXXConstructExpr extends Expr {
         String argsCode = getArgsCode();
 
         // Special case: No arguments before VarDecl
-        if (argsCode.isEmpty() &&
-                ClavaNodes.getParentNormalized(this) instanceof VarDecl) {
-            // return cxxRecordName + "{}";
-            return "{}";
-        }
+        // if (argsCode.isEmpty() &&
+        // ClavaNodes.getParentNormalized(this) instanceof VarDecl) {
+        // // return cxxRecordName + "{}";
+        // return "{}";
+        // }
 
         return cxxRecordName + argsCode;
     }
@@ -124,13 +137,13 @@ public class CXXConstructExpr extends Expr {
                 .map(arg -> arg.getCode())
                 .collect(Collectors.joining(", "));
 
-        if (argsCode.isEmpty()) {
-            // HACK: Probably this is not correct
-            if (isTemporary()) {
-                return "()";
-            }
-            return "";
-        }
+        // if (argsCode.isEmpty()) {
+        // // HACK: Probably this is not correct
+        // if (isTemporary()) {
+        // return "()";
+        // }
+        // return "";
+        // }
 
         return "(" + argsCode + ")";
     }
@@ -145,9 +158,9 @@ public class CXXConstructExpr extends Expr {
         return false;
     }
 
-    @Override
-    public String toContentString() {
-        return ClavaNode.toContentString(super.toContentString(), constructorData.toString());
-    }
+    // @Override
+    // public String toContentString() {
+    // return ClavaNode.toContentString(super.toContentString(), constructorData.toString());
+    // }
 
 }

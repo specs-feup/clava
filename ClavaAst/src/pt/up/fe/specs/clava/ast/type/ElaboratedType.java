@@ -86,6 +86,10 @@ public class ElaboratedType extends TypeWithKeyword {
 
         code += get(QUALIFIER) + getNamedType().getCode(sourceNode, name);
 
+        if (getNamedType().getCode(sourceNode, name).startsWith("%Dummy")) {
+            System.out.println("NAMED TYPE:" + getNamedType().toTree());
+        }
+
         return code;
 
         /*     

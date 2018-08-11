@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 SPeCS.
+ * Copyright 2018 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.ast.attr;
 
 import java.util.Collection;
 
@@ -19,28 +19,10 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-/**
- * Represents a C++ functional cast expression with a number of arguments different than one, that builds a temporary
- * object.
- * 
- * @author JoaoBispo
- *
- */
-public class CXXTemporaryObjectExpr extends CXXConstructExpr {
+public class MaxFieldAlignmentAttr extends InheritableAttr {
 
-    public CXXTemporaryObjectExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    public MaxFieldAlignmentAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    // public CXXTemporaryObjectExpr(CXXConstructExprData constructorData, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends Expr> args) {
-    //
-    // super(constructorData, exprData, info, args);
-    // }
-
-    @Override
-    protected boolean isTemporary() {
-        return true;
     }
 
 }

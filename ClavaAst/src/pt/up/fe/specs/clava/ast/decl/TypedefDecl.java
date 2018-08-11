@@ -78,6 +78,8 @@ public class TypedefDecl extends TypedefNameDecl {
         }
 
         String typeCode = type.getCode(this);
+        // System.out.println("TYPE TREE:" + type.toTree());
+        // System.out.println("TYPE CODE:" + typeCode);
         String code = "typedef " + typeCode + " " + getTypelessCode();
 
         // if (typeCode.equals("std::set<double>::const_iterator")) {

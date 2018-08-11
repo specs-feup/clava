@@ -13,14 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 
 /**
  * Represents a prvalue (pure rvalue - does not have identity, can be moved) temporary that is written into memory so
@@ -35,25 +35,35 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  */
 public class MaterializeTemporaryExpr extends Expr {
 
-    private final BareDeclData extendingDecl;
+    /// DATAKEYS BEGIN
 
-    public MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
-            Expr temporaryExpr) {
-        this(exprData, extendingDecl, info, Arrays.asList(temporaryExpr));
+    public final static DataKey<Decl> EXTENDING_DECL = KeyFactory.object("extendingDecl", Decl.class);
+
+    /// DATAKEYS END
+
+    public MaterializeTemporaryExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-
-        this.extendingDecl = extendingDecl;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new MaterializeTemporaryExpr(getExprData(), extendingDecl, getInfo(), Collections.emptyList());
-    }
+    // private final BareDeclData extendingDecl;
+    //
+    // public MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
+    // Expr temporaryExpr) {
+    // this(exprData, extendingDecl, info, Arrays.asList(temporaryExpr));
+    // }
+    //
+    // private MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.extendingDecl = extendingDecl;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new MaterializeTemporaryExpr(getExprData(), extendingDecl, getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

@@ -36,6 +36,7 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -285,6 +286,13 @@ public class ClavaFactory {
     //
     // return declRefExpr(qualifier, Collections.emptyList(), declData, null, exprData, info);
     // }
+
+    public CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
+        DataStore data = newExprDataStore()
+                .put(Expr.TYPE, type);
+
+        return new CallExpr(data, SpecsCollections.concat(function, args));
+    }
 
     /// DECLS
 

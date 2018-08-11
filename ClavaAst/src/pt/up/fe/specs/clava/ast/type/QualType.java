@@ -155,7 +155,7 @@ public class QualType extends Type {
         // Type child = getQualifiedType();
 
         // If constexpr, replace const with constexpr
-        boolean isConstexpr = sourceNode.get(VarDecl.IS_CONSTEXPR);
+        boolean isConstexpr = sourceNode != null && sourceNode.get(VarDecl.IS_CONSTEXPR);
         if (isConstexpr) {
             qualifiersCode = qualifiersCode.replace("const", "constexpr");
         }

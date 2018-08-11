@@ -20,10 +20,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TagKind;
 
 /**
@@ -80,16 +76,16 @@ public abstract class TagDecl extends TypeDecl {
      * @param info
      * @param children
      */
-    public TagDecl(TagKind tagKind, String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
-        set(DECL_NAME, declName);
-        set(TYPE_FOR_DECL, processType(type));
-        set(TAG_KIND, tagKind);
-        // super(declName, type, declData, info, children);
-
-        // this.tagKind = tagKind;
-    }
+    // public TagDecl(TagKind tagKind, String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
+    // set(DECL_NAME, declName);
+    // set(TYPE_FOR_DECL, processType(type));
+    // set(TAG_KIND, tagKind);
+    // // super(declName, type, declData, info, children);
+    //
+    // // this.tagKind = tagKind;
+    // }
 
     public TagKind getTagKind() {
         return get(TAG_KIND);

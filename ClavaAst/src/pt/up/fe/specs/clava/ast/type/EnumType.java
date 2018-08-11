@@ -19,6 +19,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
+import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 
 /**
@@ -61,5 +62,50 @@ public class EnumType extends TagType {
         return (EnumDecl) declNode;
         */
     }
+
+    @Override
+    public String getCode(ClavaNode sourceNode, String name) {
+
+        // System.out.println("SOURCE NODE:" + sourceNode.getClass());
+
+        String baseType = getDecl().get(TagDecl.DECL_NAME);
+
+        // System.out.println("DECL NAME:" + baseType);
+        // String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
+        // String baseType = baseTypeNode.getCode();
+        // String baseType = getBareType();
+        if (baseType.isEmpty()) {
+            baseType = getBareType();
+        }
+
+        // String enumType = getTagKind().getCode() + " " + baseType;
+        String enumType = baseType;
+
+        if (name == null) {
+            return enumType;
+        }
+
+        return enumType + " " + name;
+    }
+
+    /*
+    @Override
+    public String getCode(ClavaNode sourceNode, String name) {
+    
+        EnumDecl enumDecl = (EnumDecl) get(DECL);
+    
+        String declName = enumDecl.get(EnumDecl.DECL_NAME);
+    
+        String enumType = getTagKind().getCode();
+        if (name == null || name.isEmpty()) {
+            System.out.println("ENUM TYPE:" + enumType);
+            return enumType;
+        }
+    
+        enumType += " " + declName;
+    
+        return enumType + " " + name;
+    }
+    */
 
 }

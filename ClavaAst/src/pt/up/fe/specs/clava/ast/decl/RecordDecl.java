@@ -148,6 +148,7 @@ public class RecordDecl extends TagDecl {
     }
 
     protected String getCode(String bases) {
+
         StringBuilder code = new StringBuilder();
         code.append(ln()).append(getTagKind().getCode());
         if (hasDeclName()) {

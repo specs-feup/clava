@@ -14,30 +14,32 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.language.CXXOperator;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class CXXOperatorCallExpr extends CallExpr {
 
-    public CXXOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
-        this(exprData, info, SpecsCollections.concat(function, args));
+    public CXXOperatorCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXOperatorCallExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public CXXOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
+    // this(exprData, info, SpecsCollections.concat(function, args));
+    // }
+    //
+    // private CXXOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXOperatorCallExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
