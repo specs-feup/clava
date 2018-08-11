@@ -400,7 +400,8 @@ public class CallWrap {
                 .map(param -> ClavaNodeFactory.literalExpr(param, ClavaNodeFactory.nullType(null)))
                 .collect(Collectors.toList());
 
-        CallExpr callExpr = ClavaNodeFactory.callExpr(function, returnType, args);
+        CallExpr callExpr = CxxWeaver.getFactory().callExpr(function, returnType, args);
+        // CallExpr callExpr = ClavaNodeFactory.callExpr(function, returnType, args);
 
         if (isVoid) {
             wrapperStmts.add(CxxWeaver.getFactory().exprStmt(callExpr));

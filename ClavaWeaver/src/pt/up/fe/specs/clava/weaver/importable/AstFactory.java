@@ -40,8 +40,6 @@ import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
@@ -232,8 +230,10 @@ public class AstFactory {
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
 
-        CallExpr call = ClavaNodeFactory.callExpr(new ExprData(type, ValueKind.R_VALUE), ClavaNodeInfo.undefinedInfo(),
-                declRef, exprArgs);
+        CallExpr call = CxxWeaver.getFactory().callExpr(declRef, type, exprArgs);
+        // CallExpr call = ClavaNodeFactory.callExpr(new ExprData(type, ValueKind.R_VALUE),
+        // ClavaNodeInfo.undefinedInfo(),
+        // declRef, exprArgs);
 
         return CxxJoinpoints.create(call, null, ACall.class);
     }
