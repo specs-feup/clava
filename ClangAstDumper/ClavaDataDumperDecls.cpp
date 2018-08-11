@@ -24,7 +24,7 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"TemplateTypeParmDecl", clava::DeclNode::NAMED_DECL},
         {"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
-        {"EnumDecl", clava::DeclNode::TYPE_DECL},
+        {"EnumDecl", clava::DeclNode::ENUM_DECL},
         {"RecordDecl", clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL}
@@ -58,6 +58,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpTypeDeclData(static_cast<const TypeDecl *>(D)); break;
         case clava::DeclNode::TAG_DECL:
             DumpTagDeclData(static_cast<const TagDecl *>(D)); break;
+        case clava::DeclNode::ENUM_DECL:
+            DumpEnumDeclData(static_cast<const EnumDecl *>(D)); break;
         case clava::DeclNode::RECORD_DECL:
             DumpRecordDeclData(static_cast<const RecordDecl *>(D)); break;
         case clava::DeclNode::CXX_RECORD_DECL:
@@ -161,6 +163,24 @@ void clava::ClavaDataDumper::DumpTagDeclData(const TagDecl *D) {
 
 }
 
+void clava::ClavaDataDumper::DumpEnumDeclData(const EnumDecl *D) {
+    // Hierarchy
+    DumpTagDeclData(D);
+
+    // Dump EnumScopeType
+    if (D->isScoped()) {
+        if (D->isScopedUsingClassTag())
+            clava::dump("CLASS");
+        else
+            clava::dump("STRUCT");
+    } else {
+        clava::dump("NO_SCOPE");
+    }
+
+    clava::dump(clava::getId(D->getIntegerType(), id));
+
+}
+
 void clava::ClavaDataDumper::DumpRecordDeclData(const RecordDecl *D) {
     // Hierarchy
     DumpTagDeclData(D);
@@ -175,9 +195,13 @@ void clava::ClavaDataDumper::DumpCXXRecordDeclData(const CXXRecordDecl *D) {
     // Hierarchy
     DumpRecordDeclData(D);
 
-    clava::dump(D->getNumBases());
-    for (const auto &I : D->bases()) {
-        clava::dump(I, id);
+    if(D->hasDefinition()) {
+        clava::dump(D->getNumBases());
+        for (const auto &I : D->bases()) {
+            clava::dump(I, id);
+        }
+    } else {
+        clava::dump(0);
     }
 
     /*

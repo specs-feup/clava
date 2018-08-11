@@ -22,6 +22,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
         {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
+        {"TypedefType", clava::TypeNode::TYPEDEF_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -73,6 +74,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpTemplateTypeParmTypeData(static_cast<const TemplateTypeParmType *>(T)); break;
         case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
             DumpTemplateSpecializationTypeData(static_cast<const TemplateSpecializationType *>(T)); break;
+        case clava::TypeNode::TYPEDEF_TYPE:
+            DumpTypedefTypeData(static_cast<const TypedefType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -312,8 +315,16 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
 void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
     DumpTypeData(T);
 
-
     clava::dump(clava::getId(T->getDecl(), id));
+    /*
+    TagDecl* tagDecl = T->getDecl()->getDefinition();
+    if(tagDecl != nullptr) {
+        clava::dump(clava::getId(tagDecl, id));
+    } else {
+        clava::dump(clava::getId(T->getDecl(), id));
+    }
+     */
+
 }
 
 /*
@@ -390,4 +401,11 @@ void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSp
     }
 
 
+}
+
+void clava::ClavaDataDumper::DumpTypedefTypeData(const TypedefType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getDecl(), id));
 }

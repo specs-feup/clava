@@ -33,6 +33,7 @@ namespace clava {
         VAR_DECL,
         PARM_VAR_DECL,
         TAG_DECL,
+        ENUM_DECL,
         RECORD_DECL,
         CXX_RECORD_DECL
     };
@@ -63,6 +64,10 @@ namespace clava {
         OVERLOAD_EXPR,
         UNRESOLVED_LOOKUP_EXPR,
         UNRESOLVED_MEMBER_EXPR,
+        CXX_CONSTRUCT_EXPR,
+        MEMBER_EXPR,
+        MATERIALIZE_TEMPORARY_EXPR,
+        OFFSET_OF_EXPR,
     };
 
     /**

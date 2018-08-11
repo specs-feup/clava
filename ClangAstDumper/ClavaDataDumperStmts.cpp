@@ -28,6 +28,10 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
         {"UnresolvedLookupExpr", clava::StmtNode::OVERLOAD_EXPR},
         {"UnresolvedMemberExpr", clava::StmtNode::OVERLOAD_EXPR},
+        {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
+        {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
+        {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
+
 };
 
 
@@ -87,6 +91,12 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpDeclRefExprData(static_cast<const DeclRefExpr *>(S)); break;
         case clava::StmtNode ::OVERLOAD_EXPR:
             DumpOverloadExprData(static_cast<const OverloadExpr *>(S)); break;
+        case clava::StmtNode ::CXX_CONSTRUCT_EXPR:
+            DumpCXXConstructExprData(static_cast<const CXXConstructExpr *>(S)); break;
+        case clava::StmtNode ::MEMBER_EXPR:
+            DumpMemberExprData(static_cast<const MemberExpr *>(S)); break;
+        case clava::StmtNode ::MATERIALIZE_TEMPORARY_EXPR:
+            DumpMaterializeTemporaryExprData(static_cast<const MaterializeTemporaryExpr *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
@@ -280,4 +290,25 @@ void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
 
     // Dump qualifier
     clava::dump(E->getQualifier(), Context);
+}
+
+void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E) {
+    DumpExprData(E);
+
+    // Dump qualifier
+    clava::dump(E->isElidable());
+    clava::dump(E->requiresZeroInitialization());
+}
+
+void clava::ClavaDataDumper::DumpMemberExprData(const MemberExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->isArrow());
+    clava::dump(E->getMemberNameInfo().getAsString());
+    //clava::dump(clava::getId(E->getMemberDecl(), id));
+}
+void clava::ClavaDataDumper::DumpMaterializeTemporaryExprData(const MaterializeTemporaryExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(getId(E->getExtendingDecl(), id));
 }

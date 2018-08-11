@@ -24,6 +24,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
         {"SubstTemplateTypeParmType", clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE},
         {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
+        {"TypedefType", clava::TypeNode::TYPEDEF_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -71,6 +72,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitSubstTemplateTypeParmTypeChildren(static_cast<const SubstTemplateTypeParmType *>(T), visitedChildren); break;
         case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
             VisitTemplateSpecializationTypeChildren(static_cast<const TemplateSpecializationType *>(T), visitedChildren); break;
+        case clava::TypeNode::TYPEDEF_TYPE:
+            VisitTypedefTypeChildren(static_cast<const TypedefType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -168,6 +171,16 @@ void ClangAstDumper::VisitTagTypeChildren(const TagType *T, std::vector<std::str
     // Just visit decl
     //llvm::errs() << "VISITING DECL: " << clava::getId(T->getDecl(), id) << "\n";
     VisitDeclTop(T->getDecl());
+    //VisitDeclTop(T->getDecl()->getCanonicalDecl());
+    /*
+    TagDecl* tagDecl = T->getDecl()->getDefinition();
+    if(tagDecl != nullptr) {
+        VisitDeclTop(tagDecl);
+    } else {
+        VisitDeclTop(T->getDecl());
+    }
+     */
+
 }
 
 void ClangAstDumper::VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren) {
@@ -279,6 +292,13 @@ void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpeci
     for(int i=0; i<T->getNumArgs(); i++) {
         VisitTemplateArgChildren(T->getArg(i));
     }
+};
+
+void ClangAstDumper::VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    VisitDeclTop(T->getDecl());
 };
 
 

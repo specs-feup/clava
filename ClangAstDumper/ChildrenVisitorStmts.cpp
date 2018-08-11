@@ -14,7 +14,8 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
-        {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR}
+        {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
+        {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -60,6 +61,10 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitDeclRefExprChildren(static_cast<const DeclRefExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::CAST_EXPR:
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::OFFSET_OF_EXPR:
+            VisitOffsetOfExprChildren(static_cast<const OffsetOfExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR:
+            VisitMaterializeTemporaryExprChildren(static_cast<const MaterializeTemporaryExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -149,4 +154,20 @@ void ClangAstDumper::VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<
     // Visit found decl as child
     //VisitDeclTop(E->getFoundDecl());
     //children.push_back(clava::getId(E->getFoundDecl(), id));
+}
+
+void ClangAstDumper::VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    // Visit type
+    VisitTypeTop(E->getTypeSourceInfo()->getType().getTypePtr());
+}
+
+void ClangAstDumper::VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    // Visit type
+    VisitDeclTop(E->getExtendingDecl());
 }

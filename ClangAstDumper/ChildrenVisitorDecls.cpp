@@ -15,12 +15,15 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"EnumDecl", clava::DeclNode::ENUM_DECL},
+        {"RecordDecl", clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL},
         {"ParmVarDecl", clava::DeclNode::VAR_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
-        {"EnumDecl", clava::DeclNode::TYPE_DECL}
+
+
 
 
 };
@@ -51,6 +54,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitTypeDeclChildren(static_cast<const TypeDecl *>(D), visitedChildren); break;
         case clava::DeclNode::TAG_DECL:
             VisitTagDeclChildren(static_cast<const TagDecl *>(D), visitedChildren); break;
+         case clava::DeclNode::ENUM_DECL:
+            VisitEnumDeclChildren(static_cast<const EnumDecl *>(D), visitedChildren); break;
         case clava::DeclNode::RECORD_DECL:
             VisitRecordDeclChildren(static_cast<const RecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VALUE_DECL:
@@ -115,6 +120,7 @@ void ClangAstDumper::VisitTagDeclChildren(const TagDecl *D, std::vector<std::str
     //llvm::errs() << "TagDecl id: " << clava::getId(D, id) << "\n";
     //int declCounter = 0;
     for(auto decl : D->decls()) {
+    //for(auto decl : D->noload_decls()) {
         // If CXXRecordDecl without definition, skip
         if (const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(decl)) {
             if(!recordDecl->hasDefinition()) {
@@ -157,6 +163,17 @@ void ClangAstDumper::VisitTagDeclChildren(const TagDecl *D, std::vector<std::str
 
 }
 
+
+void ClangAstDumper::VisitEnumDeclChildren(const EnumDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitTagDeclChildren(D, children);
+
+    // Visit type
+    VisitTypeTop(D->getIntegerType());
+    //dumpTopLevelType(D->getType());
+
+
+}
 
 void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children) {
     // Hierarchy
@@ -278,13 +295,15 @@ void ClangAstDumper::VisitRecordDeclChildren(const RecordDecl *D, std::vector<st
     VisitTagDeclChildren(D, children);
 
     //D->decls_begin()
-    /*
+
     // Visit fields
+    /*
     for (auto field : D->fields()) {
-        VisitDeclTop(field);
-        children.push_back(clava::getId(field, id));
+        addChild(field, children);
+        //VisitDeclTop(field);
+        //children.push_back(clava::getId(field, id));
     }
-     */
+*/
 
 
 }
@@ -293,9 +312,12 @@ void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vec
     // Hierarchy
     VisitRecordDeclChildren(D, children);
 
-    // Visit types in bases
-    for (const auto &I : D->bases()) {
-        VisitTypeTop(I.getType());
+    if (D->hasDefinition()) {
+        // Visit types in bases
+        for (const auto &I : D->bases()) {
+            VisitTypeTop(I.getType());
+        }
+        VisitDeclTop(D->getDefinition());
     }
 
     //llvm::errs() << "CXX RECORD HAS DEF: " << D->hasDefinition() << "\n";
@@ -309,10 +331,8 @@ void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vec
     llvm::errs() << "CXXRECORDDECL INSTANTIATED: " << clava::getId(D->getInstantiatedFromMemberClass(), id) << "\n";
     llvm::errs() << "CXXRECORDDECL TEMPLATE: " << clava::getId(D->getTemplateInstantiationPattern(), id) << "\n";
 */
-    if (D->hasDefinition()) {
+
         //llvm::errs() << "CXXRECORDDECL DEF: " << clava::getId(D->getDefinition(), id) << "\n";
-        VisitDeclTop(D->getDefinition());
-    }
 
     // Visit constructors
     /*

@@ -99,6 +99,7 @@ namespace clava {
         void DumpNamedDeclData(const NamedDecl *D);
         void DumpTypeDeclData(const TypeDecl *D);
         void DumpTagDeclData(const TagDecl *D);
+        void DumpEnumDeclData(const EnumDecl *D);
         void DumpRecordDeclData(const RecordDecl *D);
         void DumpCXXRecordDeclData(const CXXRecordDecl *D);
         void DumpValueDeclData(const ValueDecl *D);
@@ -128,6 +129,9 @@ namespace clava {
         void DumpInitListExprData(const InitListExpr *E);
         void DumpDeclRefExprData(const DeclRefExpr *E);
         void DumpOverloadExprData(const OverloadExpr *E);
+        void DumpCXXConstructExprData(const CXXConstructExpr *E);
+        void DumpMemberExprData(const MemberExpr *E);
+        void DumpMaterializeTemporaryExprData(const MaterializeTemporaryExpr *E);
 
 
 
@@ -150,6 +154,7 @@ namespace clava {
         void DumpElaboratedTypeData(const ElaboratedType *T);
         void DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T);
         void DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T);
+        void DumpTypedefTypeData(const TypedefType *T);
 
 
             // ATTRS

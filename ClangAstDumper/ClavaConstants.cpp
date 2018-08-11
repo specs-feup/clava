@@ -20,6 +20,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::VAR_DECL: return "VarDecl";
         case clava::DeclNode::PARM_VAR_DECL: return "ParmVarDecl";
         case clava::DeclNode::TAG_DECL: return "TagDecl";
+        case clava::DeclNode::ENUM_DECL: return "EnumDecl";
         case clava::DeclNode::RECORD_DECL: return "RecordDecl";
         case clava::DeclNode::CXX_RECORD_DECL: return "CXXRecordDecl";
 
@@ -55,6 +56,10 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::OVERLOAD_EXPR: return "OverloadExpr";
         case clava::StmtNode::UNRESOLVED_LOOKUP_EXPR: return "UnresolvedLookupExpr";
         case clava::StmtNode::UNRESOLVED_MEMBER_EXPR: return "UnresolvedMemberExpr";
+        case clava::StmtNode::CXX_CONSTRUCT_EXPR: return "CXXConstructExpr";
+        case clava::StmtNode::MEMBER_EXPR: return "MemberExpr";
+        case clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR: return "MaterializeTemporaryExpr";
+        case clava::StmtNode::OFFSET_OF_EXPR: return "OffsetOfExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));

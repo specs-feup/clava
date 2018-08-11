@@ -208,6 +208,7 @@ private:
     void VisitNamedDeclChildren(const NamedDecl *D, std::vector<std::string> &children);
     void VisitTypeDeclChildren(const TypeDecl *D, std::vector<std::string> &children);
     void VisitTagDeclChildren(const TagDecl *D, std::vector<std::string> &children);
+    void VisitEnumDeclChildren(const EnumDecl *D, std::vector<std::string> &children);
     void VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children);
     void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
@@ -228,6 +229,8 @@ private:
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
     void VisitInitListExprChildren(const InitListExpr *E, std::vector<std::string> &children);
     void VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<std::string> &children);
+    void VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vector<std::string> &children);
+    void VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
@@ -259,6 +262,7 @@ private:
     //void VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren);
     void VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateTypeParmType *T, std::vector<std::string> &visitedChildren);
     void VisitTemplateSpecializationTypeChildren(const TemplateSpecializationType *T, std::vector<std::string> &visitedChildren);
+    void VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren);
 
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);
