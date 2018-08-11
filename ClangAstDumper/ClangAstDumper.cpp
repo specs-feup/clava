@@ -28,12 +28,13 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
         return;
     }
 
-    clava::dump(TOP_VISIT_START);
-    clava::dump(clava::getId(T, id));
+
 
     // Check if QualType is the same as the underlying type
     if((void*) T.getTypePtr() == T.getAsOpaquePtr()) {
 
+        clava::dump(TOP_VISIT_START);
+        clava::dump(clava::getId(T.getTypePtr(), id));
 /*
         if(dumpType(T.getTypePtr())) {
             return;
@@ -49,7 +50,7 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
         dumpType(T.getTypePtr());
 
         clava::dump(TOP_VISIT_END);
-        clava::dump(clava::getId(T, id));
+        clava::dump(clava::getId(T.getTypePtr(), id));
 
         return;
     }
@@ -79,6 +80,9 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
     if(dumpType(T)) {
         return;
     }
+
+    clava::dump(TOP_VISIT_START);
+    clava::dump(clava::getId(T, id));
 
     visitChildren(T);
     dataDumper.dump(T);
