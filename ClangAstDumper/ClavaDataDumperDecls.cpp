@@ -15,7 +15,7 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
-        {"FieldDecl", clava::DeclNode::NAMED_DECL},
+        {"FieldDecl", clava::DeclNode::FIELD_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"NamespaceAliasDecl", clava::DeclNode::NAMED_DECL},
         {"ObjCImplementationDecl", clava::DeclNode::NAMED_DECL},
@@ -68,6 +68,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpValueDeclData(static_cast<const ValueDecl *>(D)); break;
         case clava::DeclNode::DECLARATOR_DECL:
             DumpDeclaratorDeclData(static_cast<const DeclaratorDecl *>(D)); break;
+        case clava::DeclNode::FIELD_DECL:
+                DumpFieldDeclData(static_cast<const FieldDecl *>(D)); break;
         case clava::DeclNode::FUNCTION_DECL:
             DumpFunctionDeclData(static_cast<const FunctionDecl *>(D)); break;
         case clava::DeclNode::CXX_METHOD_DECL:
@@ -229,6 +231,15 @@ void clava::ClavaDataDumper::DumpDeclaratorDeclData(const DeclaratorDecl *D) {
     DumpValueDeclData(D);
 
     // Nothing for now
+}
+
+
+
+void clava::ClavaDataDumper::DumpFieldDeclData(const FieldDecl *D) {
+    // Hierarchy
+    DumpDeclaratorDeclData(D);
+
+    clava::dump(D->isMutable());
 }
 
 

@@ -442,6 +442,41 @@ extern const std::string clava::CONSTRUCTION_KIND[]{
         "Delegating"
 };
 
+extern const std::string clava::BINARY_OPERATOR__KIND[]{
+        "PTR_MEM_D",
+        "PTR_MEM_I",
+        "MUL",
+        "DIV",
+        "REM",
+        "ADD",
+        "SUB",
+        "SHL",
+        "SHR",
+        "LT",
+        "GT",
+        "LE",
+        "GE",
+        "EQ",
+        "NE",
+        "AND",
+        "XOR",
+        "OR",
+        "L_AND",
+        "L_OR",
+        "ASSIGN",
+        "MUL_ASSIGN",
+        "DIV_ASSIGN",
+        "REM_ASSIGN",
+        "ADD_ASSIGN",
+        "SUB_ASSIGN",
+        "SHL_ASSIGN",
+        "SHR_ASSIGN",
+        "AND_ASSIGN",
+        "XOR_ASSIGN",
+        "OR_ASSIGN",
+        "COMMA"
+};
+
 
 
 

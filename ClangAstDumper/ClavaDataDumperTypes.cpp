@@ -77,6 +77,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpTemplateSpecializationTypeData(static_cast<const TemplateSpecializationType *>(T)); break;
         case clava::TypeNode::TYPEDEF_TYPE:
             DumpTypedefTypeData(static_cast<const TypedefType *>(T)); break;
+        case clava::TypeNode::ADJUSTED_TYPE:
+            DumpAdjustedTypeData(static_cast<const AdjustedType *>(T)); break;
         case clava::TypeNode::DECAYED_TYPE:
             DumpDecayedTypeData(static_cast<const DecayedType *>(T)); break;
 
@@ -413,9 +415,18 @@ void clava::ClavaDataDumper::DumpTypedefTypeData(const TypedefType *T) {
     clava::dump(clava::getId(T->getDecl(), id));
 }
 
-void clava::ClavaDataDumper::DumpDecayedTypeData(const DecayedType *T) {
+void clava::ClavaDataDumper::DumpAdjustedTypeData(const AdjustedType *T) {
     // Hierarchy
     DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getOriginalType(), id));
+    clava::dump(clava::getId(T->getAdjustedType(), id));
+}
+
+void clava::ClavaDataDumper::DumpDecayedTypeData(const DecayedType *T) {
+    // Hierarchy
+    DumpAdjustedTypeData(T);
+
 
     clava::dump(clava::getId(T->getDecayedType(), id));
     clava::dump(clava::getId(T->getPointeeType(), id));

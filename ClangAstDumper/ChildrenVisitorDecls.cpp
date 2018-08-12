@@ -22,6 +22,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"VarDecl", clava::DeclNode::VAR_DECL},
         {"ParmVarDecl", clava::DeclNode::VAR_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
+        {"FieldDecl", clava::DeclNode::VALUE_DECL},
 
 
 

@@ -26,6 +26,7 @@ namespace clava {
         NAMED_DECL,
         VALUE_DECL,
         DECLARATOR_DECL,
+        FIELD_DECL,
         TYPE_DECL,
         FUNCTION_DECL,
         CXX_METHOD_DECL,
@@ -68,6 +69,8 @@ namespace clava {
         MEMBER_EXPR,
         MATERIALIZE_TEMPORARY_EXPR,
         OFFSET_OF_EXPR,
+        BINARY_OPERATOR,
+        COMPOUND_ASSIGN_OPERATOR,
     };
 
     /**
@@ -107,6 +110,7 @@ namespace clava {
         TYPEDEF_TYPE,
         SUBST_TEMPLATE_TYPE_PARM_TYPE,
         TEMPLATE_SPECIALIZATION_TYPE,
+        ADJUSTED_TYPE,
         DECAYED_TYPE,
 
     };

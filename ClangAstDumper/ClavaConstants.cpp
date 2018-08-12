@@ -13,6 +13,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::NAMED_DECL: return "NamedDecl";
         case clava::DeclNode::VALUE_DECL: return "ValueDecl";
         case clava::DeclNode::DECLARATOR_DECL: return "DeclaratorDecl";
+        case clava::DeclNode::FIELD_DECL: return "FieldDecl";
         case clava::DeclNode::TYPE_DECL: return "TypeDecl";
         case clava::DeclNode::FUNCTION_DECL: return "FunctionDecl";
         case clava::DeclNode::CXX_METHOD_DECL: return "CXXMethodDecl";
@@ -60,6 +61,8 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::MEMBER_EXPR: return "MemberExpr";
         case clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR: return "MaterializeTemporaryExpr";
         case clava::StmtNode::OFFSET_OF_EXPR: return "OffsetOfExpr";
+        case clava::StmtNode::BINARY_OPERATOR: return "BinaryOperator";
+        case clava::StmtNode::COMPOUND_ASSIGN_OPERATOR: return "CompoundAssignOperator";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
@@ -95,6 +98,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TYPEDEF_TYPE: return "TypedefType";
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE: return "SubstTemplateTypeParmType";
         case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE: return "TemplateSpecializationType";
+        case clava::TypeNode::ADJUSTED_TYPE: return "AdjustedType";
         case clava::TypeNode::DECAYED_TYPE: return "DecayedType";
 
         default: {

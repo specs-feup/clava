@@ -32,6 +32,8 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
         {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
         {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
+        {"BinaryOperator", clava::StmtNode::BINARY_OPERATOR},
+        {"CompoundAssignOperator", clava::StmtNode::BINARY_OPERATOR},
 
 };
 
@@ -98,6 +100,10 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpMemberExprData(static_cast<const MemberExpr *>(S)); break;
         case clava::StmtNode ::MATERIALIZE_TEMPORARY_EXPR:
             DumpMaterializeTemporaryExprData(static_cast<const MaterializeTemporaryExpr *>(S)); break;
+        case clava::StmtNode ::BINARY_OPERATOR:
+            DumpBinaryOperatorData(static_cast<const BinaryOperator *>(S)); break;
+//        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
+//            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
     }
@@ -311,8 +317,22 @@ void clava::ClavaDataDumper::DumpMemberExprData(const MemberExpr *E) {
     clava::dump(E->getMemberNameInfo().getAsString());
     //clava::dump(clava::getId(E->getMemberDecl(), id));
 }
+
 void clava::ClavaDataDumper::DumpMaterializeTemporaryExprData(const MaterializeTemporaryExpr *E) {
     DumpExprData(E);
 
     clava::dump(getId(E->getExtendingDecl(), id));
 }
+
+
+void clava::ClavaDataDumper::DumpBinaryOperatorData(const BinaryOperator *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::BINARY_OPERATOR__KIND[E->getOpcode()]);
+}
+
+//void clava::ClavaDataDumper::DumpCompoundAssignOperatorData(const CompoundAssignOperator *E) {
+//    DumpBinaryOperatorData(E);
+
+//    clava::dump();
+//}

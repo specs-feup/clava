@@ -104,6 +104,7 @@ namespace clava {
         void DumpCXXRecordDeclData(const CXXRecordDecl *D);
         void DumpValueDeclData(const ValueDecl *D);
         void DumpDeclaratorDeclData(const DeclaratorDecl *D);
+        void DumpFieldDeclData(const FieldDecl *D);
         void DumpFunctionDeclData(const FunctionDecl *D);
         void DumpCXXMethodDeclData(const CXXMethodDecl *D);
         void DumpCXXConstructorDeclData(const CXXConstructorDecl *D);
@@ -132,6 +133,7 @@ namespace clava {
         void DumpCXXConstructExprData(const CXXConstructExpr *E);
         void DumpMemberExprData(const MemberExpr *E);
         void DumpMaterializeTemporaryExprData(const MaterializeTemporaryExpr *E);
+        void DumpBinaryOperatorData(const BinaryOperator *E);
 
 
 
@@ -155,6 +157,7 @@ namespace clava {
         void DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T);
         void DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T);
         void DumpTypedefTypeData(const TypedefType *T);
+        void DumpAdjustedTypeData(const AdjustedType *T);
         void DumpDecayedTypeData(const DecayedType *T);
 
 

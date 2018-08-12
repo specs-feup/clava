@@ -75,6 +75,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitTemplateSpecializationTypeChildren(static_cast<const TemplateSpecializationType *>(T), visitedChildren); break;
         case clava::TypeNode::TYPEDEF_TYPE:
             VisitTypedefTypeChildren(static_cast<const TypedefType *>(T), visitedChildren); break;
+        case clava::TypeNode::ADJUSTED_TYPE:
+            VisitAdjustedTypeChildren(static_cast<const AdjustedType *>(T), visitedChildren); break;
         case clava::TypeNode::DECAYED_TYPE:
             VisitDecayedTypeChildren(static_cast<const DecayedType *>(T), visitedChildren); break;
 
@@ -305,14 +307,23 @@ void ClangAstDumper::VisitTypedefTypeChildren(const TypedefType *T, std::vector<
 };
 
 
-void ClangAstDumper::VisitDecayedTypeChildren(const DecayedType *T, std::vector<std::string> &visitedChildren){
+void ClangAstDumper::VisitAdjustedTypeChildren(const AdjustedType *T, std::vector<std::string> &visitedChildren){
     // Hierarchy
     VisitTypeChildren(T, visitedChildren);
 
     // Original type
-    VisitTypeTop(T->getDecayedType());
+    VisitTypeTop(T->getOriginalType());
 
     // Adjusted type
+    VisitTypeTop(T->getAdjustedType());
+};
+
+void ClangAstDumper::VisitDecayedTypeChildren(const DecayedType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitAdjustedTypeChildren(T, visitedChildren);
+
+    VisitTypeTop(T->getDecayedType());
+
     VisitTypeTop(T->getPointeeType());
 };
 
