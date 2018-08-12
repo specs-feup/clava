@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.NullType;
 
@@ -40,6 +41,13 @@ public class CXXConstructExpr extends Expr {
     public final static DataKey<Boolean> IS_ELIDABLE = KeyFactory.bool("isElidable");
 
     public final static DataKey<Boolean> REQUIRES_ZERO_INITIALIZATION = KeyFactory.bool("requiresZeroInitialization");
+
+    public final static DataKey<Boolean> IS_LIST_INITIALIZATION = KeyFactory.bool("isListInitialization");
+
+    public final static DataKey<Boolean> IS_STD_LIST_INITIALIZATION = KeyFactory.bool("isStdInitListInitialization");
+
+    public final static DataKey<ConstructionKind> CONSTRUCTION_KIND = KeyFactory.enumeration("constructionKind",
+            ConstructionKind.class);
 
     /// DATAKEYS END
 
@@ -94,17 +102,29 @@ public class CXXConstructExpr extends Expr {
     @Override
     public String getCode() {
         String typeCode = getExprType() instanceof NullType ? null : getExprType().getCode(this);
-        return getCode(typeCode);
+
+        String code = getCode(typeCode);
+        //
+        // System.out.println("CONST KIND:" + get(CONSTRUCTION_KIND));
+        // System.out.println("IS LIST:" + get(IS_LIST_INITIALIZATION));
+        // System.out.println("IS STD LIST:" + get(IS_STD_LIST_INITIALIZATION));
+        // System.out.println("CODE:" + code);
+        return code;
         // return getCode(getExprType().getCode());
     }
 
-    public String getCode(String cxxRecordName) {
+    public boolean isListInit() {
+        return get(IS_LIST_INITIALIZATION) || get(IS_STD_LIST_INITIALIZATION);
+    }
+
+    private String getCode(String cxxRecordName) {
         if (cxxRecordName == null) {
             return "";
         }
 
         // Special case: constructor that receives an initializer_list
-        if (cxxRecordName.startsWith("initializer_list<")) {
+        // if (cxxRecordName.startsWith("initializer_list<")) {
+        if (isListInit()) {
             return getArgs().stream()
                     .map(arg -> arg.getCode())
                     .collect(Collectors.joining(", ", "{", "}"));
@@ -144,6 +164,13 @@ public class CXXConstructExpr extends Expr {
         // }
         // return "";
         // }
+
+        if (argsCode.isEmpty()) {
+            if (isTemporary()) {
+                return "()";
+            }
+            return "";
+        }
 
         return "(" + argsCode + ")";
     }

@@ -71,7 +71,6 @@ import pt.up.fe.specs.clava.ast.expr.CXXDefaultArgExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNullPtrLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXReinterpretCastExpr;
@@ -90,7 +89,6 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
-import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
@@ -117,7 +115,6 @@ import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
-import pt.up.fe.specs.clava.ast.expr.legacy.ImplicitCastExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
@@ -1047,11 +1044,11 @@ public class ClavaNodeFactory {
     // return new DummyExprLegacy(content, info, children);
     // }
 
-    public static ImplicitCastExpr exprImplicitCast(CastKind castKind, ExprData exprData,
-            ClavaNodeInfo info, Expr subExpr) {
-
-        return new ImplicitCastExprLegacy(castKind, exprData, info, subExpr);
-    }
+    // public static ImplicitCastExpr exprImplicitCast(CastKind castKind, ExprData exprData,
+    // ClavaNodeInfo info, Expr subExpr) {
+    //
+    // return new ImplicitCastExprLegacy(castKind, exprData, info, subExpr);
+    // }
 
     // public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
     // return new ImplicitValueInitExpr(exprData, info);
@@ -1062,11 +1059,11 @@ public class ClavaNodeFactory {
         return new IntegerLiteralLegacy(literal, exprData, info);
     }
 
-    public static CXXFunctionalCastExpr cxxFunctionalCastExpr(CastKind castKind,
-            ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-
-        return new CXXFunctionalCastExpr(castKind, exprData, info, subExpr);
-    }
+    // public static CXXFunctionalCastExpr cxxFunctionalCastExpr(CastKind castKind,
+    // ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+    //
+    // return new CXXFunctionalCastExpr(castKind, exprData, info, subExpr);
+    // }
 
     /**
      *

@@ -36,7 +36,9 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -292,6 +294,12 @@ public class ClavaFactory {
                 .put(Expr.TYPE, type);
 
         return new CallExpr(data, SpecsCollections.concat(function, args));
+    }
+
+    public CXXFunctionalCastExpr cxxFunctionalCastExpr(CastExpr expr, Expr subExpr) {
+        DataStore data = expr.getFactoryWithNode().newExprDataStore();
+
+        return new CXXFunctionalCastExpr(data, Arrays.asList(subExpr));
     }
 
     /// DECLS

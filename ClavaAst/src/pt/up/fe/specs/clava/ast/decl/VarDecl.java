@@ -158,7 +158,6 @@ public class VarDecl extends DeclaratorDecl {
 
         code.append(getType().getCode(this, declName));
         code.append(getInitializationCode());
-
         return code.toString();
     }
 
@@ -173,6 +172,9 @@ public class VarDecl extends DeclaratorDecl {
     }
 
     public String getInitializationCode() {
+
+        // System.out.println("CHILDREN:" + getChildren());
+
         if (hasInit()) {
             return get(INIT_STYLE).getCode(this);
         }

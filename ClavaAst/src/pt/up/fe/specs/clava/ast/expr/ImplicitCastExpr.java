@@ -14,15 +14,11 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.language.CastKind;
 
 /**
  * Represents an implicit type conversions which has no direct representation in the original source code.
@@ -34,20 +30,6 @@ public class ImplicitCastExpr extends CastExpr {
 
     public ImplicitCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    /**
-     * Legacy support.
-     * 
-     * @param castKind
-     * @param exprData
-     * @param info
-     * @param subExpr
-     */
-    protected ImplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-
-        super(castKind, exprData, info, children);
     }
 
     // @Override
