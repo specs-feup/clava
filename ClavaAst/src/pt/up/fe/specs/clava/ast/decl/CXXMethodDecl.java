@@ -192,7 +192,8 @@ public class CXXMethodDecl extends FunctionDecl {
     }
 
     public CXXRecordDecl getRecordDecl() {
-        return (CXXRecordDecl) getApp().getNode(get(RECORD_ID));
+        return (CXXRecordDecl) get(RECORD);
+        // return (CXXRecordDecl) getApp().getNode(get(RECORD_ID));
         // // Check if this node is inside the record
         // Optional<CXXRecordDecl> ancestor = getAncestorTry(CXXRecordDecl.class);
         //

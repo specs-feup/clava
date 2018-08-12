@@ -13,19 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class DependentSizedArrayType extends ArrayType {
 
@@ -33,18 +28,18 @@ public class DependentSizedArrayType extends ArrayType {
         super(data, children);
     }
 
-    public DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Type elementType, Expr sizeExpr) {
-
-        this(arrayTypeData, typeData, info, Arrays.asList(elementType, sizeExpr));
-    }
-
-    private DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setArrayType(arrayTypeData).setType(typeData).setNodeInfo(info).getData(),
-                children);
-        // super(arrayTypeData, typeData, info, children);
-    }
+    // public DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Type elementType, Expr sizeExpr) {
+    //
+    // this(arrayTypeData, typeData, info, Arrays.asList(elementType, sizeExpr));
+    // }
+    //
+    // private DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore().setArrayType(arrayTypeData).setType(typeData).setNodeInfo(info).getData(),
+    // children);
+    // // super(arrayTypeData, typeData, info, children);
+    // }
 
     // @Override
     // protected ClavaNode copyPrivate() {
@@ -57,6 +52,10 @@ public class DependentSizedArrayType extends ArrayType {
     // }
 
     public Optional<Expr> getSizeExpr() {
+        if (getNumChildren() < 2) {
+            return Optional.empty();
+        }
+
         Expr sizeExpr = getChild(Expr.class, 1);
         return sizeExpr instanceof NullExpr ? Optional.empty() : Optional.of(sizeExpr);
     }

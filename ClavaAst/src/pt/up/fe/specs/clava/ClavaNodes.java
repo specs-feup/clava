@@ -31,7 +31,6 @@ import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -39,7 +38,7 @@ import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -429,11 +428,11 @@ public class ClavaNodes {
 
         return type + " ";
     }
-
-    public static BinaryOperator newAssignment(Expr leftHand, Expr rightHand) {
-        return ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(leftHand.getType()),
-                ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
-    }
+    //
+    // public static BinaryOperator newAssignment(Expr leftHand, Expr rightHand) {
+    // return ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(leftHand.getType()),
+    // ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
+    // }
 
     public static Stmt getNodeOrNullStmt(Stmt node) {
         if (node == null) {

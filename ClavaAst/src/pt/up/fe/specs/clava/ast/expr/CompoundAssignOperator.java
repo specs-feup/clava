@@ -13,26 +13,29 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 public class CompoundAssignOperator extends BinaryOperator {
 
-    private final Type lhsType;
-    private final Type resultType;
-
-    public CompoundAssignOperator(Type lhsType, Type resultType, BinaryOperatorKind op, ExprData exprData,
-            ClavaNodeInfo info, Expr lhs, Expr rhs) {
-
-        super(op, exprData, info, lhs, rhs);
-
-        this.lhsType = lhsType;
-        this.resultType = resultType;
+    public CompoundAssignOperator(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // private final Type lhsType;
+    // private final Type resultType;
+    //
+    // public CompoundAssignOperator(Type lhsType, Type resultType, BinaryOperatorKind op, ExprData exprData,
+    // ClavaNodeInfo info, Expr lhs, Expr rhs) {
+    //
+    // super(op, exprData, info, lhs, rhs);
+    //
+    // this.lhsType = lhsType;
+    // this.resultType = resultType;
+    // }
 
     /**
      * Constructor for copy function.
@@ -44,23 +47,24 @@ public class CompoundAssignOperator extends BinaryOperator {
      * @param type
      * @param info
      */
-    private CompoundAssignOperator(Type lhsType, Type resultType, BinaryOperatorKind op,
-            ExprData exprData, ClavaNodeInfo info) {
+    // private CompoundAssignOperator(Type lhsType, Type resultType, BinaryOperatorKind op,
+    // ExprData exprData, ClavaNodeInfo info) {
+    //
+    // super(op, exprData, info, Collections.emptyList());
+    //
+    // this.lhsType = lhsType;
+    // this.resultType = resultType;
+    // }
 
-        super(op, exprData, info, Collections.emptyList());
-
-        this.lhsType = lhsType;
-        this.resultType = resultType;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CompoundAssignOperator(lhsType, resultType, getOp(), getExprData(), getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CompoundAssignOperator(lhsType, resultType, getOp(), getExprData(), getInfo());
+    // }
 
     @Override
     public String getCode() {
-        return getLhs().getCode() + " " + getOp().getOpString() + "= " + getRhs().getCode();
+        // return getLhs().getCode() + " " + getOp().getOpString() + "= " + getRhs().getCode();
+        return getLhs().getCode() + " " + getOp().getOpString() + " " + getRhs().getCode();
     }
 
 }

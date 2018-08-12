@@ -133,6 +133,8 @@ public class CXXConstructorDecl extends CXXMethodDecl {
                 .map(init -> init.getCode(this))
                 .filter(initCode -> !initCode.isEmpty())
                 .collect(Collectors.toList());
+        System.out.println("INIT LIST:" + initList);
+        System.out.println("INTIS:" + getInitializers());
 
         /*
         for (CXXCtorInitializer init : getInitializers()) {

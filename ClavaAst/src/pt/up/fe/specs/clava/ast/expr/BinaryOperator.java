@@ -13,16 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 
 /**
  * Represents a builtin binary operation expression.
@@ -33,94 +31,36 @@ import pt.up.fe.specs.util.providers.StringProvider;
  */
 public class BinaryOperator extends Expr {
 
-    public static enum BinaryOperatorKind implements StringProvider {
-        PTR_MEM_D,
-        PTR_MEM_I,
-        MUL("*"),
-        DIV("/"),
-        REM("%"),
-        ADD("+"),
-        SUB("-"),
-        SHL("<<"),
-        SHR(">>"),
-        LT("<"),
-        GT(">"),
-        LE("<="),
-        GE(">="),
-        EQ("=="),
-        NE("!="),
-        AND("&"),
-        XOR("^"),
-        OR("|"),
-        L_AND("&&"),
-        L_OR("||"),
-        ASSIGN("=", true),
-        MUL_ASSIGN("*=", true),
-        DIV_ASSIGN("/=", true),
-        REM_ASSIGN("%=", true),
-        ADD_ASSIGN("+=", true),
-        SUB_ASSIGN("-=", true),
-        SHL_ASSIGN("<<=", true),
-        SHR_ASSIGN(">>=", true),
-        AND_ASSIGN("&=", true),
-        XOR_ASSIGN("^=", true),
-        OR_ASSIGN("|=", true),
-        COMMA(",");
+    /// DATAKEYS BEGIN
 
-        private static final Lazy<EnumHelperWithValue<BinaryOperatorKind>> HELPER = EnumHelperWithValue
-                .newLazyHelperWithValue(BinaryOperatorKind.class);
+    public final static DataKey<BinaryOperatorKind> OP = KeyFactory.enumeration("op", BinaryOperatorKind.class);
 
-        public static EnumHelperWithValue<BinaryOperatorKind> getHelper() {
-            return HELPER.get();
-        }
+    /// DATAKEYS END
 
-        private final String opString;
-        private final boolean isAssign;
-
-        private BinaryOperatorKind(String opString, boolean isAssign) {
-            this.opString = opString;
-            this.isAssign = isAssign;
-        }
-
-        private BinaryOperatorKind(String opString) {
-            this(opString, false);
-        }
-
-        private BinaryOperatorKind() {
-            this("<UNDEFINED>");
-        }
-
-        public String getOpString() {
-            return opString;
-        }
-
-        @Override
-        public String getString() {
-            return getOpString();
-        }
-
+    public BinaryOperator(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private final BinaryOperatorKind op;
+    // private final BinaryOperatorKind op;
 
-    public BinaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info,
-            Expr lhs, Expr rhs) {
+    // public BinaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info,
+    // Expr lhs, Expr rhs) {
+    //
+    // this(op, exprData, info, Arrays.asList(lhs, rhs));
+    // }
 
-        this(op, exprData, info, Arrays.asList(lhs, rhs));
-    }
+    // protected BinaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.op = op;
+    // }
 
-    protected BinaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-
-        this.op = op;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new BinaryOperator(op, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new BinaryOperator(op, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public Expr getLhs() {
         return getChild(Expr.class, 0);
@@ -131,17 +71,18 @@ public class BinaryOperator extends Expr {
     }
 
     public BinaryOperatorKind getOp() {
-        return op;
+        return get(OP);
+        // return op;
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + ", op:" + op;
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + ", op:" + op;
+    // }
 
     @Override
     public String getCode() {
-        String opCode = getLhs().getCode() + " " + op.getOpString() + " " + getRhs().getCode();
+        String opCode = getLhs().getCode() + " " + get(OP).getOpString() + " " + getRhs().getCode();
 
         return opCode;
     }

@@ -49,23 +49,6 @@ public class DecayedType extends AdjustedType {
     //
     // }
 
-    // TODO: Verify if DECAYED_TYPE corresponds to OriginalType
-    public Type getOriginalType() {
-        return get(DECAYED_TYPE);
-        // return getChild(Type.class, 0);
-    }
-
-    public void setOriginalType(Type originalType) {
-        set(DECAYED_TYPE, originalType);
-        setChild(0, originalType);
-    }
-
-    @Override
-    public Type getAdjustedType() {
-        return get(POINTEE_TYPE);
-        // return getChild(Type.class, 1);
-    }
-
     // Return the code of the original type
     @Override
     public String getCode(ClavaNode sourceNode, String name) {

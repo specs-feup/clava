@@ -22,13 +22,12 @@ import java.util.Set;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
@@ -252,7 +251,11 @@ public class ForStmt extends LoopStmt {
             return Optional.of(beginEndDiff);
         }
 
-        return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
+        return Optional
+                .of(getFactory().binaryOperator(BinaryOperatorKind.DIV, beginEndDiff.get(Expr.TYPE), beginEndDiff,
+                        stepValue));
+
+        // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
     }
 
     private Optional<Expr> getBeginEndDiff() {
@@ -283,7 +286,10 @@ public class ForStmt extends LoopStmt {
             return Optional.of(endExpr);
         }
 
-        return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));
+        return Optional
+                .of(getFactory().binaryOperator(BinaryOperatorKind.SUB, initExpr.get(Expr.TYPE), endExpr, initExpr));
+
+        // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));
     }
 
 }

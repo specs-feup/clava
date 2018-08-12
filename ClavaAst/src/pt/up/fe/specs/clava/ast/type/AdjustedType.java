@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -26,6 +28,14 @@ import pt.up.fe.specs.clava.ClavaNode;
  *
  */
 public abstract class AdjustedType extends Type {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Type> ORIGINAL_TYPE = KeyFactory.object("originalType", Type.class);
+
+    public final static DataKey<Type> ADJUSTED_TYPE = KeyFactory.object("adjustedType", Type.class);
+
+    /// DATAKEYS END
 
     public AdjustedType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -39,6 +49,19 @@ public abstract class AdjustedType extends Type {
     // super(typeData, info, children);
     // }
 
-    public abstract Type getAdjustedType();
+    public Type getOriginalType() {
+        return get(ORIGINAL_TYPE);
+        // return getChild(Type.class, 0);
+    }
+
+    public void setOriginalType(Type originalType) {
+        set(ORIGINAL_TYPE, originalType);
+        // setChild(0, originalType);
+    }
+
+    public Type getAdjustedType() {
+        return get(ADJUSTED_TYPE);
+        // return getChild(Type.class, 1);
+    }
 
 }

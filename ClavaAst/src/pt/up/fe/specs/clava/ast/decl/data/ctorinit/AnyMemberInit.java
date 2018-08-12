@@ -31,6 +31,7 @@ public class AnyMemberInit extends CXXCtorInitializer {
 
     @Override
     public String getCode(CXXConstructorDecl sourceNode) {
+        System.out.println("ANY MEMBER DECL:" + get(ANY_MEMBER_DECL));
         // System.out.println("ANY MEMBER CODE:" + get(ANY_MEMBER_DECL).get(FieldDecl.DECL_NAME) + "("
         // + get(INIT_EXPR).getCode() + ")");
         // System.out.println("INIT EXPR:" + get(INIT_EXPR).getCode());

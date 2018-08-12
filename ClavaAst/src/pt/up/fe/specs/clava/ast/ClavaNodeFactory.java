@@ -40,7 +40,6 @@ import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
-import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -62,12 +61,9 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXDefaultArgExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
@@ -81,7 +77,6 @@ import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
-import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
@@ -139,7 +134,6 @@ import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
@@ -153,7 +147,6 @@ import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
-import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -169,7 +162,6 @@ import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
-import pt.up.fe.specs.clava.ast.type.data.ArrayTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -475,12 +467,12 @@ public class ClavaNodeFactory {
     // return new RecordDecl(recordDeclData, type, declData, info, decls);
     // }
 
-    public static FieldDecl fieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type,
-            DeclData declData,
-            ClavaNodeInfo info, Expr bitwidth, Expr inClassInitializer) {
-
-        return new FieldDecl(isMutable, isModulePrivate, declName, type, declData, info, bitwidth, inClassInitializer);
-    }
+    // public static FieldDecl fieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type,
+    // DeclData declData,
+    // ClavaNodeInfo info, Expr bitwidth, Expr inClassInitializer) {
+    //
+    // return new FieldDecl(isMutable, isModulePrivate, declName, type, declData, info, bitwidth, inClassInitializer);
+    // }
 
     // public static CXXRecordDecl cxxRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type,
     // DeclData declData,
@@ -850,12 +842,12 @@ public class ClavaNodeFactory {
         return new PackExpansionType(numExpansions, data, info, pattern);
     }
 
-    public static DependentSizedArrayType dependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
-            ClavaNodeInfo info,
-            Type elementType, Expr sizeExpr) {
-
-        return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
-    }
+    // public static DependentSizedArrayType dependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
+    // ClavaNodeInfo info,
+    // Type elementType, Expr sizeExpr) {
+    //
+    // return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
+    // }
 
     public static TypeOfExprType typeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
             Expr underlyingExpr, Type underlyingType) {
@@ -939,13 +931,13 @@ public class ClavaNodeFactory {
     // return new DeclStmt(false, info, decl);
     // }
 
-    public static ExprStmt exprStmtAssign(Expr lhs, Expr rhs, Type returnType) {
-        ExprData exprData = new ExprData(returnType);
-
-        BinaryOperator op = binaryOperator(BinaryOperatorKind.ASSIGN, exprData, null, lhs, rhs);
-
-        return LegacyToDataStore.getFactory().exprStmt(op);// exprStmt(op);
-    }
+    // public static ExprStmt exprStmtAssign(Expr lhs, Expr rhs, Type returnType) {
+    // ExprData exprData = new ExprData(returnType);
+    //
+    // BinaryOperator op = binaryOperator(BinaryOperatorKind.ASSIGN, exprData, null, lhs, rhs);
+    //
+    // return LegacyToDataStore.getFactory().exprStmt(op);// exprStmt(op);
+    // }
 
     public static ContinueStmt continueStmt(ClavaNodeInfo info) {
         return new ContinueStmt(info);
@@ -1153,9 +1145,9 @@ public class ClavaNodeFactory {
     // return new CXXTemporaryObjectExpr(constructorData, exprData, info, args);
     // }
 
-    public static CXXDefaultArgExpr cxxDefaultArgExpr(ExprData exprData, ClavaNodeInfo info) {
-        return new CXXDefaultArgExpr(exprData, info);
-    }
+    // public static CXXDefaultArgExpr cxxDefaultArgExpr(ExprData exprData, ClavaNodeInfo info) {
+    // return new CXXDefaultArgExpr(exprData, info);
+    // }
 
     // public static StringLiteral stringLiteral(String string, ExprData exprData, ClavaNodeInfo info) {
     // return new StringLiteral(string, exprData, info);
@@ -1191,18 +1183,19 @@ public class ClavaNodeFactory {
         return new FloatingLiteralLegacy(floatKind, number, exprData, info);
     }
 
-    public static BinaryOperator binaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr lhs,
-            Expr rhs) {
+    // public static BinaryOperator binaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr
+    // lhs,
+    // Expr rhs) {
+    //
+    // return new BinaryOperator(op, exprData, info, lhs, rhs);
+    // }
 
-        return new BinaryOperator(op, exprData, info, lhs, rhs);
-    }
-
-    public static BinaryOperator binaryOperator(BinaryOperatorKind op, Expr lhs, Expr rhs) {
-        ExprData exprData = ExprData.empty();
-        ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
-
-        return binaryOperator(op, exprData, info, lhs, rhs);
-    }
+    // public static BinaryOperator binaryOperator(BinaryOperatorKind op, Expr lhs, Expr rhs) {
+    // ExprData exprData = ExprData.empty();
+    // ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
+    //
+    // return binaryOperator(op, exprData, info, lhs, rhs);
+    // }
 
     public static ParenExpr parenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
         return new ParenExpr(exprData, info, subExpr);
@@ -1279,10 +1272,10 @@ public class ClavaNodeFactory {
         return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, info, argumentExpression);
     }
 
-    public static CompoundAssignOperator compoundAssignOperator(Type lhsType, Type resultType,
-            BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {
-        return new CompoundAssignOperator(lhsType, resultType, op, exprData, info, lhs, rhs);
-    }
+    // public static CompoundAssignOperator compoundAssignOperator(Type lhsType, Type resultType,
+    // BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {
+    // return new CompoundAssignOperator(lhsType, resultType, op, exprData, info, lhs, rhs);
+    // }
 
     public static CXXDeleteExpr cxxDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete,
             ExprData exprData, ClavaNodeInfo info, Expr argument) {

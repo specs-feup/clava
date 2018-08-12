@@ -13,17 +13,16 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents a member of a struct/union/class.
@@ -33,37 +32,55 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public class FieldDecl extends DeclaratorDecl {
 
-    private final boolean isMutable;
-    private final boolean isModulePrivate;
+    /// DATAKEYS BEGIN
 
-    public FieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type, DeclData declData,
-            ClavaNodeInfo info, Expr bitwidth, Expr inClassInitializer) {
+    public final static DataKey<Boolean> IS_MUTABLE = KeyFactory.bool("isMutable");
 
-        this(isMutable, isModulePrivate, declName, type, declData, info,
-                Arrays.asList(nullable(bitwidth), nullable(inClassInitializer)));
+    /// DATAKEYS END
+
+    public FieldDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private FieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type, DeclData declData,
-            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // private final boolean isMutable;
+    // private final boolean isModulePrivate;
 
-        super(declName, type, declData, info, children);
+    // public FieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type, DeclData declData,
+    // ClavaNodeInfo info, Expr bitwidth, Expr inClassInitializer) {
+    //
+    // this(isMutable, isModulePrivate, declName, type, declData, info,
+    // Arrays.asList(nullable(bitwidth), nullable(inClassInitializer)));
+    // }
+    //
+    // private FieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type, DeclData declData,
+    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    //
+    // super(declName, type, declData, info, children);
+    //
+    // this.isMutable = isMutable;
+    // this.isModulePrivate = isModulePrivate;
+    // }
 
-        this.isMutable = isMutable;
-        this.isModulePrivate = isModulePrivate;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FieldDecl(isMutable, isModulePrivate, getDeclName(), getType(), getDeclData(), getInfo(),
-                Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new FieldDecl(isMutable, isModulePrivate, getDeclName(), getType(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public Optional<Expr> getBitwidth() {
+        if (!hasChildren()) {
+            return Optional.empty();
+        }
+
         Expr bitwidth = getChild(Expr.class, 0);
         return bitwidth instanceof NullExpr ? Optional.empty() : Optional.of(bitwidth);
     }
 
     public Optional<Expr> getInitialization() {
+        if (getNumChildren() < 2) {
+            return Optional.empty();
+        }
+
         Expr init = getChild(Expr.class, 1);
         return init instanceof NullExpr ? Optional.empty() : Optional.of(init);
     }
@@ -82,7 +99,7 @@ public class FieldDecl extends DeclaratorDecl {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        if (isMutable) {
+        if (get(IS_MUTABLE)) {
             code.append("mutable ");
         }
 

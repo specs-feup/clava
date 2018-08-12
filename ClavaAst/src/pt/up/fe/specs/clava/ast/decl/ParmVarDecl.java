@@ -50,6 +50,11 @@ public class ParmVarDecl extends VarDecl {
         return super.getInitializationCode();
     }
 
+    @Override
+    public String getCode() {
+        return super.getCode();
+    }
+
     /*
     @Override
     public String getDeclName() {
