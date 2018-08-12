@@ -95,6 +95,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TYPEDEF_TYPE: return "TypedefType";
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE: return "SubstTemplateTypeParmType";
         case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE: return "TemplateSpecializationType";
+        case clava::TypeNode::DECAYED_TYPE: return "DecayedType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

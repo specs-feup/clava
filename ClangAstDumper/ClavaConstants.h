@@ -107,6 +107,7 @@ namespace clava {
         TYPEDEF_TYPE,
         SUBST_TEMPLATE_TYPE_PARM_TYPE,
         TEMPLATE_SPECIALIZATION_TYPE,
+        DECAYED_TYPE,
 
     };
 

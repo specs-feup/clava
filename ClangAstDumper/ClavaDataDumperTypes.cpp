@@ -23,6 +23,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
         {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
         {"TypedefType", clava::TypeNode::TYPEDEF_TYPE},
+        {"DecayedType", clava::TypeNode::DECAYED_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -76,6 +77,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpTemplateSpecializationTypeData(static_cast<const TemplateSpecializationType *>(T)); break;
         case clava::TypeNode::TYPEDEF_TYPE:
             DumpTypedefTypeData(static_cast<const TypedefType *>(T)); break;
+        case clava::TypeNode::DECAYED_TYPE:
+            DumpDecayedTypeData(static_cast<const DecayedType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -408,4 +411,12 @@ void clava::ClavaDataDumper::DumpTypedefTypeData(const TypedefType *T) {
     DumpTypeData(T);
 
     clava::dump(clava::getId(T->getDecl(), id));
+}
+
+void clava::ClavaDataDumper::DumpDecayedTypeData(const DecayedType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getDecayedType(), id));
+    clava::dump(clava::getId(T->getPointeeType(), id));
 }

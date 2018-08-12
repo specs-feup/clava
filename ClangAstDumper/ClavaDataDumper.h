@@ -155,6 +155,7 @@ namespace clava {
         void DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T);
         void DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T);
         void DumpTypedefTypeData(const TypedefType *T);
+        void DumpDecayedTypeData(const DecayedType *T);
 
 
             // ATTRS

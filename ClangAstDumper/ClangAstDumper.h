@@ -263,6 +263,7 @@ private:
     void VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateTypeParmType *T, std::vector<std::string> &visitedChildren);
     void VisitTemplateSpecializationTypeChildren(const TemplateSpecializationType *T, std::vector<std::string> &visitedChildren);
     void VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren);
+    void VisitDecayedTypeChildren(const DecayedType *T, std::vector<std::string> &visitedChildren);
 
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);
