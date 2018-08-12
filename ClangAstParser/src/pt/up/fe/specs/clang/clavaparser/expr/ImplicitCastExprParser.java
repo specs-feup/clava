@@ -54,7 +54,7 @@ public class ImplicitCastExprParser extends AClangNodeParser<ImplicitCastExpr> {
 
         if (children.size() == 1) {
             Expr subExpr = toExpr(children.get(0));
-            throw new RuntimeException("deprecated");
+            throw new RuntimeException("deprecated - " + node.getExtendedId());
 
             // return ClavaNodeFactory.exprImplicitCast(castKind, exprData, info(node), subExpr);
         }

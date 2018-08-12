@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -46,7 +45,8 @@ public class DecayedTypeParser extends AClangNodeParser<DecayedType> {
         Type originalType = toType(children.get(0));
         Type adjustedType = toType(children.get(1));
 
-        return ClavaNodeFactory.decayedType(typeData, node.getInfo(), originalType, adjustedType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.decayedType(typeData, node.getInfo(), originalType, adjustedType);
     }
 
 }
