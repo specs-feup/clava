@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
@@ -48,7 +49,9 @@ public class AdaptBoolCasts implements SimplePostClavaRule {
 
         // CXXFunctionalCastExpr newCastExpr = ClavaNodeFactory.cxxFunctionalCastExpr("bool",
         // castExpr.getCastKind(), castExpr.getExprData(), castExpr.getInfo(), subExpr);
-        CXXFunctionalCastExpr newCastExpr = CXXFunctionalCastExpr.newInstance(castExpr, subExpr);
+
+        // CXXFunctionalCastExpr newCastExpr = CXXFunctionalCastExpr.newInstance(castExpr, subExpr);
+        CXXFunctionalCastExpr newCastExpr = LegacyToDataStore.getFactory().cxxFunctionalCastExpr(castExpr, subExpr);
 
         // Expr newSubExpr = newCastExpr.getSubExpr();
         // System.out.println("old sub expr == new sub expr? " + (subExpr == newSubExpr));

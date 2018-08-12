@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -63,7 +62,8 @@ public class CXXFunctionalCastExprParser extends AClangNodeParser<CXXFunctionalC
 
         Expr subExpr = toExpr(children.get(0));
 
-        return ClavaNodeFactory.cxxFunctionalCastExpr(castKind, exprData, info(node), subExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxFunctionalCastExpr(castKind, exprData, info(node), subExpr);
     }
 
 }
