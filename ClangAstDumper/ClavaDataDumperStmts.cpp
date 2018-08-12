@@ -20,7 +20,8 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"FloatingLiteral", clava::StmtNode::FLOATING_LITERAL},
         //{"FloatingLiteral", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CastExpr", clava::StmtNode::CAST_EXPR},
-        //{"CXXFunctionalCastExpr", clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR},
+        {"CXXFunctionalCastExpr", clava::StmtNode::CAST_EXPR},
+
         {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CompoundLiteralExpr", clava::StmtNode::COMPOUND_LITERAL_EXPR},
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
@@ -298,6 +299,9 @@ void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E)
     // Dump qualifier
     clava::dump(E->isElidable());
     clava::dump(E->requiresZeroInitialization());
+    clava::dump(E->isListInitialization());
+    clava::dump(E->isStdInitListInitialization());
+    clava::dump(clava::CONSTRUCTION_KIND[E->getConstructionKind()]);
 }
 
 void clava::ClavaDataDumper::DumpMemberExprData(const MemberExpr *E) {

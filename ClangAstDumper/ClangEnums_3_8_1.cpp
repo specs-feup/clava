@@ -435,6 +435,13 @@ extern const std::string clava::ELABORATED_TYPE_KEYWORD[] {
         "NONE"
 };
 
+extern const std::string clava::CONSTRUCTION_KIND[]{
+        "Complete",
+        "NonVirtualBase",
+        "VirtualBase",
+        "Delegating"
+};
+
 
 
 
