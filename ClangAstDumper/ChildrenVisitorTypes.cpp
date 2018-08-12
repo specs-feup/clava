@@ -11,7 +11,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"FunctionProtoType", clava::TypeNode::FUNCTION_PROTO_TYPE},
         {"FunctionNoProtoType", clava::TypeNode::FUNCTION_TYPE},
         {"ConstantArrayType", clava::TypeNode::ARRAY_TYPE},
-        {"DependentSizedArrayType", clava::TypeNode::ARRAY_TYPE},
+        {"DependentSizedArrayType", clava::TypeNode::DEPENDENT_SIZED_ARRAY_TYPE},
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"PointerType", clava::TypeNode::POINTER_TYPE},
@@ -55,6 +55,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitArrayTypeChildren(static_cast<const ArrayType *>(T), visitedChildren); break;
         case clava::TypeNode::VARIABLE_ARRAY_TYPE:
             VisitVariableArrayTypeChildren(static_cast<const VariableArrayType *>(T), visitedChildren); break;
+        case clava::TypeNode::DEPENDENT_SIZED_ARRAY_TYPE:
+            VisitDependentSizedArrayTypeChildren(static_cast<const DependentSizedArrayType *>(T), visitedChildren); break;
         case clava::TypeNode::POINTER_TYPE:
             VisitPointerTypeChildren(static_cast<const PointerType *>(T), visitedChildren); break;
         case clava::TypeNode::TAG_TYPE:
@@ -210,6 +212,15 @@ void ClangAstDumper::VisitVariableArrayTypeChildren(const VariableArrayType *T, 
     addChild(T->getSizeExpr(), visitedChildren);
     //VisitStmtTop(T->getSizeExpr());
     //visitedChildren.push_back(clava::getId(T->getSizeExpr(), id));
+}
+
+void ClangAstDumper::VisitDependentSizedArrayTypeChildren(const DependentSizedArrayType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitArrayTypeChildren(T, visitedChildren);
+
+
+    // Visit and add size expression
+    VisitStmtTop(T->getSizeExpr());
 }
 
 void ClangAstDumper::VisitPointerTypeChildren(const PointerType *T, std::vector<std::string> &visitedChildren) {

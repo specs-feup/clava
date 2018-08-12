@@ -17,6 +17,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"ConstantArrayType", clava::TypeNode::CONSTANT_ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
+        {"DependentSizedArrayType", clava::TypeNode::DEPENDENT_SIZED_ARRAY_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"EnumType", clava::TypeNode::TAG_TYPE},
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
@@ -65,6 +66,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpConstantArrayTypeData(static_cast<const ConstantArrayType *>(T)); break;
         case clava::TypeNode::VARIABLE_ARRAY_TYPE:
             DumpVariableArrayTypeData(static_cast<const VariableArrayType *>(T)); break;
+        case clava::TypeNode::DEPENDENT_SIZED_ARRAY_TYPE:
+            DumpDependentSizedArrayTypeData(static_cast<const DependentSizedArrayType *>(T)); break;
         case clava::TypeNode::TAG_TYPE:
             DumpTagTypeData(static_cast<const TagType *>(T)); break;
         case clava::TypeNode::TYPE_WITH_KEYWORD:
@@ -365,6 +368,13 @@ void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *
     DumpArrayTypeData(T);
 
     //clava::dump(clava::getId(T->getSizeExpr(), id));
+}
+
+void clava::ClavaDataDumper::DumpDependentSizedArrayTypeData(const DependentSizedArrayType *T) {
+    // Hierarchy
+    DumpArrayTypeData(T);
+
+    clava::dump(clava::getId(T->getSizeExpr(), id));
 }
 
 void clava::ClavaDataDumper::DumpTypeWithKeywordData(const TypeWithKeyword *T) {

@@ -22,7 +22,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"VarDecl", clava::DeclNode::VAR_DECL},
         {"ParmVarDecl", clava::DeclNode::VAR_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
-        {"FieldDecl", clava::DeclNode::VALUE_DECL},
+        {"FieldDecl", clava::DeclNode::FIELD_DECL},
 
 
 
@@ -61,6 +61,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitRecordDeclChildren(static_cast<const RecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VALUE_DECL:
             VisitValueDeclChildren(static_cast<const ValueDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::FIELD_DECL:
+            VisitFieldDeclChildren(static_cast<const FieldDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FUNCTION_DECL:
             VisitFunctionDeclChildren(static_cast<const FunctionDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_METHOD_DECL:
@@ -184,7 +186,16 @@ void ClangAstDumper::VisitValueDeclChildren(const ValueDecl *D, std::vector<std:
     VisitTypeTop(D->getType());
     dumpTopLevelType(D->getType());
 
+}
+void ClangAstDumper::VisitFieldDeclChildren(const FieldDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitValueDeclChildren(D, children);
 
+    // Add bitwidth
+    addChild(D->getBitWidth(), children);
+
+    // Add init
+    addChild(D->getInClassInitializer(), children);
 }
 
 void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children) {

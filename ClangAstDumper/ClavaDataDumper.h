@@ -152,6 +152,7 @@ namespace clava {
         void DumpArrayTypeData(const ArrayType *T);
         void DumpConstantArrayTypeData(const ConstantArrayType *T);
         void DumpVariableArrayTypeData(const VariableArrayType *T);
+        void DumpDependentSizedArrayTypeData(const DependentSizedArrayType *T);
         void DumpTypeWithKeywordData(const TypeWithKeyword *T);
         void DumpElaboratedTypeData(const ElaboratedType *T);
         void DumpTemplateTypeParmTypeData(const TemplateTypeParmType *T);

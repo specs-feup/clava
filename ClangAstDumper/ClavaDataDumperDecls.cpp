@@ -334,29 +334,27 @@ void clava::ClavaDataDumper::DumpCXXConstructorDeclData(const CXXConstructorDecl
     // Dump CXXCtorInitializers
     clava::dump(D->getNumCtorInitializers());
     for (auto init = D->init_begin(), init_last = D->init_end(); init != init_last; ++init) {
-        // Init expr
-        clava::dump(clava::getId((*init)->getInit(), id));
 
         if ((*init)->isAnyMemberInitializer()) {
             clava::dump("ANY_MEMBER_INITIALIZER");
             clava::dump(clava::getId((*init)->getAnyMember(), id));
-            continue;
-        }
-
-        if ((*init)->isBaseInitializer()) {
+        } else if ((*init)->isBaseInitializer()) {
             clava::dump("BASE_INITIALIZER");
             clava::dump(clava::getId((*init)->getBaseClass(), id));
-            continue;
-        }
-
-        if ((*init)->isDelegatingInitializer()) {
+        } else if ((*init)->isDelegatingInitializer()) {
             clava::dump("DELEGATING_INITIALIZER");
             clava::dump(clava::getId((*init)->getTypeSourceInfo()->getType(), id));
-            continue;
+        } else {
+            throw std::invalid_argument(
+                    "ClangDataDumper::DumpCXXConstructorDeclData():: CXXCtorInitializer case not implemented");
         }
 
-        throw std::invalid_argument(
-                "ClangDataDumper::DumpCXXConstructorDeclData():: CXXCtorInitializer case not implemented");
+        // Init expr
+        clava::dump(clava::getId((*init)->getInit(), id));
+
+        clava::dump((*init)->isInClassMemberInitializer());
+        clava::dump((*init)->isWritten());
+
     }
 }
 

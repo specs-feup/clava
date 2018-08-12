@@ -212,6 +212,7 @@ private:
     void VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children);
     void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
+    void VisitFieldDeclChildren(const FieldDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     void VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vector<std::string> &children);
     void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D, std::vector<std::string> &children);
@@ -254,6 +255,7 @@ private:
     void VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren);
     void VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren);
+    void VisitDependentSizedArrayTypeChildren(const DependentSizedArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitPointerTypeChildren(const PointerType *T, std::vector<std::string> &visitedChildren);
     void VisitElaboratedTypeChildren(const ElaboratedType *T, std::vector<std::string> &visitedChildren);
     void VisitReferenceTypeChildren(const ReferenceType *T, std::vector<std::string> &visitedChildren);

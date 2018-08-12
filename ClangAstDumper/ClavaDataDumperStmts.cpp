@@ -304,6 +304,7 @@ void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E)
 
     // Dump qualifier
     clava::dump(E->isElidable());
+    clava::dump(E->isDefaultArgument());
     clava::dump(E->requiresZeroInitialization());
     clava::dump(E->isListInitialization());
     clava::dump(E->isStdInitListInitialization());
