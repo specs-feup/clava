@@ -13,10 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -42,6 +45,12 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  *
  */
 public abstract class Type extends ClavaNode {
+
+    /**
+     * Maps Type classes to a List of DataKeys corresponding to the properties of that class that return ClavaNode
+     * instances.
+     */
+    private static final Map<Class<? extends Type>, List<DataKey<? extends ClavaNode>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
 
     /// DATAKEYS BEGIN
 
@@ -609,6 +618,49 @@ public abstract class Type extends ClavaNode {
     */
     public Type normalize() {
         return this;
+    }
+
+    /**
+     * 
+     * Type nodes are treated as being "unique", and usually do not have children, other types are accessed as
+     * properties of the node. This method returns all the ClavaNode instances referenced in the properties of this
+     * class.
+     * 
+     * @return
+     */
+    public List<ClavaNode> getNodes() {
+        List<DataKey<? extends ClavaNode>> keys = KEYS_WITH_NODES.get(getClass());
+        if (keys == null) {
+            keys = addKeysWithNodes(this);
+        }
+
+        List<ClavaNode> children = new ArrayList<>();
+
+        for (DataKey<? extends ClavaNode> key : keys) {
+            children.add(get(key));
+        }
+
+        return children;
+    }
+
+    @SuppressWarnings("unchecked") // It is safe, class is tested
+    private static List<DataKey<? extends ClavaNode>> addKeysWithNodes(Type type) {
+        List<DataKey<? extends ClavaNode>> keysWithNodes = new ArrayList<>();
+
+        // Get all the keys that map to a ClavaNode
+        for (DataKey<?> key : type.getKeys().getKeys()) {
+
+            if (!ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+                continue;
+            }
+
+            keysWithNodes.add((DataKey<? extends ClavaNode>) key);
+        }
+
+        // Add to map
+        KEYS_WITH_NODES.put(type.getClass(), keysWithNodes);
+
+        return keysWithNodes;
     }
 
 }

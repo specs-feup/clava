@@ -13,12 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 /**
  * Type that was implicitly adjusted.
@@ -28,13 +27,17 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  */
 public abstract class AdjustedType extends Type {
 
-    protected AdjustedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
-        this(typeData, info, Arrays.asList(originalType, adjustedType));
+    public AdjustedType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    protected AdjustedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
+    // protected AdjustedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
+    // this(typeData, info, Arrays.asList(originalType, adjustedType));
+    // }
+    //
+    // protected AdjustedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
 
     public abstract Type getAdjustedType();
 

@@ -14,39 +14,56 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class DecayedType extends AdjustedType {
 
-    public DecayedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
-        super(typeData, info, originalType, adjustedType);
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Type> DECAYED_TYPE = KeyFactory.object("decayedType", Type.class);
+
+    public final static DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
+
+    /// DATAKEYS END
+
+    public DecayedType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private DecayedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
+    // public DecayedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
+    // super(typeData, info, originalType, adjustedType);
+    // }
+    //
+    // private DecayedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DecayedType(getTypeData(), getInfo(), Collections.emptyList());
+    //
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DecayedType(getTypeData(), getInfo(), Collections.emptyList());
-
-    }
-
+    // TODO: Verify if DECAYED_TYPE corresponds to OriginalType
     public Type getOriginalType() {
-        return getChild(Type.class, 0);
+        return get(DECAYED_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     public void setOriginalType(Type originalType) {
+        set(DECAYED_TYPE, originalType);
         setChild(0, originalType);
     }
 
     @Override
     public Type getAdjustedType() {
-        return getChild(Type.class, 1);
+        return get(POINTEE_TYPE);
+        // return getChild(Type.class, 1);
     }
 
     // Return the code of the original type
@@ -60,15 +77,15 @@ public class DecayedType extends AdjustedType {
         return getOriginalType().isArray();
     }
 
-    @Override
-    protected Type desugarImpl() {
-        return getOriginalType();
-    }
-
-    @Override
-    protected void setDesugarImpl(Type desugaredType) {
-        setOriginalType(desugaredType);
-    }
+    // @Override
+    // protected Type desugarImpl() {
+    // return getOriginalType();
+    // }
+    //
+    // @Override
+    // protected void setDesugarImpl(Type desugaredType) {
+    // setOriginalType(desugaredType);
+    // }
 
     @Override
     public Type normalize() {

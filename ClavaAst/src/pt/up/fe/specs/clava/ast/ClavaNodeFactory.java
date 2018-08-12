@@ -152,7 +152,6 @@ import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
-import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
@@ -782,9 +781,10 @@ public class ClavaNodeFactory {
     // return new TemplateTypeParmType(templateParmData, declInfo, typeData, info);
     // }
 
-    public static DecayedType decayedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
-        return new DecayedType(typeData, info, originalType, adjustedType);
-    }
+    // public static DecayedType decayedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type
+    // adjustedType) {
+    // return new DecayedType(typeData, info, originalType, adjustedType);
+    // }
 
     // public static ConstantArrayType constantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData,
     // ClavaNodeInfo info,
