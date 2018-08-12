@@ -16,13 +16,20 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.NullExpr;
 
 public class DependentSizedArrayType extends ArrayType {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Optional<Expr>> SIZE_EXPR = KeyFactory.optional("sizeExpr");
+
+    /// DATAKEYS END
 
     public DependentSizedArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -52,12 +59,14 @@ public class DependentSizedArrayType extends ArrayType {
     // }
 
     public Optional<Expr> getSizeExpr() {
-        if (getNumChildren() < 2) {
-            return Optional.empty();
-        }
+        return get(SIZE_EXPR);
 
-        Expr sizeExpr = getChild(Expr.class, 1);
-        return sizeExpr instanceof NullExpr ? Optional.empty() : Optional.of(sizeExpr);
+        // if (getNumChildren() < 2) {
+        // return Optional.empty();
+        // }
+        //
+        // Expr sizeExpr = getChild(Expr.class, 1);
+        // return sizeExpr instanceof NullExpr ? Optional.empty() : Optional.of(sizeExpr);
     }
 
     @Override

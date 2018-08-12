@@ -34,13 +34,21 @@ public abstract class CXXCtorInitializer extends ADataClass<CXXCtorInitializer> 
 
     /// DATAKEYS BEGIN
 
+    public final static DataKey<CXXCtorInitializerKind> INIT_KIND = KeyFactory.enumeration("initKind",
+            CXXCtorInitializerKind.class);
+
     /**
      * The initializer.
      */
     public final static DataKey<Expr> INIT_EXPR = KeyFactory.object("initExpr", Expr.class);
 
-    public final static DataKey<CXXCtorInitializerKind> INIT_KIND = KeyFactory.enumeration("initKind",
-            CXXCtorInitializerKind.class);
+    /**
+     * Determine whether this initializer is an implicit initializer generated for a field with an initializer defined
+     * on the member declaration.
+     */
+    public final static DataKey<Boolean> IS_IN_CLASS_MEMBER_INITIALIZER = KeyFactory.bool("isInClassMemberInitializer");
+
+    public final static DataKey<Boolean> IS_WRITTEN = KeyFactory.bool("isWritten");
 
     /// DATAKEYS END
 

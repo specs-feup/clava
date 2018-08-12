@@ -130,18 +130,13 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     private String getCodeInitList() {
 
         List<String> initList = getInitializers().stream()
+                // Do not take into account default initializers
+                // .filter(init -> !(init.get(CXXCtorInitializer.INIT_EXPR) instanceof CXXDefaultInitExpr))
+                // Do not take into account default initializers that are not written in the source code
+                .filter(init -> init.get(CXXCtorInitializer.IS_WRITTEN))
                 .map(init -> init.getCode(this))
                 .filter(initCode -> !initCode.isEmpty())
                 .collect(Collectors.toList());
-        System.out.println("INIT LIST:" + initList);
-        System.out.println("INTIS:" + getInitializers());
-
-        /*
-        for (CXXCtorInitializer init : getInitializers()) {
-            System.out.println("INIT:" + init);
-            System.out.println("INIT CODE:" + init.getCode(this));
-        }
-        */
 
         if (initList.isEmpty()) {
             return "";

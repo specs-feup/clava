@@ -40,6 +40,14 @@ public class CXXConstructExpr extends Expr {
 
     public final static DataKey<Boolean> IS_ELIDABLE = KeyFactory.bool("isElidable");
 
+    /**
+     * Determine whether this expression is a default function argument. Default arguments are implicitly generated in
+     * the abstract syntax tree by semantic analysis for function calls, object constructions, etc. in C++. Default
+     * arguments are represented by CXXDefaultArgExpr nodes, however this field looks through any implicit casts to
+     * determine whether the expression is a default argument.
+     */
+    public final static DataKey<Boolean> IS_DEFAULT_ARGUMENT = KeyFactory.bool("isDefaultArgument");
+
     public final static DataKey<Boolean> REQUIRES_ZERO_INITIALIZATION = KeyFactory.bool("requiresZeroInitialization");
 
     public final static DataKey<Boolean> IS_LIST_INITIALIZATION = KeyFactory.bool("isListInitialization");
@@ -101,6 +109,28 @@ public class CXXConstructExpr extends Expr {
 
     @Override
     public String getCode() {
+        // If only one non-default arg, most of the time the constructor should be omitted
+        if (ommitConstructor()) {
+            return getArgs().get(0).getCode();
+        }
+
+        /*
+        // If source location start and end are the same, assume constructor was inserted by Clang
+        if (getLocation().getStart().equals(getLocation().getEnd())) {
+            List<Expr> args = getArgs();
+        
+            if (args.isEmpty()) {
+                return "";
+            }
+        
+            if (args.size() == 1) {
+                return args.get(0).getCode();
+            }
+        
+            ClavaLog.warning(this, "Case of more than one argument not being handled yet");
+        }
+        */
+
         String typeCode = getExprType() instanceof NullType ? null : getExprType().getCode(this);
 
         String code = getCode(typeCode);
@@ -113,11 +143,27 @@ public class CXXConstructExpr extends Expr {
         // return getCode(getExprType().getCode());
     }
 
+    private boolean ommitConstructor() {
+        List<Expr> args = getArgs();
+
+        if (args.size() != 1) {
+            return false;
+        }
+
+        // One case where it should not is when the parent is a CxxNewExpr
+        if (getParent() instanceof CXXNewExpr) {
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean isListInit() {
         return get(IS_LIST_INITIALIZATION) || get(IS_STD_LIST_INITIALIZATION);
     }
 
     private String getCode(String cxxRecordName) {
+
         if (cxxRecordName == null) {
             return "";
         }
@@ -147,7 +193,8 @@ public class CXXConstructExpr extends Expr {
         // // return cxxRecordName + "{}";
         // return "{}";
         // }
-
+        // System.out.println("CXX CONST CODE:" + cxxRecordName + argsCode);
+        // System.out.println("NODE:" + this);
         return cxxRecordName + argsCode;
     }
 
