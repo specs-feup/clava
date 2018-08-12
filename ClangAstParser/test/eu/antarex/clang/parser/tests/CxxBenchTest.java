@@ -54,7 +54,7 @@ public class CxxBenchTest {
 
     @Test
     public void testAtom() {
-        new CxxTester("bench/atom.cpp").onePass().showCode().showClavaAst().test();
+        new CxxTester("bench/atom.cpp").test();
     }
 
     @Test

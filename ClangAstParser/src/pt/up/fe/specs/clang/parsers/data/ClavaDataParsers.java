@@ -277,11 +277,10 @@ public class ClavaDataParsers {
     }
 
     public static CXXCtorInitializer cxxCtorInitializer(LineStream lines, ClangParserData parserData) {
-        String initExprId = lines.nextLine();
+
         CXXCtorInitializerKind initKind = LineStreamParsers.enumFromName(CXXCtorInitializerKind.class, lines);
 
         CXXCtorInitializer ctorInit = CXXCtorInitializer.newInstance(initKind);
-        parserData.getClavaNodes().queueSetNode(ctorInit, CXXCtorInitializer.INIT_EXPR, initExprId);
 
         switch (initKind) {
         case ANY_MEMBER_INITIALIZER:
@@ -296,6 +295,11 @@ public class ClavaDataParsers {
         default:
             throw new NotImplementedException(initKind);
         }
+
+        // Common fields
+        parserData.getClavaNodes().queueSetNode(ctorInit, CXXCtorInitializer.INIT_EXPR, lines.nextLine());
+        ctorInit.set(CXXCtorInitializer.IS_IN_CLASS_MEMBER_INITIALIZER, LineStreamParsers.oneOrZero(lines));
+        ctorInit.set(CXXCtorInitializer.IS_WRITTEN, LineStreamParsers.oneOrZero(lines));
 
         return ctorInit;
     }

@@ -168,6 +168,7 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(CXXConstructExpr.IS_ELIDABLE, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXConstructExpr.IS_DEFAULT_ARGUMENT, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.REQUIRES_ZERO_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.IS_LIST_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.IS_STD_LIST_INITIALIZATION, LineStreamParsers.oneOrZero(lines));

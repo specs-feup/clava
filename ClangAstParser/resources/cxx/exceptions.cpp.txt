@@ -23,7 +23,7 @@ struct B {
    A a1;
    A a2;
    A a3;
-   B() try : a1(A(A(1))), a2(A(A(foo()))), a3(A(A(3))) {
+   B() try : a1(1), a2(foo()), a3(3) {
       std::cout << "B constructed successfully\n";
    }
    catch (...) {
@@ -37,7 +37,7 @@ struct B {
 
 
 struct C : A, B {
-   C() try : A(), B() {
+   C() try {
       std::cout << "C::C() completed successfully\n";
    }
    catch (...) {

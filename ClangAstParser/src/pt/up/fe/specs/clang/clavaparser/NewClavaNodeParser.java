@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
@@ -576,6 +577,17 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
         if (clavaNode instanceof VariableArrayType) {
             Preconditions.checkArgument(children.size() > 1);
+            if (children.get(1) instanceof NullNode) {
+                children.set(1, LegacyToDataStore.getFactory().nullExpr());
+            }
+            return;
+        }
+
+        if (clavaNode instanceof FieldDecl) {
+            Preconditions.checkArgument(children.size() > 1);
+            if (children.get(0) instanceof NullNode) {
+                children.set(0, LegacyToDataStore.getFactory().nullExpr());
+            }
             if (children.get(1) instanceof NullNode) {
                 children.set(1, LegacyToDataStore.getFactory().nullExpr());
             }
