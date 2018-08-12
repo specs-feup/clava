@@ -32,9 +32,11 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -408,7 +410,9 @@ public class CallWrap {
         } else {
             // DeclRefExpr varAssigned = ClavaNodeFactory.declRefExpr(varName, returnType);
             DeclRefExpr varAssigned = factory.declRefExpr(varName, returnType);
-            ExprStmt assignment = ClavaNodeFactory.exprStmtAssign(varAssigned, callExpr, returnType);
+            BinaryOperator op = factory.binaryOperator(BinaryOperatorKind.ASSIGN, returnType, varAssigned, callExpr);
+            ExprStmt assignment = factory.exprStmt(op);
+            // ExprStmt assignment = ClavaNodeFactory.exprStmtAssign(varAssigned, callExpr, returnType);
             wrapperStmts.add(assignment);
         }
 

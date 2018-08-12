@@ -21,12 +21,11 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -127,8 +126,11 @@ public class CxxCall extends ACall {
         // ExprStmt -> BinaryOperator -> DeclRefExpr, Call
         else {
             Expr varExpr = CxxWeaver.getFactory().literalExpr(variableName, returnType);
-            BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(returnType),
-                    call.getInfo(), varExpr, call);
+            BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.ASSIGN, returnType,
+                    varExpr, call);
+            // BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new
+            // ExprData(returnType),
+            // call.getInfo(), varExpr, call);
             ExprStmt newStmt = CxxWeaver.getFactory().exprStmt(assign);
 
             // Replace stmt

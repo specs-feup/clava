@@ -18,8 +18,8 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
