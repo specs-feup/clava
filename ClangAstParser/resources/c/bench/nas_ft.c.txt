@@ -1,0 +1,987 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <sys/time.h>
+//---------------------------------------------------------------------
+// program FT
+//---------------------------------------------------------------------
+//----------
+//  Class S:
+//----------
+//----------
+//  Class W:
+//----------
+//----------
+//  Class A:
+//----------
+//----------
+//  Class B:
+//----------
+//----------
+//  Class C:
+//----------
+//----------
+//  Class D:
+//----------
+//----------
+//  Class E:
+//----------
+
+struct anon_nas_ft_c_116 {
+   double real;
+   double imag;
+};
+
+typedef struct anon_nas_ft_c_116 dcomplex;
+/*common /timerscomm/*/
+int timers_enabled;
+
+dcomplex dcmplx_div(dcomplex z1, dcomplex z2) {
+   double a = z1.real;
+   double b = z1.imag;
+   double c = z2.real;
+   double d = z2.imag;
+   double divisor = c * c + d * d;
+   double real = (a * c + b * d) / divisor;
+   double imag = (b * c - a * d) / divisor;
+   dcomplex result = (dcomplex){real, imag};
+   
+   return result;
+}
+
+/*common /blockinfo/*/
+int fftblock;
+/*common /workarr/*/
+dcomplex plane[4224];
+//dcomplex pad[128];
+dcomplex scr[128][33];
+// for checksum data
+/*common /sumcomm/*/
+dcomplex sums[7];
+/*common /mainarrays/*/
+double twiddle[32][128][129];
+dcomplex xnt[32][128][129];
+dcomplex y[32][128][129];
+//dcomplex pad1[128], pad2[128];
+
+void appft(int niter, double * total_time, int * verified);
+
+void CompExp(int n, dcomplex exponent[n]);
+
+int ilog2(int n);
+
+void CalculateChecksum(dcomplex * csum, int iterN, int d1, int d2, int d3, dcomplex u[d3][d2][d1 + 1]);
+
+void compute_initial_conditions(int d1, int d2, int d3, dcomplex u0[d3][d2][d1 + 1]);
+
+void evolve(int nx, int ny, int nz, dcomplex x[nz][ny][nx + 1], dcomplex y[nz][ny][nx + 1], double twiddle[nz][ny][nx + 1]);
+
+void fftXYZ(int sign, int n1, int n2, int n3, dcomplex x[n3][n2][n1 + 1], dcomplex xout[n1 + 1 * n2 * n3], dcomplex exp1[n1], dcomplex exp2[n2], dcomplex exp3[n3]);
+/*Dummy expr 'pt.up.fe.specs.clava.ast.expr.ParenExpr'*/
+
+void verify(int n1, int n2, int n3, int nt, dcomplex cksum[nt + 1], int * verified);
+
+double randlc(double * x, double a);
+
+void vranlc(int n, double * x, double a, double y[]);
+
+char getclass();
+
+void print_results(char * name, char class, int n1, int n2, int n3, int niter, double t, double mops, char * optype, int verified);
+double start[64];
+double elapsed[64];
+
+double elapsed_time();
+
+void timer_clear(int n);
+
+void timer_start(int n);
+
+void timer_stop(int n);
+
+double timer_read(int n);
+
+void wtime(double * t);
+
+int main(int argc, char * argv[]) {
+   int niter;
+   char Class;
+   double total_time;
+   double mflops;
+   int verified;
+   FILE * fp;
+   if((fp = fopen("timer.flag", "r")) != ((void *) 0)) {
+      timers_enabled = 1;
+      fclose(fp);
+   }
+   else {
+      timers_enabled = 0;
+   }
+   niter = 6;
+   printf("\n\n NAS Parallel Benchmarks (NPB3.3-SER-C) - FT Benchmark\n\n");
+   printf(" Size                : %4dx%4dx%4d\n", 128, 128, 32);
+   printf(" Iterations          :     %10d\n", niter);
+   printf("\n");
+   Class = getclass();
+   appft(niter, &total_time, &verified);
+   if(total_time != 0.0) {
+      mflops = 1.0e-6 * (double) 524288 * (14.8157 + 7.19641 * log((double) 524288) + (5.23518 + 7.21113 * log((double) 524288)) * niter) / total_time;
+   }
+   else {
+      mflops = 0.0;
+   }
+   print_results("FT", Class, 128, 128, 32, niter, total_time, mflops, "          floating point", verified);
+   
+   return 0;
+}
+
+
+char getclass() {
+   if((128 == 64) && (128 == 64) && (32 == 64) && (6 == 6)) {
+      
+      return 'S';
+   }
+   else if((128 == 128) && (128 == 128) && (32 == 32) && (6 == 6)) {
+      
+      return 'W';
+   }
+   else if((128 == 256) && (128 == 256) && (32 == 128) && (6 == 6)) {
+      
+      return 'A';
+   }
+   else if((128 == 512) && (128 == 256) && (32 == 256) && (6 == 20)) {
+      
+      return 'B';
+   }
+   else if((128 == 512) && (128 == 512) && (32 == 512) && (6 == 20)) {
+      
+      return 'C';
+   }
+   else if((128 == 2048) && (128 == 1024) && (32 == 1024) && (6 == 25)) {
+      
+      return 'D';
+   }
+   else {
+      
+      return 'U';
+   }
+}
+
+
+void appft(int niter, double * total_time, int * verified) {
+   int i;
+   int j;
+   int k;
+   int kt;
+   int n12;
+   int n22;
+   int n32;
+   int ii;
+   int jj;
+   int kk;
+   int ii2;
+   int ik2;
+   double ap;
+   dcomplex exp1[128];
+   dcomplex exp2[128];
+   dcomplex exp3[32];
+   for(i = 1; i <= 15; i++) {
+      timer_clear(i);
+   }
+   timer_start(2);
+   compute_initial_conditions(128, 128, 32, xnt);
+   CompExp(128, exp1);
+   CompExp(128, exp2);
+   CompExp(32, exp3);
+   fftXYZ(1, 128, 128, 32, xnt, (dcomplex *) y, exp1, exp2, exp3);
+   timer_stop(2);
+   timer_start(1);
+   if(timers_enabled) timer_start(13);
+   n12 = 128 / 2;
+   n22 = 128 / 2;
+   n32 = 32 / 2;
+   ap = -4.0 * 1.0e-6 * (3.141592653589793238 * 3.141592653589793238);
+   for(i = 0; i < 32; i++) {
+      ii = i - (i / n32) * 32;
+      ii2 = ii * ii;
+      for(k = 0; k < 128; k++) {
+         kk = k - (k / n22) * 128;
+         ik2 = ii2 + kk * kk;
+         for(j = 0; j < 128; j++) {
+            jj = j - (j / n12) * 128;
+            twiddle[i][k][j] = exp(ap * (double) (jj * jj + ik2));
+         }
+      }
+   }
+   if(timers_enabled) timer_stop(13);
+   if(timers_enabled) timer_start(12);
+   compute_initial_conditions(128, 128, 32, xnt);
+   if(timers_enabled) timer_stop(12);
+   if(timers_enabled) timer_start(15);
+   fftXYZ(1, 128, 128, 32, xnt, (dcomplex *) y, exp1, exp2, exp3);
+   if(timers_enabled) timer_stop(15);
+   for(kt = 1; kt <= niter; kt++) {
+      if(timers_enabled) timer_start(11);
+      evolve(128, 128, 32, xnt, y, twiddle);
+      if(timers_enabled) timer_stop(11);
+      if(timers_enabled) timer_start(15);
+      fftXYZ(-1, 128, 128, 32, xnt, (dcomplex *) xnt, exp1, exp2, exp3);
+      if(timers_enabled) timer_stop(15);
+      if(timers_enabled) timer_start(10);
+      CalculateChecksum(&sums[kt], kt, 128, 128, 32, xnt);
+      if(timers_enabled) timer_stop(10);
+   }
+   // Verification test.
+   if(timers_enabled) timer_start(14);
+   verify(128, 128, 32, niter, sums, verified);
+   if(timers_enabled) timer_stop(14);
+   timer_stop(1);
+   *total_time = timer_read(1);
+   if(!timers_enabled) 
+   return;
+   printf(" FT subroutine timers \n");
+   printf(" %26s =%9.4f\n", "FT total                  ", timer_read(1));
+   printf(" %26s =%9.4f\n", "WarmUp time               ", timer_read(2));
+   printf(" %26s =%9.4f\n", "fftXYZ body               ", timer_read(3));
+   printf(" %26s =%9.4f\n", "Swarztrauber              ", timer_read(4));
+   printf(" %26s =%9.4f\n", "X time                    ", timer_read(7));
+   printf(" %26s =%9.4f\n", "Y time                    ", timer_read(8));
+   printf(" %26s =%9.4f\n", "Z time                    ", timer_read(9));
+   printf(" %26s =%9.4f\n", "CalculateChecksum         ", timer_read(10));
+   printf(" %26s =%9.4f\n", "evolve                    ", timer_read(11));
+   printf(" %26s =%9.4f\n", "compute_initial_conditions", timer_read(12));
+   printf(" %26s =%9.4f\n", "twiddle                   ", timer_read(13));
+   printf(" %26s =%9.4f\n", "verify                    ", timer_read(14));
+   printf(" %26s =%9.4f\n", "fftXYZ                    ", timer_read(15));
+   printf(" %26s =%9.4f\n", "Benchmark time            ", *total_time);
+}
+
+//---------------------------------------------------------------------
+// compute the roots-of-unity array that will be used for subsequent FFTs.
+//---------------------------------------------------------------------
+
+void CompExp(int n, dcomplex exponent[n]) {
+   int m;
+   int nu;
+   int ku;
+   int i;
+   int j;
+   int ln;
+   double t;
+   double ti;
+   double const pi = 3.141592653589793238;
+   nu = n;
+   m = ilog2(n);
+   exponent[0] = (dcomplex){m, 0.0};
+   ku = 2;
+   ln = 1;
+   for(j = 1; j <= m; j++) {
+      t = pi / ln;
+      for(i = 0; i <= ln - 1; i++) {
+         ti = i * t;
+         exponent[i + ku - 1] = (dcomplex){cos(ti), sin(ti)};
+      }
+      ku = ku + ln;
+      ln = 2 * ln;
+   }
+}
+
+
+int ilog2(int n) {
+   int nn;
+   int lg;
+   if(n == 1) 
+   return 0;
+   lg = 1;
+   nn = 2;
+   while(nn < n) {
+      nn = nn * 2;
+      lg = lg + 1;
+   }
+   
+   return lg;
+}
+
+//---------------------------------------------------------------------
+// compute a^exponent mod 2^46
+//---------------------------------------------------------------------
+
+double ipow46(double a, int exponent) {
+   double result;
+   double dummy;
+   double q;
+   double r;
+   int n;
+   int n2;
+   //---------------------------------------------------------------------
+   // Use
+   //   a^n = a^(n/2)*a^(n/2) if n even else
+   //   a^n = a*a^(n-1)       if n odd
+   //---------------------------------------------------------------------
+   result = 1;
+   if(exponent == 0) 
+   return result;
+   q = a;
+   r = 1;
+   n = exponent;
+   while(n > 1) {
+      n2 = n / 2;
+      if(n2 * 2 == n) {
+         dummy = randlc(&q, q);
+         n = n2;
+      }
+      else {
+         dummy = randlc(&r, q);
+         n = n - 1;
+      }
+   }
+   dummy = randlc(&r, q);
+   result = r;
+   
+   return result;
+}
+
+
+void CalculateChecksum(dcomplex * csum, int iterN, int d1, int d2, int d3, dcomplex u[d3][d2][d1 + 1]) {
+   int i;
+   int i1;
+   int ii;
+   int ji;
+   int ki;
+   dcomplex csum_temp = (dcomplex){0.0, 0.0};
+   for(i = 1; i <= 1024; i++) {
+      i1 = i;
+      ii = i1 % d1;
+      ji = 3 * i1 % d2;
+      ki = 5 * i1 % d3;
+      csum_temp = (dcomplex){(csum_temp).real + (u[ki][ji][ii]).real, (csum_temp).imag + (u[ki][ji][ii]).imag};
+   }
+   csum_temp = (dcomplex){(csum_temp).real / ((double) (d1 * d2 * d3)), (csum_temp).imag / ((double) (d1 * d2 * d3))};
+   printf(" T =%5d     Checksum =%22.12E%22.12E\n", iterN, csum_temp.real, csum_temp.imag);
+   *csum = csum_temp;
+}
+
+
+void compute_initial_conditions(int d1, int d2, int d3, dcomplex u0[d3][d2][d1 + 1]) {
+   dcomplex tmp[128];
+   double x0;
+   double start;
+   double an;
+   double dummy;
+   double RanStarts[128];
+   int i;
+   int j;
+   int k;
+   double const seed = 314159265.0;
+   double const a = 1220703125.0;
+   start = seed;
+   //---------------------------------------------------------------------
+   // Jump to the starting element for our first plane.
+   //---------------------------------------------------------------------
+   an = ipow46(a, 0);
+   dummy = randlc(&start, an);
+   an = ipow46(a, 2 * d1 * d2);
+   //---------------------------------------------------------------------
+   // Go through by z planes filling in one square at a time.
+   //---------------------------------------------------------------------
+   RanStarts[0] = start;
+   for(k = 1; k < d3; k++) {
+      dummy = randlc(&start, an);
+      RanStarts[k] = start;
+   }
+   for(k = 0; k < d3; k++) {
+      x0 = RanStarts[k];
+      for(j = 0; j < d2; j++) {
+         vranlc(2 * d1, &x0, a, (double *) tmp);
+         for(i = 0; i < d1; i++) {
+            u0[k][j][i] = tmp[i];
+         }
+      }
+   }
+}
+
+
+void evolve(int nx, int ny, int nz, dcomplex x[nz][ny][nx + 1], dcomplex y[nz][ny][nx + 1], double twiddle[nz][ny][nx + 1]) {
+   int i;
+   int j;
+   int k;
+   for(i = 0; i < nz; i++) {
+      for(k = 0; k < ny; k++) {
+         for(j = 0; j < nx; j++) {
+            y[i][k][j] = (dcomplex){(y[i][k][j]).real * (twiddle[i][k][j]), (y[i][k][j]).imag * (twiddle[i][k][j])};
+            x[i][k][j] = y[i][k][j];
+         }
+      }
+   }
+}
+
+//---------------------------------------------------------------------
+// Computes NY N-point complex-to-complex FFTs of X using an algorithm due
+// to Swarztrauber.  X is both the input and the output array, while Y is a
+// scratch array.  It is assumed that N = 2^M.  Before calling
+// Swarztrauber to
+// perform FFTs
+//---------------------------------------------------------------------
+
+void Swarztrauber(int is, int m, int vlen, int n, int xd1, void * ox, dcomplex exponent[n]) {
+   dcomplex (*x)[xd1] = (dcomplex (*)[xd1]) ox;
+   int i;
+   int j;
+   int l;
+   dcomplex u1;
+   dcomplex x11;
+   dcomplex x21;
+   int k;
+   int n1;
+   int li;
+   int lj;
+   int lk;
+   int ku;
+   int i11;
+   int i12;
+   int i21;
+   int i22;
+   if(timers_enabled) timer_start(4);
+   //---------------------------------------------------------------------
+   // Perform one variant of the Stockham FFT.
+   //---------------------------------------------------------------------
+   n1 = n / 2;
+   lj = 1;
+   li = 1 << m;
+   for(l = 1; l <= m; l += 2) {
+      lk = lj;
+      lj = 2 * lk;
+      li = li / 2;
+      ku = li;
+      for(i = 0; i <= li - 1; i++) {
+         i11 = i * lk;
+         i12 = i11 + n1;
+         i21 = i * lj;
+         i22 = i21 + lk;
+         if(is >= 1) {
+            u1 = exponent[ku + i];
+         }
+         else {
+            u1 = (dcomplex){(exponent[ku + i]).real, -1.0 * (exponent[ku + i]).imag};
+         }
+         for(k = 0; k <= lk - 1; k++) {
+            for(j = 0; j < vlen; j++) {
+               x11 = x[i11 + k][j];
+               x21 = x[i12 + k][j];
+               scr[i21 + k][j] = (dcomplex){(x11).real + (x21).real, (x11).imag + (x21).imag};
+               scr[i22 + k][j] = (dcomplex){((u1).real * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).real) - ((u1).imag * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).imag), ((u1).real * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).imag) + ((u1).imag * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).real)};
+            }
+         }
+      }
+      if(l == m) {
+         for(k = 0; k < n; k++) {
+            for(j = 0; j < vlen; j++) {
+               x[k][j] = scr[k][j];
+            }
+         }
+      }
+      else {
+         lk = lj;
+         lj = 2 * lk;
+         li = li / 2;
+         ku = li;
+         for(i = 0; i <= li - 1; i++) {
+            i11 = i * lk;
+            i12 = i11 + n1;
+            i21 = i * lj;
+            i22 = i21 + lk;
+            if(is >= 1) {
+               u1 = exponent[ku + i];
+            }
+            else {
+               u1 = (dcomplex){(exponent[ku + i]).real, -1.0 * (exponent[ku + i]).imag};
+            }
+            for(k = 0; k <= lk - 1; k++) {
+               for(j = 0; j < vlen; j++) {
+                  x11 = scr[i11 + k][j];
+                  x21 = scr[i12 + k][j];
+                  x[i21 + k][j] = (dcomplex){(x11).real + (x21).real, (x11).imag + (x21).imag};
+                  x[i22 + k][j] = (dcomplex){((u1).real * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).real) - ((u1).imag * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).imag), ((u1).real * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).imag) + ((u1).imag * ((dcomplex){(x11).real - (x21).real, (x11).imag - (x21).imag}).real)};
+               }
+            }
+         }
+      }
+   }
+   if(timers_enabled) timer_stop(4);
+}
+
+
+void fftXYZ(int sign, int n1, int n2, int n3, dcomplex x[n3][n2][n1 + 1], dcomplex xout[n1 + 1 * n2 * n3], dcomplex exp1[n1], dcomplex exp2[n2], dcomplex exp3[n3]) {
+   /*Dummy expr 'pt.up.fe.specs.clava.ast.expr.ParenExpr'*/
+   int i;
+   int j;
+   int k;
+   int log;
+   int bls;
+   int ble;
+   int len;
+   int blkp;
+   if(timers_enabled) timer_start(3);
+   fftblock = 8192 / n1;
+   if(fftblock >= 32) fftblock = 32;
+   blkp = fftblock + 1;
+   log = ilog2(n1);
+   if(timers_enabled) timer_start(7);
+   for(k = 0; k < n3; k++) {
+      for(bls = 0; bls < n2; bls += fftblock) {
+         ble = bls + fftblock - 1;
+         if(ble > n2) ble = n2 - 1;
+         len = ble - bls + 1;
+         for(j = bls; j <= ble; j++) {
+            for(i = 0; i < n1; i++) {
+               plane[j - bls + blkp * i] = x[k][j][i];
+            }
+         }
+         Swarztrauber(sign, log, len, n1, blkp, plane, exp1);
+         for(j = bls; j <= ble; j++) {
+            for(i = 0; i < n1; i++) {
+               x[k][j][i] = plane[j - bls + blkp * i];
+            }
+         }
+      }
+   }
+   if(timers_enabled) timer_stop(7);
+   fftblock = 8192 / n2;
+   if(fftblock >= 32) fftblock = 32;
+   blkp = fftblock + 1;
+   log = ilog2(n2);
+   if(timers_enabled) timer_start(8);
+   for(k = 0; k < n3; k++) {
+      for(bls = 0; bls < n1; bls += fftblock) {
+         ble = bls + fftblock - 1;
+         if(ble > n1) ble = n1 - 1;
+         len = ble - bls + 1;
+         Swarztrauber(sign, log, len, n2, n1 + 1, &x[k][0][bls], exp2);
+      }
+   }
+   if(timers_enabled) timer_stop(8);
+   fftblock = 8192 / n3;
+   if(fftblock >= 32) fftblock = 32;
+   blkp = fftblock + 1;
+   log = ilog2(n3);
+   if(timers_enabled) timer_start(9);
+   for(k = 0; k < n2; k++) {
+      for(bls = 0; bls < n1; bls += fftblock) {
+         ble = bls + fftblock - 1;
+         if(ble > n1) ble = n1 - 1;
+         len = ble - bls + 1;
+         for(i = 0; i < n3; i++) {
+            for(j = bls; j <= ble; j++) {
+               plane[j - bls + blkp * i] = x[i][k][j];
+            }
+         }
+         Swarztrauber(sign, log, len, n3, blkp, plane, exp3);
+         for(i = 0; i <= n3 - 1; i++) {
+            for(j = bls; j <= ble; j++) {
+               xout[j + (n1 + 1) * (k + n2 * i)] = plane[j - bls + blkp * i];
+            }
+         }
+      }
+   }
+   if(timers_enabled) timer_stop(9);
+   if(timers_enabled) timer_stop(3);
+}
+
+// FT verification routine.
+
+void verify(int n1, int n2, int n3, int nt, dcomplex cksum[nt + 1], int * verified) {
+   // Local variables.
+   int kt;
+   dcomplex cexpd[26];
+   double epsilon;
+   double err;
+   // Initialize tolerance level and success flag.
+   epsilon = 1.0e-12;
+   *verified = 1;
+   if((n1 == 64) && (n2 == 64) && (n3 == 64) && (nt == 6)) {
+      // Class S reference values.
+      cexpd[1] = (dcomplex){554.6087004964, 484.5363331978};
+      cexpd[2] = (dcomplex){554.6385409189, 486.5304269511};
+      cexpd[3] = (dcomplex){554.6148406171, 488.3910722336};
+      cexpd[4] = (dcomplex){554.5423607415, 490.1273169046};
+      cexpd[5] = (dcomplex){554.4255039624, 491.7475857993};
+      cexpd[6] = (dcomplex){554.2683411902, 493.2597244941};
+   }
+   else if((n1 == 128) && (n2 == 128) && (n3 == 32) && (nt == 6)) {
+      // Class W reference values.
+      cexpd[1] = (dcomplex){567.3612178944, 529.3246849175};
+      cexpd[2] = (dcomplex){563.1436885271, 528.2149986629};
+      cexpd[3] = (dcomplex){559.4024089970, 527.0996558037};
+      cexpd[4] = (dcomplex){556.0698047020, 526.0027904925};
+      cexpd[5] = (dcomplex){553.0898991250, 524.9400845633};
+      cexpd[6] = (dcomplex){550.4159734538, 523.9212247086};
+   }
+   else if((n1 == 256) && (n2 == 256) && (n3 == 128) && (nt == 6)) {
+      // Class A reference values.
+      cexpd[1] = (dcomplex){504.6735008193, 511.4047905510};
+      cexpd[2] = (dcomplex){505.9412319734, 509.8809666433};
+      cexpd[3] = (dcomplex){506.9376896287, 509.8144042213};
+      cexpd[4] = (dcomplex){507.7892868474, 510.1336130759};
+      cexpd[5] = (dcomplex){508.5233095391, 510.4914655194};
+      cexpd[6] = (dcomplex){509.1487099959, 510.7917842803};
+   }
+   else if((n1 == 512) && (n2 == 256) && (n3 == 256) && (nt == 20)) {
+      // Class B reference values.
+      cexpd[1] = (dcomplex){517.7643571579, 507.7803458597};
+      cexpd[2] = (dcomplex){515.4521291263, 508.8249431599};
+      cexpd[3] = (dcomplex){514.6409228649, 509.6208912659};
+      cexpd[4] = (dcomplex){514.2378756213, 510.1023387619};
+      cexpd[5] = (dcomplex){513.9626667737, 510.3976610617};
+      cexpd[6] = (dcomplex){513.7423460082, 510.5948019802};
+      cexpd[7] = (dcomplex){513.5547056878, 510.7404165783};
+      cexpd[8] = (dcomplex){513.3910925466, 510.8576573661};
+      cexpd[9] = (dcomplex){513.2470705390, 510.9577278523};
+      cexpd[10] = (dcomplex){513.1197729984, 511.0460304483};
+      cexpd[11] = (dcomplex){513.0070319283, 511.1252433800};
+      cexpd[12] = (dcomplex){512.9070537032, 511.1968077718};
+      cexpd[13] = (dcomplex){512.8182883502, 511.2616233064};
+      cexpd[14] = (dcomplex){512.7393733383, 511.3203605551};
+      cexpd[15] = (dcomplex){512.6691062020, 511.3735928093};
+      cexpd[16] = (dcomplex){512.6064276004, 511.4218460548};
+      cexpd[17] = (dcomplex){512.5504076570, 511.4656139760};
+      cexpd[18] = (dcomplex){512.5002331720, 511.5053595966};
+      cexpd[19] = (dcomplex){512.4551951846, 511.5415130407};
+      cexpd[20] = (dcomplex){512.4146770029, 511.5744692211};
+   }
+   else if((n1 == 512) && (n2 == 512) && (n3 == 512) && (nt == 20)) {
+      // Class C reference values.
+      cexpd[1] = (dcomplex){519.5078707457, 514.9019699238};
+      cexpd[2] = (dcomplex){515.5422171134, 512.7578201997};
+      cexpd[3] = (dcomplex){514.4678022222, 512.2251847514};
+      cexpd[4] = (dcomplex){514.0150594328, 512.1090289018};
+      cexpd[5] = (dcomplex){513.7550426810, 512.1143685824};
+      cexpd[6] = (dcomplex){513.5811056728, 512.1496764568};
+      cexpd[7] = (dcomplex){513.4569343165, 512.1870921893};
+      cexpd[8] = (dcomplex){513.3651975661, 512.2193250322};
+      cexpd[9] = (dcomplex){513.2955192805, 512.2454735794};
+      cexpd[10] = (dcomplex){513.2410471738, 512.2663649603};
+      cexpd[11] = (dcomplex){513.1971141679, 512.2830879827};
+      cexpd[12] = (dcomplex){513.1605205716, 512.2965869718};
+      cexpd[13] = (dcomplex){513.1290734194, 512.3075927445};
+      cexpd[14] = (dcomplex){513.1012720314, 512.3166486553};
+      cexpd[15] = (dcomplex){513.0760908195, 512.3241541685};
+      cexpd[16] = (dcomplex){513.0528295923, 512.3304037599};
+      cexpd[17] = (dcomplex){513.0310107773, 512.3356167976};
+      cexpd[18] = (dcomplex){513.0103090133, 512.3399592211};
+      cexpd[19] = (dcomplex){512.9905029333, 512.3435588985};
+      cexpd[20] = (dcomplex){512.9714421109, 512.3465164008};
+   }
+   else if((n1 == 2048) && (n2 == 1024) && (n3 == 1024) && (nt == 25)) {
+      // Class D reference values.
+      cexpd[1] = (dcomplex){512.2230065252, 511.8534037109};
+      cexpd[2] = (dcomplex){512.0463975765, 511.7061181082};
+      cexpd[3] = (dcomplex){511.9865766760, 511.7096364601};
+      cexpd[4] = (dcomplex){511.9518799488, 511.7373863950};
+      cexpd[5] = (dcomplex){511.9269088223, 511.7680347632};
+      cexpd[6] = (dcomplex){511.9082416858, 511.7967875532};
+      cexpd[7] = (dcomplex){511.8943814638, 511.8225281841};
+      cexpd[8] = (dcomplex){511.8842385057, 511.8451629348};
+      cexpd[9] = (dcomplex){511.8769435632, 511.8649119387};
+      cexpd[10] = (dcomplex){511.8718203448, 511.8820803844};
+      cexpd[11] = (dcomplex){511.8683569061, 511.8969781011};
+      cexpd[12] = (dcomplex){511.8661708593, 511.9098918835};
+      cexpd[13] = (dcomplex){511.8649768950, 511.9210777066};
+      cexpd[14] = (dcomplex){511.8645605626, 511.9307604484};
+      cexpd[15] = (dcomplex){511.8647586618, 511.9391362671};
+      cexpd[16] = (dcomplex){511.8654451572, 511.9463757241};
+      cexpd[17] = (dcomplex){511.8665212451, 511.9526269238};
+      cexpd[18] = (dcomplex){511.8679083821, 511.9580184108};
+      cexpd[19] = (dcomplex){511.8695433664, 511.9626617538};
+      cexpd[20] = (dcomplex){511.8713748264, 511.9666538138};
+      cexpd[21] = (dcomplex){511.8733606701, 511.9700787219};
+      cexpd[22] = (dcomplex){511.8754661974, 511.9730095953};
+      cexpd[23] = (dcomplex){511.8776626738, 511.9755100241};
+      cexpd[24] = (dcomplex){511.8799262314, 511.9776353561};
+      cexpd[25] = (dcomplex){511.8822370068, 511.9794338060};
+   }
+   else if((n1 == 4096) && (n2 == 2048) && (n3 == 2048) && (nt == 25)) {
+      // Class E reference values.
+      cexpd[1] = (dcomplex){512.1601045346, 511.7395998266};
+      cexpd[2] = (dcomplex){512.0905403678, 511.8614716182};
+      cexpd[3] = (dcomplex){512.0623229306, 511.9074203747};
+      cexpd[4] = (dcomplex){512.0438418997, 511.9345900733};
+      cexpd[5] = (dcomplex){512.0311521872, 511.9551325550};
+      cexpd[6] = (dcomplex){512.0226088809, 511.9720179919};
+      cexpd[7] = (dcomplex){512.0169296534, 511.9861371665};
+      cexpd[8] = (dcomplex){512.0131225172, 511.9979364402};
+      cexpd[9] = (dcomplex){512.0104767108, 512.0077674092};
+      cexpd[10] = (dcomplex){512.0085127969, 512.0159443121};
+      cexpd[11] = (dcomplex){512.0069224127, 512.0227453670};
+      cexpd[12] = (dcomplex){512.0055158164, 512.0284096041};
+      cexpd[13] = (dcomplex){512.0041820159, 512.0331373793};
+      cexpd[14] = (dcomplex){512.0028605402, 512.0370938679};
+      cexpd[15] = (dcomplex){512.0015223011, 512.0404138831};
+      cexpd[16] = (dcomplex){512.0001570022, 512.0432068837};
+      cexpd[17] = (dcomplex){511.9987650555, 512.0455615860};
+      cexpd[18] = (dcomplex){511.9973525091, 512.0475499442};
+      cexpd[19] = (dcomplex){511.9959279472, 512.0492304629};
+      cexpd[20] = (dcomplex){511.9945006558, 512.0506508902};
+      cexpd[21] = (dcomplex){511.9930795911, 512.0518503782};
+      cexpd[22] = (dcomplex){511.9916728462, 512.0528612016};
+      cexpd[23] = (dcomplex){511.9902874185, 512.0537101195};
+      cexpd[24] = (dcomplex){511.9889291565, 512.0544194514};
+      cexpd[25] = (dcomplex){511.9876028049, 512.0550079284};
+   }
+   else {
+      printf("  Verification test for FT not performed\n");
+      *verified = 0;
+   }
+   // Verification test for results.
+   if(*verified) {
+      for(kt = 1; kt <= nt; kt++) {
+         err = sqrt(((dcmplx_div((dcomplex){(cksum[kt]).real - (cexpd[kt]).real, (cksum[kt]).imag - (cexpd[kt]).imag}, cexpd[kt])).real * (dcmplx_div((dcomplex){(cksum[kt]).real - (cexpd[kt]).real, (cksum[kt]).imag - (cexpd[kt]).imag}, cexpd[kt])).real) + ((dcmplx_div((dcomplex){(cksum[kt]).real - (cexpd[kt]).real, (cksum[kt]).imag - (cexpd[kt]).imag}, cexpd[kt])).imag * (dcmplx_div((dcomplex){(cksum[kt]).real - (cexpd[kt]).real, (cksum[kt]).imag - (cexpd[kt]).imag}, cexpd[kt])).imag));
+         if(!(err <= epsilon)) {
+            *verified = 0;
+            break;
+         }
+      }
+      if(*verified) {
+         printf(" Verification test for FT successful\n");
+      }
+      else {
+         printf(" Verification test for FT failed\n");
+      }
+   }
+}
+
+
+void print_results(char * name, char class, int n1, int n2, int n3, int niter, double t, double mops, char * optype, int verified) {
+   char size[16];
+   int j;
+   printf("\n\n %s Benchmark Completed.\n", name);
+   printf(" Class           =             %12c\n", class);
+   // If this is not a grid-based problem (EP, FT, CG), then
+   // we only print n1, which contains some measure of the
+   // problem size. In that case, n2 and n3 are both zero.
+   // Otherwise, we print the grid size n1xn2xn3
+   if((n2 == 0) && (n3 == 0)) {
+      if((name[0] == 'E') && (name[1] == 'P')) {
+         sprintf(size, "%15.0lf", pow(2.0, n1));
+         j = 14;
+         if(size[j] == '.') {
+            size[j] = ' ';
+            j--;
+         }
+         size[j + 1] = '\0';
+         printf(" Size            =          %15s\n", size);
+      }
+      else {
+         printf(" Size            =             %12d\n", n1);
+      }
+   }
+   else {
+      printf(" Size            =           %4dx%4dx%4d\n", n1, n2, n3);
+   }
+   printf(" Iterations      =             %12d\n", niter);
+   printf(" Time in seconds =             %12.2lf\n", t);
+   printf(" Mop/s total     =          %15.2lf\n", mops);
+   printf(" Operation type  = %24s\n", optype);
+   if(verified) printf(" Verification    =             %12s\n", "SUCCESSFUL");
+   else printf(" Verification    =             %12s\n", "UNSUCCESSFUL");
+}
+
+
+double randlc(double * x, double a) {
+   //--------------------------------------------------------------------
+   //
+   //  This routine returns a uniform pseudorandom double precision number in the
+   //  range (0, 1) by using the linear congruential generator
+   //
+   //  x_{k+1} = a x_k  (mod 2^46)
+   //
+   //  where 0 < x_k < 2^46 and 0 < a < 2^46.  This scheme generates 2^44 numbers
+   //  before repeating.  The argument A is the same as 'a' in the above formula,
+   //  and X is the same as x_0.  A and X must be odd double precision integers
+   //  in the range (1, 2^46).  The returned value RANDLC is normalized to be
+   //  between 0 and 1, i.e. RANDLC = 2^(-46) * x_1.  X is updated to contain
+   //  the new seed x_1, so that subsequent calls to RANDLC using the same
+   //  arguments will generate a continuous sequence.
+   //
+   //  This routine should produce the same results on any computer with at least
+   //  48 mantissa bits in double precision floating point data.  On 64 bit
+   //  systems, double precision should be disabled.
+   //
+   //  David H. Bailey     October 26, 1990
+   //
+   //--------------------------------------------------------------------
+   // r23 = pow(0.5, 23.0);
+   ////  pow(0.5, 23.0) = 1.1920928955078125e-07
+   // r46 = r23 * r23;
+   // t23 = pow(2.0, 23.0);
+   ////  pow(2.0, 23.0) = 8.388608e+06
+   // t46 = t23 * t23;
+   double const r23 = 1.1920928955078125e-07;
+   double const r46 = r23 * r23;
+   double const t23 = 8.388608e+06;
+   double const t46 = t23 * t23;
+   double t1;
+   double t2;
+   double t3;
+   double t4;
+   double a1;
+   double a2;
+   double x1;
+   double x2;
+   double z;
+   double r;
+   //--------------------------------------------------------------------
+   //  Break A into two parts such that A = 2^23 * A1 + A2.
+   //--------------------------------------------------------------------
+   t1 = r23 * a;
+   a1 = (int) t1;
+   a2 = a - t23 * a1;
+   //--------------------------------------------------------------------
+   //  Break X into two parts such that X = 2^23 * X1 + X2, compute
+   //  Z = A1 * X2 + A2 * X1  (mod 2^23), and then
+   //  X = 2^23 * Z + A2 * X2  (mod 2^46).
+   //--------------------------------------------------------------------
+   t1 = r23 * (*x);
+   x1 = (int) t1;
+   x2 = *x - t23 * x1;
+   t1 = a1 * x2 + a2 * x1;
+   t2 = (int) (r23 * t1);
+   z = t1 - t23 * t2;
+   t3 = t23 * z + a2 * x2;
+   t4 = (int) (r46 * t3);
+   *x = t3 - t46 * t4;
+   r = r46 * (*x);
+   
+   return r;
+}
+
+
+void vranlc(int n, double * x, double a, double y[]) {
+   //--------------------------------------------------------------------
+   //
+   //  This routine generates N uniform pseudorandom double precision numbers in
+   //  the range (0, 1) by using the linear congruential generator
+   //
+   //  x_{k+1} = a x_k  (mod 2^46)
+   //
+   //  where 0 < x_k < 2^46 and 0 < a < 2^46.  This scheme generates 2^44 numbers
+   //  before repeating.  The argument A is the same as 'a' in the above formula,
+   //  and X is the same as x_0.  A and X must be odd double precision integers
+   //  in the range (1, 2^46).  The N results are placed in Y and are normalized
+   //  to be between 0 and 1.  X is updated to contain the new seed, so that
+   //  subsequent calls to VRANLC using the same arguments will generate a
+   //  continuous sequence.  If N is zero, only initialization is performed, and
+   //  the variables X, A and Y are ignored.
+   //
+   //  This routine is the standard version designed for scalar or RISC systems.
+   //  However, it should produce the same results on any single processor
+   //  computer with at least 48 mantissa bits in double precision floating point
+   //  data.  On 64 bit systems, double precision should be disabled.
+   //
+   //--------------------------------------------------------------------
+   // r23 = pow(0.5, 23.0);
+   ////  pow(0.5, 23.0) = 1.1920928955078125e-07
+   // r46 = r23 * r23;
+   // t23 = pow(2.0, 23.0);
+   ////  pow(2.0, 23.0) = 8.388608e+06
+   // t46 = t23 * t23;
+   double const r23 = 1.1920928955078125e-07;
+   double const r46 = r23 * r23;
+   double const t23 = 8.388608e+06;
+   double const t46 = t23 * t23;
+   double t1;
+   double t2;
+   double t3;
+   double t4;
+   double a1;
+   double a2;
+   double x1;
+   double x2;
+   double z;
+   int i;
+   //--------------------------------------------------------------------
+   //  Break A into two parts such that A = 2^23 * A1 + A2.
+   //--------------------------------------------------------------------
+   t1 = r23 * a;
+   a1 = (int) t1;
+   a2 = a - t23 * a1;
+   //--------------------------------------------------------------------
+   //  Generate N results.   This loop is not vectorizable.
+   //--------------------------------------------------------------------
+   for(i = 0; i < n; i++) {
+      //--------------------------------------------------------------------
+      //  Break X into two parts such that X = 2^23 * X1 + X2, compute
+      //  Z = A1 * X2 + A2 * X1  (mod 2^23), and then
+      //  X = 2^23 * Z + A2 * X2  (mod 2^46).
+      //--------------------------------------------------------------------
+      t1 = r23 * (*x);
+      x1 = (int) t1;
+      x2 = *x - t23 * x1;
+      t1 = a1 * x2 + a2 * x1;
+      t2 = (int) (r23 * t1);
+      z = t1 - t23 * t2;
+      t3 = t23 * z + a2 * x2;
+      t4 = (int) (r46 * t3);
+      *x = t3 - t46 * t4;
+      y[i] = r46 * (*x);
+   }
+   
+   return;
+}
+
+
+void wtime(double * t) {
+   static int sec = -1;
+   struct timeval tv;
+   gettimeofday(&tv, (void *) 0);
+   if(sec < 0) sec = tv.tv_sec;
+   *t = (tv.tv_sec - sec) + 1.0e-6 * tv.tv_usec;
+}
+
+/*****************************************************************/
+/******         E  L  A  P  S  E  D  _  T  I  M  E          ******/
+/*****************************************************************/
+
+double elapsed_time() {
+   double t;
+   wtime(&t);
+   
+   return (t);
+}
+
+/*****************************************************************/
+/******            T  I  M  E  R  _  C  L  E  A  R          ******/
+/*****************************************************************/
+
+void timer_clear(int n) {
+   elapsed[n] = 0.0;
+}
+
+/*****************************************************************/
+/******            T  I  M  E  R  _  S  T  A  R  T          ******/
+/*****************************************************************/
+
+void timer_start(int n) {
+   start[n] = elapsed_time();
+}
+
+/*****************************************************************/
+/******            T  I  M  E  R  _  S  T  O  P             ******/
+/*****************************************************************/
+
+void timer_stop(int n) {
+   double t;
+   double now;
+   now = elapsed_time();
+   t = now - start[n];
+   elapsed[n] += t;
+}
+
+/*****************************************************************/
+/******            T  I  M  E  R  _  R  E  A  D             ******/
+/*****************************************************************/
+
+double timer_read(int n) {
+   
+   return (elapsed[n]);
+}

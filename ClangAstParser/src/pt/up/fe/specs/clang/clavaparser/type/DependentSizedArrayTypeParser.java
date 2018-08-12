@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -50,7 +49,9 @@ public class DependentSizedArrayTypeParser extends AClangNodeParser<DependentSiz
         Type elementType = toType(children.get(0));
         Expr sizeExpr = toExpr(children.get(1));
 
-        return ClavaNodeFactory.dependentSizedArrayType(arrayTypeData, typeData, node.getInfo(), elementType, sizeExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.dependentSizedArrayType(arrayTypeData, typeData, node.getInfo(), elementType,
+        // sizeExpr);
     }
 
 }

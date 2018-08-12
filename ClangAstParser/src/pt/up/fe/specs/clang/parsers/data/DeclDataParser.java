@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
+import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -179,6 +180,15 @@ public class DeclDataParser {
         // data.add(ValueDecl.TYPE, dataStore.getClavaNodes().getType(lines.nextLine()));
         dataStore.getClavaNodes().queueSetNode(data, ValueDecl.TYPE, lines.nextLine());
         data.add(ValueDecl.IS_WEAK, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseFieldDeclData(LineStream lines, ClangParserData dataStore) {
+        // Should DeclaratorDecl
+        DataStore data = parseValueDeclData(lines, dataStore);
+
+        data.add(FieldDecl.IS_MUTABLE, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }

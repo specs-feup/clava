@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
@@ -240,9 +241,19 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseDecayedTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseAdjustedTypeData(LineStream lines, ClangParserData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, AdjustedType.ORIGINAL_TYPE, lines.nextLine());
+        parserData.getClavaNodes().queueSetNode(data, AdjustedType.ADJUSTED_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseDecayedTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseAdjustedTypeData(lines, parserData);
 
         parserData.getClavaNodes().queueSetNode(data, DecayedType.DECAYED_TYPE, lines.nextLine());
         parserData.getClavaNodes().queueSetNode(data, DecayedType.POINTEE_TYPE, lines.nextLine());

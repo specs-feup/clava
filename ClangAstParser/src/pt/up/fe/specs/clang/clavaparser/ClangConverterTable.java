@@ -157,7 +157,7 @@ public class ClangConverterTable implements AutoCloseable {
 
             }
         } else {
-            System.out.println("No new ClavaNode for id " + clangNode.getExtendedId());
+            // System.out.println("No new ClavaNode for id " + clangNode.getExtendedId());
         }
 
         // If not found, try to add decl at the end

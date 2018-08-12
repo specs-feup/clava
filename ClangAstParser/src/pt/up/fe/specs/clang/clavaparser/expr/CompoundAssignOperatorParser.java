@@ -21,11 +21,10 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -71,7 +70,8 @@ public class CompoundAssignOperatorParser extends AClangNodeParser<CompoundAssig
         Expr lhs = toExpr(children.get(0));
         Expr rhs = toExpr(children.get(1));
 
-        return ClavaNodeFactory.compoundAssignOperator(lhsType, resultType, op, exprData, node.getInfo(), lhs, rhs);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.compoundAssignOperator(lhsType, resultType, op, exprData, node.getInfo(), lhs, rhs);
     }
 
 }

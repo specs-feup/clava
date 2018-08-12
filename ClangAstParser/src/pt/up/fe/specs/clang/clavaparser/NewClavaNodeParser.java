@@ -221,7 +221,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
                 if (initExpr instanceof DummyNode) {
                     ClavaNode nonDummyExpr = getOldClavaNode(initExpr);
-                    System.out.println("NON DUMMY EXPR:" + nonDummyExpr.toTree());
+                    // System.out.println("NON DUMMY EXPR:" + nonDummyExpr.toTree());
                     // NodeInsertUtils.replace(initExpr, nonDummyExpr, true);
                     init.set(CXXCtorInitializer.INIT_EXPR, (Expr) nonDummyExpr);
 

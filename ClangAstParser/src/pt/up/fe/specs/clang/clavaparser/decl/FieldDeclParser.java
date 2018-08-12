@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -78,8 +77,9 @@ public class FieldDeclParser extends AClangNodeParser<FieldDecl> {
         Expr inClassInitializer = info.hasInClassInitialized() ? SpecsCollections.popSingle(children, Expr.class)
                 : null;
 
-        return ClavaNodeFactory.fieldDecl(isMutable, isModulePrivate, fieldName, type, declData, info(node),
-                bitwidth, inClassInitializer);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.fieldDecl(isMutable, isModulePrivate, fieldName, type, declData, info(node),
+        // bitwidth, inClassInitializer);
 
     }
 

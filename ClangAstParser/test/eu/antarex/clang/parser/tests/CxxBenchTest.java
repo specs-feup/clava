@@ -54,12 +54,12 @@ public class CxxBenchTest {
 
     @Test
     public void testAtom() {
-        new CxxTester("bench/atom.cpp").test();
+        new CxxTester("bench/atom.cpp").onePass().showCode().showClavaAst().test();
     }
 
     @Test
     public void testRouting() {
-        new CxxTester("bench/Routing.cpp", "bench/ShortcutPosition.h").showCode().test();
+        new CxxTester("bench/Routing.cpp", "bench/ShortcutPosition.h").test();
     }
 
 }

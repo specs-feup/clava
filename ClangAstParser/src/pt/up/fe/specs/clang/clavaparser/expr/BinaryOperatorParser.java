@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clang.clavaparser.expr;
 
-import static pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind.*;
+import static pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +24,10 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
-import pt.up.fe.specs.clava.ast.expr.BinaryOperator.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -57,7 +56,8 @@ public class BinaryOperatorParser extends AClangNodeParser<BinaryOperator> {
         Expr lhs = toExpr(children.get(0));
         Expr rhs = toExpr(children.get(1));
 
-        return ClavaNodeFactory.binaryOperator(op, exprData, info(node), lhs, rhs);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.binaryOperator(op, exprData, info(node), lhs, rhs);
     }
 
     private static final Map<String, BinaryOperatorKind> BINARY_OPERATOR_PARSER;

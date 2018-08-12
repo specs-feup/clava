@@ -17,7 +17,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
@@ -30,6 +29,7 @@ public class DeleteTemplateSpecializations implements SimplePostClavaRule {
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
+
         if (!(node instanceof FunctionDecl)) {
             return;
         }
@@ -43,8 +43,8 @@ public class DeleteTemplateSpecializations implements SimplePostClavaRule {
 
         // Only tested function specialization, check other cases
         if (functionDecl.get(FunctionDecl.TEMPLATE_KIND) != TemplateKind.FUNCTION_TEMPLATE_SPECIALIZATION) {
-            SpecsLogs.untested("Removing template specialization of kind '"
-                    + functionDecl.get(FunctionDecl.TEMPLATE_KIND) + "'");
+            // SpecsLogs.untested("Removing template specialization of kind '"
+            // + functionDecl.get(FunctionDecl.TEMPLATE_KIND) + "'");
             // SpecsLogs.msgWarn(
             // "Removing template specialization of kind '" + functionDecl.getFunctionDeclData().getTemplateKind()
             // + "', this has not yet been tested. Please contact the developers.");

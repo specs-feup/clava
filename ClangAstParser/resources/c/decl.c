@@ -20,6 +20,8 @@ void vlatypes(int ni, int a[3][ni]) {}
 
 typedef void(*function_prt_with_vla) (int ni,int nj,double tmp[ni + 0][nj + 0]);
 
+void exact(int i, int j, int k, double u000ijk[]);
+
 int main() {
 	float* aFloatPointer;
 	
