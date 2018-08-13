@@ -5,6 +5,14 @@ aspectdef GproferGetCxxFunction
 	$func = undefined;
 	
 	/* decode name based on gprof format */
+	select function{signature == name} end
+	apply
+		$func = $function;
+		return;
+	end
+	condition
+		$function.hasDefinition
+	end
 end
 
 aspectdef GproferGetCFunction
