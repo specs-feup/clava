@@ -138,7 +138,6 @@ import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
-import pt.up.fe.specs.clava.ast.type.DecltypeType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -795,10 +794,10 @@ public class ClavaNodeFactory {
         return new AutoType(typeData, info, deducedType);
     }
 
-    public static DecltypeType decltypeType(TypeData typeData, ClavaNodeInfo info, Expr expr,
-            Type underlyingType) {
-        return new DecltypeType(typeData, info, expr, underlyingType);
-    }
+    // public static DecltypeType decltypeType(TypeData typeData, ClavaNodeInfo info, Expr expr,
+    // Type underlyingType) {
+    // return new DecltypeType(typeData, info, expr, underlyingType);
+    // }
 
     public static VariadicType variadicType(ClavaNodeInfo info) {
         return new VariadicType(info);

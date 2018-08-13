@@ -13,35 +13,45 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class DecltypeType extends Type {
 
-    public DecltypeType(TypeData typeData, ClavaNodeInfo info, Expr expr, Type underlyingType) {
-        this(typeData, info, Arrays.asList(expr, underlyingType));
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlyingExpr", Expr.class);
+
+    /// DATAKEYS END
+
+    public DecltypeType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private DecltypeType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
+    // public DecltypeType(TypeData typeData, ClavaNodeInfo info, Expr expr, Type underlyingType) {
+    // this(typeData, info, Arrays.asList(expr, underlyingType));
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DecltypeType(getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // private DecltypeType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DecltypeType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     public Expr getExpr() {
         return getChild(Expr.class, 0);
     }
 
-    public Type getUnderlyingType() {
-        return getChild(Type.class, 1);
-    }
+    // public Type getUnderlyingType() {
+    // return getChild(Type.class, 1);
+    // }
 }
