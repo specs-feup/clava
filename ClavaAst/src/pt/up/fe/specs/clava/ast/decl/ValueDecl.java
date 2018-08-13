@@ -20,8 +20,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 
@@ -59,17 +57,18 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
      * @param info
      * @param children
      */
+    // @Deprecated
+    // public ValueDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(declName, type, declData, info, children);
+    //
+    // // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
+    // //
+    // // set(DECL_NAME, processDeclName(declName));
+    // // set(ValueDecl.TYPE, processType(type));
+    // }
+
     @Deprecated
-    public ValueDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declName, type, declData, info, children);
-
-        // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
-        //
-        // set(DECL_NAME, processDeclName(declName));
-        // set(ValueDecl.TYPE, processType(type));
-    }
-
     @Override
     public Type getType() {
         return get(TYPE);

@@ -14,17 +14,17 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Declaration of a template type parameter.
@@ -34,54 +34,74 @@ import pt.up.fe.specs.util.SpecsCollections;
  */
 public class TemplateTypeParmDecl extends TypeDecl {
 
-    private final TemplateTypeParmKind kind;
-    private final boolean isParameterPack;
+    /// DATAKEYS BEGIN
 
-    public TemplateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack, String name, DeclData declData,
-            ClavaNodeInfo info, TemplateArgument defaultArgument) {
+    public final static DataKey<TemplateTypeParmKind> KIND = KeyFactory.enumeration("kind", TemplateTypeParmKind.class);
 
-        this(kind, isParameterPack, name, declData, info, SpecsCollections.ofNullable(defaultArgument));
+    /**
+     * True if this is a parameter pack.
+     */
+    public final static DataKey<Boolean> IS_PARAMETER_PACK = KeyFactory.bool("isParameterPack");
+
+    public final static DataKey<Optional<Type>> DEFAULT_ARGUMENT = KeyFactory.optional("defaultArgument");
+
+    /// DATAKEYS END
+
+    public TemplateTypeParmDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private TemplateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack, String name, DeclData declData,
-            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // private final TemplateTypeParmKind kind;
+    // private final boolean isParameterPack;
 
-        super(name, null, declData, info, children);
+    // public TemplateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack, String name, DeclData declData,
+    // ClavaNodeInfo info, TemplateArgument defaultArgument) {
+    //
+    // this(kind, isParameterPack, name, declData, info, SpecsCollections.ofNullable(defaultArgument));
+    // }
+    //
+    // private TemplateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack, String name, DeclData declData,
+    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    //
+    // super(name, null, declData, info, children);
+    //
+    // this.kind = kind;
+    // this.isParameterPack = isParameterPack;
+    // }
 
-        this.kind = kind;
-        this.isParameterPack = isParameterPack;
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new TemplateTypeParmDecl(kind, isParameterPack, getDeclName(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new TemplateTypeParmDecl(kind, isParameterPack, getDeclName(), getDeclData(), getInfo(),
-                Collections.emptyList());
-    }
-
+    /*
     public Optional<TemplateArgument> getDefaultArgument() {
         if (!hasChildren()) {
             return Optional.empty();
         }
-
+    
         return Optional.of(getChild(TemplateArgument.class, 0));
     }
+    */
 
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        code.append(kind.getString());
+        code.append(get(KIND).getString());
 
-        if (isParameterPack) {
+        if (get(IS_PARAMETER_PACK)) {
             code.append("...");
-            Preconditions.checkArgument(!getDefaultArgument().isPresent());
+            // Preconditions.checkArgument(!getDefaultArgument().isPresent());
+            Preconditions.checkArgument(!get(DEFAULT_ARGUMENT).isPresent());
         }
 
         if (hasDeclName()) {
             code.append(" ").append(getDeclName());
         }
 
-        getDefaultArgument().ifPresent(arg -> code.append(" = ").append(arg.getCode()));
+        get(DEFAULT_ARGUMENT).ifPresent(arg -> code.append(" = ").append(arg.getCode(this)));
 
         return code.toString();
     }

@@ -158,6 +158,9 @@ public class VarDecl extends DeclaratorDecl {
 
         code.append(getType().getCode(this, declName));
         code.append(getInitializationCode());
+
+        // System.out.println("VARDECL CODE:" + code);
+        // System.out.println("VARDECL TYPE:" + get(TYPE).toTree());
         return code.toString();
     }
 

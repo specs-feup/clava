@@ -37,25 +37,18 @@ import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
-import pt.up.fe.specs.clava.ast.decl.FunctionTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
-import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
-import pt.up.fe.specs.clava.ast.decl.VarTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -89,7 +82,6 @@ import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
-import pt.up.fe.specs.clava.ast.expr.PackExpansionExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenListExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
@@ -173,7 +165,6 @@ import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -380,14 +371,14 @@ public class ClavaNodeFactory {
     // return new EnumDecl(enumScopeType, name, isModulePrivate, integerType, type, declData, info, children);
     // }
 
-    public static EnumConstantDecl enumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
-        return new EnumConstantDecl(value, type, declData, info);
-    }
-
-    public static EnumConstantDecl enumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info,
-            Expr init) {
-        return new EnumConstantDecl(value, type, declData, info, init);
-    }
+    // public static EnumConstantDecl enumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
+    // return new EnumConstantDecl(value, type, declData, info);
+    // }
+    //
+    // public static EnumConstantDecl enumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info,
+    // Expr init) {
+    // return new EnumConstantDecl(value, type, declData, info, init);
+    // }
 
     public static NamespaceDecl namespaceDecl(boolean isInline, BareDeclData originalNamespace,
             String namespace, DeclData declData, ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
@@ -542,30 +533,30 @@ public class ClavaNodeFactory {
         return new UsingDecl(qualifier, declName, declData, info);
     }
 
-    public static TemplateTypeParmDecl templateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack,
-            String name, DeclData declData, ClavaNodeInfo info, TemplateArgument defaultArgument) {
+    // public static TemplateTypeParmDecl templateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack,
+    // String name, DeclData declData, ClavaNodeInfo info, TemplateArgument defaultArgument) {
+    //
+    // return new TemplateTypeParmDecl(kind, isParameterPack, name, declData, info, defaultArgument);
+    // }
 
-        return new TemplateTypeParmDecl(kind, isParameterPack, name, declData, info, defaultArgument);
-    }
+    // public static RedeclarableTemplateDecl redeclarableTemplateDecl(String declName, List<Decl> specializations,
+    // DeclData declData, ClavaNodeInfo info, List<NamedDecl> templateParameters, Decl templateDecl) {
+    //
+    // return new RedeclarableTemplateDecl(declName, specializations, declData, info, templateParameters,
+    // templateDecl);
+    // }
+    //
+    // public static FunctionTemplateDecl functionTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
+    // return new FunctionTemplateDecl(redeclarableTemplateDecl);
+    // }
 
-    public static RedeclarableTemplateDecl redeclarableTemplateDecl(String declName, List<Decl> specializations,
-            DeclData declData, ClavaNodeInfo info, List<NamedDecl> templateParameters, Decl templateDecl) {
+    // public static ClassTemplateDecl classTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
+    // return new ClassTemplateDecl(redeclarableTemplateDecl);
+    // }
 
-        return new RedeclarableTemplateDecl(declName, specializations, declData, info, templateParameters,
-                templateDecl);
-    }
-
-    public static FunctionTemplateDecl functionTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-        return new FunctionTemplateDecl(redeclarableTemplateDecl);
-    }
-
-    public static ClassTemplateDecl classTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-        return new ClassTemplateDecl(redeclarableTemplateDecl);
-    }
-
-    public static VarTemplateDecl varTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-        return new VarTemplateDecl(redeclarableTemplateDecl);
-    }
+    // public static VarTemplateDecl varTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
+    // return new VarTemplateDecl(redeclarableTemplateDecl);
+    // }
 
     // public static FunctionTemplateDecl functionTemplateDecl(String declName, List<Decl> specializations,
     // DeclData declData, ClavaNodeInfo info, List<TemplateTypeParmDecl> templateParameters, Decl templateDecl) {
@@ -1366,9 +1357,9 @@ public class ClavaNodeFactory {
         return new SizeOfPackExpr(packId, packName, exprData, info, partialArguments);
     }
 
-    public static PackExpansionExpr packExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
-        return new PackExpansionExpr(exprData, info, pattern);
-    }
+    // public static PackExpansionExpr packExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
+    // return new PackExpansionExpr(exprData, info, pattern);
+    // }
 
     public static ParenListExpr parenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
         return new ParenListExpr(exprData, info, expressions);

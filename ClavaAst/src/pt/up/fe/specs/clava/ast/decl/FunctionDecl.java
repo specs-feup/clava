@@ -247,7 +247,14 @@ public class FunctionDecl extends DeclaratorDecl {
         return SpecsCollections.lastTry(getChildren()).map(child -> child instanceof Stmt).orElse(false);
     }
 
-    public Optional<Stmt> setBody(CompoundStmt body) {
+    // public Optional<Stmt> setBody(CompoundStmt body) {
+    /**
+     * 
+     * @param body
+     * @return
+     */
+    public Optional<Stmt> setBody(Stmt body) {
+
         // If no body, just add the stmt and return
         if (!hasBody()) {
             addChild(body);
@@ -291,6 +298,7 @@ public class FunctionDecl extends DeclaratorDecl {
         code.append(returnType).append(" ").append(getTypelessCode()).append(getCodeBody());
         */
         code.append(getCodeBody());
+
         return code.toString();
     }
 

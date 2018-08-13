@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 
 public class TypedefType extends Type {
 
@@ -61,15 +62,23 @@ public class TypedefType extends Type {
     */
 
     public Type getTypeClass() {
-        return getChild(Type.class, 0);
+        Decl decl = get(DECL);
+        return decl.hasValue(ValueDecl.TYPE) ? decl.get(ValueDecl.TYPE) : null;
+        // return getChild(Type.class, 0);
     }
 
-    public void setTypeClass(Type typeClass) {
-        setChild(0, typeClass);
-    }
+    // public void setTypeClass(Type typeClass) {
+    // setChild(0, typeClass);
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
+
+        // Type typeClass = getTypeClass();
+        // if (hasSugar() && desugar() instanceof ElaboratedType) {
+        // System.out.println("ELABORATED:" + desugar().getCode(sourceNode, name));
+        // return desugar().getCode(sourceNode, name);
+        // }
 
         String type = get(TYPE_AS_STRING);
 

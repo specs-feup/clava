@@ -45,10 +45,11 @@ import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
+import pt.up.fe.specs.util.system.Copyable;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
-public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClass<ClavaNode> {
+public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClass<ClavaNode>, Copyable<ClavaNode> {
 
     /// DATAKEYS BEGIN
 

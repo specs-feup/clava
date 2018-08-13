@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -84,12 +85,17 @@ public class ElaboratedType extends TypeWithKeyword {
             code += " ";
         }
 
-        code += get(QUALIFIER) + getNamedType().getCode(sourceNode, name);
+        String qualifier = getQualifier();
+
+        code += qualifier + getNamedType().getCode(sourceNode, name);
 
         if (getNamedType().getCode(sourceNode, name).startsWith("%Dummy")) {
             System.out.println("NAMED TYPE:" + getNamedType().toTree());
         }
 
+        // System.out.println("ELABORATED CODE:" + code);
+        // System.out.println("QUALIFIER:" + get(QUALIFIER));
+        // System.out.println("TEMPLATE ARGS:" + getTemplateArgumentStrings(this));
         return code;
 
         /*     
@@ -125,6 +131,36 @@ public class ElaboratedType extends TypeWithKeyword {
         
         return bareType + " " + name;
         */
+    }
+
+    /**
+     * Takes into account if TemplateArguments where changed.
+     * 
+     * @return
+     */
+    private String getQualifier() {
+        String qualifier = get(QUALIFIER);
+        if (!hasUpdatedTemplateArgTypes()) {
+            return qualifier;
+        }
+
+        if (!qualifier.contains("<") && !qualifier.contains(">")) {
+            return qualifier;
+            // String templateStrings = getTemplateArgumentStrings(this).stream().collect(Collectors.joining(","));
+            // throw new RuntimeException("Expected to find a '<' in qualifier '" + qualifier
+            // + "', implement case when this is not present. Template types: " + templateStrings);
+        }
+
+        // Not sure if this is the best way to detect the template parameters
+        int startIndex = qualifier.indexOf('<');
+        int endIndex = qualifier.lastIndexOf('>');
+
+        String newTemplateTypes = getTemplateArgumentStrings(this).stream().collect(Collectors.joining(","));
+
+        String newQualifier = qualifier.substring(0, startIndex + 1) + newTemplateTypes
+                + qualifier.substring(endIndex, qualifier.length());
+
+        return newQualifier;
     }
 
     @Override

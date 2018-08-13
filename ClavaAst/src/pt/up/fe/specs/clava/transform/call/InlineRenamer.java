@@ -204,11 +204,44 @@ public class InlineRenamer {
                 .forEach(this::applyRenameAction);
 
         // Also rename DeclRefExpr found in Types
-        stmts.stream().flatMap(node -> node.getDescendantsAndSelfStream())
-                .filter(Typable.class::isInstance)
-                .flatMap(typable -> ((Typable) typable).getType().getDescendantsAndSelfStream())
-                .filter(DeclRefExpr.class::isInstance)
-                .forEach(this::applyRenameAction);
+        for (Stmt stmt : stmts) {
+            for (ClavaNode node : stmt.getDescendantsAndSelf(ClavaNode.class)) {
+                if (!(node instanceof Typable)) {
+                    continue;
+                }
+
+                Typable typable = (Typable) node;
+
+                // Check if there is a DeclRefExpr descendant
+                if (typable.getType().getDescendantsAndSelf(DeclRefExpr.class).isEmpty()) {
+                    continue;
+                }
+
+                // There is a DeclRefExpr
+                // Types can be shared among other nodes, copy type before modifying it
+                Type typeCopy = typable.getType().copy();
+                typable.setType(typeCopy);
+
+                // Is typable, get all descendants of the type
+                for (DeclRefExpr nodeInType : typeCopy.getDescendantsAndSelf(DeclRefExpr.class)) {
+                    applyRenameAction(nodeInType);
+                    // if (nodeInType instanceof DeclRefExpr) {
+                    // System.out.println("NODE IN TYPE: " + nodeInType.getCode());
+                    //
+                    // applyRenameAction(nodeInType);
+                    //
+                    // }
+                }
+            }
+        }
+
+        // stmts.stream().flatMap(node -> node.getDescendantsAndSelfStream())
+        // // Find nodes with types
+        // .filter(Typable.class::isInstance)
+        // .flatMap(typable -> ((Typable) typable).getType().getDescendantsAndSelfStream())
+        // .filter(DeclRefExpr.class::isInstance)
+        // .forEach(this::applyRenameAction);
+
         // .forEach(declRefExpr -> System.out.println("Found decl ref:" + declRefExpr));
 
         // // Add types that might refer to variables

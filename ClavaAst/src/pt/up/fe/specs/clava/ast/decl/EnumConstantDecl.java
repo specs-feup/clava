@@ -13,16 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.expr.NullExpr;
 
 /**
  * Represents the declaration of an enum constant.
@@ -32,34 +30,39 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public class EnumConstantDecl extends ValueDecl {
 
-    private final String value;
-
-    public EnumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
-        this(value, type, declData, info, Collections.emptyList());
+    public EnumConstantDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    public EnumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info, Expr init) {
-        this(value, type, declData, info, Arrays.asList(init));
-    }
+    // private final String value;
 
-    private EnumConstantDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(declName, type, declData, info, children);
-
-        this.value = declName;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new EnumConstantDecl(value, getType(), getDeclData(), getInfo());
-    }
+    // public EnumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
+    // this(value, type, declData, info, Collections.emptyList());
+    // }
+    //
+    // public EnumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info, Expr init) {
+    // this(value, type, declData, info, Arrays.asList(init));
+    // }
+    //
+    // private EnumConstantDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(declName, type, declData, info, children);
+    //
+    // this.value = declName;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new EnumConstantDecl(value, getType(), getDeclData(), getInfo());
+    // }
 
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(value);
+        // builder.append(value);
+        builder.append(get(DECL_NAME));
 
         getInitExpr().ifPresent(subExpr -> builder.append(" = ").append(subExpr.getCode()));
 
@@ -67,11 +70,19 @@ public class EnumConstantDecl extends ValueDecl {
     }
 
     public Optional<Expr> getInitExpr() {
-        if (getNumChildren() == 0) {
+        Expr initExpr = getChild(Expr.class, 0);
+
+        if (initExpr instanceof NullExpr) {
             return Optional.empty();
         }
 
-        return Optional.of(getChild(Expr.class, 0));
+        return Optional.ofNullable(initExpr);
+
+        // if (getNumChildren() == 0) {
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of(getChild(Expr.class, 0));
     }
 
 }

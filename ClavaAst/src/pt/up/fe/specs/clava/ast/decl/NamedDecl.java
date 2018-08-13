@@ -227,6 +227,7 @@ public abstract class NamedDecl extends Decl {
     // }
 
     public Optional<String> getNamespace(String recordName) {
+
         // Qualified name has full name
         String qualifiedName = get(QUALIFIED_NAME);
 
@@ -234,11 +235,22 @@ public abstract class NamedDecl extends Decl {
             return Optional.empty();
         }
 
+        if (!qualifiedName.contains("::")) {
+            return Optional.empty();
+        }
+
         // Remove decl name
         String declName = "::" + get(DECL_NAME);
+        // String declName = get(DECL_NAME);
         SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
                 () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
 
+        // String declSuffix = declName;
+        // if (qualifiedName.endsWith("::" + declName)) {
+        // declSuffix = "::" + declSuffix;
+        // }
+
+        // String currentString = qualifiedName.substring(0, qualifiedName.length() - declSuffix.length());
         String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
 
         // TODO: Replace with RECORD, after CXXRecordDecl is implemented

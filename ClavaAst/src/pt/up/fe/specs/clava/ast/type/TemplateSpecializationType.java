@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -34,6 +35,8 @@ public class TemplateSpecializationType extends Type {
 
     public final static DataKey<Boolean> IS_TYPE_ALIAS = KeyFactory.bool("isTypeAlias");
 
+    public final static DataKey<Optional<Type>> ALIASED_TYPE = KeyFactory.optional("aliasedType");
+
     public final static DataKey<String> TEMPLATE_NAME = KeyFactory.string("templateName");
 
     public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
@@ -41,8 +44,12 @@ public class TemplateSpecializationType extends Type {
 
     /// DATAKEYS END
 
+    private boolean hasUpdatedArgumentTypes;
+
     public TemplateSpecializationType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+
+        hasUpdatedArgumentTypes = false;
     }
 
     // private final String templateName;
@@ -129,10 +136,10 @@ public class TemplateSpecializationType extends Type {
     // // hasUpdatedArgumentTypes = true;
     // }
     //
-    // @Override
-    // public boolean hasUpdatedTemplateArgTypes() {
-    // return hasUpdatedArgumentTypes;
-    // }
+    @Override
+    public boolean hasUpdatedTemplateArgTypes() {
+        return hasUpdatedArgumentTypes;
+    }
 
     public void setTemplateArgument(int index, TemplateArgument templateArgument) {
         List<TemplateArgument> templateArgs = get(TEMPLATE_ARGUMENTS);
@@ -142,6 +149,8 @@ public class TemplateSpecializationType extends Type {
                 + "', but template only has '" + argsNumber + "' template arguments.");
 
         templateArgs.set(index, templateArgument);
+
+        hasUpdatedArgumentTypes = true;
     }
 
     @Override
@@ -326,11 +335,17 @@ public class TemplateSpecializationType extends Type {
      */
     @Override
     public void setTemplateArgumentTypes(List<Type> argsTypes) {
-        set(TEMPLATE_ARGUMENTS, argsTypes.stream()
+        // System.out.println("ARRIVED AT TEMPLATE ARGS");
+        // System.out.println(
+        // "SETTING TYPES:" + argsTypes.stream().map(Type::getCode).collect(Collectors.joining("\n")));
+        // System.out.println("ARGS BEFORE:" + get(TEMPLATE_ARGUMENTS));
+        setInPlace(TEMPLATE_ARGUMENTS, argsTypes.stream()
                 .map(TemplateArgumentType::new)
                 .collect(Collectors.toList()));
-
+        // System.out.println("ARGS AFTER:" + get(TEMPLATE_ARGUMENTS));
         // setTemplateArgumentTypes(argsTypes, true);
+
+        hasUpdatedArgumentTypes = true;
     }
 
     /*

@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
@@ -61,7 +62,7 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     public final static DataKey<String> DECL_ID = KeyFactory.string("declId");
 
-    // public final static DataKey<ValueDecl> DECL = KeyFactory.object("decl", ValueDecl.class);
+    public final static DataKey<ValueDecl> DECL = KeyFactory.object("decl", ValueDecl.class);
 
     // DATAKEY END
 

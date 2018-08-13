@@ -16,9 +16,9 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.Collection;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -37,20 +37,24 @@ public abstract class TemplateDecl extends NamedDecl {
 
     // private final String declName;
 
-    private final List<Decl> specializations;
-
-    protected TemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(declName, null, declData, info, children);
-
-        this.specializations = specializations;
-        // this.declName = declName;
+    public TemplateDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    public List<Decl> getSpecializations() {
-        return specializations;
-    }
+    // private final List<Decl> specializations;
+
+    // protected TemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(declName, null, declData, info, children);
+    //
+    // this.specializations = specializations;
+    // // this.declName = declName;
+    // }
+
+    // public List<Decl> getSpecializations() {
+    // return specializations;
+    // }
 
     // @Override
     // public String getDeclName() {

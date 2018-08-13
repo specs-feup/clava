@@ -212,17 +212,20 @@ public class Types {
      * @param sugaredType
      */
     public static void updateSugaredType(Type sugaredType) {
+        // System.out.println("UPDATING " + sugaredType);
+
         // No sugar, nothing to do
         if (!sugaredType.hasSugar()) {
             return;
         }
 
         Type underlyingType = sugaredType.desugar();
+        // System.out.println("UNDERLYING " + underlyingType);
 
         // If underlyingType type is a TypedefType, to reflect changes replace with the underlying type
         if (underlyingType instanceof TypedefType) {
             Type typeClass = ((TypedefType) underlyingType).getTypeClass();
-
+            // System.out.println("IS TYPEDEF TYPE, TYPE CLASS:" + typeClass);
             // Optimization: detach to avoid copy
             // typeClass.detach();
 

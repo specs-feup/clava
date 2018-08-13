@@ -160,7 +160,11 @@ public abstract class Type extends ClavaNode {
         Type typeToChange = createCopy ? copy() : this;
 
         // Type typeCopy = copy();
-        typeToChange.getData().put(key, value);
+        if (value == null) {
+            typeToChange.getData().remove(key);
+        } else {
+            typeToChange.getData().put(key, value);
+        }
 
         return typeToChange;
     }
@@ -313,11 +317,13 @@ public abstract class Type extends ClavaNode {
      * @param newTemplateArgTypes
      */
     public void setTemplateArgumentTypes(List<Type> newTemplateArgTypes) {
+        // System.out.println("CALLING SET TEMPLATE ARGS");
         // If no sugar, do nothing
         if (!hasSugar()) {
+            // System.out.println("NO TEMPLATE ARGS FOUND: " + this);
             return;
         }
-
+        // System.out.println("TEMPLATE ARGS DESUGARING: " + this);
         desugar().setTemplateArgumentTypes(newTemplateArgTypes);
 
         Types.updateSugaredType(this);
@@ -358,7 +364,6 @@ public abstract class Type extends ClavaNode {
      * 
      * @return true if this type updated its template argument types, false otherwise
      */
-    /*
     public boolean hasUpdatedTemplateArgTypes() {
         // If no sugar, return false
         if (!hasSugar()) {
@@ -368,7 +373,6 @@ public abstract class Type extends ClavaNode {
         // System.out.println("DESUGARING:" + this.getClass().getSimpleName());
         return desugar().hasUpdatedTemplateArgTypes();
     }
-    */
 
     /**
      * 

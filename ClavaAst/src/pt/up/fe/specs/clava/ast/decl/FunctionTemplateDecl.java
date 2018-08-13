@@ -14,12 +14,10 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 /**
  * Declaration of a template function.
@@ -29,12 +27,16 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
  */
 public class FunctionTemplateDecl extends RedeclarableTemplateDecl {
 
-    public FunctionTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-        this(redeclarableTemplateDecl.getDeclName(), redeclarableTemplateDecl.getSpecializations(),
-                redeclarableTemplateDecl.getDeclData(), redeclarableTemplateDecl.getInfo(),
-                redeclarableTemplateDecl.getChildren());
-        // super(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
+    public FunctionTemplateDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // public FunctionTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
+    // this(redeclarableTemplateDecl.getDeclName(), redeclarableTemplateDecl.getSpecializations(),
+    // redeclarableTemplateDecl.getDeclData(), redeclarableTemplateDecl.getInfo(),
+    // redeclarableTemplateDecl.getChildren());
+    // // super(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
+    // }
     // public FunctionTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
     // List<TemplateTypeParmDecl> templateParameters, Decl templateDecl) {
     //
@@ -42,17 +44,18 @@ public class FunctionTemplateDecl extends RedeclarableTemplateDecl {
     // // super(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
     // }
 
-    protected FunctionTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(declName, specializations, declData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FunctionTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
-                Collections.emptyList());
-    }
+    // protected FunctionTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo
+    // info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(declName, specializations, declData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new FunctionTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     /*
     @Override

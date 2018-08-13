@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.context;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -136,7 +137,8 @@ public class ClavaFactory {
     }
 
     private DataStore newDeclDataStore() {
-        return newDataStore(DECL_ID_PREFIX);
+        return newDataStore(DECL_ID_PREFIX)
+                .set(Decl.ATTRIBUTES, new ArrayList<>());
     }
 
     private DataStore newStmtDataStore() {

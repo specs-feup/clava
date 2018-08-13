@@ -18,9 +18,6 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents a ValueDecl that originated from a declarator.
@@ -42,10 +39,10 @@ public abstract class DeclaratorDecl extends ValueDecl {
      * @param info
      * @param children
      */
-    @Deprecated
-    public DeclaratorDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declName, type, declData, info, children);
-    }
+    // @Deprecated
+    // public DeclaratorDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(declName, type, declData, info, children);
+    // }
 
 }

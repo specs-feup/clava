@@ -49,14 +49,22 @@ public class TypedefDecl extends TypedefNameDecl {
 
     @Override
     public Type getType() {
+        // System.out.println("CALLING TYPEDEF_DECL.getType()");
+        // System.out.println("Type for decl: " + get(TYPE_FOR_DECL));
         // HACK: Sometimes, the returned type is the same as type being declared, we have not discovered why
         // In this case, desugar type
         Type type = super.getType();
 
         if (type.getCode(this).equals(getDeclName())) {
-            return type.desugar();
+
+            Type desugared = type.desugar();
+
+            // System.out.println("RETURNING DESUGARED: " + desugared);
+
+            return desugared;
         }
 
+        // System.out.println("RETURNING SUPER: " + type);
         return type;
     }
 

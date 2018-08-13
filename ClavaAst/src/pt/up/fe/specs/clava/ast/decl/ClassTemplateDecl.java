@@ -14,30 +14,32 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 public class ClassTemplateDecl extends RedeclarableTemplateDecl {
 
-    public ClassTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-        this(redeclarableTemplateDecl.getDeclName(), redeclarableTemplateDecl.getSpecializations(),
-                redeclarableTemplateDecl.getDeclData(), redeclarableTemplateDecl.getInfo(),
-                redeclarableTemplateDecl.getChildren());
+    public ClassTemplateDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    protected ClassTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(declName, specializations, declData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ClassTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
-                Collections.emptyList());
-    }
+    // public ClassTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
+    // this(redeclarableTemplateDecl.getDeclName(), redeclarableTemplateDecl.getSpecializations(),
+    // redeclarableTemplateDecl.getDeclData(), redeclarableTemplateDecl.getInfo(),
+    // redeclarableTemplateDecl.getChildren());
+    // }
+    //
+    // protected ClassTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(declName, specializations, declData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ClassTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 }
