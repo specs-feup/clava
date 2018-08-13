@@ -674,12 +674,12 @@ public class StreamParser {
         // Check if start is the same as the end
         String secondPart = lines.nextLine();
 
-        if (startFilepath.equals("<built-in>")) {
-            Preconditions.checkArgument(secondPart.equals("<end>"));
-            SourceRange previousValue = sourceRanges.put(nodeId, SourceRange.invalidRange());
-            Preconditions.checkArgument(previousValue == null);
-            return;
-        }
+//        if (startFilepath.equals("<built-in>")) {
+//            Preconditions.checkArgument(secondPart.equals("<end>"));
+//            SourceRange previousValue = sourceRanges.put(nodeId, SourceRange.invalidRange());
+//            Preconditions.checkArgument(previousValue == null);
+//            return;
+//        }
 
         if (secondPart.equals("<end>")) {
             SourceRange previousValue = sourceRanges.put(nodeId, new SourceRange(startLocation));

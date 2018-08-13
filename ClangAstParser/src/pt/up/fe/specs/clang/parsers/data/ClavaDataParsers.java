@@ -20,8 +20,6 @@ import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
@@ -83,10 +81,10 @@ public class ClavaDataParsers {
         // Check if start is the same as the end
         String secondPart = lines.nextLine();
 
-        if (startFilepath.equals("<built-in>")) {
-            Preconditions.checkArgument(secondPart.equals("<end>"));
-            return SourceRange.invalidRange();
-        }
+        // if (startFilepath.equals("<built-in>")) {
+        // Preconditions.checkArgument(secondPart.equals("<end>"));
+        // return SourceRange.invalidRange();
+        // }
 
         if (secondPart.equals("<end>")) {
             return new SourceRange(startLocation);
