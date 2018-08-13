@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang.clavaparser.decl;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -33,8 +32,10 @@ public class FunctionTemplateDeclParser extends AClangNodeParser<FunctionTemplat
         //
         // line:100:10 Distance2
 
-        RedeclarableTemplateDecl redeclarableTemplateDecl = new RedeclarableTemplateDeclParser(getConverter()).parse(node, parser);
-        return ClavaNodeFactory.functionTemplateDecl(redeclarableTemplateDecl);
+        RedeclarableTemplateDecl redeclarableTemplateDecl = new RedeclarableTemplateDeclParser(getConverter())
+                .parse(node, parser);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.functionTemplateDecl(redeclarableTemplateDecl);
     }
 
 }

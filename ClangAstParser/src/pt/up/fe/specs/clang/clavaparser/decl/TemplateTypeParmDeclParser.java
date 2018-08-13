@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
@@ -67,8 +66,9 @@ public class TemplateTypeParmDeclParser extends AClangNodeParser<TemplateTypePar
 
         Preconditions.checkArgument(children.isEmpty());
 
-        return ClavaNodeFactory.templateTypeParmDecl(kind, isParameterPack, name, declData, node.getInfo(),
-                defaultArgument);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.templateTypeParmDecl(kind, isParameterPack, name, declData, node.getInfo(),
+        // defaultArgument);
     }
 
 }

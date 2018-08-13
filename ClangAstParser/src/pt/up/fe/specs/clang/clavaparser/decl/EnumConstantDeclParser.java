@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -48,7 +47,8 @@ public class EnumConstantDeclParser extends AClangNodeParser<EnumConstantDecl> {
         Type type = parser.apply(ClangGenericParsers::parseClangType, node, getTypesMap());
 
         if (node.getNumChildren() == 0) {
-            return ClavaNodeFactory.enumConstantDecl(value, type, declData, info(node));
+            throw new RuntimeException("deprecated");
+            // return ClavaNodeFactory.enumConstantDecl(value, type, declData, info(node));
         }
 
         // EnumConstant can have an initialization
@@ -58,7 +58,8 @@ public class EnumConstantDeclParser extends AClangNodeParser<EnumConstantDecl> {
 
         Preconditions.checkArgument(initExpr instanceof Expr, "Expected an expression node:\n" + initExpr);
 
-        return ClavaNodeFactory.enumConstantDecl(value, type, declData, info(node), (Expr) initExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.enumConstantDecl(value, type, declData, info(node), (Expr) initExpr);
     }
 
 }

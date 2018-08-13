@@ -237,6 +237,8 @@ public class TypeDataParser {
         DataStore data = parseTypeData(lines, parserData);
 
         data.add(TemplateSpecializationType.IS_TYPE_ALIAS, LineStreamParsers.oneOrZero(lines));
+        parserData.getClavaNodes().queueSetOptionalNode(data, TemplateSpecializationType.ALIASED_TYPE,
+                lines.nextLine());
         data.add(TemplateSpecializationType.TEMPLATE_NAME, lines.nextLine());
         data.add(TemplateSpecializationType.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, parserData));
 

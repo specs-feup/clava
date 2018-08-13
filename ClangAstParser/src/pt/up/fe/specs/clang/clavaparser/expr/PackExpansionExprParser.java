@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.PackExpansionExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -45,7 +44,8 @@ public class PackExpansionExprParser extends AClangNodeParser<PackExpansionExpr>
 
         Expr pattern = toExpr(children.get(0));
 
-        return ClavaNodeFactory.packExpansionExpr(exprData, node.getInfo(), pattern);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.packExpansionExpr(exprData, node.getInfo(), pattern);
     }
 
 }

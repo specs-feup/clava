@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang.clavaparser.decl;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.ClassTemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -34,7 +33,9 @@ public class ClassTemplateDeclParser extends AClangNodeParser<ClassTemplateDecl>
 
         RedeclarableTemplateDecl redeclarableTemplateDecl = new RedeclarableTemplateDeclParser(getConverter())
                 .parse(node, parser);
-        return ClavaNodeFactory.classTemplateDecl(redeclarableTemplateDecl);
+
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.classTemplateDecl(redeclarableTemplateDecl);
     }
 
 }

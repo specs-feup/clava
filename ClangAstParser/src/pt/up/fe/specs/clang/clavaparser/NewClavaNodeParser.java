@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -374,7 +375,8 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                 return null;
             }
         }
-
+        // System.out.println("NODE:" + newNode);
+        // System.out.println("IS TYPE:" + (newNode instanceof Type));
         ClavaNode oldNode = parseChild(clangNode, newNode instanceof Type);
 
         // Put children in a new list, so that they can be detached
@@ -414,6 +416,8 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         }
 
         // Verify if the type of the node is according to the expected type from old parsing
+        // System.out.println("GETTING TYPE FROM " + node.get(ClavaNode.ID));
+        // System.out.println("NODE " + node);
         Type nodeType = getOriginalTypes().get(typable.getType().getId());
         if (oldParsingType != null && nodeType != oldParsingType) {
             if (SpecsSystem.isDebug()) {
@@ -591,6 +595,15 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             if (children.get(1) instanceof NullNode) {
                 children.set(1, LegacyToDataStore.getFactory().nullExpr());
             }
+            return;
+        }
+
+        if (clavaNode instanceof EnumConstantDecl) {
+            Preconditions.checkArgument(children.size() == 1);
+            if (children.get(0) instanceof NullNode) {
+                children.set(0, LegacyToDataStore.getFactory().nullExpr());
+            }
+
             return;
         }
 

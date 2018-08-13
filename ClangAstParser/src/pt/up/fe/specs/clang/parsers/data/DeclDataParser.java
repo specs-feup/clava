@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -46,6 +47,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -278,6 +280,17 @@ public class DeclDataParser {
         DataStore data = parseVarDeclData(lines, dataStore);
 
         data.add(ParmVarDecl.HAS_INHERITED_DEFAULT_ARG, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseTemplateTypeParmDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseTypeDeclData(lines, dataStore);
+
+        data.add(TemplateTypeParmDecl.KIND, LineStreamParsers.enumFromName(TemplateTypeParmKind.class, lines));
+        data.add(TemplateTypeParmDecl.IS_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
+        dataStore.getClavaNodes().queueSetOptionalNode(data, TemplateTypeParmDecl.DEFAULT_ARGUMENT, lines.nextLine());
 
         return data;
     }

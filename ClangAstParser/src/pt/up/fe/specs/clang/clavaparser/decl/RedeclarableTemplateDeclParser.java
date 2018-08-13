@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RedeclarableTemplateDecl;
@@ -73,8 +72,9 @@ public class RedeclarableTemplateDeclParser extends AClangNodeParser<Redeclarabl
         // Preconditions.checkArgument(children.isEmpty(),
         // "Expected children to be empty, its size is " + children.size());
 
-        return ClavaNodeFactory.redeclarableTemplateDecl(declName, specializations, declData, node.getInfo(),
-                templateParameters, templateDecl);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.redeclarableTemplateDecl(declName, specializations, declData, node.getInfo(),
+        // templateParameters, templateDecl);
     }
 
 }

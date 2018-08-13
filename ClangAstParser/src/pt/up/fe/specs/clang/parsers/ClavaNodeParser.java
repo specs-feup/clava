@@ -103,7 +103,6 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
         // Store node
         parsedNodes.put(nodeId, node);
-
         // data.get(ClangParserData.NODES_CURRENTLY_BEING_PARSED).remove(nodeId);
     }
 
