@@ -161,6 +161,7 @@ namespace clava {
         void DumpTypedefTypeData(const TypedefType *T);
         void DumpAdjustedTypeData(const AdjustedType *T);
         void DumpDecayedTypeData(const DecayedType *T);
+        void DumpDecltypeTypeData(const DecltypeType *T);
 
 
             // ATTRS

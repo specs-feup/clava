@@ -103,6 +103,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE: return "TemplateSpecializationType";
         case clava::TypeNode::ADJUSTED_TYPE: return "AdjustedType";
         case clava::TypeNode::DECAYED_TYPE: return "DecayedType";
+        case clava::TypeNode::DECLTYPE_TYPE: return "DecltypeType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

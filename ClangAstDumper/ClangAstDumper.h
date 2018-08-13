@@ -271,6 +271,7 @@ private:
     void VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren);
     void VisitAdjustedTypeChildren(const AdjustedType *T, std::vector<std::string> &visitedChildren);
     void VisitDecayedTypeChildren(const DecayedType *T, std::vector<std::string> &visitedChildren);
+    void VisitDecltypeTypeChildren(const DecltypeType *T, std::vector<std::string> &visitedChildren);
 
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);

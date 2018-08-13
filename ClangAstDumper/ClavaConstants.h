@@ -115,6 +115,7 @@ namespace clava {
         TEMPLATE_SPECIALIZATION_TYPE,
         ADJUSTED_TYPE,
         DECAYED_TYPE,
+        DECLTYPE_TYPE,
 
     };
 

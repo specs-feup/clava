@@ -26,6 +26,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
         {"TypedefType", clava::TypeNode::TYPEDEF_TYPE},
         {"DecayedType", clava::TypeNode::DECAYED_TYPE},
+        {"DecltypeType", clava::TypeNode::DECLTYPE_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -80,6 +81,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitAdjustedTypeChildren(static_cast<const AdjustedType *>(T), visitedChildren); break;
         case clava::TypeNode::DECAYED_TYPE:
             VisitDecayedTypeChildren(static_cast<const DecayedType *>(T), visitedChildren); break;
+        case clava::TypeNode::DECLTYPE_TYPE:
+            VisitDecltypeTypeChildren(static_cast<const DecltypeType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -346,6 +349,13 @@ void ClangAstDumper::VisitDecayedTypeChildren(const DecayedType *T, std::vector<
     VisitTypeTop(T->getDecayedType());
 
     VisitTypeTop(T->getPointeeType());
+};
+
+void ClangAstDumper::VisitDecltypeTypeChildren(const DecltypeType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    VisitStmtTop(T->getUnderlyingExpr());
 };
 
 
