@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
@@ -227,7 +226,7 @@ public class CxxFunction extends AFunction {
 
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
-        CompoundStmt definition = function.getFunctionDefinition().map(stmt -> (CompoundStmt) stmt.copy()).orElse(null);
+        Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
 
         // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
         // .getDescendants();
@@ -264,7 +263,9 @@ public class CxxFunction extends AFunction {
         FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
 
         newFunc.setParameters(function.getParameters());
-        newFunc.setBody(definition);
+        if (definition != null) {
+            newFunc.setBody(definition);
+        }
 
         return newFunc;
     }

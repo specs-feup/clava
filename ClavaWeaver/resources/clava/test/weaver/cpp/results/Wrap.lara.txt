@@ -59,7 +59,7 @@ int wrap_foo(int a);
 
 void wrap_voidFoo(int * a);
 
-int wrap_printf(char const * __restrict__ A, ...);
+int wrap_printf(char const * __restrict A, ...);
 #endif
 
 /**** End File ****/
@@ -83,7 +83,7 @@ void wrap_voidFoo(int * a) {
 }
 
 
-int wrap_printf(char const * __restrict__ A, ...) {
+int wrap_printf(char const * __restrict A, ...) {
    int result;
    // Before call
    result = printf(A);
