@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
+import pt.up.fe.specs.clava.ast.type.DecltypeType;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -270,6 +271,15 @@ public class TypeDataParser {
 
         parserData.getClavaNodes().queueSetNode(data, DecayedType.DECAYED_TYPE, lines.nextLine());
         parserData.getClavaNodes().queueSetNode(data, DecayedType.POINTEE_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseDecltypeTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, DecltypeType.UNDERLYING_EXPR, lines.nextLine());
 
         return data;
     }

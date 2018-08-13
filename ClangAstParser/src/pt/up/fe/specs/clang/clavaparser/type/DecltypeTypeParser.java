@@ -60,7 +60,8 @@ public class DecltypeTypeParser extends AClangNodeParser<DecltypeType> {
         Type underlyingType = children.isEmpty() ? ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo())
                 : toType(children.get(0));
 
-        return ClavaNodeFactory.decltypeType(typeData, node.getInfo(), expr, underlyingType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.decltypeType(typeData, node.getInfo(), expr, underlyingType);
     }
 
 }
