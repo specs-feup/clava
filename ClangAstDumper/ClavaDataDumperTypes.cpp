@@ -324,6 +324,7 @@ void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
     DumpTypeData(T);
 
     clava::dump(clava::getId(T->getDecl(), id));
+
     /*
     TagDecl* tagDecl = T->getDecl()->getDefinition();
     if(tagDecl != nullptr) {
@@ -400,6 +401,7 @@ void clava::ClavaDataDumper::DumpTemplateTypeParmTypeData(const TemplateTypeParm
     clava::dump(T->getIndex());
     clava::dump(T->isParameterPack());
     clava::dump(clava::getId(T->getDecl(), id));
+
 }
 
 void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T) {
@@ -407,6 +409,12 @@ void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSp
     DumpTypeData(T);
 
     clava::dump(T->isTypeAlias());
+    if(T->isTypeAlias()) {
+        clava::dump(clava::getId(T->getAliasedType(), id));
+    } else {
+        clava::dump(clava::getId((const Type*) nullptr, id));
+    }
+
     clava::dump([&T](llvm::raw_string_ostream& stream){T->getTemplateName().dump(stream);});
 
     int numArgs = T->getNumArgs();

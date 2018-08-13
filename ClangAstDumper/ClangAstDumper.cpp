@@ -35,6 +35,8 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 
         clava::dump(TOP_VISIT_START);
         clava::dump(clava::getId(T.getTypePtr(), id));
+
+
 /*
         if(dumpType(T.getTypePtr())) {
             return;
@@ -46,6 +48,11 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
             TypeVisitor::Visit(T.getTypePtr());
         }
 
+        //llvm::errs() << "BRANCH 1 FOR " << T.getTypePtr() << "\n";
+
+        //visitChildren(T.getTypePtr());
+        //dataDumper.dump(T.getTypePtr());
+        //dumpIdToClassMap(T.getTypePtr(), clava::getClassName(T.getTypePtr()));
 
         dumpType(T.getTypePtr());
 
@@ -83,6 +90,8 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(T, id));
+
+    //llvm::errs() << "BRANCH 2 FOR " << T.getAsOpaquePtr() << "\n";
 
     visitChildren(T);
     dataDumper.dump(T);

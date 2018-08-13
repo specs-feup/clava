@@ -12,9 +12,11 @@
 using namespace clang;
 
 void ClangAstDumper::visitChildrenAndData(const Type *T) {
+    //llvm::errs() << "VISITING TYPE CHILDREN: " << T << "\n";
+
     // Visit children
     visitChildren(T);
-
+    //llvm::errs() << "DUMPING TYPE DATA: " << T << "\n";
     // Dump data
     dataDumper.dump(T);
 

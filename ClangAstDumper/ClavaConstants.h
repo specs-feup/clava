@@ -36,7 +36,10 @@ namespace clava {
         TAG_DECL,
         ENUM_DECL,
         RECORD_DECL,
-        CXX_RECORD_DECL
+        CXX_RECORD_DECL,
+        TEMPLATE_DECL,
+        TEMPLATE_TYPE_PARM_DECL,
+        ENUM_CONSTANT_DECL,
     };
 
     /**

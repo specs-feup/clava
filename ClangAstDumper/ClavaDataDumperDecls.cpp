@@ -21,13 +21,15 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"ObjCImplementationDecl", clava::DeclNode::NAMED_DECL},
         {"ParmVarDecl", clava::DeclNode::PARM_VAR_DECL},
         {"TemplateDecl", clava::DeclNode::NAMED_DECL},
-        {"TemplateTypeParmDecl", clava::DeclNode::NAMED_DECL},
+        {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         {"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
         {"EnumDecl", clava::DeclNode::ENUM_DECL},
         {"RecordDecl", clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
-        {"VarDecl", clava::DeclNode::VAR_DECL}
+        {"VarDecl", clava::DeclNode::VAR_DECL},
+        {"EnumConstantDecl", clava::DeclNode::VALUE_DECL},
+        {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
 };
 
 
@@ -80,6 +82,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpVarDeclData(static_cast<const VarDecl *>(D)); break;
         case clava::DeclNode::PARM_VAR_DECL:
             DumpParmVarDeclData(static_cast<const ParmVarDecl *>(D)); break;
+        case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL:
+            DumpTemplateTypeParmDeclData(static_cast<const TemplateTypeParmDecl *>(D)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
 
@@ -414,4 +418,26 @@ void clava::ClavaDataDumper::DumpParmVarDeclData(const ParmVarDecl *D) {
     // Print information about ParmVarDecl
     clava::dump(D->hasInheritedDefaultArg());
     //llvm::errs() << D->hasInheritedDefaultArg() << "\n";
+}
+
+void clava::ClavaDataDumper::DumpTemplateTypeParmDeclData(const TemplateTypeParmDecl *D) {
+
+    // Hierarchy
+    DumpTypeDeclData(D);
+
+    // Kind
+    if (D->wasDeclaredWithTypename()) {
+        clava::dump("TYPENAME");
+    } else {
+        clava::dump("CLASS");
+    }
+
+    clava::dump(D->isParameterPack());
+
+    if(D->hasDefaultArgument()) {
+        clava::dump(clava::getId(D->getDefaultArgument(), id));
+    } else {
+        clava::dump(clava::getId((const Type*) nullptr, id));
+    }
+
 }

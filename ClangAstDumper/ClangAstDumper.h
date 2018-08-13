@@ -220,6 +220,10 @@ private:
     void VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children);
     void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);
 
+    void VisitTemplateDeclChildren(const TemplateDecl *D, std::vector<std::string> &children);
+    void VisitTemplateTypeParmDeclChildren(const TemplateTypeParmDecl *D, std::vector<std::string> &children);
+    void VisitEnumConstantDeclChildren(const EnumConstantDecl *D, std::vector<std::string> &children);
+
 
     // Children visitors for Stmts
     void VisitStmtChildren(const Stmt *S, std::vector<std::string> &children);

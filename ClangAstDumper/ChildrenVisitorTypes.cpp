@@ -36,7 +36,6 @@ void ClangAstDumper::visitChildren(const Type* T) {
     clava::TypeNode typeNode = TYPE_CHILDREN_MAP.count(classname) == 1 ? TYPE_CHILDREN_MAP.find(classname)->second :
                                clava::TypeNode::TYPE;
 
-
     visitChildren(typeNode, T);
 }
 
@@ -100,7 +99,10 @@ void ClangAstDumper::visitChildren(const QualType &T) {
     //addChild(T.getTypePtr(), visitedChildren);
 
     // QualType might associate with any type node, do not add type pointer as child
+
+    //llvm::errs() << "QUAL TYPE: " << T.getAsOpaquePtr() << " -> " << T.getTypePtr() << "\n";
     VisitTypeTop(T.getTypePtr());
+
 
     //VisitTypeTop(T.getTypePtr());
     //visitedChildren.push_back(clava::getId(T.getTypePtr(), id));
@@ -301,6 +303,7 @@ void ClangAstDumper::VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateT
 };
 
 void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpecializationType *T, std::vector<std::string> &visitedChildren){
+
     // Hierarchy
     VisitTypeChildren(T, visitedChildren);
 
@@ -308,6 +311,13 @@ void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpeci
     for(int i=0; i<T->getNumArgs(); i++) {
         VisitTemplateArgChildren(T->getArg(i));
     }
+
+    // Visit type alias
+    if(T->isTypeAlias()) {
+        VisitTypeTop(T->getAliasedType());
+    }
+
+
 };
 
 void ClangAstDumper::VisitTypedefTypeChildren(const TypedefType *T, std::vector<std::string> &visitedChildren){

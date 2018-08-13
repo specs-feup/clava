@@ -23,6 +23,13 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"ParmVarDecl", clava::DeclNode::VAR_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
         {"FieldDecl", clava::DeclNode::FIELD_DECL},
+        {"ClassTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
+        {"FunctionTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
+        {"TypeAliasTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
+        {"VarTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
+        {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
+        {"EnumConstantDecl", clava::DeclNode::ENUM_CONSTANT_DECL},
+        {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
 
 
 
@@ -73,6 +80,12 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VAR_DECL:
             VisitVarDeclChildren(static_cast<const VarDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::TEMPLATE_DECL:
+            VisitTemplateDeclChildren(static_cast<const TemplateDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL:
+            VisitTemplateTypeParmDeclChildren(static_cast<const TemplateTypeParmDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::ENUM_CONSTANT_DECL:
+            VisitEnumConstantDeclChildren(static_cast<const EnumConstantDecl *>(D), visitedChildren); break;
 //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
         default: throw std::invalid_argument("ChildrenVisitorDecls::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
@@ -407,3 +420,40 @@ std::vector<std::string> ClangAstDumper::VisitParmVarDeclChildren(const ParmVarD
     return children;
 }
  */
+
+void ClangAstDumper::VisitTemplateDeclChildren(const TemplateDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
+
+    auto templateParams = D->getTemplateParameters();
+    if(templateParams) {
+        for (auto I = templateParams->begin(), E = templateParams->end(); I != E; ++I)
+            addChild(*I, children);
+            //VisitDeclTop(*I);
+    }
+
+
+    addChild(D->getTemplatedDecl(), children);
+}
+
+
+void ClangAstDumper::VisitTemplateTypeParmDeclChildren(const TemplateTypeParmDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitTypeDeclChildren(D, children);
+
+    //addChild(D->getDefaultArgument(), children);
+    if(D->hasDefaultArgument()) {
+        VisitTypeTop(D->getDefaultArgument());
+    }
+
+}
+
+void ClangAstDumper::VisitEnumConstantDeclChildren(const EnumConstantDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitValueDeclChildren(D, children);
+
+    addChild(D->getInitExpr(), children);
+}
