@@ -223,8 +223,9 @@ public class ClangAstParser {
 
             parsedData = lineStreamParser.getData();
 
-            ClavaLog.metrics("Dumped " + lineStreamParser.getReadLines() + " lines (~"
-                    + SpecsStrings.toBytes(lineStreamParser.getReadChars()) + ")");
+            String numLines = SpecsStrings.toDecimal(lineStreamParser.getReadLines());
+            String size = SpecsStrings.toBytes(lineStreamParser.getReadChars());
+            ClavaLog.metrics("Dumped " + numLines + " lines (~" + size + ")");
 
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
