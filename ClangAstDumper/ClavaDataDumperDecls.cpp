@@ -27,9 +27,12 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"EnumDecl", clava::DeclNode::ENUM_DECL},
         {"RecordDecl", clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplateSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL},
         {"EnumConstantDecl", clava::DeclNode::VALUE_DECL},
         {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
+        {"UsingShadowDecl", clava::DeclNode::NAMED_DECL},
 };
 
 

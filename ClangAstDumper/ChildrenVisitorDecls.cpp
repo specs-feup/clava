@@ -18,6 +18,8 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"EnumDecl", clava::DeclNode::ENUM_DECL},
         {"RecordDecl", clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplateSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL},
         {"ParmVarDecl", clava::DeclNode::VAR_DECL},

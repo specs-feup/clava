@@ -27,13 +27,17 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
         {"StringLiteral", clava::StmtNode::STRING_LITERAL},
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
-        {"UnresolvedLookupExpr", clava::StmtNode::OVERLOAD_EXPR},
+        {"UnresolvedLookupExpr", clava::StmtNode::UNRESOLVED_LOOKUP_EXPR},
         {"UnresolvedMemberExpr", clava::StmtNode::OVERLOAD_EXPR},
         {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
         {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
         {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
         {"BinaryOperator", clava::StmtNode::BINARY_OPERATOR},
         {"CompoundAssignOperator", clava::StmtNode::BINARY_OPERATOR},
+        {"CallExpr", clava::StmtNode::CALL_EXPR},
+        {"CXXMemberCallExpr", clava::StmtNode::CALL_EXPR},
+        {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
+        {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
 
 };
 
@@ -94,6 +98,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpDeclRefExprData(static_cast<const DeclRefExpr *>(S)); break;
         case clava::StmtNode ::OVERLOAD_EXPR:
             DumpOverloadExprData(static_cast<const OverloadExpr *>(S)); break;
+        case clava::StmtNode ::UNRESOLVED_LOOKUP_EXPR:
+            DumpUnresolvedLookupExprData(static_cast<const UnresolvedLookupExpr *>(S)); break;
         case clava::StmtNode ::CXX_CONSTRUCT_EXPR:
             DumpCXXConstructExprData(static_cast<const CXXConstructExpr *>(S)); break;
         case clava::StmtNode ::MEMBER_EXPR:
@@ -102,6 +108,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpMaterializeTemporaryExprData(static_cast<const MaterializeTemporaryExpr *>(S)); break;
         case clava::StmtNode ::BINARY_OPERATOR:
             DumpBinaryOperatorData(static_cast<const BinaryOperator *>(S)); break;
+        case clava::StmtNode ::CALL_EXPR:
+            DumpCallExprData(static_cast<const CallExpr *>(S)); break;
 //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
@@ -299,6 +307,26 @@ void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
     clava::dump(E->getQualifier(), Context);
 }
 
+void clava::ClavaDataDumper::DumpUnresolvedLookupExprData(const UnresolvedLookupExpr *E) {
+    DumpOverloadExprData(E);
+
+    clava::dump(E->requiresADL());
+    if(E->requiresADL()) {
+        clava::dump([&E](llvm::raw_string_ostream& stream){stream << E->getName();});
+    } else {
+        clava::dump("");
+    }
+
+    // Number of decls
+    clava::dump(E->getNumDecls());
+    auto currentDecl = E->decls_begin(), declsEnd = E->decls_end();
+    for (; currentDecl != declsEnd; ++currentDecl) {
+        clava::dump(clava::getId(*currentDecl, id));
+    }
+
+
+}
+
 void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E) {
     DumpExprData(E);
 
@@ -330,6 +358,12 @@ void clava::ClavaDataDumper::DumpBinaryOperatorData(const BinaryOperator *E) {
     DumpExprData(E);
 
     clava::dump(clava::BINARY_OPERATOR__KIND[E->getOpcode()]);
+}
+
+void clava::ClavaDataDumper::DumpCallExprData(const CallExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::getId(E->getCalleeDecl(), id));
 }
 
 //void clava::ClavaDataDumper::DumpCompoundAssignOperatorData(const CompoundAssignOperator *E) {

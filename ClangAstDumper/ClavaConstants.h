@@ -40,6 +40,7 @@ namespace clava {
         TEMPLATE_DECL,
         TEMPLATE_TYPE_PARM_DECL,
         ENUM_CONSTANT_DECL,
+        USING_SHADOW_DECL,
     };
 
     /**
@@ -74,6 +75,7 @@ namespace clava {
         OFFSET_OF_EXPR,
         BINARY_OPERATOR,
         COMPOUND_ASSIGN_OPERATOR,
+        CALL_EXPR,
     };
 
     /**
@@ -116,6 +118,7 @@ namespace clava {
         ADJUSTED_TYPE,
         DECAYED_TYPE,
         DECLTYPE_TYPE,
+        AUTO_TYPE,
 
     };
 

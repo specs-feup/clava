@@ -27,6 +27,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::TEMPLATE_DECL: return "TemplateDecl";
         case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL: return "TemplateTypeParmDecl";
         case clava::DeclNode::ENUM_CONSTANT_DECL: return "EnumConstantDecl";
+        case clava::DeclNode::USING_SHADOW_DECL: return "UsingShadowDecl";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<DeclNode>::type>(declNode));
@@ -66,6 +67,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::OFFSET_OF_EXPR: return "OffsetOfExpr";
         case clava::StmtNode::BINARY_OPERATOR: return "BinaryOperator";
         case clava::StmtNode::COMPOUND_ASSIGN_OPERATOR: return "CompoundAssignOperator";
+        case clava::StmtNode::CALL_EXPR: return "CallExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
@@ -104,6 +106,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::ADJUSTED_TYPE: return "AdjustedType";
         case clava::TypeNode::DECAYED_TYPE: return "DecayedType";
         case clava::TypeNode::DECLTYPE_TYPE: return "DecltypeType";
+        case clava::TypeNode::AUTO_TYPE: return "AutoType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

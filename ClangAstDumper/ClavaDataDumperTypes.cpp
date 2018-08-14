@@ -26,6 +26,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"TypedefType", clava::TypeNode::TYPEDEF_TYPE},
         {"DecayedType", clava::TypeNode::DECAYED_TYPE},
         {"DecltypeType", clava::TypeNode::DECLTYPE_TYPE},
+        {"AutoType", clava::TypeNode::AUTO_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -87,6 +88,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpDecayedTypeData(static_cast<const DecayedType *>(T)); break;
         case clava::TypeNode::DECLTYPE_TYPE:
             DumpDecltypeTypeData(static_cast<const DecltypeType *>(T)); break;
+        case clava::TypeNode::AUTO_TYPE:
+            DumpAutoTypeData(static_cast<const AutoType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -460,3 +463,12 @@ void clava::ClavaDataDumper::DumpDecltypeTypeData(const DecltypeType *T) {
 
     clava::dump(clava::getId(T->getUnderlyingExpr(), id));
 }
+
+void clava::ClavaDataDumper::DumpAutoTypeData(const AutoType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+
+    clava::dump(clava::getId(T->getDeducedType(), id));
+}
+
