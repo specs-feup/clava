@@ -150,6 +150,26 @@ Gprofer.prototype.getHotspotNames = function() {
 	return this._hotSpots;
 };
 
+Gprofer.prototype.writeProfile = function(path) {
+	
+	if(path === undefined) {
+		path = Io.getPath("./gprofer.json");
+	}
+	
+	Io.writeJson(path, {data: this._data, hotspots: this._hotSpots});
+}
+
+Gprofer.prototype.readProfile = function(path) {
+
+	if(path === undefined) {
+		path = Io.getPath("./gprofer.json");
+	}
+	
+	var obj = Io.readJson(path);
+	this._data = obj.data;
+	this._hotSpots = obj.hotspots;
+}
+
 /**
  * 
  * May return undefined if the desired function is a system or library function and not available in the source code.
