@@ -442,7 +442,7 @@ public abstract class Type extends ClavaNode {
         if (!hasSugar()) {
             return this;
         }
-
+        // System.out.println("SUGARED NODE: " + this);
         return get(UNQUALIFIED_DESUGARED_TYPE);
         // return desugarImpl();
     }

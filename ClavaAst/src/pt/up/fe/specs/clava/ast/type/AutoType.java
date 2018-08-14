@@ -17,11 +17,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class AutoType extends Type {
+
+    public AutoType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
 
     public AutoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
         this(typeData, info, Arrays.asList(deducedType));
