@@ -179,19 +179,33 @@ Gprofer.prototype.getHotspot = function(rank) {
 	var _rank = defaultValue(rank, 0);
 	checkNumber(_rank, "Gprofer.getHotspot(rank)");
 	
-	var name = this._hotSpots[_rank];
+	var signature = this._hotSpots[_rank];
+	
+	var f = this._getHotspot(signature);
+	
+	if(f === undefined) {
+		println('Could not find hotspot with rank ' + rank + ' and signature ' + signature + '. It may be a system function.\n');
+	}
+	
+	return f;
+};
+
+/**
+ * Internal method that uses the signature to identify a function.
+ * */
+Gprofer.prototype._getHotspot = function(signature) {
 	
 	var f = undefined;
 	if(Clava.isCxx()) {
 		
-		debug('finding Cxx function with signature ' + name);
-		f = call GproferGetCxxFunction(name);
+		debug('finding Cxx function with signature ' + signature);
+		f = call GproferGetCxxFunction(signature);
 	} else {
 		
-		debug('finding C function with name ' + name);
-		f = call GproferGetCFunction(name);
+		debug('finding C function with signature ' + signature);
+		f = call GproferGetCFunction(signature);
 	}
-	
+		
 	return f.$func;
 };
 
@@ -216,8 +230,81 @@ Gprofer.prototype.getSelfSeconds = function($function) {
 	return this._get('selfSeconds', $function);
 };
 
+Gprofer.prototype.getSelfMsCall = function($function) {
+
+	checkJoinPointType($function, 'function', 'Gprofer.getSelfMsCall($function)');
+	
+	return this._get('selfMsCall', $function);
+};
+
+Gprofer.prototype.getTotalMsCall = function($function) {
+
+	checkJoinPointType($function, 'function', 'Gprofer.getTotalMsCall($function)');
+	
+	return this._get('totalMsCall', $function);
+};
+
 Gprofer.prototype._get = function(type, $function) {
 	
 	var name = Gprofer._buildName($function);	
 	return this._data[name][type];
+};
+
+Gprofer.prototype.print = function($function) {
+
+	checkJoinPointType($function, 'function', 'Gprofer.print($function)');
+	
+	var perc = this.getPercentage($function);
+	var calls = this.getCalls($function);
+	var self = this.getSelfSeconds($function);
+	var selfCall = this.getSelfMsCall($function);
+	var totalCall = this.getTotalMsCall($function);
+	
+	println($function.signature);
+	
+	if(perc !== undefined) {
+		println('\tPercentage: ' + perc + '%');
+	}
+
+	if(calls !== undefined) {
+		println('\tCalls: ' + calls);
+	}
+
+	if(self !== undefined) {
+		println('\tSelf seconds: ' + self + 's');
+	}
+	
+	if(selfCall !== undefined) {
+		println('\tSelf ms/call: ' + selfCall + 'ms');
+	}
+	
+	if(totalCall !== undefined) {
+		println('\tTotal ms/call: ' + totalCall + 'ms');
+	}
+};
+
+Gprofer.prototype.removeSystemFunctions = function() {
+
+	var toRemove = [];
+
+	for(var sigIndex in this._hotSpots) {
+		
+		var sig = this._hotSpots[sigIndex];
+		var $hs = this._getHotspot(sig);
+		
+		if($hs === undefined) {
+			
+			// mark to remove from array
+			toRemove.push(sigIndex);
+			
+			// remove from map
+			delete this._data[sig];
+		}
+	}
+	
+	// remove from array
+	for(var sigIndex of toRemove) {
+		this._hotSpots.splice(sigIndex, 1);
+	}
+	
 };
