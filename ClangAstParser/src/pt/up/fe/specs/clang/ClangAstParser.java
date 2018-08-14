@@ -46,6 +46,7 @@ import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.utils.ZipResourceManager;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
@@ -55,6 +56,7 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.FileResourceManager;
@@ -220,6 +222,10 @@ public class ClangAstParser {
                     inputStream -> processStdErr(config, inputStream, lineStreamParser));
 
             parsedData = lineStreamParser.getData();
+
+            ClavaLog.metrics("Dumped " + lineStreamParser.getReadLines() + " lines (~"
+                    + SpecsStrings.toBytes(lineStreamParser.getReadChars()) + ")");
+
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
