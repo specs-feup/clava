@@ -695,8 +695,9 @@ public class FunctionDecl extends DeclaratorDecl {
 
         builder.append("(");
         builder.append(getParameters().stream()
-                .map(param -> param.getType().getCode())
-                .collect(Collectors.joining(",")));
+                // .map(param -> param.getType().getCode())
+                .map(param -> param.get(ValueDecl.TYPE).desugarAll().getCode())
+                .collect(Collectors.joining(", ")));
         builder.append(")");
 
         return builder.toString();
