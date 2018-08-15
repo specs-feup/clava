@@ -314,12 +314,14 @@ void clava::ClavaDataDumper::DumpUnresolvedLookupExprData(const UnresolvedLookup
     DumpOverloadExprData(E);
 
     clava::dump(E->requiresADL());
+    clava::dump([&E](llvm::raw_string_ostream& stream){stream << E->getName();});
+/*
     if(E->requiresADL()) {
         clava::dump([&E](llvm::raw_string_ostream& stream){stream << E->getName();});
     } else {
         clava::dump("");
     }
-
+*/
     // Number of decls
     clava::dump(E->getNumDecls());
     auto currentDecl = E->decls_begin(), declsEnd = E->decls_end();
