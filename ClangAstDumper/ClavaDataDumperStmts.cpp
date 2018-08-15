@@ -35,7 +35,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"BinaryOperator", clava::StmtNode::BINARY_OPERATOR},
         {"CompoundAssignOperator", clava::StmtNode::BINARY_OPERATOR},
         {"CallExpr", clava::StmtNode::CALL_EXPR},
-        {"CXXMemberCallExpr", clava::StmtNode::CALL_EXPR},
+        {"CXXMemberCallExpr", clava::StmtNode::CXX_MEMBER_CALL_EXPR},
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
 
@@ -110,6 +110,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpBinaryOperatorData(static_cast<const BinaryOperator *>(S)); break;
         case clava::StmtNode ::CALL_EXPR:
             DumpCallExprData(static_cast<const CallExpr *>(S)); break;
+        case clava::StmtNode ::CXX_MEMBER_CALL_EXPR:
+            DumpCXXMemberCallExprData(static_cast<const CXXMemberCallExpr *>(S)); break;
 //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
@@ -291,11 +293,12 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
         clava::dump(0);
     }
 
+    /*
     std::string declNameStr;
     llvm::raw_string_ostream declNameStream(declNameStr);
     declNameStream << E->getDecl()->getDeclName();
     clava::dump(declNameStream.str());
-
+    */
 
     clava::dump(clava::getId(E->getDecl(), id));
 }
@@ -363,7 +366,13 @@ void clava::ClavaDataDumper::DumpBinaryOperatorData(const BinaryOperator *E) {
 void clava::ClavaDataDumper::DumpCallExprData(const CallExpr *E) {
     DumpExprData(E);
 
-    clava::dump(clava::getId(E->getCalleeDecl(), id));
+    clava::dump(clava::getId(E->getDirectCallee(), id));
+}
+
+void clava::ClavaDataDumper::DumpCXXMemberCallExprData(const CXXMemberCallExpr *E) {
+    DumpCallExprData(E);
+
+    clava::dump(clava::getId(E->getMethodDecl(), id));
 }
 
 //void clava::ClavaDataDumper::DumpCompoundAssignOperatorData(const CompoundAssignOperator *E) {

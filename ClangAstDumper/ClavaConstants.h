@@ -76,6 +76,7 @@ namespace clava {
         BINARY_OPERATOR,
         COMPOUND_ASSIGN_OPERATOR,
         CALL_EXPR,
+        CXX_MEMBER_CALL_EXPR,
     };
 
     /**
@@ -119,6 +120,8 @@ namespace clava {
         DECAYED_TYPE,
         DECLTYPE_TYPE,
         AUTO_TYPE,
+        PACK_EXPANSION_TYPE,
+        TYPE_OF_EXPR_TYPE,
 
     };
 

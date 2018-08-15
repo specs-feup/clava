@@ -18,7 +18,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
         {"UnresolvedLookupExpr", clava::StmtNode::UNRESOLVED_LOOKUP_EXPR},
         {"CallExpr", clava::StmtNode::CALL_EXPR},
-        {"CXXMemberCallExpr", clava::StmtNode::CALL_EXPR},
+        {"CXXMemberCallExpr", clava::StmtNode::CXX_MEMBER_CALL_EXPR},
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
 };
@@ -74,6 +74,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitUnresolvedLookupExprChildren(static_cast<const UnresolvedLookupExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CALL_EXPR:
             VisitCallExprChildren(static_cast<const CallExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::CXX_MEMBER_CALL_EXPR:
+            VisitCXXMemberCallExprChildren(static_cast<const CXXMemberCallExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -156,6 +158,7 @@ void ClangAstDumper::VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<
     // Hierarchy
     VisitExprChildren(E, children);
 
+    VisitDeclTop(E->getDecl());
     // Visit decl
     //VisitDeclTop(E->getDecl());
     //children.push_back(clava::getId(E->getDecl(), id));
@@ -197,6 +200,14 @@ void ClangAstDumper::VisitCallExprChildren(const CallExpr *E, std::vector<std::s
     // Hierarchy
     VisitExprChildren(E, children);
 
-    VisitDeclTop(E->getCalleeDecl());
+    VisitDeclTop(E->getDirectCallee());
+
+}
+
+void ClangAstDumper::VisitCXXMemberCallExprChildren(const CXXMemberCallExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitCallExprChildren(E, children);
+
+    VisitDeclTop(E->getMethodDecl());
 
 }

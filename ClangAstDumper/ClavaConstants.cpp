@@ -68,6 +68,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::BINARY_OPERATOR: return "BinaryOperator";
         case clava::StmtNode::COMPOUND_ASSIGN_OPERATOR: return "CompoundAssignOperator";
         case clava::StmtNode::CALL_EXPR: return "CallExpr";
+        case clava::StmtNode::CXX_MEMBER_CALL_EXPR: return "CXXMemberCallExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
@@ -107,6 +108,8 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::DECAYED_TYPE: return "DecayedType";
         case clava::TypeNode::DECLTYPE_TYPE: return "DecltypeType";
         case clava::TypeNode::AUTO_TYPE: return "AutoType";
+        case clava::TypeNode::PACK_EXPANSION_TYPE: return "PackExpansionType";
+        case clava::TypeNode::TYPE_OF_EXPR_TYPE: return "TypeOfExprType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

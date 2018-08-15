@@ -238,6 +238,7 @@ private:
     void VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children);
     void VisitUnresolvedLookupExprChildren(const UnresolvedLookupExpr *E, std::vector<std::string> &children);
     void VisitCallExprChildren(const CallExpr *E, std::vector<std::string> &children);
+    void VisitCXXMemberCallExprChildren(const CXXMemberCallExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);
@@ -275,6 +276,8 @@ private:
     void VisitDecayedTypeChildren(const DecayedType *T, std::vector<std::string> &visitedChildren);
     void VisitDecltypeTypeChildren(const DecltypeType *T, std::vector<std::string> &visitedChildren);
     void VisitAutoTypeChildren(const AutoType *T, std::vector<std::string> &visitedChildren);
+    void VisitPackExpansionTypeChildren(const PackExpansionType *T, std::vector<std::string> &visitedChildren);
+    void VisitTypeOfExprTypeChildren(const TypeOfExprType *T, std::vector<std::string> &visitedChildren);
 
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);

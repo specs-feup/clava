@@ -137,6 +137,7 @@ namespace clava {
         void DumpMaterializeTemporaryExprData(const MaterializeTemporaryExpr *E);
         void DumpBinaryOperatorData(const BinaryOperator *E);
         void DumpCallExprData(const CallExpr *E);
+        void DumpCXXMemberCallExprData(const CXXMemberCallExpr *E);
 
 
 
@@ -165,6 +166,9 @@ namespace clava {
         void DumpDecayedTypeData(const DecayedType *T);
         void DumpDecltypeTypeData(const DecltypeType *T);
         void DumpAutoTypeData(const AutoType *T);
+        void DumpReferenceTypeData(const ReferenceType *T);
+        void DumpPackExpansionTypeData(const PackExpansionType *T);
+        void DumpTypeOfExprTypeData(const TypeOfExprType *T);
 
 
             // ATTRS

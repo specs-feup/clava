@@ -18,6 +18,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"EnumType", clava::TypeNode::TAG_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
+        //{"ReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"LValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"RValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"InjectedClassNameType", clava::TypeNode::INJECTED_CLASS_NAME_TYPE},
@@ -28,6 +29,8 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"DecayedType", clava::TypeNode::DECAYED_TYPE},
         {"DecltypeType", clava::TypeNode::DECLTYPE_TYPE},
         {"AutoType", clava::TypeNode::AUTO_TYPE},
+        {"PackExpansionType", clava::TypeNode::PACK_EXPANSION_TYPE},
+        {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -70,8 +73,6 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitInjectedClassNameTypeChildren(static_cast<const InjectedClassNameType *>(T), visitedChildren); break;
         case clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE:
             VisitTemplateTypeParmTypeChildren(static_cast<const TemplateTypeParmType *>(T), visitedChildren); break;
-        //case clava::TypeNode::TYPEDEF_TYPE:
-        //    VisitTypedefTypeChildren(static_cast<const TypedefType *>(T), visitedChildren); break;
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE:
             VisitSubstTemplateTypeParmTypeChildren(static_cast<const SubstTemplateTypeParmType *>(T), visitedChildren); break;
         case clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE:
@@ -86,6 +87,10 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitDecltypeTypeChildren(static_cast<const DecltypeType *>(T), visitedChildren); break;
         case clava::TypeNode::AUTO_TYPE:
             VisitAutoTypeChildren(static_cast<const AutoType *>(T), visitedChildren); break;
+        case clava::TypeNode::PACK_EXPANSION_TYPE:
+            VisitPackExpansionTypeChildren(static_cast<const PackExpansionType *>(T), visitedChildren); break;
+        case clava::TypeNode::TYPE_OF_EXPR_TYPE:
+            VisitTypeOfExprTypeChildren(static_cast<const TypeOfExprType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -330,7 +335,9 @@ void ClangAstDumper::VisitTypedefTypeChildren(const TypedefType *T, std::vector<
     // Hierarchy
     VisitTypeChildren(T, visitedChildren);
 
+
     VisitDeclTop(T->getDecl());
+    VisitTypeTop(T->getPointeeType());
 };
 
 
@@ -366,6 +373,27 @@ void ClangAstDumper::VisitAutoTypeChildren(const AutoType *T, std::vector<std::s
     VisitTypeChildren(T, visitedChildren);
 
     VisitTypeTop(T->getDeducedType());
+};
+
+
+
+void ClangAstDumper::VisitPackExpansionTypeChildren(const PackExpansionType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    if(!T->isSugared()) {
+        VisitTypeTop(T->getPattern());
+    }
+
+};
+
+void ClangAstDumper::VisitTypeOfExprTypeChildren(const TypeOfExprType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+
+    VisitStmtTop(T->getUnderlyingExpr());
+
 };
 
 

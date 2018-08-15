@@ -27,6 +27,9 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"DecayedType", clava::TypeNode::DECAYED_TYPE},
         {"DecltypeType", clava::TypeNode::DECLTYPE_TYPE},
         {"AutoType", clava::TypeNode::AUTO_TYPE},
+        {"LValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
+        {"RValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
+        {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -90,6 +93,12 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpDecltypeTypeData(static_cast<const DecltypeType *>(T)); break;
         case clava::TypeNode::AUTO_TYPE:
             DumpAutoTypeData(static_cast<const AutoType *>(T)); break;
+        case clava::TypeNode::REFERENCE_TYPE:
+            DumpReferenceTypeData(static_cast<const ReferenceType *>(T)); break;
+        case clava::TypeNode::PACK_EXPANSION_TYPE:
+            DumpPackExpansionTypeData(static_cast<const PackExpansionType *>(T)); break;
+        case clava::TypeNode::TYPE_OF_EXPR_TYPE:
+            DumpTypeOfExprTypeData(static_cast<const TypeOfExprType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -470,5 +479,41 @@ void clava::ClavaDataDumper::DumpAutoTypeData(const AutoType *T) {
 
 
     clava::dump(clava::getId(T->getDeducedType(), id));
+}
+
+
+void clava::ClavaDataDumper::DumpReferenceTypeData(const ReferenceType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+
+    clava::dump(clava::getId(T->getPointeeType(), id));
+}
+
+
+void clava::ClavaDataDumper::DumpPackExpansionTypeData(const PackExpansionType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    if (T->getNumExpansions().hasValue()) {
+        clava::dump(T->getNumExpansions().getValue());
+    } else {
+        clava::dump(0);
+    }
+
+    if (!T->isSugared()) {
+        clava::dump(clava::getId(T->getPattern(), id));
+    } else {
+        clava::dump(clava::getId((const Type*) nullptr, id));
+    }
+
+}
+
+
+void clava::ClavaDataDumper::DumpTypeOfExprTypeData(const TypeOfExprType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getUnderlyingExpr(), id));
 }
 
