@@ -434,7 +434,8 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
-     * TODO: Should not return 'this' if it does not have sugar?
+     * Single-step desugar. Returns the type itself if it does not have sugar.
+     * 
      * 
      * @return
      */
@@ -447,8 +448,21 @@ public abstract class Type extends ClavaNode {
         // return desugarImpl();
     }
 
+    /**
+     * Completely desugars the type.
+     * 
+     * @return
+     */
+    public final Type desugarAll() {
+        if (!hasSugar()) {
+            return this;
+        }
+
+        return get(UNQUALIFIED_DESUGARED_TYPE).desugar();
+    }
+
     protected Type desugarImpl() {
-        throw new RuntimeException("deprecated, use UNQUALIFIED_DESUGARED_TYPE now");
+        throw new RuntimeException("deprecated, use UNQUALIFIED_DESUGARED_TYPE");
         // return get(UNQUALIFIED_DESUGARED_TYPE);
         // return getChild(Type.class, 0);
 
