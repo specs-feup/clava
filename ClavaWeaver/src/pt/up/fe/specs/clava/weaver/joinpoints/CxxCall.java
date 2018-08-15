@@ -310,9 +310,10 @@ public class CxxCall extends ACall {
 
     @Override
     public AFunction getFunctionImpl() {
-        return call.getFunctionDecl()
-                .map(fDecl -> CxxJoinpoints.create(fDecl, this, AFunction.class))
-                .orElse(null);
+        return CxxJoinpoints.create(call.getFunctionDecl(), this, AFunction.class);
+        // return call.getFunctionDecl()
+        // .map(fDecl -> CxxJoinpoints.create(fDecl, this, AFunction.class))
+        // .orElse(null);
         // return CxxJoinpoints.create(call.getFunction(), this, AFunction.class);
     }
 
