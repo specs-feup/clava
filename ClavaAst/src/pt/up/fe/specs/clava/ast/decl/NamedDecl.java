@@ -253,15 +253,25 @@ public abstract class NamedDecl extends Decl {
         // String currentString = qualifiedName.substring(0, qualifiedName.length() - declSuffix.length());
         String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
 
+        // Remove template parameters
+        int templateParamStart = currentString.indexOf('<');
+        if (templateParamStart != -1) {
+            // int templateParamEnd = currentString.lastIndexOf('>');
+            currentString = currentString.substring(0, templateParamStart);
+        }
+
+        String namespaceAndRecord = currentString;
+
         // TODO: Replace with RECORD, after CXXRecordDecl is implemented
         // CXXRecordDecl record = getRecordDecl();
         // String recordName = record.getDeclName();
         // String recordName = getRecordName();
-        SpecsCheck.checkArgument(currentString.endsWith(recordName),
-                () -> "Expected current string '" + currentString + "' to end with '" + recordName + "'");
+
+        SpecsCheck.checkArgument(namespaceAndRecord.endsWith(recordName),
+                () -> "Expected current string '" + namespaceAndRecord + "' to end with '" + recordName + "'");
 
         // Remove record name
-        String namespace = currentString.substring(0, currentString.length() - recordName.length());
+        String namespace = namespaceAndRecord.substring(0, namespaceAndRecord.length() - recordName.length());
 
         // Remove ::, if present
         if (namespace.endsWith("::")) {

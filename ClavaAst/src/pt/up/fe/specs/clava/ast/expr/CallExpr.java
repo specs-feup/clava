@@ -25,7 +25,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
@@ -42,7 +41,7 @@ public class CallExpr extends Expr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Decl> CALLEE_DECL = KeyFactory.object("calleeDecl", Decl.class);
+    public final static DataKey<Optional<FunctionDecl>> DIRECT_CALLEE = KeyFactory.optional("directCallee");
 
     /// DATAKEYS END
 
@@ -85,6 +84,9 @@ public class CallExpr extends Expr {
     }
 
     protected String getCalleeCode() {
+        // System.out.println("CALLEE: " + getCallee());
+        // System.out.println("DIRECT_CALL: " + get(DIRECT_CALLEE));
+
         return getCallee().getCode();
     }
 
@@ -160,21 +162,29 @@ public class CallExpr extends Expr {
         // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
         // return Optional.empty();
         // }
-        FunctionDecl functionDecl = getFunctionDecl();
+        Optional<FunctionDecl> functionDecl = getFunctionDecl();
+
+        if (!functionDecl.isPresent()) {
+            return Optional.empty();
+        }
 
         // If no body, return immediately
-        if (!functionDecl.hasBody()) {
-            return Optional.of(functionDecl);
+        if (!functionDecl.get().hasBody()) {
+            // return Optional.of(functionDecl);
+            return functionDecl;
         }
 
         // Search for the declaration
-        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.getDeclName(),
-                functionDecl.getFunctionType()));
+        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
+                functionDecl.get().getFunctionType()));
     }
 
-    public FunctionDecl getFunctionDecl() {
-
-        return (FunctionDecl) get(CALLEE_DECL);
+    public Optional<FunctionDecl> getFunctionDecl() {
+        // TODO: Replace with get(DIRECT_CALLEE) when refactoring to new format is complete
+        return get(DIRECT_CALLEE);
+        // Decl calleeDecl = get(DIRECT_CALLEE);
+        // return calleeDecl instanceof FunctionDecl ? Optional.of((FunctionDecl) calleeDecl) : Optional.empty();
+        // return (FunctionDecl) get(CALLEE_DECL);
 
         // DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
         //
@@ -236,15 +246,20 @@ public class CallExpr extends Expr {
      * @return the definition of this function call, if present
      */
     public Optional<FunctionDecl> getDefinition() {
-        FunctionDecl functionDecl = getFunctionDecl();
+        Optional<FunctionDecl> functionDecl = getFunctionDecl();
+
+        if (!functionDecl.isPresent()) {
+            return Optional.empty();
+        }
 
         // If has body, return immediately
-        if (functionDecl.hasBody()) {
-            return Optional.of(functionDecl);
+        if (functionDecl.get().hasBody()) {
+            // return Optional.of(functionDecl);
+            return functionDecl;
         }
 
         // Search for the definition
-        return getApp().getFunctionDefinition(functionDecl.getDeclName(), functionDecl.getFunctionType());
+        return getApp().getFunctionDefinition(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
     }
 
     /**

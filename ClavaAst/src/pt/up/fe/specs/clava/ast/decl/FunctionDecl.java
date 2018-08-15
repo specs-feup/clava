@@ -34,7 +34,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -116,6 +115,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     // private final FunctionDeclData functionDeclData;
 
+    // TODO: Remove
     private Lazy<FunctionDecl> declaration;
     private Lazy<FunctionDecl> definition;
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
@@ -145,7 +145,7 @@ public class FunctionDecl extends DeclaratorDecl {
         this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
 
         // SpecsLogs.debug("FUNCTION DECL CHILDREN:" + children);
-
+        // System.out.println("CREATING FUNCTION DECL WITH ID " + get(ID) + ", hash " + hashCode());
     }
 
     /**
@@ -297,6 +297,7 @@ public class FunctionDecl extends DeclaratorDecl {
         
         code.append(returnType).append(" ").append(getTypelessCode()).append(getCodeBody());
         */
+
         code.append(getCodeBody());
 
         return code.toString();
@@ -497,53 +498,59 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     public void setName(String name) {
-        // String functionName = getDeclName();
-
-        // Determine scope of change. If static, only change calls inside the file
-        boolean isStatic = get(STORAGE_CLASS) == StorageClass.STATIC;
-        ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
-
-        Optional<FunctionDecl> decl = getDeclaration();
-        Optional<FunctionDecl> def = getDefinitionDeclaration();
-
-        // Find all calls of this function
-        if (root != null) {
-            for (CallExpr callExpr : root.getDescendants(CallExpr.class)) {
-                testAndSetCallName(callExpr, name);
-            }
-
-            /*
-            root.getDescendantsStream()
-                    .filter(node -> node instanceof CallExpr && !(node instanceof CXXMemberCallExpr)
-                            && !(node instanceof CXXOperatorCallExpr))
-                    .map(node -> CallExpr.class.cast(node))
-                    .filter(node -> functionName.equals(node.getCalleeName()))
-                    .forEach(callExpr -> callExpr.setCallName(name));
-                    */
-        }
-
-        // Change name of itself, both definition and declaration
-        decl.ifPresent(node -> node.setDeclName(name));
-        def.ifPresent(node -> node.setDeclName(name));
-
-        // setDeclName(name);
-        // if (name.equals("declAndDefNew")) {
-        // System.out.println("BEFORE");
-        // System.out.println("DECL:" + getDeclaration());
-        // System.out.println("DEF:" + getFunctionDefinition());
-        // }
-
-        // if (name.equals("declAndDefNew")) {
-        // System.out.println("AFTER");
-        // System.out.println("DECL:" + getDeclaration());
-        // System.out.println("DEF:" + getFunctionDefinition());
-        // }
-        // Change name of declaration
-        // getDeclaration()
-        // .filter(functionDecl -> functionDecl != this)
-        // .ifPresent(functionDecl -> functionDecl.setDeclName(name));
-
+        // System.out.println("SETTING NAME OF FUNCTIONDECL " + get(ID));
+        // System.out.println("PREVIOUS NAME:" + get(DECL_NAME));
+        set(DECL_NAME, name);
+        // System.out.println("NEW NAME:" + get(DECL_NAME));
+        // System.out.println("THIS HASH: " + hashCode());
     }
+    //
+    // public String getName() {
+    // return get(DECL_NAME);
+    // }
+
+    // TODO: Replace with set(DECL_NAME) when refactoring to new format is finished
+    // public void setName(String name) {
+    // // String functionName = getDeclName();
+    //
+    // // Determine scope of change. If static, only change calls inside the file
+    // boolean isStatic = get(STORAGE_CLASS) == StorageClass.STATIC;
+    // ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
+    //
+    // Optional<FunctionDecl> decl = getDeclaration();
+    // Optional<FunctionDecl> def = getDefinitionDeclaration();
+    //
+    // // Find all calls of this function
+    // // System.out.println("FUNCTION DECL " + get(ID) + ", setting name to " + name);
+    // if (root != null) {
+    // for (CallExpr callExpr : root.getDescendants(CallExpr.class)) {
+    // testAndSetCallName(callExpr, name);
+    // }
+    //
+    // }
+    //
+    // // Change name of itself, both definition and declaration
+    // decl.ifPresent(node -> node.setDeclName(name));
+    // def.ifPresent(node -> node.setDeclName(name));
+    //
+    // // setDeclName(name);
+    // // if (name.equals("declAndDefNew")) {
+    // // System.out.println("BEFORE");
+    // // System.out.println("DECL:" + getDeclaration());
+    // // System.out.println("DEF:" + getFunctionDefinition());
+    // // }
+    //
+    // // if (name.equals("declAndDefNew")) {
+    // // System.out.println("AFTER");
+    // // System.out.println("DECL:" + getDeclaration());
+    // // System.out.println("DEF:" + getFunctionDefinition());
+    // // }
+    // // Change name of declaration
+    // // getDeclaration()
+    // // .filter(functionDecl -> functionDecl != this)
+    // // .ifPresent(functionDecl -> functionDecl.setDeclName(name));
+    //
+    // }
 
     /**
      * Sets the name of call if the corresponding definition, declaration or both refer to the function represented by

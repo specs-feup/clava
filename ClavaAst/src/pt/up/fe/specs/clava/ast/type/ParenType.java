@@ -13,36 +13,39 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class ParenType extends Type {
 
-    public ParenType(TypeData typeData, ClavaNodeInfo info, Type innerType) {
-        this(typeData, info, Arrays.asList(innerType));
+    public ParenType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private ParenType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ParenType(getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // public ParenType(TypeData typeData, ClavaNodeInfo info, Type innerType) {
+    // this(typeData, info, Arrays.asList(innerType));
+    // }
+    //
+    // private ParenType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ParenType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     public Type getInnerType() {
-        return getChild(Type.class, 0);
+        return get(UNQUALIFIED_DESUGARED_TYPE);
+        // return getChild(Type.class, 0);
     }
-
-    public boolean isSugared() {
-        return true;
-    }
+    //
+    // public boolean isSugared() {
+    // return true;
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {

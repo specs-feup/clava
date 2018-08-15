@@ -20,9 +20,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.util.parsing.StringCodec;
 
@@ -49,19 +46,18 @@ public class BuiltinType extends Type {
     }
 
     /**
-     * @deprecated for legacy support
      * @param data
      * @param info
      * @param children
      */
-    @Deprecated
-    protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
-
-        // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
-        // Type.put() creates a copy
-        getData().put(KIND_LITERAL, data.getBareType());
-    }
+    // @Deprecated
+    // protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
+    //
+    // // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
+    // // Type.put() creates a copy
+    // getData().put(KIND_LITERAL, data.getBareType());
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {

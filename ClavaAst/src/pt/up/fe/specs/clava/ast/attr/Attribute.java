@@ -20,9 +20,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public class Attribute extends ClavaNode {
 
@@ -62,18 +60,18 @@ public class Attribute extends ClavaNode {
     // getData().set(KIND, kind);
     // }
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public AttrData getAttrData() {
-        return DataStoreToLegacy.getAttribute(getData());
-        // if (hasDataI()) {
-        // throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
-        // }
-        // return attrData;
-    }
+    // /**
+    // * @deprecated
+    // * @return
+    // */
+    // @Deprecated
+    // public AttrData getAttrData() {
+    // return DataStoreToLegacy.getAttribute(getData());
+    // // if (hasDataI()) {
+    // // throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
+    // // }
+    // // return attrData;
+    // }
 
     public AttributeKind getKind() {
         return get(Attribute.KIND);

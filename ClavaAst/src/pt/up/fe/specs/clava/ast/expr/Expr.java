@@ -57,12 +57,12 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     public Expr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // Type is required
-        // UPDATE: Removed check to enable to possibility to set the Type after the node is created (e.g., delayed node
-        // setting)
-        // Preconditions.checkArgument(data.hasValue(TYPE), "Expected data of Expr node to have a defined TYPE");
     }
+
+    // Type is required
+    // UPDATE: Removed check to enable to possibility to set the Type after the node is created (e.g., delayed node
+    // setting)
+    // Preconditions.checkArgument(data.hasValue(TYPE), "Expected data of Expr node to have a defined TYPE");
 
     /**
      * For legacy.

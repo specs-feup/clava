@@ -14,13 +14,13 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * (From Clang documentation)
@@ -38,32 +38,46 @@ import pt.up.fe.specs.util.SpecsCollections;
  */
 public class PackExpansionType extends Type {
 
-    private final int numExpansions;
+    /// DATAKEYS BEGIN
 
-    public PackExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
-            Type pattern) {
+    public final static DataKey<Integer> NUM_EXPANSIONS = KeyFactory.integer("numExpansions");
 
-        this(numExpansions, data, info, SpecsCollections.ofNullable(pattern));
+    // public final static DataKey<Optional<Type>> PATTERN = KeyFactory.optional("pattern");
+    public final static DataKey<Type> PATTERN = KeyFactory.object("pattern", Type.class);
+
+    /// DATAKEYS END
+
+    public PackExpansionType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private PackExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(data, info, children);
+    // private final int numExpansions;
 
-        this.numExpansions = numExpansions;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new PackExpansionType(numExpansions, getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // public PackExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
+    // Type pattern) {
+    //
+    // this(numExpansions, data, info, SpecsCollections.ofNullable(pattern));
+    // }
+    //
+    // private PackExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(data, info, children);
+    //
+    // this.numExpansions = numExpansions;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new PackExpansionType(numExpansions, getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     public Optional<Type> getPattern() {
-        if (!hasChildren()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(getChild(Type.class, 0));
+        return Optional.of(get(PATTERN));
+        // if (!hasChildren()) {
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of(getChild(Type.class, 0));
     }
 
     @Override

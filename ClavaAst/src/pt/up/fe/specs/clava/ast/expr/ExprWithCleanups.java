@@ -13,13 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 
 /**
@@ -35,20 +33,24 @@ import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
  */
 public class ExprWithCleanups extends Expr {
 
-    public ExprWithCleanups(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-        this(exprData, info, Arrays.asList(subExpr));
+    public ExprWithCleanups(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private ExprWithCleanups(ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ExprWithCleanups(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public ExprWithCleanups(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+    // this(exprData, info, Arrays.asList(subExpr));
+    // }
+    //
+    // private ExprWithCleanups(ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    //
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ExprWithCleanups(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

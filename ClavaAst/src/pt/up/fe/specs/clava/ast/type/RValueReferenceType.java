@@ -13,28 +13,30 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class RValueReferenceType extends ReferenceType {
 
-    public RValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
-        this(typeData, info, Arrays.asList(referencee));
+    public RValueReferenceType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private RValueReferenceType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new RValueReferenceType(getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // public RValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
+    // this(typeData, info, Arrays.asList(referencee));
+    // }
+    //
+    // private RValueReferenceType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new RValueReferenceType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
@@ -49,9 +51,9 @@ public class RValueReferenceType extends ReferenceType {
 
     }
 
-    @Override
-    public Type getReferencee() {
-        return getChild(Type.class, 0);
-    }
+    // @Override
+    // public Type getReferencee() {
+    // return getChild(Type.class, 0);
+    // }
 
 }

@@ -72,7 +72,6 @@ import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
@@ -133,33 +132,22 @@ import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
-import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
-import pt.up.fe.specs.clava.ast.type.LValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
-import pt.up.fe.specs.clava.ast.type.PackExpansionType;
-import pt.up.fe.specs.clava.ast.type.ParenType;
-import pt.up.fe.specs.clava.ast.type.RValueReferenceType;
-import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
-import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
-import pt.up.fe.specs.clava.ast.type.legacy.BuiltinTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.language.CastKind;
-import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -602,11 +590,11 @@ public class ClavaNodeFactory {
      * @param type
      * @return
      */
-    @Deprecated
-    public static BuiltinType builtinType(String type) {
-        return ClavaNodeFactory.builtinType(new TypeData(type.toLowerCase()),
-                ClavaNodeInfo.undefinedInfo());
-    }
+    // @Deprecated
+    // public static BuiltinType builtinType(String type) {
+    // return ClavaNodeFactory.builtinType(new TypeData(type.toLowerCase()),
+    // ClavaNodeInfo.undefinedInfo());
+    // }
 
     /**
      * FIXED
@@ -617,10 +605,10 @@ public class ClavaNodeFactory {
      * @param infoB
      * @return
      */
-    @Deprecated
-    public static BuiltinType builtinType(TypeData typeData, ClavaNodeInfo info) {
-        return new BuiltinTypeLegacy(typeData, info);
-    }
+    // @Deprecated
+    // public static BuiltinType builtinType(TypeData typeData, ClavaNodeInfo info) {
+    // return new BuiltinTypeLegacy(typeData, info);
+    // }
 
     // public static TypedefType typedefType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
     // Type classType) {
@@ -726,13 +714,13 @@ public class ClavaNodeFactory {
     // return new RecordType(recordName, declInfo, tagKind, typeData, info);
     // }
 
-    public static LValueReferenceType lValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
-        return new LValueReferenceType(typeData, info, referencee);
-    }
-
-    public static RValueReferenceType rValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
-        return new RValueReferenceType(typeData, info, referencee);
-    }
+    // public static LValueReferenceType lValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
+    // return new LValueReferenceType(typeData, info, referencee);
+    // }
+    //
+    // public static RValueReferenceType rValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
+    // return new RValueReferenceType(typeData, info, referencee);
+    // }
 
     // public static ElaboratedType elaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData,
     // ClavaNodeInfo info, Type namedType) {
@@ -749,9 +737,9 @@ public class ClavaNodeFactory {
     }
     */
 
-    public static ParenType parenType(TypeData typeData, ClavaNodeInfo info, Type innerType) {
-        return new ParenType(typeData, info, innerType);
-    }
+    // public static ParenType parenType(TypeData typeData, ClavaNodeInfo info, Type innerType) {
+    // return new ParenType(typeData, info, innerType);
+    // }
 
     // public static TemplateTypeParmType templateTypeParmType(TemplateParmData templateParmData, DeclRef declInfo,
     // TypeData typeData, ClavaNodeInfo info) {
@@ -818,15 +806,15 @@ public class ClavaNodeFactory {
     // return variableArrayType(arrayTypeData, typeData, ClavaNodeInfo.undefinedInfo(), elementType, sizeExpr);
     // }
 
-    public static InjectedClassNameType injectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
-        return new InjectedClassNameType(declInfo, data, info);
-    }
+    // public static InjectedClassNameType injectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
+    // return new InjectedClassNameType(declInfo, data, info);
+    // }
 
-    public static PackExpansionType packExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
-            Type pattern) {
-
-        return new PackExpansionType(numExpansions, data, info, pattern);
-    }
+    // public static PackExpansionType packExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
+    // Type pattern) {
+    //
+    // return new PackExpansionType(numExpansions, data, info, pattern);
+    // }
 
     // public static DependentSizedArrayType dependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
     // ClavaNodeInfo info,
@@ -835,10 +823,10 @@ public class ClavaNodeFactory {
     // return new DependentSizedArrayType(arrayTypeData, typeData, info, elementType, sizeExpr);
     // }
 
-    public static TypeOfExprType typeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
-            Expr underlyingExpr, Type underlyingType) {
-        return new TypeOfExprType(standard, data, info, underlyingExpr, underlyingType);
-    }
+    // public static TypeOfExprType typeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
+    // Expr underlyingExpr, Type underlyingType) {
+    // return new TypeOfExprType(standard, data, info, underlyingExpr, underlyingType);
+    // }
 
     /*
     * 'stmt' nodes
@@ -859,10 +847,10 @@ public class ClavaNodeFactory {
         // return new LiteralType(literalType);
     }
 
-    public static SubstTemplateTypeParmType substTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info,
-            TemplateTypeParmType replaceParameter, Type replacementType) {
-        return new SubstTemplateTypeParmType(typeData, info, replaceParameter, replacementType);
-    }
+    // public static SubstTemplateTypeParmType substTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info,
+    // TemplateTypeParmType replaceParameter, Type replacementType) {
+    // return new SubstTemplateTypeParmType(typeData, info, replaceParameter, replacementType);
+    // }
 
     /**
      * Helper method that receives a ClavaNode.
@@ -1100,10 +1088,10 @@ public class ClavaNodeFactory {
     // return new DeclRefExpr(qualifier, templateArguments, declData, foundDeclData, exprData, info);
     // }
 
-    public static ExprWithCleanups exprWithCleanups(ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-        return new ExprWithCleanups(exprData, info, subExpr);
-    }
+    // public static ExprWithCleanups exprWithCleanups(ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    // return new ExprWithCleanups(exprData, info, subExpr);
+    // }
     //
     // public static CXXConstructExpr cxxConstructExpr(CXXConstructExprData constructorData, ExprData exprData,
     // ClavaNodeInfo info, Collection<? extends Expr> args) {

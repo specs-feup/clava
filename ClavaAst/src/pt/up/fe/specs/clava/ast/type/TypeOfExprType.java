@@ -13,58 +13,79 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 
 public class TypeOfExprType extends Type {
 
-    private final Standard standard;
+    /// DATAKEYS BEGIN
 
-    public TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info, Expr underlyingExpr,
-            Type underlyingType) {
-        super(data, info, Arrays.asList(underlyingExpr, underlyingType));
+    public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlingExpr", Expr.class);
 
-        this.standard = standard;
+    /// DATAKEYS END
+
+    public TypeOfExprType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(data, info, children);
-
-        this.standard = standard;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new TypeOfExprType(standard, getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // private final Standard standard;
+    //
+    // public TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info, Expr underlyingExpr,
+    // Type underlyingType) {
+    // super(data, info, Arrays.asList(underlyingExpr, underlyingType));
+    //
+    // this.standard = standard;
+    // }
+    //
+    // private TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(data, info, children);
+    //
+    // this.standard = standard;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new TypeOfExprType(standard, getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     public Expr getUnderlyingExpr() {
-        return getChild(Expr.class, 0);
+        return get(UNDERLYING_EXPR);
+        // return getChild(Expr.class, 0);
     }
 
-    @Override
-    protected Type desugarImpl() {
-        return getChild(Type.class, 1);
-    }
+    // @Override
+    // protected Type desugarImpl() {
+    // return getChild(Type.class, 1);
+    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
         // If GNU, do not change type (i.e., typeof)
-        // if (getApp().getStandard().isGnu()) {
-        if (standard.isGnu()) {
-            return super.getCode(sourceNode, name);
+        if (sourceNode != null) {
+            boolean isGnu = sourceNode.getAncestorTry(TranslationUnit.class)
+                    .map(tu -> tu.get(TranslationUnit.LANGUAGE).get(Language.IS_GNU))
+                    .orElse(false);
+
+            if (isGnu) {
+                return super.getCode(sourceNode, name);
+            }
         }
+
+        // if (standard.isGnu()) {
+        // return super.getCode(sourceNode, name);
+        // }
 
         // Not GNU, change to __typeof__
         String typeCode = super.getCode(sourceNode, name);

@@ -277,10 +277,13 @@ public class ClavaFactory {
 
     public DeclRefExpr declRefExpr(String declName, Type type) {
         DataStore data = newExprDataStore()
-                .put(Expr.TYPE, type)
-                .put(DeclRefExpr.DECL_NAME, declName);
+                .put(Expr.TYPE, type);
+        // .put(DeclRefExpr.DECL_NAME, declName);
 
-        return new DeclRefExpr(data, Collections.emptyList());
+        DeclRefExpr declRefExpr = new DeclRefExpr(data, Collections.emptyList());
+        declRefExpr.setName(declName);
+
+        return declRefExpr;
         // return new DeclRefExpr(data, Arrays.asList(dummyNamedDecl(declName)));
     }
     // public static DeclRefExpr declRefExpr(String refName, ValueKind valueKind, Type type, ClavaNodeInfo info) {

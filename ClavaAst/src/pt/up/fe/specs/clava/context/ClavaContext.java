@@ -48,6 +48,9 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     public final static DataKey<App> APP = KeyFactory
             .object("app", App.class);
 
+    public final static DataKey<ClavaMetrics> METRICS = KeyFactory
+            .object("metrics", ClavaMetrics.class);
+
     /**
      * Temporary measure due to TextParser being called more than once over the same nodes.
      */
@@ -75,6 +78,8 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         // Set ClavaNodeFactory
         // TODO: Temporary transition measure
         LegacyToDataStore.CLAVA_CONTEXT.set(this);
+
+        set(METRICS, new ClavaMetrics());
     }
 
     public ClavaContext addArguments(File sourceFile, List<String> arguments) {

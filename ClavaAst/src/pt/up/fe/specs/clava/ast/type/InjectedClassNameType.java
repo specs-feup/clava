@@ -14,33 +14,41 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 
 public class InjectedClassNameType extends Type {
 
-    private final DeclRef declInfo;
+    /// DATAKEYS BEGIN
 
-    public InjectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
-        this(declInfo, data, info, Collections.emptyList());
+    // Could have a DECL here
+
+    /// DATAKEYS END
+
+    public InjectedClassNameType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private InjectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(data, info, children);
-
-        this.declInfo = declInfo;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        // TODO Auto-generated method stub
-        return new InjectedClassNameType(declInfo, getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // private final DeclRef declInfo;
+    //
+    // public InjectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info) {
+    // this(declInfo, data, info, Collections.emptyList());
+    // }
+    //
+    // private InjectedClassNameType(DeclRef declInfo, TypeData data, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(data, info, children);
+    //
+    // this.declInfo = declInfo;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // // TODO Auto-generated method stub
+    // return new InjectedClassNameType(declInfo, getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
 }

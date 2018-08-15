@@ -121,6 +121,10 @@ public class InitListExpr extends Expr {
 
     @Override
     public String getCode() {
+        // System.out.println("INIT LIST EXPR TYPE:" + getType());
+        // if (getChild(0) instanceof InitListExpr) {
+        // System.out.println("HAS INIT LIST EXPR CHILD WITH TYPE:" + ((Typable) getChild(0)).getType());
+        // }
         /*
         if (isOldFormat) {
             String list = getInitExprs().stream()

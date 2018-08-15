@@ -355,6 +355,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * @return
      */
     public ClavaNode copy(boolean keepId) {
+
+        get(CONTEXT).get(ClavaContext.METRICS).incrementNumCopies();
+
         // Re-implements ATreeNode copy, in order to specify if IDs should change or not
         // return super.copy();
 
@@ -642,7 +645,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      */
     public <T extends ClavaNode> T newInstance(boolean keepId, Class<T> nodeClass, List<ClavaNode> children) {
 
-        DataStore newDataStore = dataI.copy();
+        // DataStore newDataStore = dataI.copy();
+
+        // Use the same datastore
+        DataStore newDataStore = dataI;
 
         // Set id
         if (!keepId) {

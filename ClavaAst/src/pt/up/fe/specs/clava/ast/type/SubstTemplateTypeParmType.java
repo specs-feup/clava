@@ -15,28 +15,32 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class SubstTemplateTypeParmType extends Type {
 
-    public SubstTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info, TemplateTypeParmType replaceParameter,
-            Type replacementType) {
-        this(typeData, info, Arrays.asList(replaceParameter, replacementType));
+    public SubstTemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private SubstTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new SubstTemplateTypeParmType(getTypeData(), getInfo(), Collections.emptyList());
-    }
+    // public SubstTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info, TemplateTypeParmType replaceParameter,
+    // Type replacementType) {
+    // this(typeData, info, Arrays.asList(replaceParameter, replacementType));
+    // }
+    //
+    // private SubstTemplateTypeParmType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode>
+    // children) {
+    // super(typeData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new SubstTemplateTypeParmType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     // public boolean isSugared() {
     // return true;
@@ -47,36 +51,37 @@ public class SubstTemplateTypeParmType extends Type {
      * 
      * @return
      */
-    public TemplateTypeParmType getReplaceParameter() {
-        return getChild(TemplateTypeParmType.class, 0);
-    }
+    // public TemplateTypeParmType getReplaceParameter() {
+    // return getChild(TemplateTypeParmType.class, 0);
+    // }
 
     /**
      * The type that was substituted for the template parameter.
      * 
      * @return
      */
-    public Type getReplacementType() {
-        return getChild(Type.class, 1);
-    }
+    // public Type getReplacementType() {
+    // return getChild(Type.class, 1);
+    // }
+    //
+    // public void setReplacementType(Type replacementType) {
+    // setChild(1, replacementType);
+    // }
 
-    public void setReplacementType(Type replacementType) {
-        setChild(1, replacementType);
-    }
+    // @Override
+    // protected Type desugarImpl() {
+    // return getReplacementType();
+    // }
 
-    @Override
-    protected Type desugarImpl() {
-        return getReplacementType();
-    }
-
-    @Override
-    protected void setDesugarImpl(Type desugaredType) {
-        setReplacementType(desugaredType);
-    }
+    // @Override
+    // protected void setDesugarImpl(Type desugaredType) {
+    // setReplacementType(desugaredType);
+    // }
 
     @Override
     public List<Type> getTemplateArgumentTypes() {
-        return Arrays.asList(getReplacementType());
+        return Arrays.asList(get(UNQUALIFIED_DESUGARED_TYPE));
+        // return Arrays.asList(getReplacementType());
     }
 
 }
