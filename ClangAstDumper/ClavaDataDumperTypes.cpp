@@ -100,6 +100,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpPackExpansionTypeData(static_cast<const PackExpansionType *>(T)); break;
         case clava::TypeNode::TYPE_OF_EXPR_TYPE:
             DumpTypeOfExprTypeData(static_cast<const TypeOfExprType *>(T)); break;
+        case clava::TypeNode::ATTRIBUTED_TYPE:
+            DumpAttributedTypeData(static_cast<const AttributedType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -519,5 +521,14 @@ void clava::ClavaDataDumper::DumpTypeOfExprTypeData(const TypeOfExprType *T) {
     DumpTypeData(T);
 
     clava::dump(clava::getId(T->getUnderlyingExpr(), id));
+}
+
+
+void clava::ClavaDataDumper::DumpAttributedTypeData(const AttributedType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getModifiedType(), id));
+    clava::dump(clava::getId(T->getEquivalentType(), id));
 }
 

@@ -31,6 +31,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"AutoType", clava::TypeNode::AUTO_TYPE},
         {"PackExpansionType", clava::TypeNode::PACK_EXPANSION_TYPE},
         {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
+        {"AttributedType", clava::TypeNode::ATTRIBUTED_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -91,6 +92,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitPackExpansionTypeChildren(static_cast<const PackExpansionType *>(T), visitedChildren); break;
         case clava::TypeNode::TYPE_OF_EXPR_TYPE:
             VisitTypeOfExprTypeChildren(static_cast<const TypeOfExprType *>(T), visitedChildren); break;
+        case clava::TypeNode::ATTRIBUTED_TYPE:
+            VisitAttributedTypeChildren(static_cast<const AttributedType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -393,6 +396,17 @@ void ClangAstDumper::VisitTypeOfExprTypeChildren(const TypeOfExprType *T, std::v
 
 
     VisitStmtTop(T->getUnderlyingExpr());
+
+};
+
+
+void ClangAstDumper::VisitAttributedTypeChildren(const AttributedType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+
+    VisitTypeTop(T->getModifiedType());
+    VisitTypeTop(T->getEquivalentType());
 
 };
 
