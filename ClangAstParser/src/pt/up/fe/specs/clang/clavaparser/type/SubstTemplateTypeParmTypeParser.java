@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -49,7 +48,9 @@ public class SubstTemplateTypeParmTypeParser extends AClangNodeParser<SubstTempl
         // 2nd child is ReplacementType
         Type replacementType = toType(children.get(1));
 
-        return ClavaNodeFactory.substTemplateTypeParmType(typeData, node.getInfo(), replaceParameter, replacementType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.substTemplateTypeParmType(typeData, node.getInfo(), replaceParameter,
+        // replacementType);
     }
 
 }

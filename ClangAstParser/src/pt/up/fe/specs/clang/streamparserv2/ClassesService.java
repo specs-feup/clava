@@ -41,6 +41,14 @@ public class ClassesService {
         this(new CustomClassnameMapper());
     }
 
+    public CustomClassnameMapper getCustomClassMap() {
+        return customClassMap;
+    }
+
+    // public void addCustomMapping(String className, Class<? extends ClavaNode> clavaNodeClass) {
+    // autoClassMap.put(className, clavaNodeClass);
+    // }
+
     public Class<? extends ClavaNode> getClass(String classname, DataStore data) {
 
         // Try custom map

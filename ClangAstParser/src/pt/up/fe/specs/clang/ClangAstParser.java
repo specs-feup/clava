@@ -227,6 +227,15 @@ public class ClangAstParser {
             String size = SpecsStrings.toBytes(lineStreamParser.getReadChars());
             ClavaLog.metrics("Dumped " + numLines + " lines (~" + size + ")");
 
+            String numNodes = SpecsStrings
+                    .toDecimal(lineStreamParser.getData().getClavaNodes().getNodes().size());
+            ClavaLog.metrics("Total parsed ClavaNodes: " + numNodes);
+
+            String numCopies = SpecsStrings
+                    .toDecimal(lineStreamParser.getData().get(ClangParserData.CONTEXT).get(ClavaContext.METRICS)
+                            .getNumCopies());
+            ClavaLog.metrics("Extra ClavaNodes created through copies: " + numCopies);
+
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
@@ -276,7 +285,7 @@ public class ClangAstParser {
         }
 
         // Check if there where no interleaved executions
-        checkInterleavedExecutions();
+        // checkInterleavedExecutions();
 
         // Get clang output
         // String clangOutput = output.getStdOut();

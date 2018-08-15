@@ -420,7 +420,7 @@ public class ClavaParser implements AutoCloseable {
         converter.setTypesMapping(nodeTypes);
 
         // Perform second pass over types
-        processTypesSecondPass();
+        // processTypesSecondPass();
 
         // Process Clang nodes to add extra information (e.g., namespace and RecordDecl names to CXXMethodDecl)
         new ClangAstProcessor(converter).process(clangAst);
@@ -510,21 +510,21 @@ public class ClavaParser implements AutoCloseable {
         parseDelayedTypes();
 
         // Add argument types to TemplateSpecializationType
-        completeTemplateSpecializationTypes();
+        // completeTemplateSpecializationTypes();
     }
 
-    private void completeTemplateSpecializationTypes() {
-        // System.out.println("ORIGINAL TYPES:" + converter.getOriginalTypes());
-        // Go over all original types and find TemplateSpecializationType nodes
-        for (Type type : converter.getOriginalTypes().values()) {
-            type.getDescendantsAndSelf(TemplateSpecializationType.class).stream()
-                    .forEach(this::completeTemplateSpecializationType);
-
-            // .filter(node -> node instanceof TemplateSpecializationType)
-            // .map(node -> (TemplateSpecializationType) node)
-            // .forEach(this::completeTemplateSpecializationType);
-        }
-    }
+    // private void completeTemplateSpecializationTypes() {
+    // // System.out.println("ORIGINAL TYPES:" + converter.getOriginalTypes());
+    // // Go over all original types and find TemplateSpecializationType nodes
+    // for (Type type : converter.getOriginalTypes().values()) {
+    // type.getDescendantsAndSelf(TemplateSpecializationType.class).stream()
+    // .forEach(this::completeTemplateSpecializationType);
+    //
+    // // .filter(node -> node instanceof TemplateSpecializationType)
+    // // .map(node -> (TemplateSpecializationType) node)
+    // // .forEach(this::completeTemplateSpecializationType);
+    // }
+    // }
 
     private void completeTemplateSpecializationType(TemplateSpecializationType templateType) {
         // Get args types id

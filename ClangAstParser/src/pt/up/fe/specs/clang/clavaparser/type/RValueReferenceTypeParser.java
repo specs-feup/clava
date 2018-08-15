@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.RValueReferenceType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -45,7 +44,8 @@ public class RValueReferenceTypeParser extends AClangNodeParser<RValueReferenceT
 
         Type referencee = toType(children.get(0));
 
-        return ClavaNodeFactory.rValueReferenceType(typeData, node.getInfo(), referencee);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.rValueReferenceType(typeData, node.getInfo(), referencee);
     }
 
 }

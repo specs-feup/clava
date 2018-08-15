@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
@@ -52,7 +51,8 @@ public class TypeOfExprTypeParser extends AClangNodeParser<TypeOfExprType> {
         Expr underlyingExpr = toExpr(children.get(0));
         Type underlyingType = toType(children.get(1));
 
-        return ClavaNodeFactory.typeOfExprType(standard, typeData, node.getInfo(), underlyingExpr, underlyingType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.typeOfExprType(standard, typeData, node.getInfo(), underlyingExpr, underlyingType);
     }
 
 }

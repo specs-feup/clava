@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -47,7 +46,8 @@ public class PackExpansionTypeParser extends AClangNodeParser<PackExpansionType>
         checkChildrenBetween(children, 0, 1);
         Type pattern = (Type) SpecsCollections.orElseNull(children);
 
-        return ClavaNodeFactory.packExpansionType(numExpansions, typeData, node.getInfo(), pattern);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.packExpansionType(numExpansions, typeData, node.getInfo(), pattern);
     }
 
 }

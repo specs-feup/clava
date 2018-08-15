@@ -22,6 +22,7 @@ import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
+import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
@@ -31,11 +32,14 @@ import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.PackExpansionType;
 import pt.up.fe.specs.clava.ast.type.QualType;
+import pt.up.fe.specs.clava.ast.type.ReferenceType;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
@@ -290,6 +294,45 @@ public class TypeDataParser {
         DataStore data = parseTypeData(lines, parserData);
 
         parserData.getClavaNodes().queueSetOptionalNode(data, AutoType.DEDUCED_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseReferenceTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, ReferenceType.POINTEE_TYPE_AS_WRITTEN, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parsePackExpansionTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        data.add(PackExpansionType.NUM_EXPANSIONS, LineStreamParsers.integer(lines));
+        // parserData.getClavaNodes().queueSetOptionalNode(data, PackExpansionType.PATTERN, lines.nextLine());
+        parserData.getClavaNodes().queueSetNode(data, PackExpansionType.PATTERN, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseTypeOfExprTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, TypeOfExprType.UNDERLYING_EXPR, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseAttributedTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, AttributedType.MODIFIED_TYPE, lines.nextLine());
+        parserData.getClavaNodes().queueSetNode(data, AttributedType.EQUIVALENT_TYPE, lines.nextLine());
 
         return data;
     }

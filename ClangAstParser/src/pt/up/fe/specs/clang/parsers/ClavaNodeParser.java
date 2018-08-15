@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -168,7 +169,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         }
 
         // Get corresponding ClavaNode class
-        Class<? extends ClavaNode> clavaNodeClass = classesService.getClass(classname, nodeData);
+
+        Class<? extends ClavaNode> clavaNodeClass = getClavaNodeClass(classname, nodeData);
 
         // Get children ids
         List<String> childrenIds = getChildrenIds(nodeId, classname, data);
@@ -234,6 +236,24 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         return clavaNode;
     }
 
+    private Class<? extends ClavaNode> getClavaNodeClass(String classname, DataStore nodeData) {
+
+        try {
+            return classesService.getClass(classname, nodeData);
+        } catch (Exception e) {
+            // If classname is an attribute, use generic Attribute class
+            if (classname.endsWith("Attr")) {
+                // Add custom mapping to avoid exception next time this classname is used
+                classesService.getCustomClassMap().add(classname, data -> Attribute.class);
+
+                return Attribute.class;
+            }
+
+            throw new RuntimeException(e);
+        }
+
+    }
+
     private ClavaNode processChild(ClavaNode child, Class<? extends ClavaNode> clavaNodeClass, ClangParserData data) {
         if (clavaNodeClass.equals(CompoundStmt.class)) {
             // If child is an expression, wrap a Stmt around
@@ -286,6 +306,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
     public void close(ClangParserData data) {
         data.get(ClangParserData.CLAVA_NODES).getQueuedNodesToSet().stream()
                 .forEach(Runnable::run);
+
+        // ClavaLog.metrics("Parsed ClavaNodes: " + data.get(ClangParserData.CLAVA_NODES).getNodes().size());
     }
 
 }

@@ -127,6 +127,7 @@ public class MonolithicCodeParser extends CodeParser {
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("Clang Parsing and Dump", tic));
             ClavaLog.metrics("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
+
         }
 
         // if (showClangDump) {

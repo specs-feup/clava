@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.language.Standard;
@@ -54,8 +53,8 @@ public class BuiltinTypeParser extends AClangNodeParser<BuiltinType> {
         // if (data != null) {
         // return new BuiltinType(data, Collections.emptyList());
         // }
-
-        return ClavaNodeFactory.builtinType(typeData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.builtinType(typeData, node.getInfo());
 
     }
 

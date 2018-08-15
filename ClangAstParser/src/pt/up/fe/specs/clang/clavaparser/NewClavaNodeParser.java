@@ -156,11 +156,16 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         
         return nodeClass.cast(clavaNode);
         */
+
+        // return (T) clavaNode;
+
         // System.out.println("NODE CLASS:" + nodeClass);
         T clavaNodeCopy = clavaNode.newInstance(true, nodeClass, children);
+        // clavaNode.setChildren(children);
+        // T clavaNodeCopy = (T) clavaNode;
 
         // Additional processing on the node itself
-        processNodeCopy(clavaNodeCopy);
+        // processNodeCopy(clavaNodeCopy);
 
         return clavaNodeCopy;
 
@@ -419,6 +424,11 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // System.out.println("GETTING TYPE FROM " + node.get(ClavaNode.ID));
         // System.out.println("NODE " + node);
         Type nodeType = getOriginalTypes().get(typable.getType().getId());
+        if (nodeType == null) {
+            // ClavaLog.debug("NodeType is null. Type id: " + typable.getType().getId());
+            return false;
+        }
+
         if (oldParsingType != null && nodeType != oldParsingType) {
             if (SpecsSystem.isDebug()) {
                 SpecsLogs.msgWarn("Current node type different from expected type:\nExpected type:" + oldParsingType

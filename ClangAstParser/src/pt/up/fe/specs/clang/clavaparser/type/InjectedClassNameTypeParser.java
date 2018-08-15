@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.InjectedClassNameType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
@@ -41,7 +40,8 @@ public class InjectedClassNameTypeParser extends AClangNodeParser<InjectedClassN
 
         checkNumChildren(node.getChildren(), 1);
 
-        return ClavaNodeFactory.injectedClassNameType(declInfo, typeData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.injectedClassNameType(declInfo, typeData, node.getInfo());
     }
 
 }

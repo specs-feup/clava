@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
@@ -151,9 +152,10 @@ public class ExprDataParser {
         data.add(DeclRefExpr.QUALIFIER, lines.nextLine());
         data.add(DeclRefExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines,
                 ClavaDataParsers::literalSource));
-        data.add(DeclRefExpr.DECL_NAME, lines.nextLine());
-        data.add(DeclRefExpr.DECL_ID, lines.nextLine());
+        // data.add(DeclRefExpr.DECL_NAME, lines.nextLine());
+        // data.add(DeclRefExpr.DECL_ID, lines.nextLine());
         // data.add(DeclRefExpr.DECL, ClavaNodes.getValueDecl(dataStore, data.get(DeclRefExpr.DECL_ID)));
+        dataStore.getClavaNodes().queueSetNode(data, DeclRefExpr.DECL, lines.nextLine());
 
         return data;
     }
@@ -218,7 +220,15 @@ public class ExprDataParser {
     public static DataStore parseCallExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        dataStore.getClavaNodes().queueSetNode(data, CallExpr.CALLEE_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CallExpr.DIRECT_CALLEE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseCXXMemberCallExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseCallExprData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, CXXMemberCallExpr.METHOD_DECL, lines.nextLine());
 
         return data;
     }

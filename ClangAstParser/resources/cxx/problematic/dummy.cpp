@@ -1,8 +1,9 @@
-
+#include <iostream>
 
 int main() {
     
 	// Nothing to test for now 
-	
-    return 0;
+	std::cout << std::endl;
+    
+	return 0;
 }

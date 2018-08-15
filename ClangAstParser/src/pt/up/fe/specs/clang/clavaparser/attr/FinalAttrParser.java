@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.attr.FinalAttr;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -41,7 +40,8 @@ public class FinalAttrParser extends AClangNodeParser<FinalAttr> {
 
         checkNoChildren(node);
 
-        return ClavaNodeFactory.finalAttr(attrData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.finalAttr(attrData, node.getInfo());
     }
 
 }
