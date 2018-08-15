@@ -131,19 +131,14 @@ import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
-import pt.up.fe.specs.clava.ast.type.AttributedType;
-import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
-import pt.up.fe.specs.clava.ast.type.legacy.DummyTypeLegacy;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
@@ -571,13 +566,13 @@ public class ClavaNodeFactory {
      * 'type' nodes
      */
 
-    public static DummyType dummyType(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyTypeLegacy(content, info, children);
-    }
+    // public static DummyType dummyType(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // return new DummyTypeLegacy(content, info, children);
+    // }
 
-    public static DummyType dummyType(ClavaNode node) {
-        return new DummyTypeLegacy(node.toContentString(), node.getInfo(), node.getChildren());
-    }
+    // public static DummyType dummyType(ClavaNode node) {
+    // return new DummyTypeLegacy(node.toContentString(), node.getInfo(), node.getChildren());
+    // }
 
     // public static BuiltinTypeOld builtinType(List<Type> type, ClavaNodeInfo info) {
     // return new BuiltinTypeOld(type, info);
@@ -769,10 +764,10 @@ public class ClavaNodeFactory {
     // return new IncompleteArrayType(arrayTypeData, typeData, info, elementType);
     // }
 
-    public static AttributedType attributedType(TypeData typeData, ClavaNodeInfo info, Type modifiedType,
-            Type equivalentType) {
-        return new AttributedType(typeData, info, modifiedType, equivalentType);
-    }
+    // public static AttributedType attributedType(TypeData typeData, ClavaNodeInfo info, Type modifiedType,
+    // Type equivalentType) {
+    // return new AttributedType(typeData, info, modifiedType, equivalentType);
+    // }
     //
     // public static AutoType autoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
     // return new AutoType(typeData, info, deducedType);
@@ -787,11 +782,12 @@ public class ClavaNodeFactory {
         return new VariadicType(info);
     }
 
-    public static UnaryTransformType unaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info,
-            Type baseType, Type underlyingType) {
-
-        return new UnaryTransformType(kind, data, info, baseType, underlyingType);
-    }
+    // public static UnaryTransformType unaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo
+    // info,
+    // Type baseType, Type underlyingType) {
+    //
+    // return new UnaryTransformType(kind, data, info, baseType, underlyingType);
+    // }
 
     // public static VariableArrayType variableArrayType(ArrayTypeData arrayTypeData, TypeData typeData,
     // ClavaNodeInfo info, Type elementType,

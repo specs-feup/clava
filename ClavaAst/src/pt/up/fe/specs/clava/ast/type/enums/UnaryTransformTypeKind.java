@@ -13,35 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
-import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
+public enum UnaryTransformTypeKind {
 
-public enum UnaryTransformTypeKind implements StringProvider {
+    EnumUnderlyingType;
 
-    ENUM_UNDERLYING_TYPE("underlying_type"),
-    NONE;
-
-    private final String string;
-
-    private UnaryTransformTypeKind() {
-        this.string = name().toLowerCase();
-    }
-
-    private UnaryTransformTypeKind(String string) {
-        this.string = string;
-    }
-
-    private static final Lazy<EnumHelperWithValue<UnaryTransformTypeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(
-            UnaryTransformTypeKind.class,
-            NONE);
-
-    public static EnumHelperWithValue<UnaryTransformTypeKind> getHelper() {
-        return ENUM_HELPER.get();
-    }
-
-    @Override
-    public String getString() {
-        return string;
-    }
 }

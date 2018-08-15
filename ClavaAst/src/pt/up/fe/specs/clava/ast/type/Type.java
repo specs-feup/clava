@@ -28,7 +28,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
@@ -95,18 +94,18 @@ public abstract class Type extends ClavaNode {
         */
     }
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public TypeData getTypeData() {
-        return DataStoreToLegacy.getType(getData());
-        // if (hasDataI()) {
-        // throw new NotSupportedByDataStoreException();
-        // }
-        // return data;
-    }
+    // /**
+    // * @deprecated
+    // * @return
+    // */
+    // @Deprecated
+    // public TypeData getTypeData() {
+    // return DataStoreToLegacy.getType(getData());
+    // // if (hasDataI()) {
+    // // throw new NotSupportedByDataStoreException();
+    // // }
+    // // return data;
+    // }
 
     /*
     @Override

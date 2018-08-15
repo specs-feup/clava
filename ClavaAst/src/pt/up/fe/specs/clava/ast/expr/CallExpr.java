@@ -318,7 +318,10 @@ public class CallExpr extends Expr {
      * @param name
      */
     public void setCallName(String name) {
+        // System.out.println("CHANGING " + getCalleeName() + " to " + name);
+        // System.out.println("FUNCTION BEFORE:\n" + getFunctionDecl().get().getCode());
         getCalleeDeclRef().setRefName(name);
+        // System.out.println("FUNCTION AFTER:\n" + getFunctionDecl().get().getCode());
     }
 
     public Optional<FunctionType> getFunctionType() {

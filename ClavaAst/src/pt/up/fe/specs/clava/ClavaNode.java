@@ -637,18 +637,31 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     }
 
     /**
+     * Helper method which disables sharing the same data object.
+     * 
+     * @param keepId
+     * @param nodeClass
+     * @param children
+     * @return
+     */
+    public <T extends ClavaNode> T newInstance(boolean keepId, Class<T> nodeClass, List<ClavaNode> children) {
+        return newInstance(keepId, false, nodeClass, children);
+    }
+
+    /**
      * Creates a new node using the same data as this node.
      * 
      * @param nodeClass
      * @param children
      * @return
      */
-    public <T extends ClavaNode> T newInstance(boolean keepId, Class<T> nodeClass, List<ClavaNode> children) {
+    public <T extends ClavaNode> T newInstance(boolean keepId, boolean shareData, Class<T> nodeClass,
+            List<ClavaNode> children) {
 
         // DataStore newDataStore = dataI.copy();
 
         // Use the same datastore
-        DataStore newDataStore = dataI;
+        DataStore newDataStore = shareData ? dataI : dataI.copy();
 
         // Set id
         if (!keepId) {
@@ -690,4 +703,5 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         getData().set(IS_LEGACY_NODE, isLegacyNode);
         return this;
     }
+
 }

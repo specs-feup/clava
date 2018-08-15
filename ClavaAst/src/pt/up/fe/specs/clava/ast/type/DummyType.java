@@ -18,10 +18,8 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 /**
  * Dummy type, for testing purposes.
@@ -44,11 +42,11 @@ public class DummyType extends Type implements DummyNode {
      * @param info
      * @param children
      */
-    public DummyType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-
-        // SpecsLogs.msgWarn("DUMMY TYPE TYPEDATA");
-    }
+    // public DummyType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    //
+    // // SpecsLogs.msgWarn("DUMMY TYPE TYPEDATA");
+    // }
 
     public String getNodeCode() {
         // return "// Dummy type '" + getContent() + "'";

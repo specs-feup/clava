@@ -14,82 +14,106 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
-import pt.up.fe.specs.util.SpecsCollections;
 
+/**
+ * A unary type transform, which is a type constructed from another.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class UnaryTransformType extends Type {
 
-    private final UnaryTransformTypeKind kind;
-    private final boolean hasBaseType;
-    private final boolean hasUnderlyingType;
+    /// DATAKEYS BEGIN
 
-    public UnaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info, Type baseType,
-            Type underlyingType) {
+    public final static DataKey<UnaryTransformTypeKind> KIND = KeyFactory
+            .enumeration("kind", UnaryTransformTypeKind.class);
 
-        this(kind, data, info, baseType != null, underlyingType != null,
-                SpecsCollections.asListT(Type.class, baseType, underlyingType));
+    public final static DataKey<Type> UNDERLYING_TYPE = KeyFactory.object("underlyingType", Type.class);
+
+    public final static DataKey<Type> BASE_TYPE = KeyFactory.object("baseType", Type.class);
+
+    /// DATAKEYS END
+
+    public UnaryTransformType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private UnaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info, boolean hasBaseType,
-            boolean hasUnderlyingType, Collection<? extends ClavaNode> children) {
+    // private final UnaryTransformTypeKind kind;
+    // private final boolean hasBaseType;
+    // private final boolean hasUnderlyingType;
+    //
+    // public UnaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info, Type baseType,
+    // Type underlyingType) {
+    //
+    // this(kind, data, info, baseType != null, underlyingType != null,
+    // SpecsCollections.asListT(Type.class, baseType, underlyingType));
+    // }
+    //
+    // private UnaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info, boolean hasBaseType,
+    // boolean hasUnderlyingType, Collection<? extends ClavaNode> children) {
+    //
+    // super(data, info, children);
+    //
+    // this.kind = kind;
+    // this.hasBaseType = hasBaseType;
+    // this.hasUnderlyingType = hasUnderlyingType;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UnaryTransformType(kind, getTypeData(), getInfo(), hasBaseType, hasUnderlyingType,
+    // Collections.emptyList());
+    // }
 
-        super(data, info, children);
-
-        this.kind = kind;
-        this.hasBaseType = hasBaseType;
-        this.hasUnderlyingType = hasUnderlyingType;
+    // public Optional<Type> getBaseType() {
+    public Type getBaseType() {
+        return get(BASE_TYPE);
+        // if (!hasBaseType) {
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of(getChild(Type.class, 0));
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UnaryTransformType(kind, getTypeData(), getInfo(), hasBaseType, hasUnderlyingType,
-                Collections.emptyList());
-    }
-
-    public Optional<Type> getBaseType() {
-        if (!hasBaseType) {
-            return Optional.empty();
-        }
-
-        return Optional.of(getChild(Type.class, 0));
-    }
-
-    public Optional<Type> getUnderlyingType() {
-        if (!hasUnderlyingType) {
-            return Optional.empty();
-        }
-
-        int index = 0;
-        if (hasBaseType) {
-            index++;
-        }
-
-        return Optional.of(getChild(Type.class, index));
-    }
-
-    @Override
-    protected Type desugarImpl() {
-        // System.out.println("CURRENT TYPE:" + getCode());
-        // System.out.println("HAS BASE?:" + hasBaseType);
+    // public Optional<Type> getUnderlyingType() {
+    public Type getUnderlyingType() {
+        return get(UNDERLYING_TYPE);
+        // if (!hasUnderlyingType) {
+        // return Optional.empty();
+        // }
+        //
+        // int index = 0;
         // if (hasBaseType) {
-        // System.out.println("BASE:" + getBaseType().get().getCode());
+        // index++;
         // }
-        // System.out.println("HAS UNDERLYING:" + hasUnderlyingType);
-        // if (hasUnderlyingType) {
-        // System.out.println("UNDERLYING:" + getUnderlyingType().get().getCode());
-        // }
-
-        return getBaseType().get();
+        //
+        // return Optional.of(getChild(Type.class, index));
     }
 
-    @Override
-    public boolean hasSugar() {
-        return hasBaseType;
-    }
+    // @Override
+    // protected Type desugarImpl() {
+    // // System.out.println("CURRENT TYPE:" + getCode());
+    // // System.out.println("HAS BASE?:" + hasBaseType);
+    // // if (hasBaseType) {
+    // // System.out.println("BASE:" + getBaseType().get().getCode());
+    // // }
+    // // System.out.println("HAS UNDERLYING:" + hasUnderlyingType);
+    // // if (hasUnderlyingType) {
+    // // System.out.println("UNDERLYING:" + getUnderlyingType().get().getCode());
+    // // }
+    //
+    // return getBaseType().get();
+    // }
+    //
+    // @Override
+    // public boolean hasSugar() {
+    // return hasBaseType;
+    // }
 }

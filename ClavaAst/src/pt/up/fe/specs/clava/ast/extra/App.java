@@ -809,4 +809,14 @@ public class App extends ClavaNode {
         // Found");
 
     }
+
+    public TranslationUnit getTranslationUnit(SourceRange location) {
+        for (TranslationUnit unit : getTranslationUnits()) {
+            if (unit.getLocation().toString().equals(location.toString())) {
+                return unit;
+            }
+        }
+
+        throw new RuntimeException("Could not find");
+    }
 }

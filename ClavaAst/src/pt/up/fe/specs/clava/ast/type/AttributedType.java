@@ -13,34 +13,59 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
+/**
+ * A type to which a type attribute has been applied.
+ * 
+ * The "modified type" is the fully-sugared type to which the attributed type was applied; generally it is not
+ * canonically equivalent to the attributed type. The "equivalent type" is the minimally-desugared type which the type
+ * is canonically equivalent to.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class AttributedType extends Type {
 
-    public AttributedType(TypeData typeData, ClavaNodeInfo info, Type modifiedType, Type equivalentType) {
-        this(typeData, info, Arrays.asList(modifiedType, equivalentType));
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Type> MODIFIED_TYPE = KeyFactory.object("modifiedType", Type.class);
+
+    public final static DataKey<Type> EQUIVALENT_TYPE = KeyFactory.object("equivalentType", Type.class);
+
+    /// DATAKEYS END
+
+    public AttributedType(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private AttributedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new AttributedType(getTypeData(), getInfo(), Collections.emptyList());
-    }
+    //
+    // public AttributedType(TypeData typeData, ClavaNodeInfo info, Type modifiedType, Type equivalentType) {
+    // this(typeData, info, Arrays.asList(modifiedType, equivalentType));
+    // }
+    //
+    // private AttributedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new AttributedType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
     public Type getModifiedType() {
-        return getChild(Type.class, 0);
+        return get(MODIFIED_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     public Type getEquivalentType() {
-        return getChild(Type.class, 1);
+        return get(EQUIVALENT_TYPE);
+        // return getChild(Type.class, 1);
     }
 }
