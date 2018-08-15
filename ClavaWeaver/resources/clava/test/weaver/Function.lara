@@ -1,5 +1,6 @@
 aspectdef FunctionTest
 	
+	
 	select function end
 	apply
 		var fName = $function.name;
@@ -13,13 +14,17 @@ aspectdef FunctionTest
 	// Set name
 	select file{"function.cpp"}.function end
 	apply
+	
 		var fName = $function.name;
 		if(fName != "defOnly" && fName != "declOnly" && fName != "declAndDef" && fName != "notCalled") {
 			continue;
 		}
 		
+		//println("FILE BEFORE SET:\n" + $file.code);
 		var newName = fName + "New";
-		$function.name = newName;
+		$function.name = newName;	
+		//println("FILE AFTER SET:\n" + $file.code);
+
 		println("Function new name: " + $function.name);
 	end
 	
@@ -28,5 +33,5 @@ aspectdef FunctionTest
 		println("Caller body: " + $body.code);
 	end
 	
-	
+
 end

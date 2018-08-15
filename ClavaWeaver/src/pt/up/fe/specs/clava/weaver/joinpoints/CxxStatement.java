@@ -16,13 +16,12 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
@@ -52,7 +51,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class CxxStatement extends AStatement {
@@ -210,20 +208,23 @@ public class CxxStatement extends AStatement {
         }
 
         // Filter DeclRefExprs that do not have DeclaratorDecl as decls
-
+        /*
         Optional<? extends Decl> declTry = declRefExpr.getDeclaration();
         if (!declTry.isPresent()) {
             SpecsLogs.msgInfo("Could not find declaration for reference " + declRefExpr.getRefName() + " at "
                     + declRefExpr.getLocation());
             return false;
         }
+        */
+        ValueDecl decl = declRefExpr.getDeclaration();
 
         // declRefExpr.getDeclaration()
         // .orElseThrow(() -> new RuntimeException("Could not find declaration of " + declRefExpr.getExprData));
         // if (!(declRefExpr.getDeclaration() instanceof DeclaratorDecl)) {
 
         // Decl decl = declRefExpr.getDeclaration();
-        if (!(declTry.get() instanceof DeclaratorDecl)) {
+        // if (!(declTry.get() instanceof DeclaratorDecl)) {
+        if (!(decl instanceof DeclaratorDecl)) {
             // if (!(decl instanceof DeclaratorDecl)) {
             return false;
         }

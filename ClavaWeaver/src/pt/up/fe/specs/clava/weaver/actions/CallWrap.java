@@ -26,6 +26,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -144,8 +145,11 @@ public class CallWrap {
      */
     private void createInPlaceWrapper(String name) {
 
+        // System.out.println("DEF IMPL:" + cxxCall.getDefinitionImpl());
         FunctionDecl declaration = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
+        // System.out.println("FUNCTION BEFORE:" + declaration.getCode());
         addWrapperFunctionInPlace(name, declaration);
+        // System.out.println("FUNCTION AFTER:" + declaration.getCode());
     }
 
     /**
@@ -220,8 +224,35 @@ public class CallWrap {
 
         // add to original file
         TranslationUnit originalFile = declaration.getAncestor(TranslationUnit.class);
-        int indexOfOriginal = declaration.indexOfSelf();
-        originalFile.addChild(indexOfOriginal + 1, wrapperFunctionDeclImpl);
+
+        // int indexOfOriginal = declaration.indexOfSelf();
+        // originalFile.addChild(indexOfOriginal + 1, wrapperFunctionDeclImpl);
+
+        // HACK BEGIN
+        // TODO: Temporary, while conversion is not finished
+        // Find corresponding TranslationUnit in App of join point call
+        // TranslationUnit jpFile = cxxCall.getNode().getAncestor(TranslationUnit.class);
+        TranslationUnit updatedFile = cxxCall.getNode().getApp().getTranslationUnit(originalFile.getLocation());
+
+        // System.out.println("CXX CALL TU LOCATION:" + jpFile.getLocation());
+        // System.out.println("CXX CALL TU HASH:" + jpFile.hashCode());
+        // System.out.println("ORIGINAL TU LOCATION:" + originalFile.getLocation());
+        // System.out.println("ORIGINAL TU HASH:" + originalFile.hashCode());
+
+        // System.out.println("FILE AST:\n" + originalFile.toTree());
+        int index = -1;
+        for (int i = 0; i < updatedFile.getNumChildren(); i++) {
+            ClavaNode child = updatedFile.getChild(i);
+
+            if (child.getLocation().toString().equals(declaration.getLocation().toString())) {
+                index = i;
+                break;
+            }
+        }
+
+        updatedFile.addChild(index + 1, wrapperFunctionDeclImpl);
+
+        // HACK END
 
         // Save function implementation declaration
         app.getAppData().get(WRAPPER_CALLS).add(name);
@@ -314,7 +345,18 @@ public class CallWrap {
         // Get include file of declaration
         // FunctionDecl declaration = declarationTry.get();
         FunctionDecl declaration = (FunctionDecl) functionDeclJp.getNode();
-        TranslationUnit includeFile = declaration.getAncestor(TranslationUnit.class);
+        Optional<TranslationUnit> includeFileTry = declaration.getAncestorTry(TranslationUnit.class);
+
+        // TODO: Confirm with Pedro what should be done here
+        if (!includeFileTry.isPresent()) {
+            SpecsLogs
+                    .msgLib("Could not find translation unit of the declaration of function '"
+                            + declaration.getDeclName() + "' at "
+                            + declaration.getLocation());
+            return CallWrapType.SYSTEM_INCLUDE;
+        }
+
+        TranslationUnit includeFile = includeFileTry.get();
 
         if (!includeFile.isHeaderFile()) {
             SpecsLogs.msgLib("Declaration of function '" + functionDecl.getDeclName() + "' is not in a header file: "
