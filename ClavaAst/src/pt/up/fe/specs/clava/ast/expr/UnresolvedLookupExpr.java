@@ -13,13 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.language.CXXOperator;
 import pt.up.fe.specs.clava.utils.Nameable;
 
@@ -31,26 +35,50 @@ import pt.up.fe.specs.clava.utils.Nameable;
  */
 public class UnresolvedLookupExpr extends OverloadExpr implements Nameable {
 
-    private final boolean requiresAdl;
-    private String name;
-    private final List<String> decls;
+    /// DATAKEYS BEGIN
 
-    public UnresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls, String qualifier,
-            ExprData exprData,
-            ClavaNodeInfo info) {
+    /**
+     * True if this declaration should be extended by argument-dependent lookup.
+     */
+    public final static DataKey<Boolean> REQUIRES_ADL = KeyFactory.bool("requiresAdl");
 
-        super(qualifier, exprData, info, Collections.emptyList());
+    /**
+     * The looked up name.
+     */
+    public final static DataKey<String> NAME = KeyFactory.string("name");
 
-        this.requiresAdl = requiresAdl;
-        this.name = name;
-        this.decls = decls;
+    /**
+     * The declarations in the unresolved set.
+     */
+    public final static DataKey<List<Decl>> UNRESOLVED_DECLS = KeyFactory
+            .generic("unresolvedDecls", (List<Decl>) new ArrayList<Decl>());
+
+    /// DATAKEYS END
+
+    public UnresolvedLookupExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UnresolvedLookupExpr(requiresAdl, name, decls, getQualifier().orElse(null), getExprData(),
-                getInfo());
-    }
+    // private final boolean requiresAdl;
+    // private String name;
+    // private final List<String> decls;
+    //
+    // public UnresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls, String qualifier,
+    // ExprData exprData,
+    // ClavaNodeInfo info) {
+    //
+    // super(qualifier, exprData, info, Collections.emptyList());
+    //
+    // this.requiresAdl = requiresAdl;
+    // this.name = name;
+    // this.decls = decls;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UnresolvedLookupExpr(requiresAdl, name, decls, getQualifier().orElse(null), getExprData(),
+    // getInfo());
+    // }
 
     @Override
     public String getCode() {
@@ -60,26 +88,26 @@ public class UnresolvedLookupExpr extends OverloadExpr implements Nameable {
         getQualifier().ifPresent(code::append);
 
         // Case operator
-        Optional<CXXOperator> operator = CXXOperator.parseTry(name);
+        Optional<CXXOperator> operator = CXXOperator.parseTry(get(NAME));
         if (operator.isPresent()) {
             code.append(operator.get().getString());
             return code.toString();
         }
 
-        code.append(name);
+        code.append(get(NAME));
 
         return code.toString();
     }
 
     @Override
     public String getName() {
-        return name;
+        return get(NAME);
     }
 
     @Override
     public void setName(String name) {
-        this.name = name;
-
+        set(NAME, name);
+        // this.name = name;
     }
 
 }

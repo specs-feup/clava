@@ -257,7 +257,7 @@ public class Types {
 
     private static Type toComparable(Type type) {
         if (type instanceof AutoType) {
-            return toComparable(((AutoType) type).getDeducedType());
+            return toComparable(((AutoType) type).getDeducedType().orElse(null));
         }
 
         return type;

@@ -13,41 +13,51 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 public class AutoType extends Type {
+
+    /// DATAKEYS BEGIN
+
+    /**
+     * The type deduced for this auto type, or empty if it's either not been deduced or was deduced to a dependent type.
+     */
+    public final static DataKey<Optional<Type>> DEDUCED_TYPE = KeyFactory.optional("deducedType");
+
+    /// DATAKEYS END
 
     public AutoType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    public AutoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
-        this(typeData, info, Arrays.asList(deducedType));
-    }
+    // public AutoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
+    // this(typeData, info, Arrays.asList(deducedType));
+    // }
+    //
+    // private AutoType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(typeData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new AutoType(getTypeData(), getInfo(), Collections.emptyList());
+    // }
 
-    private AutoType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new AutoType(getTypeData(), getInfo(), Collections.emptyList());
-    }
-
-    public Type getDeducedType() {
-        return getChild(Type.class, 0);
+    public Optional<Type> getDeducedType() {
+        return get(DEDUCED_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     public void setDeducedType(Type deducedType) {
-        setChild(0, deducedType);
+        set(DEDUCED_TYPE, Optional.ofNullable(deducedType));
+        // setChild(0, deducedType);
     }
 
     @Override
@@ -59,15 +69,15 @@ public class AutoType extends Type {
         return "auto" + " " + name;
     }
 
-    @Override
-    protected Type desugarImpl() {
-        return getDeducedType();
-    }
+    // @Override
+    // protected Type desugarImpl() {
+    // return getDeducedType();
+    // }
 
-    @Override
-    protected void setDesugarImpl(Type desugaredType) {
-        setDeducedType(desugaredType);
-    }
+    // @Override
+    // protected void setDesugarImpl(Type desugaredType) {
+    // setDeducedType(desugaredType);
+    // }
 
     /*
     @Override

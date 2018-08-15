@@ -92,7 +92,6 @@ import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorPosition;
-import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
@@ -136,7 +135,6 @@ import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
-import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
@@ -789,10 +787,10 @@ public class ClavaNodeFactory {
             Type equivalentType) {
         return new AttributedType(typeData, info, modifiedType, equivalentType);
     }
-
-    public static AutoType autoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
-        return new AutoType(typeData, info, deducedType);
-    }
+    //
+    // public static AutoType autoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
+    // return new AutoType(typeData, info, deducedType);
+    // }
 
     // public static DecltypeType decltypeType(TypeData typeData, ClavaNodeInfo info, Expr expr,
     // Type underlyingType) {
@@ -1288,11 +1286,11 @@ public class ClavaNodeFactory {
             Expr subExpr) {
         return new CXXStdInitializerListExpr(exprData, info, subExpr);
     }
-
-    public static UnresolvedLookupExpr unresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls,
-            String qualifier, ExprData exprData, ClavaNodeInfo info) {
-        return new UnresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, info);
-    }
+    //
+    // public static UnresolvedLookupExpr unresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls,
+    // String qualifier, ExprData exprData, ClavaNodeInfo info) {
+    // return new UnresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, info);
+    // }
 
     public static CXXStaticCastExpr cxxStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData,
             ClavaNodeInfo info, Expr subExpr) {

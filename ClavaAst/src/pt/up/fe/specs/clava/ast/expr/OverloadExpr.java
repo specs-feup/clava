@@ -21,9 +21,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
  * A reference to an overloaded function set, either an UnresolvedLookupExpr or an UnresolvedMemberExpr.
@@ -50,18 +47,18 @@ public abstract class OverloadExpr extends Expr {
         // this.qualifier = null;
     }
 
-    public OverloadExpr(String qualifier, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
-
-        if (qualifier != null && !qualifier.isEmpty()) {
-            set(QUALIFIER, qualifier);
-        }
-
-        // super(exprData, info, children);
-
-        // this.qualifier = qualifier;
-    }
+    // public OverloadExpr(String qualifier, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
+    //
+    // if (qualifier != null && !qualifier.isEmpty()) {
+    // set(QUALIFIER, qualifier);
+    // }
+    //
+    // // super(exprData, info, children);
+    //
+    // // this.qualifier = qualifier;
+    // }
 
     public Optional<String> getQualifier() {
         String qualifier = get(QUALIFIER);
