@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -61,7 +60,8 @@ public class UnresolvedLookupExprParser extends AClangNodeParser<UnresolvedLooku
 
         checkNoChildren(node);
 
-        return ClavaNodeFactory.unresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.unresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, node.getInfo());
     }
 
     private List<String> parseDecls(String decls, String suffix) {

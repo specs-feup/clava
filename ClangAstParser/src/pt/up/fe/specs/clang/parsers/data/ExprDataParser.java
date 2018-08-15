@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
@@ -35,6 +36,7 @@ import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
+import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
@@ -198,6 +200,25 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(BinaryOperator.OP, LineStreamParsers.enumFromName(BinaryOperatorKind.class, lines));
+
+        return data;
+    }
+
+    public static DataStore parseUnresolvedLookupExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseOverloadExprData(lines, dataStore);
+
+        data.add(UnresolvedLookupExpr.REQUIRES_ADL, LineStreamParsers.oneOrZero(lines));
+        data.add(UnresolvedLookupExpr.NAME, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNodeList(data, UnresolvedLookupExpr.UNRESOLVED_DECLS,
+                LineStreamParsers.stringList(lines));
+
+        return data;
+    }
+
+    public static DataStore parseCallExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, CallExpr.CALLEE_DECL, lines.nextLine());
 
         return data;
     }

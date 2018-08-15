@@ -45,7 +45,8 @@ public class AutoTypeParser extends AClangNodeParser<AutoType> {
         Type deducedType = children.isEmpty() ? ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo())
                 : toType(children.get(0));
 
-        return ClavaNodeFactory.autoType(typeData, node.getInfo(), deducedType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.autoType(typeData, node.getInfo(), deducedType);
     }
 
 }

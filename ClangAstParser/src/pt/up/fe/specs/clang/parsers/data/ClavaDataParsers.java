@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.decl.data.ctorinit.DelegatingInit;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
@@ -224,6 +225,17 @@ public class ClavaDataParsers {
             TemplateArgumentExpr expr = new TemplateArgumentExpr();
             parserData.getClavaNodes().queueSetNode(expr, TemplateArgumentExpr.EXPR, lines.nextLine());
             return expr;
+        case Pack:
+            TemplateArgumentPack pack = new TemplateArgumentPack();
+
+            // Number of template args
+            int numArgs = LineStreamParsers.integer(lines);
+            List<TemplateArgument> packArgs = new ArrayList<>(numArgs);
+            for (int i = 0; i < numArgs; i++) {
+                packArgs.add(templateArgument(lines, parserData));
+            }
+
+            return pack;
         default:
             throw new NotImplementedException(kind);
         }
