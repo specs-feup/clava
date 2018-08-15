@@ -45,6 +45,8 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNode;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
@@ -160,7 +162,11 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // return (T) clavaNode;
 
         // System.out.println("NODE CLASS:" + nodeClass);
-        T clavaNodeCopy = clavaNode.newInstance(true, nodeClass, children);
+        // Share data, in order to avoid divergence in nodes that are supposed to be the same
+        // T clavaNodeCopy = clavaNode.newInstance(true, true, nodeClass, children);
+
+        T clavaNodeCopy = withoutCopy(clavaNode, children);
+
         // clavaNode.setChildren(children);
         // T clavaNodeCopy = (T) clavaNode;
 
@@ -185,6 +191,30 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             System.out.println("HAS DUMMY TYPES:" + children);
         }
         */
+    }
+
+    private T withoutCopy(ClavaNode clavaNode, List<ClavaNode> children) {
+
+        // Check if children need a Stmt wrapper
+        if (clavaNode instanceof CompoundStmt) {
+            for (int i = 0; i < children.size(); i++) {
+                ClavaNode child = children.get(i);
+                if (child instanceof Stmt) {
+                    continue;
+                }
+
+                if (child instanceof Expr) {
+                    children.set(i, LegacyToDataStore.getFactory().exprStmt((Expr) child));
+                    continue;
+                }
+
+                throw new RuntimeException("Case not defined: " + child.getClass());
+            }
+        }
+
+        clavaNode.setChildren(children);
+
+        return (T) clavaNode;
     }
 
     public void processNodeCopy(ClavaNode clavaNodeCopy) {

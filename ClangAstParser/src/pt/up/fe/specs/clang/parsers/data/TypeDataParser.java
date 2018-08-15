@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
+import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
@@ -49,6 +50,7 @@ import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
+import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -333,6 +335,17 @@ public class TypeDataParser {
 
         parserData.getClavaNodes().queueSetNode(data, AttributedType.MODIFIED_TYPE, lines.nextLine());
         parserData.getClavaNodes().queueSetNode(data, AttributedType.EQUIVALENT_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseUnaryTransformTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        data.add(UnaryTransformType.KIND, LineStreamParsers.enumFromName(UnaryTransformTypeKind.class, lines));
+        parserData.getClavaNodes().queueSetNode(data, UnaryTransformType.UNDERLYING_TYPE, lines.nextLine());
+        parserData.getClavaNodes().queueSetNode(data, UnaryTransformType.BASE_TYPE, lines.nextLine());
 
         return data;
     }

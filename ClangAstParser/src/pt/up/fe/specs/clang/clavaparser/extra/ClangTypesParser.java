@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -57,7 +56,8 @@ public class ClangTypesParser {
             ClavaNode clavaNode = converter.parse(clangType);
 
             if (clavaNode instanceof Undefined) {
-                clavaNode = ClavaNodeFactory.dummyType(clavaNode);
+                clavaNode.getFactoryWithNode().dummyType("from undefined");
+                // clavaNode = ClavaNodeFactory.dummyType(clavaNode);
             }
 
             if (!(clavaNode instanceof Type)) {

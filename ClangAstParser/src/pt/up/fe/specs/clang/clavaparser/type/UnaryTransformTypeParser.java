@@ -23,11 +23,10 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKind;
+import pt.up.fe.specs.clava.ast.type.enums.UnaryTransformTypeKindOld;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class UnaryTransformTypeParser extends AClangNodeParser<UnaryTransformType> {
@@ -45,7 +44,7 @@ public class UnaryTransformTypeParser extends AClangNodeParser<UnaryTransformTyp
         // __underlying_type(enum Routing::Direction)' sugar underlying_type
 
         TypeData typeData = parser.apply(ClangDataParsers::parseType);
-        UnaryTransformTypeKind kind = parser.apply(ClangGenericParsers::parseEnum, UnaryTransformTypeKind.getHelper());
+        UnaryTransformTypeKindOld kind = parser.apply(ClangGenericParsers::parseEnum, UnaryTransformTypeKindOld.getHelper());
 
         // Children
         List<ClavaNode> children = parseChildren(node);
@@ -54,11 +53,12 @@ public class UnaryTransformTypeParser extends AClangNodeParser<UnaryTransformTyp
         Type baseType = typeData.hasSugar() ? toType(children.remove(0)) : null;
 
         // Check if has underlying type
-        Type underlyingType = kind == UnaryTransformTypeKind.ENUM_UNDERLYING_TYPE ? toType(children.remove(0)) : null;
+        Type underlyingType = kind == UnaryTransformTypeKindOld.ENUM_UNDERLYING_TYPE ? toType(children.remove(0)) : null;
 
         Preconditions.checkArgument(children.isEmpty(), "Expected chilren to be empty:" + children);
 
-        return ClavaNodeFactory.unaryTransformType(kind, typeData, node.getInfo(), baseType, underlyingType);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.unaryTransformType(kind, typeData, node.getInfo(), baseType, underlyingType);
     }
 
 }

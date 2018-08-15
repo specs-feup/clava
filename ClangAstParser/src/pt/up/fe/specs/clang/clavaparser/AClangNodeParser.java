@@ -93,6 +93,7 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         this.converter = converter;
         this.hasContent = hasContent;
         this.ignoreContent = ignoreContent;
+
         // this.constructors = new ClavaNodeConstructors();
     }
 
@@ -180,8 +181,11 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
     }
 
     public DummyType newDummyType(ClangNode node) {
-        return ClavaNodeFactory.dummyType(node.getDescription(), info(node),
-                node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
+        DummyType type = LegacyToDataStore.getFactory().dummyType(node.getDescription());
+        type.setChildren(node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
+        return type;
+        // return ClavaNodeFactory.dummyType(node.getDescription(), info(node),
+        // node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
     }
 
     // public DummyExpr newDummyExpr(ClangNode node) {
@@ -200,14 +204,17 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
      */
     public Expr toExpr(ClavaNode node) {
         if (node instanceof NullNode) {
-            return ClavaNodeFactory.nullExpr();
+            return node.getFactory().nullExpr();
+            // ClavaNodeFactory.nullExpr();
         }
 
-        return ClavaParserUtils.cast(node, Expr.class, ClavaNodeFactory::dummyExpr);
+        // return ClavaParserUtils.cast(node, Expr.class, ClavaNodeFactory::dummyExpr);
+        return ClavaParserUtils.cast(node, Expr.class, clavaNode -> clavaNode.getFactoryWithNode().dummyExpr(""));
     }
 
     public Type toType(ClavaNode node) {
-        return ClavaParserUtils.cast(node, Type.class, ClavaNodeFactory::dummyType);
+        return ClavaParserUtils.cast(node, Type.class, clavaNode -> clavaNode.getFactoryWithNode().dummyType(""));
+        // return ClavaParserUtils.cast(node, Type.class, ClavaNodeFactory::dummyType);
     }
 
     /**
