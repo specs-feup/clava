@@ -233,7 +233,10 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
                 case TemplateArgument::ArgKind::Expression:
                     VisitStmtTop(templateArg.getAsExpr());
                     break;
-                default: throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+                case TemplateArgument::ArgKind::Pack:
+                    // Do nothing
+                    break;
+                default: throw std::invalid_argument("ClangAstDumper::VisitFunctionDeclChildren(): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
             }
         }
     }

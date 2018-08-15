@@ -355,16 +355,25 @@ void clava::dump(NestedNameSpecifier* qualifier, ASTContext* Context) {
     }
 }
 
-void clava::dump(const TemplateArgument& templateArg, int id) {
+void clava::dump(const TemplateArgument &templateArg, int id) {
     clava::dump(clava::TEMPLATE_ARG_KIND[templateArg.getKind()]);
-    switch(templateArg.getKind()) {
+    switch (templateArg.getKind()) {
         case TemplateArgument::ArgKind::Type:
             clava::dump(clava::getId(templateArg.getAsType(), id));
             break;
         case TemplateArgument::ArgKind::Expression:
             clava::dump(clava::getId(templateArg.getAsExpr(), id));
             break;
-        default: throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+        case TemplateArgument::ArgKind::Pack:
+            clava::dump(templateArg.pack_size());
+            for (auto currentArg = templateArg.pack_begin(), endArg = templateArg.pack_end();
+                 currentArg != endArg; ++currentArg) {
+                clava::dump(*currentArg, id);
+            }
+            break;
+        default:
+            throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '" +
+                                        clava::TEMPLATE_ARG_KIND[templateArg.getKind()] + "'");
     }
 }
 
