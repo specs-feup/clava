@@ -30,6 +30,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"LValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"RValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
+        {"PackExpansionType", clava::TypeNode::PACK_EXPANSION_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -501,11 +502,14 @@ void clava::ClavaDataDumper::DumpPackExpansionTypeData(const PackExpansionType *
         clava::dump(0);
     }
 
+    clava::dump(clava::getId(T->getPattern(), id));
+    /*
     if (!T->isSugared()) {
         clava::dump(clava::getId(T->getPattern(), id));
     } else {
         clava::dump(clava::getId((const Type*) nullptr, id));
     }
+     */
 
 }
 
