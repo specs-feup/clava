@@ -160,25 +160,21 @@ public class CallExpr extends Expr {
         // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
         // return Optional.empty();
         // }
-        Optional<FunctionDecl> functionDecl = getFunctionDecl();
-
-        if (!functionDecl.isPresent()) {
-            return Optional.empty();
-        }
+        FunctionDecl functionDecl = getFunctionDecl();
 
         // If no body, return immediately
-        if (!functionDecl.get().hasBody()) {
-            return functionDecl;
+        if (!functionDecl.hasBody()) {
+            return Optional.of(functionDecl);
         }
 
         // Search for the declaration
-        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
-                functionDecl.get().getFunctionType()));
+        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.getDeclName(),
+                functionDecl.getFunctionType()));
     }
 
-    public Optional<FunctionDecl> getFunctionDecl() {
+    public FunctionDecl getFunctionDecl() {
 
-        return Optional.of((FunctionDecl) get(CALLEE_DECL));
+        return (FunctionDecl) get(CALLEE_DECL);
 
         // DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
         //
@@ -240,19 +236,15 @@ public class CallExpr extends Expr {
      * @return the definition of this function call, if present
      */
     public Optional<FunctionDecl> getDefinition() {
-        Optional<FunctionDecl> functionDecl = getFunctionDecl();
-
-        if (!functionDecl.isPresent()) {
-            return Optional.empty();
-        }
+        FunctionDecl functionDecl = getFunctionDecl();
 
         // If has body, return immediately
-        if (functionDecl.get().hasBody()) {
-            return functionDecl;
+        if (functionDecl.hasBody()) {
+            return Optional.of(functionDecl);
         }
 
         // Search for the definition
-        return getApp().getFunctionDefinition(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
+        return getApp().getFunctionDefinition(functionDecl.getDeclName(), functionDecl.getFunctionType());
     }
 
     /**

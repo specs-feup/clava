@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -30,7 +29,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 /**
@@ -153,95 +151,95 @@ public class CXXMemberCallExpr extends CallExpr {
         // return currentExpr;
     }
 
-    @Override
-    public Optional<FunctionDecl> getFunctionDecl() {
-        // TODO: Replace with Clang method getMethodDecl () const, when refactoring to new format
-
-        // Get base
-        Expr base = getBase();
-
-        if (base instanceof MemberExpr) {
-            Type baseType = base.getType();
-
-            Optional<RecordType> recordType = baseType.toTry(RecordType.class);
-
-            if (!recordType.isPresent()) {
-                SpecsLogs.msgInfo("Expected type of member access to have a record type: " + baseType.toTree());
-                return Optional.empty();
-            }
-
-            return getFunctionDeclFromRecord(recordType.get());
-        }
-
-        /*
-        // Get root base
-        Expr rootBase = getRootBase();
-        
-        if (rootBase != getBase()) {
-            // Base should be a MemberExpr
-            System.out.println("ROOT BASE:" + rootBase);
-            System.out.println("BASE:" + getBase());
-            System.out.println("BASE TYPE:" + getBase().getType());
-            ClavaLog.warning("Not yet implemented for consecutive chains");
-            return Optional.empty();
-        }
-        */
-
-        DeclRefExpr rootDeclRef = base.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
-        if (rootDeclRef == null) {
-            ClavaLog.warning("Expected a DeclRefExpr, got:\n" + base);
-            return Optional.empty();
-        }
-
-        // Get recordType of declaration
-
-        // rootDeclRef.getVariableDeclaration().
-
-        // Type initExprType = initExpr.getType();
-        // RecordType recordType = initExprType instanceof RecordType ? (RecordType) initExprType
-        // : initExprType.desugarTo(RecordType.class);
-        //
-
-        Type rootDeclRefType = rootDeclRef.getType();
-        if (!(rootDeclRefType instanceof RecordType)) {
-            rootDeclRefType = rootDeclRefType.desugar();
-        }
-
-        if (!(rootDeclRefType instanceof RecordType)) {
-            ClavaLog.warning("Expected a RecordType, got:\n" + rootDeclRef.getType().toTree());
-            return Optional.empty();
-        }
-
-        RecordType recordType = (RecordType) rootDeclRefType;
-
-        // System.out.println("BASE RECORD:" + recordType);
-
-        return getFunctionDeclFromRecord(recordType);
-        /*
-        Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
-        
-        System.out.println("VARDECL:" + varDecl);
-        
-        if (!varDecl.isPresent()) {
-            return Optional.empty();
-        }
-        
-        DeclaratorDecl declarator = varDecl.get();
-        if (declarator instanceof FunctionDecl) {
-            return Optional.of((FunctionDecl) declarator);
-        }
-        
-        SpecsLogs.msgLib("Could not extract function from member call callee decl, check if ok:\n" + declarator);
-        return Optional.empty();
-        
-        // if (!(declarator instanceof FunctionDecl)) {
-        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of((FunctionDecl) declarator);
-        */
-    }
+    // @Override
+    // public Optional<FunctionDecl> getFunctionDecl() {
+    // // TODO: Replace with Clang method getMethodDecl () const, when refactoring to new format
+    //
+    // // Get base
+    // Expr base = getBase();
+    //
+    // if (base instanceof MemberExpr) {
+    // Type baseType = base.getType();
+    //
+    // Optional<RecordType> recordType = baseType.toTry(RecordType.class);
+    //
+    // if (!recordType.isPresent()) {
+    // SpecsLogs.msgInfo("Expected type of member access to have a record type: " + baseType.toTree());
+    // return Optional.empty();
+    // }
+    //
+    // return getFunctionDeclFromRecord(recordType.get());
+    // }
+    //
+    // /*
+    // // Get root base
+    // Expr rootBase = getRootBase();
+    //
+    // if (rootBase != getBase()) {
+    // // Base should be a MemberExpr
+    // System.out.println("ROOT BASE:" + rootBase);
+    // System.out.println("BASE:" + getBase());
+    // System.out.println("BASE TYPE:" + getBase().getType());
+    // ClavaLog.warning("Not yet implemented for consecutive chains");
+    // return Optional.empty();
+    // }
+    // */
+    //
+    // DeclRefExpr rootDeclRef = base.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
+    // if (rootDeclRef == null) {
+    // ClavaLog.warning("Expected a DeclRefExpr, got:\n" + base);
+    // return Optional.empty();
+    // }
+    //
+    // // Get recordType of declaration
+    //
+    // // rootDeclRef.getVariableDeclaration().
+    //
+    // // Type initExprType = initExpr.getType();
+    // // RecordType recordType = initExprType instanceof RecordType ? (RecordType) initExprType
+    // // : initExprType.desugarTo(RecordType.class);
+    // //
+    //
+    // Type rootDeclRefType = rootDeclRef.getType();
+    // if (!(rootDeclRefType instanceof RecordType)) {
+    // rootDeclRefType = rootDeclRefType.desugar();
+    // }
+    //
+    // if (!(rootDeclRefType instanceof RecordType)) {
+    // ClavaLog.warning("Expected a RecordType, got:\n" + rootDeclRef.getType().toTree());
+    // return Optional.empty();
+    // }
+    //
+    // RecordType recordType = (RecordType) rootDeclRefType;
+    //
+    // // System.out.println("BASE RECORD:" + recordType);
+    //
+    // return getFunctionDeclFromRecord(recordType);
+    // /*
+    // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+    //
+    // System.out.println("VARDECL:" + varDecl);
+    //
+    // if (!varDecl.isPresent()) {
+    // return Optional.empty();
+    // }
+    //
+    // DeclaratorDecl declarator = varDecl.get();
+    // if (declarator instanceof FunctionDecl) {
+    // return Optional.of((FunctionDecl) declarator);
+    // }
+    //
+    // SpecsLogs.msgLib("Could not extract function from member call callee decl, check if ok:\n" + declarator);
+    // return Optional.empty();
+    //
+    // // if (!(declarator instanceof FunctionDecl)) {
+    // // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+    // // return Optional.empty();
+    // // }
+    // //
+    // // return Optional.of((FunctionDecl) declarator);
+    // */
+    // }
 
     private Optional<FunctionDecl> getFunctionDeclFromRecord(RecordType recordType) {
         // RecordType recordType = initExpr.getType().desugarTo(RecordType.class);
