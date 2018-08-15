@@ -34,7 +34,8 @@ namespace clava {
     extern const std::string TLS_KIND[];
     extern const std::string ELABORATED_TYPE_KEYWORD[];
     extern const std::string CONSTRUCTION_KIND[];
-    extern const std::string BINARY_OPERATOR__KIND[];
+    extern const std::string BINARY_OPERATOR_KIND[];
+    extern const std::string UTT_KIND[];
 
 
 }

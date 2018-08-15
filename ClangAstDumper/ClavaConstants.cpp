@@ -111,6 +111,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::PACK_EXPANSION_TYPE: return "PackExpansionType";
         case clava::TypeNode::TYPE_OF_EXPR_TYPE: return "TypeOfExprType";
         case clava::TypeNode::ATTRIBUTED_TYPE: return "AttributedType";
+        case clava::TypeNode::UNARY_TRANSFORM_TYPE: return "UnaryTransformType ";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

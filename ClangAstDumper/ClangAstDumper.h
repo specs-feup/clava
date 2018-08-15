@@ -279,6 +279,7 @@ private:
     void VisitPackExpansionTypeChildren(const PackExpansionType *T, std::vector<std::string> &visitedChildren);
     void VisitTypeOfExprTypeChildren(const TypeOfExprType *T, std::vector<std::string> &visitedChildren);
     void VisitAttributedTypeChildren(const AttributedType *T, std::vector<std::string> &visitedChildren);
+    void VisitUnaryTransformTypeChildren(const UnaryTransformType *T, std::vector<std::string> &visitedChildren);
 
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);

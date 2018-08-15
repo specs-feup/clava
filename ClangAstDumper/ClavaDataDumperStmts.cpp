@@ -362,7 +362,7 @@ void clava::ClavaDataDumper::DumpMaterializeTemporaryExprData(const MaterializeT
 void clava::ClavaDataDumper::DumpBinaryOperatorData(const BinaryOperator *E) {
     DumpExprData(E);
 
-    clava::dump(clava::BINARY_OPERATOR__KIND[E->getOpcode()]);
+    clava::dump(clava::BINARY_OPERATOR_KIND[E->getOpcode()]);
 }
 
 void clava::ClavaDataDumper::DumpCallExprData(const CallExpr *E) {

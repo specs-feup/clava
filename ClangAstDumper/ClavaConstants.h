@@ -123,6 +123,7 @@ namespace clava {
         PACK_EXPANSION_TYPE,
         TYPE_OF_EXPR_TYPE,
         ATTRIBUTED_TYPE,
+        UNARY_TRANSFORM_TYPE,
 
     };
 

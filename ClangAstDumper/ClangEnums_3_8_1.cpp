@@ -442,7 +442,7 @@ extern const std::string clava::CONSTRUCTION_KIND[]{
         "Delegating"
 };
 
-extern const std::string clava::BINARY_OPERATOR__KIND[]{
+extern const std::string clava::BINARY_OPERATOR_KIND[]{
         "PTR_MEM_D",
         "PTR_MEM_I",
         "MUL",
@@ -477,6 +477,9 @@ extern const std::string clava::BINARY_OPERATOR__KIND[]{
         "COMMA"
 };
 
+extern const std::string clava::UTT_KIND[]{
+    "EnumUnderlyingType"
+};
 
 
 

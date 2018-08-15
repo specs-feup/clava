@@ -170,6 +170,7 @@ namespace clava {
         void DumpPackExpansionTypeData(const PackExpansionType *T);
         void DumpTypeOfExprTypeData(const TypeOfExprType *T);
         void DumpAttributedTypeData(const AttributedType *T);
+        void DumpUnaryTransformTypeData(const UnaryTransformType  *T);
 
 
             // ATTRS

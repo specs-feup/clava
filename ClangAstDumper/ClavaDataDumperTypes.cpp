@@ -31,6 +31,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"RValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
         {"PackExpansionType", clava::TypeNode::PACK_EXPANSION_TYPE},
+        {"UnaryTransformType ", clava::TypeNode::UNARY_TRANSFORM_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -102,6 +103,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpTypeOfExprTypeData(static_cast<const TypeOfExprType *>(T)); break;
         case clava::TypeNode::ATTRIBUTED_TYPE:
             DumpAttributedTypeData(static_cast<const AttributedType *>(T)); break;
+        case clava::TypeNode::UNARY_TRANSFORM_TYPE:
+            DumpUnaryTransformTypeData(static_cast<const UnaryTransformType  *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -530,5 +533,15 @@ void clava::ClavaDataDumper::DumpAttributedTypeData(const AttributedType *T) {
 
     clava::dump(clava::getId(T->getModifiedType(), id));
     clava::dump(clava::getId(T->getEquivalentType(), id));
+}
+
+
+void clava::ClavaDataDumper::DumpUnaryTransformTypeData(const UnaryTransformType  *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::UTT_KIND[T->getUTTKind()]);
+    clava::dump(clava::getId(T->getUnderlyingType(), id));
+    clava::dump(clava::getId(T->getBaseType(), id));
 }
 
