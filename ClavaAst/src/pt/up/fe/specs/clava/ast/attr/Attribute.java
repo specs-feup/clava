@@ -20,13 +20,11 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
-public abstract class Attribute extends ClavaNode {
+public class Attribute extends ClavaNode {
 
     /// DATAKEYS BEGIN
 
@@ -54,15 +52,15 @@ public abstract class Attribute extends ClavaNode {
      * @param nodeInfo
      * @param children
      */
-    public Attribute(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
-            Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore()
-                .setAttribute(attrData)
-                .setNodeInfo(nodeInfo)
-                .getData(), children);
-
-        getData().set(KIND, kind);
-    }
+    // public Attribute(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
+    // Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore()
+    // .setAttribute(attrData)
+    // .setNodeInfo(nodeInfo)
+    // .getData(), children);
+    //
+    // getData().set(KIND, kind);
+    // }
 
     /**
      * @deprecated
@@ -91,5 +89,13 @@ public abstract class Attribute extends ClavaNode {
      */
     public boolean isPostAttr() {
         return false;
+    }
+
+    /**
+     * By default, uses the code string defined in the field KIND.
+     */
+    @Override
+    public String getCode() {
+        return get(KIND).getCode();
     }
 }

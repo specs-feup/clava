@@ -23,8 +23,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.attr.FinalAttr;
-import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.comment.BlockContentComment;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.DummyComment;
@@ -1401,9 +1399,9 @@ public class ClavaNodeFactory {
     /*
      * Attribute nodes
      */
-    public static FinalAttr finalAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-        return new FinalAttr(attrData, nodeInfo);
-    }
+    // public static FinalAttr finalAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
+    // return new FinalAttr(attrData, nodeInfo);
+    // }
 
     // public static OpenCLKernelAttr openCLKernelAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
     // return new OpenCLKernelAttr(attrData, nodeInfo);

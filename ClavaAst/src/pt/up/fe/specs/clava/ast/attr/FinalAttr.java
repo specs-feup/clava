@@ -13,23 +13,26 @@
 
 package pt.up.fe.specs.clava.ast.attr;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 
 public class FinalAttr extends InheritableAttr {
 
-    public FinalAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-        super(AttributeKind.Final, attrData, nodeInfo, Collections.emptyList());
+    public FinalAttr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FinalAttr(getAttrData(), getInfo());
-    }
+    // public FinalAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
+    // super(AttributeKind.Final, attrData, nodeInfo, Collections.emptyList());
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new FinalAttr(getAttrData(), getInfo());
+    // }
 
     @Override
     public String getCode() {
