@@ -26,13 +26,9 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * The base class of the type hierarchy.
@@ -85,14 +81,14 @@ public abstract class Type extends ClavaNode {
      * @param info
      * @param children
      */
-    public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
-        /*
-        super(info, children);
-        
-        this.data = data;
-        */
-    }
+    // public Type(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
+    // /*
+    // super(info, children);
+    //
+    // this.data = data;
+    // */
+    // }
 
     // /**
     // * @deprecated
@@ -459,20 +455,20 @@ public abstract class Type extends ClavaNode {
 
         return get(UNQUALIFIED_DESUGARED_TYPE).desugar();
     }
-
-    protected Type desugarImpl() {
-        throw new RuntimeException("deprecated, use UNQUALIFIED_DESUGARED_TYPE");
-        // return get(UNQUALIFIED_DESUGARED_TYPE);
-        // return getChild(Type.class, 0);
-
-        /*
-        if (hasDataI()) {
-            // If has sugar, first child is always the desugared type
-            return getChild(Type.class, 0);
-        }
-        throw new NotImplementedException(getClass());
-        */
-    }
+    //
+    // protected Type desugarImpl() {
+    // throw new RuntimeException("deprecated, use UNQUALIFIED_DESUGARED_TYPE");
+    // // return get(UNQUALIFIED_DESUGARED_TYPE);
+    // // return getChild(Type.class, 0);
+    //
+    // /*
+    // if (hasDataI()) {
+    // // If has sugar, first child is always the desugared type
+    // return getChild(Type.class, 0);
+    // }
+    // throw new NotImplementedException(getClass());
+    // */
+    // }
 
     /**
      * 
@@ -499,9 +495,9 @@ public abstract class Type extends ClavaNode {
         // setDesugarImpl(desugaredType);
     }
 
-    protected void setDesugarImpl(Type desugaredType) {
-        throw new NotImplementedException(getClass());
-    }
+    // protected void setDesugarImpl(Type desugaredType) {
+    // throw new NotImplementedException(getClass());
+    // }
 
     /*
     @Override

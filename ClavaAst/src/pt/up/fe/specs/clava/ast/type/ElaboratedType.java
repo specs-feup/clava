@@ -163,15 +163,15 @@ public class ElaboratedType extends TypeWithKeyword {
         return newQualifier;
     }
 
-    @Override
-    protected Type desugarImpl() {
-        return getNamedType();
-    }
-
-    @Override
-    protected void setDesugarImpl(Type desugaredType) {
-        setNamedType(desugaredType);
-    }
+    // @Override
+    // protected Type desugarImpl() {
+    // return getNamedType();
+    // }
+    //
+    // @Override
+    // protected void setDesugarImpl(Type desugaredType) {
+    // setNamedType(desugaredType);
+    // }
 
     /**
      * 
