@@ -21,8 +21,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -43,12 +41,13 @@ public class CompoundStmt extends Stmt {
     public final static DataKey<Boolean> IS_NAKED = KeyFactory.bool("isNaked");
 
     public CompoundStmt(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, parseChildren(children));
+        // super(data, parseChildren(children));
+        super(data, children);
 
         // If naked, can have only only child, or be empty
-        if (get(IS_NAKED)) {
-            Preconditions.checkArgument(children.size() < 2, "Expected at most 1 child:" + children);
-        }
+        // if (get(IS_NAKED)) {
+        // Preconditions.checkArgument(children.size() < 2, "Expected at most 1 child:" + children);
+        // }
 
     }
 

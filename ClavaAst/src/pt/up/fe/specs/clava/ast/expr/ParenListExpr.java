@@ -14,28 +14,31 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class ParenListExpr extends Expr {
 
-    public ParenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
-        this(exprData, info, (Collection<? extends ClavaNode>) expressions);
+    public ParenListExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private ParenListExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ParenListExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public ParenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
+    // this(exprData, info, (Collection<? extends ClavaNode>) expressions);
+    // }
+    //
+    // private ParenListExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ParenListExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public List<Expr> getExpressions() {
         return getChildren(Expr.class);

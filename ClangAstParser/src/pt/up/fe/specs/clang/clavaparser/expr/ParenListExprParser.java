@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ParenListExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -45,7 +44,8 @@ public class ParenListExprParser extends AClangNodeParser<ParenListExpr> {
 
         List<Expr> expressions = toExpr(children);
         // System.out.println("EXPR:" + expressions);
-        return ClavaNodeFactory.parenListExpr(exprData, node.getInfo(), expressions);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.parenListExpr(exprData, node.getInfo(), expressions);
     }
 
 }

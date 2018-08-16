@@ -69,8 +69,8 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     }
 
-    public CompoundStmt getThen() {
-        return getChild(CompoundStmt.class, 2);
+    public Optional<CompoundStmt> getThen() {
+        return getOptionalChild(CompoundStmt.class, 2);
         // return (CompoundStmt) ClavaNodes.getChild(this, getConditionIndex() + 1);
     }
 
@@ -86,7 +86,7 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
         String conditionCode = getDeclCondition().map(VarDecl::getCode).orElse(getCondition().getCode());
 
-        String thenCode = getThen().getCode();
+        String thenCode = getThen().map(CompoundStmt::getCode).orElse(";\n");
         // If then does not end with newline, add one
         thenCode = thenCode.endsWith(ln()) ? thenCode : thenCode + ln();
 

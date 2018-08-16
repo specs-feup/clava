@@ -48,7 +48,6 @@ import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
-import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
@@ -68,8 +67,6 @@ import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
-import pt.up.fe.specs.clava.ast.expr.ParenExpr;
-import pt.up.fe.specs.clava.ast.expr.ParenListExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
@@ -1143,15 +1140,15 @@ public class ClavaNodeFactory {
     //
     // return binaryOperator(op, exprData, info, lhs, rhs);
     // }
+    //
+    // public static ParenExpr parenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+    // return new ParenExpr(exprData, info, subExpr);
+    // }
 
-    public static ParenExpr parenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-        return new ParenExpr(exprData, info, subExpr);
-    }
-
-    public static ArraySubscriptExpr arraySubscriptExpr(ExprData exprData, ClavaNodeInfo info,
-            Expr lhs, Expr rhs) {
-        return new ArraySubscriptExpr(exprData, info, lhs, rhs);
-    }
+    // public static ArraySubscriptExpr arraySubscriptExpr(ExprData exprData, ClavaNodeInfo info,
+    // Expr lhs, Expr rhs) {
+    // return new ArraySubscriptExpr(exprData, info, lhs, rhs);
+    // }
 
     // public static CStyleCastExpr cStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
     // Expr subExpr) {
@@ -1317,9 +1314,9 @@ public class ClavaNodeFactory {
     // return new PackExpansionExpr(exprData, info, pattern);
     // }
 
-    public static ParenListExpr parenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
-        return new ParenListExpr(exprData, info, expressions);
-    }
+    // public static ParenListExpr parenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
+    // return new ParenListExpr(exprData, info, expressions);
+    // }
 
     public static CXXUnresolvedConstructExpr cxxUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData,
             ClavaNodeInfo info,

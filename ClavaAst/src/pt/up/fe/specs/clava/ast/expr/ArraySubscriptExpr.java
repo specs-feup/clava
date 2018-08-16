@@ -14,17 +14,16 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.classmap.ClassSet;
 
 /**
@@ -38,20 +37,24 @@ public class ArraySubscriptExpr extends Expr {
     private static final ClassSet<ClavaNode> VALID_ARRAY_VARS = ClassSet.newInstance(DeclRefExpr.class,
             MemberExpr.class);
 
-    public ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {
-        this(exprData, info, Arrays.asList(lhs, rhs));
+    public ArraySubscriptExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ArraySubscriptExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {
+    // this(exprData, info, Arrays.asList(lhs, rhs));
+    // }
+    //
+    // private ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ArraySubscriptExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public Expr getLhs() {
         return getChild(Expr.class, 0);
