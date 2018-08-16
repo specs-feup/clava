@@ -243,6 +243,7 @@ private:
     void VisitCXXMemberCallExprChildren(const CXXMemberCallExpr *E, std::vector<std::string> &children);
     void VisitCXXTypeidExprChildren(const CXXTypeidExpr *E, std::vector<std::string> &children);
     void VisitExplicitCastExprChildren(const ExplicitCastExpr *E, std::vector<std::string> &children);
+    void VisitOpaqueValueExprChildren(const OpaqueValueExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);

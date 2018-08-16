@@ -79,6 +79,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::CXX_MEMBER_CALL_EXPR: return "CXXMemberCallExpr";
         case clava::StmtNode::CXX_TYPEID_EXPR: return "CXXTypeidExpr";
         case clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR: return "CXXDependentScopeMemberExpr";
+        case clava::StmtNode::OPAQUE_VALUE_EXPR: return "OpaqueValueExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));

@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
+import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
@@ -35,9 +36,9 @@ public class ChildrenAdapter {
         this.context = context;
     }
 
-    private ClavaFactory getFactory() {
-        return context.get(ClavaContext.FACTORY);
-    }
+    // private ClavaFactory getFactory() {
+    // return context.get(ClavaContext.FACTORY);
+    // }
 
     private final static ClassMap<ClavaNode, BiFunction<List<ClavaNode>, ClavaContext, List<ClavaNode>>> CHILDREN_ADAPTERS;
     static {
@@ -46,8 +47,22 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(CompoundStmt.class, ChildrenAdapter::adaptCompoundStmt);
     }
 
+    private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
+    static {
+        NULL_NODE_MAPPER = new ClassMap<>(NullNodeAdapter.newEmpty());
+        NULL_NODE_MAPPER.put(IfStmt.class,
+                NullNodeAdapter.newInstance(NullNodeType.DECL, null, NullNodeType.STMT, NullNodeType.STMT));
+    }
+
     public List<ClavaNode> adaptChildren(ClavaNode node, List<ClavaNode> children) {
-        return CHILDREN_ADAPTERS.get(node.getClass()).apply(children, context);
+        // Replace NullNodeOld instances with NullNode
+        List<ClavaNode> adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
+                node, children);
+
+        // Apply normalization steps to children
+        adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(adaptedChildren, context);
+
+        return adaptedChildren;
     }
 
     private static List<ClavaNode> adaptIfStmt(List<ClavaNode> children, ClavaContext context) {
@@ -97,6 +112,11 @@ public class ChildrenAdapter {
             return clavaNode;
         }
 
+        // NullStmt is a valid value for CompoundStmt
+        if (clavaNode instanceof NullStmt) {
+            return clavaNode;
+        }
+
         // Wrap Expr around Stmt
         if (clavaNode instanceof Expr) {
             return toCompoundStmt(context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode), context);
@@ -107,6 +127,6 @@ public class ChildrenAdapter {
                     "Expected node to be of class " + Stmt.class + " but it " + clavaNode.getClass());
         }
 
-        return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode);
+        return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode).set(CompoundStmt.IS_NAKED);
     }
 }

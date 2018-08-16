@@ -89,7 +89,7 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
         StringBuilder code = new StringBuilder();
 
-        String conditionCode = getCondition().getCode();
+        String conditionCode = getDeclCondition().map(VarDecl::getCode).orElse(getCondition().getCode());
 
         String thenCode = getThen().getCode();
         // If then does not end with newline, add one

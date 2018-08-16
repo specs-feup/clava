@@ -27,6 +27,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXConstCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
         {"CXXReinterpretCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
         {"CXXStaticCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
+        {"OpaqueValueExpr", clava::StmtNode::OPAQUE_VALUE_EXPR},
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -88,6 +89,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXTypeidExprChildren(static_cast<const CXXTypeidExpr *>(S), visitedChildren); break;
         case clava::StmtNode::EXPLICIT_CAST_EXPR:
             VisitExplicitCastExprChildren(static_cast<const ExplicitCastExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::OPAQUE_VALUE_EXPR:
+            VisitOpaqueValueExprChildren(static_cast<const OpaqueValueExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -256,4 +259,12 @@ void ClangAstDumper::VisitExplicitCastExprChildren(const ExplicitCastExpr *E, st
 
 
     VisitTypeTop(E->getTypeAsWritten());
+}
+
+void ClangAstDumper::VisitOpaqueValueExprChildren(const OpaqueValueExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+    
+    addChild(E->getSourceExpr(), children);
+
 }
