@@ -39,7 +39,6 @@ import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
@@ -53,7 +52,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.treenode.TreeNodeUtils;
@@ -274,10 +272,10 @@ public class CallWrap {
         int numParameters = paramTypes.size();
 
         // Adjust number of parameters if last type is VariadicType,
-        boolean isVariadicType = SpecsCollections.last(paramTypes) instanceof VariadicType;
-        if (isVariadicType) {
-            numParameters--;
-        }
+        // boolean isVariadicType = SpecsCollections.last(paramTypes) instanceof VariadicType;
+        // if (isVariadicType) {
+        // numParameters--;
+        // }
 
         List<String> paramNames = IntStream.rangeClosed(1, numParameters)
                 .mapToObj(SpecsStrings::toExcelColumn)
