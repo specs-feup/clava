@@ -31,6 +31,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::TYPEDEF_NAME_DECL: return "TypedefNameDecl";
         case clava::DeclNode::TYPE_ALIAS_DECL: return "TypeAliasDecl";
         case clava::DeclNode::TYPEDEF_DECL: return "TypedefDecl";
+        case clava::DeclNode::ACCESS_SPEC_DECL: return "AccessSpecDecl";
 
 
         default: {
@@ -51,7 +52,9 @@ const std::string clava::getName(const StmtNode stmtNode) {
         // EXPRS
         case clava::StmtNode::EXPR: return "Expr";
         case clava::StmtNode::CAST_EXPR: return "CastExpr";
-        //case clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR: return "CXXFunctionalCastExpr";
+        case clava::StmtNode::CXX_FUNCTIONAL_CAST_EXPR: return "CXXFunctionalCastExpr";
+        case clava::StmtNode::EXPLICIT_CAST_EXPR: return "ExplicitCastExpr";
+        case clava::StmtNode::CXX_NAMED_CAST_EXPR: return "CXXNamedCastExpr";
         case clava::StmtNode::LITERAL: return "Literal";
         case clava::StmtNode::CHARACTER_LITERAL: return "CharacterLiteral";
         case clava::StmtNode::INTEGER_LITERAL: return "IntegerLiteral";

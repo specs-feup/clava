@@ -13,12 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents explicit type conversions in the source code.
@@ -30,15 +32,19 @@ public abstract class ExplicitCastExpr extends CastExpr {
 
     /// DATAKEY BEGIN
 
-    // public final static DataKey<Type> TYPE_AS_WRITTEN = KeyFactory.object("typeAsWritten", Type.class);
+    public final static DataKey<Type> TYPE_AS_WRITTEN = KeyFactory.object("typeAsWritten", Type.class);
 
     /// DATAKEY END
 
-    public ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-
-        super(castKind, exprData, info, subExpr);
+    public ExplicitCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // public ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    //
+    // super(castKind, exprData, info, subExpr);
+    // }
 
     /**
      * Constructor without children, for node copy.
@@ -46,10 +52,10 @@ public abstract class ExplicitCastExpr extends CastExpr {
      * @param castKind
      * @param location
      */
-    protected ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-
-        super(castKind, exprData, info, children);
-    }
+    // protected ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // List<? extends ClavaNode> children) {
+    //
+    // super(castKind, exprData, info, children);
+    // }
 
 }

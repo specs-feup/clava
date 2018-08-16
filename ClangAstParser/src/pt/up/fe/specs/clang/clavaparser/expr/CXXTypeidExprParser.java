@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -56,12 +55,14 @@ public class CXXTypeidExprParser extends AClangNodeParser<CXXTypeidExpr> {
             Type operandType = getOriginalTypes().get(typeidData.getOperandId());
             Preconditions.checkNotNull(operandType);
             typeidData.setOperandType(operandType);
-            return ClavaNodeFactory.cxxTypeidExpr(typeidData, exprData, node.getInfo());
+            throw new RuntimeException("deprecated");
+            // return ClavaNodeFactory.cxxTypeidExpr(typeidData, exprData, node.getInfo());
         }
 
         checkNumChildren(children, 1);
         Expr operandExpr = toExpr(children.get(0));
-        return ClavaNodeFactory.cxxTypeidExpr(typeidData, exprData, node.getInfo(), operandExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxTypeidExpr(typeidData, exprData, node.getInfo(), operandExpr);
 
     }
 

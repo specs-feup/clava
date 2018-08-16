@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -21,9 +20,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CastKind;
@@ -58,10 +54,10 @@ public abstract class CastExpr extends Expr {
      * @param info
      * @param subExpr
      */
-    public CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-        this(castKind, exprData, info, Arrays.asList(subExpr));
-    }
+    // public CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    // this(castKind, exprData, info, Arrays.asList(subExpr));
+    // }
 
     // protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
     // Expr subExpr, Collection<? extends ClavaNode> children) {
@@ -80,21 +76,20 @@ public abstract class CastExpr extends Expr {
     // }
 
     /**
-     * @deprecated
      * @param castKind
      * @param exprData
      * @param info
      * @param children
      */
-    @Deprecated
-    protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
-
-        set(CAST_KIND, castKind);
-        // this.castKind = castKind;
-    }
+    // @Deprecated
+    // protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
+    //
+    // set(CAST_KIND, castKind);
+    // // this.castKind = castKind;
+    // }
 
     @Override
     public ValueKind getValueKind() {

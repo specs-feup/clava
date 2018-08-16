@@ -21,6 +21,10 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         //{"FloatingLiteral", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CastExpr", clava::StmtNode::CAST_EXPR},
         {"CXXFunctionalCastExpr", clava::StmtNode::CAST_EXPR},
+        {"CStyleCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
+        {"CXXConstCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
+        {"CXXReinterpretCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
+        {"CXXStaticCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
 
         {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CompoundLiteralExpr", clava::StmtNode::COMPOUND_LITERAL_EXPR},
@@ -115,6 +119,10 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXMemberCallExprData(static_cast<const CXXMemberCallExpr *>(S)); break;
         case clava::StmtNode ::CXX_TYPEID_EXPR:
             DumpCXXTypeidExprData(static_cast<const CXXTypeidExpr *>(S)); break;
+        case clava::StmtNode ::EXPLICIT_CAST_EXPR:
+            DumpExplicitCastExprData(static_cast<const ExplicitCastExpr *>(S)); break;
+        case clava::StmtNode ::CXX_NAMED_CAST_EXPR:
+            DumpCXXNamedCastExprData(static_cast<const CXXNamedCastExpr *>(S)); break;
 //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
@@ -397,3 +405,15 @@ void clava::ClavaDataDumper::DumpCXXTypeidExprData(const CXXTypeidExpr *E) {
     }
 
 }
+
+void clava::ClavaDataDumper::DumpExplicitCastExprData(const ExplicitCastExpr *E) {
+    DumpCastExprData(E);
+
+    clava::dump(clava::getId(E->getTypeAsWritten(), id));
+}
+
+void clava::ClavaDataDumper::DumpCXXNamedCastExprData(const CXXNamedCastExpr *E) {
+    DumpExplicitCastExprData(E);
+
+    clava::dump(E->getCastName());
+ }

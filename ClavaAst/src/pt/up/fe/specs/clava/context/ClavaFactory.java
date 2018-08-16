@@ -39,6 +39,7 @@ import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
@@ -71,6 +72,7 @@ import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -316,6 +318,15 @@ public class ClavaFactory {
         data.set(BinaryOperator.OP, op);
 
         return new BinaryOperator(data, Arrays.asList(lhs, rhs));
+    }
+
+    public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
+        DataStore data = newExprDataStore()
+                .put(Expr.TYPE, Optional.of(type));
+
+        data.set(CastExpr.CAST_KIND, CastKind.NO_OP);
+
+        return new CStyleCastExpr(data, Arrays.asList(expr));
     }
 
     /// DECLS

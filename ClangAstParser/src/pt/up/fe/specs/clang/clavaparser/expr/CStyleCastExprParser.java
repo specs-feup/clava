@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -50,7 +49,8 @@ public class CStyleCastExprParser extends AClangNodeParser<CStyleCastExpr> {
 
         Expr subExpr = toExpr(children.get(0));
 
-        return ClavaNodeFactory.cStyleCastExpr(castKind, exprData, info(node), subExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cStyleCastExpr(castKind, exprData, info(node), subExpr);
     }
 
 }

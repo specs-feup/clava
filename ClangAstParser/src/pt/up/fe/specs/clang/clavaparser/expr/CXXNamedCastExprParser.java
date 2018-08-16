@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
@@ -63,16 +62,17 @@ public class CXXNamedCastExprParser extends AClangNodeParser<CXXNamedCastExpr> {
 
         Expr subExpr = toExpr(children.get(0));
 
-        switch (node.getName()) {
-        case "CXXStaticCastExpr":
-            return ClavaNodeFactory.cxxStaticCastExpr(cxxNamedCastExprData, exprData, node.getInfo(), subExpr);
-        case "CXXReinterpretCastExpr":
-            return ClavaNodeFactory.cxxReinterpretCastExpr(cxxNamedCastExprData, exprData, node.getInfo(), subExpr);
-        case "CXXConstCastExpr":
-            return ClavaNodeFactory.cxxConstCastExpr(cxxNamedCastExprData, exprData, node.getInfo(), subExpr);
-        default:
-            throw new RuntimeException("Case not defined: " + node.getName());
-        }
+        throw new RuntimeException("deprecated");
+        // switch (node.getName()) {
+        // case "CXXStaticCastExpr":
+        // return ClavaNodeFactory.cxxStaticCastExpr(cxxNamedCastExprData, exprData, node.getInfo(), subExpr);
+        // case "CXXReinterpretCastExpr":
+        // return ClavaNodeFactory.cxxReinterpretCastExpr(cxxNamedCastExprData, exprData, node.getInfo(), subExpr);
+        // case "CXXConstCastExpr":
+        // return ClavaNodeFactory.cxxConstCastExpr(cxxNamedCastExprData, exprData, node.getInfo(), subExpr);
+        // default:
+        // throw new RuntimeException("Case not defined: " + node.getName());
+        // }
 
     }
 

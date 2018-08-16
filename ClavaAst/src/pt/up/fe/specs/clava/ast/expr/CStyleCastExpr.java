@@ -13,14 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.language.CastKind;
 
 /**
  * Represents an explicit C-style cast (e.g., (double) a).
@@ -30,9 +27,13 @@ import pt.up.fe.specs.clava.language.CastKind;
  */
 public class CStyleCastExpr extends ExplicitCastExpr {
 
-    public CStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-        this(castKind, exprData, info, Arrays.asList(subExpr));
+    public CStyleCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // public CStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+    // this(castKind, exprData, info, Arrays.asList(subExpr));
+    // }
 
     /**
      * Constructor without children, for node copy.
@@ -40,15 +41,15 @@ public class CStyleCastExpr extends ExplicitCastExpr {
      * @param castKind
      * @param location
      */
-    private CStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-        super(castKind, exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CStyleCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private CStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // List<? extends ClavaNode> children) {
+    // super(castKind, exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CStyleCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

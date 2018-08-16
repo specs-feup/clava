@@ -14,35 +14,47 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 
 public class AccessSpecDecl extends Decl {
+    /// DATAKEYS BEGIN
 
-    private final AccessSpecifier accessSpecifier;
+    public final static DataKey<AccessSpecifier> ACCESS_SPECIFIER = KeyFactory.enumeration("accessSpecifier",
+            AccessSpecifier.class);
 
-    public AccessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData, ClavaNodeInfo info) {
-        this(accessSpecifier, declData, info, Collections.emptyList());
+    /// DATAKEYS END
+
+    public AccessSpecDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private AccessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declData, info, children);
-
-        this.accessSpecifier = accessSpecifier;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new AccessSpecDecl(accessSpecifier, getDeclData(), getInfo(), Collections.emptyList());
-    }
+    // private final AccessSpecifier accessSpecifier;
+    //
+    // public AccessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData, ClavaNodeInfo info) {
+    // this(accessSpecifier, declData, info, Collections.emptyList());
+    // }
+    //
+    // private AccessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(declData, info, children);
+    //
+    // this.accessSpecifier = accessSpecifier;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new AccessSpecDecl(accessSpecifier, getDeclData(), getInfo(), Collections.emptyList());
+    // }
 
     public AccessSpecifier getAccessSpecifier() {
-        return accessSpecifier;
+        return get(ACCESS_SPECIFIER);
+        // return accessSpecifier;
     }
 
     @Override
@@ -50,9 +62,9 @@ public class AccessSpecDecl extends Decl {
         return ln() + ln() + getAccessSpecifier().getString() + ":";
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + "visibility:" + getAccessSpecifier();
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + "visibility:" + getAccessSpecifier();
+    // }
 
 }

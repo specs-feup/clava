@@ -13,17 +13,15 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
-import com.google.common.base.Preconditions;
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * A C++ typeid expression (C++ [expr.typeid]), which gets the type_info that corresponds to the supplied type, or the
@@ -37,36 +35,53 @@ import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
  */
 public class CXXTypeidExpr extends Expr {
 
-    private final TypeidData typeidData;
+    /// DATAKEYS BEGIN
 
-    public CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info, Expr operandExpr) {
-        this(typeidData, exprData, info, Arrays.asList(operandExpr));
+    public final static DataKey<Boolean> IS_TYPE_OPERAND = KeyFactory.bool("typeOperand");
+
+    public final static DataKey<ClavaNode> OPERAND = KeyFactory.object("operand", ClavaNode.class);
+
+    /// DATAKEYS END
+
+    public CXXTypeidExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    public CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
-        this(typeidData, exprData, info, Collections.emptyList());
-    }
-
-    private CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-
-        this.typeidData = typeidData;
-
-        if (typeidData.isTypeOperand()) {
-            Preconditions.checkArgument(children.isEmpty());
-        } else {
-            Preconditions.checkArgument(children.size() == 1);
-        }
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXTypeidExpr(typeidData, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private final TypeidData typeidData;
+    //
+    // public CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info, Expr operandExpr) {
+    // this(typeidData, exprData, info, Arrays.asList(operandExpr));
+    // }
+    //
+    // public CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
+    // this(typeidData, exprData, info, Collections.emptyList());
+    // }
+    //
+    // private CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    //
+    // this.typeidData = typeidData;
+    //
+    // if (typeidData.isTypeOperand()) {
+    // Preconditions.checkArgument(children.isEmpty());
+    // } else {
+    // Preconditions.checkArgument(children.size() == 1);
+    // }
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXTypeidExpr(typeidData, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public Optional<Expr> getOperandExpr() {
-        return typeidData.isTypeOperand() ? Optional.empty() : Optional.of(getChild(Expr.class, 0));
+        return get(IS_TYPE_OPERAND) ? Optional.empty() : Optional.of((Expr) get(OPERAND));
+        // return typeidData.isTypeOperand() ? Optional.empty() : Optional.of(getChild(Expr.class, 0));
+    }
+
+    public Optional<Type> getOperandType() {
+        return get(IS_TYPE_OPERAND) ? Optional.of((Type) get(OPERAND)) : Optional.empty();
     }
 
     @Override
@@ -74,8 +89,8 @@ public class CXXTypeidExpr extends Expr {
         StringBuilder code = new StringBuilder();
 
         code.append("typeid(");
-        if (typeidData.isTypeOperand()) {
-            code.append(typeidData.getOperandType().getCode(this));
+        if (get(IS_TYPE_OPERAND)) {
+            code.append(getOperandType().get().getCode(this));
         } else {
             code.append(getOperandExpr().get().getCode());
         }

@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -46,6 +47,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
+import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.TLSKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
@@ -306,6 +308,15 @@ public class DeclDataParser {
         // ClavaLog.debug("TYPEDEF NAME DECL ID:" + data.get(ClavaNode.ID));
 
         dataStore.getClavaNodes().queueSetNode(data, TypedefNameDecl.UNDERLYING_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseAccessSpecDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseDeclData(lines, dataStore);
+
+        data.add(AccessSpecDecl.ACCESS_SPECIFIER, LineStreamParsers.enumFromName(AccessSpecifier.class, lines));
 
         return data;
     }

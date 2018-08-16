@@ -44,6 +44,7 @@ namespace clava {
         TYPEDEF_NAME_DECL,
         TYPE_ALIAS_DECL,
         TYPEDEF_DECL,
+        ACCESS_SPEC_DECL,
     };
 
     /**
@@ -59,6 +60,8 @@ namespace clava {
         EXPR,
         CAST_EXPR,
         CXX_FUNCTIONAL_CAST_EXPR,
+        EXPLICIT_CAST_EXPR,
+        CXX_NAMED_CAST_EXPR,
         LITERAL,
         CHARACTER_LITERAL,
         INTEGER_LITERAL,

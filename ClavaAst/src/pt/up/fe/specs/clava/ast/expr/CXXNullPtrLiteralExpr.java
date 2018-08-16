@@ -13,22 +13,26 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXNullPtrLiteralExpr extends Expr {
 
-    public CXXNullPtrLiteralExpr(ExprData exprData, ClavaNodeInfo info) {
-        super(exprData, info, Collections.emptyList());
+    public CXXNullPtrLiteralExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXNullPtrLiteralExpr(getExprData(), getInfo());
-    }
+    // public CXXNullPtrLiteralExpr(ExprData exprData, ClavaNodeInfo info) {
+    // super(exprData, info, Collections.emptyList());
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXNullPtrLiteralExpr(getExprData(), getInfo());
+    // }
 
     @Override
     public String getCode() {

@@ -13,32 +13,33 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class CXXStaticCastExpr extends CXXNamedCastExpr {
 
-    public CXXStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-
-        this(cxxNamedCastExprdata, exprData, info, Arrays.asList(subExpr));
+    public CXXStaticCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-
-        super(cxxNamedCastExprdata, exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXStaticCastExpr(getCxxNamedCastExprdata(), getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public CXXStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    //
+    // this(cxxNamedCastExprdata, exprData, info, Arrays.asList(subExpr));
+    // }
+    //
+    // private CXXStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
+    // List<? extends ClavaNode> children) {
+    //
+    // super(cxxNamedCastExprdata, exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXStaticCastExpr(getCxxNamedCastExprdata(), getExprData(), getInfo(), Collections.emptyList());
+    // }
 
 }

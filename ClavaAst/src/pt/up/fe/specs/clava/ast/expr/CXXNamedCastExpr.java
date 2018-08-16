@@ -13,25 +13,39 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 
 public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
 
-    private final CXXNamedCastExprData cxxNamedCastExprdata;
+    /// DATAKEY BEGIN
 
-    public CXXNamedCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
+    public final static DataKey<String> CAST_NAME = KeyFactory.string("castName");
 
-        this(cxxNamedCastExprdata, exprData, info, Arrays.asList(subExpr));
+    /// DATAKEY END
+
+    public CXXNamedCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // private final String castName;
+    // private final String typeAsWritten;
+    // private final CastKind castKind;
+
+    // private final CXXNamedCastExprData cxxNamedCastExprdata;
+
+    // public CXXNamedCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    //
+    // this(cxxNamedCastExprdata, exprData, info, Arrays.asList(subExpr));
+    // }
 
     /**
      * General constructor.
@@ -39,17 +53,17 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
      * @param castKind
      * @param location
      */
-    protected CXXNamedCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
+    // protected CXXNamedCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
+    // List<? extends ClavaNode> children) {
+    //
+    // super(cxxNamedCastExprdata.getCastKind(), exprData, info, children);
+    //
+    // this.cxxNamedCastExprdata = cxxNamedCastExprdata;
+    // }
 
-        super(cxxNamedCastExprdata.getCastKind(), exprData, info, children);
-
-        this.cxxNamedCastExprdata = cxxNamedCastExprdata;
-    }
-
-    public CXXNamedCastExprData getCxxNamedCastExprdata() {
-        return cxxNamedCastExprdata;
-    }
+    // public CXXNamedCastExprData getCxxNamedCastExprdata() {
+    // return cxxNamedCastExprdata;
+    // }
 
     @Override
     public String getCode() {
@@ -58,7 +72,8 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // System.out.println("AFTER:" + getTypeCode());
         // HACK: To deal with _Bool in C++ files while it is not properly addressed
         // ExplicitCast has the attribute 'typeAsWritten', which should be used here instead of getType()
-        String typeCode = cxxNamedCastExprdata.getTypeAsWritten();
+        // String typeCode = cxxNamedCastExprdata.getTypeAsWritten();
+        String typeCode = get(TYPE_AS_WRITTEN).getCode(this);
         if (typeCode.equals("_Bool") && getAncestorTry(TranslationUnit.class)
                 .map(tu -> tu.get(TranslationUnit.LANGUAGE).get(Language.C_PLUS_PLUS)).orElse(false)) {
             typeCode = "bool";
@@ -69,7 +84,8 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // System.out.println("VALUE DECL TYPE:" + ((DeclRefExpr) getSubExpr()).getValueDeclType());
         // System.out.println("TYPE CODE:" + typeCode);
         // System.out.println("TYPE AS WRITTEN:" + cxxNamedCastExprdata.getTypeAsWritten());
-        code.append(cxxNamedCastExprdata.getCastName());
+        // code.append(cxxNamedCastExprdata.getCastName());
+        code.append(get(CAST_NAME));
         // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
         code.append("<").append(typeCode).append(">");
         code.append("(").append(getSubExpr().getCode()).append(")");

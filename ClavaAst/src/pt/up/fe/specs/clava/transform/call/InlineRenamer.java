@@ -23,9 +23,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -34,7 +32,6 @@ import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -42,7 +39,6 @@ import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
-import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.BiConsumerClassMap;
@@ -389,8 +385,9 @@ public class InlineRenamer {
             // newType);
         }
 
-        Expr exprWithCast = ClavaNodeFactory.cStyleCastExpr(CastKind.NO_OP, new ExprData(newType),
-                ClavaNodeInfo.undefinedInfo(), expr);
+        Expr exprWithCast = factory.cStyleCastExpr(newType, expr);
+        // Expr exprWithCast = ClavaNodeFactory.cStyleCastExpr(CastKind.NO_OP, new ExprData(newType),
+        // ClavaNodeInfo.undefinedInfo(), expr);
 
         // System.out.println("NEW TYPE:" + newType.getCode());
 

@@ -24,11 +24,14 @@ import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.ExplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
@@ -230,6 +233,31 @@ public class ExprDataParser {
         DataStore data = parseCallExprData(lines, dataStore);
 
         dataStore.getClavaNodes().queueSetNode(data, CXXMemberCallExpr.METHOD_DECL, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseCXXTypeidExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXTypeidExpr.IS_TYPE_OPERAND, LineStreamParsers.oneOrZero(lines));
+        dataStore.getClavaNodes().queueSetNode(data, CXXTypeidExpr.OPERAND, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseExplicitCastExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseCastExprData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, ExplicitCastExpr.TYPE_AS_WRITTEN, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseCXXNamedCastExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExplicitCastExprData(lines, dataStore);
+
+        data.add(CXXNamedCastExpr.CAST_NAME, lines.nextLine());
 
         return data;
     }

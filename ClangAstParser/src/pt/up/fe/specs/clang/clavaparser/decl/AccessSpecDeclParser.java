@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
@@ -43,8 +42,8 @@ public class AccessSpecDeclParser extends AClangNodeParser<AccessSpecDecl> {
         AccessSpecifier accessSpecifier = parser.apply(ClangGenericParsers::parseEnum, AccessSpecifier.getHelper());
 
         checkNoChildren(node);
-
-        return ClavaNodeFactory.accessSpecDecl(accessSpecifier, declData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.accessSpecDecl(accessSpecifier, declData, node.getInfo());
     }
 
 }

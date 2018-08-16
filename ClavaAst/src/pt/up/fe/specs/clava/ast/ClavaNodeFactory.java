@@ -33,7 +33,6 @@ import pt.up.fe.specs.clava.ast.comment.InlineContentComment;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
-import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
@@ -50,20 +49,14 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
-import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXConstCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXNullPtrLiteralExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXReinterpretCastExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXStaticCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
@@ -87,11 +80,9 @@ import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorPosition;
-import pt.up.fe.specs.clava.ast.expr.data.CXXNamedCastExprData;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
-import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
@@ -136,9 +127,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
-import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
-import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 
@@ -472,10 +461,10 @@ public class ClavaNodeFactory {
     // definition);
     // }
 
-    public static AccessSpecDecl accessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData,
-            ClavaNodeInfo info) {
-        return new AccessSpecDecl(accessSpecifier, declData, info);
-    }
+    // public static AccessSpecDecl accessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData,
+    // ClavaNodeInfo info) {
+    // return new AccessSpecDecl(accessSpecifier, declData, info);
+    // }
 
     /*
     public static CXXDestructorDecl cxxDestructorDecl(String declName,
@@ -1171,10 +1160,10 @@ public class ClavaNodeFactory {
         return new ArraySubscriptExpr(exprData, info, lhs, rhs);
     }
 
-    public static CStyleCastExpr cStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-        return new CStyleCastExpr(castKind, exprData, info, subExpr);
-    }
+    // public static CStyleCastExpr cStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    // return new CStyleCastExpr(castKind, exprData, info, subExpr);
+    // }
 
     public static PredefinedExpr predefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
             Expr subExpr) {
@@ -1223,9 +1212,9 @@ public class ClavaNodeFactory {
         return new CXXDefaultInitExpr(exprData, info);
     }
 
-    public static CXXNullPtrLiteralExpr cxxNullPtrLiteralExpr(ExprData exprData, ClavaNodeInfo info) {
-        return new CXXNullPtrLiteralExpr(exprData, info);
-    }
+    // public static CXXNullPtrLiteralExpr cxxNullPtrLiteralExpr(ExprData exprData, ClavaNodeInfo info) {
+    // return new CXXNullPtrLiteralExpr(exprData, info);
+    // }
 
     public static CXXThisExpr cxxThisExpr(ExprData exprData, ClavaNodeInfo info) {
         return new CXXThisExpr(exprData, info);
@@ -1269,24 +1258,24 @@ public class ClavaNodeFactory {
     // return new UnresolvedLookupExpr(requiresAdl, name, decls, qualifier, exprData, info);
     // }
 
-    public static CXXStaticCastExpr cxxStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData,
-            ClavaNodeInfo info, Expr subExpr) {
-
-        return new CXXStaticCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
-    }
-
-    public static CXXConstCastExpr cxxConstCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData,
-            ClavaNodeInfo info,
-            Expr subExpr) {
-
-        return new CXXConstCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
-    }
-
-    public static CXXReinterpretCastExpr cxxReinterpretCastExpr(CXXNamedCastExprData cxxNamedCastExprdata,
-            ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-
-        return new CXXReinterpretCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
-    }
+    // public static CXXStaticCastExpr cxxStaticCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData,
+    // ClavaNodeInfo info, Expr subExpr) {
+    //
+    // return new CXXStaticCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
+    // }
+    //
+    // public static CXXConstCastExpr cxxConstCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData,
+    // ClavaNodeInfo info,
+    // Expr subExpr) {
+    //
+    // return new CXXConstCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
+    // }
+    //
+    // public static CXXReinterpretCastExpr cxxReinterpretCastExpr(CXXNamedCastExprData cxxNamedCastExprdata,
+    // ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+    //
+    // return new CXXReinterpretCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
+    // }
 
     public static OffsetOfExpr offsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info) {
         return new OffsetOfExpr(offsetOfData, exprData, info);
@@ -1351,15 +1340,15 @@ public class ClavaNodeFactory {
 
         return new LambdaExpr(lambdaData, exprData, info, lambdaClass, captureArguments, body);
     }
-
-    public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
-        return new CXXTypeidExpr(typeidData, exprData, info);
-    }
-
-    public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
-            Expr operatorExpr) {
-        return new CXXTypeidExpr(typeidData, exprData, info, operatorExpr);
-    }
+    //
+    // public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
+    // return new CXXTypeidExpr(typeidData, exprData, info);
+    // }
+    //
+    // public static CXXTypeidExpr cxxTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
+    // Expr operatorExpr) {
+    // return new CXXTypeidExpr(typeidData, exprData, info, operatorExpr);
+    // }
 
     /*
      * OpenMP Nodes

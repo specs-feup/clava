@@ -112,6 +112,7 @@ namespace clava {
         void DumpParmVarDeclData(const ParmVarDecl *D);
         void DumpTemplateTypeParmDeclData(const TemplateTypeParmDecl *D);
         void DumpTypedefNameDeclData(const TypedefNameDecl *D);
+        void DumpAccessSpecDeclData(const AccessSpecDecl *D);
 
 
         // STMTS
@@ -140,6 +141,8 @@ namespace clava {
         void DumpCallExprData(const CallExpr *E);
         void DumpCXXMemberCallExprData(const CXXMemberCallExpr *E);
         void DumpCXXTypeidExprData(const CXXTypeidExpr *E);
+        void DumpExplicitCastExprData(const ExplicitCastExpr *E);
+        void DumpCXXNamedCastExprData(const CXXNamedCastExpr *E);
 
 
 

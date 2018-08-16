@@ -22,6 +22,10 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
         {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
+        {"CStyleCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
+        {"CXXConstCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
+        {"CXXReinterpretCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
+        {"CXXStaticCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -79,6 +83,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXMemberCallExprChildren(static_cast<const CXXMemberCallExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_TYPEID_EXPR:
             VisitCXXTypeidExprChildren(static_cast<const CXXTypeidExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::EXPLICIT_CAST_EXPR:
+            VisitExplicitCastExprChildren(static_cast<const ExplicitCastExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -225,4 +231,12 @@ void ClangAstDumper::VisitCXXTypeidExprChildren(const CXXTypeidExpr *E, std::vec
         VisitStmtTop(E->getExprOperand());
     }
 
+}
+
+void ClangAstDumper::VisitExplicitCastExprChildren(const ExplicitCastExpr *E, std::vector<std::string> &children) {
+    // Hierarchy - direct parent is CastExpr
+    VisitExprChildren(E, children);
+
+
+    VisitTypeTop(E->getTypeAsWritten());
 }
