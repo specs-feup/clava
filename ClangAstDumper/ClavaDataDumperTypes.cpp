@@ -389,7 +389,7 @@ void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *
     // Hierarchy
     DumpArrayTypeData(T);
 
-    //clava::dump(clava::getId(T->getSizeExpr(), id));
+    clava::dump(clava::getId(T->getSizeExpr(), id));
 }
 
 void clava::ClavaDataDumper::DumpDependentSizedArrayTypeData(const DependentSizedArrayType *T) {
