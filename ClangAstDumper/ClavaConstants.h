@@ -41,6 +41,9 @@ namespace clava {
         TEMPLATE_TYPE_PARM_DECL,
         ENUM_CONSTANT_DECL,
         USING_SHADOW_DECL,
+        TYPEDEF_NAME_DECL,
+        TYPE_ALIAS_DECL,
+        TYPEDEF_DECL,
     };
 
     /**

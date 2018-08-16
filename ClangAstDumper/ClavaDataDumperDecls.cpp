@@ -22,7 +22,7 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"ParmVarDecl", clava::DeclNode::PARM_VAR_DECL},
         {"TemplateDecl", clava::DeclNode::NAMED_DECL},
         {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
-        {"TypedefDecl", clava::DeclNode::NAMED_DECL},
+        //{"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl", clava::DeclNode::TYPE_DECL},
         {"EnumDecl", clava::DeclNode::ENUM_DECL},
         {"RecordDecl", clava::DeclNode::RECORD_DECL},
@@ -33,6 +33,8 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"EnumConstantDecl", clava::DeclNode::VALUE_DECL},
         {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
         {"UsingShadowDecl", clava::DeclNode::NAMED_DECL},
+        {"TypeAliasDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
+        {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
 };
 
 
@@ -87,6 +89,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpParmVarDeclData(static_cast<const ParmVarDecl *>(D)); break;
         case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL:
             DumpTemplateTypeParmDeclData(static_cast<const TemplateTypeParmDecl *>(D)); break;
+        case clava::DeclNode::TYPEDEF_NAME_DECL:
+            DumpTypedefNameDeclData(static_cast<const TypedefNameDecl *>(D)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
 
@@ -160,6 +164,7 @@ void clava::ClavaDataDumper::DumpTypeDeclData(const TypeDecl *D) {
     // Hierarchy
     DumpNamedDeclData(D);
 
+    //clava::dump(clava::getId(Context->getTypeDeclType(D), id));
     clava::dump(clava::getId(D->getTypeForDecl(), id));
 }
 
@@ -444,3 +449,13 @@ void clava::ClavaDataDumper::DumpTemplateTypeParmDeclData(const TemplateTypeParm
     }
 
 }
+
+
+void clava::ClavaDataDumper::DumpTypedefNameDeclData(const TypedefNameDecl *D) {
+
+    // Hierarchy
+    DumpTypeDeclData(D);
+
+    clava::dump(clava::getId(D->getUnderlyingType(), id));
+}
+

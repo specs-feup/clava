@@ -111,6 +111,7 @@ namespace clava {
         void DumpVarDeclData(const VarDecl *D);
         void DumpParmVarDeclData(const ParmVarDecl *D);
         void DumpTemplateTypeParmDeclData(const TemplateTypeParmDecl *D);
+        void DumpTypedefNameDeclData(const TypedefNameDecl *D);
 
 
         // STMTS

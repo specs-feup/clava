@@ -32,6 +32,8 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         {"EnumConstantDecl", clava::DeclNode::ENUM_CONSTANT_DECL},
         {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
+        {"TypeAliasDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
+        {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
 
 
 
@@ -88,6 +90,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitTemplateTypeParmDeclChildren(static_cast<const TemplateTypeParmDecl *>(D), visitedChildren); break;
         case clava::DeclNode::ENUM_CONSTANT_DECL:
             VisitEnumConstantDeclChildren(static_cast<const EnumConstantDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::TYPEDEF_NAME_DECL:
+            VisitTypedefNameDeclChildren(static_cast<const TypedefNameDecl *>(D), visitedChildren); break;
 //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
         default: throw std::invalid_argument("ChildrenVisitorDecls::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
@@ -461,4 +465,12 @@ void ClangAstDumper::VisitEnumConstantDeclChildren(const EnumConstantDecl *D, st
     VisitValueDeclChildren(D, children);
 
     addChild(D->getInitExpr(), children);
+}
+
+void ClangAstDumper::VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitTypeDeclChildren(D, children);
+
+    VisitTypeTop(D->getUnderlyingType());
 }

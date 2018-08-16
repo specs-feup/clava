@@ -28,6 +28,10 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL: return "TemplateTypeParmDecl";
         case clava::DeclNode::ENUM_CONSTANT_DECL: return "EnumConstantDecl";
         case clava::DeclNode::USING_SHADOW_DECL: return "UsingShadowDecl";
+        case clava::DeclNode::TYPEDEF_NAME_DECL: return "TypedefNameDecl";
+        case clava::DeclNode::TYPE_ALIAS_DECL: return "TypeAliasDecl";
+        case clava::DeclNode::TYPEDEF_DECL: return "TypedefDecl";
+
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<DeclNode>::type>(declNode));
