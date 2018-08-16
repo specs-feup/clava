@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
+import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * The base class of the type hierarchy.
@@ -45,7 +47,7 @@ public abstract class Type extends ClavaNode {
      * Maps Type classes to a List of DataKeys corresponding to the properties of that class that return ClavaNode
      * instances.
      */
-    private static final Map<Class<? extends Type>, List<DataKey<? extends ClavaNode>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends Type>, List<DataKey<?>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
 
     /// DATAKEYS BEGIN
 
@@ -647,32 +649,79 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public List<ClavaNode> getNodes() {
-        List<DataKey<? extends ClavaNode>> keys = KEYS_WITH_NODES.get(getClass());
+        List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
         if (keys == null) {
             keys = addKeysWithNodes(this);
         }
 
         List<ClavaNode> children = new ArrayList<>();
 
-        for (DataKey<? extends ClavaNode> key : keys) {
-            children.add(get(key));
+        for (DataKey<?> key : keys) {
+            List<ClavaNode> values = getClavaNode(key);
+
+            children.addAll(values);
+            // children.add(get(key));
         }
 
         return children;
     }
 
-    @SuppressWarnings("unchecked") // It is safe, class is tested
-    private static List<DataKey<? extends ClavaNode>> addKeysWithNodes(Type type) {
-        List<DataKey<? extends ClavaNode>> keysWithNodes = new ArrayList<>();
+    private List<ClavaNode> getClavaNode(DataKey<?> key) {
+        // ClavaNode keys
+        if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+            return Arrays.asList((ClavaNode) get(key));
+        }
+
+        // Optional nodes
+        if (Optional.class.isAssignableFrom(key.getValueClass())) {
+            Optional<?> optionalValue = (Optional<?>) get(key);
+
+            return optionalValue.filter(value -> value instanceof ClavaNode)
+                    .map(node -> Arrays.asList((ClavaNode) node))
+                    .orElse(Collections.emptyList());
+        }
+
+        // List of nodes
+        if (List.class.isAssignableFrom(key.getValueClass())) {
+            List<?> values = (List<?>) get(key);
+
+            if (values.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            // Only testing first, cast tests all elements
+            if (values.get(0) instanceof ClavaNode) {
+                return SpecsCollections.cast(values, ClavaNode.class);
+            }
+        }
+
+        return null;
+    }
+
+    private static List<DataKey<?>> addKeysWithNodes(Type type) {
+        List<DataKey<?>> keysWithNodes = new ArrayList<>();
 
         // Get all the keys that map to a ClavaNode
         for (DataKey<?> key : type.getKeys().getKeys()) {
 
-            if (!ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+            // ClavaNode keys
+            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+                keysWithNodes.add(key);
                 continue;
             }
 
-            keysWithNodes.add((DataKey<? extends ClavaNode>) key);
+            // Optional nodes
+            if (Optional.class.isAssignableFrom(key.getValueClass())) {
+                keysWithNodes.add(key);
+                continue;
+            }
+
+            // List of nodes
+            if (List.class.isAssignableFrom(key.getValueClass())) {
+                keysWithNodes.add(key);
+                continue;
+            }
+
         }
 
         // Add to map
