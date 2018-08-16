@@ -1,11 +1,11 @@
 aspectdef GproferGetCxxFunction
-	input name end
+	input signature end
 	output $func end
 	
 	$func = undefined;
 	
 	/* decode name based on gprof format */
-	select function{signature == name} end
+	select function{signature == signature} end
 	apply
 		$func = $function;
 		return;
@@ -16,12 +16,12 @@ aspectdef GproferGetCxxFunction
 end
 
 aspectdef GproferGetCFunction
-	input name end
+	input signature end
 	output $func end
 	
 	$func = undefined;
 	
-	select function{name} end
+	select function{signature} end
 	apply
 		$func = $function;
 		return;
