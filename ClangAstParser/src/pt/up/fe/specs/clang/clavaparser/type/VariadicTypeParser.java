@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang.clavaparser.type;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -30,8 +29,8 @@ public class VariadicTypeParser extends AClangNodeParser<VariadicType> {
     protected VariadicType parse(ClangNode node, StringParser parser) {
 
         checkNoChildren(node);
-
-        return ClavaNodeFactory.variadicType(node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.variadicType(node.getInfo());
     }
 
 }

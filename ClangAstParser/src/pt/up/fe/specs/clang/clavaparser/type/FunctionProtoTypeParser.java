@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.data.ExceptionSpecifierInfo;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
@@ -67,8 +66,9 @@ public class FunctionProtoTypeParser extends AClangNodeParser<FunctionProtoType>
         Type returnType = toType(children.get(0));
         List<Type> arguments = toType(SpecsCollections.subList(children, 1));
 
-        return ClavaNodeFactory.functionProtoType(functionProtoTypeData, functionTypeData, typeData, node.getInfo(),
-                returnType, arguments);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.functionProtoType(functionProtoTypeData, functionTypeData, typeData, node.getInfo(),
+        // returnType, arguments);
     }
 
 }

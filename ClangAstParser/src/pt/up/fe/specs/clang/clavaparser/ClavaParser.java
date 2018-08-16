@@ -420,7 +420,7 @@ public class ClavaParser implements AutoCloseable {
         converter.setTypesMapping(nodeTypes);
 
         // Perform second pass over types
-        // processTypesSecondPass();
+        processTypesSecondPass();
 
         // Process Clang nodes to add extra information (e.g., namespace and RecordDecl names to CXXMethodDecl)
         new ClangAstProcessor(converter).process(clangAst);
