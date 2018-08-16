@@ -106,7 +106,6 @@ import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
-import pt.up.fe.specs.clava.ast.extra.VariadicType;
 import pt.up.fe.specs.clava.ast.omp.OMPParallelDirective;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
@@ -136,7 +135,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.FunctionProtoTypeData;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
@@ -145,7 +143,6 @@ import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * Contains methods to create Clava nodes.
@@ -625,7 +622,7 @@ public class ClavaNodeFactory {
     // }
 
     /**
-     * @deprecated use ClavaFactory
+     * 
      * @param functionProtoTypeData
      * @param functionTypeData
      * @param type
@@ -634,33 +631,33 @@ public class ClavaNodeFactory {
      * @param arguments
      * @return
      */
-    @Deprecated
-    public static FunctionProtoType functionProtoType(FunctionProtoTypeData functionProtoTypeData,
-            FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info, Type returnType,
-            Collection<? extends Type> arguments) {
-
-        DataStore data = new LegacyToDataStore()
-                .setNodeInfo(info)
-                .setType(type)
-                .setFunctionType(functionTypeData)
-                .setFunctionProtoType(functionProtoTypeData)
-                .getData();
-
-        // Has to check if last argument is of variadic type, and adjust number of arguments accordingly
-        int numParams = arguments.size();
-        boolean isVariadic = arguments.stream().filter(argType -> argType instanceof VariadicType)
-                .findFirst().isPresent();
-        if (isVariadic) {
-            --numParams;
-        }
-
-        data.add(FunctionProtoType.NUM_PARAMETERS, numParams);
-        data.add(FunctionProtoType.IS_VARIADIC, isVariadic);
-
-        return new FunctionProtoType(data, SpecsCollections.concat(returnType, arguments));
-
-        // return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
-    }
+    // @Deprecated
+    // public static FunctionProtoType functionProtoType(FunctionProtoTypeData functionProtoTypeData,
+    // FunctionTypeData functionTypeData, TypeData type, ClavaNodeInfo info, Type returnType,
+    // Collection<? extends Type> arguments) {
+    //
+    // DataStore data = new LegacyToDataStore()
+    // .setNodeInfo(info)
+    // .setType(type)
+    // .setFunctionType(functionTypeData)
+    // .setFunctionProtoType(functionProtoTypeData)
+    // .getData();
+    //
+    // // Has to check if last argument is of variadic type, and adjust number of arguments accordingly
+    // int numParams = arguments.size();
+    // boolean isVariadic = arguments.stream().filter(argType -> argType instanceof VariadicType)
+    // .findFirst().isPresent();
+    // if (isVariadic) {
+    // --numParams;
+    // }
+    //
+    // data.add(FunctionProtoType.NUM_PARAMETERS, numParams);
+    // data.add(FunctionProtoType.IS_VARIADIC, isVariadic);
+    //
+    // return new FunctionProtoType(data, SpecsCollections.concat(returnType, arguments));
+    //
+    // // return new FunctionProtoType(functionProtoTypeData, functionTypeData, type, info, returnType, arguments);
+    // }
 
     /**
      * @deprecated use ClavaFactory
@@ -777,10 +774,10 @@ public class ClavaNodeFactory {
     // Type underlyingType) {
     // return new DecltypeType(typeData, info, expr, underlyingType);
     // }
-
-    public static VariadicType variadicType(ClavaNodeInfo info) {
-        return new VariadicType(info);
-    }
+    //
+    // public static VariadicType variadicType(ClavaNodeInfo info) {
+    // return new VariadicType(info);
+    // }
 
     // public static UnaryTransformType unaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo
     // info,

@@ -17,8 +17,6 @@ import java.util.Collections;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.TypeData;
 
 /**
  * Represents an optional node in the tree.
@@ -29,10 +27,11 @@ import pt.up.fe.specs.clava.ast.type.data.TypeData;
  * @author JoaoBispo
  *
  */
-public class VariadicType extends Type {
+public class VariadicType extends ClavaNode {
 
     public VariadicType(ClavaNodeInfo info) {
-        super(new TypeData("VariadicType"), info, Collections.emptyList());
+        super(info, Collections.emptyList());
+        // super(new TypeData("VariadicType"), info, Collections.emptyList());
     }
 
     @Override
@@ -40,13 +39,15 @@ public class VariadicType extends Type {
         return new VariadicType(getInfo());
     }
 
+    /*
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         if (name != null) {
             throw new RuntimeException("Not implemented when name is not null");
         }
-
+    
         return "...";
     }
+    */
 
 }
