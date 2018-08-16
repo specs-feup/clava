@@ -13,45 +13,59 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 
 public class WhileStmt extends LoopStmt {
 
-    public WhileStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
-        this(info, Arrays.asList(condition, thenStmt));
+    public WhileStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private WhileStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
+    // public WhileStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
+    // this(info, Arrays.asList(condition, thenStmt));
+    // }
+    //
+    // private WhileStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new WhileStmt(getInfo(), Collections.emptyList());
+    // }
+
+    public Optional<VarDecl> getDeclCondition() {
+        return getOptionalChild(VarDecl.class, 0);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new WhileStmt(getInfo(), Collections.emptyList());
+    public Stmt getCondition() {
+        return getChild(Stmt.class, 1);
+        // return ClavaNodes.getChild(this, 1);
     }
 
-    public ClavaNode getWhileCondition() {
-        // return getChild(0);
-        return ClavaNodes.getChild(this, 0);
-    }
+    // public ClavaNode getWhileCondition() {
+    // // return getChild(0);
+    // return ClavaNodes.getChild(this, 1);
+    // }
 
     public CompoundStmt getThen() {
         // return getChild(Stmt.class, 1);
-        return (CompoundStmt) ClavaNodes.getChild(this, 1);
+        return (CompoundStmt) ClavaNodes.getChild(this, 2);
     }
 
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        String conditionCode = getWhileCondition().getCode();
+        // String conditionCode = getWhileCondition().getCode();
+        String conditionCode = getStmtCondition().map(ClavaNode::getCode).orElse("");
 
         code.append("while(").append(conditionCode).append(")").append(getThen().getCode());
 
@@ -59,13 +73,16 @@ public class WhileStmt extends LoopStmt {
     }
 
     @Override
-    public Optional<CompoundStmt> getBody() {
+    public CompoundStmt getBody() {
         return getThen();
     }
 
     @Override
     public Optional<ClavaNode> getStmtCondition() {
-        return Optional.of(getWhileCondition());
+        return Optional.of(getDeclCondition()
+                .map(ClavaNode.class::cast)
+                .orElse(getCondition()));
+        // return Optional.of(getWhileCondition());
     }
 
 }

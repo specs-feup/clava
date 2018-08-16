@@ -232,6 +232,7 @@ private:
     void VisitDeclStmtChildren(const DeclStmt *S, std::vector<std::string> &children);
     void VisitIfStmtChildren(const IfStmt *S, std::vector<std::string> &children);
     void VisitForStmtChildren(const ForStmt *S, std::vector<std::string> &children);
+    void VisitWhileStmtChildren(const WhileStmt *S, std::vector<std::string> &children);
 
     // Children visitors for Exprs
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);

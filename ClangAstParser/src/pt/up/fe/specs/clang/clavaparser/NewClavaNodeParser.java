@@ -51,6 +51,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
@@ -680,6 +681,22 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             }
             if (children.get(3) instanceof NullNodeOld) {
                 children.set(3, LegacyToDataStore.getFactory().nullStmt());
+            }
+
+            return;
+        }
+
+        if (clavaNode instanceof WhileStmt) {
+            Preconditions.checkArgument(children.size() == 3);
+
+            if (children.get(0) instanceof NullNodeOld) {
+                children.set(0, LegacyToDataStore.getFactory().nullDecl());
+            }
+            if (children.get(1) instanceof NullNodeOld) {
+                children.set(1, LegacyToDataStore.getFactory().nullStmt());
+            }
+            if (children.get(2) instanceof NullNodeOld) {
+                children.set(2, LegacyToDataStore.getFactory().nullStmt());
             }
 
             return;

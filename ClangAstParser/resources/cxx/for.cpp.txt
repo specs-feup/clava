@@ -1,3 +1,4 @@
+#include <vector>
 
 int main() {
    int i;
@@ -27,5 +28,10 @@ int main() {
    }
    // Cond and inc
    for(; i < 10; i++) {
+   }
+   for(;;);
+   
+   std::vector<int> intVector;
+   for(auto element : intVector) {
    }
 }

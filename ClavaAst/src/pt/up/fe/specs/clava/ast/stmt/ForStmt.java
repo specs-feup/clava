@@ -81,8 +81,8 @@ public class ForStmt extends LoopStmt {
     }
 
     @Override
-    public Optional<CompoundStmt> getBody() {
-        return getOptionalChild(CompoundStmt.class, 3);
+    public CompoundStmt getBody() {
+        return getChild(CompoundStmt.class, 3);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ForStmt extends LoopStmt {
         code.append(incCode);
         // getInc().ifPresent(inc -> code.append(inc.getCode()));
         code.append(")");
-        code.append(getBody().map(Stmt::getCode).orElse(";"));
+        code.append(getBody().getCode());
 
         return code.toString();
     }

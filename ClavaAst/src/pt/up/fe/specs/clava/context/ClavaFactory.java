@@ -64,6 +64,7 @@ import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
@@ -480,6 +481,12 @@ public class ClavaFactory {
         DataStore forStmtData = newStmtDataStore();
 
         return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body));
+    }
+
+    public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {
+        DataStore whileStmtData = newStmtDataStore();
+
+        return new WhileStmt(whileStmtData, Arrays.asList(cond, body));
     }
 
     /// ATTRIBUTES

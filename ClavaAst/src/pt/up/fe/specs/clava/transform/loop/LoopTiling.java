@@ -133,7 +133,7 @@ public class LoopTiling {
 
         // add loop as parent
         NodeInsertUtils.replace(referenceStmt, newFor, true);
-        newFor.getBody().get().addChild(referenceStmt);
+        newFor.getBody().addChild(referenceStmt);
     }
 
     private Stmt changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,

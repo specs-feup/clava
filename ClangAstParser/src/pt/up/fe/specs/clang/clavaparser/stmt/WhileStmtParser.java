@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
@@ -55,8 +54,9 @@ public class WhileStmtParser extends AClangNodeParser<WhileStmt> {
 
         CompoundStmt thenStmt = toCompoundStmt(children.get(2));
 
+        throw new RuntimeException("deprecated");
         // return ClavaNodeFactory.whileStmt(node.getInfo(), condition, thenStmt);
-        return ClavaNodeFactory.whileStmt(node.getInfo(), conditionStmt, thenStmt);
+        // return ClavaNodeFactory.whileStmt(node.getInfo(), conditionStmt, thenStmt);
     }
 
 }

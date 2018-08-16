@@ -105,7 +105,6 @@ import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
-import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
@@ -898,9 +897,9 @@ public class ClavaNodeFactory {
     // return new IfStmt(info, condition, thenStmt, elseStmt);
     // }
 
-    public static WhileStmt whileStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
-        return new WhileStmt(info, condition, thenStmt);
-    }
+    // public static WhileStmt whileStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
+    // return new WhileStmt(info, condition, thenStmt);
+    // }
 
     // public static ForStmt forStmt(ClavaNodeInfo info, Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
     // return new ForStmt(info, init, cond, inc, body);

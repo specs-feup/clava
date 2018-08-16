@@ -27,7 +27,6 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
@@ -260,10 +259,10 @@ public class CxxLoop extends ALoop {
 
     @Override
     public List<? extends AScope> selectBody() {
-        return loop.getBody()
-                .map(body -> Arrays.asList(CxxJoinpoints.create(body, this, AScope.class)))
-                .orElse(Collections.emptyList());
-        // return Arrays.asList(CxxJoinpoints.create(loop.getBody(), this, AScope.class));
+        // return loop.getBody()
+        // .map(body -> Arrays.asList(CxxJoinpoints.create(body, this, AScope.class)))
+        // .orElse(Collections.emptyList());
+        return Arrays.asList(CxxJoinpoints.create(loop.getBody(), this, AScope.class));
     }
 
     @Override
@@ -341,8 +340,13 @@ public class CxxLoop extends ALoop {
 
         if (loop instanceof ForStmt) {
 
-            WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
-                    loop.getBody().orElse(null));
+            // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
+            // loop.getBody().orElse(null));
+
+            // WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
+            // loop.getBody());
+            Stmt cond = ((ForStmt) loop).getCond().orElse(CxxWeaver.getFactory().nullStmt());
+            WhileStmt whileStmt = CxxWeaver.getFactory().whileStmt(cond, loop.getBody());
 
             replaceWith(CxxJoinpoints.create(whileStmt, getParentImpl()));
 

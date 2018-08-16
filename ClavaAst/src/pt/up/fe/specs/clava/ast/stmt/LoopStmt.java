@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -59,7 +58,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
         rank = null;
     }
 
-    public abstract Optional<CompoundStmt> getBody();
+    public abstract CompoundStmt getBody();
 
     public boolean isParallel() {
         return isParallel;

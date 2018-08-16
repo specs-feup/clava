@@ -7,6 +7,7 @@
 #define CLANGASTDUMPER_CLAVADATADUMPER_H
 
 #include "ClavaConstants.h"
+#include "ClavaDecl.h"
 
 #include "clang/AST/AST.h"
 #include "clang/AST/Decl.h"

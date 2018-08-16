@@ -94,6 +94,14 @@ public class LoopInterchange {
             return null;
         }
 
+        if (loop1.getBody().getStatements().isEmpty()) {
+            return null;
+        }
+
+        if (loop2.getBody().getStatements().isEmpty()) {
+            return null;
+        }
+
         ForStmt innerLoop = (ForStmt) (outerLoop != loop1 ? loop1 : loop2);
 
         boolean testBehaviour = testBehaviour(outerLoop, innerLoop);
@@ -113,8 +121,10 @@ public class LoopInterchange {
             return false;
         }
 
-        Optional<CompoundStmt> body = outLoop.getBody();
-        Stmt firstStmt = body.map(stmts -> stmts.getStatements().get(0)).orElse(null);
+        // Optional<CompoundStmt> body = outLoop.getBody();
+        CompoundStmt body = outLoop.getBody();
+        // Stmt firstStmt = body.map(stmts -> stmts.getStatements().get(0)).orElse(null);
+        Stmt firstStmt = body.getStatements().get(0);
 
         while (firstStmt != null) {
 
@@ -127,7 +137,8 @@ public class LoopInterchange {
                 return false;
             }
 
-            firstStmt = ((ForStmt) firstStmt).getBody().map(stmts -> stmts.getStatements().get(0)).orElse(null);
+            // firstStmt = ((ForStmt) firstStmt).getBody().map(stmts -> stmts.getStatements().get(0)).orElse(null);
+            firstStmt = ((ForStmt) firstStmt).getBody().getStatements().get(0);
         }
 
         /* the loops are not nested out -> inner */

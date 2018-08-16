@@ -63,8 +63,8 @@ public class CXXForRangeStmt extends LoopStmt {
     }
 
     @Override
-    public Optional<CompoundStmt> getBody() {
-        return getOptionalChild(CompoundStmt.class, 5);
+    public CompoundStmt getBody() {
+        return getChild(CompoundStmt.class, 5);
     }
 
     @Override
@@ -88,7 +88,8 @@ public class CXXForRangeStmt extends LoopStmt {
         String expr = initVar.getInit().get().getCode();
 
         code.append(expr).append(")");
-        code.append(getBody().map(body -> body.getCode()).orElse(";"));
+        // code.append(getBody().map(body -> body.getCode()).orElse(";"));
+        code.append(getBody().getCode());
 
         return code.toString();
     }

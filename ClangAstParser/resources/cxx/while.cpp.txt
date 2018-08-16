@@ -15,6 +15,9 @@ int main() {
    // Declaration inside empty while
    while(int a = test) {
    }
+   
+   while(true);
+   
    int i = 2;
    do  { // compound statement is the loop body
       i++;
@@ -24,6 +27,8 @@ int main() {
    do  {
    }
    while (i++ < 9);
+   
+   do ;while (true);
    
    return 0;
 }

@@ -21,6 +21,8 @@ int main() {
 
 	}
 	
+	while(true);
+	
 	int i = 2;
     do { // compound statement is the loop body
 		i++;

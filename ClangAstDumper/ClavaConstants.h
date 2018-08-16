@@ -18,34 +18,7 @@ static const std::string PARM_VAR_DECL_DATA = "<ParmVarDecl Data>";
 */
 namespace clava {
 
-    /**
-     * Represents decl node classes
-     */
-    enum class DeclNode {
-        DECL,
-        NAMED_DECL,
-        VALUE_DECL,
-        DECLARATOR_DECL,
-        FIELD_DECL,
-        TYPE_DECL,
-        FUNCTION_DECL,
-        CXX_METHOD_DECL,
-        CXX_CONSTRUCTOR_DECL,
-        VAR_DECL,
-        PARM_VAR_DECL,
-        TAG_DECL,
-        ENUM_DECL,
-        RECORD_DECL,
-        CXX_RECORD_DECL,
-        TEMPLATE_DECL,
-        TEMPLATE_TYPE_PARM_DECL,
-        ENUM_CONSTANT_DECL,
-        USING_SHADOW_DECL,
-        TYPEDEF_NAME_DECL,
-        TYPE_ALIAS_DECL,
-        TYPEDEF_DECL,
-        ACCESS_SPEC_DECL,
-    };
+
 
     /**
      * Represents stmt and expr node classes
@@ -57,6 +30,7 @@ namespace clava {
         DECL_STMT,
         IF_STMT,
         FOR_STMT,
+        WHILE_STMT,
 
         // Expr nodes
         EXPR,
@@ -150,7 +124,6 @@ namespace clava {
     };
 
 
-    const std::string getName(const DeclNode D);
     const std::string getName(const StmtNode S);
     const std::string getName(const TypeNode T);
     const std::string getName(const AttrNode A);
