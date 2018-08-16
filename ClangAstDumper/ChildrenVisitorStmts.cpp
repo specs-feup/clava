@@ -91,6 +91,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitExplicitCastExprChildren(static_cast<const ExplicitCastExpr *>(S), visitedChildren); break;
         case clava::StmtNode::OPAQUE_VALUE_EXPR:
             VisitOpaqueValueExprChildren(static_cast<const OpaqueValueExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR:
+            VisitUnaryExprOrTypeTraitExprChildren(static_cast<const UnaryExprOrTypeTraitExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -264,7 +266,18 @@ void ClangAstDumper::VisitExplicitCastExprChildren(const ExplicitCastExpr *E, st
 void ClangAstDumper::VisitOpaqueValueExprChildren(const OpaqueValueExpr *E, std::vector<std::string> &children) {
     // Hierarchy
     VisitExprChildren(E, children);
-    
+
     addChild(E->getSourceExpr(), children);
+
+}
+
+void ClangAstDumper::VisitUnaryExprOrTypeTraitExprChildren(const UnaryExprOrTypeTraitExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    if(E->isArgumentType()) {
+        VisitTypeTop(E->getArgumentType());
+    }
+
 
 }

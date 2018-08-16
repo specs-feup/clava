@@ -14,16 +14,15 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents an expression with a type or with an unevaluated expression operand.
@@ -34,10 +33,25 @@ import pt.up.fe.specs.util.SpecsLogs;
  *
  */
 public class UnaryExprOrTypeTraitExpr extends Expr {
+    /// DATAKEYS BEGIN
 
-    private final UnaryExprOrTypeTrait uettKind;
-    private Type argType;
-    private final String literalCode;
+    public final static DataKey<UnaryExprOrTypeTrait> KIND = KeyFactory.enumeration("kind", UnaryExprOrTypeTrait.class);
+
+    public final static DataKey<Boolean> IS_ARGUMENT_TYPE = KeyFactory.bool("isArgumentType");
+
+    public final static DataKey<Optional<Type>> ARG_TYPE = KeyFactory.optional("argType");
+
+    public final static DataKey<String> SOURCE_LITERAL = KeyFactory.string("sourceLiteral");
+
+    /// DATAKEYS END
+
+    public UnaryExprOrTypeTraitExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    // private final UnaryExprOrTypeTrait uettKind;
+    // private Type argType;
+    // private final String literalCode;
     // private boolean useLiteralCode;
 
     // private final String exprName;
@@ -48,44 +62,48 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
     // this(exprName, argType, type, info, Collections.emptyList());
     // }
 
-    public UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData exprData,
-            ClavaNodeInfo info,
-            Expr argumentExpression) {
+    // public UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData
+    // exprData,
+    // ClavaNodeInfo info,
+    // Expr argumentExpression) {
+    //
+    // this(uettKind, argType, literalCode, exprData, info, SpecsCollections.ofNullable(argumentExpression));
+    // }
+    //
+    // private UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData
+    // exprData,
+    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    //
+    // this.uettKind = uettKind;
+    // this.argType = argType;
+    // this.literalCode = literalCode;
+    // // this.useLiteralCode = false;
+    //
+    // if (argType == null) {
+    // // This can happen when copying nodes
+    // // Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
+    // } else {
+    // // useLiteralCode = true;
+    // // Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
+    // }
+    //
+    // }
 
-        this(uettKind, argType, literalCode, exprData, info, SpecsCollections.ofNullable(argumentExpression));
-    }
-
-    private UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData exprData,
-            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-
-        this.uettKind = uettKind;
-        this.argType = argType;
-        this.literalCode = literalCode;
-        // this.useLiteralCode = false;
-
-        if (argType == null) {
-            // This can happen when copying nodes
-            // Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
-        } else {
-            // useLiteralCode = true;
-            // Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
-        }
-
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, getExprData(), getInfo(),
-                Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, getExprData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public UnaryExprOrTypeTrait getUettKind() {
-        return uettKind;
+        return get(KIND);
+        // return uettKind;
     }
 
     public Optional<Type> getArgumentType() {
-        return Optional.ofNullable(argType);
+        return get(ARG_TYPE);
+        // return Optional.ofNullable(argType);
     }
 
     // public String getExprName() {
@@ -101,16 +119,19 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
     }
 
     public boolean hasArgumentExpression() {
-        return hasChildren();
+        return !get(IS_ARGUMENT_TYPE);
     }
 
     public boolean hasTypeExpression() {
-        return argType != null;
+        return get(IS_ARGUMENT_TYPE);
+        // return argType != null;
     }
 
     @Override
     public String getCode() {
-        return literalCode;
+
+        return get(SOURCE_LITERAL);
+        // return literalCode;
         /*
         if (useLiteralCode) {
             return literalCode;
@@ -132,22 +153,22 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         */
     }
 
-    @Override
-    public String toContentString() {
-        String argTypeString = argType == null ? null : argType.getBareType();
-        return toContentString(super.toContentString(),
-                "uett kind: " + uettKind + ", arg type: " + argTypeString);
-    }
+    // @Override
+    // public String toContentString() {
+    // String argTypeString = argType == null ? null : argType.getBareType();
+    // return toContentString(super.toContentString(),
+    // "uett kind: " + uettKind + ", arg type: " + argTypeString);
+    // }
 
-    public void setArgType(Type argType) {
-        if (this.argType == null) {
-            SpecsLogs.msgInfo("Cannot set type when kind is '" + uettKind + "'");
-            return;
-        }
-
-        this.argType = argType;
-
-    }
+    // public void setArgType(Type argType) {
+    // if (this.argType == null) {
+    // SpecsLogs.msgInfo("Cannot set type when kind is '" + uettKind + "'");
+    // return;
+    // }
+    //
+    // this.argType = argType;
+    //
+    // }
 
     /**
      * Special case: if sizeof, returns argument type.

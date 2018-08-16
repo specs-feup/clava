@@ -24,7 +24,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -80,8 +79,9 @@ public class UnaryExprOrTypeTraitExprParser extends AClangNodeParser<UnaryExprOr
 
         Expr argumentExpression = children.isEmpty() ? null : toExpr(children.get(0));
 
-        return ClavaNodeFactory.unaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, node.getInfo(),
-                argumentExpression);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.unaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, node.getInfo(),
+        // argumentExpression);
         /*
         if (children.isEmpty()) {
             return ClavaNodeFactory.unaryExprOrTypeTraitExpr(exprName, argType, type, node.getInfo());

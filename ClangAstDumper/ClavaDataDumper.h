@@ -144,6 +144,8 @@ namespace clava {
         void DumpExplicitCastExprData(const ExplicitCastExpr *E);
         void DumpCXXNamedCastExprData(const CXXNamedCastExpr *E);
         void DumpCXXDependentScopeMemberExprData(const CXXDependentScopeMemberExpr *E);
+        void DumpUnaryOperatorData(const UnaryOperator *E);
+        void DumpUnaryExprOrTypeTraitExprData(const UnaryExprOrTypeTraitExpr *E);
 
 
 

@@ -13,13 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 
@@ -31,45 +31,61 @@ import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
  */
 public class UnaryOperator extends Expr {
 
-    private final UnaryOperatorKind opcode;
-    private final UnaryOperatorPosition position;
+    /// DATAKEYS BEGIN
 
-    /**
-     * @param opcode
-     * @param isPrefix
-     * @param valueKind
-     * @param type
-     * @param info
-     * @param subExpr
-     */
-    public UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData exprData,
-            ClavaNodeInfo info, Expr subExpr) {
-        this(opcode, position, exprData, info, Arrays.asList(subExpr));
+    public final static DataKey<UnaryOperatorKind> OP = KeyFactory.enumeration("op", UnaryOperatorKind.class);
+
+    public final static DataKey<UnaryOperatorPosition> POSITION = KeyFactory.enumeration("position",
+            UnaryOperatorPosition.class);
+
+    /// DATAKEYS END
+
+    public UnaryOperator(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData expr, ClavaNodeInfo info,
-            List<? extends Expr> children) {
-        super(expr, info, children);
-
-        this.opcode = opcode;
-        this.position = position;
-
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UnaryOperator(opcode, position, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private final UnaryOperatorKind opcode;
+    // private final UnaryOperatorPosition position;
+    //
+    // /**
+    // * @param opcode
+    // * @param isPrefix
+    // * @param valueKind
+    // * @param type
+    // * @param info
+    // * @param subExpr
+    // */
+    // public UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData exprData,
+    // ClavaNodeInfo info, Expr subExpr) {
+    // this(opcode, position, exprData, info, Arrays.asList(subExpr));
+    // }
+    //
+    // private UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData expr, ClavaNodeInfo
+    // info,
+    // List<? extends Expr> children) {
+    // super(expr, info, children);
+    //
+    // this.opcode = opcode;
+    // this.position = position;
+    //
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UnaryOperator(opcode, position, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
+
         StringBuilder builder = new StringBuilder();
 
         // Get code of child
         builder.append(getSubExpr().getCode());
+        UnaryOperatorKind opcode = get(OP);
         String code = opcode.getCode();
 
-        switch (position) {
+        switch (get(POSITION)) {
         case PREFIX:
             if (opcode.requiresSpace()) {
                 code += " ";
@@ -91,16 +107,16 @@ public class UnaryOperator extends Expr {
     }
 
     public UnaryOperatorKind getOp() {
-        return opcode;
+        return get(OP);
     }
 
     public Expr getSubExpr() {
         return getChild(Expr.class, 0);
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + ", op:" + opcode;
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + ", op:" + opcode;
+    // }
 
 }

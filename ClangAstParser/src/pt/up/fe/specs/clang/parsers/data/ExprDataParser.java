@@ -41,13 +41,18 @@ import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
+import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -271,4 +276,25 @@ public class ExprDataParser {
 
         return data;
     }
+
+    public static DataStore parseUnaryOperatorData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(UnaryOperator.OP, LineStreamParsers.enumFromName(UnaryOperatorKind.class, lines));
+        data.add(UnaryOperator.POSITION, LineStreamParsers.enumFromName(UnaryOperatorPosition.class, lines));
+
+        return data;
+    }
+
+    public static DataStore parseUnaryExprOrTypeTraitExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(UnaryExprOrTypeTraitExpr.KIND, LineStreamParsers.enumFromName(UnaryExprOrTypeTrait.class, lines));
+        data.add(UnaryExprOrTypeTraitExpr.IS_ARGUMENT_TYPE, LineStreamParsers.oneOrZero(lines));
+        dataStore.getClavaNodes().queueSetOptionalNode(data, UnaryExprOrTypeTraitExpr.ARG_TYPE, lines.nextLine());
+        data.add(UnaryExprOrTypeTraitExpr.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
+
+        return data;
+    }
+
 }

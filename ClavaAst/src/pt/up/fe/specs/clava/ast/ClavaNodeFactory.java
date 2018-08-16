@@ -74,13 +74,9 @@ import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.StmtExpr;
-import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
-import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
@@ -125,7 +121,6 @@ import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
-import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 
 /**
@@ -1020,11 +1015,11 @@ public class ClavaNodeFactory {
      * @param subExpr
      * @return
      */
-    public static UnaryOperator unaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position,
-            ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-
-        return new UnaryOperator(opcode, position, exprData, info, subExpr);
-    }
+    // public static UnaryOperator unaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position,
+    // ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
+    //
+    // return new UnaryOperator(opcode, position, exprData, info, subExpr);
+    // }
 
     // public static DeclRefExpr declRefExpr(String refName, Type type) {
     // ExprData exprData = new ExprData(type, ValueKind.getDefault());
@@ -1218,11 +1213,11 @@ public class ClavaNodeFactory {
     // return new CXXThisExpr(exprData, info);
     // }
 
-    public static UnaryExprOrTypeTraitExpr unaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType,
-            String literalCode, ExprData exprData, ClavaNodeInfo info, Expr argumentExpression) {
-
-        return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, info, argumentExpression);
-    }
+    // public static UnaryExprOrTypeTraitExpr unaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType,
+    // String literalCode, ExprData exprData, ClavaNodeInfo info, Expr argumentExpression) {
+    //
+    // return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, exprData, info, argumentExpression);
+    // }
 
     // public static CompoundAssignOperator compoundAssignOperator(Type lhsType, Type resultType,
     // BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {

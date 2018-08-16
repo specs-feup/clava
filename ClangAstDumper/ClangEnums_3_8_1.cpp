@@ -482,5 +482,29 @@ extern const std::string clava::UTT_KIND[]{
 };
 
 
+extern const std::string clava::UNARY_OPERATOR_KIND[]{
+        "POST_INC",
+        "POST_DEC",
+        "PRE_INC",
+        "PRE_DEC",
+        "ADDR_OF",
+        "DEREF",
+        "PLUS",
+        "MINUS",
+        "NOT",
+        "L_NOT",
+        "REAL",
+        "IMAG",
+        "EXTENSION",
+        "COAWAIT"
+};
+
+extern const std::string clava::UETT_KIND[]{
+        "SIZE_OF",
+        "ALIGN_OF",
+        "VEC_STEP",
+        "OPEN_MP_REQUIRED_SIMD_ALIGN"
+};
+
 
 //const std::string BUILTIN_KIND[] {};

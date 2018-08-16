@@ -37,6 +37,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
         {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
         {"BinaryOperator", clava::StmtNode::BINARY_OPERATOR},
+        {"UnaryOperator", clava::StmtNode::UNARY_OPERATOR},
         {"CompoundAssignOperator", clava::StmtNode::BINARY_OPERATOR},
         {"CallExpr", clava::StmtNode::CALL_EXPR},
         {"CXXMemberCallExpr", clava::StmtNode::CXX_MEMBER_CALL_EXPR},
@@ -44,6 +45,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
         {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
         {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
+        {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
 
 };
 
@@ -126,7 +128,13 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXNamedCastExprData(static_cast<const CXXNamedCastExpr *>(S)); break;
         case clava::StmtNode ::CXX_DEPENDENT_SCOPE_MEMBER_EXPR:
             DumpCXXDependentScopeMemberExprData(static_cast<const CXXDependentScopeMemberExpr *>(S)); break;
-//        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
+        case clava::StmtNode ::UNARY_OPERATOR:
+            DumpUnaryOperatorData(static_cast<const UnaryOperator *>(S)); break;
+        case clava::StmtNode ::UNARY_EXPR_OR_TYPE_TRAIT_EXPR:
+            DumpUnaryExprOrTypeTraitExprData(static_cast<const UnaryExprOrTypeTraitExpr *>(S)); break;
+
+
+            //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
         default: throw std::invalid_argument("ClangDataDumper::dump(StmtNode): Case not implemented, '"+getName(stmtNode)+"'");
@@ -427,4 +435,32 @@ void clava::ClavaDataDumper::DumpCXXDependentScopeMemberExprData(const CXXDepend
     clava::dump(E->isArrow());
     clava::dump(E->getMemberNameInfo().getAsString());
 
+ }
+
+void clava::ClavaDataDumper::DumpUnaryOperatorData(const UnaryOperator *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::UNARY_OPERATOR_KIND[E->getOpcode()]);
+    if (E->isPostfix()) {
+        clava::dump("POSTFIX");
+    } else {
+        clava::dump("PREFIX");
+    }
+
+
+ }
+
+void clava::ClavaDataDumper::DumpUnaryExprOrTypeTraitExprData(const UnaryExprOrTypeTraitExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::UETT_KIND[E->getKind()]);
+    clava::dump(E->isArgumentType());
+    if(E->isArgumentType()) {
+        clava::dump(getId(E->getArgumentType(), id));
+    } else {
+        clava::dump(getId((const Type *)nullptr, id));
+    }
+
+    clava::dump(clava::getSource(Context, E->getSourceRange()));
+    //llvm::errs() << "UNARY " << clava::getId(E, id) << " is argument type: " << E->isArgumentType() << "\n";
  }

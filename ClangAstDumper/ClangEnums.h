@@ -36,6 +36,8 @@ namespace clava {
     extern const std::string CONSTRUCTION_KIND[];
     extern const std::string BINARY_OPERATOR_KIND[];
     extern const std::string UTT_KIND[];
+    extern const std::string UNARY_OPERATOR_KIND[];
+    extern const std::string UETT_KIND[];
 
 
 }
