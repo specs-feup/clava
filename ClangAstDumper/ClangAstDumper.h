@@ -240,6 +240,7 @@ private:
     void VisitUnresolvedLookupExprChildren(const UnresolvedLookupExpr *E, std::vector<std::string> &children);
     void VisitCallExprChildren(const CallExpr *E, std::vector<std::string> &children);
     void VisitCXXMemberCallExprChildren(const CXXMemberCallExpr *E, std::vector<std::string> &children);
+    void VisitCXXTypeidExprChildren(const CXXTypeidExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);

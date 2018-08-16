@@ -38,6 +38,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXMemberCallExpr", clava::StmtNode::CXX_MEMBER_CALL_EXPR},
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
+        {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
 
 };
 
@@ -112,6 +113,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCallExprData(static_cast<const CallExpr *>(S)); break;
         case clava::StmtNode ::CXX_MEMBER_CALL_EXPR:
             DumpCXXMemberCallExprData(static_cast<const CXXMemberCallExpr *>(S)); break;
+        case clava::StmtNode ::CXX_TYPEID_EXPR:
+            DumpCXXTypeidExprData(static_cast<const CXXTypeidExpr *>(S)); break;
 //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
@@ -382,3 +385,15 @@ void clava::ClavaDataDumper::DumpCXXMemberCallExprData(const CXXMemberCallExpr *
 
 //    clava::dump();
 //}
+
+void clava::ClavaDataDumper::DumpCXXTypeidExprData(const CXXTypeidExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->isTypeOperand());
+    if(E->isTypeOperand()) {
+        clava::dump(clava::getId(E->getTypeOperand(*Context), id));
+    } else {
+        clava::dump(getId(E->getExprOperand(), id));
+    }
+
+}

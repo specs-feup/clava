@@ -80,6 +80,7 @@ namespace clava {
         COMPOUND_ASSIGN_OPERATOR,
         CALL_EXPR,
         CXX_MEMBER_CALL_EXPR,
+        CXX_TYPEID_EXPR,
     };
 
     /**

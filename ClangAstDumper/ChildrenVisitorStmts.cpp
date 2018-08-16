@@ -21,6 +21,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXMemberCallExpr", clava::StmtNode::CXX_MEMBER_CALL_EXPR},
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
+        {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -76,6 +77,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCallExprChildren(static_cast<const CallExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_MEMBER_CALL_EXPR:
             VisitCXXMemberCallExprChildren(static_cast<const CXXMemberCallExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::CXX_TYPEID_EXPR:
+            VisitCXXTypeidExprChildren(static_cast<const CXXTypeidExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -209,5 +212,17 @@ void ClangAstDumper::VisitCXXMemberCallExprChildren(const CXXMemberCallExpr *E, 
     VisitCallExprChildren(E, children);
 
     VisitDeclTop(E->getMethodDecl());
+
+}
+
+void ClangAstDumper::VisitCXXTypeidExprChildren(const CXXTypeidExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    if(E->isTypeOperand()) {
+        VisitTypeTop(E->getTypeOperand(*Context));
+    } else {
+        VisitStmtTop(E->getExprOperand());
+    }
 
 }
