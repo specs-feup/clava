@@ -76,7 +76,7 @@ public class TypeDataParser {
         clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
         clavaData.add(Type.IS_FROM_AST, LineStreamParsers.oneOrZero(lines));
 
-        dataStore.getClavaNodes().queueSetNode(clavaData, Type.UNQUALIFIED_DESUGARED_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(clavaData, Type.UNQUALIFIED_DESUGARED_TYPE, lines.nextLine());
 
         return clavaData;
     }
@@ -236,7 +236,7 @@ public class TypeDataParser {
         data.add(TemplateTypeParmType.DEPTH, LineStreamParsers.integer(lines));
         data.add(TemplateTypeParmType.INDEX, LineStreamParsers.integer(lines));
         data.add(TemplateTypeParmType.IS_PACKED, LineStreamParsers.oneOrZero(lines));
-        parserData.getClavaNodes().queueSetNode(data, TemplateTypeParmType.DECL, lines.nextLine());
+        parserData.getClavaNodes().queueSetOptionalNode(data, TemplateTypeParmType.DECL, lines.nextLine());
 
         return data;
     }

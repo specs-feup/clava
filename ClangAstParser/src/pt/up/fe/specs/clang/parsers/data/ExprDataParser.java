@@ -60,7 +60,8 @@ public class ExprDataParser {
         DataStore data = NodeDataParser.parseNodeData(lines, dataStore);
         // TODO: ClavaNodes.getType, should be in ClavaContext?
         // data.add(Expr.TYPE, dataStore.getClavaNodes().getType(lines.nextLine()));
-        dataStore.getClavaNodes().queueSetNode(data, Expr.TYPE, lines.nextLine());
+        // dataStore.getClavaNodes().queueSetNode(data, Expr.TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, Expr.TYPE, lines.nextLine());
 
         data.add(Expr.VALUE_KIND, LineStreamParsers.enumFromInt(ValueKind.getEnumHelper(), lines));
         data.add(Expr.OBJECT_KIND, LineStreamParsers.enumFromInt(ObjectKind.getEnumHelper(), lines));
@@ -193,7 +194,7 @@ public class ExprDataParser {
     public static DataStore parseMaterializeTemporaryExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        dataStore.getClavaNodes().queueSetNode(data, MaterializeTemporaryExpr.EXTENDING_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, MaterializeTemporaryExpr.EXTENDING_DECL, lines.nextLine());
 
         return data;
     }

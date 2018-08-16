@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.TypeAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -50,7 +49,8 @@ public class TypeAliasDeclParser extends AClangNodeParser<TypeAliasDecl> {
         checkNumChildren(children, 1);
         Type aliasedType = toType(children.get(0));
 
-        return ClavaNodeFactory.typeAliasDecl(aliasedType, declName, type, declData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.typeAliasDecl(aliasedType, declName, type, declData, node.getInfo());
     }
 
 }

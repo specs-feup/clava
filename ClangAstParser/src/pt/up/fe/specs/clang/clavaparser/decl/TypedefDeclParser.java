@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -61,8 +60,9 @@ public class TypedefDeclParser extends AClangNodeParser<TypedefDecl> {
         // .map(child -> getConverter().parse(child))
         // .collect(Collectors.toList());
 
-        return ClavaNodeFactory.typedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData,
-                info(node));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.typedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData,
+        // info(node));
     }
 
 }

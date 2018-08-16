@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.clavaparser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -312,10 +313,10 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                 if (currentType.desugar() instanceof DummyNode) {
                     Type newType = (Type) getOldClavaNode(currentType.desugar());
                     // NodeInsertUtils.replace(currentType.desugar(), newType, true);
-                    currentType.set(Type.UNQUALIFIED_DESUGARED_TYPE, newType);
+                    currentType.set(Type.UNQUALIFIED_DESUGARED_TYPE, Optional.of(newType));
                 }
 
-                currentType = currentType.get(Type.UNQUALIFIED_DESUGARED_TYPE);
+                currentType = currentType.get(Type.UNQUALIFIED_DESUGARED_TYPE).get();
             }
 
             if (type instanceof TemplateSpecializationType) {

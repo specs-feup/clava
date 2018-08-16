@@ -238,9 +238,12 @@ public class ClavaNodes {
 
         Runnable nodeToAdd = () -> {
 
-            // If null id, just return
+            // If null id, throw exception
             if (isNullId(nodeId)) {
-                return;
+                // return;
+                throw new RuntimeException(
+                        "Null id for key '" + key + "' of node '" + data.get(ClavaNode.ID)
+                                + "', if node can be null, use queueOptional instead");
             }
 
             // Get node
@@ -254,6 +257,8 @@ public class ClavaNodes {
                             + node.getClass().getSimpleName());
 
             data.set(key, valueClass.cast(node));
+
+            // System.out.println("SETTING node " + nodeId + " for key " + key);
         };
 
         delayedNodesToAdd.add(nodeToAdd);

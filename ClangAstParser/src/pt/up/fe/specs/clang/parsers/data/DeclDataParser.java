@@ -36,6 +36,7 @@ import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
@@ -106,8 +107,12 @@ public class DeclDataParser {
         DataStore data = parseNamedDeclData(lines, dataStore);
 
         // data.add(TypeDecl.TYPE_FOR_DECL, dataStore.getClavaNodes().getType(lines.nextLine()));
-        dataStore.getClavaNodes().queueSetNode(data, TypeDecl.TYPE_FOR_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, TypeDecl.TYPE_FOR_DECL, lines.nextLine());
 
+        // String typeId = lines.nextLine();
+        // System.out.println("TYPE_FOR_DECL ID:" + typeId);
+        // dataStore.getClavaNodes().queueSetNode(data, TypeDecl.TYPE_FOR_DECL, typeId);
+        // ClavaLog.debug("TYPE DECL ID");
         return data;
     }
 
@@ -208,7 +213,7 @@ public class DeclDataParser {
         data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_DELETED, LineStreamParsers.oneOrZero(lines));
 
-        dataStore.getClavaNodes().queueSetNode(data, FunctionDecl.PREVIOUS_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, FunctionDecl.PREVIOUS_DECL, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, FunctionDecl.CANONICAL_DECL, lines.nextLine());
 
         data.add(FunctionDecl.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
@@ -291,6 +296,16 @@ public class DeclDataParser {
         data.add(TemplateTypeParmDecl.KIND, LineStreamParsers.enumFromName(TemplateTypeParmKind.class, lines));
         data.add(TemplateTypeParmDecl.IS_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
         dataStore.getClavaNodes().queueSetOptionalNode(data, TemplateTypeParmDecl.DEFAULT_ARGUMENT, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseTypedefNameDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseTypeDeclData(lines, dataStore);
+        // ClavaLog.debug("TYPEDEF NAME DECL ID:" + data.get(ClavaNode.ID));
+
+        dataStore.getClavaNodes().queueSetNode(data, TypedefNameDecl.UNDERLYING_TYPE, lines.nextLine());
 
         return data;
     }
