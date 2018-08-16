@@ -84,6 +84,7 @@ namespace clava {
         CALL_EXPR,
         CXX_MEMBER_CALL_EXPR,
         CXX_TYPEID_EXPR,
+        CXX_DEPENDENT_SCOPE_MEMBER_EXPR,
     };
 
     /**

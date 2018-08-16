@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.data.CxxMemberExprInfo;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -50,9 +49,9 @@ public class CXXDependentScopeMemberExprParser extends AClangNodeParser<CXXDepen
         Expr memberExpr = toExpr(children.get(0));
         // Expr memberExpr = !children.isEmpty() ? toExpr(children.get(0))
         // : ClavaNodeFactory.dummyExpr(ClavaNodeFactory.nullExpr());
-
-        return ClavaNodeFactory.cxxDependentScopeMemberExpr(memberExprInfo.isArrow(), memberExprInfo.getMemberName(),
-                exprData, node.getInfo(), memberExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxDependentScopeMemberExpr(memberExprInfo.isArrow(), memberExprInfo.getMemberName(),
+        // exprData, node.getInfo(), memberExpr);
     }
 
 }

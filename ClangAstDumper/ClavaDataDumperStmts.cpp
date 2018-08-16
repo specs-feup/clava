@@ -43,6 +43,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
         {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
+        {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
 
 };
 
@@ -123,6 +124,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpExplicitCastExprData(static_cast<const ExplicitCastExpr *>(S)); break;
         case clava::StmtNode ::CXX_NAMED_CAST_EXPR:
             DumpCXXNamedCastExprData(static_cast<const CXXNamedCastExpr *>(S)); break;
+        case clava::StmtNode ::CXX_DEPENDENT_SCOPE_MEMBER_EXPR:
+            DumpCXXDependentScopeMemberExprData(static_cast<const CXXDependentScopeMemberExpr *>(S)); break;
 //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
 
@@ -416,4 +419,12 @@ void clava::ClavaDataDumper::DumpCXXNamedCastExprData(const CXXNamedCastExpr *E)
     DumpExplicitCastExprData(E);
 
     clava::dump(E->getCastName());
+ }
+
+void clava::ClavaDataDumper::DumpCXXDependentScopeMemberExprData(const CXXDependentScopeMemberExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->isArrow());
+    clava::dump(E->getMemberNameInfo().getAsString());
+
  }

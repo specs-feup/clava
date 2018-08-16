@@ -143,6 +143,7 @@ namespace clava {
         void DumpCXXTypeidExprData(const CXXTypeidExpr *E);
         void DumpExplicitCastExprData(const ExplicitCastExpr *E);
         void DumpCXXNamedCastExprData(const CXXNamedCastExpr *E);
+        void DumpCXXDependentScopeMemberExprData(const CXXDependentScopeMemberExpr *E);
 
 
 

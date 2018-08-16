@@ -52,7 +52,6 @@ import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
@@ -1305,10 +1304,10 @@ public class ClavaNodeFactory {
         // return new NullExpr();
     }
 
-    public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(boolean isArrow, String memberName,
-            ExprData exprData, ClavaNodeInfo info, Expr memberExpr) {
-        return new CXXDependentScopeMemberExpr(isArrow, memberName, exprData, info, memberExpr);
-    }
+    // public static CXXDependentScopeMemberExpr cxxDependentScopeMemberExpr(boolean isArrow, String memberName,
+    // ExprData exprData, ClavaNodeInfo info, Expr memberExpr) {
+    // return new CXXDependentScopeMemberExpr(isArrow, memberName, exprData, info, memberExpr);
+    // }
 
     public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
         return new StmtExpr(exprData, info, compoundStmt);

@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
@@ -258,6 +259,15 @@ public class ExprDataParser {
         DataStore data = parseExplicitCastExprData(lines, dataStore);
 
         data.add(CXXNamedCastExpr.CAST_NAME, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseCXXDependentScopeMemberExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXDependentScopeMemberExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDependentScopeMemberExpr.MEMBER_NAME, lines.nextLine());
 
         return data;
     }
