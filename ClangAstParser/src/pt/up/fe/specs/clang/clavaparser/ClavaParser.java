@@ -125,33 +125,6 @@ import pt.up.fe.specs.clang.clavaparser.stmt.LabelStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.NullStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.SwitchStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.WhileStmtParser;
-import pt.up.fe.specs.clang.clavaparser.type.AttributedTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.AutoTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.BuiltinTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.ConstantArrayTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.DecayedTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.DecltypeTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.DependentSizedArrayTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.ElaboratedTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.EnumTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.FunctionNoProtoTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.FunctionProtoTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.IncompleteArrayTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.InjectedClassNameTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.LValueReferenceTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.PackExpansionTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.ParenTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.PointerTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.QualTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.RValueReferenceTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.RecordTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.SubstTemplateTypeParmTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.TemplateSpecializationTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.TemplateTypeParmTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.TypeOfExprTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.TypedefTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.UnaryTransformTypeParser;
-import pt.up.fe.specs.clang.clavaparser.type.VariableArrayTypeParser;
 import pt.up.fe.specs.clang.clavaparser.type.VariadicTypeParser;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangAstProcessor;
 import pt.up.fe.specs.clang.textparser.TextParser;
@@ -361,34 +334,34 @@ public class ClavaParser implements AutoCloseable {
         converter.put("CXXTypeidExpr", CXXTypeidExprParser::new);
 
         /* type */
-        converter.put("RecordType", RecordTypeParser::new);
-        converter.put("FunctionProtoType", FunctionProtoTypeParser::new);
-        converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
-        // converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
-        converter.put("LValueReferenceType", LValueReferenceTypeParser::new);
-        converter.put("RValueReferenceType", RValueReferenceTypeParser::new);
-        converter.put("QualType", QualTypeParser::new);
-        converter.put("ElaboratedType", ElaboratedTypeParser::new);
-        converter.put("TypedefType", TypedefTypeParser::new);
-        converter.put("TemplateSpecializationType", TemplateSpecializationTypeParser::new);
-        converter.put("ParenType", ParenTypeParser::new);
-        converter.put("PointerType", PointerTypeParser::new);
-        converter.put("SubstTemplateTypeParmType", SubstTemplateTypeParmTypeParser::new);
-        converter.put("TemplateTypeParmType", TemplateTypeParmTypeParser::new);
-        converter.put("DecayedType", DecayedTypeParser::new);
-        converter.put("IncompleteArrayType", IncompleteArrayTypeParser::new);
-        converter.put("ConstantArrayType", ConstantArrayTypeParser::new);
-        converter.put("AttributedType", AttributedTypeParser::new);
-        converter.put("AutoType", AutoTypeParser::new);
-        converter.put("FunctionNoProtoType", FunctionNoProtoTypeParser::new);
-        converter.put("DecltypeType", DecltypeTypeParser::new);
-        converter.put("EnumType", EnumTypeParser::new);
-        converter.put("UnaryTransformType", UnaryTransformTypeParser::new);
-        converter.put("VariableArrayType", VariableArrayTypeParser::new);
-        converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
-        converter.put("PackExpansionType", PackExpansionTypeParser::new);
-        converter.put("DependentSizedArrayType", DependentSizedArrayTypeParser::new);
-        converter.put("TypeOfExprType", TypeOfExprTypeParser::new);
+        // converter.put("RecordType", RecordTypeParser::new);
+        // converter.put("FunctionProtoType", FunctionProtoTypeParser::new);
+        // converter.put("BuiltinType", BuiltinTypeParser::new); // Replace with new builder
+        // // converter.put("BuiltinType", NewClavaNodeParser.newInstance(BuiltinType.class));
+        // converter.put("LValueReferenceType", LValueReferenceTypeParser::new);
+        // converter.put("RValueReferenceType", RValueReferenceTypeParser::new);
+        // converter.put("QualType", QualTypeParser::new);
+        // converter.put("ElaboratedType", ElaboratedTypeParser::new);
+        // converter.put("TypedefType", TypedefTypeParser::new);
+        // converter.put("TemplateSpecializationType", TemplateSpecializationTypeParser::new);
+        // converter.put("ParenType", ParenTypeParser::new);
+        // converter.put("PointerType", PointerTypeParser::new);
+        // converter.put("SubstTemplateTypeParmType", SubstTemplateTypeParmTypeParser::new);
+        // converter.put("TemplateTypeParmType", TemplateTypeParmTypeParser::new);
+        // converter.put("DecayedType", DecayedTypeParser::new);
+        // converter.put("IncompleteArrayType", IncompleteArrayTypeParser::new);
+        // converter.put("ConstantArrayType", ConstantArrayTypeParser::new);
+        // converter.put("AttributedType", AttributedTypeParser::new);
+        // converter.put("AutoType", AutoTypeParser::new);
+        // converter.put("FunctionNoProtoType", FunctionNoProtoTypeParser::new);
+        // converter.put("DecltypeType", DecltypeTypeParser::new);
+        // converter.put("EnumType", EnumTypeParser::new);
+        // converter.put("UnaryTransformType", UnaryTransformTypeParser::new);
+        // converter.put("VariableArrayType", VariableArrayTypeParser::new);
+        // converter.put("InjectedClassNameType", InjectedClassNameTypeParser::new);
+        // converter.put("PackExpansionType", PackExpansionTypeParser::new);
+        // converter.put("DependentSizedArrayType", DependentSizedArrayTypeParser::new);
+        // converter.put("TypeOfExprType", TypeOfExprTypeParser::new);
 
         /* comment */
         converter.put("ParagraphComment", ParagraphCommentParser::new);
@@ -507,7 +480,7 @@ public class ClavaParser implements AutoCloseable {
 
     private void processTypesSecondPass() {
         // Parse non-types node that where delayed until types where parsed
-        parseDelayedTypes();
+        // parseDelayedTypes();
 
         // Add argument types to TemplateSpecializationType
         // completeTemplateSpecializationTypes();

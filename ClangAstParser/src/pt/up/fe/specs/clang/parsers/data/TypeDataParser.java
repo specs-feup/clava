@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.ast.type.TypeOfExprType;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.UnaryTransformType;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.AddressSpaceQualifierV2;
 import pt.up.fe.specs.clava.ast.type.enums.ArraySizeModifier;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
@@ -184,7 +185,7 @@ public class TypeDataParser {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 
-        // data.add(VariableArrayType.SIZE_EXPR, ClavaNodes.getExpr(parserData, lines.nextLine()));
+        parserData.getClavaNodes().queueSetNode(data, VariableArrayType.SIZE_EXPR, lines.nextLine());
 
         return data;
 
