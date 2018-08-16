@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
@@ -57,7 +56,8 @@ public class CXXForRangeStmtParser extends AClangNodeParser<CXXForRangeStmt> {
         DeclStmt loopVar = (DeclStmt) toStmt(children.get(4));
         Stmt body = toStmt(children.get(5));
 
-        return ClavaNodeFactory.cxxForRangeStmt(node.getInfo(), range, beginEnd, cond, inc, loopVar, body);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxForRangeStmt(node.getInfo(), range, beginEnd, cond, inc, loopVar, body);
     }
 
 }

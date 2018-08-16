@@ -14,31 +14,35 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 /**
- * Represents a return statement.
+ * Represents a continue statement.
  * 
  * @author JoaoBispo
  *
  */
 public class ContinueStmt extends Stmt {
 
-    public ContinueStmt(ClavaNodeInfo info) {
-        this(info, Collections.emptyList());
+    public ContinueStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private ContinueStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ContinueStmt(getInfo(), Collections.emptyList());
-    }
+    // public ContinueStmt(ClavaNodeInfo info) {
+    // this(info, Collections.emptyList());
+    // }
+    //
+    // private ContinueStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ContinueStmt(getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

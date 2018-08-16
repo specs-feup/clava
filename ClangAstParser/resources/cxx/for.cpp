@@ -41,8 +41,6 @@ int main() {
 	}
 	
 	for(;;);
-
-	for(;;)
 	
 	std::vector<int> intVector;
 	for(auto element : intVector) {

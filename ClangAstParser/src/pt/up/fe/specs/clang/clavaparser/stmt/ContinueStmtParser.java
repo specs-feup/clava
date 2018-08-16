@@ -16,7 +16,6 @@ package pt.up.fe.specs.clang.clavaparser.stmt;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.stmt.ContinueStmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -28,7 +27,8 @@ public class ContinueStmtParser extends AClangNodeParser<ContinueStmt> {
 
     @Override
     protected ContinueStmt parse(ClangNode node, StringParser parser) {
-        return ClavaNodeFactory.continueStmt(node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.continueStmt(node.getInfo());
     }
 
 }

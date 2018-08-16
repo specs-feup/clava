@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
@@ -39,8 +38,8 @@ public class DoStmtParser extends AClangNodeParser<DoStmt> {
 
         CompoundStmt body = toCompoundStmt(children.get(0));
         Expr condition = toExpr(children.get(1));
-
-        return ClavaNodeFactory.doStmt(node.getInfo(), body, condition);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.doStmt(node.getInfo(), body, condition);
     }
 
 }

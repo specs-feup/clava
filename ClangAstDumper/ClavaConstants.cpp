@@ -18,6 +18,8 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::IF_STMT: return "IfStmt";
         case clava::StmtNode::FOR_STMT: return "ForStmt";
         case clava::StmtNode::WHILE_STMT: return "WhileStmt";
+        case clava::StmtNode::DO_STMT: return "DoStmt";
+        case clava::StmtNode::CXX_FOR_RANGE_STMT: return "CXXForRangeStmt";
 
 
         // EXPRS

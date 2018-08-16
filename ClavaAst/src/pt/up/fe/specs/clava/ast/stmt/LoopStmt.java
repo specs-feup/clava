@@ -24,7 +24,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -50,13 +49,13 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
     private int iterations;
     private List<Integer> rank;
 
-    public LoopStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-
-        isParallel = false;
-        iterations = DEFAULT_ITERATIONS;
-        rank = null;
-    }
+    // public LoopStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    //
+    // isParallel = false;
+    // iterations = DEFAULT_ITERATIONS;
+    // rank = null;
+    // }
 
     public abstract CompoundStmt getBody();
 

@@ -55,6 +55,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -487,6 +488,12 @@ public class ClavaFactory {
         DataStore whileStmtData = newStmtDataStore();
 
         return new WhileStmt(whileStmtData, Arrays.asList(cond, body));
+    }
+
+    public BreakStmt breakStmt() {
+        DataStore breakStmtData = newStmtDataStore();
+
+        return new BreakStmt(breakStmtData, Collections.emptyList());
     }
 
     /// ATTRIBUTES

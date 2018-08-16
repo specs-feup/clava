@@ -88,18 +88,13 @@ import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.omp.OMPParallelDirective;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
-import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
-import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.ClangLabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.ContinueStmt;
-import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
-import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
@@ -880,13 +875,13 @@ public class ClavaNodeFactory {
     // return LegacyToDataStore.getFactory().exprStmt(op);// exprStmt(op);
     // }
 
-    public static ContinueStmt continueStmt(ClavaNodeInfo info) {
-        return new ContinueStmt(info);
-    }
+    // public static ContinueStmt continueStmt(ClavaNodeInfo info) {
+    // return new ContinueStmt(info);
+    // }
 
-    public static BreakStmt breakStmt(ClavaNodeInfo info) {
-        return new BreakStmt(info);
-    }
+    // public static BreakStmt breakStmt(ClavaNodeInfo info) {
+    // return new BreakStmt(info);
+    // }
 
     // public static IfStmt ifStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
     // return new IfStmt(info, condition, thenStmt);
@@ -913,10 +908,10 @@ public class ClavaNodeFactory {
     // return new LiteralStmt(literalCode, info);
     // }
 
-    public static CXXForRangeStmt cxxForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond,
-            Expr inc, DeclStmt loopVar, Stmt body) {
-        return new CXXForRangeStmt(info, range, beginEnd, cond, inc, loopVar, body);
-    }
+    // public static CXXForRangeStmt cxxForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond,
+    // Expr inc, DeclStmt loopVar, Stmt body) {
+    // return new CXXForRangeStmt(info, range, beginEnd, cond, inc, loopVar, body);
+    // }
 
     public static CapturedStmt capturedStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
         return new CapturedStmt(info, children);
@@ -942,9 +937,9 @@ public class ClavaNodeFactory {
         return new CXXTryStmt(info, tryBody, handlers);
     }
 
-    public static DoStmt doStmt(ClavaNodeInfo info, CompoundStmt body, Expr condition) {
-        return new DoStmt(info, body, condition);
-    }
+    // public static DoStmt doStmt(ClavaNodeInfo info, CompoundStmt body, Expr condition) {
+    // return new DoStmt(info, body, condition);
+    // }
 
     public static NullStmt nullStmt(ClavaNodeInfo info) {
         return new NullStmt(info);

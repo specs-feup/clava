@@ -31,6 +31,8 @@ namespace clava {
         IF_STMT,
         FOR_STMT,
         WHILE_STMT,
+        DO_STMT,
+        CXX_FOR_RANGE_STMT,
 
         // Expr nodes
         EXPR,

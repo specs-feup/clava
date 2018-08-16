@@ -14,10 +14,10 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 /**
  * Represents a return statement.
@@ -27,18 +27,22 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  */
 public class BreakStmt extends Stmt {
 
-    public BreakStmt(ClavaNodeInfo info) {
-        this(info, Collections.emptyList());
+    public BreakStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private BreakStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new BreakStmt(getInfo(), Collections.emptyList());
-    }
+    // public BreakStmt(ClavaNodeInfo info) {
+    // this(info, Collections.emptyList());
+    // }
+    //
+    // private BreakStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new BreakStmt(getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

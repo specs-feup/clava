@@ -381,7 +381,7 @@ public class AstFactory {
     public static List<AStatement> caseFromExpr(AExpression value, AExpression expr) {
         // Create compound stmt
         ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
-        BreakStmt breakStmt = ClavaNodeFactory.breakStmt(ClavaNodeInfo.undefinedInfo());
+        BreakStmt breakStmt = CxxWeaver.getFactory().breakStmt();
 
         CompoundStmt compoundStmt = CxxWeaver.getFactory().compoundStmt(exprStmt);
         compoundStmt.setNaked(true);

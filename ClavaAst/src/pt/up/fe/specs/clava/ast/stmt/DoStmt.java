@@ -13,37 +13,39 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class DoStmt extends LoopStmt {
 
-    public DoStmt(ClavaNodeInfo info, CompoundStmt body, Expr condition) {
-        this(info, Arrays.asList(body, condition));
+    public DoStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private DoStmt(ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DoStmt(getInfo(), Collections.emptyList());
-    }
+    // public DoStmt(ClavaNodeInfo info, CompoundStmt body, Expr condition) {
+    // this(info, Arrays.asList(body, condition));
+    // }
+    //
+    // private DoStmt(ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DoStmt(getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public Optional<ClavaNode> getStmtCondition() {
         return Optional.of(getCondition());
     }
 
-    public Expr getCondition() {
-        return getChild(Expr.class, 1);
+    public Stmt getCondition() {
+        return getChild(Stmt.class, 1);
     }
 
     @Override

@@ -13,33 +13,35 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class CXXForRangeStmt extends LoopStmt {
 
-    public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
-            Stmt body) {
-
-        this(info, Arrays.asList(range, ClavaNodes.getNodeOrNullStmt(beginEnd), cond, inc, loopVar, body));
+    public CXXForRangeStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXForRangeStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXForRangeStmt(getInfo(), Collections.emptyList());
-    }
+    // public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
+    // Stmt body) {
+    //
+    // this(info, Arrays.asList(range, ClavaNodes.getNodeOrNullStmt(beginEnd), cond, inc, loopVar, body));
+    // }
+    //
+    // private CXXForRangeStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXForRangeStmt(getInfo(), Collections.emptyList());
+    // }
 
     public DeclStmt getRange() {
         return getChild(DeclStmt.class, 0);

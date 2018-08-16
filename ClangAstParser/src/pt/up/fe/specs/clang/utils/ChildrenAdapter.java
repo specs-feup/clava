@@ -20,7 +20,9 @@ import java.util.function.BiFunction;
 import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
@@ -50,6 +52,8 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(IfStmt.class, ChildrenAdapter::adaptIfStmt);
         CHILDREN_ADAPTERS.put(ForStmt.class, ChildrenAdapter::adaptForStmt);
         CHILDREN_ADAPTERS.put(WhileStmt.class, ChildrenAdapter::adaptWhileStmt);
+        CHILDREN_ADAPTERS.put(DoStmt.class, ChildrenAdapter::adaptDoStmt);
+        CHILDREN_ADAPTERS.put(CXXForRangeStmt.class, ChildrenAdapter::adaptCXXForRangeStmt);
         CHILDREN_ADAPTERS.put(CompoundStmt.class, ChildrenAdapter::adaptCompoundStmt);
     }
 
@@ -99,8 +103,22 @@ public class ChildrenAdapter {
 
         adaptedChildren.add(toStmt(children.get(0), context));
         adaptedChildren.add(toStmt(children.get(1), context));
-        adaptedChildren.add(toStmt(children.get(2), context));
+        adaptedChildren.add(toStmt(children.get(2), false, context));
         adaptedChildren.add(toCompoundStmt(children.get(3), false, context));
+
+        return adaptedChildren;
+    }
+
+    private static List<ClavaNode> adaptCXXForRangeStmt(List<ClavaNode> children, ClavaContext context) {
+
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+        adaptedChildren.add(toStmt(children.get(0), context));
+        adaptedChildren.add(toStmt(children.get(1), context));
+        adaptedChildren.add(toStmt(children.get(2), context));
+        adaptedChildren.add(toStmt(children.get(3), context));
+        adaptedChildren.add(toStmt(children.get(4), context));
+        adaptedChildren.add(toCompoundStmt(children.get(5), false, context));
 
         return adaptedChildren;
     }
@@ -110,8 +128,18 @@ public class ChildrenAdapter {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
         adaptedChildren.add(children.get(0));
-        adaptedChildren.add(toStmt(children.get(1), context));
+        adaptedChildren.add(toStmt(children.get(1), false, context));
         adaptedChildren.add(toCompoundStmt(children.get(2), false, context));
+
+        return adaptedChildren;
+    }
+
+    private static List<ClavaNode> adaptDoStmt(List<ClavaNode> children, ClavaContext context) {
+
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+        adaptedChildren.add(toCompoundStmt(children.get(0), false, context));
+        adaptedChildren.add(toStmt(children.get(1), false, context));
 
         return adaptedChildren;
     }
@@ -174,6 +202,10 @@ public class ChildrenAdapter {
     }
 
     private static ClavaNode toStmt(ClavaNode clavaNode, ClavaContext context) {
+        return toStmt(clavaNode, true, context);
+    }
+
+    private static ClavaNode toStmt(ClavaNode clavaNode, boolean hasSemicolon, ClavaContext context) {
         if (clavaNode instanceof Stmt) {
             return clavaNode;
         }
@@ -185,7 +217,13 @@ public class ChildrenAdapter {
 
         // Wrap Expr around Stmt
         if (clavaNode instanceof Expr) {
-            return context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode).set(ExprStmt.HAS_SEMICOLON, false);
+            Stmt exprStmt = context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode);
+            if (!hasSemicolon) {
+                exprStmt.set(ExprStmt.HAS_SEMICOLON, false);
+            }
+
+            return exprStmt;
+
         }
 
         throw new NotImplementedException(clavaNode.getClass());

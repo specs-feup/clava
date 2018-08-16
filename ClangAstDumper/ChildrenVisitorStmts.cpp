@@ -13,6 +13,8 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
         {"IfStmt", clava::StmtNode::IF_STMT},
         {"ForStmt", clava::StmtNode::FOR_STMT},
         {"WhileStmt", clava::StmtNode::WHILE_STMT},
+        {"DoStmt", clava::StmtNode::DO_STMT},
+        {"CXXForRangeStmt", clava::StmtNode::CXX_FOR_RANGE_STMT},
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
@@ -71,6 +73,10 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitForStmtChildren(static_cast<const ForStmt *>(S), visitedChildren); break;
         case clava::StmtNode::WHILE_STMT:
             VisitWhileStmtChildren(static_cast<const WhileStmt *>(S), visitedChildren); break;
+        case clava::StmtNode::DO_STMT:
+            VisitDoStmtChildren(static_cast<const DoStmt *>(S), visitedChildren); break;
+       case clava::StmtNode::CXX_FOR_RANGE_STMT:
+            VisitCXXForRangeStmtChildren(static_cast<const CXXForRangeStmt *>(S), visitedChildren); break;
 
 
         case clava::StmtNode::EXPR:
@@ -173,6 +179,26 @@ void ClangAstDumper::VisitWhileStmtChildren(const WhileStmt *S, std::vector<std:
 
     addChild(S->getConditionVariable(), children);
     addChild(S->getCond(), children);
+    addChild(S->getBody(), children);
+}
+
+void ClangAstDumper::VisitDoStmtChildren(const DoStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    addChild(S->getBody(), children);
+    addChild(S->getCond(), children);
+}
+
+void ClangAstDumper::VisitCXXForRangeStmtChildren(const CXXForRangeStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    addChild(S->getRangeStmt(), children);
+    addChild(S->getBeginEndStmt(), children);
+    addChild(S->getCond(), children);
+    addChild(S->getInc(), children);
+    addChild(S->getLoopVarStmt(), children);
     addChild(S->getBody(), children);
 }
 
