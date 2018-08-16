@@ -28,9 +28,9 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {

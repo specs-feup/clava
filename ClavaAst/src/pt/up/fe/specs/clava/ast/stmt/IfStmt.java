@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -82,10 +81,6 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     @Override
     public String getCode() {
-        System.out.println("IFSMTM ID:" + get(ID));
-
-        System.out.println(
-                "IFSMTM CHILDREN:" + getChildren().stream().map(ClavaNode::toString).collect(Collectors.joining("\n")));
 
         StringBuilder code = new StringBuilder();
 

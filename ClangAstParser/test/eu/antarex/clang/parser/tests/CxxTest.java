@@ -84,7 +84,7 @@ public class CxxTest {
 
     @Test
     public void testIfs() {
-        new CxxTester("if.cpp").showClavaAst().test();
+        new CxxTester("if.cpp").test();
     }
 
     @Test

@@ -26,8 +26,8 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
-import pt.up.fe.specs.clava.ast.expr.UnaryOperator.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
