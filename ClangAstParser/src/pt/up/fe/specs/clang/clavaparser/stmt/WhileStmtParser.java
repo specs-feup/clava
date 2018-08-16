@@ -20,7 +20,7 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -45,7 +45,7 @@ public class WhileStmtParser extends AClangNodeParser<WhileStmt> {
         // Always 3 children
         checkNumChildren(children, 3);
 
-        ClavaNode declCondition = children.get(0) instanceof NullNode ? null : children.get(0);
+        ClavaNode declCondition = children.get(0) instanceof NullNodeOld ? null : children.get(0);
         if (declCondition instanceof DeclStmt) {
             declCondition = declCondition.getChild(0);
         }

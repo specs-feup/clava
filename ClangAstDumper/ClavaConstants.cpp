@@ -47,6 +47,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::STMT: return "Stmt";
         case clava::StmtNode::COMPOUND_STMT: return "CompoundStmt";
         case clava::StmtNode::DECL_STMT: return "DeclStmt";
+        case clava::StmtNode::IF_STMT: return "IfStmt";
 
 
         // EXPRS

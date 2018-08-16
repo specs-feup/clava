@@ -54,7 +54,6 @@ import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
@@ -88,7 +87,7 @@ import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
 import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
@@ -110,7 +109,6 @@ import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
-import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -172,8 +170,8 @@ public class ClavaNodeFactory {
         return new IncludeDecl(include, ClavaNodeInfo.undefinedInfo(filepath));
     }
 
-    public static NullNode nullNode(ClavaNodeInfo info) {
-        return new NullNode(info);
+    public static NullNodeOld nullNode(ClavaNodeInfo info) {
+        return new NullNodeOld(info);
     }
 
     public static OriginalNamespace originalNamespace(String namespace, ClavaNodeInfo nodeInfo) {
@@ -900,13 +898,14 @@ public class ClavaNodeFactory {
         return new BreakStmt(info);
     }
 
-    public static IfStmt ifStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
-        return new IfStmt(info, condition, thenStmt);
-    }
-
-    public static IfStmt ifStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt, CompoundStmt elseStmt) {
-        return new IfStmt(info, condition, thenStmt, elseStmt);
-    }
+    // public static IfStmt ifStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
+    // return new IfStmt(info, condition, thenStmt);
+    // }
+    //
+    // public static IfStmt ifStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt, CompoundStmt
+    // elseStmt) {
+    // return new IfStmt(info, condition, thenStmt, elseStmt);
+    // }
 
     public static WhileStmt whileStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
         return new WhileStmt(info, condition, thenStmt);
@@ -1215,9 +1214,9 @@ public class ClavaNodeFactory {
     // return new CXXNullPtrLiteralExpr(exprData, info);
     // }
 
-    public static CXXThisExpr cxxThisExpr(ExprData exprData, ClavaNodeInfo info) {
-        return new CXXThisExpr(exprData, info);
-    }
+    // public static CXXThisExpr cxxThisExpr(ExprData exprData, ClavaNodeInfo info) {
+    // return new CXXThisExpr(exprData, info);
+    // }
 
     public static UnaryExprOrTypeTraitExpr unaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType,
             String literalCode, ExprData exprData, ClavaNodeInfo info, Expr argumentExpression) {

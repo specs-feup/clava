@@ -19,17 +19,17 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
-public class NullNodeParser extends AClangNodeParser<NullNode> {
+public class NullNodeParser extends AClangNodeParser<NullNodeOld> {
 
     public NullNodeParser(ClangConverterTable converter) {
         super(converter, false);
     }
 
     @Override
-    public NullNode parse(ClangNode node, StringParser parser) {
+    public NullNodeOld parse(ClangNode node, StringParser parser) {
 
         // Make sure it has no children
         Preconditions.checkArgument(node.getNumChildren() == 0, "Expected no children");

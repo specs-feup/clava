@@ -24,7 +24,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -46,7 +46,7 @@ public class CXXCatchStmtParser extends AClangNodeParser<CXXCatchStmt> {
         List<ClavaNode> children = parseChildren(node);
 
         ClavaNode exceptionNode = SpecsCollections.popSingle(children, ClavaNode.class);
-        Decl exceptionDecl = exceptionNode instanceof NullNode ? NullDecl.create(exceptionNode) : (Decl) exceptionNode;
+        Decl exceptionDecl = exceptionNode instanceof NullNodeOld ? NullDecl.create(exceptionNode) : (Decl) exceptionNode;
 
         CompoundStmt catchBody = SpecsCollections.popSingle(children, CompoundStmt.class);
 

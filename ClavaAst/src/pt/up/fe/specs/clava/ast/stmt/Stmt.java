@@ -34,6 +34,12 @@ public abstract class Stmt extends ClavaNode {
         super(data, children);
     }
 
+    /**
+     * @deprecated
+     * @param info
+     * @param children
+     */
+    @Deprecated
     public Stmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
     }

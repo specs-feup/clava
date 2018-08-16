@@ -460,6 +460,18 @@ public class ClavaFactory {
         return new ExprStmt(exprStmtData, Arrays.asList(expr));
     }
 
+    // public IfStmt ifStmt(Expr condition, CompoundStmt thenBody) {
+    // return ifStmt(condition, thenBody, nullStmt());
+    // }
+    //
+    // public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {
+    // DataStore exprStmtData = newStmtDataStore()
+    // .put(ExprStmt.HAS_SEMICOLON, true)
+    // .put(ClavaNode.LOCATION, expr.getLocation());
+    //
+    // return new ExprStmt(exprStmtData, Arrays.asList(expr));
+    // }
+
     /// ATTRIBUTES
 
     public DummyAttr dummyAttr(String dummyContent) {

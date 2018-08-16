@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -80,11 +79,13 @@ public class CxxIf extends AIf {
 
     @Override
     public List<? extends AVardecl> selectCondDecl() {
-        if (!(ifStmt.getCondition() instanceof VarDecl)) {
-            return Collections.emptyList();
-        }
-
-        return Arrays.asList(CxxJoinpoints.create((VarDecl) ifStmt.getCondition(), this, AVardecl.class));
+        return SpecsCollections.toList(ifStmt.getDeclCondition()
+                .map(varDecl -> CxxJoinpoints.create(varDecl, this, AVardecl.class)));
+        // if (!(ifStmt.getCondition() instanceof VarDecl)) {
+        // return Collections.emptyList();
+        // }
+        //
+        // return Arrays.asList(CxxJoinpoints.create((VarDecl) ifStmt.getCondition(), this, AVardecl.class));
     }
 
     @Override

@@ -259,7 +259,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         ClavaNode child = ClavaNodes.getChild(this, index);
 
         // If NullNode return empty Optional, otherwise cast and return optional
-        return child instanceof pt.up.fe.specs.clava.ast.extra.NullNode ? Optional.empty()
+        return child instanceof pt.up.fe.specs.clava.ast.extra.NullNodeOld ? Optional.empty()
                 : Optional.of(castTo.cast(child));
     }
 
@@ -711,6 +711,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     public ClavaNode setIsLegacyNode(boolean isLegacyNode) {
         getData().set(IS_LEGACY_NODE, isLegacyNode);
         return this;
+    }
+
+    public <T extends ClavaNode> Optional<T> getOptionalChild(Class<T> nodeClass, int index) {
+        ClavaNode child = getChild(index);
+
+        if (child instanceof NullNode) {
+            return Optional.empty();
+        }
+
+        return Optional.of(nodeClass.cast(child));
     }
 
 }

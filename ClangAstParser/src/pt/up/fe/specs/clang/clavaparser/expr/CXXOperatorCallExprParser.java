@@ -23,7 +23,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -45,7 +45,7 @@ public class CXXOperatorCallExprParser extends AClangNodeParser<CXXOperatorCallE
         List<ClavaNode> children = parseChildren(node);
 
         // Check if last child is a null node
-        if (SpecsCollections.last(children) instanceof NullNode) {
+        if (SpecsCollections.last(children) instanceof NullNodeOld) {
             children.remove(children.size() - 1);
         }
 

@@ -25,6 +25,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.streamparserv2.ClassesService;
+import pt.up.fe.specs.clang.utils.ChildrenAdapter;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
@@ -49,10 +50,12 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
     private final ClassesService classesService;
     private final Set<String> missingConstructors;
+    private ChildrenAdapter childrenAdapter;
 
     public ClavaNodeParser(ClassesService classesService) {
         this.classesService = classesService;
         this.missingConstructors = new HashSet<>();
+        this.childrenAdapter = null;
     }
 
     @Override
@@ -71,6 +74,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserData.CONTEXT).get(ClavaContext.FACTORY));
         data.set(ClangParserData.CLAVA_NODES, clavaNodes);
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
+
+        childrenAdapter = new ChildrenAdapter(data.get(ClangParserData.CONTEXT));
     }
 
     @Override
@@ -230,7 +235,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
                 newChildren.add(child);
             }
 
-            clavaNode.setChildren(newChildren);
+            // clavaNode.setChildren(newChildren);
+            clavaNode.setChildren(childrenAdapter.adaptChildren(clavaNode, newChildren));
         });
 
         return clavaNode;

@@ -23,7 +23,7 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -43,7 +43,7 @@ public class SwitchStmtParser extends AClangNodeParser<SwitchStmt> {
         checkNumChildren(children, 3);
 
         // 1st child has always been null
-        Preconditions.checkArgument(children.get(0) instanceof NullNode, "Check what to do when not NullNode");
+        Preconditions.checkArgument(children.get(0) instanceof NullNodeOld, "Check what to do when not NullNode");
         Expr cond = toExpr(children.get(1));
         Stmt body = toStmt(children.get(2));
 

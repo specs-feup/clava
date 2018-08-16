@@ -25,6 +25,7 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
+import pt.up.fe.specs.clang.utils.ChildrenAdapter;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
@@ -44,9 +45,10 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.QualType;
@@ -166,15 +168,18 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // Share data, in order to avoid divergence in nodes that are supposed to be the same
         // T clavaNodeCopy = clavaNode.newInstance(true, true, nodeClass, children);
 
-        T clavaNodeCopy = withoutCopy(clavaNode, children);
+        // T clavaNodeCopy = withoutCopy(clavaNode, children);
+        children = new ChildrenAdapter(LegacyToDataStore.CLAVA_CONTEXT.get()).adaptChildren(clavaNode, children);
+        clavaNode.setChildren(children);
+        return (T) clavaNode;
+        // T clavaNodeCopy = withoutCopy(clavaNode, children);
+        // return clavaNodeCopy;
 
         // clavaNode.setChildren(children);
         // T clavaNodeCopy = (T) clavaNode;
 
         // Additional processing on the node itself
         // processNodeCopy(clavaNodeCopy);
-
-        return clavaNodeCopy;
 
         // return newClavaNode(nodeClass, clavaNode.getDataI(), children);
         /*
@@ -592,7 +597,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
         // Check if any of the children is a NullNode
         boolean hasNullNode = children.stream()
-                .filter(child -> child instanceof NullNode)
+                .filter(child -> child instanceof NullNodeOld)
                 .findFirst()
                 .isPresent();
 
@@ -607,7 +612,8 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         if (clavaNode instanceof DependentSizedArrayType) {
             // Only second child can be null
             Preconditions
-                    .checkArgument(!(children.get(0) instanceof NullNode) && (children.get(1) instanceof NullNode));
+                    .checkArgument(
+                            !(children.get(0) instanceof NullNodeOld) && (children.get(1) instanceof NullNodeOld));
 
             // Replace with NullExpr
             children.set(1, LegacyToDataStore.getFactory().nullExpr());
@@ -622,7 +628,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
         if (clavaNode instanceof VariableArrayType) {
             Preconditions.checkArgument(children.size() > 1);
-            if (children.get(1) instanceof NullNode) {
+            if (children.get(1) instanceof NullNodeOld) {
                 children.set(1, LegacyToDataStore.getFactory().nullExpr());
             }
             return;
@@ -630,10 +636,10 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
         if (clavaNode instanceof FieldDecl) {
             Preconditions.checkArgument(children.size() > 1);
-            if (children.get(0) instanceof NullNode) {
+            if (children.get(0) instanceof NullNodeOld) {
                 children.set(0, LegacyToDataStore.getFactory().nullExpr());
             }
-            if (children.get(1) instanceof NullNode) {
+            if (children.get(1) instanceof NullNodeOld) {
                 children.set(1, LegacyToDataStore.getFactory().nullExpr());
             }
             return;
@@ -641,8 +647,20 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
 
         if (clavaNode instanceof EnumConstantDecl) {
             Preconditions.checkArgument(children.size() == 1);
-            if (children.get(0) instanceof NullNode) {
+            if (children.get(0) instanceof NullNodeOld) {
                 children.set(0, LegacyToDataStore.getFactory().nullExpr());
+            }
+
+            return;
+        }
+
+        if (clavaNode instanceof IfStmt) {
+            Preconditions.checkArgument(children.size() == 4);
+            if (children.get(2) instanceof NullNodeOld) {
+                children.set(2, LegacyToDataStore.getFactory().nullStmt());
+            }
+            if (children.get(3) instanceof NullNodeOld) {
+                children.set(3, LegacyToDataStore.getFactory().nullStmt());
             }
 
             return;

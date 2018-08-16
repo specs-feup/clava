@@ -44,7 +44,7 @@ import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
@@ -165,7 +165,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(OmpPragma.class, CxxOmp::new);
         JOINPOINT_FACTORY.put(TranslationUnit.class, CxxFile::new);
         JOINPOINT_FACTORY.put(App.class, CxxJoinpoints::programFactory);
-        JOINPOINT_FACTORY.put(NullNode.class, CxxEmpty::new);
+        JOINPOINT_FACTORY.put(NullNodeOld.class, CxxEmpty::new);
         JOINPOINT_FACTORY.put(Comment.class, CxxComment::new);
         // JOINPOINT_FACTORY.put(WrapperStmt.class, CxxJoinpoints::wrapperStmtFactory);
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);

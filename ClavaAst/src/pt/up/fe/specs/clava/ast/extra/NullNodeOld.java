@@ -27,15 +27,15 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  * @author JoaoBispo
  *
  */
-public class NullNode extends ClavaNode {
+public class NullNodeOld extends ClavaNode {
 
-    public NullNode(ClavaNodeInfo info) {
+    public NullNodeOld(ClavaNodeInfo info) {
         super(info, Collections.emptyList());
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-        return new NullNode(getInfo());
+        return new NullNodeOld(getInfo());
     }
 
     @Override

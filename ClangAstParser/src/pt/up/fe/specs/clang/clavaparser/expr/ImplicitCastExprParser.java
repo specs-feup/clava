@@ -26,7 +26,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -62,7 +62,7 @@ public class ImplicitCastExprParser extends AClangNodeParser<ImplicitCastExpr> {
         Preconditions.checkArgument(children.size() == 2, "Expected 2 children at this point");
 
         Expr subExpr = toExpr(children.get(0));
-        if (!(children.get(1) instanceof NullNode)) {
+        if (!(children.get(1) instanceof NullNodeOld)) {
             throw new RuntimeException("Do not know what to do when non-NullNode:" + info(node));
         }
 

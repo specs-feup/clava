@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXThisExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -41,8 +40,8 @@ public class CXXThisExprParser extends AClangNodeParser<CXXThisExpr> {
         parser.apply(string -> ClangGenericParsers.checkWord(string, "this"));
 
         checkNoChildren(node);
-
-        return ClavaNodeFactory.cxxThisExpr(exprData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxThisExpr(exprData, node.getInfo());
     }
 
 }

@@ -49,7 +49,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
 import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
@@ -203,7 +203,7 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
      * @return
      */
     public Expr toExpr(ClavaNode node) {
-        if (node instanceof NullNode) {
+        if (node instanceof NullNodeOld) {
             return node.getFactory().nullExpr();
             // ClavaNodeFactory.nullExpr();
         }

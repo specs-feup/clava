@@ -25,7 +25,7 @@ import pt.up.fe.specs.clava.ast.comment.FullComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 /**
@@ -103,7 +103,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
             // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
-        if (node instanceof NullNode) {
+        if (node instanceof NullNodeOld) {
             // return ClavaNodeFactory.nullStmt(node.getInfo());
             return null;
         }

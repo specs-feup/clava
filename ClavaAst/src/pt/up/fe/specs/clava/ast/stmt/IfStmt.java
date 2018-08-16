@@ -13,51 +13,80 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
 
 public class IfStmt extends Stmt implements StmtWithCondition {
 
-    public IfStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
-        this(info, Arrays.asList(condition, thenStmt));
+    public IfStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
     }
 
-    public IfStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt, CompoundStmt elseStmt) {
-        this(info, Arrays.asList(condition, thenStmt, elseStmt));
+    // public IfStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
+    // this(info, Arrays.asList(condition, thenStmt));
+    // }
+    //
+    // public IfStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt, CompoundStmt elseStmt) {
+    // this(info, Arrays.asList(condition, thenStmt, elseStmt));
+    // }
+    //
+    // private IfStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new IfStmt(getInfo(), Collections.emptyList());
+    // }
+
+    // public boolean hasDeclCondition() {
+    // return getChild(0) instanceof DeclStmt;
+    // }
+
+    // private int getConditionIndex() {
+    // return hasDeclCondition() ? 1 : 0;
+    // }
+
+    public Optional<VarDecl> getDeclCondition() {
+        return getOptionalChild(VarDecl.class, 0);
     }
 
-    private IfStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
+    // public ClavaNode getCondition() {
+    public Expr getCondition() {
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new IfStmt(getInfo(), Collections.emptyList());
-    }
-
-    public ClavaNode getCondition() {
         // return getChild(0);
-        return ClavaNodes.getChild(this, 0);
+        // return ClavaNodes.getChild(this, 0);
+        // return ClavaNodes.getChild(this, getConditionIndex());
+        return getChild(Expr.class, 1);
 
     }
 
     public CompoundStmt getThen() {
-        return (CompoundStmt) ClavaNodes.getChild(this, 1);
+        return getChild(CompoundStmt.class, 2);
+        // return (CompoundStmt) ClavaNodes.getChild(this, getConditionIndex() + 1);
     }
 
     public Optional<CompoundStmt> getElse() {
-        return ClavaNodes.getChildTry(this, 2).map(child -> (CompoundStmt) child);
+        return getOptionalChild(CompoundStmt.class, 3);
+        // return ClavaNodes.getChildTry(this, getConditionIndex() + 2).map(child -> (CompoundStmt) child);
     }
 
     @Override
     public String getCode() {
+        System.out.println("IFSMTM ID:" + get(ID));
+
+        System.out.println(
+                "IFSMTM CHILDREN:" + getChildren().stream().map(ClavaNode::toString).collect(Collectors.joining("\n")));
+
         StringBuilder code = new StringBuilder();
 
         String conditionCode = getCondition().getCode();
@@ -86,7 +115,9 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     @Override
     public Optional<ClavaNode> getStmtCondition() {
-        return Optional.of(getCondition());
+        return getDeclCondition().map(ClavaNode.class::cast);
+        // return Optional.ofNullable(hasDeclCondition() ? getChild(0) : null);
+        // return Optional.of(getCondition());
     }
 
     /*

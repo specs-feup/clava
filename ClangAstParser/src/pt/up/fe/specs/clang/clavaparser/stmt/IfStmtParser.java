@@ -19,8 +19,7 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.extra.NullNode;
+import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
@@ -47,7 +46,7 @@ public class IfStmtParser extends AClangNodeParser<IfStmt> {
         checkNumChildren(children, 4);
         // checkNumChildren(children, 5);
 
-        ClavaNode declCondition = children.get(0) instanceof NullNode ? null : children.get(0);
+        ClavaNode declCondition = children.get(0) instanceof NullNodeOld ? null : children.get(0);
         if (declCondition instanceof DeclStmt) {
             declCondition = declCondition.getChild(0);
         }
@@ -56,16 +55,19 @@ public class IfStmtParser extends AClangNodeParser<IfStmt> {
 
         CompoundStmt thenStmt = toCompoundStmt(children.get(2));
         CompoundStmt elseStmt = toCompoundStmt(children.get(3));
-        // System.out.println("ELSE NODE NAME:" + children.get(3).getNodeName());
-        // System.out.println("ELSE is NULL? " + (elseStmt == null));
-        if (elseStmt == null) {
 
-            return ClavaNodeFactory.ifStmt(node.getInfo(), condition, thenStmt);
-        }
+        throw new RuntimeException("deprecated");
 
-        // System.out.println("IF:" + thenStmt.getCode());
-        // System.out.println("ELSE:" + elseStmt.getCode());
-        return ClavaNodeFactory.ifStmt(node.getInfo(), condition, thenStmt, elseStmt);
+        // // System.out.println("ELSE NODE NAME:" + children.get(3).getNodeName());
+        // // System.out.println("ELSE is NULL? " + (elseStmt == null));
+        // if (elseStmt == null) {
+        //
+        // return ClavaNodeFactory.ifStmt(node.getInfo(), condition, thenStmt);
+        // }
+        //
+        // // System.out.println("IF:" + thenStmt.getCode());
+        // // System.out.println("ELSE:" + elseStmt.getCode());
+        // return ClavaNodeFactory.ifStmt(node.getInfo(), condition, thenStmt, elseStmt);
     }
 
 }
