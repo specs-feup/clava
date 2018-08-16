@@ -42,7 +42,8 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+    // public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+    public final static DataKey<Optional<Type>> TYPE = KeyFactory.optional("type");
 
     public final static DataKey<ValueKind> VALUE_KIND = KeyFactory.enumeration("valueKind", ValueKind.class)
             .setDefault(() -> ValueKind.getDefault());
@@ -79,12 +80,13 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     @Override
     public Type getType() {
-        return get(TYPE);
+        return get(TYPE).orElse(null);
     }
 
     @Override
     public void setType(Type type) {
-        set(TYPE, type);
+        // set(TYPE, type);
+        set(TYPE, Optional.of(type));
     }
 
     public Optional<Type> getExprTypeTry() {

@@ -48,7 +48,7 @@ public class DataStoreToLegacy {
 
     public static ExprData getExpr(DataStore data) {
         return new ExprData(
-                data.get(Expr.TYPE),
+                data.get(Expr.TYPE).orElse(null),
                 data.get(Expr.VALUE_KIND),
                 data.get(Expr.OBJECT_KIND));
     }

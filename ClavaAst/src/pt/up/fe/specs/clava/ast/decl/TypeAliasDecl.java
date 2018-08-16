@@ -14,30 +14,33 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class TypeAliasDecl extends TypedefNameDecl {
 
-    public TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info) {
-        this(underlyingType, declName, type, declData, info, Collections.emptyList());
+    public TypeAliasDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(underlyingType, declName, type, declData, info, children);
+    // public TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info) {
+    // this(underlyingType, declName, type, declData, info, Collections.emptyList());
+    // }
+    //
+    // private TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(underlyingType, declName, type, declData, info, children);
+    //
+    // }
 
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new TypeAliasDecl(getUnderlyingType(), getDeclName(), getType(), getDeclData(), getInfo(),
-                Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new TypeAliasDecl(getUnderlyingType(), getDeclName(), getType(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public Type getAliasedType() {
         // return getChild(Type.class, 0);

@@ -63,8 +63,10 @@ public abstract class Type extends ClavaNode {
 
     public final static DataKey<Boolean> IS_FROM_AST = KeyFactory.bool("isFromAst");
 
-    public final static DataKey<Type> UNQUALIFIED_DESUGARED_TYPE = KeyFactory.object("unqualifiedDesugaredType",
-            Type.class);
+    // public final static DataKey<Type> UNQUALIFIED_DESUGARED_TYPE = KeyFactory.object("unqualifiedDesugaredType",
+    // Type.class);
+    public final static DataKey<Optional<Type>> UNQUALIFIED_DESUGARED_TYPE = KeyFactory
+            .optional("unqualifiedDesugaredType");
 
     /// DATAKEYS END
 
@@ -435,11 +437,12 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public final Type desugar() {
-        if (!hasSugar()) {
-            return this;
-        }
-        // System.out.println("SUGARED NODE: " + this);
-        return get(UNQUALIFIED_DESUGARED_TYPE);
+        return get(UNQUALIFIED_DESUGARED_TYPE).orElse(this);
+        // if (!hasSugar()) {
+        // return this;
+        // }
+        // // System.out.println("SUGARED NODE: " + this);
+        // return get(UNQUALIFIED_DESUGARED_TYPE);
         // return desugarImpl();
     }
 
@@ -449,11 +452,12 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public final Type desugarAll() {
-        if (!hasSugar()) {
-            return this;
-        }
-
-        return get(UNQUALIFIED_DESUGARED_TYPE).desugar();
+        return get(UNQUALIFIED_DESUGARED_TYPE).map(Type::desugar).orElse(this);
+        // if (!hasSugar()) {
+        // return this;
+        // }
+        //
+        // return get(UNQUALIFIED_DESUGARED_TYPE).desugar();
     }
     //
     // protected Type desugarImpl() {
@@ -491,7 +495,8 @@ public abstract class Type extends ClavaNode {
             throw new RuntimeException("Type does not have sugar:" + this);
         }
 
-        set(UNQUALIFIED_DESUGARED_TYPE, desugaredType);
+        set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(desugaredType));
+        // set(UNQUALIFIED_DESUGARED_TYPE, desugaredType);
         // setDesugarImpl(desugaredType);
     }
 

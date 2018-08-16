@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -37,7 +38,7 @@ public class MaterializeTemporaryExpr extends Expr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Decl> EXTENDING_DECL = KeyFactory.object("extendingDecl", Decl.class);
+    public final static DataKey<Optional<Decl>> EXTENDING_DECL = KeyFactory.optional("extendingDecl");
 
     /// DATAKEYS END
 

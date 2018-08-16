@@ -15,9 +15,11 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
@@ -27,19 +29,29 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public abstract class TypedefNameDecl extends TypeDecl {
+    /// DATAKEYS BEGIN
 
-    private final Type underlyingType;
+    public final static DataKey<Type> UNDERLYING_TYPE = KeyFactory.object("underlyingType", Type.class);
 
-    public TypedefNameDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
+    /// DATAKEYS END
 
-        super(declName, type, declData, info, children);
-
-        this.underlyingType = underlyingType;
+    public TypedefNameDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
+    // private final Type underlyingType;
+    //
+    // public TypedefNameDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(declName, type, declData, info, children);
+    //
+    // this.underlyingType = underlyingType;
+    // }
+
     public Type getUnderlyingType() {
-        return underlyingType;
+        return get(UNDERLYING_TYPE);
+        // return underlyingType;
     }
 
 }

@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -178,7 +179,7 @@ public class LegacyToDataStore {
 
     public LegacyToDataStore setExpr(ExprData data) {
 
-        nodeData.add(Expr.TYPE, data.getType());
+        nodeData.add(Expr.TYPE, Optional.of(data.getType()));
         nodeData.add(Expr.VALUE_KIND, data.getValueKind());
         nodeData.add(Expr.OBJECT_KIND, data.getObjectKind());
 

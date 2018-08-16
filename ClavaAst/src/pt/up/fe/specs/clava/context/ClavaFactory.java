@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -237,14 +238,14 @@ public class ClavaFactory {
     public DummyExpr dummyExpr(String dummyContent) {
         DataStore data = newExprDataStore()
                 .put(DummyExpr.DUMMY_CONTENT, dummyContent)
-                .put(Expr.TYPE, dummyType("dummy type"));
+                .put(Expr.TYPE, Optional.of(dummyType("dummy type")));
 
         return new DummyExpr(data, Collections.emptyList());
     }
 
     public NullExpr nullExpr() {
         DataStore data = newExprDataStore()
-                .put(Expr.TYPE, nullType());
+                .put(Expr.TYPE, Optional.of(nullType()));
 
         return new NullExpr(data, Collections.emptyList());
     }
@@ -253,7 +254,7 @@ public class ClavaFactory {
         DataStore data = newExprDataStore()
                 .put(Literal.SOURCE_LITERAL, Integer.toString(integer))
                 .put(IntegerLiteral.VALUE, BigInteger.valueOf(integer))
-                .put(Expr.TYPE, builtinType(BuiltinKind.Int));
+                .put(Expr.TYPE, Optional.of(builtinType(BuiltinKind.Int)));
 
         return new IntegerLiteral(data, Collections.emptyList());
     }
@@ -262,7 +263,7 @@ public class ClavaFactory {
         DataStore data = newExprDataStore()
                 .put(Literal.SOURCE_LITERAL, Double.toString(value))
                 .put(FloatingLiteral.VALUE, value)
-                .put(Expr.TYPE, builtinType(floatKind.getBuiltinKind()));
+                .put(Expr.TYPE, Optional.of(builtinType(floatKind.getBuiltinKind())));
 
         return new FloatingLiteral(data, Collections.emptyList());
     }
@@ -270,14 +271,14 @@ public class ClavaFactory {
     public LiteralExpr literalExpr(String code, Type type) {
         DataStore data = newExprDataStore()
                 .put(LiteralNode.LITERAL_CODE, code)
-                .put(Expr.TYPE, type);
+                .put(Expr.TYPE, Optional.of(type));
 
         return new LiteralExpr(data, Collections.emptyList());
     }
 
     public DeclRefExpr declRefExpr(String declName, Type type) {
         DataStore data = newExprDataStore()
-                .put(Expr.TYPE, type);
+                .put(Expr.TYPE, Optional.of(type));
         // .put(DeclRefExpr.DECL_NAME, declName);
 
         DeclRefExpr declRefExpr = new DeclRefExpr(data, Collections.emptyList());
@@ -298,7 +299,7 @@ public class ClavaFactory {
 
     public CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
         DataStore data = newExprDataStore()
-                .put(Expr.TYPE, type);
+                .put(Expr.TYPE, Optional.of(type));
 
         return new CallExpr(data, SpecsCollections.concat(function, args));
     }
@@ -311,7 +312,7 @@ public class ClavaFactory {
 
     public BinaryOperator binaryOperator(BinaryOperatorKind op, Type type, Expr lhs, Expr rhs) {
         DataStore data = newExprDataStore()
-                .put(Expr.TYPE, type);
+                .put(Expr.TYPE, Optional.of(type));
         data.set(BinaryOperator.OP, op);
 
         return new BinaryOperator(data, Arrays.asList(lhs, rhs));

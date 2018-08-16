@@ -13,11 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 
@@ -29,23 +29,28 @@ import pt.up.fe.specs.clava.ast.type.Type;
  */
 public class TypedefDecl extends TypedefNameDecl {
 
-    private final String typedefSource;
-    private final boolean isModulePrivate;
-
-    public TypedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate, String declName, Type type,
-            DeclData declData,
-            ClavaNodeInfo info) {
-        super(underlyingType, declName, type, declData, info, Collections.emptyList());
-
-        this.typedefSource = typedefSource;
-        this.isModulePrivate = isModulePrivate;
+    public TypedefDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new TypedefDecl(getUnderlyingType(), typedefSource, isModulePrivate, getDeclName(), getType(),
-                getDeclData(), getInfo());
-    }
+    // private final String typedefSource;
+    // private final boolean isModulePrivate;
+    //
+    // public TypedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate, String declName, Type
+    // type,
+    // DeclData declData,
+    // ClavaNodeInfo info) {
+    // super(underlyingType, declName, type, declData, info, Collections.emptyList());
+    //
+    // this.typedefSource = typedefSource;
+    // this.isModulePrivate = isModulePrivate;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new TypedefDecl(getUnderlyingType(), typedefSource, isModulePrivate, getDeclName(), getType(),
+    // getDeclData(), getInfo());
+    // }
 
     @Override
     public Type getType() {
@@ -53,7 +58,8 @@ public class TypedefDecl extends TypedefNameDecl {
         // System.out.println("Type for decl: " + get(TYPE_FOR_DECL));
         // HACK: Sometimes, the returned type is the same as type being declared, we have not discovered why
         // In this case, desugar type
-        Type type = super.getType();
+        // Type type = super.getType();
+        Type type = getUnderlyingType();
 
         if (type.getCode(this).equals(getDeclName())) {
 
@@ -102,7 +108,7 @@ public class TypedefDecl extends TypedefNameDecl {
         // if (getDeclName().equals("IT")) {
         // System.out.println("TYPEDEF DECL CODE:" + code);
         // }
-
+        // ClavaLog.debug("TypedeDEcl CODE:" + code);
         return code;
     }
 

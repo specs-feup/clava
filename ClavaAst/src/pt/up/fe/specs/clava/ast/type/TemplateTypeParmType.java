@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -29,7 +30,7 @@ public class TemplateTypeParmType extends Type {
     public final static DataKey<Integer> DEPTH = KeyFactory.integer("depth");
     public final static DataKey<Integer> INDEX = KeyFactory.integer("index");
     public final static DataKey<Boolean> IS_PACKED = KeyFactory.bool("isPacked");
-    public final static DataKey<Decl> DECL = KeyFactory.object("decl", Decl.class);
+    public final static DataKey<Optional<Decl>> DECL = KeyFactory.optional("decl");
 
     /// DATAKEYS END
 

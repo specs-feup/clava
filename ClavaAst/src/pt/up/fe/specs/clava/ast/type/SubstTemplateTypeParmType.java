@@ -80,7 +80,7 @@ public class SubstTemplateTypeParmType extends Type {
 
     @Override
     public List<Type> getTemplateArgumentTypes() {
-        return Arrays.asList(get(UNQUALIFIED_DESUGARED_TYPE));
+        return Arrays.asList(get(UNQUALIFIED_DESUGARED_TYPE).get());
         // return Arrays.asList(getReplacementType());
     }
 

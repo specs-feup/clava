@@ -100,7 +100,7 @@ public class FunctionDecl extends DeclaratorDecl {
     public final static DataKey<Boolean> IS_DELETED = KeyFactory.bool("isDeleted");
 
     // TODO: Change to FunctionDecl when refactoring is complete
-    public final static DataKey<Decl> PREVIOUS_DECL = KeyFactory.object("previousDecl", Decl.class);
+    public final static DataKey<Optional<Decl>> PREVIOUS_DECL = KeyFactory.optional("previousDecl");
 
     // TODO: Change to FunctionDecl when refactoring is complete
     public final static DataKey<Decl> CANONICAL_DECL = KeyFactory.object("canonicalDecl", Decl.class);

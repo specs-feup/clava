@@ -252,7 +252,7 @@ public class ForStmt extends LoopStmt {
         }
 
         return Optional
-                .of(getFactory().binaryOperator(BinaryOperatorKind.DIV, beginEndDiff.get(Expr.TYPE), beginEndDiff,
+                .of(getFactory().binaryOperator(BinaryOperatorKind.DIV, beginEndDiff.get(Expr.TYPE).get(), beginEndDiff,
                         stepValue));
 
         // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
@@ -287,7 +287,8 @@ public class ForStmt extends LoopStmt {
         }
 
         return Optional
-                .of(getFactory().binaryOperator(BinaryOperatorKind.SUB, initExpr.get(Expr.TYPE), endExpr, initExpr));
+                .of(getFactory().binaryOperator(BinaryOperatorKind.SUB, initExpr.get(Expr.TYPE).get(), endExpr,
+                        initExpr));
 
         // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));
     }

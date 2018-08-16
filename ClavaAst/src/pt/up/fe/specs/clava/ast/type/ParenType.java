@@ -39,7 +39,7 @@ public class ParenType extends Type {
     // }
 
     public Type getInnerType() {
-        return get(UNQUALIFIED_DESUGARED_TYPE);
+        return get(UNQUALIFIED_DESUGARED_TYPE).get();
         // return getChild(Type.class, 0);
     }
     //

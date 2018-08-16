@@ -91,6 +91,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      */
     public final static DataKey<Boolean> IS_LEGACY_NODE = KeyFactory.bool("isLegacyNode");
 
+    public final static DataKey<String> PREVIOUS_ID = KeyFactory.string("previousId");
+
     /// DATAKEYS END
 
     public static String toTree(Collection<? extends ClavaNode> nodes) {
@@ -665,8 +667,15 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
         // Set id
         if (!keepId) {
+            String previousId = newDataStore.get(ID);
             String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
             newDataStore.put(ID, newId);
+            newDataStore.put(PREVIOUS_ID, previousId);
+
+            // if (newId.equals("fromTypedefDecl_1")) {
+            // System.out.println("PREVIOUS DATA:::\n" + dataI);
+            // System.out.println("DATA:::\n" + newDataStore);
+            // }
         }
 
         try {

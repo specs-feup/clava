@@ -43,8 +43,6 @@ import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.decl.TypeAliasDecl;
-import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
@@ -287,10 +285,10 @@ public class ClavaNodeFactory {
         return new LinkageSpecDecl(linkageType, declData, info, declarations);
     }
 
-    public static TypedefDecl typedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate,
-            String name, Type type, DeclData declData, ClavaNodeInfo info) {
-        return new TypedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData, info);
-    }
+    // public static TypedefDecl typedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate,
+    // String name, Type type, DeclData declData, ClavaNodeInfo info) {
+    // return new TypedefDecl(underlyingType, typedefSource, isModulePrivate, name, type, declData, info);
+    // }
 
     // public static VarDecl varDecl(String varName, Type type) {
     // boolean isUsed = true;
@@ -493,11 +491,11 @@ public class ClavaNodeFactory {
         return new FriendDecl(declData, info, friendNode);
     }
 
-    public static TypeAliasDecl typeAliasDecl(Type aliasedType, String declName, Type type, DeclData declData,
-            ClavaNodeInfo info) {
-
-        return new TypeAliasDecl(aliasedType, declName, type, declData, info);
-    }
+    // public static TypeAliasDecl typeAliasDecl(Type aliasedType, String declName, Type type, DeclData declData,
+    // ClavaNodeInfo info) {
+    //
+    // return new TypeAliasDecl(aliasedType, declName, type, declData, info);
+    // }
 
     public static UsingDirectiveDecl usingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
         return new UsingDirectiveDecl(declName, declData, info);
