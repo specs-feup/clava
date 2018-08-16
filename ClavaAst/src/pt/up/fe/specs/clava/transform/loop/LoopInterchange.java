@@ -113,8 +113,8 @@ public class LoopInterchange {
             return false;
         }
 
-        CompoundStmt body = outLoop.getBody();
-        Stmt firstStmt = body.getStatements().get(0);
+        Optional<CompoundStmt> body = outLoop.getBody();
+        Stmt firstStmt = body.map(stmts -> stmts.getStatements().get(0)).orElse(null);
 
         while (firstStmt != null) {
 
@@ -127,7 +127,7 @@ public class LoopInterchange {
                 return false;
             }
 
-            firstStmt = ((ForStmt) firstStmt).getBody().getStatements().get(0);
+            firstStmt = ((ForStmt) firstStmt).getBody().map(stmts -> stmts.getStatements().get(0)).orElse(null);
         }
 
         /* the loops are not nested out -> inner */

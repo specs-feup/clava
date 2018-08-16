@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.transform.loop;
 
 import java.util.List;
 
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
@@ -128,11 +127,13 @@ public class LoopTiling {
 
         // make for loop
         CompoundStmt emptyBody = factory.compoundStmt();
-        ForStmt newFor = ClavaNodeFactory.forStmt(ClavaNodeInfo.undefinedInfo(), init, cond, inc, emptyBody);
+        // ForStmt newFor = ClavaNodeFactory.forStmt(ClavaNodeInfo.undefinedInfo(), init, cond, inc, emptyBody);
+
+        ForStmt newFor = factory.forStmt(init, cond, inc, emptyBody);
 
         // add loop as parent
         NodeInsertUtils.replace(referenceStmt, newFor, true);
-        newFor.getBody().addChild(referenceStmt);
+        newFor.getBody().get().addChild(referenceStmt);
     }
 
     private Stmt changeTarget(ForStmt targetFor, String blockSize, String blockVarName, Expr oldUpperBound,

@@ -21,12 +21,14 @@ import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class ChildrenAdapter {
 
@@ -44,6 +46,7 @@ public class ChildrenAdapter {
     static {
         CHILDREN_ADAPTERS = new ClassMap<>((list, context) -> list);
         CHILDREN_ADAPTERS.put(IfStmt.class, ChildrenAdapter::adaptIfStmt);
+        CHILDREN_ADAPTERS.put(ForStmt.class, ChildrenAdapter::adaptForStmt);
         CHILDREN_ADAPTERS.put(CompoundStmt.class, ChildrenAdapter::adaptCompoundStmt);
     }
 
@@ -81,6 +84,22 @@ public class ChildrenAdapter {
         return adaptedChildren;
     }
 
+    private static List<ClavaNode> adaptForStmt(List<ClavaNode> children, ClavaContext context) {
+        // Check body is a compound statements
+        // if (children.get(3) instanceof CompoundStmt) {
+        // return children;
+        // }
+
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+        adaptedChildren.add(toStmt(children.get(0), context));
+        adaptedChildren.add(toStmt(children.get(1), context));
+        adaptedChildren.add(toStmt(children.get(2), context));
+        adaptedChildren.add(toCompoundStmt(children.get(3), context));
+
+        return adaptedChildren;
+    }
+
     private static List<ClavaNode> adaptCompoundStmt(List<ClavaNode> children, ClavaContext context) {
 
         boolean needsAdaptation = children.stream().filter(child -> !(child instanceof Stmt)).findFirst().isPresent();
@@ -112,8 +131,8 @@ public class ChildrenAdapter {
             return clavaNode;
         }
 
-        // NullStmt is a valid value for CompoundStmt
-        if (clavaNode instanceof NullStmt) {
+        // NullNode is a valid value for CompoundStmt
+        if (clavaNode instanceof NullNode) {
             return clavaNode;
         }
 
@@ -128,5 +147,26 @@ public class ChildrenAdapter {
         }
 
         return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode).set(CompoundStmt.IS_NAKED);
+    }
+
+    private static ClavaNode toStmt(ClavaNode clavaNode, ClavaContext context) {
+        if (clavaNode instanceof Stmt) {
+            return clavaNode;
+        }
+
+        // NullNode is a valid value for Stmt
+        if (clavaNode instanceof NullNode) {
+            return clavaNode;
+        }
+
+        // Wrap Expr around Stmt
+        if (clavaNode instanceof Expr) {
+            return context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode);
+        }
+
+        throw new NotImplementedException(clavaNode.getClass());
+        // throw new RuntimeException(
+        // "Expected node to be of class " + Stmt.class + " but it " + clavaNode.getClass());
+
     }
 }

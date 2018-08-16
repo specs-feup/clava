@@ -30,5 +30,7 @@ int main() {
     do { 
 	} while (i++ < 9);
 	
+	do; while(true);
+	
 	return 0;
 }

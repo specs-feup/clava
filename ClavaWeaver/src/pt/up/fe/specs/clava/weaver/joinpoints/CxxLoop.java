@@ -260,7 +260,10 @@ public class CxxLoop extends ALoop {
 
     @Override
     public List<? extends AScope> selectBody() {
-        return Arrays.asList(CxxJoinpoints.create(loop.getBody(), this, AScope.class));
+        return loop.getBody()
+                .map(body -> Arrays.asList(CxxJoinpoints.create(body, this, AScope.class)))
+                .orElse(Collections.emptyList());
+        // return Arrays.asList(CxxJoinpoints.create(loop.getBody(), this, AScope.class));
     }
 
     @Override
@@ -339,7 +342,7 @@ public class CxxLoop extends ALoop {
         if (loop instanceof ForStmt) {
 
             WhileStmt whileStmt = ClavaNodeFactory.whileStmt(loop.getInfo(), ((ForStmt) loop).getCond().orElse(null),
-                    loop.getBody());
+                    loop.getBody().orElse(null));
 
             replaceWith(CxxJoinpoints.create(whileStmt, getParentImpl()));
 

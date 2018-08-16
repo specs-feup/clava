@@ -11,6 +11,7 @@
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDREN_MAP = {
         {"DeclStmt", clava::StmtNode::DECL_STMT},
         {"IfStmt", clava::StmtNode::IF_STMT},
+        {"ForStmt", clava::StmtNode::FOR_STMT},
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
@@ -65,6 +66,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitDeclStmtChildren(static_cast<const DeclStmt *>(S), visitedChildren); break;
         case clava::StmtNode::IF_STMT:
             VisitIfStmtChildren(static_cast<const IfStmt *>(S), visitedChildren); break;
+        case clava::StmtNode::FOR_STMT:
+            VisitForStmtChildren(static_cast<const ForStmt *>(S), visitedChildren); break;
 
 
         case clava::StmtNode::EXPR:
@@ -148,6 +151,17 @@ void ClangAstDumper::VisitIfStmtChildren(const IfStmt *S, std::vector<std::strin
     addChild(S->getCond(), children);
     addChild(S->getThen(), children);
     addChild(S->getElse(), children);
+}
+
+void ClangAstDumper::VisitForStmtChildren(const ForStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    //addChild(S->getConditionVariableDeclStmt(), children);
+    addChild(S->getInit(), children);
+    addChild(S->getCond(), children);
+    addChild(S->getInc(), children);
+    addChild(S->getBody(), children);
 }
 
 

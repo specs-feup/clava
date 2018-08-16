@@ -48,6 +48,7 @@ import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
@@ -666,7 +667,25 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             return;
         }
 
-        throw new RuntimeException("NullNode not being handled in class " + clavaNode.getClass());
+        if (clavaNode instanceof ForStmt) {
+            Preconditions.checkArgument(children.size() == 4);
+            if (children.get(0) instanceof NullNodeOld) {
+                children.set(0, LegacyToDataStore.getFactory().nullStmt());
+            }
+            if (children.get(1) instanceof NullNodeOld) {
+                children.set(1, LegacyToDataStore.getFactory().nullStmt());
+            }
+            if (children.get(2) instanceof NullNodeOld) {
+                children.set(2, LegacyToDataStore.getFactory().nullStmt());
+            }
+            if (children.get(3) instanceof NullNodeOld) {
+                children.set(3, LegacyToDataStore.getFactory().nullStmt());
+            }
+
+            return;
+        }
+
+        throw new RuntimeException("NullNodeOld not being handled in class " + clavaNode.getClass());
     }
 
     @Override

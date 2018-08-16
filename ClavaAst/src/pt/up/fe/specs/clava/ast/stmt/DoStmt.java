@@ -47,15 +47,16 @@ public class DoStmt extends LoopStmt {
     }
 
     @Override
-    public CompoundStmt getBody() {
-        return getChild(CompoundStmt.class, 0);
+    public Optional<CompoundStmt> getBody() {
+        return getOptionalChild(CompoundStmt.class, 0);
     }
 
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        code.append("do ").append(getBody().getCode()).append("while (").append(getCondition().getCode()).append(");");
+        code.append("do ").append(getBody().map(Stmt::getCode).orElse(";")).append("while (")
+                .append(getCondition().getCode()).append(");");
 
         return code.toString();
 

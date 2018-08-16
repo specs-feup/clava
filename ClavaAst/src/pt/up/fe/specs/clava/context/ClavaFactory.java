@@ -58,6 +58,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
@@ -470,9 +471,15 @@ public class ClavaFactory {
     }
 
     private IfStmt ifStmt(Expr condition, CompoundStmt thenBody, ClavaNode elseBody) {
-        DataStore exprStmtData = newStmtDataStore();
+        DataStore ifStmtData = newStmtDataStore();
 
-        return new IfStmt(exprStmtData, Arrays.asList(nullDecl(), condition, thenBody, elseBody));
+        return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenBody, elseBody));
+    }
+
+    public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
+        DataStore forStmtData = newStmtDataStore();
+
+        return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body));
     }
 
     /// ATTRIBUTES

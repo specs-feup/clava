@@ -56,6 +56,7 @@ namespace clava {
         COMPOUND_STMT,
         DECL_STMT,
         IF_STMT,
+        FOR_STMT,
 
         // Expr nodes
         EXPR,

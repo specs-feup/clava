@@ -59,7 +59,7 @@ public class WhileStmt extends LoopStmt {
     }
 
     @Override
-    public CompoundStmt getBody() {
+    public Optional<CompoundStmt> getBody() {
         return getThen();
     }
 

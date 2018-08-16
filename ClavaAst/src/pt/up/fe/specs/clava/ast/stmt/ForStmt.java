@@ -14,14 +14,14 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -36,6 +36,10 @@ public class ForStmt extends LoopStmt {
     private static final Set<BinaryOperatorKind> RELATIONAL_OPS = EnumSet.of(BinaryOperatorKind.LE,
             BinaryOperatorKind.LT, BinaryOperatorKind.GE, BinaryOperatorKind.GT);
 
+    public ForStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     /**
      * Constructor of a 'for' statement.
      *
@@ -48,34 +52,37 @@ public class ForStmt extends LoopStmt {
      * @param inc
      * @param body
      */
-    public ForStmt(ClavaNodeInfo info, Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
-        this(info, sanitize(info, init, cond, inc, body));
-    }
-
-    private ForStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ForStmt(getInfo(), Collections.emptyList());
-    }
+    // public ForStmt(ClavaNodeInfo info, Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
+    // this(info, sanitize(info, init, cond, inc, body));
+    // }
+    //
+    // private ForStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ForStmt(getInfo(), Collections.emptyList());
+    // }
 
     public Optional<Stmt> getInit() {
-        return getNullable(0, Stmt.class);
+        return getOptionalChild(Stmt.class, 0);
+        // return getNullable(0, Stmt.class);
     }
 
     public Optional<Stmt> getCond() {
-        return getNullable(1, Stmt.class);
+        return getOptionalChild(Stmt.class, 1);
+        // return getNullable(1, Stmt.class);
     }
 
     public Optional<Stmt> getInc() {
-        return getNullable(2, Stmt.class);
+        return getOptionalChild(Stmt.class, 2);
+        // return getNullable(2, Stmt.class);
     }
 
     @Override
-    public CompoundStmt getBody() {
-        return getChild(CompoundStmt.class, 3);
+    public Optional<CompoundStmt> getBody() {
+        return getOptionalChild(CompoundStmt.class, 3);
     }
 
     @Override
@@ -105,7 +112,7 @@ public class ForStmt extends LoopStmt {
         code.append(incCode);
         // getInc().ifPresent(inc -> code.append(inc.getCode()));
         code.append(")");
-        code.append(getBody().getCode());
+        code.append(getBody().map(Stmt::getCode).orElse(";"));
 
         return code.toString();
     }

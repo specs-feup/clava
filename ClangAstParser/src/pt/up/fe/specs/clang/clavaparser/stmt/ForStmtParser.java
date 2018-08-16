@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
@@ -47,7 +46,8 @@ public class ForStmtParser extends AClangNodeParser<ForStmt> {
         Stmt init = toStmt(children.get(0));
 
         // 2nd child has always appeared as null node until now
-        Preconditions.checkArgument(children.get(1) instanceof NullNodeOld, "Check what to do when this is not NullNode");
+        Preconditions.checkArgument(children.get(1) instanceof NullNodeOld,
+                "Check what to do when this is not NullNode");
 
         // 3rd child is the condition
         Stmt cond = toStmt(children.get(2));
@@ -57,8 +57,8 @@ public class ForStmtParser extends AClangNodeParser<ForStmt> {
 
         // 5th child is the body
         CompoundStmt body = toCompoundStmt(children.get(4));
-
-        return ClavaNodeFactory.forStmt(node.getInfo(), init, cond, inc, body);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.forStmt(node.getInfo(), init, cond, inc, body);
     }
 
 }

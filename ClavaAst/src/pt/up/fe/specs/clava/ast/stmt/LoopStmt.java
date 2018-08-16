@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
@@ -31,6 +34,14 @@ import pt.up.fe.specs.clava.utils.StmtWithCondition;
 public abstract class LoopStmt extends Stmt implements StmtWithCondition {
 
     private static final int DEFAULT_ITERATIONS = -1;
+
+    public LoopStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        isParallel = false;
+        iterations = DEFAULT_ITERATIONS;
+        rank = null;
+    }
 
     public static int getDefaultIterations() {
         return DEFAULT_ITERATIONS;
@@ -48,7 +59,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
         rank = null;
     }
 
-    public abstract CompoundStmt getBody();
+    public abstract Optional<CompoundStmt> getBody();
 
     public boolean isParallel() {
         return isParallel;
