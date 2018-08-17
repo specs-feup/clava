@@ -28,10 +28,13 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.utils.NullNodeAdapter;
+import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class ClavaNodes {
 
@@ -198,6 +201,23 @@ public class ClavaNodes {
         return NULL_IDS.contains(nullId);
     }
 
+    public static NullNodeType getNullNodeType(String nullId) {
+        switch (nullId) {
+        case NULLPRT_ATTR:
+            return NullNodeType.ATTR;
+        case NULLPRT_DECL:
+            return NullNodeType.DECL;
+        case NULLPRT_EXPR:
+            return NullNodeType.EXPR;
+        case NULLPRT_STMT:
+            return NullNodeType.STMT;
+        case NULLPRT_TYPE:
+            return NullNodeType.TYPE;
+        default:
+            throw new NotImplementedException(nullId);
+        }
+    }
+
     // private <T> void setNodesDelayed(DataClass<?> dataClass, DataKey<List<T>> key, List<String> nodeIds,
     // Function<String, T> nodeSupplier) {
     //
@@ -311,8 +331,22 @@ public class ClavaNodes {
                 //
                 // value = Optional.of(valueClass.cast(node));
             }
-            */
+             */
             data.set(key, value);
+        };
+
+        delayedNodesToAdd.add(nodeToAdd);
+    }
+
+    public <T extends ClavaNode> void queueSetNullableNode(DataClass<?> data, DataKey<T> key,
+            String nodeId) {
+
+        Runnable nodeToAdd = () -> {
+
+            ClavaNode value = isNullId(nodeId) ? NullNodeAdapter.getNullNode(getNullNodeType(nodeId), factory)
+                    : get(nodeId);
+
+            data.set(key, key.getValueClass().cast(value));
         };
 
         delayedNodesToAdd.add(nodeToAdd);

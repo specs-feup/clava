@@ -26,6 +26,7 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 public class NullNodeAdapter {
 
     public static enum NullNodeType {
+        ATTR,
         DECL,
         EXPR,
         STMT,
@@ -99,7 +100,7 @@ public class NullNodeAdapter {
         return adaptedChildren;
     }
 
-    private ClavaNode getNullNode(NullNodeType nullType, ClavaFactory factory) {
+    public static ClavaNode getNullNode(NullNodeType nullType, ClavaFactory factory) {
         switch (nullType) {
         case DECL:
             return factory.nullDecl();
