@@ -30,6 +30,7 @@ namespace clava {
     extern const std::string TAG_KIND[];
     extern const std::string ACCESS_SPECIFIER[];
     extern const std::string INIT_STYLE[];
+    extern const std::string NEW_INIT_STYLE[];
     extern const std::string STORAGE_CLASS[];
     extern const std::string TLS_KIND[];
     extern const std::string ELABORATED_TYPE_KEYWORD[];

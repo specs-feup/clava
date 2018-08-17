@@ -47,12 +47,10 @@ import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
-import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -1159,12 +1157,13 @@ public class ClavaNodeFactory {
 
         // return new CXXBoolLiteralExpr(value, exprData, info);
     }
-
-    public static CXXNewExpr cxxNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData exprData,
-            ClavaNodeInfo info, Expr arraySize, Expr constructorExpr, DeclRefExpr nothrow) {
-
-        return new CXXNewExpr(isGlobal, isArray, newOperator, exprData, info, arraySize, constructorExpr, nothrow);
-    }
+    //
+    // public static CXXNewExpr cxxNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData
+    // exprData,
+    // ClavaNodeInfo info, Expr arraySize, Expr constructorExpr, DeclRefExpr nothrow) {
+    //
+    // return new CXXNewExpr(isGlobal, isArray, newOperator, exprData, info, arraySize, constructorExpr, nothrow);
+    // }
 
     public static ConditionalOperator conditionalOperator(ExprData exprData, ClavaNodeInfo info,
             Expr condition, Expr trueExpr, Expr falseExpr) {

@@ -46,6 +46,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
         {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
         {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
+        {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
 
 };
 
@@ -132,6 +133,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpUnaryOperatorData(static_cast<const UnaryOperator *>(S)); break;
         case clava::StmtNode ::UNARY_EXPR_OR_TYPE_TRAIT_EXPR:
             DumpUnaryExprOrTypeTraitExprData(static_cast<const UnaryExprOrTypeTraitExpr *>(S)); break;
+        case clava::StmtNode ::CXX_NEW_EXPR:
+            DumpCXXNewExprData(static_cast<const CXXNewExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -463,4 +466,18 @@ void clava::ClavaDataDumper::DumpUnaryExprOrTypeTraitExprData(const UnaryExprOrT
 
     clava::dump(clava::getSource(Context, E->getSourceRange()));
     //llvm::errs() << "UNARY " << clava::getId(E, id) << " is argument type: " << E->isArgumentType() << "\n";
+ }
+
+void clava::ClavaDataDumper::DumpCXXNewExprData(const CXXNewExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->isGlobalNew());
+    clava::dump(E->isArray());
+    clava::dump(E->hasInitializer());
+    clava::dump(clava::NEW_INIT_STYLE[E->getInitializationStyle()]);
+    clava::dump(clava::getId(E->getInitializer(), id));
+    clava::dump(clava::getId(E->getConstructExpr(), id));
+    clava::dump(clava::getId(E->getArraySize(), id));
+    clava::dump(clava::getId(E->getOperatorNew(), id));
+
  }

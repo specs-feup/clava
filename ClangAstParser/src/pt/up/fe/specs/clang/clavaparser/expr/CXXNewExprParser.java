@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
@@ -85,10 +84,10 @@ public class CXXNewExprParser extends AClangNodeParser<CXXNewExpr> {
         checkChildrenBetween(children, 0, 1);
 
         Expr constructorExpr = children.isEmpty() ? null : toExpr(children.get(0));
-
-        // return ClavaNodeFactory.cxxNewExpr(newFunctionId, typeSourceInfo, ftype, exprData, node.getInfo(),
-        return ClavaNodeFactory.cxxNewExpr(isGlobal, isArray, newOperator, exprData, node.getInfo(), arrayExpr,
-                constructorExpr, nothrow);
+        throw new RuntimeException("deprecated");
+        // // return ClavaNodeFactory.cxxNewExpr(newFunctionId, typeSourceInfo, ftype, exprData, node.getInfo(),
+        // return ClavaNodeFactory.cxxNewExpr(isGlobal, isArray, newOperator, exprData, node.getInfo(), arrayExpr,
+        // constructorExpr, nothrow);
     }
 
     private static DeclRefExpr removeNothrow(List<? extends ClavaNode> children) {

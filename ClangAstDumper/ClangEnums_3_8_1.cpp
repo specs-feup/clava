@@ -410,6 +410,14 @@ extern const std::string clava::INIT_STYLE[] {
         "LIST_INIT"
 };
 
+
+extern const std::string clava::NEW_INIT_STYLE[]{
+        "NO_INIT",
+        "CALL_INIT",
+        "LIST_INIT"
+};
+
+
 extern const std::string clava::STORAGE_CLASS[] {
         "NONE",
         "EXTERN",

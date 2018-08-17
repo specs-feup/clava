@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
@@ -47,6 +48,7 @@ import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
+import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
@@ -293,6 +295,21 @@ public class ExprDataParser {
         data.add(UnaryExprOrTypeTraitExpr.IS_ARGUMENT_TYPE, LineStreamParsers.oneOrZero(lines));
         dataStore.getClavaNodes().queueSetOptionalNode(data, UnaryExprOrTypeTraitExpr.ARG_TYPE, lines.nextLine());
         data.add(UnaryExprOrTypeTraitExpr.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
+
+        return data;
+    }
+
+    public static DataStore parseCXXNewExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXNewExpr.IS_GLOBAL_NEW, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXNewExpr.IS_ARRAY, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXNewExpr.HAS_INITIALIZER, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXNewExpr.INIT_STYLE, LineStreamParsers.enumFromName(NewInitStyle.class, lines));
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.INITIALIZER, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.CONSTRUCT_EXPR, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.ARRAY_SIZE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.OPERATOR_NEW, lines.nextLine());
 
         return data;
     }

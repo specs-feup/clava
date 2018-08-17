@@ -66,6 +66,7 @@ namespace clava {
         CXX_DEPENDENT_SCOPE_MEMBER_EXPR,
         OPAQUE_VALUE_EXPR,
         UNARY_EXPR_OR_TYPE_TRAIT_EXPR,
+        CXX_NEW_EXPR,
     };
 
     /**

@@ -252,6 +252,7 @@ private:
     void VisitExplicitCastExprChildren(const ExplicitCastExpr *E, std::vector<std::string> &children);
     void VisitOpaqueValueExprChildren(const OpaqueValueExpr *E, std::vector<std::string> &children);
     void VisitUnaryExprOrTypeTraitExprChildren(const UnaryExprOrTypeTraitExpr *E, std::vector<std::string> &children);
+    void VisitCXXNewExprChildren(const CXXNewExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);

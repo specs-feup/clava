@@ -150,6 +150,7 @@ namespace clava {
         void DumpCXXDependentScopeMemberExprData(const CXXDependentScopeMemberExpr *E);
         void DumpUnaryOperatorData(const UnaryOperator *E);
         void DumpUnaryExprOrTypeTraitExprData(const UnaryExprOrTypeTraitExpr *E);
+        void DumpCXXNewExprData(const CXXNewExpr *E);
 
 
 

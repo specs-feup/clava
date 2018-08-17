@@ -14,16 +14,19 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * Represents a new-expression e.g: "new Object(foo)".
@@ -33,12 +36,29 @@ import pt.up.fe.specs.util.SpecsCollections;
  */
 public class CXXNewExpr extends Expr {
 
-    private final BareDeclData newOperator;
+    /// DATAKEYS BEGIN
 
-    private final boolean isGlobal;
-    private final boolean isArray;
-    private final boolean hasConstructor;
-    private final boolean hasNothrow;
+    public final static DataKey<Boolean> IS_GLOBAL_NEW = KeyFactory.bool("isGlobalNew");
+    public final static DataKey<Boolean> IS_ARRAY = KeyFactory.bool("isArray");
+    public final static DataKey<Boolean> HAS_INITIALIZER = KeyFactory.bool("hasInitializer");
+    public final static DataKey<NewInitStyle> INIT_STYLE = KeyFactory.enumeration("initStyle", NewInitStyle.class);
+    public final static DataKey<Optional<Expr>> INITIALIZER = KeyFactory.optional("initializer");
+    public final static DataKey<Optional<CXXConstructExpr>> CONSTRUCT_EXPR = KeyFactory.optional("constructExpr");
+    public final static DataKey<Optional<Expr>> ARRAY_SIZE = KeyFactory.optional("arraySize");
+    public final static DataKey<Optional<FunctionDecl>> OPERATOR_NEW = KeyFactory.optional("operatorNew");
+
+    /// DATAKEYS ENDs
+
+    public CXXNewExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    // private final BareDeclData newOperator;
+    //
+    // private final boolean isGlobal;
+    // private final boolean isArray;
+    // private final boolean hasConstructor;
+    // private final boolean hasNothrow;
 
     /*
     private final Long newFunctionId;
@@ -53,73 +73,82 @@ public class CXXNewExpr extends Expr {
      * @param info
      * @param children
      */
-    public CXXNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData exprData,
-            ClavaNodeInfo info, Expr arraySize, Expr constructorExpr, DeclRefExpr nothrow) {
+    // public CXXNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData exprData,
+    // ClavaNodeInfo info, Expr arraySize, Expr constructorExpr, DeclRefExpr nothrow) {
+    //
+    // this(isGlobal, isArray, constructorExpr != null, nothrow != null, newOperator, exprData, info,
+    // SpecsCollections.asListT(ClavaNode.class, arraySize, constructorExpr, nothrow));
+    // }
+    //
+    // private CXXNewExpr(boolean isGlobal, boolean isArray, boolean hasConstructor, boolean hasNothrow,
+    // BareDeclData newOperator, ExprData exprData,
+    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.isGlobal = isGlobal;
+    // this.isArray = isArray;
+    // this.hasConstructor = hasConstructor;
+    // this.hasNothrow = hasNothrow;
+    //
+    // this.newOperator = newOperator;
+    // /*
+    // this.isArray = isArray;
+    // this.hasNothrow = hasNothrow;
+    // this.hasConstructor = hasConstructor;
+    //
+    // this.newFunctionId = newFunctionId;
+    // this.typeSourceInfo = typeSourceInfo;
+    // this.ftype = ftype;
+    // */
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXNewExpr(isGlobal, isArray, hasConstructor, hasNothrow, newOperator, getExprData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
-        this(isGlobal, isArray, constructorExpr != null, nothrow != null, newOperator, exprData, info,
-                SpecsCollections.asListT(ClavaNode.class, arraySize, constructorExpr, nothrow));
-    }
-
-    private CXXNewExpr(boolean isGlobal, boolean isArray, boolean hasConstructor, boolean hasNothrow,
-            BareDeclData newOperator, ExprData exprData,
-            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-
-        this.isGlobal = isGlobal;
-        this.isArray = isArray;
-        this.hasConstructor = hasConstructor;
-        this.hasNothrow = hasNothrow;
-
-        this.newOperator = newOperator;
-        /*
-        this.isArray = isArray;
-        this.hasNothrow = hasNothrow;
-        this.hasConstructor = hasConstructor;
-        
-        this.newFunctionId = newFunctionId;
-        this.typeSourceInfo = typeSourceInfo;
-        this.ftype = ftype;
-        */
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXNewExpr(isGlobal, isArray, hasConstructor, hasNothrow, newOperator, getExprData(), getInfo(),
-                Collections.emptyList());
-    }
-
-    public Optional<Expr> getConstructorExpr() {
-        if (!hasConstructor) {
-            return Optional.empty();
-        }
-
-        // If hasArray, is the second child. Otherwise, is the first child
-        int constructorIndex = isArray ? 1 : 0;
-
-        return Optional.of(getChild(Expr.class, constructorIndex));
+    public Optional<CXXConstructExpr> getConstructorExpr() {
+        return get(CONSTRUCT_EXPR);
+        // if (!hasConstructor) {
+        // return Optional.empty();
+        // }
+        //
+        // // If hasArray, is the second child. Otherwise, is the first child
+        // int constructorIndex = isArray ? 1 : 0;
+        //
+        // return Optional.of(getChild(Expr.class, constructorIndex));
     }
 
     public Optional<Expr> getArrayExpr() {
-        if (!isArray) {
-            return Optional.empty();
-        }
-
-        // Array expr is always the first child
-        return Optional.of(getChild(Expr.class, 0));
+        return get(ARRAY_SIZE);
+        // if (!isArray) {
+        // return Optional.empty();
+        // }
+        //
+        // // Array expr is always the first child
+        // return Optional.of(getChild(Expr.class, 0));
     }
 
     @Override
     public String getCode() {
+        // System.out.println("Operator new:" + get(OPERATOR_NEW).map(ClavaNode::getCode).orElse("null"));
+        // System.out.println("ARRAY:" + get(ARRAY_SIZE).map(ClavaNode::getCode).orElse("null"));
+        // System.out.println("Construct:" + get(CONSTRUCT_EXPR).map(ClavaNode::getCode).orElse("null"));
         StringBuilder code = new StringBuilder();
 
         code.append("new ");
+
+        boolean hasNothrow = get(OPERATOR_NEW).flatMap(fdecl -> SpecsCollections.lastTry(fdecl.getParameters()))
+                .filter(param -> param.getCode().startsWith("std::nothrow_"))
+                .isPresent();
 
         if (hasNothrow) {
             code.append("(std::nothrow) ");
         }
 
-        Optional<Expr> constructorExpr = getConstructorExpr();
+        Optional<CXXConstructExpr> constructorExpr = getConstructorExpr();
 
         if (constructorExpr.isPresent()) {
             // Special case: literal
@@ -141,6 +170,17 @@ public class CXXNewExpr extends Expr {
                 exprType = Types.getPointeeType(exprType);
             }
             code.append(exprType.getCode(this));
+
+            switch (get(INIT_STYLE)) {
+            case NO_INIT:
+                // Do nothing
+                break;
+            case CALL_INIT:
+                code.append("(").append(get(INITIALIZER).get().getCode()).append(")");
+                break;
+            default:
+                throw new NotImplementedException(get(INIT_STYLE));
+            }
         }
 
         getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));
