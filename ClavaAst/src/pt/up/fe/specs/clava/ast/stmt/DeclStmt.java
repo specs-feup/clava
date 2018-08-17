@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -196,7 +195,9 @@ public class DeclStmt extends Stmt {
     public String getCode() {
         switch (get(DECL_STMT_TYPE)) {
         case DECL_LIST:
-            return getCodeDeclList();
+            String code = getCodeDeclList();
+            // System.out.println("FINAL CODE:\n" + code);
+            return code;
         case RECORD_DECL:
             return getCodeRecordDecl();
         default:
@@ -228,6 +229,7 @@ public class DeclStmt extends Stmt {
     public String getCodeDeclList() {
         // If no semicolon, can only have one decl
         if (!get(HAS_SEMICOLON)) {
+            // System.out.println("NO SEMI");
             // return getChildren(NamedDecl.class).get(0).getCode();
             return getChildren(Decl.class).get(0).getCode();
         }
@@ -237,11 +239,42 @@ public class DeclStmt extends Stmt {
         List<Decl> decls = getChildren(Decl.class);
 
         // Write code of first type, add code of next types without variable declaration
+        // System.out.println("DECLS:");
+        // for (Decl decl : decls) {
+        // System.out.println("asdasd");
+        // System.out.println("DECL CLASS:" + decl.getClass());
+        // System.out.println(decl.getCode());
+        // }
 
-        return decls.stream()
-                .map(decl -> decl.getCode())
-                .collect(Collectors.joining(";" + ln(), "", ";"));
+        // StringBuilder code = new StringBuilder();
+        String code = decls.get(0).getCode();
 
+        // String firstDecl = decls.get(0).getCode();
+        // code.append(firstDecl);
+        // if(!firstDecl.endsWith(";")) {
+        // code.append(";");
+        // }
+        for (int i = 1; i < decls.size(); i++) {
+            if (!code.trim().endsWith(";")) {
+                code += ";";
+            }
+
+            code += ln() + decls.get(i).getCode();
+        }
+
+        // String code = decls.stream()
+        // .map(decl -> decl.getCode())
+        // // .filter(code -> !code.isEmpty())
+        // // .collect(Collectors.joining(";" + ln(), "", ";"));
+        // .collect(Collectors.joining(";" + ln()));
+
+        // System.out.println("CODE TRIM:" + code.trim());
+        if (!code.trim().endsWith(";")) {
+            // System.out.println("ADDING ;");
+            code += ";";
+        }
+        // System.out.println("FINAL CODE:" + code);
+        return code;
     }
 
     public DeclStmt setHasSemicolon(boolean hasSemicolon) {
