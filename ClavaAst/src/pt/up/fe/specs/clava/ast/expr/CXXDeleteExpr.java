@@ -13,42 +13,52 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class CXXDeleteExpr extends Expr {
 
-    private final boolean isGlobal;
-    private final boolean isArray;
-    private final BareDeclData operatorDelete;
+    /// DATAKEYS BEGIN
 
-    public CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete, ExprData exprData,
-            ClavaNodeInfo info, Expr argument) {
+    public final static DataKey<Boolean> IS_GLOBAL = KeyFactory.bool("isGlobal");
+    public final static DataKey<Boolean> IS_ARRAY = KeyFactory.bool("isArray");
+    public final static DataKey<Boolean> IS_ARRAY_AS_WRITTEN = KeyFactory.bool("isArrayAsWritten");
+    // public final static DataKey<Expr> ARGUMENT_EXPR = KeyFactory.object("argumentExpr", Expr.class);
 
-        this(isGlobal, isArray, operatorDelete, exprData, info, Arrays.asList(argument));
+    public CXXDeleteExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData bareDecl, ExprData exprData,
-            ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-
-        this.isGlobal = isGlobal;
-        this.isArray = isArray;
-        this.operatorDelete = bareDecl;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, getExprData(), getInfo(),
-                Collections.emptyList());
-    }
+    // private final boolean isGlobal;
+    // private final boolean isArray;
+    // private final BareDeclData operatorDelete;
+    //
+    // public CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete, ExprData exprData,
+    // ClavaNodeInfo info, Expr argument) {
+    //
+    // this(isGlobal, isArray, operatorDelete, exprData, info, Arrays.asList(argument));
+    // }
+    //
+    // private CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData bareDecl, ExprData exprData,
+    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    //
+    // this.isGlobal = isGlobal;
+    // this.isArray = isArray;
+    // this.operatorDelete = bareDecl;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, getExprData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public Expr getArgument() {
         return getChild(Expr.class, 0);
@@ -58,16 +68,20 @@ public class CXXDeleteExpr extends Expr {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        if (isGlobal) {
+        if (get(IS_GLOBAL)) {
             SpecsLogs.msgWarn("Code generation not implemented yet when global is true");
         }
 
         code.append("delete");
-        if (isArray) {
+        if (get(IS_ARRAY_AS_WRITTEN)) {
             code.append("[]");
         }
-        code.append(" ");
-        code.append(getArgument().getCode());
+
+        Expr arg = getArgument();
+        if (!arg.get(Expr.IS_DEFAULT_ARGUMENT)) {
+            code.append(" ");
+            code.append(getArgument().getCode());
+        }
 
         return code.toString();
     }

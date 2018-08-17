@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -59,8 +58,8 @@ public class CXXDeleteExprParser extends AClangNodeParser<CXXDeleteExpr> {
 
         checkNumChildren(children, 1);
         Expr argument = toExpr(children.get(0));
-
-        return ClavaNodeFactory.cxxDeleteExpr(isGlobal, isArray, operatorDelete, exprData, node.getInfo(), argument);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxDeleteExpr(isGlobal, isArray, operatorDelete, exprData, node.getInfo(), argument);
     }
 
 }

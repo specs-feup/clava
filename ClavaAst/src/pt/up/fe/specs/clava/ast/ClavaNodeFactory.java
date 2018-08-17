@@ -46,7 +46,6 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
@@ -1208,10 +1207,10 @@ public class ClavaNodeFactory {
     // return new CompoundAssignOperator(lhsType, resultType, op, exprData, info, lhs, rhs);
     // }
 
-    public static CXXDeleteExpr cxxDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete,
-            ExprData exprData, ClavaNodeInfo info, Expr argument) {
-        return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, exprData, info, argument);
-    }
+    // public static CXXDeleteExpr cxxDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete,
+    // ExprData exprData, ClavaNodeInfo info, Expr argument) {
+    // return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, exprData, info, argument);
+    // }
 
     // public static InitListExpr initListExpr(boolean hasInitializedFieldInUnion, Expr arrayFiller,
     // BareDeclData fieldData,

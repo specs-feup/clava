@@ -101,7 +101,7 @@ public class CxxTest {
 
     @Test
     public void testNew() {
-        new CxxTester("new.cpp").test();
+        new CxxTester("new.cpp").showCode().test();
     }
 
     @Test

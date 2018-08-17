@@ -47,6 +47,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
         {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
         {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
+        {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
 
 };
 
@@ -135,6 +136,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpUnaryExprOrTypeTraitExprData(static_cast<const UnaryExprOrTypeTraitExpr *>(S)); break;
         case clava::StmtNode ::CXX_NEW_EXPR:
             DumpCXXNewExprData(static_cast<const CXXNewExpr *>(S)); break;
+        case clava::StmtNode ::CXX_DELETE_EXPR:
+            DumpCXXDeleteExprData(static_cast<const CXXDeleteExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -167,6 +170,7 @@ void clava::ClavaDataDumper::DumpExprData(const Expr *E) {
     clava::dump(E->getType(), id);
     clava::dump(E->getValueKind());
     clava::dump(E->getObjectKind());
+    clava::dump(E->isDefaultArgument());
 }
 
 void clava::ClavaDataDumper::DumpCastExprData(const CastExpr *E) {
@@ -362,7 +366,7 @@ void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E)
 
     // Dump qualifier
     clava::dump(E->isElidable());
-    clava::dump(E->isDefaultArgument());
+    //clava::dump(E->isDefaultArgument());
     clava::dump(E->requiresZeroInitialization());
     clava::dump(E->isListInitialization());
     clava::dump(E->isStdInitListInitialization());
@@ -479,5 +483,15 @@ void clava::ClavaDataDumper::DumpCXXNewExprData(const CXXNewExpr *E) {
     clava::dump(clava::getId(E->getConstructExpr(), id));
     clava::dump(clava::getId(E->getArraySize(), id));
     clava::dump(clava::getId(E->getOperatorNew(), id));
+
+ }
+
+void clava::ClavaDataDumper::DumpCXXDeleteExprData(const CXXDeleteExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->isGlobalDelete());
+    clava::dump(E->isArrayForm());
+    clava::dump(E->isArrayFormAsWritten());
+    //clava::dump(clava::getId(E->getArgument(), id));
 
  }

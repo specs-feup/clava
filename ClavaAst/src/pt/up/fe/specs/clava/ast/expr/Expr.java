@@ -54,6 +54,8 @@ public abstract class Expr extends ClavaNode implements Typable {
     public final static DataKey<ImplicitCastExpr> IMPLICIT_CAST = KeyFactory
             .object("implicitCast", ImplicitCastExpr.class);
 
+    public final static DataKey<Boolean> IS_DEFAULT_ARGUMENT = KeyFactory.bool("isDefaultArgument");
+
     /// DATAKEYS END
 
     public Expr(DataStore data, Collection<? extends ClavaNode> children) {

@@ -46,7 +46,7 @@ public class CXXConstructExpr extends Expr {
      * arguments are represented by CXXDefaultArgExpr nodes, however this field looks through any implicit casts to
      * determine whether the expression is a default argument.
      */
-    public final static DataKey<Boolean> IS_DEFAULT_ARGUMENT = KeyFactory.bool("isDefaultArgument");
+    // public final static DataKey<Boolean> IS_DEFAULT_ARGUMENT = KeyFactory.bool("isDefaultArgument");
 
     public final static DataKey<Boolean> REQUIRES_ZERO_INITIALIZATION = KeyFactory.bool("requiresZeroInitialization");
 

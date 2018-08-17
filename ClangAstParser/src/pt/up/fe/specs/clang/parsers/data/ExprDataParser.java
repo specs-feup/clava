@@ -23,6 +23,7 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
@@ -76,6 +77,7 @@ public class ExprDataParser {
 
         data.add(Expr.VALUE_KIND, LineStreamParsers.enumFromInt(ValueKind.getEnumHelper(), lines));
         data.add(Expr.OBJECT_KIND, LineStreamParsers.enumFromInt(ObjectKind.getEnumHelper(), lines));
+        data.add(Expr.IS_DEFAULT_ARGUMENT, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }
@@ -184,7 +186,7 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(CXXConstructExpr.IS_ELIDABLE, LineStreamParsers.oneOrZero(lines));
-        data.add(CXXConstructExpr.IS_DEFAULT_ARGUMENT, LineStreamParsers.oneOrZero(lines));
+        // data.add(CXXConstructExpr.IS_DEFAULT_ARGUMENT, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.REQUIRES_ZERO_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.IS_LIST_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.IS_STD_LIST_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
@@ -302,7 +304,7 @@ public class ExprDataParser {
     public static DataStore parseCXXNewExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
-        data.add(CXXNewExpr.IS_GLOBAL_NEW, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXNewExpr.IS_GLOBAL, LineStreamParsers.oneOrZero(lines));
         data.add(CXXNewExpr.IS_ARRAY, LineStreamParsers.oneOrZero(lines));
         data.add(CXXNewExpr.HAS_INITIALIZER, LineStreamParsers.oneOrZero(lines));
         data.add(CXXNewExpr.INIT_STYLE, LineStreamParsers.enumFromName(NewInitStyle.class, lines));
@@ -310,6 +312,17 @@ public class ExprDataParser {
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.CONSTRUCT_EXPR, lines.nextLine());
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.ARRAY_SIZE, lines.nextLine());
         dataStore.getClavaNodes().queueSetOptionalNode(data, CXXNewExpr.OPERATOR_NEW, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseCXXDeleteExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXDeleteExpr.IS_GLOBAL, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDeleteExpr.IS_ARRAY, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDeleteExpr.IS_ARRAY_AS_WRITTEN, LineStreamParsers.oneOrZero(lines));
+        // dataStore.getClavaNodes().queueSetNode(data, CXXDeleteExpr.ARGUMENT_EXPR, lines.nextLine());
 
         return data;
     }

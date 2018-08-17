@@ -33,6 +33,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXStaticCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
         {"OpaqueValueExpr", clava::StmtNode::OPAQUE_VALUE_EXPR},
         {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
+        {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
 };
 
 void ClangAstDumper::visitChildren(const Stmt* S) {
@@ -108,6 +109,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitUnaryExprOrTypeTraitExprChildren(static_cast<const UnaryExprOrTypeTraitExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_NEW_EXPR:
             VisitCXXNewExprChildren(static_cast<const CXXNewExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::CXX_DELETE_EXPR:
+            VisitCXXDeleteExprChildren(static_cast<const CXXDeleteExpr *>(S), visitedChildren); break;
 
 
         default: throw std::invalid_argument("ChildrenVisitorStmts::visitChildren(StmtNode): Case not implemented, '"+clava::getName(stmtNode)+"'");
@@ -347,4 +350,12 @@ void ClangAstDumper::VisitCXXNewExprChildren(const CXXNewExpr *E, std::vector<st
     VisitStmtTop(E->getArraySize());
     VisitDeclTop(E->getOperatorNew());
 
+}
+
+void ClangAstDumper::VisitCXXDeleteExprChildren(const CXXDeleteExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    addChild(E->getArgument(), children);
+    //VisitStmtTop(E->getArgument());
 }

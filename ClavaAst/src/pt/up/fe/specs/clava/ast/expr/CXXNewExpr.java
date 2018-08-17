@@ -38,7 +38,7 @@ public class CXXNewExpr extends Expr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Boolean> IS_GLOBAL_NEW = KeyFactory.bool("isGlobalNew");
+    public final static DataKey<Boolean> IS_GLOBAL = KeyFactory.bool("isGlobalNew");
     public final static DataKey<Boolean> IS_ARRAY = KeyFactory.bool("isArray");
     public final static DataKey<Boolean> HAS_INITIALIZER = KeyFactory.bool("hasInitializer");
     public final static DataKey<NewInitStyle> INIT_STYLE = KeyFactory.enumeration("initStyle", NewInitStyle.class);
