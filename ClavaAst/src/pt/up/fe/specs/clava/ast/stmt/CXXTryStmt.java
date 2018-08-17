@@ -14,27 +14,31 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class CXXTryStmt extends Stmt {
 
-    public CXXTryStmt(ClavaNodeInfo info, CompoundStmt tryBody, List<CXXCatchStmt> handlers) {
-        this(info, SpecsCollections.concat(tryBody, handlers));
+    public CXXTryStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXTryStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXTryStmt(getInfo(), Collections.emptyList());
-    }
+    // public CXXTryStmt(ClavaNodeInfo info, CompoundStmt tryBody, List<CXXCatchStmt> handlers) {
+    // this(info, SpecsCollections.concat(tryBody, handlers));
+    // }
+    //
+    // private CXXTryStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXTryStmt(getInfo(), Collections.emptyList());
+    // }
 
     public CompoundStmt getBody() {
         return getChild(CompoundStmt.class, 0);

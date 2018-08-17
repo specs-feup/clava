@@ -69,8 +69,6 @@ import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.omp.OMPParallelDirective;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
-import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
-import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.ClangLabelStmt;
@@ -914,9 +912,9 @@ public class ClavaNodeFactory {
     // return new CXXCatchStmt(info, exception, catchBody);
     // }
 
-    public static CXXTryStmt cxxTryStmt(ClavaNodeInfo info, CompoundStmt tryBody, List<CXXCatchStmt> handlers) {
-        return new CXXTryStmt(info, tryBody, handlers);
-    }
+    // public static CXXTryStmt cxxTryStmt(ClavaNodeInfo info, CompoundStmt tryBody, List<CXXCatchStmt> handlers) {
+    // return new CXXTryStmt(info, tryBody, handlers);
+    // }
 
     // public static DoStmt doStmt(ClavaNodeInfo info, CompoundStmt body, Expr condition) {
     // return new DoStmt(info, body, condition);

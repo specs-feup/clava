@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -43,8 +42,8 @@ public class CXXTryStmtParser extends AClangNodeParser<CXXTryStmt> {
 
         CompoundStmt body = SpecsCollections.popSingle(children, CompoundStmt.class);
         List<CXXCatchStmt> handlers = SpecsCollections.cast(children, CXXCatchStmt.class);
-
-        return ClavaNodeFactory.cxxTryStmt(node.getInfo(), body, handlers);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxTryStmt(node.getInfo(), body, handlers);
     }
 
 }

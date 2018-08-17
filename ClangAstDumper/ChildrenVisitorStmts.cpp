@@ -16,6 +16,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
         {"DoStmt", clava::StmtNode::DO_STMT},
         {"CXXForRangeStmt", clava::StmtNode::CXX_FOR_RANGE_STMT},
         {"CXXCatchStmt", clava::StmtNode::CXX_CATCH_STMT},
+        {"CXXTryStmt", clava::StmtNode::CXX_TRY_STMT},
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
@@ -82,6 +83,10 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXForRangeStmtChildren(static_cast<const CXXForRangeStmt *>(S), visitedChildren); break;
        case clava::StmtNode::CXX_CATCH_STMT:
             VisitCXXCatchStmtChildren(static_cast<const CXXCatchStmt *>(S), visitedChildren); break;
+       case clava::StmtNode::CXX_TRY_STMT:
+            VisitCXXTryStmtChildren(static_cast<const CXXTryStmt *>(S), visitedChildren); break;
+
+
 
 
         case clava::StmtNode::EXPR:
@@ -217,6 +222,19 @@ void ClangAstDumper::VisitCXXCatchStmtChildren(const CXXCatchStmt *S, std::vecto
 
     addChild(S->getExceptionDecl(), children);
     addChild(S->getHandlerBlock(), children);
+}
+
+void ClangAstDumper::VisitCXXTryStmtChildren(const CXXTryStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    addChild(S->getTryBlock(), children);
+    for(int i=0; i<S->getNumHandlers();i++) {
+        addChild(S->getHandler(i), children);
+    }
+
+    //llvm::errs() << "TRY STMT: " << S << "\n";
+    //llvm::errs() << "TRY BLOCK: " << S->getTryBlock() << "\n";
 }
 
 

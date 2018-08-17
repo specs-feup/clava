@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
+import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -57,6 +58,7 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(CXXForRangeStmt.class, ChildrenAdapter::adaptCXXForRangeStmt);
         CHILDREN_ADAPTERS.put(CompoundStmt.class, ChildrenAdapter::adaptCompoundStmt);
         CHILDREN_ADAPTERS.put(CXXCatchStmt.class, ChildrenAdapter::adaptCXXCatchStmt);
+        CHILDREN_ADAPTERS.put(CXXTryStmt.class, ChildrenAdapter::adaptCXXTryStmt);
     }
 
     private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
@@ -183,6 +185,20 @@ public class ChildrenAdapter {
         return adaptedChildren;
     }
 
+    private static List<ClavaNode> adaptCXXTryStmt(List<ClavaNode> children, ClavaContext context) {
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+        // System.out.println("CHILDREN:"
+        // + children.stream().map(child -> child.get(ClavaNode.ID)).collect(Collectors.joining(", ")));
+
+        // if (children.get(0) instanceof Decl) {
+        // System.out.println("FOUND DECL " + children.get(0).get(ClavaNode.ID) + " IN TRY:" + children.get(0));
+        // }
+        adaptedChildren.add(toCompoundStmt(children.get(0), context));
+        adaptedChildren.addAll(children.subList(1, children.size()));
+
+        return adaptedChildren;
+    }
+
     private static ClavaNode toCompoundStmt(ClavaNode clavaNode, ClavaContext context) {
         return toCompoundStmt(clavaNode, true, context);
     }
@@ -206,9 +222,14 @@ public class ChildrenAdapter {
             return toCompoundStmt(context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode), isOptional, context);
         }
 
+        // if (clavaNode instanceof Decl) {
+        // return toCompoundStmt(context.get(ClavaContext.FACTORY).declStmt((Decl) clavaNode), isOptional, context);
+        // }
+
         if (!(clavaNode instanceof Stmt)) {
             throw new RuntimeException(
-                    "Expected node to be of class " + Stmt.class + " but it " + clavaNode.getClass());
+                    "Expected node " + clavaNode.get(ClavaNode.ID) + " to be of class " + Stmt.class + " but it "
+                            + clavaNode.getClass() + ": " + clavaNode);
         }
 
         return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode).set(CompoundStmt.IS_NAKED);
