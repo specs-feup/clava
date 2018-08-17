@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.comment.BlockContentComment;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.DummyComment;
@@ -34,7 +33,6 @@ import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
@@ -120,17 +118,17 @@ public class ClavaNodeFactory {
     // return new TranslationUnit(filename, path, declarations);
     // }
 
-    public static IncludeDecl include(String include, boolean isAngled) {
-        return new IncludeDecl(include, isAngled);
-    }
-
-    public static IncludeDecl include(Include include) {
-        return include(include, include.getSourceFile().getAbsolutePath());
-    }
-
-    public static IncludeDecl include(Include include, String filepath) {
-        return new IncludeDecl(include, ClavaNodeInfo.undefinedInfo(filepath));
-    }
+    // public static IncludeDecl include(String include, boolean isAngled) {
+    // return new IncludeDecl(include, isAngled);
+    // }
+    //
+    // public static IncludeDecl include(Include include) {
+    // return include(include, include.getSourceFile().getAbsolutePath());
+    // }
+    //
+    // public static IncludeDecl include(Include include, String filepath) {
+    // return new IncludeDecl(include, ClavaNodeInfo.undefinedInfo(filepath));
+    // }
 
     public static NullNodeOld nullNode(ClavaNodeInfo info) {
         return new NullNodeOld(info);

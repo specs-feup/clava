@@ -28,6 +28,7 @@ import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -74,7 +75,8 @@ public class LinkageSpecDeclParser extends AClangNodeParser<LinkageSpecDecl> {
                 }
 
                 includedNodes.add(childInclude);
-                children.add(ClavaNodeFactory.include(childInclude, node.getLocation().getFilepath()));
+                children.add(
+                        LegacyToDataStore.getFactory().includeDecl(childInclude, node.getLocation().getFilepath()));
 
                 continue;
             }

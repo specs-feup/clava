@@ -25,6 +25,8 @@ import java.util.Optional;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.LiteralNode;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -32,6 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -400,6 +403,25 @@ public class ClavaFactory {
                 .put(ValueDecl.TYPE, type);
 
         return new ParmVarDecl(data, Collections.emptyList());
+    }
+
+    public IncludeDecl includeDecl(Include include, String filepath) {
+        DataStore data = newDeclDataStore();
+
+        data.set(IncludeDecl.INCLUDE, include);
+        if (filepath != null) {
+            data.set(IncludeDecl.LOCATION, new SourceRange(filepath, -1, -1, -1, -1));
+        }
+
+        return new IncludeDecl(data, Collections.emptyList());
+    }
+
+    public IncludeDecl includeDecl(String include, boolean isAngled) {
+        return includeDecl(new Include(include, isAngled), null);
+    }
+
+    public IncludeDecl includeDecl(Include include) {
+        return includeDecl(include, null);
     }
 
     /// STMTS

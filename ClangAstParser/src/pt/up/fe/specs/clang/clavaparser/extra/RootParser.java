@@ -30,7 +30,6 @@ import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -160,7 +159,7 @@ public class RootParser extends AClangNodeParser<App> {
 
             // Add includes
             uniqueIncludes.stream()
-                    .map(include -> ClavaNodeFactory.include(include, path))
+                    .map(include -> LegacyToDataStore.getFactory().includeDecl(include, path))
                     .forEach(decls::add);
             // Add declarations
             decls.addAll(declNodes);
@@ -291,7 +290,7 @@ public class RootParser extends AClangNodeParser<App> {
 
         // Add includes
         uniqueIncludes.stream()
-                .map(include -> ClavaNodeFactory.include(include, null)) // PATH?
+                .map(include -> LegacyToDataStore.getFactory().includeDecl(include, null)) // PATH?
                 .forEach(tuDecls::add);
 
         // If either the file in start location or end location is the current file, then it belongs to the translation

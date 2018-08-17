@@ -26,7 +26,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -526,7 +525,7 @@ public class TranslationUnit extends ClavaNode {
         // }
         // System.out.println("INCLUDE NAME:" + includeName);
 
-        getIncludes().addInclude(ClavaNodeFactory.include(includeName, isAngled));
+        getIncludes().addInclude(getFactory().includeDecl(includeName, isAngled));
     }
 
     public void addInclude(IncludeDecl include) {

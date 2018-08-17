@@ -33,7 +33,6 @@ import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -244,7 +243,8 @@ public class ClangStreamParser {
 
             // Add includes
             uniqueIncludes.stream()
-                    .map(include -> ClavaNodeFactory.include(include, path))
+                    // .map(include -> ClavaNodeFactory.include(include, path))
+                    .map(include -> getFactory().includeDecl(include, path))
                     .forEach(decls::add);
 
             // Add declarations

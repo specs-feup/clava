@@ -81,7 +81,8 @@ public class IncludeManager {
     }
 
     public boolean hasInclude(String includeName, boolean isAngled) {
-        String includeCode = new IncludeDecl(includeName, isAngled).getFormattedInclude();
+        String includeCode = translationUnit.getFactory().includeDecl(includeName, isAngled).getFormattedInclude();
+        // String includeCode = new IncludeDecl(includeName, isAngled).getFormattedInclude();
 
         return currentIncludes.contains(includeCode);
     }

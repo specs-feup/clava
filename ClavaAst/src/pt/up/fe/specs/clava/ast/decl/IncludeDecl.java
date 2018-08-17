@@ -13,31 +13,43 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 public class IncludeDecl extends Decl {
 
-    private final Include include;
+    /// DATAKEYS BEGIN
 
-    public IncludeDecl(String include, boolean isAngled) {
-        this(new Include(include, isAngled), ClavaNodeInfo.undefinedInfo());
+    public final static DataKey<Include> INCLUDE = KeyFactory.object("include", Include.class);
+
+    /// DATAKEYS END
+
+    public IncludeDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    public IncludeDecl(Include include, ClavaNodeInfo info) {
-        super(DeclData.empty(), info, Collections.emptyList());
+    // private final Include include;
+    //
+    // public IncludeDecl(String include, boolean isAngled) {
+    // this(new Include(include, isAngled), ClavaNodeInfo.undefinedInfo());
+    // }
+    //
+    // public IncludeDecl(Include include, ClavaNodeInfo info) {
+    // super(DeclData.empty(), info, Collections.emptyList());
+    //
+    // this.include = include;
+    // }
 
-        this.include = include;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new IncludeDecl(include, getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new IncludeDecl(include, getInfo());
+    // }
 
     @Override
     public String getCode() {
@@ -50,6 +62,7 @@ public class IncludeDecl extends Decl {
     }
 
     public String getFormattedInclude() {
+        Include include = get(INCLUDE);
         if (include.isAngled()) {
             return "<" + include.getInclude() + ">";
         }
@@ -62,12 +75,12 @@ public class IncludeDecl extends Decl {
      * @return
      */
     public Include getInclude() {
-        return include;
+        return get(INCLUDE);
     }
 
-    @Override
-    public String toContentString() {
-        return super.toContentString() + getFormattedInclude() + " ";
-    }
+    // @Override
+    // public String toContentString() {
+    // return super.toContentString() + getFormattedInclude() + " ";
+    // }
 
 }

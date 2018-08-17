@@ -297,11 +297,15 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
         if (!missingConstructors.contains(classname)) {
             missingConstructors.add(classname);
-            if (debug)
+            if (debug) {
                 SpecsLogs
                         .msgInfo("No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
                                 + DataStore.class.getSimpleName()
                                 + " data, Collection<? extends ClavaNode> children)'");
+                if (true) {
+                    throw new RuntimeException("deprecated");
+                }
+            }
         }
 
         // return DummyNode.newInstance(clavaNodeClass, nodeData, children, false);
