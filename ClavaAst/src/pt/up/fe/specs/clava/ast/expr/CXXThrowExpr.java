@@ -14,28 +14,30 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.SpecsCollections;
 
 public class CXXThrowExpr extends Expr {
 
-    public CXXThrowExpr(ExprData exprData, ClavaNodeInfo info, Expr throwExpr) {
-        this(exprData, info, SpecsCollections.ofNullable(throwExpr));
+    public CXXThrowExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXThrowExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXThrowExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public CXXThrowExpr(ExprData exprData, ClavaNodeInfo info, Expr throwExpr) {
+    // this(exprData, info, SpecsCollections.ofNullable(throwExpr));
+    // }
+    //
+    // private CXXThrowExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXThrowExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public Optional<Expr> getThrowExpr() {
         if (!hasChildren()) {
@@ -47,6 +49,7 @@ public class CXXThrowExpr extends Expr {
 
     @Override
     public String getCode() {
+
         StringBuilder code = new StringBuilder();
 
         code.append("throw");

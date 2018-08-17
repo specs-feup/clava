@@ -227,6 +227,7 @@ private:
     void VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std::vector<std::string> &children);
     void VisitUsingDirectiveDeclChildren(const UsingDirectiveDecl *D, std::vector<std::string> &children);
     void VisitNamespaceDeclChildren(const NamespaceDecl *D, std::vector<std::string> &children);
+    void VisitFriendDeclChildren(const FriendDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts

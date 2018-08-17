@@ -36,6 +36,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
         {"NamespaceDecl", clava::DeclNode::NAMESPACE_DECL},
+        {"FriendDecl", clava::DeclNode::FRIEND_DECL},
 
 
 
@@ -99,7 +100,12 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitUsingDirectiveDeclChildren(static_cast<const UsingDirectiveDecl *>(D), visitedChildren); break;
         case clava::DeclNode::NAMESPACE_DECL:
             VisitNamespaceDeclChildren(static_cast<const NamespaceDecl *>(D), visitedChildren); break;
-//        case clava::DeclNode::PARM_VAR_DECL:
+        case clava::DeclNode::FRIEND_DECL:
+            VisitFriendDeclChildren(static_cast<const FriendDecl *>(D), visitedChildren); break;
+
+
+
+            //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
         default: throw std::invalid_argument("ChildrenVisitorDecls::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
     }
@@ -533,6 +539,17 @@ void ClangAstDumper::VisitNamespaceDeclChildren(const NamespaceDecl *D, std::vec
     VisitNamedDeclChildren(D, children);
 
     addChildren(D->decls(), children);
+
+    //llvm::errs() << "IS OROGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
+}
+
+void ClangAstDumper::VisitFriendDeclChildren(const FriendDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitDeclChildren(D, children);
+
+    addChild(D->getFriendDecl(), children);
+    //addChildren(D->decls(), children);
 
     //llvm::errs() << "IS OROGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
 }

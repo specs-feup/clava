@@ -34,7 +34,6 @@ import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
@@ -46,7 +45,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
@@ -437,9 +435,9 @@ public class ClavaNodeFactory {
     }
     */
 
-    public static FriendDecl friendDecl(DeclData declData, ClavaNodeInfo info, ClavaNode friendNode) {
-        return new FriendDecl(declData, info, friendNode);
-    }
+    // public static FriendDecl friendDecl(DeclData declData, ClavaNodeInfo info, ClavaNode friendNode) {
+    // return new FriendDecl(declData, info, friendNode);
+    // }
 
     // public static TypeAliasDecl typeAliasDecl(Type aliasedType, String declName, Type type, DeclData declData,
     // ClavaNodeInfo info) {
@@ -1250,9 +1248,9 @@ public class ClavaNodeFactory {
     // return new UserDefinedLiteral(exprData, info, callee, cookedLiteral);
     // }
 
-    public static CXXThrowExpr cxxThrowExpr(ExprData exprData, ClavaNodeInfo info, Expr throwExpr) {
-        return new CXXThrowExpr(exprData, info, throwExpr);
-    }
+    // public static CXXThrowExpr cxxThrowExpr(ExprData exprData, ClavaNodeInfo info, Expr throwExpr) {
+    // return new CXXThrowExpr(exprData, info, throwExpr);
+    // }
 
     public static GNUNullExpr gnuNullExpr(ExprData exprData, ClavaNodeInfo info) {
         return new GNUNullExpr(exprData, info);

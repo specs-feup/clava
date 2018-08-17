@@ -13,13 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 /**
  * Represents the declaration of a friend entity.
@@ -32,18 +30,22 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
  */
 public class FriendDecl extends Decl {
 
-    public FriendDecl(DeclData declData, ClavaNodeInfo info, ClavaNode friendNode) {
-        this(declData, info, Arrays.asList(friendNode));
+    public FriendDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private FriendDecl(DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(declData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new FriendDecl(getDeclData(), getInfo(), Collections.emptyList());
-    }
+    // public FriendDecl(DeclData declData, ClavaNodeInfo info, ClavaNode friendNode) {
+    // this(declData, info, Arrays.asList(friendNode));
+    // }
+    //
+    // private FriendDecl(DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(declData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new FriendDecl(getDeclData(), getInfo(), Collections.emptyList());
+    // }
 
     public ClavaNode getFriendNode() {
         return getChild(0);
@@ -51,6 +53,7 @@ public class FriendDecl extends Decl {
 
     @Override
     public String getCode() {
+
         String friendCode = getFriendNode().getCode();
 
         // Check if it has new lines at the beginning

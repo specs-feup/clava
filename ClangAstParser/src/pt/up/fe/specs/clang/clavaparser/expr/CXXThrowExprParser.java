@@ -22,7 +22,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -51,8 +50,8 @@ public class CXXThrowExprParser extends AClangNodeParser<CXXThrowExpr> {
         }
 
         Preconditions.checkArgument(children.isEmpty());
-
-        return ClavaNodeFactory.cxxThrowExpr(exprData, node.getInfo(), throwExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxThrowExpr(exprData, node.getInfo(), throwExpr);
     }
 
 }

@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -43,8 +42,8 @@ public class FriendDeclParser extends AClangNodeParser<FriendDecl> {
         List<ClavaNode> children = parseChildren(node);
 
         checkNumChildren(children, 1);
-
-        return ClavaNodeFactory.friendDecl(declData, node.getInfo(), children.get(0));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.friendDecl(declData, node.getInfo(), children.get(0));
     }
 
 }

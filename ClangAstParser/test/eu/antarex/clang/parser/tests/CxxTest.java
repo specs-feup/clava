@@ -198,7 +198,12 @@ public class CxxTest {
 
     @Test
     public void testClasses() {
-        new CxxTester("classes.cpp").showCode().onePass().test();
+        new CxxTester("classes.cpp").test();
+    }
+
+    @Test
+    public void testFriend() {
+        new CxxTester("friend.cpp").test();
     }
 
 }
