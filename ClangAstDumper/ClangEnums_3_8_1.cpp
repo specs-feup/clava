@@ -507,4 +507,15 @@ extern const std::string clava::UETT_KIND[]{
 };
 
 
+extern const std::string clava::NESTED_NAMED_SPECIFIER[]{
+        "IDENTIFIER",
+        "NAMESPACE",
+        "NAMESPACE_ALIAS",
+        "TYPE_SPEC",
+        "TYPE_SPEC_WITH_TEMPLATE",
+        "GLOBAL",
+        "SUPER"
+};
+
+
 //const std::string BUILTIN_KIND[] {};

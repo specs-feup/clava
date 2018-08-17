@@ -34,6 +34,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
         {"TypeAliasDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
+        {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
 
 
 
@@ -92,6 +93,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitEnumConstantDeclChildren(static_cast<const EnumConstantDecl *>(D), visitedChildren); break;
         case clava::DeclNode::TYPEDEF_NAME_DECL:
             VisitTypedefNameDeclChildren(static_cast<const TypedefNameDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::USING_DIRECTIVE_DECL:
+            VisitUsingDirectiveDeclChildren(static_cast<const UsingDirectiveDecl *>(D), visitedChildren); break;
 //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
         default: throw std::invalid_argument("ChildrenVisitorDecls::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
@@ -473,4 +476,13 @@ void ClangAstDumper::VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std:
     VisitTypeDeclChildren(D, children);
 
     VisitTypeTop(D->getUnderlyingType());
+}
+
+void ClangAstDumper::VisitUsingDirectiveDeclChildren(const UsingDirectiveDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
+
+    VisitDeclTop(D->getNominatedNamespace());
+    VisitDeclTop(D->getNominatedNamespaceAsWritten());
 }

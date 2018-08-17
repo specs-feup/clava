@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -43,7 +42,8 @@ public class UsingDirectiveDeclParser extends AClangNodeParser<UsingDirectiveDec
 
         checkNoChildren(node);
 
-        return ClavaNodeFactory.usingDirectiveDecl(declName, declData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.usingDirectiveDecl(declName, declData, node.getInfo());
     }
 
 }

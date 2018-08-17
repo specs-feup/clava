@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -56,9 +55,9 @@ public class NamespaceDeclParser extends AClangNodeParser<NamespaceDecl> {
 
         // DOUBT: All nodes should decls, but due to ';' issues, some decls might be transformed into statements?
         // toDecl(namespaceDecls);
-
-        return ClavaNodeFactory.namespaceDecl(isInline, originalNamespace, namespace, declData, node.getInfo(),
-                toDecl(children));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.namespaceDecl(isInline, originalNamespace, namespace, declData, node.getInfo(),
+        // toDecl(children));
     }
 
     private BareDeclData parseOriginalDecl(List<ClangNode> clangChildren) {

@@ -126,7 +126,7 @@ public class CxxTest {
 
     @Test
     public void testQualifiers() {
-        new CxxTester("qualifiers.cpp").test();
+        new CxxTester("qualifiers.cpp").onePass().showCode().showClavaAst().test();
     }
 
     @Test
@@ -194,6 +194,11 @@ public class CxxTest {
     @Test
     public void testTypes() {
         new CxxTester("types.cpp").test();
+    }
+
+    @Test
+    public void testClasses() {
+        new CxxTester("classes.cpp").showCode().onePass().test();
     }
 
 }

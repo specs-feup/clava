@@ -1,5 +1,18 @@
 #ifndef _TEMPLATES_H_
 #define _TEMPLATES_H_
 
+/*
+class ClassA
+{
+public:
+struct InnerStruct;
+int a;
+};
+*/
+
+template <typename T, typename A1>
+inline T make_a(A1 const& a1) {
+return T(a1);
+}
 
 #endif

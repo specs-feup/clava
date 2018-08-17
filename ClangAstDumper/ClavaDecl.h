@@ -37,6 +37,8 @@ namespace clava {
         TYPE_ALIAS_DECL,
         TYPEDEF_DECL,
         ACCESS_SPEC_DECL,
+        USING_DECL,
+        USING_DIRECTIVE_DECL,
     };
 
     const std::string getName(const DeclNode D);

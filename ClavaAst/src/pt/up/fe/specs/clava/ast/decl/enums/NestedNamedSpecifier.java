@@ -24,11 +24,11 @@ public enum NestedNamedSpecifier implements StringProvider {
     TYPE_SPEC("TypeSpec"),
     TYPE_SPEC_WITH_TEMPLATE("TypeSpecWithTemplate"),
     GLOBAL("Global"),
-    SUPER("Super"),
-    NONE("");
+    SUPER("Super");
+    // NONE("");
 
     private static final Lazy<EnumHelperWithValue<NestedNamedSpecifier>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelperWithValue(NestedNamedSpecifier.class, NONE);
+            .newLazyHelperWithValue(NestedNamedSpecifier.class);
 
     public static EnumHelperWithValue<NestedNamedSpecifier> getEnumHelper() {
         return ENUM_HELPER.get();

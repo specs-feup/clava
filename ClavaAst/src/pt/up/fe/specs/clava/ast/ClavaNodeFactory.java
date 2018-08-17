@@ -40,21 +40,16 @@ import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
-import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
-import pt.up.fe.specs.clava.ast.decl.UsingDecl;
-import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
-import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
@@ -324,11 +319,11 @@ public class ClavaNodeFactory {
     // return new EnumConstantDecl(value, type, declData, info, init);
     // }
 
-    public static NamespaceDecl namespaceDecl(boolean isInline, BareDeclData originalNamespace,
-            String namespace, DeclData declData, ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
-
-        return new NamespaceDecl(isInline, originalNamespace, namespace, declData, info, namespaceDecls);
-    }
+    // public static NamespaceDecl namespaceDecl(boolean isInline, BareDeclData originalNamespace,
+    // String namespace, DeclData declData, ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
+    //
+    // return new NamespaceDecl(isInline, originalNamespace, namespace, declData, info, namespaceDecls);
+    // }
 
     /**
      * Constructor for a function declaration (without a definition).
@@ -468,14 +463,14 @@ public class ClavaNodeFactory {
     // return new TypeAliasDecl(aliasedType, declName, type, declData, info);
     // }
 
-    public static UsingDirectiveDecl usingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
-        return new UsingDirectiveDecl(declName, declData, info);
-    }
+    // public static UsingDirectiveDecl usingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
+    // return new UsingDirectiveDecl(declName, declData, info);
+    // }
 
-    public static UsingDecl usingDecl(NestedNamedSpecifier qualifier, String declName, DeclData declData,
-            ClavaNodeInfo info) {
-        return new UsingDecl(qualifier, declName, declData, info);
-    }
+    // public static UsingDecl usingDecl(NestedNamedSpecifier qualifier, String declName, DeclData declData,
+    // ClavaNodeInfo info) {
+    // return new UsingDecl(qualifier, declName, declData, info);
+    // }
 
     // public static TemplateTypeParmDecl templateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack,
     // String name, DeclData declData, ClavaNodeInfo info, TemplateArgument defaultArgument) {
@@ -1311,12 +1306,12 @@ public class ClavaNodeFactory {
     // return new ParenListExpr(exprData, info, expressions);
     // }
 
-    public static CXXUnresolvedConstructExpr cxxUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData,
-            ClavaNodeInfo info,
-            List<Expr> arguments) {
-
-        return new CXXUnresolvedConstructExpr(typeAsWritten, exprData, info, arguments);
-    }
+    // public static CXXUnresolvedConstructExpr cxxUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData,
+    // ClavaNodeInfo info,
+    // List<Expr> arguments) {
+    //
+    // return new CXXUnresolvedConstructExpr(typeAsWritten, exprData, info, arguments);
+    // }
 
     public static LambdaExpr lambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
             CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {

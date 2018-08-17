@@ -13,27 +13,61 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
+/**
+ * A C++ using-directive.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class UsingDirectiveDecl extends NamedDecl {
 
-    public UsingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
-        super(declName, ClavaNodeFactory.nullType(info), declData, info, Collections.emptyList());
+    /// DATAKEYS BEGIN
 
+    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
+    public final static DataKey<NamespaceDecl> NAMESPACE = KeyFactory.object("namespace", NamespaceDecl.class);
+
+    public final static DataKey<NamedDecl> NAMESPACE_AS_WRITTEN = KeyFactory.object("namespaceAsWritten",
+            NamedDecl.class);
+
+    /// DATAKEYS END
+
+    public UsingDirectiveDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UsingDirectiveDecl(getDeclName(), getDeclData(), getInfo());
-    }
+    // public UsingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
+    // super(declName, ClavaNodeFactory.nullType(info), declData, info, Collections.emptyList());
+    //
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UsingDirectiveDecl(getDeclName(), getDeclData(), getInfo());
+    // }
 
     @Override
     public String getCode() {
-        return "using namespace " + getDeclName();
+
+        // System.out.println("USING DIRECTIVE:" + this);
+        // System.out.println("USING NAME: " + get(NAMESPACE_AS_WRITTEN).get(NamedDecl.DECL_NAME));
+        // System.out.println("USING QUALIFIED: " + get(NAMESPACE_AS_WRITTEN).get(NamedDecl.QUALIFIED_NAME));
+        // System.out.println("AS WRITTEN CODE: " + get(NAMESPACE_AS_WRITTEN).getCode());
+        // System.out.println("NAMESPACE CODE: " + get(NAMESPACE).getCode());
+        // System.out.println("NAMESPACE:" + get(NAMESPACE));
+        // System.out.println("NAMESPACE AS WRITTEN:" + get(NAMESPACE_AS_WRITTEN));
+
+        // System.out.println("UQALIFIER:" + get(QUALIFIER));
+        // return "using namespace " + getDeclName();
+        // return "using namespace " + getDeclName();
+        return get(QUALIFIER);
     }
 }

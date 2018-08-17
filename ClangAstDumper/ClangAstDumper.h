@@ -224,6 +224,7 @@ private:
     void VisitTemplateTypeParmDeclChildren(const TemplateTypeParmDecl *D, std::vector<std::string> &children);
     void VisitEnumConstantDeclChildren(const EnumConstantDecl *D, std::vector<std::string> &children);
     void VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std::vector<std::string> &children);
+    void VisitUsingDirectiveDeclChildren(const UsingDirectiveDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts

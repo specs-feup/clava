@@ -13,35 +13,53 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
-import pt.up.fe.specs.util.SpecsLogs;
 
+/**
+ * A C++ using-declaration.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class UsingDecl extends NamedDecl {
 
-    private final NestedNamedSpecifier qualifier;
+    /// DATAKEYS BEGIN
 
-    public UsingDecl(NestedNamedSpecifier qualifier, String declName, DeclData declData, ClavaNodeInfo info) {
-        super(declName, null, declData, info, Collections.emptyList());
+    public final static DataKey<NestedNamedSpecifier> QUALIFIER = KeyFactory.enumeration("qualifier",
+            NestedNamedSpecifier.class);
 
-        this.qualifier = qualifier;
+    /// DATAKEYS END
+
+    public UsingDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new UsingDecl(qualifier, getDeclName(), getDeclData(), getInfo());
-    }
+    // private final NestedNamedSpecifier qualifier;
+    //
+    // public UsingDecl(NestedNamedSpecifier qualifier, String declName, DeclData declData, ClavaNodeInfo info) {
+    // super(declName, null, declData, info, Collections.emptyList());
+    //
+    // this.qualifier = qualifier;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new UsingDecl(qualifier, getDeclName(), getDeclData(), getInfo());
+    // }
 
     @Override
     public String getCode() {
-        if (qualifier != NestedNamedSpecifier.NONE) {
-            SpecsLogs.msgWarn(
-                    "Qualifier is not NONE, check if anything changes in generated code. Loc:" + getLocation());
-        }
+        // if (qualifier != NestedNamedSpecifier.NONE) {
+        // SpecsLogs.msgWarn(
+        // "Qualifier is not NONE, check if anything changes in generated code. Loc:" + getLocation());
+        // }
 
         return "using " + getDeclName() + ";";
     }

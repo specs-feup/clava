@@ -14,20 +14,22 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 public class NamespaceDecl extends NamedDecl {
 
+    public NamespaceDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     // private final String namespace;
-    private final boolean isInline;
-    private final BareDeclData originalNamespace;
+    // private final boolean isInline;
+    // private final BareDeclData originalNamespace;
     //
     // public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace, DeclData declData,
     // ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
@@ -35,21 +37,21 @@ public class NamespaceDecl extends NamedDecl {
     // this(isInline, originalNamespace, namespace, declData, info, namespaceDecls);
     // }
 
-    public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace,
-            DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-
-        super(namespace, null, declData, info, children);
-
-        // this.namespace = namespace;
-        this.isInline = isInline;
-        this.originalNamespace = originalNamespace;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new NamespaceDecl(isInline, originalNamespace, getDeclName(), getDeclData(), getInfo(),
-                Collections.emptyList());
-    }
+    // public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace,
+    // DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    //
+    // super(namespace, null, declData, info, children);
+    //
+    // // this.namespace = namespace;
+    // this.isInline = isInline;
+    // this.originalNamespace = originalNamespace;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new NamespaceDecl(isInline, originalNamespace, getDeclName(), getDeclData(), getInfo(),
+    // Collections.emptyList());
+    // }
 
     public String getCompleteNamespace() {
         // If it has no namespace ancestor, found top-level namespace

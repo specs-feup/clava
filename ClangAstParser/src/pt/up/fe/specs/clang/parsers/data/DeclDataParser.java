@@ -38,12 +38,15 @@ import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
+import pt.up.fe.specs.clava.ast.decl.UsingDecl;
+import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
+import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
@@ -317,6 +320,27 @@ public class DeclDataParser {
         DataStore data = parseDeclData(lines, dataStore);
 
         data.add(AccessSpecDecl.ACCESS_SPECIFIER, LineStreamParsers.enumFromName(AccessSpecifier.class, lines));
+
+        return data;
+    }
+
+    public static DataStore parseUsingDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        data.add(UsingDecl.QUALIFIER, LineStreamParsers.enumFromName(NestedNamedSpecifier.class, lines));
+
+        return data;
+    }
+
+    public static DataStore parseUsingDirectiveDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        // data.add(UsingDirectiveDecl.QUALIFIER, lines.nextLine());
+        data.add(UsingDirectiveDecl.QUALIFIER, ClavaDataParsers.literalSource(lines));
+        dataStore.getClavaNodes().queueSetNode(data, UsingDirectiveDecl.NAMESPACE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, UsingDirectiveDecl.NAMESPACE_AS_WRITTEN, lines.nextLine());
 
         return data;
     }

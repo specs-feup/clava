@@ -23,7 +23,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXUnresolvedConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -50,8 +49,8 @@ public class CXXUnresolvedConstructExprParser extends AClangNodeParser<CXXUnreso
 
         List<ClavaNode> children = parseChildren(node);
         List<Expr> arguments = toExpr(children);
-
-        return ClavaNodeFactory.cxxUnresolvedConstructExpr(typeAsWritten, exprData, node.getInfo(), arguments);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxUnresolvedConstructExpr(typeAsWritten, exprData, node.getInfo(), arguments);
     }
 
 }

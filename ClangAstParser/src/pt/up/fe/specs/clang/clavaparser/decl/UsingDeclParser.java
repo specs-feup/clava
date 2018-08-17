@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.UsingDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
@@ -39,13 +38,13 @@ public class UsingDeclParser extends AClangNodeParser<UsingDecl> {
 
         DeclData declData = parser.apply(ClangDataParsers::parseDecl);
         NestedNamedSpecifier qualifier = parser.apply(ClangGenericParsers::parseEnum,
-                NestedNamedSpecifier.getEnumHelper(), NestedNamedSpecifier.NONE);
+                NestedNamedSpecifier.getEnumHelper());
 
         String declName = parser.apply(StringParsers::parseWord);
 
         checkNoChildren(node);
-
-        return ClavaNodeFactory.usingDecl(qualifier, declName, declData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.usingDecl(qualifier, declName, declData, node.getInfo());
     }
 
 }
