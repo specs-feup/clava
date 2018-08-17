@@ -49,7 +49,6 @@ import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
-import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -1163,12 +1162,12 @@ public class ClavaNodeFactory {
     //
     // return new CXXNewExpr(isGlobal, isArray, newOperator, exprData, info, arraySize, constructorExpr, nothrow);
     // }
-
-    public static ConditionalOperator conditionalOperator(ExprData exprData, ClavaNodeInfo info,
-            Expr condition, Expr trueExpr, Expr falseExpr) {
-
-        return new ConditionalOperator(exprData, info, condition, trueExpr, falseExpr);
-    }
+    //
+    // public static ConditionalOperator conditionalOperator(ExprData exprData, ClavaNodeInfo info,
+    // Expr condition, Expr trueExpr, Expr falseExpr) {
+    //
+    // return new ConditionalOperator(exprData, info, condition, trueExpr, falseExpr);
+    // }
 
     // public static CXXOperatorCallExpr cxxOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Expr function,
     // List<? extends Expr> args) {

@@ -13,27 +13,29 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 public class ConditionalOperator extends AbstractConditionalOperator {
 
-    public ConditionalOperator(ExprData exprData, ClavaNodeInfo info,
-            Expr condition, Expr trueExpr, Expr falseExpr) {
-
-        this(exprData, info, Arrays.asList(condition, trueExpr, falseExpr));
+    public ConditionalOperator(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private ConditionalOperator(ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-    }
+    // public ConditionalOperator(ExprData exprData, ClavaNodeInfo info,
+    // Expr condition, Expr trueExpr, Expr falseExpr) {
+    //
+    // this(exprData, info, Arrays.asList(condition, trueExpr, falseExpr));
+    // }
+    //
+    // private ConditionalOperator(ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    // }
 
     public Expr getCondition() {
         return getChild(Expr.class, 0);
@@ -47,10 +49,10 @@ public class ConditionalOperator extends AbstractConditionalOperator {
         return getChild(Expr.class, 2);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ConditionalOperator(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new ConditionalOperator(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {

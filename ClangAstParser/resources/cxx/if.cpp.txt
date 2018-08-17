@@ -57,6 +57,8 @@ int main() { // Inline in function main, after compound
    else if(currentDayString == "Saturday") currentDay = 5;
    else if(currentDayString == "Sunday") currentDay = 6;
    
+   int conditional = 0 ? 1 : 10;
+   
    return 0;
 }
 
