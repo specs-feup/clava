@@ -185,7 +185,7 @@ public class TypeDataParser {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 
-        parserData.getClavaNodes().queueSetNode(data, VariableArrayType.SIZE_EXPR, lines.nextLine());
+        parserData.getClavaNodes().queueSetOptionalNode(data, VariableArrayType.SIZE_EXPR, lines.nextLine());
 
         return data;
 

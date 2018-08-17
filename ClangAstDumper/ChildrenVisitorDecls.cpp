@@ -286,6 +286,7 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     }
 
 
+    //addChildren(D->decls(), children);
 
     // Visit parameters
     for(auto param : D->parameters()) {
@@ -293,15 +294,25 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
         //VisitDeclTop(param);
         //children.push_back(clava::getId(param, id));
     }
-    /*
-    for (auto I = D->param_begin(), E = D->param_end(); I != E; ++I) {
-        llvm::errs() << "PARAM: " <<  getId(I) << "\n";
-        llvm::errs() << "PARAM CLASS: " <<  clava::getClassName(I) << "\n";
 
-        VisitDeclTop(*I);
-        children.push_back(getId(I));
+    // Visit body
+    //if(D->hasBody()) {
+    if (D->doesThisDeclarationHaveABody()) {
+        //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
+        addChild(D->getBody(), children);
+        //VisitStmtTop(D->getBody());
+        //children.push_back(clava::getId(D->getBody(), id));
     }
-     */
+
+    /*
+for (auto I = D->param_begin(), E = D->param_end(); I != E; ++I) {
+    llvm::errs() << "PARAM: " <<  getId(I) << "\n";
+    llvm::errs() << "PARAM CLASS: " <<  clava::getClassName(I) << "\n";
+
+    VisitDeclTop(*I);
+    children.push_back(getId(I));
+}
+ */
 
     // Visit decls in prototype scope
 /*
@@ -313,14 +324,6 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
         //children.push_back(clava::getId(*I, id));
     }
 */
-    // Visit body
-    //if(D->hasBody()) {
-    if (D->doesThisDeclarationHaveABody()) {
-        //llvm::errs() << "BODY: " <<  getId(D->getBody()) << "\n";
-        addChild(D->getBody(), children);
-        //VisitStmtTop(D->getBody());
-        //children.push_back(clava::getId(D->getBody(), id));
-    }
 
 }
 

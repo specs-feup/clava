@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -26,7 +27,7 @@ public class VariableArrayType extends ArrayType {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Expr> SIZE_EXPR = KeyFactory.object("sizeExpr", Expr.class);
+    public final static DataKey<Optional<Expr>> SIZE_EXPR = KeyFactory.optional("sizeExpr");
 
     /// DATAKEYS END
 
@@ -58,14 +59,14 @@ public class VariableArrayType extends ArrayType {
     // return getChild(Type.class, 0);
     // }
 
-    public Expr getExpr() {
+    public Optional<Expr> getExpr() {
         return get(SIZE_EXPR);
         // return getChild(Expr.class, 1);
     }
 
     @Override
     protected String getArrayCode() {
-        return getExpr().getCode();
+        return getExpr().map(Expr::getCode).orElse("");
     }
 
 }

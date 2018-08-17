@@ -52,7 +52,6 @@ public class CBenchTest {
         new CTester("bench/nas_lu.c").test();
     }
 
-    /** NOT WORKING **/
     @Test
     public void testFt() {
         new CTester("bench/nas_ft.c").test();
