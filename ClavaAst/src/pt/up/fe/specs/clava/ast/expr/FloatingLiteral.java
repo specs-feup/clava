@@ -14,15 +14,12 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.SpecsStrings;
 
 public class FloatingLiteral extends Literal {
@@ -38,18 +35,6 @@ public class FloatingLiteral extends Literal {
     public FloatingLiteral(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-    }
-
-    /**
-     * Legacy support.
-     * 
-     * @param floatKind
-     * @param number
-     * @param exprData
-     * @param info
-     */
-    public FloatingLiteral(ExprData exprData, ClavaNodeInfo info) {
-        super(exprData, info, Collections.emptyList());
     }
 
     @Override

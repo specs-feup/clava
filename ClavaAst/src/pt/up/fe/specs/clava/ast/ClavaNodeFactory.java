@@ -34,7 +34,6 @@ import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FriendDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
@@ -48,12 +47,8 @@ import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXThrowExpr;
-import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
-import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
-import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
@@ -65,11 +60,6 @@ import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
-import pt.up.fe.specs.clava.ast.expr.legacy.CharacterLiteralLegacy;
-import pt.up.fe.specs.clava.ast.expr.legacy.DummyExprLegacy;
-import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy;
-import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
-import pt.up.fe.specs.clava.ast.expr.legacy.IntegerLiteralLegacy;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
@@ -919,10 +909,10 @@ public class ClavaNodeFactory {
     public static WrapperStmt wrapperStmt(ClavaNodeInfo info, ClavaNode wrappedNode) {
         return new WrapperStmt(info, wrappedNode);
     }
-
-    public static CXXCatchStmt cxxCatchStmt(ClavaNodeInfo info, Decl exception, CompoundStmt catchBody) {
-        return new CXXCatchStmt(info, exception, catchBody);
-    }
+    //
+    // public static CXXCatchStmt cxxCatchStmt(ClavaNodeInfo info, Decl exception, CompoundStmt catchBody) {
+    // return new CXXCatchStmt(info, exception, catchBody);
+    // }
 
     public static CXXTryStmt cxxTryStmt(ClavaNodeInfo info, CompoundStmt tryBody, List<CXXCatchStmt> handlers) {
         return new CXXTryStmt(info, tryBody, handlers);
@@ -950,15 +940,15 @@ public class ClavaNodeFactory {
     // return new LiteralExpr(literalCode, type, info);
     // }
 
-    /**
-     * @deprecated use DummyExpr constructor.
-     * @param node
-     * @return
-     */
-    @Deprecated
-    public static DummyExpr dummyExpr(ClavaNode node) {
-        return new DummyExprLegacy(node.toContentString(), node.getInfo(), node.getChildren());
-    }
+    // /**
+    // * @deprecated use DummyExpr constructor.
+    // * @param node
+    // * @return
+    // */
+    // @Deprecated
+    // public static DummyExpr dummyExpr(ClavaNode node) {
+    // return new DummyExprLegacy(node.toContentString(), node.getInfo(), node.getChildren());
+    // }
 
     // public static DummyExpr dummyExpr(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
     // return new DummyExprLegacy(content, info, children);
@@ -973,11 +963,11 @@ public class ClavaNodeFactory {
     // public static ImplicitValueInitExpr implicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
     // return new ImplicitValueInitExpr(exprData, info);
     // }
-
-    public static IntegerLiteral integerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
-
-        return new IntegerLiteralLegacy(literal, exprData, info);
-    }
+    //
+    // public static IntegerLiteral integerLiteral(String literal, ExprData exprData, ClavaNodeInfo info) {
+    //
+    // return new IntegerLiteralLegacy(literal, exprData, info);
+    // }
 
     // public static CXXFunctionalCastExpr cxxFunctionalCastExpr(CastKind castKind,
     // ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
@@ -1105,11 +1095,11 @@ public class ClavaNodeFactory {
     // return new MemberExpr(memberName, isArrow, exprData, info, base);
     // }
 
-    public static FloatingLiteral floatingLiteral(FloatKind floatKind, String number, ExprData exprData,
-            ClavaNodeInfo info) {
-
-        return new FloatingLiteralLegacy(floatKind, number, exprData, info);
-    }
+    // public static FloatingLiteral floatingLiteral(FloatKind floatKind, String number, ExprData exprData,
+    // ClavaNodeInfo info) {
+    //
+    // return new FloatingLiteralLegacy(floatKind, number, exprData, info);
+    // }
 
     // public static BinaryOperator binaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info, Expr
     // lhs,
@@ -1179,9 +1169,9 @@ public class ClavaNodeFactory {
     // return new CharacterLiteral(data, Collections.emptyList());
     // }
 
-    public static CharacterLiteral characterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info) {
-        return new CharacterLiteralLegacy(charValue, exprData, info);
-    }
+    // public static CharacterLiteral characterLiteral(long charValue, ExprData exprData, ClavaNodeInfo info) {
+    // return new CharacterLiteralLegacy(charValue, exprData, info);
+    // }
 
     public static CXXDefaultInitExpr cxxDefaultInitExpr(ExprData exprData, ClavaNodeInfo info) {
         return new CXXDefaultInitExpr(exprData, info);

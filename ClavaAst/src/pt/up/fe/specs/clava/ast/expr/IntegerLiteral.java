@@ -15,15 +15,12 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
  * Represents an implicit type conversion which has no direct representation in the original source code.
@@ -43,18 +40,6 @@ public class IntegerLiteral extends Literal {
 
     public IntegerLiteral(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    /**
-     * For legacy support.
-     * 
-     * @param exprData
-     * @param info
-     */
-    protected IntegerLiteral(ExprData exprData, ClavaNodeInfo info) {
-        // According to CPP reference, all literals (except for string literal) are rvalues
-        // http://en.cppreference.com/w/cpp/language/value_category
-        super(exprData, info, Collections.emptyList());
     }
 
     public BigInteger getValue() {

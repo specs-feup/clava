@@ -20,6 +20,7 @@ import java.util.function.BiFunction;
 import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
@@ -55,6 +56,7 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(DoStmt.class, ChildrenAdapter::adaptDoStmt);
         CHILDREN_ADAPTERS.put(CXXForRangeStmt.class, ChildrenAdapter::adaptCXXForRangeStmt);
         CHILDREN_ADAPTERS.put(CompoundStmt.class, ChildrenAdapter::adaptCompoundStmt);
+        CHILDREN_ADAPTERS.put(CXXCatchStmt.class, ChildrenAdapter::adaptCXXCatchStmt);
     }
 
     private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
@@ -64,6 +66,8 @@ public class ChildrenAdapter {
                 NullNodeAdapter.newInstance(NullNodeType.DECL, null, NullNodeType.STMT, NullNodeType.STMT));
         NULL_NODE_MAPPER.put(WhileStmt.class,
                 NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT, NullNodeType.STMT));
+        NULL_NODE_MAPPER.put(CXXCatchStmt.class,
+                NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT));
     }
 
     public List<ClavaNode> adaptChildren(ClavaNode node, List<ClavaNode> children) {
@@ -166,6 +170,15 @@ public class ChildrenAdapter {
 
             throw new CaseNotDefinedException(child.getClass());
         }
+
+        return adaptedChildren;
+    }
+
+    private static List<ClavaNode> adaptCXXCatchStmt(List<ClavaNode> children, ClavaContext context) {
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+        adaptedChildren.add(children.get(0));
+        adaptedChildren.add(toCompoundStmt(children.get(1), context));
 
         return adaptedChildren;
     }

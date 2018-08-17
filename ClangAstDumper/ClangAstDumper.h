@@ -238,6 +238,7 @@ private:
     void VisitWhileStmtChildren(const WhileStmt *S, std::vector<std::string> &children);
     void VisitDoStmtChildren(const DoStmt *S, std::vector<std::string> &children);
     void VisitCXXForRangeStmtChildren(const CXXForRangeStmt *S, std::vector<std::string> &children);
+    void VisitCXXCatchStmtChildren(const CXXCatchStmt *S, std::vector<std::string> &children);
 
     // Children visitors for Exprs
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);

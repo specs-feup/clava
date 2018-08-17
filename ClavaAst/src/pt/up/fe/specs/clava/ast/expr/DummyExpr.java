@@ -18,10 +18,8 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
 /**
  * Dummy statement, for testing purposes.
@@ -35,17 +33,13 @@ public class DummyExpr extends Expr implements DummyNode {
         super(data, children);
     }
 
-    public DummyExpr(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(ExprData.empty(), info, children);
-    }
-
     @Override
     public String getNodeName() {
         return super.getNodeName() + " (" + getOriginalType() + ")";
     }
 
     public String getNodeCode() {
-        return "/* Dummy expr '" + getContent() + "'*/";
+        return "% Dummy expr '" + getContent() + "'%";
     }
 
     @Override

@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
@@ -46,13 +45,14 @@ public class CXXCatchStmtParser extends AClangNodeParser<CXXCatchStmt> {
         List<ClavaNode> children = parseChildren(node);
 
         ClavaNode exceptionNode = SpecsCollections.popSingle(children, ClavaNode.class);
-        Decl exceptionDecl = exceptionNode instanceof NullNodeOld ? NullDecl.create(exceptionNode) : (Decl) exceptionNode;
+        Decl exceptionDecl = exceptionNode instanceof NullNodeOld ? NullDecl.create(exceptionNode)
+                : (Decl) exceptionNode;
 
         CompoundStmt catchBody = SpecsCollections.popSingle(children, CompoundStmt.class);
 
         Preconditions.checkArgument(children.isEmpty());
-
-        return ClavaNodeFactory.cxxCatchStmt(node.getInfo(), exceptionDecl, catchBody);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxCatchStmt(node.getInfo(), exceptionDecl, catchBody);
     }
 
 }

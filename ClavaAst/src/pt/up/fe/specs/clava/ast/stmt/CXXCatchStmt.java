@@ -13,29 +13,32 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 
 public class CXXCatchStmt extends Stmt {
 
-    public CXXCatchStmt(ClavaNodeInfo info, Decl exceptionDecl, CompoundStmt catchBody) {
-        this(info, Arrays.asList(exceptionDecl, catchBody));
+    public CXXCatchStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private CXXCatchStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXCatchStmt(getInfo(), Collections.emptyList());
-    }
+    // public CXXCatchStmt(ClavaNodeInfo info, Decl exceptionDecl, CompoundStmt catchBody) {
+    // this(info, Arrays.asList(exceptionDecl, catchBody));
+    // }
+    //
+    // private CXXCatchStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CXXCatchStmt(getInfo(), Collections.emptyList());
+    // }
 
     public Decl getExceptionDecl() {
         return getChild(Decl.class, 0);
@@ -47,6 +50,7 @@ public class CXXCatchStmt extends Stmt {
 
     @Override
     public String getCode() {
+
         StringBuilder code = new StringBuilder();
 
         String declCode = getExceptionDecl() instanceof NullDecl ? "..." : getExceptionDecl().getCode();

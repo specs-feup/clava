@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
+import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
@@ -697,6 +698,19 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
             }
             if (children.get(2) instanceof NullNodeOld) {
                 children.set(2, LegacyToDataStore.getFactory().nullStmt());
+            }
+
+            return;
+        }
+
+        if (clavaNode instanceof CXXCatchStmt) {
+            Preconditions.checkArgument(children.size() == 2);
+
+            if (children.get(0) instanceof NullNodeOld) {
+                children.set(0, LegacyToDataStore.getFactory().nullDecl());
+            }
+            if (children.get(1) instanceof NullNodeOld) {
+                children.set(1, LegacyToDataStore.getFactory().nullStmt());
             }
 
             return;

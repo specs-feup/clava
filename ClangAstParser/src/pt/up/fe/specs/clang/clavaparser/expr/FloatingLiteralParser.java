@@ -23,10 +23,9 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.legacy.FloatingLiteralLegacy.FloatKind;
+import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.BuiltinTypeKeyword;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -70,8 +69,8 @@ public class FloatingLiteralParser extends AClangNodeParser<FloatingLiteral> {
         // Optional<String> source = location.getSource();
 
         checkNoChildren(node);
-
-        return ClavaNodeFactory.floatingLiteral(floatKind, number, exprData, info(node));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.floatingLiteral(floatKind, number, exprData, info(node));
     }
 
     private Optional<String> getSourceLiteral(ClangNode node) {

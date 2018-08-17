@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -48,8 +47,8 @@ public class IntegerLiteralParser extends AClangNodeParser<IntegerLiteral> {
 
         // TODO: finish implementations
         // getSourceLiteral(node);
-
-        return ClavaNodeFactory.integerLiteral(literal, exprData, info(node));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.integerLiteral(literal, exprData, info(node));
 
         // return data != null ? new IntegerLiteral(data, Collections.emptyList())
         // : ClavaNodeFactory.integerLiteral(literal, exprData, info(node));
