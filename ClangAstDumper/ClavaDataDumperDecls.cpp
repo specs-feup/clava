@@ -37,6 +37,7 @@ const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
         {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"AccessSpecDecl", clava::DeclNode::ACCESS_SPEC_DECL},
         {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
+        {"NamespaceDecl", clava::DeclNode::NAMESPACE_DECL},
 };
 
 
@@ -99,6 +100,8 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
             DumpUsingDeclData(static_cast<const UsingDecl *>(D)); break;
         case clava::DeclNode::USING_DIRECTIVE_DECL:
             DumpUsingDirectiveDeclData(static_cast<const UsingDirectiveDecl *>(D)); break;
+        case clava::DeclNode::NAMESPACE_DECL:
+            DumpNamespaceDeclData(static_cast<const NamespaceDecl *>(D)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
 
@@ -491,5 +494,13 @@ void clava::ClavaDataDumper::DumpUsingDirectiveDeclData(const UsingDirectiveDecl
     clava::dump(clava::getSource(Context, D->getSourceRange()));
     clava::dump(clava::getId(D->getNominatedNamespace(), id));
     clava::dump(clava::getId(D->getNominatedNamespaceAsWritten(), id));
+}
+
+void clava::ClavaDataDumper::DumpNamespaceDeclData(const NamespaceDecl *D) {
+
+    // Hierarchy
+    DumpNamedDeclData(D);
+
+    clava::dump(clava::getSource(Context, D->getSourceRange()));
 }
 

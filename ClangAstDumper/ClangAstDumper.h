@@ -166,6 +166,7 @@ public:
      * @return
      */
     const void addChild(const Decl *addr, std::vector<std::string> &children);
+    const void addChildren(DeclContext::decl_range declRange, std::vector<std::string> &children);
     const void addChild(const Stmt *addr, std::vector<std::string> &children);
     const void addChild(const Expr *addr, std::vector<std::string> &children);
     const void addChild(const Type *addr, std::vector<std::string> &children);
@@ -225,6 +226,7 @@ private:
     void VisitEnumConstantDeclChildren(const EnumConstantDecl *D, std::vector<std::string> &children);
     void VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std::vector<std::string> &children);
     void VisitUsingDirectiveDeclChildren(const UsingDirectiveDecl *D, std::vector<std::string> &children);
+    void VisitNamespaceDeclChildren(const NamespaceDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts

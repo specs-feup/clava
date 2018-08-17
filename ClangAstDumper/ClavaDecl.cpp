@@ -33,6 +33,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::ACCESS_SPEC_DECL: return "AccessSpecDecl";
         case clava::DeclNode::USING_DECL: return "UsingDecl";
         case clava::DeclNode::USING_DIRECTIVE_DECL: return "UsingDirectiveDecl";
+        case clava::DeclNode::NAMESPACE_DECL: return "NamespaceDecl";
 
 
         default: {

@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
@@ -341,6 +342,15 @@ public class DeclDataParser {
         data.add(UsingDirectiveDecl.QUALIFIER, ClavaDataParsers.literalSource(lines));
         dataStore.getClavaNodes().queueSetNode(data, UsingDirectiveDecl.NAMESPACE, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, UsingDirectiveDecl.NAMESPACE_AS_WRITTEN, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseNamespaceDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        data.add(NamespaceDecl.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
 
         return data;
     }

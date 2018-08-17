@@ -386,6 +386,27 @@ const void ClangAstDumper::addChild(const Decl *addr, std::vector<std::string> &
 
 };
 
+const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vector<std::string> &children) {
+
+    for (auto decl = decls.begin(), endDecl = decls.end(); decl != endDecl; ++decl) {
+
+        // If CXXRecordDecl without definition, skip
+        if (const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(*decl)) {
+            if (!recordDecl->hasDefinition()) {
+                continue;
+            }
+        }
+
+        if (*decl == nullptr) {
+            continue;
+        }
+
+
+        addChild(*decl, children);
+    }
+
+};
+
 const void ClangAstDumper::addChild(const Stmt *addr, std::vector<std::string> &children) {
 
     std::string clavaId = clava::getId(addr, id);

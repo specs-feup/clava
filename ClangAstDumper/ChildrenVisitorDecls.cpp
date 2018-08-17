@@ -35,6 +35,8 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"TypeAliasDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
+        {"NamespaceDecl", clava::DeclNode::NAMESPACE_DECL},
+
 
 
 
@@ -95,6 +97,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitTypedefNameDeclChildren(static_cast<const TypedefNameDecl *>(D), visitedChildren); break;
         case clava::DeclNode::USING_DIRECTIVE_DECL:
             VisitUsingDirectiveDeclChildren(static_cast<const UsingDirectiveDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::NAMESPACE_DECL:
+            VisitNamespaceDeclChildren(static_cast<const NamespaceDecl *>(D), visitedChildren); break;
 //        case clava::DeclNode::PARM_VAR_DECL:
 //            visitedChildren = VisitParmVarDeclChildren(static_cast<const ParmVarDecl *>(D)); break;
         default: throw std::invalid_argument("ChildrenVisitorDecls::visitChildren: Case not implemented, '"+clava::getName(declNode)+"'");
@@ -112,6 +116,33 @@ void ClangAstDumper::VisitDeclChildren(const Decl *D, std::vector<std::string> &
         VisitAttrTop(attr);
         dumpTopLevelAttr(attr);
     }
+
+    /*
+    // Visit decls
+    //DeclContext::decl_range
+    if (auto decls = dyn_cast<DeclContext::decl_range>(D)) {
+
+        for (auto decl = decls->begin(), endDecl = decls->end(); decl != endDecl; ++decl) {
+
+
+//        for (auto decl : decls->decl) {
+            // If CXXRecordDecl without definition, skip
+            if (const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(*decl)) {
+                if (!recordDecl->hasDefinition()) {
+                    continue;
+                }
+            }
+
+            if (*decl == nullptr) {
+                continue;
+            }
+
+
+            addChild(*decl, children);
+        }
+    }
+*/
+
 
 }
 
@@ -144,6 +175,10 @@ void ClangAstDumper::VisitTagDeclChildren(const TagDecl *D, std::vector<std::str
     //for (auto I = D->getFirstDecl(), E = D->getDecl; I != E; ++I) {
     //llvm::errs() << "TagDecl id: " << clava::getId(D, id) << "\n";
     //int declCounter = 0;
+//DeclContext::decl_range
+
+    addChildren(D->decls(), children);
+/*
     for(auto decl : D->decls()) {
     //for(auto decl : D->noload_decls()) {
         // If CXXRecordDecl without definition, skip
@@ -176,6 +211,8 @@ void ClangAstDumper::VisitTagDeclChildren(const TagDecl *D, std::vector<std::str
         //children.push_back(clava::getId(decl, id));
         //declCounter++;
     }
+*/
+
 
     /*
     for(auto decl : D->noload_decls()) {
@@ -485,4 +522,14 @@ void ClangAstDumper::VisitUsingDirectiveDeclChildren(const UsingDirectiveDecl *D
 
     VisitDeclTop(D->getNominatedNamespace());
     VisitDeclTop(D->getNominatedNamespaceAsWritten());
+}
+
+void ClangAstDumper::VisitNamespaceDeclChildren(const NamespaceDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
+
+    addChildren(D->decls(), children);
+
+    //llvm::errs() << "IS OROGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
 }
