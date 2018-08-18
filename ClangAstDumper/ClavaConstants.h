@@ -72,6 +72,7 @@ namespace clava {
         CXX_DELETE_EXPR,
         SUBST_NON_TYPE_TEMPLATE_PARM_EXPR,
         LAMBDA_EXPR,
+        PREDEFINED_EXPR,
 
     };
 

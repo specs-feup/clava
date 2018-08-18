@@ -156,6 +156,7 @@ namespace clava {
         void DumpCXXDeleteExprData(const CXXDeleteExpr *E);
         void DumpOffsetOfExprData(const OffsetOfExpr *E);
         void DumpLambdaExprData(const LambdaExpr *E);
+        void DumpPredefinedExprData(const PredefinedExpr *E);
 
 
 

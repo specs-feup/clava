@@ -553,5 +553,14 @@ extern const std::string clava::LAMBDA_CAPTURE_KIND[] {
         "VLA_TYPE"
 };
 
+extern const std::string clava::PREDEFINED_ID_TYPE[]{
+        "FUNC",
+        "FUNCTION",
+        "L_FUNCTION",
+        "FUND_D_NAME",
+        "FUNC_SIG",
+        "PRETTY_FUNCTION",
+        "PRETTY_FUNCTION_NO_VIRTUAL"
+};
 
 //const std::string BUILTIN_KIND[] {};

@@ -13,16 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.providers.StringProvider;
+import pt.up.fe.specs.clava.ast.expr.enums.PredefinedIdType;
 
 /**
  * Represents a type cast.
@@ -32,28 +30,39 @@ import pt.up.fe.specs.util.providers.StringProvider;
  */
 public class PredefinedExpr extends Expr {
 
-    private final PredefinedIdType id;
+    /// DATAKEYS BEGIN
 
-    public PredefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-        this(id, exprData, info, Arrays.asList(subExpr));
+    public final static DataKey<PredefinedIdType> PREDEFINED_TYPE = KeyFactory.enumeration("PREDEFINED_TYPE",
+            PredefinedIdType.class);
+
+    /// DATAKEYS END
+
+    public PredefinedExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    protected PredefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-
-        this.id = id;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new PredefinedExpr(id, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private final PredefinedIdType id;
+    //
+    // public PredefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    // this(id, exprData, info, Arrays.asList(subExpr));
+    // }
+    //
+    // protected PredefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.id = id;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new PredefinedExpr(id, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public PredefinedIdType getIdentifier() {
-        return id;
+        return get(PREDEFINED_TYPE);
     }
 
     public Expr getSubExpr() {
@@ -63,35 +72,6 @@ public class PredefinedExpr extends Expr {
     @Override
     public String getCode() {
         return getSubExpr().getCode();
-    }
-
-    public enum PredefinedIdType implements StringProvider {
-        FUNC("__func__"),
-        FUNCTION("__FUNCTION__"),
-        L_FUNCTION("L__FUNCTION__"),
-        FUND_D_NAME("__FUNCDNAME__"),
-        FUNC_SIG("__FUNCSIG__"),
-        PRETTY_FUNCTION("__PRETTY_FUNCTION__"),
-        PRETTY_FUNCTION_NO_VIRTUAL("<not implemented for PRETTY_FUNCTION_NO_VIRTUAL>");
-
-        private static final Lazy<EnumHelperWithValue<PredefinedIdType>> ENUM_HELPER = EnumHelperWithValue
-                .newLazyHelperWithValue(PredefinedIdType.class);
-
-        public static EnumHelperWithValue<PredefinedIdType> getEnumHelper() {
-            return ENUM_HELPER.get();
-        }
-
-        private PredefinedIdType(String identTypeName) {
-            this.identTypeName = identTypeName;
-        }
-
-        private final String identTypeName;
-
-        @Override
-        public String getString() {
-            return identTypeName;
-        }
-
     }
 
 }

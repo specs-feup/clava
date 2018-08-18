@@ -50,6 +50,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
         {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
         {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
+        {"PredefinedExpr", clava::StmtNode::PREDEFINED_EXPR},
 
 };
 
@@ -144,6 +145,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpOffsetOfExprData(static_cast<const OffsetOfExpr *>(S)); break;
         case clava::StmtNode ::LAMBDA_EXPR:
             DumpLambdaExprData(static_cast<const LambdaExpr *>(S)); break;
+        case clava::StmtNode ::PREDEFINED_EXPR:
+            DumpPredefinedExprData(static_cast<const PredefinedExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -547,4 +550,10 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
         E->getC
     }
      */
+ }
+
+ void clava::ClavaDataDumper::DumpPredefinedExprData(const PredefinedExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::PREDEFINED_ID_TYPE[E->getIdentType()]);
  }

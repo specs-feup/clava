@@ -44,6 +44,7 @@ namespace clava {
     extern const std::string LINKAGE_LANGUAGE[];
     extern const std::string LAMBDA_CAPTURE_DEFAULT[];
     extern const std::string LAMBDA_CAPTURE_KIND[];
+    extern const std::string PREDEFINED_ID_TYPE[];
 
 
 }

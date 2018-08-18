@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
+import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
@@ -55,6 +56,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
+import pt.up.fe.specs.clava.ast.expr.enums.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -356,6 +358,14 @@ public class ExprDataParser {
                 ClavaDataParsers.list(lines, dataStore,
                         (linestream, parserData) -> LineStreamParsers.enumFromName(LambdaCaptureKind.class,
                                 linestream)));
+
+        return data;
+    }
+
+    public static DataStore parsePredefinedExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.set(PredefinedExpr.PREDEFINED_TYPE, LineStreamParsers.enumFromName(PredefinedIdType.class, lines));
 
         return data;
     }

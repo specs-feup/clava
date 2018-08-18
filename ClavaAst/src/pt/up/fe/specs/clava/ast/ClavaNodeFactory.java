@@ -37,8 +37,6 @@ import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
-import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
@@ -1106,11 +1104,11 @@ public class ClavaNodeFactory {
     // return new CStyleCastExpr(castKind, exprData, info, subExpr);
     // }
 
-    public static PredefinedExpr predefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-
-        return new PredefinedExpr(id, exprData, info, subExpr);
-    }
+    // public static PredefinedExpr predefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    //
+    // return new PredefinedExpr(id, exprData, info, subExpr);
+    // }
 
     public static CXXBoolLiteralExpr cxxBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
         DataStore data = new LegacyToDataStore().setNodeInfo(info).setExpr(exprData).getData();
