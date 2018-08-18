@@ -534,4 +534,9 @@ extern const std::string clava::OFFSET_OF_NODE_KIND[]{
 };
 
 
+extern const std::string clava::LINKAGE_LANGUAGE[]{
+    "C",
+    "CXX"
+};
+
 //const std::string BUILTIN_KIND[] {};

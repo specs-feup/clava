@@ -15,4 +15,6 @@
 
 extern int includes1;
 
+extern "C" void foo();
+
 #endif

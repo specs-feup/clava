@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
@@ -46,6 +47,7 @@ import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
+import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
@@ -369,6 +371,15 @@ public class DeclDataParser {
 
         data.add(NamespaceAliasDecl.NESTED_PREFIX, nestedPrefix);
         dataStore.getClavaNodes().queueSetNode(data, NamespaceAliasDecl.ALIASED_NAMESPACE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseLinkageSpecDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseDeclData(lines, dataStore);
+
+        data.add(LinkageSpecDecl.LINKAGE_TYPE, LineStreamParsers.enumFromName(LanguageId.class, lines));
 
         return data;
     }

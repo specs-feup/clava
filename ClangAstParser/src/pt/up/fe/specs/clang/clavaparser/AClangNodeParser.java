@@ -45,9 +45,7 @@ import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.data.RecordDeclData;
-import pt.up.fe.specs.clava.ast.decl.legacy.DummyDeclLegacy;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
@@ -165,10 +163,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         return clavaNode;
     }
 
-    public DummyDecl newDummyDecl(ClangNode node) {
-        return new DummyDeclLegacy(node.getDescription(), info(node),
-                node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
-    }
+    // public DummyDecl newDummyDecl(ClangNode node) {
+    // return new DummyDeclLegacy(node.getDescription(), info(node),
+    // node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
+    // }
 
     protected ClavaNodeInfo info(ClangNode node) {
         return node.getInfo();

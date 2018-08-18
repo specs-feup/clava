@@ -229,6 +229,7 @@ private:
     void VisitNamespaceDeclChildren(const NamespaceDecl *D, std::vector<std::string> &children);
     void VisitFriendDeclChildren(const FriendDecl *D, std::vector<std::string> &children);
     void VisitNamespaceAliasDeclChildren(const NamespaceAliasDecl *D, std::vector<std::string> &children);
+    void VisitLinkageSpecDeclChildren(const LinkageSpecDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts

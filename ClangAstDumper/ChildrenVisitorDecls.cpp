@@ -38,6 +38,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"NamespaceDecl", clava::DeclNode::NAMESPACE_DECL},
         {"FriendDecl", clava::DeclNode::FRIEND_DECL},
         {"NamespaceAliasDecl", clava::DeclNode::NAMESPACE_ALIAS_DECL},
+        {"LinkageSpecDecl", clava::DeclNode::LINKAGE_SPEC_DECL},
 
 
 
@@ -105,6 +106,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitFriendDeclChildren(static_cast<const FriendDecl *>(D), visitedChildren); break;
         case clava::DeclNode::NAMESPACE_ALIAS_DECL:
             VisitNamespaceAliasDeclChildren(static_cast<const NamespaceAliasDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::LINKAGE_SPEC_DECL:
+            VisitLinkageSpecDeclChildren(static_cast<const LinkageSpecDecl *>(D), visitedChildren); break;
 
 
 
@@ -563,4 +566,12 @@ void ClangAstDumper::VisitNamespaceAliasDeclChildren(const NamespaceAliasDecl *D
     VisitNamedDeclChildren(D, children);
 
     VisitDeclTop(D->getAliasedNamespace());
+}
+
+void ClangAstDumper::VisitLinkageSpecDeclChildren(const LinkageSpecDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    //VisitDeclChildren(D, children);
+
+    addChildren(D->decls(), children);
 }

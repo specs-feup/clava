@@ -39,6 +39,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"UsingDirectiveDecl",                     clava::DeclNode::USING_DIRECTIVE_DECL},
         {"NamespaceDecl",                          clava::DeclNode::NAMESPACE_DECL},
         {"NamespaceAliasDecl",                     clava::DeclNode::NAMESPACE_ALIAS_DECL},
+        {"LinkageSpecDecl",                        clava::DeclNode::LINKAGE_SPEC_DECL},
 
 };
 
@@ -127,6 +128,9 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             break;
         case clava::DeclNode::NAMESPACE_ALIAS_DECL:
             DumpNamespaceAliasDeclData(static_cast<const NamespaceAliasDecl *>(D));
+            break;
+        case clava::DeclNode::LINKAGE_SPEC_DECL:
+            DumpLinkageSpecDeclData(static_cast<const LinkageSpecDecl *>(D));
             break;
         default:
             throw std::invalid_argument(
@@ -534,5 +538,24 @@ void clava::ClavaDataDumper::DumpNamespaceAliasDeclData(const NamespaceAliasDecl
 
     clava::dump(clava::getSource(Context, D->getQualifierLoc().getSourceRange()));
     clava::dump(clava::getId(D->getAliasedNamespace(), id));
+}
+
+void clava::ClavaDataDumper::DumpLinkageSpecDeclData(const LinkageSpecDecl *D) {
+
+    // Hierarchy
+    DumpDeclData(D);
+
+    switch(D->getLanguage()) {
+        case LinkageSpecDecl::LanguageIDs::lang_c:
+            clava::dump(clava::LINKAGE_LANGUAGE[0]);
+            break;
+        case LinkageSpecDecl::LanguageIDs::lang_cxx:
+            clava::dump(clava::LINKAGE_LANGUAGE[1]);
+            break;
+        default:
+            throw std::invalid_argument(
+                    "ClangDataDumper::DumpLinkageSpecDeclData():: Case not implemented, '" + std::to_string(D->getLanguage()) + "'");
+    }
+    //clava::dump(clava::getSource(Context, D->getQualifierLoc().getSourceRange()));
 }
 

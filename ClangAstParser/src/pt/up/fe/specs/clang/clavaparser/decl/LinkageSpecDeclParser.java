@@ -27,7 +27,6 @@ import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
@@ -85,8 +84,8 @@ public class LinkageSpecDeclParser extends AClangNodeParser<LinkageSpecDecl> {
             children.add(getConverter().parse(child));
 
         }
-
-        return ClavaNodeFactory.linkageSpecialDecl(linkageType, declData, info(node), children);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.linkageSpecialDecl(linkageType, declData, info(node), children);
     }
 
     /**

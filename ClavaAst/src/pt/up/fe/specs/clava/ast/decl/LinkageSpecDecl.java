@@ -14,12 +14,13 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 
 /**
@@ -30,24 +31,34 @@ import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
  */
 public class LinkageSpecDecl extends Decl {
 
-    private final LanguageId linkageType;
+    /// DATAKEYS BEGIN
 
-    public LinkageSpecDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declData, info, children);
+    public final static DataKey<LanguageId> LINKAGE_TYPE = KeyFactory.enumeration("linkageType", LanguageId.class);
 
-        this.linkageType = linkageType;
+    /// DATAKEYS END
+
+    public LinkageSpecDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LinkageSpecDecl(linkageType, getDeclData(), getInfo(), Collections.emptyList());
-    }
+    // private final LanguageId linkageType;
+    //
+    // public LinkageSpecDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(declData, info, children);
+    //
+    // this.linkageType = linkageType;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LinkageSpecDecl(linkageType, getDeclData(), getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
-        builder.append(ln() + "extern \"" + linkageType + "\" {" + ln());
+        builder.append(ln() + "extern \"" + get(LINKAGE_TYPE) + "\" {" + ln());
 
         String childrenCode = getChildrenStream().map(child -> child.getCode())
                 .collect(Collectors.joining(ln() + getTab(), getTab(), ln()));
@@ -58,7 +69,7 @@ public class LinkageSpecDecl extends Decl {
     }
 
     public LanguageId getLanguage() {
-        return linkageType;
+        return get(LINKAGE_TYPE);
     }
 
 }

@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
@@ -42,6 +43,7 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
@@ -431,6 +433,18 @@ public class ClavaFactory {
         data.set(LiteralDecl.LITERAL_CODE, code);
 
         return new LiteralDecl(data, Collections.emptyList());
+    }
+
+    public LinkageSpecDecl linkageSpecDecl(LanguageId language, Decl... decls) {
+        return linkageSpecDecl(language, Arrays.asList(decls));
+    }
+
+    public LinkageSpecDecl linkageSpecDecl(LanguageId language, List<? extends Decl> decls) {
+        DataStore data = newDeclDataStore();
+
+        data.set(LinkageSpecDecl.LINKAGE_TYPE, language);
+
+        return new LinkageSpecDecl(data, decls);
     }
 
     /// STMTS

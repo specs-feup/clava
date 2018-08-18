@@ -30,10 +30,10 @@ import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
@@ -301,8 +301,9 @@ public class AstFactory {
             // return CxxJoinpoints.newJoinpoint(decl.getParent(), null);
         }
 
-        LinkageSpecDecl linkage = ClavaNodeFactory.linkageSpecialDecl(LanguageId.C, DeclData.empty(),
-                ClavaNodeInfo.undefinedInfo(), Arrays.asList(decl));
+        LinkageSpecDecl linkage = CxxWeaver.getFactory().linkageSpecDecl(LanguageId.C, (Decl) decl);
+        // LinkageSpecDecl linkage = ClavaNodeFactory.linkageSpecialDecl(LanguageId.C, DeclData.empty(),
+        // ClavaNodeInfo.undefinedInfo(), Arrays.asList(decl));
 
         return CxxJoinpoints.create(linkage, null);
     }

@@ -18,10 +18,8 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 /**
  * Dummy declaration, for testing purposes.
@@ -35,15 +33,15 @@ public class DummyDecl extends Decl implements DummyNode {
         super(clavaData, children);
     }
 
-    /**
-     * For legacy support.
-     * 
-     * @param info
-     * @param children
-     */
-    protected DummyDecl(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(DeclData.empty(), info, children);
-    }
+    // /**
+    // * For legacy support.
+    // *
+    // * @param info
+    // * @param children
+    // */
+    // protected DummyDecl(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(DeclData.empty(), info, children);
+    // }
 
     @Override
     public String getNodeName() {

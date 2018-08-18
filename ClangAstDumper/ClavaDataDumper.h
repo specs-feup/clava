@@ -118,6 +118,7 @@ namespace clava {
         void DumpUsingDirectiveDeclData(const UsingDirectiveDecl *D);
         void DumpNamespaceDeclData(const NamespaceDecl *D);
         void DumpNamespaceAliasDeclData(const NamespaceAliasDecl *D);
+        void DumpLinkageSpecDeclData(const LinkageSpecDecl *D);
 
 
         // STMTS

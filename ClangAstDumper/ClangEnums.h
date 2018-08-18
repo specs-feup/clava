@@ -41,6 +41,7 @@ namespace clava {
     extern const std::string UETT_KIND[];
     extern const std::string NESTED_NAMED_SPECIFIER[];
     extern const std::string OFFSET_OF_NODE_KIND[];
+    extern const std::string LINKAGE_LANGUAGE[];
 
 
 }

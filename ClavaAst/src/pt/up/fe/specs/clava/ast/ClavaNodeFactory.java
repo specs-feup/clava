@@ -33,10 +33,7 @@ import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -216,11 +213,11 @@ public class ClavaNodeFactory {
     // return new DummyDeclLegacy(node.toContentString(), node.getInfo(), node.getChildren());
     // }
 
-    public static LinkageSpecDecl linkageSpecialDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
-            List<ClavaNode> declarations) {
-
-        return new LinkageSpecDecl(linkageType, declData, info, declarations);
-    }
+    // public static LinkageSpecDecl linkageSpecialDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
+    // List<ClavaNode> declarations) {
+    //
+    // return new LinkageSpecDecl(linkageType, declData, info, declarations);
+    // }
 
     // public static TypedefDecl typedefDecl(Type underlyingType, String typedefSource, boolean isModulePrivate,
     // String name, Type type, DeclData declData, ClavaNodeInfo info) {
