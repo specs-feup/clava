@@ -44,18 +44,14 @@ import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr.PredefinedIdType;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
-import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
-import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
@@ -1236,9 +1232,9 @@ public class ClavaNodeFactory {
     // return new CXXReinterpretCastExpr(cxxNamedCastExprdata, exprData, info, subExpr);
     // }
 
-    public static OffsetOfExpr offsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info) {
-        return new OffsetOfExpr(offsetOfData, exprData, info);
-    }
+    // public static OffsetOfExpr offsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info) {
+    // return new OffsetOfExpr(offsetOfData, exprData, info);
+    // }
 
     // public static UserDefinedLiteral userDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Expr callee,
     // Expr cookedLiteral) {
@@ -1250,9 +1246,9 @@ public class ClavaNodeFactory {
     // return new CXXThrowExpr(exprData, info, throwExpr);
     // }
 
-    public static GNUNullExpr gnuNullExpr(ExprData exprData, ClavaNodeInfo info) {
-        return new GNUNullExpr(exprData, info);
-    }
+    // public static GNUNullExpr gnuNullExpr(ExprData exprData, ClavaNodeInfo info) {
+    // return new GNUNullExpr(exprData, info);
+    // }
 
     /**
      * @deprecated use ClavaFactory
@@ -1269,9 +1265,9 @@ public class ClavaNodeFactory {
     // return new CXXDependentScopeMemberExpr(isArrow, memberName, exprData, info, memberExpr);
     // }
 
-    public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
-        return new StmtExpr(exprData, info, compoundStmt);
-    }
+    // public static StmtExpr stmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
+    // return new StmtExpr(exprData, info, compoundStmt);
+    // }
 
     public static SizeOfPackExpr sizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
             List<TemplateArgument> partialArguments) {

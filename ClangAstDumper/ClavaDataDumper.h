@@ -152,6 +152,7 @@ namespace clava {
         void DumpUnaryExprOrTypeTraitExprData(const UnaryExprOrTypeTraitExpr *E);
         void DumpCXXNewExprData(const CXXNewExpr *E);
         void DumpCXXDeleteExprData(const CXXDeleteExpr *E);
+        void DumpOffsetOfExprData(const OffsetOfExpr *E);
 
 
 

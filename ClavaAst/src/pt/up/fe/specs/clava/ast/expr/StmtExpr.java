@@ -13,29 +13,31 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 
 public class StmtExpr extends Expr {
 
-    public StmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
-        super(exprData, info, Arrays.asList(compoundStmt));
+    public StmtExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    protected StmtExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new StmtExpr(getExprData(), getInfo(), Collections.emptyList());
-    }
+    // public StmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
+    // super(exprData, info, Arrays.asList(compoundStmt));
+    // }
+    //
+    // protected StmtExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new StmtExpr(getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public CompoundStmt getCompoundStmt() {
         return getChild(CompoundStmt.class, 0);

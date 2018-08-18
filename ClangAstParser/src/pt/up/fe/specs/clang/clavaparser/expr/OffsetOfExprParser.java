@@ -24,13 +24,10 @@ import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfClangComponent;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
-import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfArray;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
-import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfField;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -81,8 +78,8 @@ public class OffsetOfExprParser extends AClangNodeParser<ClavaNode> {
 
         // Preconditions.checkArgument(children.size() == 1, "Expected only one child in OffsetOfExpr, got: " +
         // children);
-
-        return ClavaNodeFactory.offsetOfExpr(offsetOfData, exprData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.offsetOfExpr(offsetOfData, exprData, node.getInfo());
     }
 
     private OffsetOfData createOffsetOfData(Type sourceType, OffsetOfInfo info, List<Expr> expressions) {
@@ -94,10 +91,10 @@ public class OffsetOfExprParser extends AClangNodeParser<ClavaNode> {
 
     private OffsetOfComponent parser(OffsetOfClangComponent component, List<Expr> expressions) {
         switch (component.getKind()) {
-        case ARRAY:
-            return new OffsetOfArray(expressions.get(component.getExpressionIndex()));
-        case FIELD:
-            return new OffsetOfField(component.getFieldName());
+        // case ARRAY:
+        // return new OffsetOfArray(expressions.get(component.getExpressionIndex()));
+        // case FIELD:
+        // return new OffsetOfField(component.getFieldName());
         default:
             throw new CaseNotDefinedException(component.getKind());
         }

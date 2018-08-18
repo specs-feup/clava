@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponentKind;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;

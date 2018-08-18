@@ -5,6 +5,7 @@
 #include "ClangAstDumper.h"
 #include "ClavaConstants.h"
 #include "ClangNodes.h"
+#include "ClangEnums.h"
 
 #include <string>
 
@@ -294,6 +295,22 @@ void ClangAstDumper::VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vecto
 
     // Visit type
     VisitTypeTop(E->getTypeSourceInfo()->getType().getTypePtr());
+
+    for(int i = 0; i < E->getNumComponents(); i++) {
+        // Dump each component
+        OffsetOfNode node = E->getComponent(i);
+        switch (node.getKind()) {
+            case OffsetOfNode::Kind::Array:
+                VisitStmtTop(E->getIndexExpr(node.getArrayExprIndex()));
+                break;
+            case OffsetOfNode::Kind::Field:
+                // Nothing to visit
+                break;
+            default:
+                throw std::invalid_argument("ClangDataDumper::DumpOffsetOfExprData(): Case not implemented, '" +
+                                            clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
+        }
+    }
 }
 
 void ClangAstDumper::VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children) {

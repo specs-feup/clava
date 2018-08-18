@@ -13,16 +13,25 @@
 
 package pt.up.fe.specs.clava.ast.expr.data.offsetof;
 
-public class OffsetOfField implements OffsetOfComponent {
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-    private final String fieldName;
+public class OffsetOfField extends OffsetOfComponent {
 
-    public OffsetOfField(String fieldName) {
-        this.fieldName = fieldName;
-    }
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> FIELD_NAME = KeyFactory.string("fieldName");
+
+    /// DATAKEYS END
+
+    // private final String fieldName;
+    //
+    // public OffsetOfField(String fieldName) {
+    // this.fieldName = fieldName;
+    // }
 
     public String getFieldName() {
-        return fieldName;
+        return get(FIELD_NAME);
     }
 
     @Override
@@ -32,7 +41,11 @@ public class OffsetOfField implements OffsetOfComponent {
 
     @Override
     public String getCode() {
-        return fieldName;
+        return getFieldName();
     }
 
+    @Override
+    public OffsetOfComponentKind getKind() {
+        return OffsetOfComponentKind.FIELD;
+    }
 }

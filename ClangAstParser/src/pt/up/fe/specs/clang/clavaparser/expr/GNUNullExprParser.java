@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.GNUNullExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -33,7 +32,8 @@ public class GNUNullExprParser extends AClangNodeParser<GNUNullExpr> {
 
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
-        return ClavaNodeFactory.gnuNullExpr(exprData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.gnuNullExpr(exprData, node.getInfo());
     }
 
 }

@@ -48,6 +48,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
         {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
         {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
+        {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
 
 };
 
@@ -138,6 +139,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXNewExprData(static_cast<const CXXNewExpr *>(S)); break;
         case clava::StmtNode ::CXX_DELETE_EXPR:
             DumpCXXDeleteExprData(static_cast<const CXXDeleteExpr *>(S)); break;
+        case clava::StmtNode ::OFFSET_OF_EXPR:
+            DumpOffsetOfExprData(static_cast<const OffsetOfExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -494,4 +497,27 @@ void clava::ClavaDataDumper::DumpCXXDeleteExprData(const CXXDeleteExpr *E) {
     clava::dump(E->isArrayFormAsWritten());
     //clava::dump(clava::getId(E->getArgument(), id));
 
+ }
+
+void clava::ClavaDataDumper::DumpOffsetOfExprData(const OffsetOfExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::getId(E->getTypeSourceInfo()->getType(), id));
+    clava::dump(E->getNumComponents());
+    for(int i = 0; i < E->getNumComponents(); i++) {
+        // Dump each component
+        OffsetOfNode node = E->getComponent(i);
+        clava::dump(clava::OFFSET_OF_NODE_KIND[node.getKind()]);
+        switch (node.getKind()) {
+            case OffsetOfNode::Kind::Array:
+                clava::dump(clava::getId(E->getIndexExpr(node.getArrayExprIndex()), id));
+                break;
+            case OffsetOfNode::Kind::Field:
+                clava::dump(node.getFieldName()->getName().str());
+                break;
+            default:
+                throw std::invalid_argument("ClangDataDumper::DumpOffsetOfExprData(): Case not implemented, '" +
+                                                    clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
+        }
+    }
  }

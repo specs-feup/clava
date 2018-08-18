@@ -34,6 +34,10 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfArray;
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponentKind;
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfField;
 import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
@@ -314,4 +318,23 @@ public class ClavaDataParsers {
         return ctorInit;
     }
 
+    public static OffsetOfComponent offsetOfComponent(LineStream lines, ClangParserData parserData) {
+        // Kind
+        OffsetOfComponentKind kind = LineStreamParsers.enumFromName(OffsetOfComponentKind.class, lines);
+        OffsetOfComponent component = OffsetOfComponent.newInstance(kind);
+        switch (kind) {
+        case ARRAY:
+            parserData.getClavaNodes().queueSetNode(component, OffsetOfArray.EXPR, lines.nextLine());
+            break;
+        case FIELD:
+            component.set(OffsetOfField.FIELD_NAME, lines.nextLine());
+            break;
+        default:
+            throw new NotImplementedException(kind);
+        }
+
+        return component;
+    }
+
+    // OffsetOfExpr
 }

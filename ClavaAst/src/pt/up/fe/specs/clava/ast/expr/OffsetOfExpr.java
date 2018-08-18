@@ -13,43 +13,60 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.OffsetOfData;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 public class OffsetOfExpr extends Expr {
 
-    private final OffsetOfData offsetOfData;
+    /// DATAKEYS BEGIN
 
-    public OffsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info) {
-        this(offsetOfData, exprData, info, Collections.emptyList());
+    public final static DataKey<Type> SOURCE_TYPE = KeyFactory.object("sourceType", Type.class);
+
+    public final static DataKey<List<OffsetOfComponent>> COMPONENTS = KeyFactory.generic("components",
+            new ArrayList<OffsetOfComponent>());
+
+    /// DATAKEYS END
+
+    public OffsetOfExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private OffsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(exprData, info, children);
+    // private final OffsetOfData offsetOfData;
+    //
+    // public OffsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info) {
+    // this(offsetOfData, exprData, info, Collections.emptyList());
+    // }
+    //
+    // private OffsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // super(exprData, info, children);
+    //
+    // this.offsetOfData = offsetOfData;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new OffsetOfExpr(offsetOfData, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
-        this.offsetOfData = offsetOfData;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new OffsetOfExpr(offsetOfData, getExprData(), getInfo(), Collections.emptyList());
-    }
-
-    public Expr getSubExpr() {
-        return getChild(Expr.class, 0);
-    }
+    // public Expr getSubExpr() {
+    // return getChild(Expr.class, 0);
+    // }
 
     @Override
     public String getCode() {
-        String componentCode = getComponentsCode();
-        return "offsetof(" + offsetOfData.getSourceType().getCode(this) + ", " + componentCode + ")";
+
+        String componentsCode = getComponentsCode();
+        return "offsetof(" + get(SOURCE_TYPE).getCode(this) + ", " + componentsCode + ")";
         // return getSubExpr().getCode();
         /*
         if (!hasChildren()) {
@@ -69,7 +86,7 @@ public class OffsetOfExpr extends Expr {
         StringBuilder code = new StringBuilder();
 
         boolean isFirst = true;
-        for (OffsetOfComponent component : offsetOfData.getComponents()) {
+        for (OffsetOfComponent component : get(COMPONENTS)) {
 
             if (component.isField() && !isFirst) {
                 code.append(".");

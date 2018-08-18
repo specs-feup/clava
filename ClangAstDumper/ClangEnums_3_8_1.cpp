@@ -526,4 +526,12 @@ extern const std::string clava::NESTED_NAMED_SPECIFIER[]{
 };
 
 
+extern const std::string clava::OFFSET_OF_NODE_KIND[]{
+        "ARRAY",
+        "FIELD",
+        "IDENTIFIER",
+        "BASE"
+};
+
+
 //const std::string BUILTIN_KIND[] {};

@@ -13,23 +13,37 @@
 
 package pt.up.fe.specs.clava.ast.expr.data.offsetof;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
-public class OffsetOfArray implements OffsetOfComponent {
+public class OffsetOfArray extends OffsetOfComponent {
 
-    private final Expr expr;
+    /// DATAKEYS BEGIN
 
-    public OffsetOfArray(Expr expr) {
-        this.expr = expr;
-    }
+    public final static DataKey<Expr> EXPR = KeyFactory.object("expr", Expr.class);
+
+    /// DATAKEYS END
+    // private final Expr expr;
+
+    // public OffsetOfArray(Expr expr) {
+    // this.expr = expr;
+    // }
 
     public Expr getExpr() {
-        return expr;
+        return get(EXPR);
+        // return expr;
     }
 
     @Override
     public String getCode() {
-        return "[" + expr.getCode() + "]";
+        return "[" + getExpr().getCode() + "]";
+    }
+
+    @Override
+    public OffsetOfComponentKind getKind() {
+        return OffsetOfComponentKind.ARRAY;
     }
 
 }

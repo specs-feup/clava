@@ -13,17 +13,35 @@
 
 package pt.up.fe.specs.clava.ast.expr.data.offsetof;
 
+import org.suikasoft.jOptions.DataStore.ADataClass;
+
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
+
 /**
  * Represents the data of an OffsetOfExpr.
  * 
  * @author JoaoBispo
  *
  */
-public interface OffsetOfComponent {
+public abstract class OffsetOfComponent extends ADataClass<OffsetOfComponent> {
 
-    String getCode();
+    public abstract String getCode();
 
-    default boolean isField() {
+    public abstract OffsetOfComponentKind getKind();
+
+    public boolean isField() {
         return false;
+    }
+
+    public static OffsetOfComponent newInstance(OffsetOfComponentKind kind) {
+        switch (kind) {
+        case ARRAY:
+            return new OffsetOfArray();
+        case FIELD:
+            return new OffsetOfField();
+        default:
+            throw new NotImplementedException(kind);
+        }
+
     }
 }

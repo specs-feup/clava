@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.StmtExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -41,8 +40,8 @@ public class StmtExprParser extends AClangNodeParser<StmtExpr> {
         checkNumChildren(children, 1);
 
         CompoundStmt compoundStmt = (CompoundStmt) children.get(0);
-
-        return ClavaNodeFactory.stmtExpr(exprData, node.getInfo(), compoundStmt);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.stmtExpr(exprData, node.getInfo(), compoundStmt);
     }
 
 }

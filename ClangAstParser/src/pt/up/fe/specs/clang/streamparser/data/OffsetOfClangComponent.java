@@ -15,6 +15,8 @@ package pt.up.fe.specs.clang.streamparser.data;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponentKind;
+
 public class OffsetOfClangComponent {
 
     private final OffsetOfComponentKind kind;

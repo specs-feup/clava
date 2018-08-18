@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
+import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
@@ -323,6 +324,16 @@ public class ExprDataParser {
         data.add(CXXDeleteExpr.IS_ARRAY, LineStreamParsers.oneOrZero(lines));
         data.add(CXXDeleteExpr.IS_ARRAY_AS_WRITTEN, LineStreamParsers.oneOrZero(lines));
         // dataStore.getClavaNodes().queueSetNode(data, CXXDeleteExpr.ARGUMENT_EXPR, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseOffsetOfExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, OffsetOfExpr.SOURCE_TYPE, lines.nextLine());
+        data.set(OffsetOfExpr.COMPONENTS,
+                ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::offsetOfComponent));
 
         return data;
     }
