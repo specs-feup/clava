@@ -282,6 +282,8 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     auto templateSpecializationArgs = D->getTemplateSpecializationArgs();
     if(templateSpecializationArgs != nullptr) {
         for(auto templateArg : templateSpecializationArgs->asArray()) {
+            VisitTemplateArgument(templateArg);
+            /*
             switch(templateArg.getKind()) {
                 case TemplateArgument::ArgKind::Type:
                     VisitTypeTop(templateArg.getAsType());
@@ -294,6 +296,7 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
                     break;
                 default: throw std::invalid_argument("ClangAstDumper::VisitFunctionDeclChildren(): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
             }
+             */
         }
     }
 

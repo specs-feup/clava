@@ -37,12 +37,10 @@ import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
-import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
-import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -1254,11 +1252,12 @@ public class ClavaNodeFactory {
     // return new StmtExpr(exprData, info, compoundStmt);
     // }
 
-    public static SizeOfPackExpr sizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
-            List<TemplateArgument> partialArguments) {
-
-        return new SizeOfPackExpr(packId, packName, exprData, info, partialArguments);
-    }
+    // public static SizeOfPackExpr sizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo
+    // info,
+    // List<TemplateArgument> partialArguments) {
+    //
+    // return new SizeOfPackExpr(packId, packName, exprData, info, partialArguments);
+    // }
 
     // public static PackExpansionExpr packExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
     // return new PackExpansionExpr(exprData, info, pattern);

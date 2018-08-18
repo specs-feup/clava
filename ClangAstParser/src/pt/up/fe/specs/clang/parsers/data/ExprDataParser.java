@@ -46,6 +46,7 @@ import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
+import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
@@ -369,5 +370,25 @@ public class ExprDataParser {
 
         return data;
     }
+
+    public static DataStore parseSizeOfPackExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.set(SizeOfPackExpr.IS_PARTIALLY_SUBSTITUTED, LineStreamParsers.oneOrZero(lines));
+
+        dataStore.getClavaNodes().queueSetNode(data, SizeOfPackExpr.PACK, lines.nextLine());
+
+        data.set(SizeOfPackExpr.PARTIAL_ARGUMENTS,
+                ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::templateArgument));
+
+        return data;
+    }
+
+    // public final static DataKey<Boolean> IS_PARTIALLY_SUBSTITUTED = KeyFactory.bool("isPartiallySubstituted");
+    //
+    // public final static DataKey<NamedDecl> PACK = KeyFactory.object("pack", NamedDecl.class);
+    //
+    // public final static DataKey<List<TemplateArgument>> PARTIAL_ARGUMENTS = KeyFactory.generic("partialArguments",
+    // new ArrayList<TemplateArgument>());
 
 }

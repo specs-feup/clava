@@ -13,15 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 
 /**
  * Represents an expression that computes the length of a parameter pack.
@@ -31,53 +33,72 @@ import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
  */
 public class SizeOfPackExpr extends Expr {
 
-    private final String packId;
-    private final String packName;
+    /// DATAKEYS BEGIN
 
-    private NamedDecl pack;
+    public final static DataKey<Boolean> IS_PARTIALLY_SUBSTITUTED = KeyFactory.bool("isPartiallySubstituted");
 
-    public SizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
-            List<TemplateArgument> partialArguments) {
+    public final static DataKey<NamedDecl> PACK = KeyFactory.object("pack", NamedDecl.class);
 
-        this(packId, packName, exprData, info, (Collection<? extends ClavaNode>) partialArguments);
+    public final static DataKey<List<TemplateArgument>> PARTIAL_ARGUMENTS = KeyFactory.generic("partialArguments",
+            new ArrayList<TemplateArgument>());
+
+    /// DATAKEYS END
+
+    public SizeOfPackExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private SizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-
-        this.packId = packId;
-        this.packName = packName;
-
-        pack = null;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new SizeOfPackExpr(packId, packName, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private final String packId;
+    // private final String packName;
+    //
+    // private NamedDecl pack;
+    //
+    // public SizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
+    // List<TemplateArgument> partialArguments) {
+    //
+    // this(packId, packName, exprData, info, (Collection<? extends ClavaNode>) partialArguments);
+    // }
+    //
+    // private SizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.packId = packId;
+    // this.packName = packName;
+    //
+    // pack = null;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new SizeOfPackExpr(packId, packName, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public NamedDecl getPack() {
-        if (pack == null) {
-            // Retrive pack
-            pack = (NamedDecl) getApp().getNode(packId);
-        }
-
-        return pack;
+        return get(PACK);
+        // if (pack == null) {
+        // // Retrive pack
+        // pack = (NamedDecl) getApp().getNode(packId);
+        // }
+        //
+        // return pack;
     }
 
     public boolean isPartiallySubstituted() {
+        return get(IS_PARTIALLY_SUBSTITUTED);
         // Is it possible to be partially substituted and not have template arguments?
-        return hasChildren();
+        // return hasChildren();
     }
 
     public List<TemplateArgument> getPartialArguments() {
-        return getChildren(TemplateArgument.class);
+        return get(PARTIAL_ARGUMENTS);
+        // return getChildren(TemplateArgument.class);
     }
 
     @Override
     public String getCode() {
-        return "sizeof...(" + packName + ")";
+        // return "sizeof...(" + packName + ")";
+        return "sizeof...(" + get(PACK).get(NamedDecl.DECL_NAME) + ")";
     }
 }

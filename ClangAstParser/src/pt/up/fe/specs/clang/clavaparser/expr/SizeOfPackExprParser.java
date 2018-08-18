@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
@@ -53,8 +52,8 @@ public class SizeOfPackExprParser extends AClangNodeParser<SizeOfPackExpr> {
 
         // Not tested yet, but it is expected that children should be template arguments
         List<TemplateArgument> partialArguments = SpecsCollections.cast(children, TemplateArgument.class);
-
-        return ClavaNodeFactory.sizeOfPackExpr(packId, packName, exprData, node.getInfo(), partialArguments);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.sizeOfPackExpr(packId, packName, exprData, node.getInfo(), partialArguments);
     }
 
 }

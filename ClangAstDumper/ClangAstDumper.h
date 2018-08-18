@@ -260,6 +260,7 @@ private:
     void VisitCXXNewExprChildren(const CXXNewExpr *E, std::vector<std::string> &children);
     void VisitCXXDeleteExprChildren(const CXXDeleteExpr *E, std::vector<std::string> &children);
     void VisitLambdaExprChildren(const LambdaExpr *E, std::vector<std::string> &children);
+    void VisitSizeOfPackExprChildren(const SizeOfPackExpr *E, std::vector<std::string> &children);
 
 
 
@@ -271,6 +272,7 @@ private:
 
     // Children visitors for Attributes
     void VisitAlignedAttrChildren(const AlignedAttr * A, std::vector<std::string> &children);
+    void VisitTemplateArgument(const TemplateArgument& templateArg);
 
 
 

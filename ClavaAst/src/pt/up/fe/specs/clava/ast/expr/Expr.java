@@ -23,7 +23,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
@@ -103,14 +102,14 @@ public abstract class Expr extends ClavaNode implements Typable {
         return get(VALUE_KIND);
     }
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public ExprData getExprData() {
-        return DataStoreToLegacy.getExpr(getData());
-    }
+    // /**
+    // * @deprecated
+    // * @return
+    // */
+    // @Deprecated
+    // public ExprData getExprData() {
+    // return DataStoreToLegacy.getExpr(getData());
+    // }
 
     /*
     @Override

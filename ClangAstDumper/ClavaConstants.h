@@ -73,7 +73,7 @@ namespace clava {
         SUBST_NON_TYPE_TEMPLATE_PARM_EXPR,
         LAMBDA_EXPR,
         PREDEFINED_EXPR,
-
+        SIZE_OF_PACK_EXPR,
     };
 
     /**

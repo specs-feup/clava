@@ -39,6 +39,9 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
         {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
         {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
+        {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
+
+
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
 };
 
@@ -125,7 +128,12 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXDeleteExprChildren(static_cast<const CXXDeleteExpr *>(S), visitedChildren); break;
         case clava::StmtNode::LAMBDA_EXPR:
             VisitLambdaExprChildren(static_cast<const LambdaExpr *>(S), visitedChildren); break;
-//        case clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR:
+        case clava::StmtNode::SIZE_OF_PACK_EXPR:
+            VisitSizeOfPackExprChildren(static_cast<const SizeOfPackExpr *>(S), visitedChildren); break;
+
+
+
+            //        case clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR:
 //            VisitSubstNonTypeTemplateParmExprChildren(static_cast<const SubstNonTypeTemplateParmExpr *>(S), visitedChildren); break;
 
 
@@ -418,6 +426,19 @@ void ClangAstDumper::VisitLambdaExprChildren(const LambdaExpr *E, std::vector<st
     VisitExprChildren(E, children);
 
     VisitDeclTop(E->getLambdaClass());
+}
+
+void ClangAstDumper::VisitSizeOfPackExprChildren(const SizeOfPackExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    VisitDeclTop(E->getPack());
+
+    if(E->isPartiallySubstituted()) {
+        for (auto templateArg : E->getPartialArguments()) {
+            VisitTemplateArgument(templateArg);
+        }
+    }
 }
 
 /*

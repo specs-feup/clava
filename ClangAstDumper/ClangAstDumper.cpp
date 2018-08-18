@@ -5,6 +5,7 @@
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
 #include "ClangNodes.h"
+#include "ClangEnums.h"
 
 #include "clang/AST/AST.h"
 #include "clang/Lex/Lexer.h"
@@ -544,3 +545,19 @@ const void ClangAstDumper::addChild(const Attr *addr, std::vector<std::string> &
 };
 
 
+
+
+void ClangAstDumper::VisitTemplateArgument(const TemplateArgument& templateArg) {
+    switch(templateArg.getKind()) {
+        case TemplateArgument::ArgKind::Type:
+            VisitTypeTop(templateArg.getAsType());
+            break;
+        case TemplateArgument::ArgKind::Expression:
+            VisitStmtTop(templateArg.getAsExpr());
+            break;
+        case TemplateArgument::ArgKind::Pack:
+            // Do nothing
+            break;
+        default: throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+    }
+};

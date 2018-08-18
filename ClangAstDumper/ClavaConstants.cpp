@@ -61,6 +61,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR: return "SubstNonTypeTemplateParmExpr";
         case clava::StmtNode::LAMBDA_EXPR: return "LambdaExpr";
         case clava::StmtNode::PREDEFINED_EXPR: return "PredefinedExpr";
+        case clava::StmtNode::SIZE_OF_PACK_EXPR: return "SizeOfPackExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
