@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -38,8 +37,8 @@ public class CXXDefaultInitExprParser extends AClangNodeParser<CXXDefaultInitExp
         ExprData exprData = parser.apply(ClangDataParsers::parseExpr, node, getTypesMap());
 
         checkNoChildren(node);
-
-        return ClavaNodeFactory.cxxDefaultInitExpr(exprData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxDefaultInitExpr(exprData, node.getInfo());
     }
 
 }

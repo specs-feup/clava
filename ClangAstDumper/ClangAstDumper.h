@@ -259,7 +259,11 @@ private:
     void VisitUnaryExprOrTypeTraitExprChildren(const UnaryExprOrTypeTraitExpr *E, std::vector<std::string> &children);
     void VisitCXXNewExprChildren(const CXXNewExpr *E, std::vector<std::string> &children);
     void VisitCXXDeleteExprChildren(const CXXDeleteExpr *E, std::vector<std::string> &children);
-    void VisitSubstNonTypeTemplateParmExprChildren(const SubstNonTypeTemplateParmExpr *E, std::vector<std::string> &children);
+    void VisitLambdaExprChildren(const LambdaExpr *E, std::vector<std::string> &children);
+
+
+
+    //void VisitSubstNonTypeTemplateParmExprChildren(const SubstNonTypeTemplateParmExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);

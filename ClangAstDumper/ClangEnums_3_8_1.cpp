@@ -539,4 +539,19 @@ extern const std::string clava::LINKAGE_LANGUAGE[]{
     "CXX"
 };
 
+
+extern const std::string clava::LAMBDA_CAPTURE_DEFAULT[]{
+        "NONE",
+        "BY_COPY",
+        "BY_REF"
+};
+
+extern const std::string clava::LAMBDA_CAPTURE_KIND[] {
+        "THIS",
+        "BY_COPY",
+        "BY_REF",
+        "VLA_TYPE"
+};
+
+
 //const std::string BUILTIN_KIND[] {};

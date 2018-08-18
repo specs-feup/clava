@@ -106,4 +106,9 @@ public class CTest {
     public void testSizeof() {
         new CTester("sizeof.c").test();
     }
+
+    @Test
+    public void testPredefined() {
+        new CTester("predefined.c").test();
+    }
 }

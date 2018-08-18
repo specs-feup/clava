@@ -42,6 +42,8 @@ namespace clava {
     extern const std::string NESTED_NAMED_SPECIFIER[];
     extern const std::string OFFSET_OF_NODE_KIND[];
     extern const std::string LINKAGE_LANGUAGE[];
+    extern const std::string LAMBDA_CAPTURE_DEFAULT[];
+    extern const std::string LAMBDA_CAPTURE_KIND[];
 
 
 }

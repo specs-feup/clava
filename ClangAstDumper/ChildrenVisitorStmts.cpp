@@ -9,6 +9,7 @@
 
 #include <string>
 
+
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDREN_MAP = {
         {"DeclStmt", clava::StmtNode::DECL_STMT},
         {"IfStmt", clava::StmtNode::IF_STMT},
@@ -37,6 +38,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"OpaqueValueExpr", clava::StmtNode::OPAQUE_VALUE_EXPR},
         {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
         {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
+        {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
 };
 
@@ -121,6 +123,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXNewExprChildren(static_cast<const CXXNewExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_DELETE_EXPR:
             VisitCXXDeleteExprChildren(static_cast<const CXXDeleteExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::LAMBDA_EXPR:
+            VisitLambdaExprChildren(static_cast<const LambdaExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR:
 //            VisitSubstNonTypeTemplateParmExprChildren(static_cast<const SubstNonTypeTemplateParmExpr *>(S), visitedChildren); break;
 
@@ -407,6 +411,13 @@ void ClangAstDumper::VisitCXXDeleteExprChildren(const CXXDeleteExpr *E, std::vec
 
     addChild(E->getArgument(), children);
     //VisitStmtTop(E->getArgument());
+}
+
+void ClangAstDumper::VisitLambdaExprChildren(const LambdaExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    VisitDeclTop(E->getLambdaClass());
 }
 
 /*

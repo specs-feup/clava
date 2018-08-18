@@ -49,6 +49,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXNewExpr", clava::StmtNode::CXX_NEW_EXPR},
         {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
         {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
+        {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
 
 };
 
@@ -141,6 +142,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXDeleteExprData(static_cast<const CXXDeleteExpr *>(S)); break;
         case clava::StmtNode ::OFFSET_OF_EXPR:
             DumpOffsetOfExprData(static_cast<const OffsetOfExpr *>(S)); break;
+        case clava::StmtNode ::LAMBDA_EXPR:
+            DumpLambdaExprData(static_cast<const LambdaExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -520,4 +523,28 @@ void clava::ClavaDataDumper::DumpOffsetOfExprData(const OffsetOfExpr *E) {
                                                     clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
         }
     }
+ }
+
+void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->isGenericLambda());
+    clava::dump(E->isMutable());
+    clava::dump(E->hasExplicitParameters());
+    clava::dump(E->hasExplicitResultType());
+    clava::dump(clava::LAMBDA_CAPTURE_DEFAULT[E->getCaptureDefault()]);
+
+    clava::dump(clava::getId(E->getLambdaClass(), id));
+
+    clava::dump(E->capture_size());
+    for(auto capture : E->captures()) {
+        clava::dump(clava::LAMBDA_CAPTURE_KIND[capture.getCaptureKind()]);
+    }
+
+
+    /*
+    for(int i=0; i<E->capture_size(); i++) {
+        E->getC
+    }
+     */
  }

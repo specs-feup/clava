@@ -15,49 +15,80 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
 import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.collections.SpecsList;
 
+/**
+ * A C++ lambda expression, which produces a function object (of unspecified type) that can be invoked later.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class LambdaExpr extends Expr {
 
-    private final LambdaExprData lambdaData;
+    /// DATAKEYS BEGIN
 
-    public LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
-            CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
+    public final static DataKey<Boolean> IS_GENERIC_LAMBDA = KeyFactory.bool("isGenericLambda");
 
-        this(lambdaData, exprData, info, SpecsList.newInstance(ClavaNode.class)
-                .concat(lambdaClass).concat(captureArguments).concat(body));
+    public final static DataKey<Boolean> IS_MUTABLE = KeyFactory.bool("isMutable");
+
+    public final static DataKey<Boolean> HAS_EXPLICIT_PARAMETERS = KeyFactory.bool("hasExplicitParameters");
+
+    public final static DataKey<Boolean> HAS_EXPLICIT_RESULT_TYPE = KeyFactory.bool("hasExplicitResultType");
+
+    public final static DataKey<LambdaCaptureDefault> CAPTURE_DEFAULT = KeyFactory.enumeration("captureDefault",
+            LambdaCaptureDefault.class);
+
+    public final static DataKey<CXXRecordDecl> LAMBDA_CLASS = KeyFactory.object("lambdaClass", CXXRecordDecl.class);
+
+    public final static DataKey<List<LambdaCaptureKind>> CAPTURE_KINDS = KeyFactory.generic("captureKinds",
+            new ArrayList<LambdaCaptureKind>());
+
+    /// DATAKEYS END
+
+    public LambdaExpr(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
-
-        this.lambdaData = lambdaData;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LambdaExpr(lambdaData, getExprData(), getInfo(), Collections.emptyList());
-    }
+    // private final LambdaExprData lambdaData;
+    //
+    // public LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
+    // CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
+    //
+    // this(lambdaData, exprData, info, SpecsList.newInstance(ClavaNode.class)
+    // .concat(lambdaClass).concat(captureArguments).concat(body));
+    // }
+    //
+    // private LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    //
+    // super(exprData, info, children);
+    //
+    // this.lambdaData = lambdaData;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LambdaExpr(lambdaData, getExprData(), getInfo(), Collections.emptyList());
+    // }
 
     public CXXRecordDecl getLambdaClass() {
-        return getChild(CXXRecordDecl.class, 0);
+        return get(LAMBDA_CLASS);
+        // return getChild(CXXRecordDecl.class, 0);
     }
 
     public CompoundStmt getBody() {
@@ -65,15 +96,16 @@ public class LambdaExpr extends Expr {
     }
 
     public List<Expr> getCaptureArguments() {
-        int startIndex = 1;
+        // int startIndex = 1;
+        int startIndex = 0;
         int endIndex = getNumChildren() - 1;
 
         return SpecsCollections.cast(getChildren().subList(startIndex, endIndex), Expr.class);
     }
 
-    public LambdaExprData getLambdaData() {
-        return lambdaData;
-    }
+    // public LambdaExprData getLambdaData() {
+    // return lambdaData;
+    // }
 
     @Override
     public String getCode() {
@@ -102,11 +134,11 @@ public class LambdaExpr extends Expr {
 
         code.append(" ");
 
-        if (lambdaData.isMutable()) {
+        if (get(IS_MUTABLE)) {
             code.append("mutable ");
         }
 
-        if (lambdaData.isHasExplicitResultType()) {
+        if (get(HAS_EXPLICIT_RESULT_TYPE)) {
             code.append("-> ");
             code.append(operatorPar.getReturnType().getCode(this)).append(" ");
         }
@@ -124,12 +156,13 @@ public class LambdaExpr extends Expr {
         List<String> captureElements = new ArrayList<>();
 
         // Add default, if present
-        lambdaData.getCaptureDefault().getCode().ifPresent(captureElements::add);
+        get(CAPTURE_DEFAULT).getCode().ifPresent(captureElements::add);
 
         // Add captures, if present
         List<Expr> captureArgs = getCaptureArguments();
+        List<LambdaCaptureKind> captureKinds = get(CAPTURE_KINDS);
         for (int i = 0; i < captureArgs.size(); i++) {
-            LambdaCaptureKind kind = lambdaData.getCaptureKinds().get(i);
+            LambdaCaptureKind kind = captureKinds.get(i);
             captureElements.add(kind.getCode(captureArgs.get(i).getCode()));
         }
 

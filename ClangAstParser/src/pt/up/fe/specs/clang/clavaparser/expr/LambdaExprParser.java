@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
@@ -60,10 +59,10 @@ public class LambdaExprParser extends AClangNodeParser<LambdaExpr> {
 
         // Remaining children should be capture arguments
         List<Expr> captureArguments = toExpr(children);
-
+        throw new RuntimeException("deprecated");
         // System.out.println("CHILDREN:" + children);
-        return ClavaNodeFactory.lambdaExpr(lambdaExprData, exprData, node.getInfo(), lambdaClass, captureArguments,
-                body);
+        // return ClavaNodeFactory.lambdaExpr(lambdaExprData, exprData, node.getInfo(), lambdaClass, captureArguments,
+        // body);
     }
 
 }

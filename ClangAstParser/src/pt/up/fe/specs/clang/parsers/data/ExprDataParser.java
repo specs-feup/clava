@@ -39,6 +39,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
@@ -50,6 +51,8 @@ import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.CharacterKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
+import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
@@ -334,6 +337,25 @@ public class ExprDataParser {
         dataStore.getClavaNodes().queueSetNode(data, OffsetOfExpr.SOURCE_TYPE, lines.nextLine());
         data.set(OffsetOfExpr.COMPONENTS,
                 ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::offsetOfComponent));
+
+        return data;
+    }
+
+    public static DataStore parseLambdaExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.set(LambdaExpr.IS_GENERIC_LAMBDA, LineStreamParsers.oneOrZero(lines));
+        data.set(LambdaExpr.IS_MUTABLE, LineStreamParsers.oneOrZero(lines));
+        data.set(LambdaExpr.HAS_EXPLICIT_PARAMETERS, LineStreamParsers.oneOrZero(lines));
+        data.set(LambdaExpr.HAS_EXPLICIT_RESULT_TYPE, LineStreamParsers.oneOrZero(lines));
+        data.set(LambdaExpr.CAPTURE_DEFAULT, LineStreamParsers.enumFromName(LambdaCaptureDefault.class, lines));
+
+        dataStore.getClavaNodes().queueSetNode(data, LambdaExpr.LAMBDA_CLASS, lines.nextLine());
+
+        data.set(LambdaExpr.CAPTURE_KINDS,
+                ClavaDataParsers.list(lines, dataStore,
+                        (linestream, parserData) -> LineStreamParsers.enumFromName(LambdaCaptureKind.class,
+                                linestream)));
 
         return data;
     }
