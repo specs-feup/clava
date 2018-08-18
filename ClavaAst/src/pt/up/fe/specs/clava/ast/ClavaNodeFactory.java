@@ -34,7 +34,6 @@ import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
@@ -42,7 +41,6 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDefaultInitExpr;
-import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
@@ -205,9 +203,9 @@ public class ClavaNodeFactory {
      * 'decl' nodes
      */
 
-    public static LiteralDecl literalDecl(String code) {
-        return new LiteralDecl(code);
-    }
+    // public static LiteralDecl literalDecl(String code) {
+    // return new LiteralDecl(code);
+    // }
 
     // public static LiteralDecl literalDecl(String code, ClavaNodeInfo info) {
     // return new LiteralDecl(code, info);
@@ -1203,10 +1201,10 @@ public class ClavaNodeFactory {
     // return new InitListExpr(data, exprData, info, initExprs);
     // }
 
-    public static CXXStdInitializerListExpr cxxStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info,
-            Expr subExpr) {
-        return new CXXStdInitializerListExpr(exprData, info, subExpr);
-    }
+    // public static CXXStdInitializerListExpr cxxStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info,
+    // Expr subExpr) {
+    // return new CXXStdInitializerListExpr(exprData, info, subExpr);
+    // }
     //
     // public static UnresolvedLookupExpr unresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls,
     // String qualifier, ExprData exprData, ClavaNodeInfo info) {

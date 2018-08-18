@@ -13,11 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 
 /**
  * Represents a literal piece of code corresponding to a statement.
@@ -27,31 +29,42 @@ import pt.up.fe.specs.clava.ast.decl.data.DeclData;
  */
 public class LiteralDecl extends Decl {
 
-    private final String literalCode;
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> LITERAL_CODE = KeyFactory.string("literalCode");
+
+    /// DATAKEYS END
+
+    public LiteralDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    // private final String literalCode;
 
     /**
      * 
      * 
      * @param literalCode
      */
-    public LiteralDecl(String literalCode) {
-        this(literalCode, ClavaNodeInfo.undefinedInfo());
-    }
-
-    private LiteralDecl(String literalCode, ClavaNodeInfo info) {
-        super(DeclData.empty(), info, Collections.emptyList());
-
-        this.literalCode = literalCode;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LiteralDecl(literalCode, getInfo());
-    }
+    // public LiteralDecl(String literalCode) {
+    // this(literalCode, ClavaNodeInfo.undefinedInfo());
+    // }
+    //
+    // private LiteralDecl(String literalCode, ClavaNodeInfo info) {
+    // super(DeclData.empty(), info, Collections.emptyList());
+    //
+    // this.literalCode = literalCode;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LiteralDecl(literalCode, getInfo());
+    // }
 
     @Override
     public String getCode() {
-        return literalCode;
+        return get(LITERAL_CODE);
+        // return literalCode;
     }
 
 }

@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.CXXStdInitializerListExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
@@ -41,8 +40,8 @@ public class CXXStdInitializerListExprParser extends AClangNodeParser<CXXStdInit
 
         checkNumChildren(children, 1);
         Expr subExpr = toExpr(children.get(0));
-
-        return ClavaNodeFactory.cxxStdInitializerListExpr(exprData, node.getInfo(), subExpr);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.cxxStdInitializerListExpr(exprData, node.getInfo(), subExpr);
     }
 
 }

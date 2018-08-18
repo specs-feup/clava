@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -422,6 +423,14 @@ public class ClavaFactory {
 
     public IncludeDecl includeDecl(Include include) {
         return includeDecl(include, null);
+    }
+
+    public LiteralDecl literalDecl(String code) {
+        DataStore data = newDeclDataStore();
+
+        data.set(LiteralDecl.LITERAL_CODE, code);
+
+        return new LiteralDecl(data, Collections.emptyList());
     }
 
     /// STMTS

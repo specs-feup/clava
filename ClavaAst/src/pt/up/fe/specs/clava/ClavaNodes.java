@@ -103,7 +103,7 @@ public class ClavaNodes {
         }
 
         if (hint instanceof Decl) {
-            return ClavaNodeFactory.literalDecl(code);
+            hint.getFactory().literalDecl(code);
         }
 
         if (hint instanceof Stmt) {

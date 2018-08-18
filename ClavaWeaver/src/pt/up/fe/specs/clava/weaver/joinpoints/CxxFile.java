@@ -22,7 +22,6 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -152,7 +151,7 @@ public class CxxFile extends AFile {
 
     @Override
     public void insertImpl(String position, String code) {
-        Decl literalDecl = ClavaNodeFactory.literalDecl(code);
+        Decl literalDecl = CxxWeaver.getFactory().literalDecl(code);
         CxxActions.insertAsChild(position, getNode(), literalDecl, getWeaverEngine());
     }
 

@@ -184,11 +184,11 @@ public class AstFactory {
     }
 
     public static AType typeLiteral(String code) {
-        return CxxJoinpoints.create(ClavaNodeFactory.literalType(code), null, AType.class);
+        return CxxJoinpoints.create(CxxWeaver.getFactory().literalType(code), null, AType.class);
     }
 
     public static ADecl declLiteral(String code) {
-        return CxxJoinpoints.create(ClavaNodeFactory.literalDecl(code), null, ADecl.class);
+        return CxxJoinpoints.create(CxxWeaver.getFactory().literalDecl(code), null, ADecl.class);
     }
 
     public static AExpression exprLiteral(String code) {
