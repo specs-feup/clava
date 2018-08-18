@@ -35,6 +35,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::USING_DIRECTIVE_DECL: return "UsingDirectiveDecl";
         case clava::DeclNode::NAMESPACE_DECL: return "NamespaceDecl";
         case clava::DeclNode::FRIEND_DECL: return "FriendDecl";
+        case clava::DeclNode::NAMESPACE_ALIAS_DECL: return "NamespaceAliasDecl";
 
 
         default: {

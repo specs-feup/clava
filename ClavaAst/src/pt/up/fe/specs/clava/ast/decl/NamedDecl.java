@@ -21,9 +21,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
@@ -90,36 +88,36 @@ public abstract class NamedDecl extends Decl {
         super(data, children);
     }
 
-    /**
-     * @deprecated
-     * @param declName
-     * @param type
-     * @param declData
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public NamedDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
-
-        set(DECL_NAME, processDeclName(declName));
-        set(ValueDecl.TYPE, processType(type));
-
-        // super(declData, info, children);
-
-        // if (declName != null) {
-        // declName = declName.isEmpty() ? null : declName;
-        // // Preconditions.checkArgument(!declName.isEmpty(),
-        // // "Empty declNames not supported, use null instead (" + getLocation() + ")");
-        // }
-        // this.declName = declName == null ? "" : declName;
-        // this.declName = declName != null && declName.isEmpty() ? null : declName;
-        // this.declName = declName;
-        // Types should be unique
-        // this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type.copy();
-        // this.type.setApp(type.getApp());
-    }
+    // /**
+    // * @deprecated
+    // * @param declName
+    // * @param type
+    // * @param declData
+    // * @param info
+    // * @param children
+    // */
+    // @Deprecated
+    // public NamedDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
+    // Collection<? extends ClavaNode> children) {
+    // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
+    //
+    // set(DECL_NAME, processDeclName(declName));
+    // set(ValueDecl.TYPE, processType(type));
+    //
+    // // super(declData, info, children);
+    //
+    // // if (declName != null) {
+    // // declName = declName.isEmpty() ? null : declName;
+    // // // Preconditions.checkArgument(!declName.isEmpty(),
+    // // // "Empty declNames not supported, use null instead (" + getLocation() + ")");
+    // // }
+    // // this.declName = declName == null ? "" : declName;
+    // // this.declName = declName != null && declName.isEmpty() ? null : declName;
+    // // this.declName = declName;
+    // // Types should be unique
+    // // this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type.copy();
+    // // this.type.setApp(type.getApp());
+    // }
 
     protected String processDeclName(String declName) {
         // return declName == null ? "" : declName;

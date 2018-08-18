@@ -41,6 +41,7 @@ namespace clava {
         USING_DIRECTIVE_DECL,
         NAMESPACE_DECL,
         FRIEND_DECL,
+        NAMESPACE_ALIAS_DECL,
     };
 
     const std::string getName(const DeclNode D);

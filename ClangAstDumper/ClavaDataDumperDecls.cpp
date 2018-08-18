@@ -10,39 +10,40 @@
 #include <map>
 #include <string>
 
-const std::map<const std::string, clava::DeclNode > clava::DECL_DATA_MAP = {
-        {"CXXConstructorDecl", clava::DeclNode::CXX_CONSTRUCTOR_DECL},
-        {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
-        {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
-        {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
-        {"FieldDecl", clava::DeclNode::FIELD_DECL},
-        {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
-        {"NamespaceAliasDecl", clava::DeclNode::NAMED_DECL},
-        {"ObjCImplementationDecl", clava::DeclNode::NAMED_DECL},
-        {"ParmVarDecl", clava::DeclNode::PARM_VAR_DECL},
-        {"TemplateDecl", clava::DeclNode::NAMED_DECL},
-        {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
+const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
+        {"CXXConstructorDecl",                     clava::DeclNode::CXX_CONSTRUCTOR_DECL},
+        {"CXXConversionDecl",                      clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXDestructorDecl",                      clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXMethodDecl",                          clava::DeclNode::CXX_METHOD_DECL},
+        {"FieldDecl",                              clava::DeclNode::FIELD_DECL},
+        {"FunctionDecl",                           clava::DeclNode::FUNCTION_DECL},
+        //{"NamespaceAliasDecl",                     clava::DeclNode::NAMED_DECL},
+        {"ObjCImplementationDecl",                 clava::DeclNode::NAMED_DECL},
+        {"ParmVarDecl",                            clava::DeclNode::PARM_VAR_DECL},
+        {"TemplateDecl",                           clava::DeclNode::NAMED_DECL},
+        {"TemplateTypeParmDecl",                   clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         //{"TypedefDecl", clava::DeclNode::NAMED_DECL},
-        {"TypeDecl", clava::DeclNode::TYPE_DECL},
-        {"EnumDecl", clava::DeclNode::ENUM_DECL},
-        {"RecordDecl", clava::DeclNode::RECORD_DECL},
-        {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
-        {"ClassTemplateSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"TypeDecl",                               clava::DeclNode::TYPE_DECL},
+        {"EnumDecl",                               clava::DeclNode::ENUM_DECL},
+        {"RecordDecl",                             clava::DeclNode::RECORD_DECL},
+        {"CXXRecordDecl",                          clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplateSpecializationDecl",        clava::DeclNode::CXX_RECORD_DECL},
         {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
-        {"VarDecl", clava::DeclNode::VAR_DECL},
-        {"EnumConstantDecl", clava::DeclNode::VALUE_DECL},
-        {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
-        {"UsingShadowDecl", clava::DeclNode::NAMED_DECL},
-        {"TypeAliasDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
-        {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
-        {"AccessSpecDecl", clava::DeclNode::ACCESS_SPEC_DECL},
-        {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
-        {"NamespaceDecl", clava::DeclNode::NAMESPACE_DECL},
+        {"VarDecl",                                clava::DeclNode::VAR_DECL},
+        {"EnumConstantDecl",                       clava::DeclNode::VALUE_DECL},
+        {"NonTypeTemplateParmDecl",                clava::DeclNode::VALUE_DECL},
+        {"UsingShadowDecl",                        clava::DeclNode::NAMED_DECL},
+        {"TypeAliasDecl",                          clava::DeclNode::TYPEDEF_NAME_DECL},
+        {"TypedefDecl",                            clava::DeclNode::TYPEDEF_NAME_DECL},
+        {"AccessSpecDecl",                         clava::DeclNode::ACCESS_SPEC_DECL},
+        {"UsingDirectiveDecl",                     clava::DeclNode::USING_DIRECTIVE_DECL},
+        {"NamespaceDecl",                          clava::DeclNode::NAMESPACE_DECL},
+        {"NamespaceAliasDecl",                     clava::DeclNode::NAMESPACE_ALIAS_DECL},
+
 };
 
 
-
-void clava::ClavaDataDumper::dump(const Decl* D) {
+void clava::ClavaDataDumper::dump(const Decl *D) {
 
     // Get classname
     const std::string classname = clava::getClassName(D);
@@ -51,64 +52,89 @@ void clava::ClavaDataDumper::dump(const Decl* D) {
     DeclNode declNode = DECL_DATA_MAP.count(classname) == 1 ? DECL_DATA_MAP.find(classname)->second : DeclNode::DECL;
 
     dump(declNode, D);
+
 }
 
-void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl* D) {
+void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
     // Dump header
     llvm::errs() << getDataName(declNode) << "\n";
     llvm::errs() << clava::getId(D, id) << "\n";
     //DumpHeader(getDataName(declNode), D);
 
-    switch(declNode) {
+    switch (declNode) {
         case clava::DeclNode::DECL:
-            DumpDeclData(D); break;
+            DumpDeclData(D);
+            break;
         case clava::DeclNode::NAMED_DECL:
-            DumpNamedDeclData(static_cast<const NamedDecl *>(D)); break;
+            DumpNamedDeclData(static_cast<const NamedDecl *>(D));
+            break;
         case clava::DeclNode::TYPE_DECL:
-            DumpTypeDeclData(static_cast<const TypeDecl *>(D)); break;
+            DumpTypeDeclData(static_cast<const TypeDecl *>(D));
+            break;
         case clava::DeclNode::TAG_DECL:
-            DumpTagDeclData(static_cast<const TagDecl *>(D)); break;
+            DumpTagDeclData(static_cast<const TagDecl *>(D));
+            break;
         case clava::DeclNode::ENUM_DECL:
-            DumpEnumDeclData(static_cast<const EnumDecl *>(D)); break;
+            DumpEnumDeclData(static_cast<const EnumDecl *>(D));
+            break;
         case clava::DeclNode::RECORD_DECL:
-            DumpRecordDeclData(static_cast<const RecordDecl *>(D)); break;
+            DumpRecordDeclData(static_cast<const RecordDecl *>(D));
+            break;
         case clava::DeclNode::CXX_RECORD_DECL:
-            DumpCXXRecordDeclData(static_cast<const CXXRecordDecl *>(D)); break;
+            DumpCXXRecordDeclData(static_cast<const CXXRecordDecl *>(D));
+            break;
         case clava::DeclNode::VALUE_DECL:
-            DumpValueDeclData(static_cast<const ValueDecl *>(D)); break;
+            DumpValueDeclData(static_cast<const ValueDecl *>(D));
+            break;
         case clava::DeclNode::DECLARATOR_DECL:
-            DumpDeclaratorDeclData(static_cast<const DeclaratorDecl *>(D)); break;
+            DumpDeclaratorDeclData(static_cast<const DeclaratorDecl *>(D));
+            break;
         case clava::DeclNode::FIELD_DECL:
-                DumpFieldDeclData(static_cast<const FieldDecl *>(D)); break;
+            DumpFieldDeclData(static_cast<const FieldDecl *>(D));
+            break;
         case clava::DeclNode::FUNCTION_DECL:
-            DumpFunctionDeclData(static_cast<const FunctionDecl *>(D)); break;
+            DumpFunctionDeclData(static_cast<const FunctionDecl *>(D));
+            break;
         case clava::DeclNode::CXX_METHOD_DECL:
-            DumpCXXMethodDeclData(static_cast<const CXXMethodDecl *>(D)); break;
+            DumpCXXMethodDeclData(static_cast<const CXXMethodDecl *>(D));
+            break;
         case clava::DeclNode::CXX_CONSTRUCTOR_DECL:
-            DumpCXXConstructorDeclData(static_cast<const CXXConstructorDecl *>(D)); break;
+            DumpCXXConstructorDeclData(static_cast<const CXXConstructorDecl *>(D));
+            break;
         case clava::DeclNode::VAR_DECL:
-            DumpVarDeclData(static_cast<const VarDecl *>(D)); break;
+            DumpVarDeclData(static_cast<const VarDecl *>(D));
+            break;
         case clava::DeclNode::PARM_VAR_DECL:
-            DumpParmVarDeclData(static_cast<const ParmVarDecl *>(D)); break;
+            DumpParmVarDeclData(static_cast<const ParmVarDecl *>(D));
+            break;
         case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL:
-            DumpTemplateTypeParmDeclData(static_cast<const TemplateTypeParmDecl *>(D)); break;
+            DumpTemplateTypeParmDeclData(static_cast<const TemplateTypeParmDecl *>(D));
+            break;
         case clava::DeclNode::TYPEDEF_NAME_DECL:
-            DumpTypedefNameDeclData(static_cast<const TypedefNameDecl *>(D)); break;
+            DumpTypedefNameDeclData(static_cast<const TypedefNameDecl *>(D));
+            break;
         case clava::DeclNode::ACCESS_SPEC_DECL:
-            DumpAccessSpecDeclData(static_cast<const AccessSpecDecl *>(D)); break;
+            DumpAccessSpecDeclData(static_cast<const AccessSpecDecl *>(D));
+            break;
         case clava::DeclNode::USING_DECL:
-            DumpUsingDeclData(static_cast<const UsingDecl *>(D)); break;
+            DumpUsingDeclData(static_cast<const UsingDecl *>(D));
+            break;
         case clava::DeclNode::USING_DIRECTIVE_DECL:
-            DumpUsingDirectiveDeclData(static_cast<const UsingDirectiveDecl *>(D)); break;
+            DumpUsingDirectiveDeclData(static_cast<const UsingDirectiveDecl *>(D));
+            break;
         case clava::DeclNode::NAMESPACE_DECL:
-            DumpNamespaceDeclData(static_cast<const NamespaceDecl *>(D)); break;
+            DumpNamespaceDeclData(static_cast<const NamespaceDecl *>(D));
+            break;
+        case clava::DeclNode::NAMESPACE_ALIAS_DECL:
+            DumpNamespaceAliasDeclData(static_cast<const NamespaceAliasDecl *>(D));
+            break;
         default:
-            throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
+            throw std::invalid_argument(
+                    "ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
 
 
     }
 }
-
 
 
 void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
@@ -220,7 +246,7 @@ void clava::ClavaDataDumper::DumpCXXRecordDeclData(const CXXRecordDecl *D) {
     // Hierarchy
     DumpRecordDeclData(D);
 
-    if(D->hasDefinition()) {
+    if (D->hasDefinition()) {
         clava::dump(D->getNumBases());
         for (const auto &I : D->bases()) {
             clava::dump(I, id);
@@ -257,15 +283,12 @@ void clava::ClavaDataDumper::DumpDeclaratorDeclData(const DeclaratorDecl *D) {
 }
 
 
-
 void clava::ClavaDataDumper::DumpFieldDeclData(const FieldDecl *D) {
     // Hierarchy
     DumpDeclaratorDeclData(D);
 
     clava::dump(D->isMutable());
 }
-
-
 
 
 void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
@@ -288,9 +311,9 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
 
     // Template specialization args
     auto templateSpecializationArgs = D->getTemplateSpecializationArgs();
-    if(templateSpecializationArgs != nullptr) {
+    if (templateSpecializationArgs != nullptr) {
         clava::dump(templateSpecializationArgs->size());
-        for(auto templateArg : templateSpecializationArgs->asArray()) {
+        for (auto templateArg : templateSpecializationArgs->asArray()) {
             clava::dump(templateArg, id);
         }
     } else {
@@ -453,10 +476,10 @@ void clava::ClavaDataDumper::DumpTemplateTypeParmDeclData(const TemplateTypeParm
 
     clava::dump(D->isParameterPack());
 
-    if(D->hasDefaultArgument()) {
+    if (D->hasDefaultArgument()) {
         clava::dump(clava::getId(D->getDefaultArgument(), id));
     } else {
-        clava::dump(clava::getId((const Type*) nullptr, id));
+        clava::dump(clava::getId((const Type *) nullptr, id));
     }
 
 }
@@ -502,5 +525,14 @@ void clava::ClavaDataDumper::DumpNamespaceDeclData(const NamespaceDecl *D) {
     DumpNamedDeclData(D);
 
     clava::dump(clava::getSource(Context, D->getSourceRange()));
+}
+
+void clava::ClavaDataDumper::DumpNamespaceAliasDeclData(const NamespaceAliasDecl *D) {
+
+    // Hierarchy
+    DumpNamedDeclData(D);
+
+    clava::dump(clava::getSource(Context, D->getQualifierLoc().getSourceRange()));
+    clava::dump(clava::getId(D->getAliasedNamespace(), id));
 }
 

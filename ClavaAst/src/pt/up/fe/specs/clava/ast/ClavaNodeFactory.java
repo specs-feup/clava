@@ -34,8 +34,6 @@ import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
-import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
-import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -78,7 +76,6 @@ import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
-import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.clava.omp.OMPDirective;
 
@@ -477,16 +474,16 @@ public class ClavaNodeFactory {
     // return new FunctionTemplateDecl(declName, specializations, declData, info, templateParameters, templateDecl);
     // }
 
-    public static NullDecl nullDecl(ClavaNodeInfo info) {
-        return new NullDecl(info);
-    }
+    // public static NullDecl nullDecl(ClavaNodeInfo info) {
+    // return new NullDecl(info);
+    // }
 
-    public static NamespaceAliasDecl namespaceAliasDecl(String nestedPrefix, DeclRef declInfo, String declName,
-            DeclData declData,
-            ClavaNodeInfo info) {
-
-        return new NamespaceAliasDecl(nestedPrefix, declInfo, declName, declData, info);
-    }
+    // public static NamespaceAliasDecl namespaceAliasDecl(String nestedPrefix, DeclRef declInfo, String declName,
+    // DeclData declData,
+    // ClavaNodeInfo info) {
+    //
+    // return new NamespaceAliasDecl(nestedPrefix, declInfo, declName, declData, info);
+    // }
 
     // public static CXXConversionDecl cxxConversionDecl(String declName, Type functionType,
     // FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,

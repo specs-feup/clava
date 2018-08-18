@@ -37,6 +37,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
         {"NamespaceDecl", clava::DeclNode::NAMESPACE_DECL},
         {"FriendDecl", clava::DeclNode::FRIEND_DECL},
+        {"NamespaceAliasDecl", clava::DeclNode::NAMESPACE_ALIAS_DECL},
 
 
 
@@ -102,6 +103,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitNamespaceDeclChildren(static_cast<const NamespaceDecl *>(D), visitedChildren); break;
         case clava::DeclNode::FRIEND_DECL:
             VisitFriendDeclChildren(static_cast<const FriendDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::NAMESPACE_ALIAS_DECL:
+            VisitNamespaceAliasDeclChildren(static_cast<const NamespaceAliasDecl *>(D), visitedChildren); break;
 
 
 
@@ -552,4 +555,12 @@ void ClangAstDumper::VisitFriendDeclChildren(const FriendDecl *D, std::vector<st
     //addChildren(D->decls(), children);
 
     //llvm::errs() << "IS OROGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
+}
+
+void ClangAstDumper::VisitNamespaceAliasDeclChildren(const NamespaceAliasDecl *D, std::vector<std::string> &children) {
+
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
+
+    VisitDeclTop(D->getAliasedNamespace());
 }

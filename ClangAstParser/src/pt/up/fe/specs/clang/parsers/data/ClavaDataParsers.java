@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpeci
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -113,6 +114,11 @@ public class ClavaDataParsers {
      * @return
      */
     public static String literalSource(LineStream lines) {
+        // Check next line is beginning of source
+        String sourceBegin = lines.nextLine();
+        SpecsCheck.checkArgument(sourceBegin.equals("%CLAVA_SOURCE_BEGIN%"),
+                () -> "Expected line to be '%CLAVA_SOURCE_BEGIN%', is '" + sourceBegin + "'");
+
         // Append lines until terminator line is found
         StringBuilder builder = new StringBuilder();
         String currentLine = null;

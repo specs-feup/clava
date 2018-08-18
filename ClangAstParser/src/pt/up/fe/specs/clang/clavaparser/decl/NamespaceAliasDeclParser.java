@@ -18,7 +18,6 @@ import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangDataParsers;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
@@ -50,8 +49,8 @@ public class NamespaceAliasDeclParser extends AClangNodeParser<NamespaceAliasDec
         DeclRef declInfo = parseDeclRef(node.getChild(0));
 
         checkNumChildren(node.getChildren(), 1);
-
-        return ClavaNodeFactory.namespaceAliasDecl(nestedPrefix, declInfo, name, declData, node.getInfo());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.namespaceAliasDecl(nestedPrefix, declInfo, name, declData, node.getInfo());
     }
 
 }

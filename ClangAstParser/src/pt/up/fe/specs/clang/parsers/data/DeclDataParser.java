@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
@@ -351,6 +352,23 @@ public class DeclDataParser {
         DataStore data = parseNamedDeclData(lines, dataStore);
 
         data.add(NamespaceDecl.SOURCE_LITERAL, ClavaDataParsers.literalSource(lines));
+
+        return data;
+    }
+
+    public static DataStore parseNamespaceAliasDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        String nestedPrefix = ClavaDataParsers.literalSource(lines);
+
+        // HACK: For some reason, the last ':' is being dropped when dumping the source
+        if (nestedPrefix.endsWith(":") && !nestedPrefix.endsWith("::")) {
+            nestedPrefix += ":";
+        }
+
+        data.add(NamespaceAliasDecl.NESTED_PREFIX, nestedPrefix);
+        dataStore.getClavaNodes().queueSetNode(data, NamespaceAliasDecl.ALIASED_NAMESPACE, lines.nextLine());
 
         return data;
     }

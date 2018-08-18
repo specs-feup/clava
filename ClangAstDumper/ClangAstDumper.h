@@ -228,6 +228,7 @@ private:
     void VisitUsingDirectiveDeclChildren(const UsingDirectiveDecl *D, std::vector<std::string> &children);
     void VisitNamespaceDeclChildren(const NamespaceDecl *D, std::vector<std::string> &children);
     void VisitFriendDeclChildren(const FriendDecl *D, std::vector<std::string> &children);
+    void VisitNamespaceAliasDeclChildren(const NamespaceAliasDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts
@@ -257,6 +258,7 @@ private:
     void VisitUnaryExprOrTypeTraitExprChildren(const UnaryExprOrTypeTraitExpr *E, std::vector<std::string> &children);
     void VisitCXXNewExprChildren(const CXXNewExpr *E, std::vector<std::string> &children);
     void VisitCXXDeleteExprChildren(const CXXDeleteExpr *E, std::vector<std::string> &children);
+    void VisitSubstNonTypeTemplateParmExprChildren(const SubstNonTypeTemplateParmExpr *E, std::vector<std::string> &children);
 
 
         //void VisitCastExprChildren(const CastExpr *S, std::vector<std::string> &children);

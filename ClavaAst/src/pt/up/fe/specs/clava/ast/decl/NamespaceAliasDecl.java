@@ -13,43 +13,64 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
-import pt.up.fe.specs.clava.ast.type.tag.DeclRef;
 
 public class NamespaceAliasDecl extends NamedDecl {
 
-    private final String nestedPrefix;
-    private final DeclRef declInfo;
+    /// DATAKEYS BEGIN
 
-    public NamespaceAliasDecl(String nestedPrefix, DeclRef declInfo, String declName, DeclData declData,
-            ClavaNodeInfo info) {
-        super(declName, null, declData, info, Collections.emptyList());
+    public final static DataKey<String> NESTED_PREFIX = KeyFactory.string("nestedPrefix");
 
-        this.declInfo = declInfo;
-        this.nestedPrefix = nestedPrefix;
+    public final static DataKey<NamespaceDecl> ALIASED_NAMESPACE = KeyFactory.object("aliasedNamespace",
+            NamespaceDecl.class);
+
+    /// DATAKEYS END
+
+    public NamespaceAliasDecl(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new NamespaceAliasDecl(nestedPrefix, declInfo, getDeclName(), getDeclData(), getInfo());
-    }
+    // private final String nestedPrefix;
+    // private final DeclRef declInfo;
+    //
+    // public NamespaceAliasDecl(String nestedPrefix, DeclRef declInfo, String declName, DeclData declData,
+    // ClavaNodeInfo info) {
+    // super(declName, null, declData, info, Collections.emptyList());
+    //
+    // this.declInfo = declInfo;
+    // this.nestedPrefix = nestedPrefix;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new NamespaceAliasDecl(nestedPrefix, declInfo, getDeclName(), getDeclData(), getInfo());
+    // }
 
-    public DeclRef getAliasedNamespaceRef() {
-        return declInfo;
-    }
+    // public DeclRef getAliasedNamespaceRef() {
+    // return get(ALIASED_NAMESPACE);
+    // // return declInfo;
+    // }
 
-    public Optional<NamespaceDecl> getAliasedNamespace() {
-        return getApp().getNodeTry(declInfo.getDeclId())
-                .map(node -> (NamespaceDecl) node);
+    public NamespaceDecl getAliasedNamespace() {
+        return get(ALIASED_NAMESPACE);
+        // return getApp().getNodeTry(declInfo.getDeclId())
+        // .map(node -> (NamespaceDecl) node);
     }
 
     @Override
     public String getCode() {
-        return "namespace " + getDeclName() + " = " + nestedPrefix + declInfo.getDeclType();
+        // System.out.println("DECL NAME:" + get(DECL_NAME));
+        // System.out.println("QUALIFIED NAME:" + get(QUALIFIED_NAME));
+        // System.out.println("aLIASED DECL NAME:" + get(ALIASED_NAMESPACE).get(DECL_NAME));
+        // System.out.println("ID:" + get(PREVIOUS_ID));
+        // System.out.println("NESTED PREFIX:" + get(NESTED_PREFIX));
+        return "namespace " + get(DECL_NAME) + " = " + get(NESTED_PREFIX) + get(ALIASED_NAMESPACE).get(DECL_NAME);
+        // return "namespace " + getDeclName() + " = " + nestedPrefix + declInfo.getDeclType();
     }
 }

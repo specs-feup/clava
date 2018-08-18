@@ -70,6 +70,8 @@ namespace clava {
         UNARY_EXPR_OR_TYPE_TRAIT_EXPR,
         CXX_NEW_EXPR,
         CXX_DELETE_EXPR,
+        SUBST_NON_TYPE_TEMPLATE_PARM_EXPR,
+
     };
 
     /**

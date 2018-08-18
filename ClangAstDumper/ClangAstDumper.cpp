@@ -17,6 +17,8 @@
 
 //#define DEBUG
 
+//#define VISIT_CHECK
+
 using namespace clang;
 
 ClangAstDumper::ClangAstDumper(ASTContext *Context, int id) : Context(Context), id(id), dataDumper(Context, id)  {};
@@ -32,10 +34,10 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 
     // Check if QualType is the same as the underlying type
     if((void*) T.getTypePtr() == T.getAsOpaquePtr()) {
-
+#ifdef VISIT_CHECK
         clava::dump(TOP_VISIT_START);
         clava::dump(clava::getId(T.getTypePtr(), id));
-
+#endif
 
 /*
         if(dumpType(T.getTypePtr())) {
@@ -55,10 +57,10 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
         //dumpIdToClassMap(T.getTypePtr(), clava::getClassName(T.getTypePtr()));
 
         dumpType(T.getTypePtr());
-
+#ifdef VISIT_CHECK
         clava::dump(TOP_VISIT_END);
         clava::dump(clava::getId(T.getTypePtr(), id));
-
+#endif
         return;
     }
 
@@ -88,8 +90,10 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
         return;
     }
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(T, id));
+#endif
 
     //llvm::errs() << "BRANCH 2 FOR " << T.getAsOpaquePtr() << "\n";
 
@@ -97,8 +101,10 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
     dataDumper.dump(T);
     dumpIdToClassMap(T.getAsOpaquePtr(), "QualType");
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_END);
     clava::dump(clava::getId(T, id));
+#endif
 
     // Dump data
     //dataDumper.dump(clava::TypeNode::TYPE, T);
@@ -122,14 +128,17 @@ void ClangAstDumper::VisitTypeTop(const Type *T) {
     if(T == nullptr) {
         return;
     }
-
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(T, id));
+#endif
 
     TypeVisitor::Visit(T);
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_END);
     clava::dump(clava::getId(T, id));
+#endif
 }
 
 void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
@@ -139,13 +148,17 @@ void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
         return;
     }
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(Node, id));
+#endif
 
     ConstStmtVisitor::Visit(Node);
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_END);
     clava::dump(clava::getId(Node, id));
+#endif
 }
 
 void ClangAstDumper::VisitDeclTop(const Decl *Node) {
@@ -153,13 +166,18 @@ void ClangAstDumper::VisitDeclTop(const Decl *Node) {
         return;
     }
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(Node, id));
+#endif
 
     ConstDeclVisitor::Visit(Node);
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_END);
     clava::dump(clava::getId(Node, id));
+#endif
+
 }
 
 void ClangAstDumper::VisitAttrTop(const Attr *Node) {
@@ -167,13 +185,17 @@ void ClangAstDumper::VisitAttrTop(const Attr *Node) {
         return;
     }
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(Node, id));
+#endif
 
     VisitAttr(Node);
 
+#ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_END);
     clava::dump(clava::getId(Node, id));
+#endif
 }
 
 //void ClangAstDumper::log(const char* name, const void* addr) {
@@ -371,18 +393,22 @@ const void ClangAstDumper::addChild(const Decl *addr, std::vector<std::string> &
 
     std::string clavaId = clava::getId(addr, id);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_START);
         clava::dump(clavaId);
     }
+#endif
 
     VisitDeclTop(addr);
     children.push_back(clavaId);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_END);
         clava::dump(clavaId);
     }
+#endif
 
 };
 
@@ -411,53 +437,67 @@ const void ClangAstDumper::addChild(const Stmt *addr, std::vector<std::string> &
 
     std::string clavaId = clava::getId(addr, id);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_START);
         clava::dump(clavaId);
     }
+#endif
 
     VisitStmtTop(addr);
     children.push_back(clavaId);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_END);
         clava::dump(clavaId);
     }
+#endif
+
 };
 
 const void ClangAstDumper::addChild(const Expr *addr, std::vector<std::string> &children) {
     std::string clavaId = clava::getId(addr, id);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_START);
         clava::dump(clavaId);
     }
+#endif
 
     VisitStmtTop(addr);
     children.push_back(clavaId);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_END);
         clava::dump(clavaId);
     }
+#endif
+
 };
 
 const void ClangAstDumper::addChild(const Type *addr, std::vector<std::string> &children) {
 
     std::string clavaId = clava::getId(addr, id);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_START);
         clava::dump(clavaId);
     }
+#endif
 
     VisitTypeTop(addr);
     children.push_back(clavaId);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_END);
         clava::dump(clavaId);
     }
+#endif
 
 };
 
@@ -465,16 +505,18 @@ const void ClangAstDumper::addChild(const QualType &addr, std::vector<std::strin
 
     std::string clavaId = clava::getId(addr, id);
 
+#ifdef VISIT_CHECK
     clava::dump(VISIT_START);
     clava::dump(clavaId);
-
+#endif
 
     VisitTypeTop(addr);
     children.push_back(clavaId);
 
+#ifdef VISIT_CHECK
     clava::dump(VISIT_END);
     clava::dump(clavaId);
-
+#endif
 
 };
 
@@ -482,18 +524,22 @@ const void ClangAstDumper::addChild(const Attr *addr, std::vector<std::string> &
 
     std::string clavaId = clava::getId(addr, id);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_START);
         clava::dump(clavaId);
     }
+#endif
 
     VisitAttrTop(addr);
     children.push_back(clavaId);
 
+#ifdef VISIT_CHECK
     if(addr != nullptr) {
         clava::dump(VISIT_END);
         clava::dump(clavaId);
     }
+#endif
 
 };
 

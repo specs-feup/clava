@@ -295,6 +295,10 @@ void clava::dump(const Qualifiers& qualifiers, ASTContext* Context) {
  * @return
  */
 const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange) {
+
+    // Mark beginning of source
+    clava::dump("%CLAVA_SOURCE_BEGIN%");
+
     //const SourceManager &sm = Context->getSourceManager();
 
   /*

@@ -230,6 +230,10 @@ public class NodeDataParser {
     private static void parseNodeDataTop(BiFunction<LineStream, ClangParserData, DataStore> dataParser,
             LineStream lines, ClangParserData data) {
 
+        // if (lines.getLastLineIndex() == 4153) {
+        // System.out.println("HELLOOOOOOOOASOD:");
+        // }
+        // System.out.println("LINE DATA:" + lines.getLastLineIndex());
         DataStore clavaData = dataParser.apply(lines, data);
 
         DataStore previousValue = data.get(ClangParserData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);

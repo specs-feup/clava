@@ -102,7 +102,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
             return;
         }
 
-        ClavaNode node = parseNode(nodeId, classname, data);
+        ClavaNode node = parseNode(nodeId, classname, data, lineStream);
 
         // If UnsupportedNode, transform to DummyNode
         // node = transformUnsupportedNode(node);
@@ -151,7 +151,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         throw new RuntimeException("ClavaData class not supported:" + data.getClass());
     }
     */
-    private ClavaNode parseNode(String nodeId, String classname, ClangParserData data) {
+    private ClavaNode parseNode(String nodeId, String classname, ClangParserData data, LineStream lineStream) {
         boolean debug = data.get(ClangParserData.DEBUG);
 
         if (classname == null) {
@@ -166,7 +166,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
         if (nodeData == null) {
             throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
-                    + "), data dumper is not being called");
+                    + "), data dumper is not being called (linestream index '" + lineStream.getLastLineIndex() + "')");
             // if (debug)
             // SpecsLogs.msgInfo("No ClavaData for node '" + nodeId + "' (classname: " + classname
             // + "), data dumper is not being called");
@@ -296,6 +296,12 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         }
 
         if (!missingConstructors.contains(classname)) {
+
+            // throw new RuntimeException(
+            // "No builder for node '" + nodeId + "', missing constructor 'new " + classname + "("
+            // + DataStore.class.getSimpleName()
+            // + " data, Collection<? extends ClavaNode> children)'");
+
             missingConstructors.add(classname);
             if (debug) {
                 SpecsLogs
