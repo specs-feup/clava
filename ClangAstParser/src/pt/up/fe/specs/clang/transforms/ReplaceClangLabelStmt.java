@@ -16,7 +16,7 @@ package pt.up.fe.specs.clang.transforms;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.stmt.ClangLabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -33,23 +33,23 @@ public class ReplaceClangLabelStmt implements SimplePreClavaRule {
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
-	if (!(node instanceof ClangLabelStmt)) {
-	    return;
-	}
+        if (!(node instanceof ClangLabelStmt)) {
+            return;
+        }
 
-	ClangLabelStmt clangLabel = (ClangLabelStmt) node;
-	Stmt subStmt = clangLabel.getSubStmt();
+        ClangLabelStmt clangLabel = (ClangLabelStmt) node;
+        Stmt subStmt = clangLabel.getSubStmt();
 
-	// Remove sub-statement from label
-	Preconditions.checkArgument(clangLabel.removeChild(subStmt) != -1);
+        // Remove sub-statement from label
+        Preconditions.checkArgument(clangLabel.removeChild(subStmt) != -1);
 
-	LabelStmt labelStmt = ClavaNodeFactory.labelStmt(clangLabel.getLabel(), clangLabel.getInfo());
+        LabelStmt labelStmt = LegacyToDataStore.getFactory().labelStmt(clangLabel.getLabel());
 
-	// Replace ClangLabel
-	queue.replace(clangLabel, labelStmt);
+        // Replace ClangLabel
+        queue.replace(clangLabel, labelStmt);
 
-	// Insert sub-statement after label
-	queue.moveAfter(labelStmt, subStmt);
+        // Insert sub-statement after label
+        queue.moveAfter(labelStmt, subStmt);
     }
 
 }

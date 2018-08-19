@@ -24,6 +24,8 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::CXX_TRY_STMT: return "CXXTryStmt";
         case clava::StmtNode::CASE_STMT: return "CaseStmt";
         case clava::StmtNode::DEFAULT_STMT: return "CaseStmt";
+        case clava::StmtNode::LABEL_STMT: return "LabelStmt";
+        case clava::StmtNode::GOTO_STMT: return "GotoStmt";
 
 
         // EXPRS

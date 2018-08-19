@@ -40,6 +40,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"NamespaceDecl",                          clava::DeclNode::NAMESPACE_DECL},
         {"NamespaceAliasDecl",                     clava::DeclNode::NAMESPACE_ALIAS_DECL},
         {"LinkageSpecDecl",                        clava::DeclNode::LINKAGE_SPEC_DECL},
+        {"LabelDecl",                              clava::DeclNode::NAMED_DECL},
 
 };
 

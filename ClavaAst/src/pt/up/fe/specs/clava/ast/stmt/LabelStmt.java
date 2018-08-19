@@ -14,37 +14,61 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Optional;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class LabelStmt extends Stmt {
+    /// DATAKEYS BEGIN
 
-    private final String label;
+    public final static DataKey<String> LABEL = KeyFactory.string("label");
 
-    public LabelStmt(String label, ClavaNodeInfo info) {
-	this(label, info, Collections.emptyList());
+    /// DATAKEYS END
+
+    public LabelStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private LabelStmt(String label, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-	super(info, children);
-
-	this.label = label;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-	return new LabelStmt(label, getInfo());
-    }
+    // private final String label;
+    //
+    // public LabelStmt(String label, ClavaNodeInfo info) {
+    // this(label, info, Collections.emptyList());
+    // }
+    //
+    // private LabelStmt(String label, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    //
+    // this.label = label;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LabelStmt(label, getInfo());
+    // }
 
     public String getLabel() {
-	return label;
+        return get(LABEL);
+    }
+
+    public Optional<Stmt> getSubStmt() {
+        if (!hasChildren()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(getChild(Stmt.class, 0));
     }
 
     @Override
     public String getCode() {
-	return label + ":";
+        String code = getLabel() + ":";
+
+        code += getSubStmt().map(stmt -> " " + stmt.getCode()).orElse("");
+
+        return code;
     }
 
 }

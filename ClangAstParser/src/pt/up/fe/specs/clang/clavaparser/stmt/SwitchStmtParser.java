@@ -21,7 +21,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -46,8 +45,8 @@ public class SwitchStmtParser extends AClangNodeParser<SwitchStmt> {
         Preconditions.checkArgument(children.get(0) instanceof NullNodeOld, "Check what to do when not NullNode");
         Expr cond = toExpr(children.get(1));
         Stmt body = toStmt(children.get(2));
-
-        return ClavaNodeFactory.switchStmt(info(node), cond, body);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.switchStmt(info(node), cond, body);
     }
 
 }

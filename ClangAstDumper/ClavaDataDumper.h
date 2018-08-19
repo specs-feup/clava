@@ -123,6 +123,8 @@ namespace clava {
 
         // STMTS
         void DumpStmtData(const Stmt *S);
+        void DumpLabelStmtData(const LabelStmt *S);
+        void DumpGotoStmtData(const GotoStmt *S);
 
 
         // EXPRS

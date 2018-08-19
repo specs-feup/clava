@@ -49,11 +49,8 @@ import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
 import pt.up.fe.specs.clava.ast.stmt.ClangLabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
-import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
-import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -783,9 +780,9 @@ public class ClavaNodeFactory {
     // return new CompoundStmt(info, children);
     // }
 
-    public static SwitchStmt switchStmt(ClavaNodeInfo info, Expr cond, Stmt body) {
-        return new SwitchStmt(info, cond, body);
-    }
+    // public static SwitchStmt switchStmt(ClavaNodeInfo info, Expr cond, Stmt body) {
+    // return new SwitchStmt(info, cond, body);
+    // }
 
     // public static CaseStmt caseStmt(ClavaNodeInfo info, Expr lhs, Stmt subStmt) {
     // return new CaseStmt(info, lhs, subStmt);
@@ -873,13 +870,13 @@ public class ClavaNodeFactory {
         return new ClangLabelStmt(label, info, subStmt);
     }
 
-    public static LabelStmt labelStmt(String label, ClavaNodeInfo info) {
-        return new LabelStmt(label, info);
-    }
+    // public static LabelStmt labelStmt(String label, ClavaNodeInfo info) {
+    // return new LabelStmt(label, info);
+    // }
 
-    public static WrapperStmt wrapperStmt(ClavaNodeInfo info, ClavaNode wrappedNode) {
-        return new WrapperStmt(info, wrappedNode);
-    }
+    // public static WrapperStmt wrapperStmt(ClavaNodeInfo info, ClavaNode wrappedNode) {
+    // return new WrapperStmt(info, wrappedNode);
+    // }
     //
     // public static CXXCatchStmt cxxCatchStmt(ClavaNodeInfo info, Decl exception, CompoundStmt catchBody) {
     // return new CXXCatchStmt(info, exception, catchBody);

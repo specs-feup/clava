@@ -68,11 +68,14 @@ import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
+import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
@@ -450,6 +453,23 @@ public class ClavaFactory {
 
     /// STMTS
 
+    public LabelStmt labelStmt(String label) {
+        return labelStmt(label, null);
+    }
+
+    public LabelStmt labelStmt(String label, Stmt subStmt) {
+        DataStore data = newStmtDataStore()
+                .set(LabelStmt.LABEL, label);
+
+        return new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
+    }
+
+    public WrapperStmt wrapperStmt(ClavaNode node) {
+        DataStore data = newStmtDataStore();
+
+        return new WrapperStmt(data, Arrays.asList(node));
+    }
+
     public NullStmt nullStmt() {
         return new NullStmt(newStmtDataStore(), Collections.emptyList());
     }
@@ -546,6 +566,12 @@ public class ClavaFactory {
         DataStore caseStmtData = newStmtDataStore();
 
         return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, subStmt));
+    }
+
+    public SwitchStmt switchStmt(Expr condition, Stmt body) {
+        DataStore data = newStmtDataStore();
+
+        return new SwitchStmt(data, Arrays.asList(condition, body));
     }
 
     /// ATTRIBUTES

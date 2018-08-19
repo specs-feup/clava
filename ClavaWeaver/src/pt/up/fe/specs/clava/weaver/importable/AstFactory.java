@@ -399,8 +399,7 @@ public class AstFactory {
     }
 
     public static AStatement switchStmt(AExpression condition, AStatement body) {
-        Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(),
-                (Stmt) body.getNode());
+        Stmt switchStmt = CxxWeaver.getFactory().switchStmt((Expr) condition.getNode(), (Stmt) body.getNode());
 
         return CxxJoinpoints.create(switchStmt, null, AStatement.class);
     }
@@ -442,7 +441,7 @@ public class AstFactory {
         }
 
         CompoundStmt body = CxxWeaver.getFactory().compoundStmt(statements);
-        Stmt switchStmt = ClavaNodeFactory.switchStmt(ClavaNodeInfo.undefinedInfo(), (Expr) condition.getNode(), body);
+        Stmt switchStmt = CxxWeaver.getFactory().switchStmt((Expr) condition.getNode(), body);
 
         return CxxJoinpoints.create(switchStmt, null, AStatement.class);
     }

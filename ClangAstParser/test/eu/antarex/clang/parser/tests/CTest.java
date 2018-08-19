@@ -116,4 +116,9 @@ public class CTest {
     public void testSwitch() {
         new CTester("switch.c").test();
     }
+
+    @Test
+    public void testGoto() {
+        new CTester("goto.c").test();
+    }
 }

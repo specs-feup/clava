@@ -14,8 +14,11 @@
 package pt.up.fe.specs.clang.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
+
+import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -30,6 +33,7 @@ import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
+import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -62,7 +66,9 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(CXXCatchStmt.class, ChildrenAdapter::adaptCXXCatchStmt);
         CHILDREN_ADAPTERS.put(CXXTryStmt.class, ChildrenAdapter::adaptCXXTryStmt);
         CHILDREN_ADAPTERS.put(CaseStmt.class, ChildrenAdapter::adaptCaseStmt);
-        CHILDREN_ADAPTERS.put(DefaultStmt.class, ChildrenAdapter::adaptDefaultStmt);
+        CHILDREN_ADAPTERS.put(DefaultStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
+        CHILDREN_ADAPTERS.put(LabelStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
+        // CHILDREN_ADAPTERS.put(GotoStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
     }
 
     private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
@@ -213,15 +219,50 @@ public class ChildrenAdapter {
         return adaptedChildren;
     }
 
-    private static List<ClavaNode> adaptDefaultStmt(List<ClavaNode> children, ClavaContext context) {
-        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+    // private static List<ClavaNode> adaptDefaultStmt(List<ClavaNode> children, ClavaContext context) {
+    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+    //
+    // adaptedChildren.add(toStmt(children.get(0), context));
+    //
+    // return adaptedChildren;
+    // }
 
-        adaptedChildren.add(toStmt(children.get(0), context));
+    // private static List<ClavaNode> adaptLabelStmt(List<ClavaNode> children, ClavaContext context) {
+    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+    //
+    // adaptedChildren.add(toStmt(children.get(0), context));
+    //
+    // return adaptedChildren;
+    // }
 
-        return adaptedChildren;
+    private static BiFunction<List<ClavaNode>, ClavaContext, List<ClavaNode>> adapt(AdaptationType... adaptations) {
+        return adapt(Arrays.asList(adaptations));
     }
 
-    private static ClavaNode toCompoundStmt(ClavaNode clavaNode, ClavaContext context) {
+    private static BiFunction<List<ClavaNode>, ClavaContext, List<ClavaNode>> adapt(List<AdaptationType> adaptations) {
+        return (children, context) -> {
+            Preconditions.checkArgument(children.size() <= adaptations.size());
+
+            List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+            for (int i = 0; i < children.size(); i++) {
+                ClavaNode node = adaptations.get(i).adapt(children.get(i), context);
+                adaptedChildren.add(node);
+            }
+
+            return adaptedChildren;
+        };
+
+    }
+    // private static List<ClavaNode> adapt(List<ClavaNode> children, ClavaContext context) {
+    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+    //
+    // adaptedChildren.add(toStmt(children.get(0), context));
+    //
+    // return adaptedChildren;
+    // }
+
+    static ClavaNode toCompoundStmt(ClavaNode clavaNode, ClavaContext context) {
         return toCompoundStmt(clavaNode, true, context);
     }
 
@@ -257,7 +298,7 @@ public class ChildrenAdapter {
         return context.get(ClavaContext.FACTORY).compoundStmt((Stmt) clavaNode).set(CompoundStmt.IS_NAKED);
     }
 
-    private static ClavaNode toStmt(ClavaNode clavaNode, ClavaContext context) {
+    static ClavaNode toStmt(ClavaNode clavaNode, ClavaContext context) {
         return toStmt(clavaNode, true, context);
     }
 

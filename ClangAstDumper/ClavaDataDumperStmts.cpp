@@ -11,6 +11,8 @@
 #include <map>
 
 const std::map<const std::string, clava::StmtNode > clava::STMT_DATA_MAP = {
+        {"LabelStmt", clava::StmtNode::LABEL_STMT},
+        {"GotoStmt", clava::StmtNode::GOTO_STMT},
 
 };
 
@@ -88,6 +90,16 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
     switch(stmtNode) {
         case clava::StmtNode::STMT:
             DumpStmtData(S); break;
+        case clava::StmtNode::LABEL_STMT:
+            DumpLabelStmtData(static_cast<const LabelStmt *>(S)); break;
+        case clava::StmtNode::GOTO_STMT:
+            DumpGotoStmtData(static_cast<const GotoStmt *>(S)); break;
+
+
+
+
+
+
         case clava::StmtNode::EXPR:
             DumpExprData(static_cast<const Expr *>(S)); break;
         case clava::StmtNode::CAST_EXPR:
@@ -168,6 +180,20 @@ void clava::ClavaDataDumper::DumpStmtData(const Stmt *S) {
     // Original source range
     clava::dumpSourceInfo(Context, S->getLocStart(), S->getLocEnd());
 
+}
+
+void clava::ClavaDataDumper::DumpLabelStmtData(const LabelStmt *S) {
+    // Hierarchy
+    DumpStmtData(S);
+
+    clava::dump(S->getName());
+}
+
+void clava::ClavaDataDumper::DumpGotoStmtData(const GotoStmt *S) {
+    // Hierarchy
+    DumpStmtData(S);
+
+    clava::dump(clava::getId(S->getLabel(), id));
 }
 
 

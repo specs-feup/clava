@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -71,7 +70,7 @@ public class ClavaNodes {
         }
 
         if (node instanceof Expr) {
-            return LegacyToDataStore.getFactory().exprStmt((Expr) node);
+            return node.getFactory().exprStmt((Expr) node);
             // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
@@ -81,7 +80,7 @@ public class ClavaNodes {
         }
 
         if (node instanceof Comment || node instanceof Pragma) {
-            return ClavaNodeFactory.wrapperStmt(node.getInfo(), node);
+            return node.getFactoryWithNode().wrapperStmt(node);
         }
 
         throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");

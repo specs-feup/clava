@@ -43,6 +43,7 @@ namespace clava {
         FRIEND_DECL,
         NAMESPACE_ALIAS_DECL,
         LINKAGE_SPEC_DECL,
+        LABEL_DECL,
     };
 
     const std::string getName(const DeclNode D);
