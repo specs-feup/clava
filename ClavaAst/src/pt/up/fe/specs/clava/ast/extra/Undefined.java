@@ -27,9 +27,11 @@ import pt.up.fe.specs.clava.ast.DummyNode;
 /**
  * Generic dummy node, for testing purposes.
  * 
+ * @deprecated
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class Undefined extends ClavaNode implements DummyNode {
 
     /// DATAKEYS BEGIN

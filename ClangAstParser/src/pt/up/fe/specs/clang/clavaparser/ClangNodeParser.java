@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -108,7 +107,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
             return null;
         }
 
-        return ClavaParserUtils.cast(node, Stmt.class, ClavaNodeFactory::dummyStmt);
+        return ClavaParserUtils.cast(node, Stmt.class, LegacyToDataStore.getFactory()::dummyStmt);
     }
 
     /**

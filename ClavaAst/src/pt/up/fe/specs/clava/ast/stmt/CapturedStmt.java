@@ -14,24 +14,28 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 public class CapturedStmt extends Stmt {
 
-    public CapturedStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-        super(info, children);
+    public CapturedStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CapturedStmt(getInfo(), Collections.emptyList());
-    }
+    // public CapturedStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new CapturedStmt(getInfo(), Collections.emptyList());
+    // }
 
     public List<Stmt> getStatements() {
         return getChildren(Stmt.class);

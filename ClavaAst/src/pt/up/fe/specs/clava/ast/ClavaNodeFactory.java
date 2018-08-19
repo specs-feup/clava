@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,14 +43,7 @@ import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
-import pt.up.fe.specs.clava.ast.omp.OMPParallelDirective;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
-import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
-import pt.up.fe.specs.clava.ast.stmt.ClangLabelStmt;
-import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
-import pt.up.fe.specs.clava.ast.stmt.NullStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.ast.stmt.legacy.DummyStmtLegacy;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
@@ -60,7 +52,6 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.data.TypeData;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
-import pt.up.fe.specs.clava.omp.OMPDirective;
 
 /**
  * Contains methods to create Clava nodes.
@@ -743,9 +734,9 @@ public class ClavaNodeFactory {
     * 'stmt' nodes
     */
 
-    public static DummyStmt dummyStmt(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
-        return new DummyStmtLegacy(content, info, children);
-    }
+    // public static DummyStmt dummyStmt(String content, ClavaNodeInfo info, List<? extends ClavaNode> children) {
+    // return new DummyStmtLegacy(content, info, children);
+    // }
 
     /**
      * @deprecated use ClavaFactory
@@ -771,10 +762,10 @@ public class ClavaNodeFactory {
      * @param node
      * @return
      */
-    @Deprecated
-    public static DummyStmt dummyStmt(ClavaNode node) {
-        return new DummyStmtLegacy(node.toContentString(), node.getInfo(), node.getChildren());
-    }
+    // @Deprecated
+    // public static DummyStmt dummyStmt(ClavaNode node) {
+    // return new DummyStmtLegacy(node.toContentString(), node.getInfo(), node.getChildren());
+    // }
 
     // public static CompoundStmt compoundStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
     // return new CompoundStmt(info, children);
@@ -862,13 +853,13 @@ public class ClavaNodeFactory {
     // return new CXXForRangeStmt(info, range, beginEnd, cond, inc, loopVar, body);
     // }
 
-    public static CapturedStmt capturedStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-        return new CapturedStmt(info, children);
-    }
+    // public static CapturedStmt capturedStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
+    // return new CapturedStmt(info, children);
+    // }
 
-    public static ClangLabelStmt clangLabelStmt(String label, ClavaNodeInfo info, Stmt subStmt) {
-        return new ClangLabelStmt(label, info, subStmt);
-    }
+    // public static ClangLabelStmt clangLabelStmt(String label, ClavaNodeInfo info, Stmt subStmt) {
+    // return new ClangLabelStmt(label, info, subStmt);
+    // }
 
     // public static LabelStmt labelStmt(String label, ClavaNodeInfo info) {
     // return new LabelStmt(label, info);
@@ -890,9 +881,9 @@ public class ClavaNodeFactory {
     // return new DoStmt(info, body, condition);
     // }
 
-    public static NullStmt nullStmt(ClavaNodeInfo info) {
-        return new NullStmt(info);
-    }
+    // public static NullStmt nullStmt(ClavaNodeInfo info) {
+    // return new NullStmt(info);
+    // }
 
     /**
      * @deprecated use ClavaFactory 'expr' nodes
@@ -1287,11 +1278,11 @@ public class ClavaNodeFactory {
     /*
      * OpenMP Nodes
      */
-    public static OMPParallelDirective ompParallelDirective(OMPDirective directive, ClavaNodeInfo info,
-            Stmt associatedStmt) {
-
-        return new OMPParallelDirective(directive, info, associatedStmt);
-    }
+    // public static OMPParallelDirective ompParallelDirective(OMPDirective directive, ClavaNodeInfo info,
+    // Stmt associatedStmt) {
+    //
+    // return new OMPParallelDirective(directive, info, associatedStmt);
+    // }
 
     // public static OmpPragma ompPragma(OmpDirectiveKind directiveKind, Map<OmpClauseKind, OmpClause> clauses,
     // ClavaNodeInfo info) {

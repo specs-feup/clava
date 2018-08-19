@@ -433,12 +433,12 @@ public class ClavaNodes {
     // ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
     // }
 
-    public static Stmt getNodeOrNullStmt(Stmt node) {
-        if (node == null) {
-            return ClavaNodeFactory.nullStmt(ClavaNodeInfo.undefinedInfo());
-        }
-
-        return node;
-    }
+    // public static Stmt getNodeOrNullStmt(Stmt node) {
+    // if (node == null) {
+    // return ClavaNodeFactory.nullStmt(ClavaNodeInfo.undefinedInfo());
+    // }
+    //
+    // return node;
+    // }
 
 }

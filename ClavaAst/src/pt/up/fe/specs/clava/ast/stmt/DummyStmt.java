@@ -18,7 +18,6 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.DummyNode;
 
@@ -40,9 +39,9 @@ public class DummyStmt extends Stmt implements DummyNode {
      * @param info
      * @param children
      */
-    public DummyStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
+    // public DummyStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
 
     public String getNodeCode() {
         return "/* Dummy statement '" + getContent() + "'*/";

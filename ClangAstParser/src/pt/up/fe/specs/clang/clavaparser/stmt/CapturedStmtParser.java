@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -36,7 +35,8 @@ public class CapturedStmtParser extends AClangNodeParser<CapturedStmt> {
 
         List<Stmt> statements = toStmt(children);
         // statements.forEach(stmt -> System.out.println("STMT:" + stmt.getCode()));
-        return ClavaNodeFactory.capturedStmt(node.getInfo(), statements);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.capturedStmt(node.getInfo(), statements);
     }
 
 }

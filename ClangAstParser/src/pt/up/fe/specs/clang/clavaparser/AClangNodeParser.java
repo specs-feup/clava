@@ -41,7 +41,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -50,7 +49,6 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.DummyType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -173,10 +171,10 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
         // return node.toInfo();
     }
 
-    public DummyStmt newDummyStmt(ClangNode node) {
-        return ClavaNodeFactory.dummyStmt(node.getDescription(), info(node),
-                node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
-    }
+    // public DummyStmt newDummyStmt(ClangNode node) {
+    // return ClavaNodeFactory.dummyStmt(node.getDescription(), info(node),
+    // node.getChildrenStream().map(child -> converter.parse(child)).collect(Collectors.toList()));
+    // }
 
     public DummyType newDummyType(ClangNode node) {
         DummyType type = LegacyToDataStore.getFactory().dummyType(node.getDescription());

@@ -23,11 +23,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -58,7 +56,7 @@ public class CompoundStmt extends Stmt {
                 // .filter(child -> !(child instanceof NullNode))
                 // Transform Undefined nodes into DummyStmt nodes
                 // TODO: to remove after Undefined is no longer used
-                .map(child -> child instanceof Undefined ? ClavaNodeFactory.dummyStmt(child) : child)
+                // .map(child -> child instanceof Undefined ? ClavaNodeFactory.dummyStmt(child) : child)
                 // Transform Expr nodes into ExprStmt nodes
                 // .map(child -> child instanceof Expr ? ClavaNodesLegacy.exprStmt((Expr) child) : child)
                 .map(child -> child instanceof Expr ? LegacyToDataStore.getFactory().exprStmt((Expr) child)

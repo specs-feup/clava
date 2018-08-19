@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LiteralNode;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -65,6 +66,7 @@ import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
+import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
@@ -574,11 +576,25 @@ public class ClavaFactory {
         return new SwitchStmt(data, Arrays.asList(condition, body));
     }
 
+    public DummyStmt dummyStmt(ClavaNode node) {
+        DataStore data = newStmtDataStore()
+                .put(DummyNode.DUMMY_CONTENT, node.toString());
+
+        return new DummyStmt(data, node.getChildren());
+    }
+
+    public DummyStmt dummyStmt(String dummyContent) {
+        DataStore data = newStmtDataStore()
+                .put(DummyNode.DUMMY_CONTENT, dummyContent);
+
+        return new DummyStmt(data, Collections.emptyList());
+    }
+
     /// ATTRIBUTES
 
     public DummyAttr dummyAttr(String dummyContent) {
         DataStore data = newAttrDataStore()
-                .put(DummyDecl.DUMMY_CONTENT, dummyContent);
+                .put(DummyNode.DUMMY_CONTENT, dummyContent);
 
         return new DummyAttr(data, Collections.emptyList());
     }

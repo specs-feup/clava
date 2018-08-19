@@ -121,7 +121,6 @@ import pt.up.fe.specs.clang.clavaparser.stmt.DefaultStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.DoStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.ForStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.IfStmtParser;
-import pt.up.fe.specs.clang.clavaparser.stmt.LabelStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.NullStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.SwitchStmtParser;
 import pt.up.fe.specs.clang.clavaparser.stmt.WhileStmtParser;
@@ -140,7 +139,6 @@ import pt.up.fe.specs.clang.transforms.RemoveClangComments;
 import pt.up.fe.specs.clang.transforms.RemoveDefaultInitializers;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemoveImplicitConstructors;
-import pt.up.fe.specs.clang.transforms.ReplaceClangLabelStmt;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
@@ -176,7 +174,7 @@ public class ClavaParser implements AutoCloseable {
             new AdaptBoolTypes(),
             new AdaptBoolCasts(),
             new RemoveBoolOperatorCalls(),
-            new ReplaceClangLabelStmt(),
+            // new ReplaceClangLabelStmt(),
             new RemoveDefaultInitializers(),
             new RemoveImplicitConstructors(),
             new RecoverStdMacros(),
@@ -269,7 +267,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("ForStmt", ForStmtParser::new);
         converter.put("CXXForRangeStmt", CXXForRangeStmtParser::new);
         converter.put("CapturedStmt", CapturedStmtParser::new);
-        converter.put("LabelStmt", LabelStmtParser::new);
+        // converter.put("LabelStmt", LabelStmtParser::new);
         converter.put("CXXTryStmt", CXXTryStmtParser::new);
         converter.put("CXXCatchStmt", CXXCatchStmtParser::new);
         converter.put("DoStmt", DoStmtParser::new);

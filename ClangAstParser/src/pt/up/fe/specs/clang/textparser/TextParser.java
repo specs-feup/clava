@@ -18,7 +18,6 @@ import static pt.up.fe.specs.clava.context.ClavaContext.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -38,10 +37,8 @@ import pt.up.fe.specs.clang.textparser.rules.MultiLineCommentRule;
 import pt.up.fe.specs.clang.textparser.rules.PragmaMacroRule;
 import pt.up.fe.specs.clang.textparser.rules.PragmaRule;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
@@ -52,6 +49,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
@@ -87,6 +85,10 @@ public class TextParser {
     public TextParser(ClavaContext context) {
 
         this.context = context;
+    }
+
+    private ClavaFactory getFactory() {
+        return context.get(ClavaContext.FACTORY);
     }
 
     /**
@@ -406,13 +408,17 @@ public class TextParser {
             SourceRange compoundStartLoc = new SourceRange(compoundStmt.getLocation().getStart());
             SourceRange compoundEndLoc = new SourceRange(compoundStmt.getLocation().getEnd());
 
-            ClavaNodeInfo compoundStartInfo = new ClavaNodeInfo(null, compoundStartLoc);
-            ClavaNodeInfo compoundEndInfo = new ClavaNodeInfo(null, compoundEndLoc);
+            // ClavaNodeInfo compoundStartInfo = new ClavaNodeInfo(null, compoundStartLoc);
+            // ClavaNodeInfo compoundEndInfo = new ClavaNodeInfo(null, compoundEndLoc);
 
-            DummyStmt compoundStartGuard = ClavaNodeFactory.dummyStmt("Compound_StartGuard", compoundStartInfo,
-                    Collections.emptyList());
-            DummyStmt compoundEndGuard = ClavaNodeFactory.dummyStmt("Compound_EndGuard", compoundEndInfo,
-                    Collections.emptyList());
+            // DummyStmt compoundStartGuard = ClavaNodeFactory.dummyStmt("Compound_StartGuard", compoundStartInfo,
+            // Collections.emptyList());
+            // DummyStmt compoundEndGuard = ClavaNodeFactory.dummyStmt("Compound_EndGuard", compoundEndInfo,
+            // Collections.emptyList());
+            DummyStmt compoundStartGuard = getFactory().dummyStmt("Compound_StartGuard");
+            compoundStartGuard.set(ClavaNode.LOCATION, compoundStartLoc);
+            DummyStmt compoundEndGuard = getFactory().dummyStmt("Compound_EndGuard");
+            compoundEndGuard.set(ClavaNode.LOCATION, compoundEndLoc);
 
             guardNodes.add(compoundStartGuard);
             guardNodes.add(compoundEndGuard);

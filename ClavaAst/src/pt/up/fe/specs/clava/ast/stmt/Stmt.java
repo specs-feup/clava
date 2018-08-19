@@ -20,7 +20,6 @@ import java.util.List;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 /**
  * Represents statements.
@@ -34,15 +33,15 @@ public abstract class Stmt extends ClavaNode {
         super(data, children);
     }
 
-    /**
-     * @deprecated
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public Stmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
+    // /**
+    // * @deprecated
+    // * @param info
+    // * @param children
+    // */
+    // @Deprecated
+    // public Stmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
 
     @Override
     public Stmt copy() {
