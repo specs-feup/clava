@@ -26,7 +26,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
@@ -180,7 +179,7 @@ public class AstFactory {
 
     public static AStatement stmtLiteral(String code, ACxxWeaverJoinPoint parent) {
         // return CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), parent, AStatement.class);
-        return CxxJoinpoints.create(ClavaNodeParser.parseStmt(code), parent, AStatement.class);
+        return CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), parent, AStatement.class);
     }
 
     public static AType typeLiteral(String code) {

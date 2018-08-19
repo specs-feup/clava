@@ -18,8 +18,8 @@ import java.util.Optional;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.SnippetParser;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -50,17 +50,17 @@ public class CxxActions {
      * @param from
      */
     public static AJoinPoint insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
-
+        SnippetParser snippetParser = CxxWeaver.getSnippetParser();
         switch (insert) {
         case BEFORE:
             // NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
-            Stmt beforeNode = ClavaNodeParser.parseStmt(code);
+            Stmt beforeNode = snippetParser.parseStmt(code);
             NodeInsertUtils.insertBefore(getValidStatement(target), beforeNode);
             return CxxJoinpoints.create(beforeNode, null);
 
         case AFTER:
             // NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
-            Stmt afterNode = ClavaNodeParser.parseStmt(code);
+            Stmt afterNode = snippetParser.parseStmt(code);
             NodeInsertUtils.insertAfter(getValidStatement(target), afterNode);
             return CxxJoinpoints.create(afterNode, null);
 

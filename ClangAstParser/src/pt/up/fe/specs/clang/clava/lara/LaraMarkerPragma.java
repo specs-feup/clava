@@ -16,6 +16,10 @@ package pt.up.fe.specs.clang.clava.lara;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
@@ -24,12 +28,35 @@ public class LaraMarkerPragma extends Pragma {
 
     private static final String LARA_MARKER_PREFIX = "lara marker ";
 
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> MARKER_ID = KeyFactory.string("markerId");
+
+    /// DATAKEYS END
+
+    public LaraMarkerPragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     private String markerId;
 
+    /**
+     * @deprecated
+     * @param markerId
+     * @param info
+     */
+    @Deprecated
     public LaraMarkerPragma(String markerId, ClavaNodeInfo info) {
         this(markerId, info, Collections.emptyList());
     }
 
+    /**
+     * @deprecated
+     * @param markerId
+     * @param info
+     * @param children
+     */
+    @Deprecated
     private LaraMarkerPragma(String markerId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 

@@ -17,15 +17,27 @@ import java.util.Arrays;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.StringLines;
 
-public class ClavaNodeParser {
+/**
+ * Parses small amounts of code.
+ * 
+ * @author JoaoBispo
+ *
+ */
+public class SnippetParser {
+
+    private final ClavaContext context;
+
+    public SnippetParser(ClavaContext context) {
+        this.context = context;
+    }
 
     /**
      * Parses certain occurrences of code. If could not parse, returns LiteralStmt.
@@ -38,12 +50,12 @@ public class ClavaNodeParser {
      * @param code
      * @return
      */
-    public static Stmt parseStmt(String code) {
+    public Stmt parseStmt(String code) {
         List<String> codeLines = StringLines.getLines(code);
 
         // Check if single line
         if (codeLines.size() != 1) {
-            LegacyToDataStore.getFactory().literalStmt(code);
+            context.getFactory().literalStmt(code);
             // return ClavaNodeFactory.literalStmt(code);
         }
 
@@ -82,7 +94,7 @@ public class ClavaNodeParser {
         }
 
         // Case not supported
-        return LegacyToDataStore.getFactory().literalStmt(code);
+        return context.getFactory().literalStmt(code);
     }
 
     // private static String extractPragmaPrefix(String currentCode) {

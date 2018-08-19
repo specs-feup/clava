@@ -87,6 +87,10 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         return this;
     }
 
+    public ClavaFactory getFactory() {
+        return get(FACTORY);
+    }
+
     // public <T> T get(DataKey<T> key) {
     // return this.data.get(key);
     // }
@@ -101,10 +105,7 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         // return data.get(ID_GENERATOR);
     }
     
-    public ClavaFactory getFactory() {
-        return factory;
-        // return data.get(FACTORY);
-    }
+    
     
     public List<String> getParsingArguments() {
         return arguments;

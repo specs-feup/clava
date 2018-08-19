@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.SnippetParser;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
@@ -1212,6 +1213,10 @@ public class CxxWeaver extends ACxxWeaver {
 
     public static ClavaContext getContex() {
         return getCxxWeaver().getApp().getContext();
+    }
+
+    public static SnippetParser getSnippetParser() {
+        return new SnippetParser(getContex());
     }
 
     /**

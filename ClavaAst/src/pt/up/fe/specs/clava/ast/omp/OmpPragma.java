@@ -13,9 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.omp;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
@@ -29,6 +33,19 @@ public abstract class OmpPragma extends Pragma {
     private final OmpDirectiveKind directiveKind;
     private final Lazy<OmpClauses> clauses;
 
+    protected OmpPragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        directiveKind = null;
+        clauses = null;
+    }
+
+    /**
+     * @deprecated
+     * @param directiveKind
+     * @param info
+     */
+    @Deprecated
     protected OmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
 
         super(info, Collections.emptyList());

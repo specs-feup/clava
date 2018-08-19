@@ -20,17 +20,38 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class GenericPragma extends Pragma {
 
+    public GenericPragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+
+        content = null;
+    }
+
     private List<String> content;
 
+    /**
+     * @deprecated
+     * @param content
+     * @param info
+     */
+    @Deprecated
     public GenericPragma(List<String> content, ClavaNodeInfo info) {
         this(content, info, Collections.emptyList());
     }
 
+    /**
+     * @deprecated
+     * @param content
+     * @param info
+     * @param children
+     */
+    @Deprecated
     private GenericPragma(List<String> content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 

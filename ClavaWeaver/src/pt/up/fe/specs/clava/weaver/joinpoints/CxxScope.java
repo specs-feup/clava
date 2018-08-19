@@ -20,7 +20,6 @@ import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeParser;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -35,6 +34,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
@@ -94,7 +94,7 @@ public class CxxScope extends AScope {
         // 'body' behaviour
         if (!scope.isNestedScope()) {
             // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
-            Stmt literalStmt = ClavaNodeParser.parseStmt(code);
+            Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
             CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
             return;
         }

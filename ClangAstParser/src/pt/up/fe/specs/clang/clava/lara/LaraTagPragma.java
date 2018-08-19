@@ -16,6 +16,8 @@ package pt.up.fe.specs.clang.clava.lara;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
@@ -24,12 +26,30 @@ public class LaraTagPragma extends Pragma {
 
     private static final String LARA_TAG_PREFIX = "lara tag ";
 
+    public LaraTagPragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
     private String tagId;
 
+    /**
+     * @deprecated
+     * @param tagId
+     * @param info
+     */
+    @Deprecated
     public LaraTagPragma(String tagId, ClavaNodeInfo info) {
         this(tagId, info, Collections.emptyList());
     }
 
+    /**
+     * @deprecated
+     * 
+     * @param tagId
+     * @param info
+     * @param children
+     */
+    @Deprecated
     private LaraTagPragma(String tagId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
 
@@ -46,6 +66,7 @@ public class LaraTagPragma extends Pragma {
         return LARA_TAG_PREFIX + tagId;
     }
 
+    @Override
     public void setFullContent(String fullContent) {
         String newContent = fullContent;
 

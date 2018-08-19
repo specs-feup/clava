@@ -16,6 +16,8 @@ package pt.up.fe.specs.clava.ast.pragma;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -30,6 +32,16 @@ import pt.up.fe.specs.util.stringparser.StringParsers;
 // public abstract class Pragma extends Stmt {
 public abstract class Pragma extends ClavaNode {
 
+    public Pragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
+    }
+
+    /**
+     * @deprecated
+     * @param info
+     * @param children
+     */
+    @Deprecated
     public Pragma(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         super(info, children);
     }
