@@ -15,8 +15,9 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 /**
  * Represents a switch case.
@@ -26,9 +27,13 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  */
 public abstract class SwitchCase extends Stmt {
 
-    public SwitchCase(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-	super(info, children);
+    public SwitchCase(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // public SwitchCase(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
 
     public abstract Stmt getSubStmt();
 }

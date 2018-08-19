@@ -13,27 +13,30 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class DefaultStmt extends SwitchCase {
 
-    public DefaultStmt(ClavaNodeInfo info, Stmt subStmt) {
-        this(info, Arrays.asList(subStmt));
+    public DefaultStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private DefaultStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DefaultStmt(getInfo(), Collections.emptyList());
-    }
+    // public DefaultStmt(ClavaNodeInfo info, Stmt subStmt) {
+    // this(info, Arrays.asList(subStmt));
+    // }
+    //
+    // private DefaultStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DefaultStmt(getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public Stmt getSubStmt() {

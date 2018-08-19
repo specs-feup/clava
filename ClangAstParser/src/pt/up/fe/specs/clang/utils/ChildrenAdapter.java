@@ -23,7 +23,9 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
+import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
@@ -59,6 +61,8 @@ public class ChildrenAdapter {
         CHILDREN_ADAPTERS.put(CompoundStmt.class, ChildrenAdapter::adaptCompoundStmt);
         CHILDREN_ADAPTERS.put(CXXCatchStmt.class, ChildrenAdapter::adaptCXXCatchStmt);
         CHILDREN_ADAPTERS.put(CXXTryStmt.class, ChildrenAdapter::adaptCXXTryStmt);
+        CHILDREN_ADAPTERS.put(CaseStmt.class, ChildrenAdapter::adaptCaseStmt);
+        CHILDREN_ADAPTERS.put(DefaultStmt.class, ChildrenAdapter::adaptDefaultStmt);
     }
 
     private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
@@ -195,6 +199,24 @@ public class ChildrenAdapter {
         // }
         adaptedChildren.add(toCompoundStmt(children.get(0), context));
         adaptedChildren.addAll(children.subList(1, children.size()));
+
+        return adaptedChildren;
+    }
+
+    private static List<ClavaNode> adaptCaseStmt(List<ClavaNode> children, ClavaContext context) {
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+        adaptedChildren.add(children.get(0));
+        adaptedChildren.add(children.get(1));
+        adaptedChildren.add(toStmt(children.get(2), context));
+
+        return adaptedChildren;
+    }
+
+    private static List<ClavaNode> adaptDefaultStmt(List<ClavaNode> children, ClavaContext context) {
+        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+
+        adaptedChildren.add(toStmt(children.get(0), context));
 
         return adaptedChildren;
     }

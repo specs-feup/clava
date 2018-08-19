@@ -13,12 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
 /**
@@ -29,35 +28,45 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
  */
 public class SwitchStmt extends Stmt {
 
-    public SwitchStmt(ClavaNodeInfo info, Expr cond, Stmt body) {
-	this(info, Arrays.asList(cond, body));
+    /// DATAKEYS BEGIN
+
+    // public final static DataKey<Optional<VarDecl>> CONDITION_VARIABLE = KeyFactory.optional("conditionVariable");
+
+    /// DATAKEYS END
+
+    public SwitchStmt(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private SwitchStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-	super(info, children);
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-	return new SwitchStmt(getInfo(), Collections.emptyList());
-    }
+    // public SwitchStmt(ClavaNodeInfo info, Expr cond, Stmt body) {
+    // this(info, Arrays.asList(cond, body));
+    // }
+    //
+    // private SwitchStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new SwitchStmt(getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getCode() {
-	StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-	builder.append("switch (").append(getCond().getCode()).append(")").append(getBody().getCode());
+        builder.append("switch (").append(getCond().getCode()).append(")").append(getBody().getCode());
 
-	return builder.toString();
-	// return ClavaNodeUtils.toUnimplementedCode(this);
+        return builder.toString();
+        // return ClavaNodeUtils.toUnimplementedCode(this);
     }
 
     public Expr getCond() {
-	return getChild(Expr.class, 0);
+        return getChild(Expr.class, 0);
     }
 
     public Stmt getBody() {
-	return getChild(Stmt.class, 1);
+        return getChild(Stmt.class, 1);
     }
 
 }

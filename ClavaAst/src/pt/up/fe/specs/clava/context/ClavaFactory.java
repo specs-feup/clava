@@ -62,6 +62,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
+import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
@@ -539,6 +540,12 @@ public class ClavaFactory {
         DataStore breakStmtData = newStmtDataStore();
 
         return new BreakStmt(breakStmtData, Collections.emptyList());
+    }
+
+    public CaseStmt caseStmt(Expr caseExpr, Stmt subStmt) {
+        DataStore caseStmtData = newStmtDataStore();
+
+        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, subStmt));
     }
 
     /// ATTRIBUTES

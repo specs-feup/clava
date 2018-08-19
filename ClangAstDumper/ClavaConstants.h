@@ -35,6 +35,8 @@ namespace clava {
         CXX_FOR_RANGE_STMT,
         CXX_CATCH_STMT,
         CXX_TRY_STMT,
+        CASE_STMT,
+        DEFAULT_STMT,
 
         // Expr nodes
         EXPR,

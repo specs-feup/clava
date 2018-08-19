@@ -19,6 +19,8 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
         {"CXXForRangeStmt", clava::StmtNode::CXX_FOR_RANGE_STMT},
         {"CXXCatchStmt", clava::StmtNode::CXX_CATCH_STMT},
         {"CXXTryStmt", clava::StmtNode::CXX_TRY_STMT},
+        {"CaseStmt", clava::StmtNode::CASE_STMT},
+        {"DefaultStmt", clava::StmtNode::DEFAULT_STMT},
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
@@ -92,6 +94,10 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXCatchStmtChildren(static_cast<const CXXCatchStmt *>(S), visitedChildren); break;
        case clava::StmtNode::CXX_TRY_STMT:
             VisitCXXTryStmtChildren(static_cast<const CXXTryStmt *>(S), visitedChildren); break;
+       case clava::StmtNode::CASE_STMT:
+            VisitCaseStmtChildren(static_cast<const CaseStmt *>(S), visitedChildren); break;
+       case clava::StmtNode::DEFAULT_STMT:
+            VisitDefaultStmtChildren(static_cast<const DefaultStmt *>(S), visitedChildren); break;
 
 
 
@@ -251,6 +257,22 @@ void ClangAstDumper::VisitCXXTryStmtChildren(const CXXTryStmt *S, std::vector<st
 
     //llvm::errs() << "TRY STMT: " << S << "\n";
     //llvm::errs() << "TRY BLOCK: " << S->getTryBlock() << "\n";
+}
+
+void ClangAstDumper::VisitCaseStmtChildren(const CaseStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    addChild(S->getLHS(), children);
+    addChild(S->getRHS(), children);
+    addChild(S->getSubStmt(), children);
+}
+
+void ClangAstDumper::VisitDefaultStmtChildren(const DefaultStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    addChild(S->getSubStmt(), children);
 }
 
 

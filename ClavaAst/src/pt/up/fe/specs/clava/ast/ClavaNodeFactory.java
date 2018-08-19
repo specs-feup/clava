@@ -47,9 +47,7 @@ import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.omp.OMPParallelDirective;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
-import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.ClangLabelStmt;
-import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
@@ -789,17 +787,17 @@ public class ClavaNodeFactory {
         return new SwitchStmt(info, cond, body);
     }
 
-    public static CaseStmt caseStmt(ClavaNodeInfo info, Expr lhs, Stmt subStmt) {
-        return new CaseStmt(info, lhs, subStmt);
-    }
-
-    public static CaseStmt caseStmt(ClavaNodeInfo info, Expr lhs, Expr rhs, Stmt subStmt) {
-        return new CaseStmt(info, lhs, rhs, subStmt);
-    }
-
-    public static DefaultStmt defaultStmt(ClavaNodeInfo info, Stmt subStmt) {
-        return new DefaultStmt(info, subStmt);
-    }
+    // public static CaseStmt caseStmt(ClavaNodeInfo info, Expr lhs, Stmt subStmt) {
+    // return new CaseStmt(info, lhs, subStmt);
+    // }
+    //
+    // public static CaseStmt caseStmt(ClavaNodeInfo info, Expr lhs, Expr rhs, Stmt subStmt) {
+    // return new CaseStmt(info, lhs, rhs, subStmt);
+    // }
+    //
+    // public static DefaultStmt defaultStmt(ClavaNodeInfo info, Stmt subStmt) {
+    // return new DefaultStmt(info, subStmt);
+    // }
 
     // public static ReturnStmt returnStmt(ClavaNodeInfo info, Expr retValue) {
     // return new ReturnStmt(info, retValue);

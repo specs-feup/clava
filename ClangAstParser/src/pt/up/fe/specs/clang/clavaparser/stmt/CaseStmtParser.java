@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
@@ -47,12 +46,13 @@ public class CaseStmtParser extends AClangNodeParser<CaseStmt> {
 
         // 3rd child is the body
         Stmt subStmt = toStmt(children.get(2));
+        throw new RuntimeException("deprecated");
 
-        if (rhs == null) {
-            return ClavaNodeFactory.caseStmt(info(node), lhs, subStmt);
-        }
+        // if (rhs == null) {
+        // return ClavaNodeFactory.caseStmt(info(node), lhs, subStmt);
+        // }
 
-        return ClavaNodeFactory.caseStmt(info(node), lhs, rhs, subStmt);
+        // return ClavaNodeFactory.caseStmt(info(node), lhs, rhs, subStmt);
     }
 
 }

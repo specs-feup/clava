@@ -111,4 +111,9 @@ public class CTest {
     public void testPredefined() {
         new CTester("predefined.c").test();
     }
+
+    @Test
+    public void testSwitch() {
+        new CTester("switch.c").test();
+    }
 }

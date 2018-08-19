@@ -367,7 +367,8 @@ public class AstFactory {
     }
 
     public static AStatement caseStmt(AExpression value, AStatement subStmt) {
-        CaseStmt caseStmt = ClavaNodeFactory.caseStmt(ClavaNodeInfo.undefinedInfo(), (Expr) value.getNode(),
+
+        CaseStmt caseStmt = CxxWeaver.getFactory().caseStmt((Expr) value.getNode(),
                 (Stmt) subStmt.getNode());
 
         return CxxJoinpoints.create(caseStmt, null, AStatement.class);
