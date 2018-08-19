@@ -254,14 +254,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * @param castTo
      * @return
      */
-    protected <T extends ClavaNode> Optional<T> getNullable(int index, Class<T> castTo) {
-        // Get child
-        ClavaNode child = ClavaNodes.getChild(this, index);
-
-        // If NullNode return empty Optional, otherwise cast and return optional
-        return child instanceof pt.up.fe.specs.clava.ast.extra.NullNodeOld ? Optional.empty()
-                : Optional.of(castTo.cast(child));
-    }
+    // protected <T extends ClavaNode> Optional<T> getNullable(int index, Class<T> castTo) {
+    // // Get child
+    // ClavaNode child = ClavaNodes.getChild(this, index);
+    //
+    // // If NullNode return empty Optional, otherwise cast and return optional
+    // return child instanceof pt.up.fe.specs.clava.ast.extra.NullNodeOld ? Optional.empty()
+    // : Optional.of(castTo.cast(child));
+    // }
 
     @Override
     public int hashCode() {

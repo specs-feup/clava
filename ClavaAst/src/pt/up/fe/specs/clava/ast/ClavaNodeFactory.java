@@ -39,7 +39,6 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
-import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
@@ -98,9 +97,9 @@ public class ClavaNodeFactory {
         return new NullNodeOld(info);
     }
 
-    public static OriginalNamespace originalNamespace(String namespace, ClavaNodeInfo nodeInfo) {
-        return new OriginalNamespace(namespace, nodeInfo);
-    }
+    // public static OriginalNamespace originalNamespace(String namespace, ClavaNodeInfo nodeInfo) {
+    // return new OriginalNamespace(namespace, nodeInfo);
+    // }
 
     public static CXXCtorInitializer cxxCtorInitializer(BareDeclData anyMemberData, Type initType,
             CXXCtorInitializerKind kind, ClavaNodeInfo nodeInfo, Expr defaultInit) {

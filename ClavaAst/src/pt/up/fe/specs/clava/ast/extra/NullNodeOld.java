@@ -24,9 +24,11 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  * <p>
  * This class exists for compatibility purposes with Clang AST, when parsing.
  * 
+ * @deprecated
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class NullNodeOld extends ClavaNode {
 
     public NullNodeOld(ClavaNodeInfo info) {
