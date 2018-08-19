@@ -13,7 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.omp;
 
-import pt.up.fe.specs.clava.ClavaNodeInfo;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
+import pt.up.fe.specs.clava.ClavaNode;
 
 /**
  * E.g., #pragma omp declare target
@@ -23,24 +29,37 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
  */
 public class SimpleOmpPragma extends OmpPragma {
 
-    private String customContent;
+    /// DATAKEYS BEGIN
 
-    public SimpleOmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
-        this(null, directiveKind, info);
+    public final static DataKey<String> CUSTOM_CONTENT = KeyFactory.string("customContent");
+
+    /// DATAKEYS END
+
+    public SimpleOmpPragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private SimpleOmpPragma(String customContent, OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
-        super(directiveKind, info);
+    // private String customContent;
 
-        this.customContent = null;
-    }
+    // public SimpleOmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
+    // this(null, directiveKind, info);
+    // }
+
+    // private SimpleOmpPragma(String customContent, OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
+    // super(directiveKind, info);
+    //
+    // this.customContent = null;
+    // }
 
     @Override
     public String getFullContent() {
         // Give priority to custom content
-        if (customContent != null) {
-            return customContent;
+        if (hasValue(CUSTOM_CONTENT)) {
+            return get(CUSTOM_CONTENT);
         }
+        // if (customContent != null) {
+        // return customContent;
+        // }
 
         StringBuilder fullContent = new StringBuilder();
 
@@ -50,14 +69,15 @@ public class SimpleOmpPragma extends OmpPragma {
         return fullContent.toString();
     }
 
-    @Override
-    protected SimpleOmpPragma copyPrivate() {
-        return new SimpleOmpPragma(customContent, getDirectiveKind(), getInfo());
-    }
+    // @Override
+    // protected SimpleOmpPragma copyPrivate() {
+    // return new SimpleOmpPragma(customContent, getDirectiveKind(), getInfo());
+    // }
 
     @Override
     public void setFullContent(String fullContent) {
-        this.customContent = fullContent;
+        set(CUSTOM_CONTENT, fullContent);
+        // this.customContent = fullContent;
     }
 
 }

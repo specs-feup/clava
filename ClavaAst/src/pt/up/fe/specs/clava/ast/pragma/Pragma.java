@@ -21,7 +21,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
@@ -36,15 +35,14 @@ public abstract class Pragma extends ClavaNode {
         super(data, children);
     }
 
-    /**
-     * @deprecated
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public Pragma(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-    }
+    // /**
+    // * @param info
+    // * @param children
+    // */
+    // @Deprecated
+    // public Pragma(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    // }
 
     /**
      * By default, returns the next sibling that is not a comment or a pragma.

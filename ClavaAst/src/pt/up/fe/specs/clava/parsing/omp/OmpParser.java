@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,12 +29,8 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
-import pt.up.fe.specs.clava.ast.omp.OmpLiteralPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
-import pt.up.fe.specs.clava.ast.omp.SimpleOmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
@@ -61,18 +56,20 @@ public class OmpParser implements PragmaParser {
         // SPECIFIC_OMP_PARSERS.put(ATOMIC, value);
     }
 
-    public static OmpPragma newOmpPragma(OmpDirectiveKind kind) {
+    public static OmpPragma newOmpPragma(OmpDirectiveKind kind, ClavaContext context) {
         // Check if already implemented
         if (UNIMPLEMENTED_OMP_PRAGMA.contains(kind)) {
             throw new RuntimeException("OpenMP pragma '" + kind + "' is not yet supported");
         }
 
         if (SIMPLE_OMP_PRAGMA.contains(kind)) {
-            return new SimpleOmpPragma(kind, ClavaNodeInfo.undefinedInfo());
+            return context.getFactory().simpleOmpPragma(kind);
+            // return new SimpleOmpPragma(kind, ClavaNodeInfo.undefinedInfo());
         }
 
         // Return pragma without clauses
-        return new OmpClausePragma(kind, new LinkedHashMap<>(), ClavaNodeInfo.undefinedInfo());
+        return context.getFactory().ompClausePragma(kind);
+        // return new OmpClausePragma(kind, new LinkedHashMap<>(), ClavaNodeInfo.undefinedInfo());
     }
 
     /**
@@ -84,7 +81,8 @@ public class OmpParser implements PragmaParser {
      */
     public static OmpPragma newOmpPragma(OmpDirectiveKind kind, OmpPragma basePragma) {
         // Create new pragma
-        OmpPragma newPragma = newOmpPragma(kind);
+        // OmpPragma newPragma = newOmpPragma(kind);
+        OmpPragma newPragma = newOmpPragma(kind, basePragma.getContext());
 
         // Transfer all clauses from base pragma that are valid in the new pragma
         for (OmpClauseKind clauseKind : basePragma.getClauseKinds()) {
@@ -121,12 +119,14 @@ public class OmpParser implements PragmaParser {
 
         if (UNIMPLEMENTED_OMP_PRAGMA.contains(ompDirective)) {
             ClavaLog.info("OpenMP directive not implemented yet: " + ompDirective.getString());
-            return new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo());
+            return pragma.getFactoryWithNode().ompLiteralPragma(ompDirective, pragma.getFullContent());
+            // return new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo());
         }
 
         // Simple OpenMP Pragma
         if (SIMPLE_OMP_PRAGMA.contains(ompDirective)) {
-            return new SimpleOmpPragma(ompDirective, pragma.getInfo());
+            return pragma.getFactoryWithNode().simpleOmpPragma(ompDirective);
+            // return new SimpleOmpPragma(ompDirective, pragma.getInfo());
         }
 
         // There are some special cases, directive 'critical' takes a name, some directives to not take clauses,
@@ -145,11 +145,15 @@ public class OmpParser implements PragmaParser {
         // If no map and there were clauses to parse, at least one of the clauses could not be parsed. Return a literal
         // pragma
         if (hasClauses && !clausesMap.isPresent()) {
-            return new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo());
+            return pragma.getFactoryWithNode().ompLiteralPragma(ompDirective, pragma.getFullContent());
+            // return new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo());
         }
 
-        return clausesMap.map(clauses -> (OmpPragma) new OmpClausePragma(ompDirective, clauses, pragma.getInfo()))
-                .orElseGet(() -> new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo()));
+        return clausesMap.map(clauses -> (OmpPragma) pragma.getFactoryWithNode().ompClausePragma(ompDirective, clauses))
+                .orElseGet(() -> pragma.getFactoryWithNode().ompLiteralPragma(ompDirective, pragma.getFullContent()));
+
+        // return clausesMap.map(clauses -> (OmpPragma) new OmpClausePragma(ompDirective, clauses, pragma.getInfo()))
+        // .orElseGet(() -> new OmpLiteralPragma(ompDirective, pragma.getFullContent(), pragma.getInfo()));
 
         // Map<OmpClauseKind, OmpClause> clauses = OmpClauseParsers.parse(pragmaParser);
         //

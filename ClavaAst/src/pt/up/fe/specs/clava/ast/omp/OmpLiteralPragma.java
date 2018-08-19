@@ -13,32 +13,49 @@
 
 package pt.up.fe.specs.clava.ast.omp;
 
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class OmpLiteralPragma extends OmpPragma {
 
-    private String customContent;
+    /// DATAKEYS BEGIN
 
-    public OmpLiteralPragma(OmpDirectiveKind directiveKind, String content, ClavaNodeInfo info) {
-        super(directiveKind, info);
+    public final static DataKey<String> CUSTOM_CONTENT = KeyFactory.string("customContent");
 
-        this.customContent = content;
+    /// DATAKEYS END
+
+    public OmpLiteralPragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
+
+    // private String customContent;
+
+    // public OmpLiteralPragma(OmpDirectiveKind directiveKind, String content, ClavaNodeInfo info) {
+    // super(directiveKind, info);
+    //
+    // this.customContent = content;
+    // }
 
     @Override
     public String getFullContent() {
-        return customContent;
+        // return customContent;
+        return get(CUSTOM_CONTENT);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new OmpLiteralPragma(getDirectiveKind(), customContent, getInfo());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new OmpLiteralPragma(getDirectiveKind(), customContent, getInfo());
+    // }
 
     @Override
     public void setFullContent(String fullContent) {
-        this.customContent = fullContent;
+        set(CUSTOM_CONTENT, fullContent);
+        // this.customContent = fullContent;
     }
 
 }

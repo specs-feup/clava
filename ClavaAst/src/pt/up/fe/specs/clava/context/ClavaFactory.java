@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -62,6 +64,13 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
+import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
+import pt.up.fe.specs.clava.ast.omp.OmpLiteralPragma;
+import pt.up.fe.specs.clava.ast.omp.OmpPragma;
+import pt.up.fe.specs.clava.ast.omp.SimpleOmpPragma;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
+import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
@@ -612,6 +621,33 @@ public class ClavaFactory {
                 .set(GenericPragma.CONTENT, content);
 
         return new GenericPragma(data, Collections.emptyList());
+    }
+
+    public SimpleOmpPragma simpleOmpPragma(OmpDirectiveKind kind) {
+        DataStore data = newPragmaDataStore()
+                .set(OmpPragma.DIRECTIVE_KIND, kind);
+
+        return new SimpleOmpPragma(data, Collections.emptyList());
+    }
+
+    public OmpClausePragma ompClausePragma(OmpDirectiveKind kind) {
+        return ompClausePragma(kind, new LinkedHashMap<>());
+    }
+
+    public OmpClausePragma ompClausePragma(OmpDirectiveKind kind, Map<OmpClauseKind, List<OmpClause>> clauses) {
+        DataStore data = newPragmaDataStore()
+                .set(OmpPragma.DIRECTIVE_KIND, kind)
+                .set(OmpClausePragma.CLAUSES, clauses);
+
+        return new OmpClausePragma(data, Collections.emptyList());
+    }
+
+    public OmpLiteralPragma ompLiteralPragma(OmpDirectiveKind kind, String customContent) {
+        DataStore data = newPragmaDataStore()
+                .set(OmpPragma.DIRECTIVE_KIND, kind)
+                .set(OmpLiteralPragma.CUSTOM_CONTENT, customContent);
+
+        return new OmpLiteralPragma(data, Collections.emptyList());
     }
 
 }

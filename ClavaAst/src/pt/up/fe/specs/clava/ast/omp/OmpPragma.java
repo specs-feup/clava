@@ -17,49 +17,60 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauses;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.lazy.Lazy;
 
 public abstract class OmpPragma extends Pragma {
 
-    private final OmpDirectiveKind directiveKind;
-    private final Lazy<OmpClauses> clauses;
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<OmpDirectiveKind> DIRECTIVE_KIND = KeyFactory.enumeration("directiveKind",
+            OmpDirectiveKind.class);
+
+    /// DATAKEYS END
+    // private final OmpDirectiveKind directiveKind;
+    // private Lazy<OmpClauses> clauses;
+    private OmpClauses clauses;
 
     protected OmpPragma(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-        directiveKind = null;
         clauses = null;
     }
 
-    /**
-     * @deprecated
-     * @param directiveKind
-     * @param info
-     */
-    @Deprecated
-    protected OmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
-
-        super(info, Collections.emptyList());
-
-        this.directiveKind = directiveKind;
-        this.clauses = Lazy.newInstance(() -> new OmpClauses(this));
-    }
+    // /**
+    // * @deprecated
+    // * @param directiveKind
+    // * @param info
+    // */
+    // @Deprecated
+    // protected OmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
+    //
+    // super(info, Collections.emptyList());
+    //
+    // this.directiveKind = directiveKind;
+    // this.clauses = Lazy.newInstance(() -> new OmpClauses(this));
+    // }
 
     public OmpClauses clauses() {
-        return clauses.get();
+        if (clauses == null) {
+            clauses = new OmpClauses(this);
+        }
+
+        return clauses;
     }
 
     public OmpDirectiveKind getDirectiveKind() {
-        return directiveKind;
+        return get(DIRECTIVE_KIND);
+        // return directiveKind;
     }
 
     public List<OmpClause> getClause(OmpClauseKind clauseKind) {

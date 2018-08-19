@@ -360,7 +360,7 @@ public class AstFactory {
     public static AJoinPoint omp(String directiveName) {
         // Get directive
         OmpDirectiveKind kind = OmpDirectiveKind.getHelper().fromValue(directiveName);
-        return CxxJoinpoints.create(OmpParser.newOmpPragma(kind), null);
+        return CxxJoinpoints.create(OmpParser.newOmpPragma(kind, CxxWeaver.getContex()), null);
 
         // ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(),
     }

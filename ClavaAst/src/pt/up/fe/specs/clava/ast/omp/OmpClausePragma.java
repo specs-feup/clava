@@ -15,14 +15,20 @@ package pt.up.fe.specs.clava.ast.omp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpListClause;
@@ -30,35 +36,55 @@ import pt.up.fe.specs.util.SpecsLogs;
 
 public class OmpClausePragma extends OmpPragma {
 
-    private final Map<OmpClauseKind, List<OmpClause>> clauses;
-    private String customContent;
+    /// DATAKEYS BEGIN
 
-    public OmpClausePragma(OmpDirectiveKind directiveKind, Map<OmpClauseKind, List<OmpClause>> clauses,
-            ClavaNodeInfo info) {
-        this(directiveKind, null, clauses, info);
+    public final static DataKey<Map<OmpClauseKind, List<OmpClause>>> CLAUSES = KeyFactory.generic("clauses",
+            new HashMap<OmpClauseKind, List<OmpClause>>());
+
+    public final static DataKey<String> CUSTOM_CONTENT = KeyFactory.string("customContent");
+
+    /// DATAKEYS END
+
+    public OmpClausePragma(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    private OmpClausePragma(OmpDirectiveKind directiveKind, String customContent,
-            Map<OmpClauseKind, List<OmpClause>> clauses, ClavaNodeInfo info) {
-        super(directiveKind, info);
+    // private final Map<OmpClauseKind, List<OmpClause>> clauses;
+    // private String customContent;
+    //
+    // public OmpClausePragma(OmpDirectiveKind directiveKind, Map<OmpClauseKind, List<OmpClause>> clauses,
+    // ClavaNodeInfo info) {
+    // this(directiveKind, null, clauses, info);
+    // }
+    //
+    // private OmpClausePragma(OmpDirectiveKind directiveKind, String customContent,
+    // Map<OmpClauseKind, List<OmpClause>> clauses, ClavaNodeInfo info) {
+    // super(directiveKind, info);
+    //
+    // this.clauses = clauses;
+    // this.customContent = customContent;
+    // }
 
-        this.clauses = clauses;
-        this.customContent = customContent;
+    public Optional<String> getCustomContent() {
+        return getTry(CUSTOM_CONTENT);
     }
 
     @Override
     public String getFullContent() {
 
         // Give priority to custom content
-        if (customContent != null) {
-            return customContent;
+        // if (customContent != null) {
+        if (hasValue(CUSTOM_CONTENT)) {
+            return get(CUSTOM_CONTENT);
+            // return customContent;
         }
 
         StringBuilder fullContent = new StringBuilder();
 
         fullContent.append("omp ");
         fullContent.append(getDirectiveKind().getString());
-        fullContent.append(clauses.values().stream()
+        // fullContent.append(clauses.values().stream()
+        fullContent.append(get(CLAUSES).values().stream()
                 .map(clauseList -> clauseList.stream().map(clause -> clause.getCode())
                         .collect(Collectors.joining(" ")))
                 .collect(Collectors.joining(" ", " ", "")));
@@ -66,22 +92,24 @@ public class OmpClausePragma extends OmpPragma {
         return fullContent.toString();
     }
 
-    @Override
-    protected OmpClausePragma copyPrivate() {
-        // We should check if we should have immutable clauses (e.g., replace the clause object, easier in a map)
-        // Or mutable clauses (need to copy the clauses here)
-        return new OmpClausePragma(getDirectiveKind(), customContent, new HashMap<>(clauses), getInfo());
-    }
+    // @Override
+    // protected OmpClausePragma copyPrivate() {
+    // // We should check if we should have immutable clauses (e.g., replace the clause object, easier in a map)
+    // // Or mutable clauses (need to copy the clauses here)
+    // return new OmpClausePragma(getDirectiveKind(), customContent, new HashMap<>(clauses), getInfo());
+    // }
 
     @Override
     public List<OmpClause> getClause(OmpClauseKind clauseKind) {
-        if (customContent != null) {
+        // if (customContent != null) {
+        if (getCustomContent().isPresent()) {
             SpecsLogs.msgInfo("OpenMP pragma " + getDirectiveKind()
                     + " has custom content set, no clause processing will be done");
             return Collections.emptyList();
         }
 
-        List<OmpClause> clausesList = clauses.get(clauseKind);
+        // List<OmpClause> clausesList = clauses.get(clauseKind);
+        List<OmpClause> clausesList = get(CLAUSES).get(clauseKind);
 
         return clausesList != null ? clausesList : Collections.emptyList();
     }
@@ -106,10 +134,10 @@ public class OmpClausePragma extends OmpPragma {
 
     @Override
     public void addClause(OmpClauseKind kind, OmpClause clause) {
-        List<OmpClause> clausesList = clauses.get(kind);
+        List<OmpClause> clausesList = get(CLAUSES).get(kind);
         if (clausesList == null) {
             clausesList = new ArrayList<>();
-            clauses.put(kind, clausesList);
+            get(CLAUSES).put(kind, clausesList);
         }
 
         clausesList.add(clause);
@@ -137,7 +165,7 @@ public class OmpClausePragma extends OmpPragma {
 
     @Override
     public void removeClause(OmpClauseKind kind) {
-        clauses.remove(kind);
+        get(CLAUSES).remove(kind);
 
     }
 
@@ -161,27 +189,29 @@ public class OmpClausePragma extends OmpPragma {
             }
         }
 
-        clauses.put(firstKind, ompClauseList);
+        get(CLAUSES).put(firstKind, ompClauseList);
     }
 
     @Override
     public Boolean hasClause(OmpClauseKind clauseKind) {
-        if (customContent != null) {
+        // if (customContent != null) {
+        if (getCustomContent().isPresent()) {
             SpecsLogs.msgInfo("OpenMP pragma " + getDirectiveKind()
                     + " has custom content set, no clause processing will be done");
             return false;
         }
 
-        return clauses.containsKey(clauseKind);
+        return get(CLAUSES).containsKey(clauseKind);
     }
 
     @Override
     public void setFullContent(String fullContent) {
-        this.customContent = fullContent;
+        set(CUSTOM_CONTENT, fullContent);
+        // this.customContent = fullContent;
     }
 
     @Override
     public List<OmpClauseKind> getClauseKinds() {
-        return new ArrayList<>(clauses.keySet());
+        return new ArrayList<>(get(CLAUSES).keySet());
     }
 }
