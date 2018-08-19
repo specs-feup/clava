@@ -617,8 +617,10 @@ public class ClavaFactory {
     /// PRAGMAS
 
     public GenericPragma genericPragma(List<String> content) {
+        // content = content instanceof ArrayList ? content : new ArrayList<>(content);
+
         DataStore data = newPragmaDataStore()
-                .set(GenericPragma.CONTENT, content);
+                .set(GenericPragma.CONTENT, new ArrayList<>(content));
 
         return new GenericPragma(data, Collections.emptyList());
     }

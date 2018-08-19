@@ -83,7 +83,7 @@ public class LaraMarkerPragma extends Pragma {
     }
 
     public String getMarkerId() {
-        return getMarkerId();
+        return get(MARKER_ID);
         // return markerId;
     }
 

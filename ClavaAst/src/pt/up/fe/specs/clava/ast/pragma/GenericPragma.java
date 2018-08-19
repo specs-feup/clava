@@ -29,7 +29,8 @@ public class GenericPragma extends Pragma {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<List<String>> CONTENT = KeyFactory.generic("content", new ArrayList<String>());
+    public final static DataKey<List<String>> CONTENT = KeyFactory.generic("content",
+            (List<String>) new ArrayList<String>());
 
     /// DATAKEYS END
 
