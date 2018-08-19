@@ -476,7 +476,7 @@ public class TextParser {
 
     }
 
-    public static TextElements parseElements(File sourceFile) {
+    public TextElements parseElements(File sourceFile) {
         // Separate inline comments associated to a node from the rest
         List<ClavaNode> standaloneElements = new ArrayList<>();
         List<InlineComment> associatedComments = new ArrayList<>();
@@ -493,7 +493,8 @@ public class TextParser {
                 String currentLine = iterator.next();
                 currentLineNumber++;
 
-                Optional<ClavaNode> textElement = applyRules(filepath, iterator, currentLine, currentLineNumber);
+                Optional<ClavaNode> textElement = applyRules(filepath, iterator, currentLine, currentLineNumber,
+                        context);
 
                 if (!textElement.isPresent()) {
                     continue;
@@ -517,11 +518,11 @@ public class TextParser {
     }
 
     public static Optional<ClavaNode> applyRules(String filepath, Iterator<String> iterator, String currentLine,
-            int currentLineNumber) {
+            int currentLineNumber, ClavaContext context) {
 
         // Apply all rules to the current line
         for (TextParserRule rule : RULES) {
-            Optional<ClavaNode> textElement = rule.apply(filepath, currentLine, currentLineNumber, iterator);
+            Optional<ClavaNode> textElement = rule.apply(filepath, currentLine, currentLineNumber, iterator, context);
 
             // If node is present, return
             if (textElement.isPresent()) {

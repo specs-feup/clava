@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.context.ClavaContext;
 
 public interface TextParserRule {
 
@@ -30,5 +31,6 @@ public interface TextParserRule {
      * @param iterator
      * @return
      */
-    Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator);
+    Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
+            ClavaContext context);
 }

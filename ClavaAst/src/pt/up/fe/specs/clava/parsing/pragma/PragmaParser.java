@@ -13,16 +13,22 @@
 
 package pt.up.fe.specs.clava.parsing.pragma;
 
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 @FunctionalInterface
 public interface PragmaParser {
 
-    default Pragma parse(String contents, ClavaNodeInfo info) {
-        return parse(new StringParser(contents), info);
+    // default Pragma parse(String contents, ClavaNodeInfo info) {
+    // return parse(new StringParser(contents), info);
+    // }
+    //
+    // Pragma parse(StringParser contents, ClavaNodeInfo info);
+
+    default Pragma parse(String contents, ClavaContext context) {
+        return parse(new StringParser(contents), context);
     }
 
-    Pragma parse(StringParser contents, ClavaNodeInfo info);
+    Pragma parse(StringParser contents, ClavaContext context);
 }

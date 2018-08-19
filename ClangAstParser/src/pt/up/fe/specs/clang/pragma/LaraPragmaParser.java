@@ -16,10 +16,9 @@ package pt.up.fe.specs.clang.pragma;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
-import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
+import pt.up.fe.specs.clang.utils.ClavaParserFactory;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.parsing.pragma.PragmaParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -34,7 +33,7 @@ public class LaraPragmaParser implements PragmaParser {
     }
 
     @Override
-    public Pragma parse(StringParser parser, ClavaNodeInfo info) {
+    public Pragma parse(StringParser parser, ClavaContext context) {
 
         String contents = parser.toString();
 
@@ -43,7 +42,7 @@ public class LaraPragmaParser implements PragmaParser {
         PragmaParser laraParser = LARA_PARSERS.get(laraType.toLowerCase());
 
         if (laraParser != null) {
-            Pragma pragma = laraParser.parse(parser, info);
+            Pragma pragma = laraParser.parse(parser, context);
 
             return pragma;
         }
@@ -51,18 +50,18 @@ public class LaraPragmaParser implements PragmaParser {
         throw new RuntimeException("LARA pragma not supported: #pragma lara" + contents);
     }
 
-    private static Pragma marker(StringParser contents, ClavaNodeInfo info) {
+    private static Pragma marker(StringParser contents, ClavaContext context) {
         // Get marker id
         String markerId = contents.apply(StringParsers::parseWord);
-
-        return new LaraMarkerPragma(markerId, info);
+        return new ClavaParserFactory(context).laraMarkerPragma(markerId);
+        // return new LaraMarkerPragma(markerId, context);
     }
 
-    private static Pragma tag(StringParser contents, ClavaNodeInfo info) {
+    private static Pragma tag(StringParser contents, ClavaContext context) {
 
         String refId = contents.apply(StringParsers::parseWord);
-
-        return new LaraTagPragma(refId, info);
+        return new ClavaParserFactory(context).laraTagPragma(refId);
+        // return new LaraTagPragma(refId, context);
     }
 
 }

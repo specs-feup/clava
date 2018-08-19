@@ -26,59 +26,61 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
+import pt.up.fe.specs.clava.context.ClavaContext;
 
 public class MultiLineCommentRule implements TextParserRule {
 
     @Override
-    public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator) {
+    public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
+            ClavaContext context) {
 
-	// Check if line contains '//'
-	int startIndex = line.indexOf("/*");
-	if (startIndex == -1) {
-	    return Optional.empty();
-	}
+        // Check if line contains '//'
+        int startIndex = line.indexOf("/*");
+        if (startIndex == -1) {
+            return Optional.empty();
+        }
 
-	// Found start of a multi-line comment. Try to find the end
-	List<String> lines = new ArrayList<>();
+        // Found start of a multi-line comment. Try to find the end
+        List<String> lines = new ArrayList<>();
 
-	String currentLine = line.substring(startIndex + "/*".length());
+        String currentLine = line.substring(startIndex + "/*".length());
 
-	int endIndex = -1;
-	while (true) {
+        int endIndex = -1;
+        while (true) {
 
-	    // Check if current line end the multi-line comment
-	    endIndex = currentLine.indexOf("*/");
+            // Check if current line end the multi-line comment
+            endIndex = currentLine.indexOf("*/");
 
-	    if (endIndex != -1) {
-		// Found end of multi-line comment, add line
-		lines.add(currentLine.substring(0, endIndex).trim());
-		break;
+            if (endIndex != -1) {
+                // Found end of multi-line comment, add line
+                lines.add(currentLine.substring(0, endIndex).trim());
+                break;
 
-	    }
+            }
 
-	    Preconditions.checkArgument(iterator.hasNext(),
-		    "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
+            Preconditions.checkArgument(iterator.hasNext(),
+                    "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
 
-	    // Did not find end of comment, add current string to list
-	    lines.add(currentLine.trim());
-	    currentLine = iterator.next();
-	}
+            // Did not find end of comment, add current string to list
+            lines.add(currentLine.trim());
+            currentLine = iterator.next();
+        }
 
-	// If no endIndex found, comment is malformed
-	// Preconditions.checkArgument(endIndex != -1,
-	// "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
+        // If no endIndex found, comment is malformed
+        // Preconditions.checkArgument(endIndex != -1,
+        // "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
 
-	int startCol = startIndex;
-	int endCol = endIndex;
-	int endLine = lineNumber + lines.size() - 1;
+        int startCol = startIndex;
+        int endCol = endIndex;
+        int endLine = lineNumber + lines.size() - 1;
 
-	SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
-	ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
-	MultiLineComment comment = ClavaNodeFactory.multiLineComment(lines, info);
+        SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
+        ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
+        MultiLineComment comment = ClavaNodeFactory.multiLineComment(lines, info);
 
-	// System.out.println("MULTILINE:" + comment.getCode());
-	// System.out.println("LOC:" + info.getLocation());
-	return Optional.of(comment);
+        // System.out.println("MULTILINE:" + comment.getCode());
+        // System.out.println("LOC:" + info.getLocation());
+        return Optional.of(comment);
     }
 
 }

@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.parsing.pragma.PragmaParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -41,11 +41,11 @@ public class PragmaParsers {
      * @param info
      * @return
      */
-    public static Optional<Pragma> parse(List<String> contents, ClavaNodeInfo info) {
+    public static Optional<Pragma> parse(List<String> contents, ClavaContext info) {
         return parse(contents.stream().collect(Collectors.joining(" ")), info);
     }
 
-    public static Optional<Pragma> parse(String contents, ClavaNodeInfo info) {
+    public static Optional<Pragma> parse(String contents, ClavaContext info) {
 
         String trimmedContents = contents.trim();
 

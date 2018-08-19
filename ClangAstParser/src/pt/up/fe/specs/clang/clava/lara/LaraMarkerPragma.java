@@ -14,14 +14,12 @@
 package pt.up.fe.specs.clang.clava.lara;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 
 public class LaraMarkerPragma extends Pragma {
@@ -38,39 +36,38 @@ public class LaraMarkerPragma extends Pragma {
         super(data, children);
     }
 
-    private String markerId;
+    // private String markerId;
 
     /**
-     * @deprecated
      * @param markerId
      * @param info
      */
-    @Deprecated
-    public LaraMarkerPragma(String markerId, ClavaNodeInfo info) {
-        this(markerId, info, Collections.emptyList());
-    }
+    // @Deprecated
+    // public LaraMarkerPragma(String markerId, ClavaNodeInfo info) {
+    // this(markerId, info, Collections.emptyList());
+    // }
 
     /**
-     * @deprecated
+     * 
      * @param markerId
      * @param info
      * @param children
      */
-    @Deprecated
-    private LaraMarkerPragma(String markerId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
+    // @Deprecated
+    // private LaraMarkerPragma(String markerId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    //
+    // this.markerId = markerId;
+    // }
 
-        this.markerId = markerId;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LaraMarkerPragma(markerId, getInfo(), Collections.emptyList());
-    }
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LaraMarkerPragma(markerId, getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getFullContent() {
-        return LARA_MARKER_PREFIX + markerId;
+        return LARA_MARKER_PREFIX + get(MARKER_ID);
     }
 
     @Override
@@ -81,15 +78,17 @@ public class LaraMarkerPragma extends Pragma {
             newContent = newContent.substring(LARA_MARKER_PREFIX.length());
         }
 
-        this.markerId = newContent;
+        set(MARKER_ID, newContent);
+        // this.markerId = newContent;
     }
 
     public String getMarkerId() {
-        return markerId;
+        return getMarkerId();
+        // return markerId;
     }
 
     @Override
     public String getCode() {
-        return "#pragma lara marker " + markerId;
+        return "#pragma lara marker " + getMarkerId();
     }
 }

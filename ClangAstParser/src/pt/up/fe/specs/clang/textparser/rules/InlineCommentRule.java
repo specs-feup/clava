@@ -22,11 +22,13 @@ import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
+import pt.up.fe.specs.clava.context.ClavaContext;
 
 public class InlineCommentRule implements TextParserRule {
 
     @Override
-    public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator) {
+    public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
+            ClavaContext context) {
 
         // Check if line contains '//'
         int commentIndex = line.indexOf("//");

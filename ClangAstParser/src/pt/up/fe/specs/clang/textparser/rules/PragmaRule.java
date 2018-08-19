@@ -21,9 +21,8 @@ import java.util.Optional;
 import pt.up.fe.specs.clang.pragma.PragmaParsers;
 import pt.up.fe.specs.clang.textparser.TextParserRule;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class PragmaRule implements TextParserRule {
@@ -31,7 +30,8 @@ public class PragmaRule implements TextParserRule {
     private static final String PRAGMA = "#pragma";
 
     @Override
-    public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator) {
+    public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
+            ClavaContext context) {
 
         // To calculate position of pragma
         String lastLine = line;
@@ -80,11 +80,12 @@ public class PragmaRule implements TextParserRule {
         int endLine = lineNumber + pragmaContents.size() - 1;
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
-        ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
+        // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
 
         // Try to parse pragma. If pragma not parsable, create generic pragma
-        ClavaNode pragmaNode = PragmaParsers.parse(pragmaContents, info)
-                .orElse(ClavaNodeFactory.genericPragmaStmt(pragmaContents, info));
+        ClavaNode pragmaNode = PragmaParsers.parse(pragmaContents, context)
+                .orElse(context.getFactory().genericPragma(pragmaContents));
+        pragmaNode.set(ClavaNode.LOCATION, loc);
 
         return Optional.of(pragmaNode);
     }

@@ -85,11 +85,10 @@ public class SnippetParser {
 
             // Check if OpenMP pragma
             if (pragmaKind.equals("omp")) {
-                return ClavaNodes.toStmt(new OmpParser().parse(parser, undefinedInfo));
+                return ClavaNodes.toStmt(new OmpParser().parse(parser, context));
             }
 
-            GenericPragma pragma = ClavaNodeFactory
-                    .genericPragmaStmt(Arrays.asList(pragmaContent), undefinedInfo);
+            GenericPragma pragma = context.getFactory().genericPragma(Arrays.asList(pragmaContent));
             return ClavaNodes.toStmt(pragma);
         }
 

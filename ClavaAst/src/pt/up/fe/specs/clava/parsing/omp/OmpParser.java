@@ -38,8 +38,8 @@ import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.omp.SimpleOmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
-import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.parsing.pragma.PragmaParser;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -157,8 +157,9 @@ public class OmpParser implements PragmaParser {
     }
 
     @Override
-    public Pragma parse(StringParser contents, ClavaNodeInfo info) {
-        Pragma pragma = parse(new GenericPragma(Arrays.asList("omp " + contents.toString()), info));
+    public Pragma parse(StringParser contents, ClavaContext context) {
+        Pragma pragma = parse(context.getFactory().genericPragma(Arrays.asList("omp " + contents.toString())));
+        // Pragma pragma = parse(new GenericPragma(, info));
         contents.clear();
         return pragma;
     }

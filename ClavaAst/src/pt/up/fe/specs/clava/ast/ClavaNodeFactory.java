@@ -43,7 +43,6 @@ import pt.up.fe.specs.clava.ast.extra.OriginalNamespace;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.extra.Undefined;
-import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
@@ -166,9 +165,9 @@ public class ClavaNodeFactory {
     /*
      * 'pragma' nodes
      */
-    public static GenericPragma genericPragmaStmt(List<String> content, ClavaNodeInfo info) {
-        return new GenericPragma(content, info);
-    }
+    // public static GenericPragma genericPragmaStmt(List<String> content, ClavaNodeInfo info) {
+    // return new GenericPragma(content, info);
+    // }
 
     /*
      * 'decl' nodes

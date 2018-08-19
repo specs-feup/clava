@@ -62,6 +62,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -114,6 +115,7 @@ public class ClavaFactory {
     private static final String EXTRA_ID_PREFIX = "extra_";
     private static final String STMT_ID_PREFIX = "stmt_";
     private static final String ATTR_ID_PREFIX = "attr_";
+    private static final String PRAGMA_ID_PREFIX = "pragma_";
 
     private final ClavaContext context;
     private final DataStore baseData;
@@ -143,29 +145,33 @@ public class ClavaFactory {
         return data;
     }
 
-    private DataStore newTypeDataStore() {
+    protected DataStore newTypeDataStore() {
         return newDataStore(TYPE_ID_PREFIX);
     }
 
-    private DataStore newExprDataStore() {
+    protected DataStore newExprDataStore() {
         return newDataStore(EXPR_ID_PREFIX);
     }
 
-    private DataStore newExtraDataStore() {
+    protected DataStore newExtraDataStore() {
         return newDataStore(EXTRA_ID_PREFIX);
     }
 
-    private DataStore newDeclDataStore() {
+    protected DataStore newDeclDataStore() {
         return newDataStore(DECL_ID_PREFIX)
                 .set(Decl.ATTRIBUTES, new ArrayList<>());
     }
 
-    private DataStore newStmtDataStore() {
+    protected DataStore newStmtDataStore() {
         return newDataStore(STMT_ID_PREFIX);
     }
 
-    private DataStore newAttrDataStore() {
+    protected DataStore newAttrDataStore() {
         return newDataStore(ATTR_ID_PREFIX);
+    }
+
+    protected DataStore newPragmaDataStore() {
+        return newDataStore(PRAGMA_ID_PREFIX);
     }
 
     /// EXTRA
@@ -597,6 +603,15 @@ public class ClavaFactory {
                 .put(DummyNode.DUMMY_CONTENT, dummyContent);
 
         return new DummyAttr(data, Collections.emptyList());
+    }
+
+    /// PRAGMAS
+
+    public GenericPragma genericPragma(List<String> content) {
+        DataStore data = newPragmaDataStore()
+                .set(GenericPragma.CONTENT, content);
+
+        return new GenericPragma(data, Collections.emptyList());
     }
 
 }

@@ -14,56 +14,61 @@
 package pt.up.fe.specs.clang.clava.lara;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 
 public class LaraTagPragma extends Pragma {
 
     private static final String LARA_TAG_PREFIX = "lara tag ";
 
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<String> TAG_ID = KeyFactory.string("tagId");
+
+    /// DATAKEYS END
+
     public LaraTagPragma(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    private String tagId;
+    // private String tagId;
 
     /**
-     * @deprecated
      * @param tagId
      * @param info
      */
-    @Deprecated
-    public LaraTagPragma(String tagId, ClavaNodeInfo info) {
-        this(tagId, info, Collections.emptyList());
-    }
+    // @Deprecated
+    // public LaraTagPragma(String tagId, ClavaNodeInfo info) {
+    // this(tagId, info, Collections.emptyList());
+    // }
 
     /**
-     * @deprecated
      * 
      * @param tagId
      * @param info
      * @param children
      */
-    @Deprecated
-    private LaraTagPragma(String tagId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        super(info, children);
-
-        this.tagId = tagId;
-    }
-
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new LaraTagPragma(tagId, getInfo(), Collections.emptyList());
-    }
+    // @Deprecated
+    // private LaraTagPragma(String tagId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // super(info, children);
+    //
+    // this.tagId = tagId;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new LaraTagPragma(tagId, getInfo(), Collections.emptyList());
+    // }
 
     @Override
     public String getFullContent() {
-        return LARA_TAG_PREFIX + tagId;
+        // return LARA_TAG_PREFIX + tagId;
+        return LARA_TAG_PREFIX + get(TAG_ID);
     }
 
     @Override
@@ -74,11 +79,13 @@ public class LaraTagPragma extends Pragma {
             newContent = newContent.substring(LARA_TAG_PREFIX.length());
         }
 
-        tagId = newContent;
+        set(TAG_ID, newContent);
+        // tagId = newContent;
     }
 
     public String getTagId() {
-        return tagId;
+        return get(TAG_ID);
+        // return tagId;
     }
 
     @Override
