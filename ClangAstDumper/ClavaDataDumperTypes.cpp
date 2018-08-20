@@ -31,7 +31,8 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"RValueReferenceType", clava::TypeNode::REFERENCE_TYPE},
         {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
         {"PackExpansionType", clava::TypeNode::PACK_EXPANSION_TYPE},
-        {"UnaryTransformType ", clava::TypeNode::UNARY_TRANSFORM_TYPE},
+        {"UnaryTransformType", clava::TypeNode::UNARY_TRANSFORM_TYPE},
+        {"AttributedType", clava::TypeNode::ATTRIBUTED_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
