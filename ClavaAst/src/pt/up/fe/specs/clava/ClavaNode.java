@@ -263,14 +263,50 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     // : Optional.of(castTo.cast(child));
     // }
 
+    // @Override
+    // public int hashCode() {
+    // return super.hashCode();
+    // }
+    //
+    // @Override
+    // public boolean equals(Object obj) {
+    // return this == obj;
+    // }
+
     @Override
     public int hashCode() {
-        return super.hashCode();
+        final int prime = 31;
+        int result = 1;
+
+        boolean isValid = get(LOCATION).isValid();
+
+        result = prime * result + (!isValid ? 0 : get(LOCATION).hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ClavaNode other = (ClavaNode) obj;
+
+        // Use the location, if valid
+        SourceRange location = get(LOCATION);
+        if (!location.isValid()) {
+            return false;
+        }
+
+        SourceRange objLocation = other.get(LOCATION);
+        if (!objLocation.isValid()) {
+            return false;
+        }
+
+        // return location.toString().equals(objLocation.toString());
+        return location.equals(objLocation);
     }
 
     /**
