@@ -93,9 +93,10 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
     std::ostringstream extendedId;
     extendedId << declAddr << "_" << id;
 
+
     // Dump location
     dumpSourceRange(extendedId.str(), declAddr->getLocStart(), declAddr->getLocEnd());
-
+/*
     // If NamedDecl, check if it has name
     if (const NamedDecl *ND = dyn_cast<NamedDecl>(declAddr)) {
 //        llvm::errs() << "Testing NAMED DECL: " << getId(ND) << "\n";
@@ -107,8 +108,8 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
             llvm::errs() << ND->getNameAsString() << "\n";
         }
     }
-
-
+*/
+/*
     // Dump system header decls, that are not dumped otherwise
     // This way they can be used as children for new nodes
     FullSourceLoc fullLocation = Context->getFullLoc(declAddr->getLocStart());
@@ -118,7 +119,7 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
         (*declAddr).dump(llvm::errs());
         clava::dump("<System Header Node Dump End>");
     }
-
+*/
     // Top-level Node
     //llvm::errs() << "<All Decls>" << "\n";
     //llvm::errs() << declAddr << "_" << id << "\n";

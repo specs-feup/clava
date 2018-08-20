@@ -43,11 +43,11 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
     // A TypeDumper is created for each context,
     // no need to use id to disambiguate
     seenTypes.insert((void*)typeAddr);
-
+    /*
     llvm::errs() << "TYPE_BEGIN\n";
     typeAddr->dump();
     llvm::errs() << "TYPE_END\n";
-
+    */
     //dumpIdToClassMap(typeAddr, clava::getClassName(typeAddr));
 
 

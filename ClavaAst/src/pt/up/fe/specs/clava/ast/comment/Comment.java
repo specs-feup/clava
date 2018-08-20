@@ -18,7 +18,6 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
@@ -34,11 +33,11 @@ public abstract class Comment extends ClavaNode {
         super(data, children);
     }
 
-    public Comment(ClavaNodeInfo nodeInfo, Collection<? extends Comment> children) {
-        // Dummy values for ValueKind and Type
-        // super(ValueKind.R_VALUE, Collections.emptyList(), nodeInfo, children);
-        super(nodeInfo, children);
-    }
+    // public Comment(ClavaNodeInfo nodeInfo, Collection<? extends Comment> children) {
+    // // Dummy values for ValueKind and Type
+    // // super(ValueKind.R_VALUE, Collections.emptyList(), nodeInfo, children);
+    // super(nodeInfo, children);
+    // }
     //
     // @Override
     // public String toContentString() {

@@ -553,9 +553,10 @@ public class ClavaParser implements AutoCloseable {
             Type type = types.get(typeAddress);
 
             if (type == null) {
-                System.out.println("TYPES:" + types);
-                System.out.println("TYPE ADDRESS:" + typeAddress);
-                throw new RuntimeException("STOP");
+                continue;
+                // System.out.println("TYPES:" + types);
+                // System.out.println("TYPE ADDRESS:" + typeAddress);
+                // throw new RuntimeException("STOP");
             }
             // if (type == null) {
             // throw new RuntimeException(

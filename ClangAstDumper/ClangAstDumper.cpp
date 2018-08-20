@@ -48,6 +48,13 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
         // TODO: AST dump method relies on visiting the nodes multiple times
         // For now, detect it to avoid visiting children more than once
         if(seenTypes.count(T.getTypePtr()) == 0) {
+            /*
+            if(dumpType(T.getTypePtr())) {
+                return;
+            }
+
+            visitChildrenAndData(T.getTypePtr());
+*/
             TypeVisitor::Visit(T.getTypePtr());
         }
 
@@ -154,6 +161,13 @@ void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
     clava::dump(clava::getId(Node, id));
 #endif
 
+/*
+    if(dumpStmt(Node)) {
+        return;
+    }
+
+    visitChildrenAndData(Node);
+*/
     ConstStmtVisitor::Visit(Node);
 
 #ifdef VISIT_CHECK
@@ -171,6 +185,13 @@ void ClangAstDumper::VisitDeclTop(const Decl *Node) {
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(Node, id));
 #endif
+/*
+    if(dumpDecl(Node)) {
+        return;
+    }
+
+    visitChildrenAndData(Node);
+*/
 
     ConstDeclVisitor::Visit(Node);
 
