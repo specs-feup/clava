@@ -11,6 +11,6 @@ aspectdef ClavaCodeTest
 	apply
 		println("Cannot prove one exec: " + ClavaCode.isExecutedOnce($pragma.target));
 	end
-	
+
 end
 
