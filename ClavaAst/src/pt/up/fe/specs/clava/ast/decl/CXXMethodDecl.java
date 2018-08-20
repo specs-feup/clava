@@ -117,6 +117,22 @@ public class CXXMethodDecl extends FunctionDecl {
         return getAncestorTry(NamespaceDecl.class).isPresent();
     }
 
+    protected boolean addNamespace() {
+
+        // Do not add if inside namespace
+        if (isInsideNamespaceDecl()) {
+            return false;
+        }
+
+        // Do not add if parent is a FunctionTemplateDecl
+        if (getAncestorTry(FunctionTemplateDecl.class).isPresent()) {
+            return false;
+        }
+
+        return true;
+
+    }
+
     // public CXXMethodDeclData getMethodData() {
     // return methodData;
     // }
@@ -168,7 +184,8 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         // Add namespace if not inside namespace decl
-        if (!isInsideNamespaceDecl()) {
+        // if (!isInsideNamespaceDecl()) {
+        if (addNamespace()) {
             String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
             // String namespace = getMethodData().getNamespace();
             // namespace = namespace == null ? "" : namespace + "::";

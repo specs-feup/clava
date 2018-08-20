@@ -61,11 +61,10 @@ public class RedeclarableTemplateDecl extends TemplateDecl {
                 .map(param -> param.getCode())
                 .collect(Collectors.joining(", "));
 
-        code.append(parameterList).append(">");
+        code.append(parameterList).append(">\n");
         code.append(getTemplateDecl().getCode());
 
         return code.toString();
-
     }
 
 }
