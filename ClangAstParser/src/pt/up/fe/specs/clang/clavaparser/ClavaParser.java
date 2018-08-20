@@ -29,10 +29,6 @@ import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.clava.parser.DelayedParsing;
 import pt.up.fe.specs.clang.clavaparser.attr.FinalAttrParser;
-import pt.up.fe.specs.clang.clavaparser.comment.FullCommentParser;
-import pt.up.fe.specs.clang.clavaparser.comment.InlineCommandCommentParser;
-import pt.up.fe.specs.clang.clavaparser.comment.ParagraphCommentParser;
-import pt.up.fe.specs.clang.clavaparser.comment.TextCommentParser;
 import pt.up.fe.specs.clang.clavaparser.decl.AccessSpecDeclParser;
 import pt.up.fe.specs.clang.clavaparser.decl.CXXConstructorDeclParser;
 import pt.up.fe.specs.clang.clavaparser.decl.CXXConversionDeclParser;
@@ -105,7 +101,6 @@ import pt.up.fe.specs.clang.clavaparser.expr.UnaryExprOrTypeTraitExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.UnaryOperatorParser;
 import pt.up.fe.specs.clang.clavaparser.expr.UnresolvedLookupExprParser;
 import pt.up.fe.specs.clang.clavaparser.expr.UserDefinedLiteralParser;
-import pt.up.fe.specs.clang.clavaparser.extra.AlwaysInlineAttrParser;
 import pt.up.fe.specs.clang.clavaparser.extra.ClangTypesParser;
 import pt.up.fe.specs.clang.clavaparser.extra.NullNodeParser;
 import pt.up.fe.specs.clang.clavaparser.extra.RootParser;
@@ -221,7 +216,7 @@ public class ClavaParser implements AutoCloseable {
         converter.put("Root", RootParser::new);
         converter.put("NULL", NullNodeParser::new);
         converter.put("VariadicType", VariadicTypeParser::new);
-        converter.put("AlwaysInlineAttr", AlwaysInlineAttrParser::new);
+        // converter.put("AlwaysInlineAttr", AlwaysInlineAttrParser::new);
         converter.put("TemplateArgument", TemplateArgumentParser::new);
 
         /* decl */
@@ -361,10 +356,10 @@ public class ClavaParser implements AutoCloseable {
         // converter.put("TypeOfExprType", TypeOfExprTypeParser::new);
 
         /* comment */
-        converter.put("ParagraphComment", ParagraphCommentParser::new);
-        converter.put("TextComment", TextCommentParser::new);
-        converter.put("FullComment", FullCommentParser::new);
-        converter.put("InlineCommandComment", InlineCommandCommentParser::new);
+        // converter.put("ParagraphComment", ParagraphCommentParser::new);
+        // converter.put("TextComment", TextCommentParser::new);
+        // converter.put("FullComment", FullCommentParser::new);
+        // converter.put("InlineCommandComment", InlineCommandCommentParser::new);
 
         /* attributes */
         converter.put("FinalAttr", FinalAttrParser::new);
