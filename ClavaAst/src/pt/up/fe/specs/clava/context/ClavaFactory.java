@@ -671,7 +671,7 @@ public class ClavaFactory {
 
     public MultiLineComment multiLineComment(List<String> lines) {
         DataStore data = newCommentDataStore()
-                .set(MultiLineComment.LINES, lines);
+                .set(MultiLineComment.LINES, new ArrayList<>(lines));
 
         return new MultiLineComment(data, Collections.emptyList());
     }
