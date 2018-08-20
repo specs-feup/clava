@@ -656,8 +656,8 @@ public class FunctionDecl extends DeclaratorDecl {
     */
 
     private static boolean match(FunctionDecl decl, Optional<FunctionDecl> callDecl) {
-
-        return callDecl.map(cDecl -> decl == cDecl).orElse(false);
+        // return callDecl.map(cDecl -> decl == cDecl).orElse(false);
+        return callDecl.map(cDecl -> decl.equals(cDecl)).orElse(false);
         /*
         if (!callDecl.isPresent()) {
             return false;
