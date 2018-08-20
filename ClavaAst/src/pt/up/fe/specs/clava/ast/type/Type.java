@@ -497,7 +497,7 @@ public abstract class Type extends ClavaNode {
             throw new RuntimeException("Type does not have sugar:" + this);
         }
 
-        set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(desugaredType));
+        set(UNQUALIFIED_DESUGARED_TYPE, Optional.ofNullable(desugaredType));
         // set(UNQUALIFIED_DESUGARED_TYPE, desugaredType);
         // setDesugarImpl(desugaredType);
     }
