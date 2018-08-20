@@ -62,4 +62,9 @@ public class CxxBenchTest {
         new CxxTester("bench/Routing.cpp", "bench/ShortcutPosition.h").test();
     }
 
+    @Test
+    public void testPairHash() {
+        new CxxTester("bench/pair_hash.cpp", "bench/pair_hash.h").test();
+    }
+
 }

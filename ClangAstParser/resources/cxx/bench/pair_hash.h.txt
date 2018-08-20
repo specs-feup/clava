@@ -1,0 +1,25 @@
+#ifndef _PAIR_HASH_H_
+#define _PAIR_HASH_H_
+
+#include <cstdlib>
+#include <functional>
+#include <utility>
+
+class A {
+   
+   
+   private:
+   
+   struct PairHash {
+      
+      
+      public:
+      template <typename T, typename U>
+      std::size_t operator()(std::pair<T, U> const& x) const {
+         
+         return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+      }
+   };
+};
+
+#endif
