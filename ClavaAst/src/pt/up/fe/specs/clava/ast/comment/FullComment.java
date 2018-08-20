@@ -28,9 +28,11 @@ import pt.up.fe.specs.clava.ast.expr.data.ExprData;
  * <p>
  * This node child is later extracted as a statement.
  * 
+ * @deprecated
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class FullComment extends Expr {
 
     public FullComment(ClavaNodeInfo nodeInfo, List<BlockContentComment> block) {

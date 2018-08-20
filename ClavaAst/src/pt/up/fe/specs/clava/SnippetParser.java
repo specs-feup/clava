@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -66,13 +65,15 @@ public class SnippetParser {
         // Inline Comment
         if (lowerCurrentCode.startsWith("//")) {
             return ClavaNodes
-                    .toStmt(ClavaNodeFactory.inlineComment(currentCode.substring("//".length()), true, undefinedInfo));
+                    .toStmt(context.getFactory().inlineComment(currentCode.substring("//".length()), true));
+            // .toStmt(ClavaNodeFactory.inlineComment(currentCode.substring("//".length()), true, undefinedInfo));
         }
 
         // Multiline comment
         if (lowerCurrentCode.startsWith("/*") && lowerCurrentCode.endsWith("*/")) {
             String comment = currentCode.substring("/*".length(), currentCode.length() - "*/".length());
-            return ClavaNodes.toStmt(ClavaNodeFactory.multiLineComment(Arrays.asList(comment), undefinedInfo));
+            // return ClavaNodes.toStmt(ClavaNodeFactory.multiLineComment(Arrays.asList(comment), undefinedInfo));
+            return ClavaNodes.toStmt(context.getFactory().multiLineComment(Arrays.asList(comment)));
         }
 
         // String pragmaPrefix = extractPragmaPrefix(currentCode);

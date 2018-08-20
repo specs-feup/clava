@@ -22,9 +22,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.textparser.TextParserRule;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
@@ -75,9 +73,10 @@ public class MultiLineCommentRule implements TextParserRule {
         int endLine = lineNumber + lines.size() - 1;
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
-        ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
-        MultiLineComment comment = ClavaNodeFactory.multiLineComment(lines, info);
-
+        // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
+        // MultiLineComment comment = ClavaNodeFactory.multiLineComment(lines, info);
+        MultiLineComment comment = context.getFactory().multiLineComment(lines);
+        comment.set(ClavaNode.LOCATION, loc);
         // System.out.println("MULTILINE:" + comment.getCode());
         // System.out.println("LOC:" + info.getLocation());
         return Optional.of(comment);

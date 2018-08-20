@@ -18,9 +18,7 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clang.textparser.TextParserRule;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.context.ClavaContext;
 
@@ -44,8 +42,9 @@ public class InlineCommentRule implements TextParserRule {
         int endCol = line.length();
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, lineNumber, endCol);
-        ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
-        InlineComment comment = ClavaNodeFactory.inlineComment(commentText, isStmtComment, info);
+        // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
+        InlineComment comment = context.getFactory().inlineComment(commentText, isStmtComment);
+        comment.set(ClavaNode.LOCATION, loc);
 
         // System.out.println("INLINE:" + comment.getCode());
         return Optional.of(comment);

@@ -22,6 +22,12 @@ import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgument;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class FunctionDeclData {
 
     private static final long NULL_EXCEPT_ADDRESS = 0;

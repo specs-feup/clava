@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.ast.comment.FullComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -69,7 +68,7 @@ public interface ClangNodeParser<T extends ClavaNode> {
                 // return parseChild(child, isTypeParser);
                 // })
                 // Remove full comment nodes
-                .filter(clavaNode -> !(clavaNode instanceof FullComment))
+                // .filter(clavaNode -> !(clavaNode instanceof FullComment))
                 .collect(Collectors.toList());
 
     }

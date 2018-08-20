@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class ParagraphComment extends BlockContentComment {
 
     public ParagraphComment(ClavaNodeInfo nodeInfo, List<InlineContentComment> text) {

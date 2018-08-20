@@ -135,7 +135,6 @@ import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RecoverStdMacros;
 import pt.up.fe.specs.clang.transforms.RemoveBoolOperatorCalls;
-import pt.up.fe.specs.clang.transforms.RemoveClangComments;
 import pt.up.fe.specs.clang.transforms.RemoveDefaultInitializers;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemoveImplicitConstructors;
@@ -169,7 +168,7 @@ public class ClavaParser implements AutoCloseable {
             new DenanonymizeDecls(),
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
-            new RemoveClangComments(),
+            // new RemoveClangComments(),
             new CreateDeclStmts(),
             new AdaptBoolTypes(),
             new AdaptBoolCasts(),

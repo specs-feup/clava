@@ -13,12 +13,9 @@
 
 package pt.up.fe.specs.clang.clavaparser.comment;
 
-import java.util.Collections;
-
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -38,7 +35,8 @@ public class FullCommentParser extends AClangNodeParser<FullComment> {
         // List<BlockContentComment> blocks = CollectionUtils.cast(BlockContentComment.class, children);
 
         // return ClavaNodeFactory.fullComment(info(node), blocks);
-        return ClavaNodeFactory.fullComment(info(node), Collections.emptyList());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.fullComment(info(node), Collections.emptyList());
     }
 
 }

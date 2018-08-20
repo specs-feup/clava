@@ -13,31 +13,45 @@
 
 package pt.up.fe.specs.clava.ast.comment;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class MultiLineComment extends Comment {
 
-    private final List<String> lines;
+    /// DATAKEYS BEGIN
 
-    public MultiLineComment(List<String> lines, ClavaNodeInfo nodeInfo) {
-        super(nodeInfo, Collections.emptyList());
+    public final static DataKey<List<String>> LINES = KeyFactory.generic("lines", new ArrayList<String>());
 
-        this.lines = lines;
+    /// DATAKEYS END
+
+    public MultiLineComment(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new MultiLineComment(lines, getInfo());
-    }
+    // private final List<String> lines;
+    //
+    // public MultiLineComment(List<String> lines, ClavaNodeInfo nodeInfo) {
+    // super(nodeInfo, Collections.emptyList());
+    //
+    // this.lines = lines;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new MultiLineComment(lines, getInfo());
+    // }
 
     @Override
     public String getText() {
-        return lines.stream().collect(Collectors.joining(ln()));
+        return get(LINES).stream().collect(Collectors.joining(ln()));
     }
 
     @Override
@@ -47,7 +61,7 @@ public class MultiLineComment extends Comment {
     }
 
     public List<String> getLines() {
-        return lines;
+        return get(LINES);
     }
 
 }

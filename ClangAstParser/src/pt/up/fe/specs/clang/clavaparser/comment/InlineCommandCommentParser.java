@@ -17,7 +17,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineCommandComment;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -37,7 +36,9 @@ public class InlineCommandCommentParser extends AClangNodeParser<InlineCommandCo
 
         // System.out.println("Command Comment:" + parser);
         String text = parser.apply(ClangGenericParsers::getString);
-        return ClavaNodeFactory.inlineCommandComment(text, node.getInfo());
+
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.inlineCommandComment(text, node.getInfo());
     }
 
 }

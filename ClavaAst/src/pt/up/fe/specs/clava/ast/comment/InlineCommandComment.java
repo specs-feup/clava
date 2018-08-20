@@ -18,23 +18,29 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 
+/**
+ * @deprecated
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class InlineCommandComment extends InlineContentComment {
 
     private final String text;
 
     public InlineCommandComment(String text, ClavaNodeInfo nodeInfo) {
-	super(nodeInfo, Collections.emptyList());
+        super(nodeInfo, Collections.emptyList());
 
-	this.text = text;
+        this.text = text;
     }
 
     @Override
     protected ClavaNode copyPrivate() {
-	return new InlineCommandComment(text, getInfo());
+        return new InlineCommandComment(text, getInfo());
     }
 
     @Override
     public String getCode() {
-	return text;
+        return text;
     }
 }

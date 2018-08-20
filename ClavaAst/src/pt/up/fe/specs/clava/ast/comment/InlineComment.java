@@ -13,36 +13,51 @@
 
 package pt.up.fe.specs.clava.ast.comment;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 
 public class InlineComment extends Comment {
 
-    private final String text;
-    private final boolean isStmtComment;
+    /// DATAKEYS BEGIN
 
-    public InlineComment(String text, boolean isStmtComment, ClavaNodeInfo nodeInfo) {
-        super(nodeInfo, Collections.emptyList());
+    public final static DataKey<String> TEXT = KeyFactory.string("text");
 
-        this.text = text;
-        this.isStmtComment = isStmtComment;
+    public final static DataKey<Boolean> IS_STMT_COMMENT = KeyFactory.bool("isStmtComment");
+
+    /// DATAKEYS END
+
+    public InlineComment(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new InlineComment(text, isStmtComment, getInfo());
-    }
+    // private final String text;
+    // private final boolean isStmtComment;
+    //
+    // public InlineComment(String text, boolean isStmtComment, ClavaNodeInfo nodeInfo) {
+    // super(nodeInfo, Collections.emptyList());
+    //
+    // this.text = text;
+    // this.isStmtComment = isStmtComment;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new InlineComment(text, isStmtComment, getInfo());
+    // }
 
     @Override
     public String getCode() {
-        return "//" + text;
+        return "//" + get(TEXT);
     }
 
     @Override
     public String getText() {
-        return text;
+        return get(TEXT);
     }
 
     /**
@@ -50,7 +65,7 @@ public class InlineComment extends Comment {
      * @return true, if the inline comment appears alone in the statement.
      */
     public boolean isStmtComment() {
-        return isStmtComment;
+        return get(IS_STMT_COMMENT);
     }
 
 }

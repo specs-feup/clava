@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.InlineContentComment;
 import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -36,8 +35,8 @@ public class ParagraphCommentParser extends AClangNodeParser<ParagraphComment> {
         List<ClavaNode> children = parseChildren(node);
 
         List<InlineContentComment> text = SpecsCollections.cast(children, InlineContentComment.class);
-
-        return ClavaNodeFactory.paragraphComment(info(node), text);
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.paragraphComment(info(node), text);
     }
 
 }

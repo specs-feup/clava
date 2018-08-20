@@ -32,6 +32,8 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LiteralNode;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
+import pt.up.fe.specs.clava.ast.comment.InlineComment;
+import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
@@ -125,6 +127,7 @@ public class ClavaFactory {
     private static final String STMT_ID_PREFIX = "stmt_";
     private static final String ATTR_ID_PREFIX = "attr_";
     private static final String PRAGMA_ID_PREFIX = "pragma_";
+    private static final String COMMENT_ID_PREFIX = "comment_";
 
     private final ClavaContext context;
     private final DataStore baseData;
@@ -181,6 +184,10 @@ public class ClavaFactory {
 
     protected DataStore newPragmaDataStore() {
         return newDataStore(PRAGMA_ID_PREFIX);
+    }
+
+    protected DataStore newCommentDataStore() {
+        return newDataStore(COMMENT_ID_PREFIX);
     }
 
     /// EXTRA
@@ -650,6 +657,23 @@ public class ClavaFactory {
                 .set(OmpLiteralPragma.CUSTOM_CONTENT, customContent);
 
         return new OmpLiteralPragma(data, Collections.emptyList());
+    }
+
+    /// COMMENTS
+
+    public InlineComment inlineComment(String text, boolean isStmtComment) {
+        DataStore data = newCommentDataStore()
+                .set(InlineComment.TEXT, text)
+                .set(InlineComment.IS_STMT_COMMENT, isStmtComment);
+
+        return new InlineComment(data, Collections.emptyList());
+    }
+
+    public MultiLineComment multiLineComment(List<String> lines) {
+        DataStore data = newCommentDataStore()
+                .set(MultiLineComment.LINES, lines);
+
+        return new MultiLineComment(data, Collections.emptyList());
     }
 
 }

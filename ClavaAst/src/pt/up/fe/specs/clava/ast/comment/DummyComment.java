@@ -14,10 +14,12 @@
 package pt.up.fe.specs.clava.ast.comment;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 
 /**
@@ -28,26 +30,36 @@ import pt.up.fe.specs.clava.ClavaNodes;
  */
 public class DummyComment extends Comment {
 
-    private final String content;
+    /// DATAKEYS BEGIN
 
-    public DummyComment(String content, ClavaNodeInfo info, Collection<? extends Comment> children) {
-        super(info, children);
+    public final static DataKey<String> CONTENT = KeyFactory.string("content");
 
-        this.content = content;
+    /// DATAKEYS END
+
+    public DummyComment(DataStore data, Collection<? extends ClavaNode> children) {
+        super(data, children);
     }
 
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DummyComment(content, getInfo(), Collections.emptyList());
-    }
+    // private final String content;
+    //
+    // public DummyComment(String content, ClavaNodeInfo info, Collection<? extends Comment> children) {
+    // super(info, children);
+    //
+    // this.content = content;
+    // }
+    //
+    // @Override
+    // protected ClavaNode copyPrivate() {
+    // return new DummyComment(content, getInfo(), Collections.emptyList());
+    // }
 
     public String getNodeCode() {
-        return "// Dummy comment '" + content + "'";
+        return "// Dummy comment '" + get(CONTENT) + "'";
     }
 
     @Override
     public String getText() {
-        return content;
+        return get(CONTENT);
     }
 
     @Override

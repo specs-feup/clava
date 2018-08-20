@@ -13,13 +13,10 @@
 
 package pt.up.fe.specs.clang.clavaparser.extra;
 
-import java.util.Collections;
-
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.FullComment;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -44,7 +41,8 @@ public class AlwaysInlineAttrParser extends AClangNodeParser<FullComment> {
         checkNoChildren(node);
 
         // Returning FullComment, these nodes are removed from the tree
-        return ClavaNodeFactory.fullComment(node.getInfo(), Collections.emptyList());
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.fullComment(node.getInfo(), Collections.emptyList());
     }
 
 }

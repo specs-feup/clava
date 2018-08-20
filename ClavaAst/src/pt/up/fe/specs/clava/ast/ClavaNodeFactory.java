@@ -19,18 +19,7 @@ import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.comment.BlockContentComment;
-import pt.up.fe.specs.clava.ast.comment.Comment;
-import pt.up.fe.specs.clava.ast.comment.DummyComment;
-import pt.up.fe.specs.clava.ast.comment.FullComment;
-import pt.up.fe.specs.clava.ast.comment.InlineCommandComment;
-import pt.up.fe.specs.clava.ast.comment.InlineComment;
-import pt.up.fe.specs.clava.ast.comment.InlineContentComment;
-import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
-import pt.up.fe.specs.clava.ast.comment.ParagraphComment;
-import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.clava.ast.decl.data.BareDeclData;
 import pt.up.fe.specs.clava.ast.expr.CXXBoolLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -41,7 +30,6 @@ import pt.up.fe.specs.clava.ast.extra.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.extra.TemplateArgumentType;
-import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.type.FunctionNoProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
@@ -62,12 +50,12 @@ public class ClavaNodeFactory {
     /*
      * 'extra' nodes
      */
-
-    public static Undefined undefined(String name, String content, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-
-        return new Undefined(name, content, info, children);
-    }
+    //
+    // public static Undefined undefined(String name, String content, ClavaNodeInfo info,
+    // List<? extends ClavaNode> children) {
+    //
+    // return new Undefined(name, content, info, children);
+    // }
 
     // public static App app(Collection<TranslationUnit> translationUnits) {
     // return new App(translationUnits);
@@ -126,29 +114,29 @@ public class ClavaNodeFactory {
      * 'comment' nodes
      */
 
-    public static DummyComment dummyComment(String content, ClavaNodeInfo info, List<? extends Comment> children) {
-        return new DummyComment(content, info, children);
-    }
+    // public static DummyComment dummyComment(String content, ClavaNodeInfo info, List<? extends Comment> children) {
+    // return new DummyComment(content, info, children);
+    // }
 
-    public static TextComment textComment(String text, ClavaNodeInfo nodeInfo) {
-        return new TextComment(text, nodeInfo);
-    }
+    // public static TextComment textComment(String text, ClavaNodeInfo nodeInfo) {
+    // return new TextComment(text, nodeInfo);
+    // }
+    //
+    // public static ParagraphComment paragraphComment(ClavaNodeInfo nodeInfo, List<InlineContentComment> text) {
+    // return new ParagraphComment(nodeInfo, text);
+    // }
 
-    public static ParagraphComment paragraphComment(ClavaNodeInfo nodeInfo, List<InlineContentComment> text) {
-        return new ParagraphComment(nodeInfo, text);
-    }
+    // public static FullComment fullComment(ClavaNodeInfo nodeInfo, List<BlockContentComment> block) {
+    // return new FullComment(nodeInfo, block);
+    // }
 
-    public static FullComment fullComment(ClavaNodeInfo nodeInfo, List<BlockContentComment> block) {
-        return new FullComment(nodeInfo, block);
-    }
+    // public static InlineComment inlineComment(String text, boolean isStmtComment, ClavaNodeInfo nodeInfo) {
+    // return new InlineComment(text, isStmtComment, nodeInfo);
+    // }
 
-    public static InlineComment inlineComment(String text, boolean isStmtComment, ClavaNodeInfo nodeInfo) {
-        return new InlineComment(text, isStmtComment, nodeInfo);
-    }
-
-    public static MultiLineComment multiLineComment(List<String> lines, ClavaNodeInfo nodeInfo) {
-        return new MultiLineComment(lines, nodeInfo);
-    }
+    // public static MultiLineComment multiLineComment(List<String> lines, ClavaNodeInfo nodeInfo) {
+    // return new MultiLineComment(lines, nodeInfo);
+    // }
 
     /**
      * @deprecated use inlineComment
@@ -156,10 +144,10 @@ public class ClavaNodeFactory {
      * @param nodeInfo
      * @return
      */
-    @Deprecated
-    public static InlineCommandComment inlineCommandComment(String text, ClavaNodeInfo nodeInfo) {
-        return new InlineCommandComment(text, nodeInfo);
-    }
+    // @Deprecated
+    // public static InlineCommandComment inlineCommandComment(String text, ClavaNodeInfo nodeInfo) {
+    // return new InlineCommandComment(text, nodeInfo);
+    // }
 
     /*
      * 'pragma' nodes

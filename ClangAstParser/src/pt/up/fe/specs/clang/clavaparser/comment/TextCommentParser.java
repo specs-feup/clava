@@ -19,7 +19,6 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.clavaparser.AClangNodeParser;
 import pt.up.fe.specs.clang.clavaparser.ClangConverterTable;
 import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.TextComment;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
@@ -50,8 +49,8 @@ public class TextCommentParser extends AClangNodeParser<TextComment> {
         // Preconditions.checkArgument(endOk);
 
         // String text = parser.apply(ClangParseWorkers::getString);
-
-        return ClavaNodeFactory.textComment(text, info(node));
+        throw new RuntimeException("deprecated");
+        // return ClavaNodeFactory.textComment(text, info(node));
     }
 
 }

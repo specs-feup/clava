@@ -23,16 +23,15 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
-import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 
 public class ClavaParserUtils {
 
     public static <T extends ClavaNode> T cast(ClavaNode node, Class<T> aClass, Function<ClavaNode, T> dummySupplier) {
         // Replace with DummyStmt if Undefined
-        if (node instanceof Undefined) {
-            node = dummySupplier.apply(node);
-        }
+        // if (node instanceof Undefined) {
+        // node = dummySupplier.apply(node);
+        // }
 
         if (!aClass.isInstance(node)) {
             throw new RuntimeException("Expected an '" + aClass.getSimpleName() + "':" + node);

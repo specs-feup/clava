@@ -18,6 +18,13 @@ import java.util.Collections;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 
+/**
+ * @deprecated
+ * 
+ * @author JoaoBispo
+ *
+ */
+@Deprecated
 public class TextComment extends InlineContentComment {
 
     private final String text;
