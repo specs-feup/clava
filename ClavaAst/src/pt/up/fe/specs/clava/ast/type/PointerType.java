@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -23,7 +25,7 @@ public class PointerType extends Type {
 
     /// DATAKEYS BEGIN
 
-    // public final static DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
+    public final static DataKey<Type> POINTEE_TYPE = KeyFactory.object("pointeeType", Type.class);
 
     /// DATAKEYS END
 
@@ -69,8 +71,8 @@ public class PointerType extends Type {
     }
 
     public Type getPointeeType() {
-        // return get(POINTEE_TYPE);
-        return getChild(Type.class, 0);
+        return get(POINTEE_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     public static boolean isPointerToParenType(Type type) {

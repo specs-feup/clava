@@ -33,6 +33,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"PackExpansionType", clava::TypeNode::PACK_EXPANSION_TYPE},
         {"UnaryTransformType", clava::TypeNode::UNARY_TRANSFORM_TYPE},
         {"AttributedType", clava::TypeNode::ATTRIBUTED_TYPE},
+        {"SubstTemplateTypeParmType", clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -106,6 +107,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpAttributedTypeData(static_cast<const AttributedType *>(T)); break;
         case clava::TypeNode::UNARY_TRANSFORM_TYPE:
             DumpUnaryTransformTypeData(static_cast<const UnaryTransformType  *>(T)); break;
+        case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE:
+            DumpSubstTemplateTypeParmTypeData(static_cast<const SubstTemplateTypeParmType  *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -267,7 +270,7 @@ void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
 void clava::ClavaDataDumper::DumpPointerTypeData(const PointerType *T) {
     DumpTypeData(T);
 
-    //clava::dump(clava::getId(T->getPointeeType(), id));
+    clava::dump(clava::getId(T->getPointeeType(), id));
 }
 
 void clava::ClavaDataDumper::DumpFunctionTypeData(const FunctionType *T) {
@@ -284,13 +287,24 @@ void clava::ClavaDataDumper::DumpFunctionTypeData(const FunctionType *T) {
     clava::dump(extInfo.getHasRegParm() ? extInfo.getRegParm() : 0);
     clava::dump(clava::CALLING_CONVENTION[extInfo.getCC()]);
 
+    clava::dump(clava::getId(T->getReturnType(), id));
 }
 
 void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *T) {
     DumpFunctionTypeData(T);
 
+
+
+
     // Num parameters
     clava::dump(T->getParamTypes().size());
+
+    // Parameters types
+    clava::dump(T->getParamTypes().size());
+    for (QualType paramType : T->getParamTypes()) {
+        clava::dump(clava::getId(paramType, id));
+    }
+
 
     auto info = T->getExtProtoInfo();
     clava::dump(info.HasTrailingReturn);
@@ -382,7 +396,7 @@ void clava::ClavaDataDumper::DumpArrayTypeData(const ArrayType *T) {
     //clava::dump(T->getIndexTypeQualifiers().getAsString());
     // Dump C99 qualifiers of element type
     clava::dump(T->getIndexTypeQualifiers(), Context);
-
+    clava::dump(clava::getId(T->getElementType(), id));
 }
 
 void clava::ClavaDataDumper::DumpConstantArrayTypeData(const ConstantArrayType *T) {
@@ -420,6 +434,7 @@ void clava::ClavaDataDumper::DumpElaboratedTypeData(const ElaboratedType *T) {
     DumpTypeWithKeywordData(T);
 
     clava::dump(T->getQualifier(), Context);
+    clava::dump(clava::getId(T->getNamedType(), id));
 
 }
 
@@ -552,5 +567,13 @@ void clava::ClavaDataDumper::DumpUnaryTransformTypeData(const UnaryTransformType
     clava::dump(clava::UTT_KIND[T->getUTTKind()]);
     clava::dump(clava::getId(T->getUnderlyingType(), id));
     clava::dump(clava::getId(T->getBaseType(), id));
+}
+
+void clava::ClavaDataDumper::DumpSubstTemplateTypeParmTypeData(const SubstTemplateTypeParmType  *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getReplacedParameter(), id));
+    clava::dump(clava::getId(T->getReplacementType(), id));
 }
 

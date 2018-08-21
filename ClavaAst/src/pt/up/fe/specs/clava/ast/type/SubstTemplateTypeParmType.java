@@ -17,11 +17,21 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
 public class SubstTemplateTypeParmType extends Type {
+
+    /// DATAKEYS BEGIN
+
+    public final static DataKey<Type> REPLACED_PARAMETER = KeyFactory.object("replacedParameter", Type.class);
+
+    public final static DataKey<Type> REPLACEMENT_TYPE = KeyFactory.object("replacementType", Type.class);
+
+    /// DATAKEYS END
 
     public SubstTemplateTypeParmType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

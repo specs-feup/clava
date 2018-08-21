@@ -38,6 +38,8 @@ public abstract class ArrayType extends Type {
             .generic("indexTypeQualifiers", (List<C99Qualifier>) new ArrayList<C99Qualifier>())
             .setDefault(() -> new ArrayList<>());
 
+    public final static DataKey<Type> ELEMENT_TYPE = KeyFactory.object("elementType", Type.class);
+
     /// DATAKEYS END
 
     public ArrayType(DataStore data, Collection<? extends ClavaNode> children) {
@@ -60,7 +62,8 @@ public abstract class ArrayType extends Type {
 
     // abstract public Type getElementType();
     public Type getElementType() {
-        return getChild(Type.class, 0);
+        return get(ELEMENT_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     /**

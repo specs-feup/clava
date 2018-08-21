@@ -36,7 +36,13 @@ import pt.up.fe.specs.clava.ClavaNode;
  */
 public class ElaboratedType extends TypeWithKeyword {
 
+    /// DATAKEYS BEGIN
+
     public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
+    public final static DataKey<Type> NAMED_TYPE = KeyFactory.object("namedType", Type.class);
+
+    /// DATAKEYS END
 
     // private static final ClassSet<Type> BARE_TYPE_CLASSES = ClassSet.newInstance(RecordType.class);
 
@@ -62,11 +68,13 @@ public class ElaboratedType extends TypeWithKeyword {
     */
 
     public Type getNamedType() {
-        return getChild(Type.class, 0);
+        return get(NAMED_TYPE);
+        // return getChild(Type.class, 0);
     }
 
     public void setNamedType(Type namedType) {
-        setChild(0, namedType);
+        set(NAMED_TYPE, namedType);
+        // setChild(0, namedType);
     }
 
     /*

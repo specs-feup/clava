@@ -152,8 +152,8 @@ void ClangAstDumper::VisitFunctionTypeChildren(const FunctionType *T, std::vecto
     VisitTypeChildren(T, visitedChildren);
 
     // Return type
-    addChild(T->getReturnType(), visitedChildren);
-    //VisitTypeTop(T->getReturnType());
+    //addChild(T->getReturnType(), visitedChildren);
+    VisitTypeTop(T->getReturnType());
     //visitedChildren.push_back(clava::getId(T->getReturnType(), id));
 }
 
@@ -163,7 +163,8 @@ void ClangAstDumper::VisitFunctionProtoTypeChildren(const FunctionProtoType *T, 
 
     // Parameters types
     for (QualType paramType : T->getParamTypes()) {
-        addChild(paramType, visitedChildren);
+        VisitTypeTop(paramType);
+        //addChild(paramType, visitedChildren);
 //        VisitTypeTop(paramType);
 //        visitedChildren.push_back(clava::getId(paramType, id));
     }
@@ -215,7 +216,9 @@ void ClangAstDumper::VisitArrayTypeChildren(const ArrayType *T, std::vector<std:
     VisitTypeChildren(T, visitedChildren);
 
     // Element type
-    addChild(T->getElementType(), visitedChildren);
+    //addChild(T->getElementType(), visitedChildren);
+    VisitTypeTop(T->getElementType());
+
     //VisitTypeTop(T->getElementType());
     //visitedChildren.push_back(clava::getId(T->getElementType(), id));
 
@@ -229,7 +232,9 @@ void ClangAstDumper::VisitVariableArrayTypeChildren(const VariableArrayType *T, 
 
 
     // Visit and add size expression
-    addChild(T->getSizeExpr(), visitedChildren);
+    //addChild(T->getSizeExpr(), visitedChildren);
+    VisitStmtTop(T->getSizeExpr());
+
     //VisitStmtTop(T->getSizeExpr());
     //visitedChildren.push_back(clava::getId(T->getSizeExpr(), id));
 }
@@ -252,7 +257,9 @@ void ClangAstDumper::VisitPointerTypeChildren(const PointerType *T, std::vector<
 
     // Visit pointee
     //VisitTypeTop(T->getPointeeType());
-    addChild(T->getPointeeType(), visitedChildren);
+    //addChild(T->getPointeeType(), visitedChildren);
+    VisitTypeTop(T->getPointeeType());
+
     //VisitTypeTop(T->getPointeeType());
     //visitedChildren.push_back(clava::getId(T->getPointeeType(), id));
 }
@@ -262,8 +269,8 @@ void ClangAstDumper::VisitElaboratedTypeChildren(const ElaboratedType *T, std::v
     VisitTypeChildren(T, visitedChildren);
 
     // Visit named type
-    addChild(T->getNamedType(), visitedChildren);
-//    VisitTypeTop(T->getNamedType());
+    //addChild(T->getNamedType(), visitedChildren);
+    VisitTypeTop(T->getNamedType());
 //    visitedChildren.push_back(clava::getId(T->getNamedType(), id));
 }
 
@@ -316,8 +323,10 @@ void ClangAstDumper::VisitSubstTemplateTypeParmTypeChildren(const SubstTemplateT
     // Hierarchy
     VisitTypeChildren(T, visitedChildren);
 
-    addChild(T->getReplacedParameter(), visitedChildren);
-    addChild(T->getReplacementType(), visitedChildren);
+    //addChild(T->getReplacedParameter(), visitedChildren);
+    //addChild(T->getReplacementType(), visitedChildren);
+    VisitTypeTop(T->getReplacedParameter());
+    VisitTypeTop(T->getReplacementType());
 };
 
 void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpecializationType *T, std::vector<std::string> &visitedChildren){

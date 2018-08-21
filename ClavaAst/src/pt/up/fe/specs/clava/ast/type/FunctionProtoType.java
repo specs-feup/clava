@@ -14,7 +14,9 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -29,6 +31,9 @@ public class FunctionProtoType extends FunctionType {
     /// DATAKEYS BEGIN
 
     public final static DataKey<Integer> NUM_PARAMETERS = KeyFactory.integer("numParameters");
+
+    public final static DataKey<List<Type>> PARAMETERS_TYPES = KeyFactory.generic("parametersTypes",
+            new ArrayList<Type>());
 
     public final static DataKey<Boolean> HAS_TRAILING_RETURNS = KeyFactory.bool("hasTrailingReturn");
 
@@ -94,6 +99,11 @@ public class FunctionProtoType extends FunctionType {
     @Override
     public boolean isVariadic() {
         return get(IS_VARIADIC);
+    }
+
+    @Override
+    public List<Type> getParamTypes() {
+        return get(PARAMETERS_TYPES);
     }
 
 }

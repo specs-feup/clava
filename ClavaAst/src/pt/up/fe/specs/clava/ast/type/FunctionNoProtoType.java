@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -34,6 +36,11 @@ public class FunctionNoProtoType extends FunctionType {
     @Override
     public int getNumParams() {
         return 0;
+    }
+
+    @Override
+    public List<Type> getParamTypes() {
+        return Collections.emptyList();
     }
 
     @Override

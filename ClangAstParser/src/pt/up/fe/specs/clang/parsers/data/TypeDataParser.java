@@ -33,8 +33,10 @@ import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.PackExpansionType;
+import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.ReferenceType;
+import pt.up.fe.specs.clava.ast.type.SubstTemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
@@ -97,7 +99,7 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, dataStore);
 
-        // dataStore.getClavaNodes().queueSetNode(data, PointerType.POINTEE_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, PointerType.POINTEE_TYPE, lines.nextLine());
 
         return data;
     }
@@ -130,6 +132,8 @@ public class TypeDataParser {
         data.add(FunctionType.REG_PARM, LineStreamParsers.longInt(lines));
         data.add(FunctionType.CALLING_CONVENTION, LineStreamParsers.enumFromName(CallingConvention.getHelper(), lines));
 
+        parserData.getClavaNodes().queueSetNode(data, FunctionType.RETURN_TYPE, lines.nextLine());
+
         return data;
     }
 
@@ -138,6 +142,9 @@ public class TypeDataParser {
         DataStore data = parseFunctionTypeData(lines, parserData);
 
         data.add(FunctionProtoType.NUM_PARAMETERS, LineStreamParsers.integer(lines));
+
+        parserData.getClavaNodes().queueSetNodeList(data, FunctionProtoType.PARAMETERS_TYPES,
+                LineStreamParsers.stringList(lines));
 
         data.add(FunctionProtoType.HAS_TRAILING_RETURNS, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionProtoType.IS_VARIADIC, LineStreamParsers.oneOrZero(lines));
@@ -166,6 +173,7 @@ public class TypeDataParser {
 
         data.add(ArrayType.ARRAY_SIZE_MODIFIER, LineStreamParsers.enumFromName(ArraySizeModifier.class, lines));
         data.add(ArrayType.INDEX_TYPE_QUALIFIERS, LineStreamParsers.enumListFromName(C99Qualifier.getHelper(), lines));
+        parserData.getClavaNodes().queueSetNode(data, ArrayType.ELEMENT_TYPE, lines.nextLine());
 
         return data;
 
@@ -225,6 +233,7 @@ public class TypeDataParser {
         DataStore data = parseTypeWithKeywordData(lines, parserData);
 
         data.add(ElaboratedType.QUALIFIER, lines.nextLine());
+        parserData.getClavaNodes().queueSetNode(data, ElaboratedType.NAMED_TYPE, lines.nextLine());
 
         return data;
     }
@@ -347,6 +356,16 @@ public class TypeDataParser {
         data.add(UnaryTransformType.KIND, LineStreamParsers.enumFromName(UnaryTransformTypeKind.class, lines));
         parserData.getClavaNodes().queueSetNode(data, UnaryTransformType.UNDERLYING_TYPE, lines.nextLine());
         parserData.getClavaNodes().queueSetNode(data, UnaryTransformType.BASE_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseSubstTemplateTypeParmTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, SubstTemplateTypeParmType.REPLACED_PARAMETER, lines.nextLine());
+        parserData.getClavaNodes().queueSetNode(data, SubstTemplateTypeParmType.REPLACEMENT_TYPE, lines.nextLine());
 
         return data;
     }

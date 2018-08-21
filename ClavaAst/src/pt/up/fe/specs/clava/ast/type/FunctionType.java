@@ -24,6 +24,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
+import pt.up.fe.specs.clava.utils.NullNode;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
@@ -57,6 +59,8 @@ public abstract class FunctionType extends Type {
     public final static DataKey<CallingConvention> CALLING_CONVENTION = KeyFactory.enumeration("callingConvention",
             CallingConvention.class);
 
+    public final static DataKey<Type> RETURN_TYPE = KeyFactory.object("returnType", Type.class);
+
     /// DATAKEYS END
 
     /**
@@ -68,12 +72,19 @@ public abstract class FunctionType extends Type {
     }
 
     public Type getReturnType() {
-        int indexReturnType = getIndexReturnType();
-        if (indexReturnType < 0) {
-            return null;
-        }
 
-        return getChild(Type.class, indexReturnType);
+        Type returnType = get(RETURN_TYPE);
+
+        SpecsCheck.checkArgument(!(returnType instanceof NullNode),
+                () -> "Just to confirm if this can be null. It if can, change to Optional");
+
+        return returnType;
+        // int indexReturnType = getIndexReturnType();
+        // if (indexReturnType < 0) {
+        // return null;
+        // }
+        //
+        // return getChild(Type.class, indexReturnType);
     }
 
     @Override
@@ -110,20 +121,21 @@ public abstract class FunctionType extends Type {
         return getIndexParamStart() + getNumParams();
     }
 
-    public List<Type> getParamTypes() {
-
-        return getChildren().subList(getIndexParamStart(), getIndexParamEnd()).stream()
-                .map(child -> (Type) child)
-                .collect(Collectors.toList());
-
-        /*
-        if (getNumChildren() == 1) {
-            Collections.emptyList();
-        }
-        
-        return getChildren(Type.class, 1);
-        */
-    }
+    public abstract List<Type> getParamTypes();
+    // public List<Type> getParamTypes() {
+    //
+    // return getChildren().subList(getIndexParamStart(), getIndexParamEnd()).stream()
+    // .map(child -> (Type) child)
+    // .collect(Collectors.toList());
+    //
+    // /*
+    // if (getNumChildren() == 1) {
+    // Collections.emptyList();
+    // }
+    //
+    // return getChildren(Type.class, 1);
+    // */
+    // }
 
     /**
      * 
