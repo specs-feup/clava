@@ -355,13 +355,14 @@ public abstract class Type extends ClavaNode {
      * @return true if this type updated its template argument types, false otherwise
      */
     public boolean hasUpdatedTemplateArgTypes() {
-        // If no sugar, return false
-        if (!hasSugar()) {
-            // System.out.println("NO SUGAR:" + this.getClass().getSimpleName());
-            return false;
-        }
-        // System.out.println("DESUGARING:" + this.getClass().getSimpleName());
-        return desugar().hasUpdatedTemplateArgTypes();
+        return desugarTry().map(Type::hasUpdatedTemplateArgTypes).orElse(false);
+        // // If no sugar, return false
+        // if (!hasSugar()) {
+        // // System.out.println("NO SUGAR:" + this.getClass().getSimpleName());
+        // return false;
+        // }
+        // // System.out.println("DESUGARING:" + this.getClass().getSimpleName());
+        // return desugarTry().map(Type::hasUpdatedTemplateArgTypes).orElse(false);
     }
 
     /**
