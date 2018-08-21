@@ -61,9 +61,11 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     public final static DataKey<ValueDecl> DECL = KeyFactory.object("decl", ValueDecl.class);
 
+    public final static DataKey<String> CUSTOM_NAME = KeyFactory.string("customName");
+
     // DATAKEY END
 
-    private String customName;
+    // private String customName;
 
     // private final String qualifier;
     // private final List<String> templateArguments;
@@ -75,7 +77,7 @@ public class DeclRefExpr extends Expr implements Nameable {
     public DeclRefExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-        this.customName = null;
+        // this.customName = null;
 
         // qualifier = data.get(QUALIFIER);
         // templateArguments = get(TEMPLATE_ARGUMENTS);
@@ -198,9 +200,12 @@ public class DeclRefExpr extends Expr implements Nameable {
     // }
 
     public String getRefName() {
-        if (customName != null) {
-            return customName;
+        if (hasValue(CUSTOM_NAME)) {
+            return get(CUSTOM_NAME);
         }
+        // if (customName != null) {
+        // return customName;
+        // }
 
         return get(DECL).get(ValueDecl.DECL_NAME);
         // return get(DECL_NAME);
@@ -209,7 +214,8 @@ public class DeclRefExpr extends Expr implements Nameable {
     }
 
     public void setRefName(String refName) {
-        this.customName = refName;
+        set(CUSTOM_NAME, refName);
+        // this.customName = refName;
         // set(DECL_NAME, refName);
         // getUniqueDeclaration().setDeclName(refName);
         // declData.setDeclName(refName);
