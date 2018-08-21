@@ -729,6 +729,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         if (!keepId) {
             String previousId = newDataStore.get(ID);
             String newId = get(CONTEXT).get(ClavaContext.ID_GENERATOR).next("from" + getClass().getSimpleName() + "_");
+
             newDataStore.put(ID, newId);
             newDataStore.put(PREVIOUS_ID, previousId);
 

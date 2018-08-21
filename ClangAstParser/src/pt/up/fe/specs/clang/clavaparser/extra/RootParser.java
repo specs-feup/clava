@@ -164,6 +164,14 @@ public class RootParser extends AClangNodeParser<App> {
             // Add declarations
             decls.addAll(declNodes);
 
+            // Detach decls
+            for (Decl decl : decls) {
+                if (decl.hasParent()) {
+                    decl.detach();
+                }
+
+            }
+
             // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
             // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
             TranslationUnit tUnit = LegacyToDataStore.getFactory().translationUnit(sourcePath, decls);

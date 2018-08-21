@@ -498,6 +498,7 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     public void setName(String name) {
+        // System.out.println("SETTING NAME:" + get(ID));
         // System.out.println("SETTING NAME OF FUNCTIONDECL " + get(ID));
         // System.out.println("PREVIOUS NAME:" + get(DECL_NAME));
         set(DECL_NAME, name);
