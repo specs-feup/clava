@@ -176,11 +176,11 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         // T clavaNodeCopy = withoutCopy(clavaNode, children);
         children = new ChildrenAdapter(LegacyToDataStore.CLAVA_CONTEXT.get()).adaptChildren(clavaNode, children);
 
-        for (ClavaNode child : children) {
-            if (child.hasParent()) {
-                child.detach();
-            }
-        }
+        // for (ClavaNode child : children) {
+        // if (child.hasParent()) {
+        // child.detach();
+        // }
+        // }
         clavaNode.setChildren(children);
         return (T) clavaNode;
         // T clavaNodeCopy = withoutCopy(clavaNode, children);
@@ -436,7 +436,7 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
                 .collect(Collectors.toList());
 
         // Replace children
-        newChildren.stream().forEach(ClavaNode::detach);
+        // newChildren.stream().forEach(ClavaNode::detach);
         oldNode.setChildren(newChildren);
 
         // If new node has parent, replace it

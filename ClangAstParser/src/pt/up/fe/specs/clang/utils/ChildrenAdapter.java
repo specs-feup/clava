@@ -176,9 +176,9 @@ public class ChildrenAdapter {
             }
 
             if (child instanceof Expr) {
-                if (child.hasParent()) {
-                    child.detach();
-                }
+                // if (child.hasParent()) {
+                // child.detach();
+                // }
                 adaptedChildren.add(context.get(ClavaContext.FACTORY).exprStmt((Expr) child));
                 continue;
             }
@@ -285,9 +285,9 @@ public class ChildrenAdapter {
 
         // Wrap Expr around Stmt
         if (clavaNode instanceof Expr) {
-            if (clavaNode.hasParent()) {
-                clavaNode.detach();
-            }
+            // if (clavaNode.hasParent()) {
+            // clavaNode.detach();
+            // }
             return toCompoundStmt(context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode), isOptional, context);
         }
 
@@ -325,9 +325,9 @@ public class ChildrenAdapter {
         // Wrap Expr around Stmt
         if (clavaNode instanceof Expr) {
 
-            if (clavaNode.hasParent()) {
-                clavaNode.detach();
-            }
+            // if (clavaNode.hasParent()) {
+            // clavaNode.detach();
+            // }
 
             Stmt exprStmt = context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode);
             if (!hasSemicolon) {
