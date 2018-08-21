@@ -770,10 +770,18 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public File getWeavingFolder() {
+
+        String outputFoldername = args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME);
+        if (outputFoldername.isEmpty()) {
+            ClavaLog.info("No name defined for the output folder, using default value 'output'");
+            outputFoldername = "output";
+        }
         // System.out.println("OUTPUT FOLDER:" + args.get(LaraiKeys.OUTPUT_FOLDER));
         // System.out.println("WOVEN CODE FOLDERNAME:" + args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
         // return SpecsIo.mkdir(outputDir, args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
-        return SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), args.get(CxxWeaverOption.WOVEN_CODE_FOLDERNAME));
+        File outputFolder = SpecsIo.mkdir(args.get(LaraiKeys.OUTPUT_FOLDER), outputFoldername);
+
+        return outputFolder;
     }
 
     /**
