@@ -18,8 +18,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
@@ -36,12 +40,15 @@ import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -50,6 +57,12 @@ import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
 public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClass<ClavaNode>, Copyable<ClavaNode> {
+
+    /**
+     * Maps Type classes to a List of DataKeys corresponding to the properties of that class that return ClavaNode
+     * instances.
+     */
+    private static final Map<Class<? extends ClavaNode>, List<DataKey<?>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
 
     /// DATAKEYS BEGIN
 
@@ -392,6 +405,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      *            if true, the id of the copy will be the same as the id of the original node
      * @return
      */
+    // public ClavaNode copy(boolean keepId) {
+    // return copy(keepId, false);
+    // }
+
     public ClavaNode copy(boolean keepId) {
 
         get(CONTEXT).get(ClavaContext.METRICS).incrementNumCopies();
@@ -413,8 +430,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
         for (ClavaNode child : getChildren()) {
             // Copy children of token
+            // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
             ClavaNode newChildToken = child.copy(keepId);
-
             newToken.addChild(newChildToken);
         }
 
@@ -599,7 +616,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     @Override
     public <T> T get(DataKey<T> key) {
         try {
-            return dataI.get(key);
+            T value = dataI.get(key);
+
+            // Ignore ImplicitCasts
+            if (value instanceof ImplicitCastExpr) {
+                return (T) ((ImplicitCastExpr) value).getSubExpr();
+            }
+
+            return value;
         } catch (Exception e) {
             throw new RuntimeException("Problem while accessing attribute '" + key + "' in ClavaNode: " + this, e);
         }
@@ -759,4 +783,437 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         return Optional.of(nodeClass.cast(child));
     }
 
+    /**
+     * All keys that can potentially have ClavaNodes.
+     * 
+     * @return
+     */
+    private List<DataKey<?>> getAllKeysWithNodes() {
+        List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
+        if (keys == null) {
+            keys = addKeysWithNodes(this);
+        }
+
+        return keys;
+    }
+
+    public List<ClavaNode> getNodeFields() {
+        List<DataKey<?>> keys = getAllKeysWithNodes();
+
+        List<ClavaNode> children = new ArrayList<>();
+
+        for (DataKey<?> key : keys) {
+            if (!hasValue(key)) {
+                continue;
+            }
+            List<ClavaNode> values = getClavaNode(key);
+
+            // if (values.size() != 0) {
+            // System.out.println("KEY '" + key + "' ADDING VALUES: " + values);
+            // }
+            children.addAll(values);
+            // children.add(get(key));
+        }
+
+        return children;
+    }
+
+    public List<ClavaNode> getNodeFieldsRecursive() {
+        return getNodeFieldsRecursive(new ArrayList<>(), new HashSet<>());
+    }
+
+    private List<ClavaNode> getNodeFieldsRecursive(List<ClavaNode> descendants, Set<String> seenNodes) {
+        // Get nodes
+        for (ClavaNode node : getNodeFields()) {
+            if (seenNodes.contains(node.getId())) {
+                continue;
+            }
+
+            // Add node
+            descendants.add(node);
+            seenNodes.add(node.getId());
+
+            // Add node's nodes
+            node.getNodeFieldsRecursive(descendants, seenNodes);
+        }
+
+        return descendants;
+    }
+
+    private List<ClavaNode> getClavaNode(DataKey<?> key) {
+        // ClavaNode keys
+        if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+            return Arrays.asList((ClavaNode) get(key));
+        }
+
+        // Optional nodes
+        if (Optional.class.isAssignableFrom(key.getValueClass())) {
+            Optional<?> optionalValue = (Optional<?>) get(key);
+
+            return optionalValue.filter(value -> value instanceof ClavaNode)
+                    .map(node -> Arrays.asList((ClavaNode) node))
+                    .orElse(Collections.emptyList());
+        }
+
+        // List of nodes
+        if (List.class.isAssignableFrom(key.getValueClass())) {
+            List<?> values = (List<?>) get(key);
+
+            if (values.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            // Only testing first, cast tests all elements
+            if (values.get(0) instanceof ClavaNode) {
+                return SpecsCollections.cast(values, ClavaNode.class);
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    private static List<DataKey<?>> addKeysWithNodes(ClavaNode node) {
+        List<DataKey<?>> keysWithNodes = new ArrayList<>();
+
+        // Get all the keys that map to a ClavaNode
+        for (DataKey<?> key : node.getKeys().getKeys()) {
+
+            // ClavaNode keys
+            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+                keysWithNodes.add(key);
+                continue;
+            }
+
+            // Optional nodes
+            if (Optional.class.isAssignableFrom(key.getValueClass())) {
+                keysWithNodes.add(key);
+                continue;
+            }
+
+            // List of nodes
+            if (List.class.isAssignableFrom(key.getValueClass())) {
+                keysWithNodes.add(key);
+                continue;
+            }
+
+        }
+
+        // Add to map
+        KEYS_WITH_NODES.put(node.getClass(), keysWithNodes);
+
+        return keysWithNodes;
+    }
+
+    public <T extends ClavaNode> List<T> getDescendantsAndFields(Class<T> aClass) {
+        return getDescendantsAndFields().stream()
+                .filter(aClass::isInstance)
+                .map(aClass::cast)
+                .collect(Collectors.toList());
+    }
+
+    public List<ClavaNode> getDescendantsAndFields() {
+        return getDescendantsAndFields(new ArrayList<>(), new HashSet<>());
+    }
+
+    private List<ClavaNode> getDescendantsAndFields(List<ClavaNode> nodes, Set<String> seenNodes) {
+        // List<ClavaNode> nodes = new ArrayList<>();
+        //
+        // Set<String> seenNodes = new HashSet<>();
+
+        // Fields of node
+        for (ClavaNode node : getNodeFields()) {
+            if (seenNodes.contains(node.getId())) {
+                continue;
+            }
+
+            seenNodes.add(node.getId());
+            nodes.add(node);
+
+            node.getDescendantsAndFields(nodes, seenNodes);
+        }
+
+        // Children
+        for (ClavaNode child : getChildren()) {
+            if (seenNodes.contains(child.getId())) {
+                continue;
+            }
+
+            seenNodes.add(child.getId());
+            nodes.add(child);
+
+            child.getDescendantsAndFields(nodes, seenNodes);
+        }
+
+        // // Descendants
+        // for (ClavaNode descendant : getDescendants()) {
+        // // Add descendant
+        // if (!seenNodes.contains(descendant.getId())) {
+        // seenNodes.add(descendant.getId());
+        // nodes.add(descendant);
+        // }
+        //
+        // // Add descendant fields
+        // for (ClavaNode descendantField : descendant.getNodeFieldsRecursive()) {
+        // // Add descendant
+        // if (!seenNodes.contains(descendantField.getId())) {
+        // seenNodes.add(descendantField.getId());
+        // nodes.add(descendantField);
+        // }
+        // }
+        //
+        // }
+
+        return nodes;
+    }
+
+    /**
+     * Copy the node, including nodes in fields.
+     * 
+     * @return
+     */
+
+    public ClavaNode deepCopy() {
+        return deepCopy(false, new HashSet<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    private ClavaNode deepCopy(boolean keepId, Set<String> seenNodes) {
+        // return copy(keepId);
+
+        // Copy node itself
+        // ClavaNode copy = copy(keepId, true);
+
+        // Copies the node, without children
+        ClavaNode copy = copyPrivate(keepId);
+
+        for (ClavaNode child : getChildren()) {
+            // Copy children of token
+            // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
+            ClavaNode newChildToken = child.deepCopy(keepId, seenNodes);
+            copy.addChild(newChildToken);
+        }
+
+        System.out.println("DEEP COPYING " + this);
+        if (this instanceof VariableArrayType) {
+            System.out.println("EXPR:" + get(VariableArrayType.SIZE_EXPR));
+        }
+        // Copy fields
+        for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
+            if (!hasValue(keyWithNode)) {
+                continue;
+            }
+
+            // ClavaNode keys
+            if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
+                ClavaNode value = get(clavaNodeKey);
+                if (!seenNodes.contains(value.getId())) {
+                    seenNodes.add(value.getId());
+                    set(clavaNodeKey, value.deepCopy(keepId, seenNodes));
+                }
+
+                continue;
+            }
+
+            // Optional nodes
+            if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                // Since this came from getKeysWithNodes(), it is guaranteed that is an Optional of ClavaNode
+                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
+                Optional<?> value = get(optionalKey);
+                if (!value.isPresent()) {
+                    continue;
+                }
+
+                Object possibleNode = value.get();
+
+                if (!(possibleNode instanceof ClavaNode)) {
+                    continue;
+                }
+
+                ClavaNode node = (ClavaNode) possibleNode;
+                seenNodes.add(node.getId());
+
+                set(optionalKey, Optional.of(node.deepCopy(keepId, seenNodes)));
+                continue;
+            }
+
+            // ClavaLog.info("Case not supported yet:" + keyWithNode);
+        }
+
+        // if (copy.hasSugar()) {
+        // set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(copy.desugar().copyDeep()));
+        // }
+
+        return copy;
+
+    }
+    //
+    // @SuppressWarnings("unchecked")
+    // public List<ClavaNode> copyNodeField(DataKey<?> keyWithNode) {
+    //
+    // if (!hasValue(keyWithNode)) {
+    // return Collections.emptyList();
+    // }
+    //
+    // // ClavaNode keys
+    // if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
+    // DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
+    // ClavaNode value = get(clavaNodeKey);
+    // ClavaNode copy = value.copy();
+    // set(clavaNodeKey, copy);
+    // return Arrays.asList(copy);
+    // }
+    //
+    // // Optional nodes
+    // if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
+    // DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
+    // Optional<?> value = get(optionalKey);
+    // if (!value.isPresent()) {
+    // return Collections.emptyList();
+    // }
+    //
+    // Object possibleNode = value.get();
+    //
+    // if (!(possibleNode instanceof ClavaNode)) {
+    // return Collections.emptyList();
+    // }
+    //
+    // ClavaNode node = (ClavaNode) possibleNode;
+    // ClavaNode copy = node.copy();
+    // set(optionalKey, Optional.of(copy));
+    // return Arrays.asList(copy);
+    // }
+    //
+    // return Collections.emptyList();
+    //
+    // // ClavaLog.info("Case not supported yet:" + keyWithNode);
+    //
+    // }
+
+    @SuppressWarnings("unchecked")
+    public void replaceNodeField(DataKey<?> keyWithNode, List<ClavaNode> newValue) {
+
+        if (!hasValue(keyWithNode)) {
+            // System.out.println("DOES NOT HAVE VALUE");
+            return;
+        }
+
+        // ClavaNode keys
+        if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
+            DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
+            setInPlace(clavaNodeKey, newValue.get(0));
+            // System.out.println("SETTING NEW VALUE:" + newValue.get(0).getCode());
+            // ClavaNode value = get(clavaNodeKey);
+            // ClavaNode copy = value.copy();
+            // set(clavaNodeKey, copy);
+            //
+            // return Arrays.asList(copy);
+        }
+
+        // Optional nodes
+        if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
+            // System.out.println("OPTIONAL KEY");
+            DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
+            Optional<?> value = get(optionalKey);
+            if (!value.isPresent()) {
+                // System.out.println("NO VALUE");
+                return;
+            }
+
+            Object possibleNode = value.get();
+
+            if (!(possibleNode instanceof ClavaNode)) {
+                // System.out.println("NOT A CLAVANODE");
+                return;
+            }
+
+            setInPlace(optionalKey, Optional.of(newValue.get(0)));
+            // System.out.println("SETTING OPTIONAL");
+            // ClavaNode copy = node.copy();
+            // set(optionalKey, Optional.of(copy));
+            // return Arrays.asList(copy);
+        }
+
+        // return Collections.emptyList();
+
+        // ClavaLog.info("Case not supported yet:" + keyWithNode);
+
+    }
+
+    public <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
+        return set(key, value);
+    }
+
+    /**
+     * Keys that currently have nodes assigned.
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<DataKey<?>> getKeysWithNodes() {
+
+        List<DataKey<?>> keys = new ArrayList<>();
+
+        for (DataKey<?> key : getAllKeysWithNodes()) {
+
+            if (!hasValue(key)) {
+                continue;
+            }
+
+            // ClavaNode keys
+            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
+                keys.add(key);
+                continue;
+            }
+
+            // Optional nodes
+            if (Optional.class.isAssignableFrom(key.getValueClass())) {
+                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) key;
+                Optional<?> value = get(optionalKey);
+                if (!value.isPresent()) {
+                    continue;
+                }
+
+                Object possibleNode = value.get();
+
+                if (!(possibleNode instanceof ClavaNode)) {
+                    continue;
+                }
+
+                keys.add(key);
+                continue;
+            }
+        }
+
+        return keys;
+        // ClavaLog.info("Case not supported yet:" + keyWithNode);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<ClavaNode> getNodes(DataKey<?> keyWithNodes) {
+
+        List<ClavaNode> nodes = new ArrayList<>();
+
+        for (DataKey<?> key : getKeysWithNodes()) {
+
+            Object value = get(key);
+
+            if (value instanceof ClavaNode) {
+                nodes.add((ClavaNode) value);
+                continue;
+            }
+
+            if (value instanceof Optional) {
+                nodes.add((ClavaNode) ((Optional) value).get());
+                continue;
+            }
+
+            // ClavaLog.info("Case not supported yet:" + keyWithNode);
+
+        }
+
+        return nodes;
+
+    }
 }

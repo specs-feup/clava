@@ -14,13 +14,10 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -30,7 +27,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * The base class of the type hierarchy.
@@ -42,12 +38,6 @@ import pt.up.fe.specs.util.SpecsCollections;
  *
  */
 public abstract class Type extends ClavaNode {
-
-    /**
-     * Maps Type classes to a List of DataKeys corresponding to the properties of that class that return ClavaNode
-     * instances.
-     */
-    private static final Map<Class<? extends Type>, List<DataKey<?>>> KEYS_WITH_NODES = new ConcurrentHashMap<>();
 
     /// DATAKEYS BEGIN
 
@@ -151,6 +141,7 @@ public abstract class Type extends ClavaNode {
      * @param value
      * @return
      */
+    @Override
     public <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
         return set(key, value, false);
     }
@@ -448,6 +439,10 @@ public abstract class Type extends ClavaNode {
         // return desugarImpl();
     }
 
+    public final Optional<Type> desugarTry() {
+        return get(UNQUALIFIED_DESUGARED_TYPE);
+    }
+
     /**
      * Completely desugars the type.
      * 
@@ -497,7 +492,7 @@ public abstract class Type extends ClavaNode {
             throw new RuntimeException("Type does not have sugar:" + this);
         }
 
-        set(UNQUALIFIED_DESUGARED_TYPE, Optional.ofNullable(desugaredType));
+        setInPlace(UNQUALIFIED_DESUGARED_TYPE, Optional.ofNullable(desugaredType));
         // set(UNQUALIFIED_DESUGARED_TYPE, desugaredType);
         // setDesugarImpl(desugaredType);
     }
@@ -640,94 +635,68 @@ public abstract class Type extends ClavaNode {
         return this;
     }
 
-    /**
-     * 
-     * Type nodes are treated as being "unique", and usually do not have children, other types are accessed as
-     * properties of the node. This method returns all the ClavaNode instances referenced in the properties of this
-     * class.
-     * 
-     * @return
-     */
-    public List<ClavaNode> getNodes() {
-        List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
-        if (keys == null) {
-            keys = addKeysWithNodes(this);
+    // /**
+    // *
+    // * Type nodes are treated as being "unique", and usually do not have children, other types are accessed as
+    // * properties of the node. This method returns all the ClavaNode instances referenced in the properties of this
+    // * class.
+    // *
+    // * @return
+    // */
+    // public List<ClavaNode> getNodes() {
+    // List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
+    // if (keys == null) {
+    // keys = addKeysWithNodes(this);
+    // }
+    //
+    // List<ClavaNode> children = new ArrayList<>();
+    //
+    // for (DataKey<?> key : keys) {
+    // List<ClavaNode> values = getClavaNode(key);
+    //
+    // children.addAll(values);
+    // // children.add(get(key));
+    // }
+    //
+    // return children;
+    // }
+    //
+    // public List<ClavaNode> getDescendantsNodes() {
+    // return getDescendantsNodes(new ArrayList<>(), new HashSet<>());
+    // }
+    //
+    // private List<ClavaNode> getDescendantsNodes(List<ClavaNode> descendants, Set<String> seenNodes) {
+    // // Get nodes
+    // for (ClavaNode node : getNodes()) {
+    // if (seenNodes.contains(node.getId())) {
+    // continue;
+    // }
+    //
+    // // Add node
+    // descendants.add(node);
+    // seenNodes.add(node.getId());
+    //
+    // // Add node's nodes
+    // node.get
+    // }
+    //
+    // }
+
+    public List<ClavaNode> getDesugaredNodeFields() {
+        List<ClavaNode> fields = new ArrayList<>();
+        Type currentType = this;
+        while (currentType != null) {
+            for (ClavaNode desc : currentType.getNodeFields()) {
+                fields.add(desc);
+            }
+
+            if (currentType.hasSugar()) {
+                currentType = currentType.desugar();
+            } else {
+                currentType = null;
+            }
         }
 
-        List<ClavaNode> children = new ArrayList<>();
-
-        for (DataKey<?> key : keys) {
-            List<ClavaNode> values = getClavaNode(key);
-
-            children.addAll(values);
-            // children.add(get(key));
-        }
-
-        return children;
+        return fields;
     }
-
-    private List<ClavaNode> getClavaNode(DataKey<?> key) {
-        // ClavaNode keys
-        if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-            return Arrays.asList((ClavaNode) get(key));
-        }
-
-        // Optional nodes
-        if (Optional.class.isAssignableFrom(key.getValueClass())) {
-            Optional<?> optionalValue = (Optional<?>) get(key);
-
-            return optionalValue.filter(value -> value instanceof ClavaNode)
-                    .map(node -> Arrays.asList((ClavaNode) node))
-                    .orElse(Collections.emptyList());
-        }
-
-        // List of nodes
-        if (List.class.isAssignableFrom(key.getValueClass())) {
-            List<?> values = (List<?>) get(key);
-
-            if (values.isEmpty()) {
-                return Collections.emptyList();
-            }
-
-            // Only testing first, cast tests all elements
-            if (values.get(0) instanceof ClavaNode) {
-                return SpecsCollections.cast(values, ClavaNode.class);
-            }
-        }
-
-        return null;
-    }
-
-    private static List<DataKey<?>> addKeysWithNodes(Type type) {
-        List<DataKey<?>> keysWithNodes = new ArrayList<>();
-
-        // Get all the keys that map to a ClavaNode
-        for (DataKey<?> key : type.getKeys().getKeys()) {
-
-            // ClavaNode keys
-            if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-            // Optional nodes
-            if (Optional.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-            // List of nodes
-            if (List.class.isAssignableFrom(key.getValueClass())) {
-                keysWithNodes.add(key);
-                continue;
-            }
-
-        }
-
-        // Add to map
-        KEYS_WITH_NODES.put(type.getClass(), keysWithNodes);
-
-        return keysWithNodes;
-    }
-
 }

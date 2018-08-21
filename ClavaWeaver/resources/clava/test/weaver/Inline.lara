@@ -9,5 +9,10 @@ aspectdef Inline
 	apply
 		println($function.code);
 	end
-	
+	/*
+	select function{"main"} end
+	apply
+		println($function.ast);
+	end
+	*/
 end

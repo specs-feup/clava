@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.transform.call;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
@@ -202,32 +205,164 @@ public class InlineRenamer {
         // Also rename DeclRefExpr found in Types
         for (Stmt stmt : stmts) {
             for (ClavaNode node : stmt.getDescendantsAndSelf(ClavaNode.class)) {
+
+                // if (node instanceof VarDecl) {
+                // VarDecl varDecl = (VarDecl) node;
+                // if (varDecl.getTypeCode().equals("double (*)[x][5]")) {
+                // // System.out.println("VARDECL TYPE:" + varDecl.getType());
+                // // System.out.println(
+                // // "POINTER TYPE:" + ((VarDecl) node).getType().getChild(Type.class, 0).desugar());
+                //
+                // System.out.println("FIELDSSDS");
+                // for (Type descendant : varDecl.getType().getDescendantsAndSelf(Type.class)) {
+                // for (ClavaNode field : descendant.getDesugaredNodeFields()) {
+                // System.out.println("FIELD:" + field);
+                // }
+                // /*
+                // Type currentType = descendant;
+                // while (currentType != null) {
+                // for (ClavaNode desc : currentType.getNodeFields()) {
+                // System.out.println(desc);
+                // }
+                //
+                // if (currentType.hasSugar()) {
+                // currentType = currentType.desugar();
+                // } else {
+                // currentType = null;
+                // }
+                //
+                // }
+                // */
+                // }
+                // // for (ClavaNode desc : ((VarDecl) node).getType().getDescendantsAndFields()) {
+                // // for (ClavaNode desc : varDecl.getType().getNodeFields()) {
+                // // System.out.println(desc);
+                // // }
+                // // System.out.println(((VarDecl) node).getType().getDescendantsAndFields());
+                //
+                // // ((VarDecl) node).getType().getDescendantsAndFields().stream().map(Object::toString)
+                // // .collect(Collectors.joining("\n"));
+                //
+                // // System.out.println("TYPE FIELDS:" + ((VarDecl) node).getNodeFieldsRecursive().stream()
+                // // .map(Object::toString).collect(Collectors.joining("\n")));
+                // }
+                // // System.out.println("VARDECL TYPE:" + ((VarDecl) node).getTypeCode());
+                // }
+
                 if (!(node instanceof Typable)) {
                     continue;
                 }
 
                 Typable typable = (Typable) node;
 
+                // typable.getType().getDescendantsNodes().stream().filter(field -> field instanceof DeclRefExpr)
+                // .forEach(field -> System.out.println("Found declref:" + field));
+
                 // Check if there is a DeclRefExpr descendant
-                if (typable.getType().getDescendantsAndSelf(DeclRefExpr.class).isEmpty()) {
+                // if (typable.getType().getDescendantsAndSelf(DeclRefExpr.class).isEmpty()) {
+                // if (typable.getType().getDescendantsAndFields(DeclRefExpr.class).isEmpty()) {
+                // continue;
+                // }
+
+                boolean hasDeclRefExpr = typable.getType().getDescendantsAndSelfStream()
+                        .filter(Type.class::isInstance)
+                        .map(Type.class::cast)
+                        .flatMap(type -> type.getDesugaredNodeFields().stream())
+                        .filter(DeclRefExpr.class::isInstance)
+                        .findFirst()
+                        .isPresent();
+
+                if (!hasDeclRefExpr) {
                     continue;
                 }
 
                 // There is a DeclRefExpr
                 // Types can be shared among other nodes, copy type before modifying it
-                Type typeCopy = typable.getType().copy();
+                // Type typeCopy = typable.getType().copyDeep();
+                // Type typeCopy = (Type) typable.getType().deepCopy();
+                Type typeCopy = (Type) typable.getType().copy();
                 typable.setType(typeCopy);
 
-                // Is typable, get all descendants of the type
-                for (DeclRefExpr nodeInType : typeCopy.getDescendantsAndSelf(DeclRefExpr.class)) {
-                    applyRenameAction(nodeInType);
-                    // if (nodeInType instanceof DeclRefExpr) {
-                    // System.out.println("NODE IN TYPE: " + nodeInType.getCode());
+                // System.out.println("TYPES");
+                for (Type descendant : typeCopy.getDescendantsAndSelf(Type.class)) {
+                    // System.out.println("DESCENDANT");
+                    Type currentType = descendant;
+                    while (currentType != null) {
+                        // System.out.println("TYPE:" + currentType);
+                        // System.out.println("NODE FIELDS:" + descendant.getNodeFields());
+
+                        for (DataKey<?> key : currentType.getKeysWithNodes()) {
+                            List<ClavaNode> fields = currentType.getNodes(key);
+
+                            if (fields.size() != 1) {
+                                continue;
+                            }
+
+                            if (!(fields.get(0) instanceof DeclRefExpr)) {
+                                continue;
+                            }
+                            // System.out.println("SETTING FIELD " + key);
+                            DeclRefExpr declRef = (DeclRefExpr) fields.get(0).copy();
+                            // declRef.setRefName("xpto");
+                            currentType.replaceNodeField(key, Arrays.asList(declRef));
+                            // currentType.setInPlace((DataKey<Object>) key, declRef);
+                            // System.out.println("GETTING: " + currentType.get(VariableArrayType.SIZE_EXPR).getCode());
+                            // List<ClavaNode> fieldsCopy = currentType.copyNodeField(key);
+                            // System.out.println("TYPE BEFORE:" + currentType.getCode());
+                            // System.out.println("DECLREF BEFORE:" + ((DeclRefExpr) declRef).getRefName());
+                            applyRenameAction(declRef);
+                            // System.out.println("TYPE AFTER:" + currentType.getCode());
+                            // System.out.println("DECLREF AFTER:" + ((DeclRefExpr) declRef).getRefName());
+
+                        }
+
+                        /*
+                        for (ClavaNode field : currentType.getNodeFields()) {
+                            if (!(field instanceof DeclRefExpr)) {
+                                continue;
+                            }
+                        
+                            // Copy declref and queue rename
+                        
+                            // applyRenameAction(field);
+                            System.out.println("DECLREF:" + ((DeclRefExpr) field).getRefName());
+                            // System.out.println("DECLREF asdas:" + field);
+                        }
+                        */
+
+                        Type desugaredType = currentType.desugarTry().orElse(null);
+
+                        // Copy desugared and set it
+                        if (desugaredType != null) {
+                            desugaredType = desugaredType.copy();
+                            currentType.setDesugar(desugaredType);
+                        }
+
+                        currentType = desugaredType;
+                    }
+                    // for (ClavaNode field : descendant.getDesugaredNodeFields()) {
+                    // if (!(field instanceof DeclRefExpr)) {
+                    // continue;
+                    // }
                     //
-                    // applyRenameAction(nodeInType);
+                    // System.out.println("Renaming FIELD:" + field);
+                    // applyRenameAction(field);
                     //
                     // }
                 }
+
+                // Is typable, get all descendants of the type
+                // for (DeclRefExpr nodeInType : typeCopy.getDescendantsAndFields(DeclRefExpr.class)) {
+                // System.out.println("RENAMING:" + nodeInType);
+                // System.out.println("DECLREF:" + nodeInType.getCode());
+                // applyRenameAction(nodeInType);
+                // // if (nodeInType instanceof DeclRefExpr) {
+                // // System.out.println("NODE IN TYPE: " + nodeInType.getCode());
+                // //
+                // // applyRenameAction(nodeInType);
+                // //
+                // // }
+                // }
             }
         }
 

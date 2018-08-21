@@ -214,6 +214,10 @@ public class DeclRefExpr extends Expr implements Nameable {
     }
 
     public void setRefName(String refName) {
+        // ValueDecl copy = (ValueDecl) get(DECL).copy();
+        // copy.set(ValueDecl.DECL_NAME, refName);
+        // set(DECL, copy);
+
         set(CUSTOM_NAME, refName);
         // this.customName = refName;
         // set(DECL_NAME, refName);

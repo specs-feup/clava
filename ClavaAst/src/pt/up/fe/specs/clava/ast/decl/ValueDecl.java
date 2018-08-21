@@ -50,7 +50,8 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
     }
 
     /**
-     * @deprecated
+     * //* @deprecated
+     * 
      * @param declName
      * @param type
      * @param declData
@@ -68,7 +69,6 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
     // // set(ValueDecl.TYPE, processType(type));
     // }
 
-    @Deprecated
     @Override
     public Type getType() {
         return get(TYPE);

@@ -67,6 +67,8 @@ public class VariableArrayType extends ArrayType {
 
     @Override
     protected String getArrayCode() {
+        // System.out.println("EXPR CODE:" + getExpr().getCode());
+        // System.out.println("VARIABLE ARRAY TYPEEXPR:" + getExpr());
         return getExpr().getCode();
         // return getExpr().map(Expr::getCode).orElse("");
     }
