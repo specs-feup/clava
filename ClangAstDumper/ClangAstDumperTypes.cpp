@@ -129,7 +129,7 @@ void ClangAstDumper::VisitPointerType(const PointerType *T) {
     VisitTypeTop(T->getPointeeType().getTypePtr());
 }
 
-
+/*
 void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializationType *T){
     // If already parsed, return
     if(seenTypes.count(T) != 0) {
@@ -206,7 +206,7 @@ void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializatio
     }
 
 }
-
+*/
 void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
     if(dumpType(T)) {
         return;

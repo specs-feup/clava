@@ -59,7 +59,7 @@ public:
     // TODO: We should only need to call VisitType, children/data maps should handle all cases
     //void VisitBuiltinType(const BuiltinType *T);
     void VisitPointerType(const PointerType *T);
-    void VisitTemplateSpecializationType(const TemplateSpecializationType *T);
+    //void VisitTemplateSpecializationType(const TemplateSpecializationType *T);
     void VisitFunctionProtoType(const FunctionProtoType *T);
     void VisitTypedefType(const TypedefType *T);
     void VisitElaboratedType(const ElaboratedType *T);

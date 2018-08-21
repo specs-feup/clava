@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.DelegatingInit;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentIntegral;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
@@ -246,6 +247,10 @@ public class ClavaDataParsers {
             }
 
             return pack;
+        case Integral:
+            TemplateArgumentIntegral integral = new TemplateArgumentIntegral();
+            integral.set(TemplateArgumentIntegral.INTEGRAL, LineStreamParsers.integer(lines));
+            return integral;
         default:
             throw new NotImplementedException(kind);
         }

@@ -15,6 +15,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"IncompleteArrayType", clava::TypeNode::ARRAY_TYPE},
         {"VariableArrayType", clava::TypeNode::VARIABLE_ARRAY_TYPE},
         {"PointerType", clava::TypeNode::POINTER_TYPE},
+        //{"TagType", clava::TypeNode::TAG_TYPE},
         {"EnumType", clava::TypeNode::TAG_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},

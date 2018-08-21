@@ -375,6 +375,12 @@ void clava::dump(const TemplateArgument &templateArg, int id) {
                 clava::dump(*currentArg, id);
             }
             break;
+        case TemplateArgument::ArgKind::Integral:
+            //bool isSigned = templateArg.getAsIntegral().isSigned();
+            clava::dump(templateArg.getAsIntegral().toString(10));
+//    const std::string source = getSource(E);
+//    clava::dump(source);
+            break;
         default:
             throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '" +
                                         clava::TEMPLATE_ARG_KIND[templateArg.getKind()] + "'");

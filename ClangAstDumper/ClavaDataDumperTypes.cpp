@@ -355,7 +355,15 @@ void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
         clava::dump(clava::getId(T->getDecl(), id));
     }
      */
+/*
+    // Get classname
+    const std::string classname = clava::getClassName(T);
 
+    // Get corresponding TypeNode
+    TypeNode typeNode = TYPE_DATA_MAP.count(classname) == 1 ? TYPE_DATA_MAP.find(classname)->second : TypeNode::TYPE;
+
+    llvm::errs() << "CLASSNAME: " + classname + " WITH TYPE " << clava::getName(typeNode) << "\n";
+*/
 }
 
 /*
