@@ -111,7 +111,6 @@ public class CTest {
         newTester().test("InlineNasLu.lara", "inline_nas_lu.c");
     }
 
-    // TODO: Not working
     @Test
     public void testInlineNasFt() {
         newTester().test("InlineNasFt.lara", "inline_nas_ft.c");

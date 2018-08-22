@@ -417,7 +417,8 @@ public class CxxFunction extends AFunction {
         FunctionType functionTypeCopy = (FunctionType) functionType.copy();
 
         // Replace the return type of the function type copy
-        CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
+        functionTypeCopy.set(FunctionType.RETURN_TYPE, newType);
+        // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
 
         // Set the function type copy as the type of the function
         function.setType(functionTypeCopy);
