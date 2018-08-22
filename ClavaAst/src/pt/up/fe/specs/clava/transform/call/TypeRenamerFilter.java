@@ -19,7 +19,6 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -78,18 +77,20 @@ public class TypeRenamerFilter {
     }
 
     private void renameCandidate(ClavaNode node, List<ClavaNode> currentNodes) {
+
+        currentNodes.addAll(node.getDescendants(DeclRefExpr.class));
         // System.out.println("RENAME CANDIDATE:" + node);
 
-        if (node instanceof ImplicitCastExpr) {
-            renameCandidate(((ImplicitCastExpr) node).getSubExpr(), currentNodes);
-            return;
-        }
-
-        if (node instanceof DeclRefExpr) {
-            // This is a candidate for renaming
-            currentNodes.add(node);
-            return;
-        }
+        // if (node instanceof ImplicitCastExpr) {
+        // renameCandidate(((ImplicitCastExpr) node).getSubExpr(), currentNodes);
+        // return;
+        // }
+        //
+        // if (node instanceof DeclRefExpr) {
+        // // This is a candidate for renaming
+        // currentNodes.add(node);
+        // return;
+        // }
 
     }
 }

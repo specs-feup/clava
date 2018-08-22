@@ -205,6 +205,7 @@ public class InlineRenamer {
         // Also rename DeclRefExpr found in Types
         // Also types might need renaming
         for (Stmt stmt : stmts) {
+
             for (ClavaNode node : stmt.getDescendantsAndSelf(ClavaNode.class)) {
                 // System.out.println("CHECK STMT:" + node.getCode());
                 // if (node instanceof VarDecl) {
