@@ -211,8 +211,13 @@ public class ClavaFactory {
     }
 
     public FunctionProtoType functionProtoType(Type returnType, Collection<Type> argTypes) {
-        DataStore data = newTypeDataStore().put(FunctionProtoType.NUM_PARAMETERS, argTypes.size());
-        return new FunctionProtoType(data, SpecsCollections.concat(returnType, argTypes));
+        DataStore data = newTypeDataStore()
+                .put(FunctionProtoType.NUM_PARAMETERS, argTypes.size())
+                .put(FunctionProtoType.RETURN_TYPE, returnType)
+                .put(FunctionProtoType.PARAMETERS_TYPES, new ArrayList<>(argTypes));
+
+        return new FunctionProtoType(data, SpecsCollections.concat(returnType, Collections.emptyList()));
+        // return new FunctionProtoType(data, SpecsCollections.concat(returnType, argTypes));
     }
 
     public NullType nullType() {
@@ -253,24 +258,31 @@ public class ClavaFactory {
 
     public ConstantArrayType constantArrayType(Type elementType, BigInteger size) {
         DataStore data = newTypeDataStore()
-                .put(ConstantArrayType.ARRAY_SIZE, size);
+                .put(ConstantArrayType.ARRAY_SIZE, size)
+                .put(ConstantArrayType.ELEMENT_TYPE, elementType);
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
-        return new ConstantArrayType(data, Arrays.asList(elementType));
+        // return new ConstantArrayType(data, Arrays.asList(elementType));
+        return new ConstantArrayType(data, Collections.emptyList());
     }
 
     public VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
-        DataStore data = newTypeDataStore();
+        DataStore data = newTypeDataStore()
+                .put(VariableArrayType.ELEMENT_TYPE, elementType)
+                .put(VariableArrayType.SIZE_EXPR, sizeExpr);
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
-        return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
+        // return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
+        return new VariableArrayType(data, Collections.emptyList());
     }
 
     public PointerType pointerType(Type pointeeType) {
-        DataStore data = newTypeDataStore();
+        DataStore data = newTypeDataStore()
+                .put(PointerType.POINTEE_TYPE, pointeeType);
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
-        return new PointerType(data, Arrays.asList(pointeeType));
+        // return new PointerType(data, Arrays.asList(pointeeType));
+        return new PointerType(data, Collections.emptyList());
     }
 
     /// EXPRS
