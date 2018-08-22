@@ -400,7 +400,7 @@ public abstract class Type extends ClavaNode {
         // System.out.println("TEMPLATE ARGS DESUGARING: " + this);
         desugar().setTemplateArgumentTypes(newTemplateArgTypes);
 
-        Types.updateSugaredType(this);
+        // Types.updateSugaredType(this);
     }
 
     /**
@@ -417,7 +417,7 @@ public abstract class Type extends ClavaNode {
 
         desugar().setTemplateArgumentType(index, newTemplateArgType);
 
-        Types.updateSugaredType(this);
+        // Types.updateSugaredType(this);
     }
 
     /**

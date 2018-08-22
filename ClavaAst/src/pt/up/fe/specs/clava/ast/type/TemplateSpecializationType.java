@@ -338,11 +338,11 @@ public class TemplateSpecializationType extends Type {
         // System.out.println("ARRIVED AT TEMPLATE ARGS");
         // System.out.println(
         // "SETTING TYPES:" + argsTypes.stream().map(Type::getCode).collect(Collectors.joining("\n")));
-        // System.out.println("ARGS BEFORE:" + get(TEMPLATE_ARGUMENTS));
+        // System.out.println("ARGS BEFORE:" + getTemplateArgumentStrings(null));
         setInPlace(TEMPLATE_ARGUMENTS, argsTypes.stream()
                 .map(TemplateArgumentType::new)
                 .collect(Collectors.toList()));
-        // System.out.println("ARGS AFTER:" + get(TEMPLATE_ARGUMENTS));
+        // System.out.println("ARGS AFTER:" + getTemplateArgumentStrings(null));
         // setTemplateArgumentTypes(argsTypes, true);
 
         hasUpdatedArgumentTypes = true;
