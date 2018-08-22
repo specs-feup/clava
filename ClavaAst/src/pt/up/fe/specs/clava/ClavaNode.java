@@ -40,11 +40,9 @@ import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
@@ -618,10 +616,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         try {
             T value = dataI.get(key);
 
-            // Ignore ImplicitCasts
-            if (value instanceof ImplicitCastExpr) {
-                return (T) ((ImplicitCastExpr) value).getSubExpr();
-            }
+            // // Ignore ImplicitCasts
+            // if (value instanceof ImplicitCastExpr) {
+            // return (T) ((ImplicitCastExpr) value).getSubExpr();
+            // }
 
             return value;
         } catch (Exception e) {
@@ -789,7 +787,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * 
      * @return
      */
-    private List<DataKey<?>> getAllKeysWithNodes() {
+    protected List<DataKey<?>> getAllKeysWithNodes() {
         List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
         if (keys == null) {
             keys = addKeysWithNodes(this);
@@ -994,10 +992,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             copy.addChild(newChildToken);
         }
 
-        System.out.println("DEEP COPYING " + this);
-        if (this instanceof VariableArrayType) {
-            System.out.println("EXPR:" + get(VariableArrayType.SIZE_EXPR));
-        }
+        // System.out.println("DEEP COPYING " + this);
+        // if (this instanceof VariableArrayType) {
+        // System.out.println("EXPR:" + get(VariableArrayType.SIZE_EXPR));
+        // }
         // Copy fields
         for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
             if (!hasValue(keyWithNode)) {
@@ -1102,7 +1100,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         // ClavaNode keys
         if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
             DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
-            setInPlace(clavaNodeKey, newValue.get(0));
+            set(clavaNodeKey, newValue.get(0));
             // System.out.println("SETTING NEW VALUE:" + newValue.get(0).getCode());
             // ClavaNode value = get(clavaNodeKey);
             // ClavaNode copy = value.copy();
@@ -1141,6 +1139,13 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
     }
 
+    /**
+     * @deprecated
+     * @param key
+     * @param value
+     * @return
+     */
+    @Deprecated
     public <T, E extends T> ClavaNode setInPlace(DataKey<T> key, E value) {
         return set(key, value);
     }
@@ -1217,4 +1222,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         return nodes;
 
     }
+
+    // public <T> copyField(DataKey<T> key) {
+    // Type pointeeCopy = type.get(PointerType.POINTEE_TYPE).copy();
+    // type.set(PointerType.POINTEE_TYPE, pointeeCopy);
+    // }
 }

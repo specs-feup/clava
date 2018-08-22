@@ -16,12 +16,18 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+
+import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
@@ -117,6 +123,11 @@ public abstract class Type extends ClavaNode {
     @Override
     public Type copy(boolean keepId) {
         Type copy = (Type) super.copy(keepId);
+        // Type copy = deepCopy(keepId, new HashSet<>());
+
+        // All copy the descendants
+        // deepCopy()
+        // deepCopy()
 
         // Set app
         // copy.app = app;
@@ -124,12 +135,85 @@ public abstract class Type extends ClavaNode {
         return copy;
     }
 
-    /**
-     * For Type nodes, this method does not change the current node, but returns a copy of the current node with the
-     * change.
-     */
+    @Override
+    public Type deepCopy() {
+        Set<String> seenNodes = new HashSet<>();
+        Type copy = deepCopy(false, seenNodes);
+
+        // System.out.println("COPIED NODES:" + seenNodes);
+
+        return copy;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Type deepCopy(boolean keepId, Set<String> seenNodes) {
+        // Copies the node, without children
+        Type copy = (Type) copyPrivate(keepId);
+
+        // Type nodes do not have children
+
+        // Copy fields that are types
+        for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
+            if (!hasValue(keyWithNode)) {
+                continue;
+            }
+
+            // ClavaNode keys
+            if (Type.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                DataKey<Type> clavaNodeKey = (DataKey<Type>) keyWithNode;
+                ClavaNode value = get(clavaNodeKey);
+
+                if (!seenNodes.contains(value.getId())) {
+                    seenNodes.add(value.getId());
+                    copy.set(clavaNodeKey, ((Type) value).deepCopy(keepId, seenNodes), false);
+                }
+
+                continue;
+            }
+
+            // Optional nodes
+            if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                // Since this came from getKeysWithNodes(), it is guaranteed that is an Optional of ClavaNode
+                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
+                Optional<?> value = get(optionalKey);
+                if (!value.isPresent()) {
+                    continue;
+                }
+
+                Object possibleNode = value.get();
+
+                if (!(possibleNode instanceof Type)) {
+                    continue;
+                }
+
+                Type node = (Type) possibleNode;
+                seenNodes.add(node.getId());
+
+                copy.set(optionalKey, Optional.of(node.deepCopy(keepId, seenNodes)), false);
+                continue;
+            }
+
+            // ClavaLog.info("Case not supported yet:" + keyWithNode);
+        }
+
+        // if (copy.hasSugar()) {
+        // set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(copy.desugar().copyDeep()));
+        // }
+
+        return copy;
+
+    }
+
     @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
+        return set(key, value, false);
+    }
+
+    /**
+     * Similar to set(), but does not change the current node, and returns a copy of the current node with the change.
+     */
+
+    public <T, E extends T> ClavaNode setCopy(DataKey<T> key, E value) {
         return set(key, value, true);
     }
 
@@ -444,13 +528,38 @@ public abstract class Type extends ClavaNode {
         return get(UNQUALIFIED_DESUGARED_TYPE);
     }
 
+    public final List<Type> getDesugars() {
+        return getDesugars(false);
+    }
+
+    public final List<Type> getDesugars(boolean addSelf) {
+        List<Type> desugars = new ArrayList<>();
+
+        if (addSelf) {
+            desugars.add(this);
+        }
+
+        Type currentDesugar = desugarTry().orElse(null);
+        while (currentDesugar != null) {
+            desugars.add(currentDesugar);
+            currentDesugar = currentDesugar.desugarTry().orElse(null);
+        }
+
+        return desugars;
+    }
+
     /**
      * Completely desugars the type.
      * 
      * @return
      */
     public final Type desugarAll() {
-        return get(UNQUALIFIED_DESUGARED_TYPE).map(Type::desugar).orElse(this);
+        if (!hasSugar()) {
+            return this;
+        }
+
+        return desugar().desugarAll();
+        // return get(UNQUALIFIED_DESUGARED_TYPE).flatMap(Type::desugarTry).orElse(this);
         // if (!hasSugar()) {
         // return this;
         // }
@@ -699,5 +808,56 @@ public abstract class Type extends ClavaNode {
         }
 
         return fields;
+    }
+
+    public List<Type> getTypeChildren() {
+        return getNodeFields().stream()
+                .filter(Type.class::isInstance)
+                .map(Type.class::cast)
+                .collect(Collectors.toList());
+    }
+
+    public Stream<Type> getTypeDescendantsStream() {
+        return getTypeChildren().stream().flatMap(c -> c.getTypeDescendantsAndSelfStream());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Stream<Type> getTypeDescendantsAndSelfStream() {
+        return Stream.concat(Stream.of(this), getTypeDescendantsStream());
+    }
+
+    public String toFieldTree() {
+        return toFieldTree("", true, new HashSet<>());
+    }
+
+    private String toFieldTree(String prefix, boolean onlyTypes, Set<String> seenNodes) {
+        StringBuilder builder = new StringBuilder();
+
+        boolean newNode = seenNodes.add(get(ID));
+        Preconditions.checkArgument(newNode);
+
+        builder.append(prefix);
+        builder.append(toString());
+
+        builder.append("\n");
+
+        List<ClavaNode> fields = getNodeFields();
+        // System.out.println("SOURCE:" + getClass());
+        // System.out.println("FIELDS:" + fields);
+
+        for (ClavaNode field : fields) {
+            if (onlyTypes && !(field instanceof Type)) {
+                continue;
+            }
+
+            // Check if repeated node
+            String nodeString = seenNodes.contains(field.get(ID))
+                    ? "Repeated: " + field.getClass() + "(" + field.get(ID) + ")"
+                    : ((Type) field).toFieldTree(prefix + "  ", onlyTypes, seenNodes);
+
+            builder.append(nodeString);
+        }
+
+        return builder.toString();
     }
 }
