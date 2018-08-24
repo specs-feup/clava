@@ -15,7 +15,7 @@ package pt.up.fe.specs.clang.parsers;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class TopLevelNodesParser {
     }
 
     private static void init(DataKey<Set<String>> key, ClangParserData data) {
-        data.set(key, new HashSet<>());
+        data.set(key, new LinkedHashSet<>());
     }
 
     private static void apply(String id, DataKey<Set<String>> key, LineStream lines, ClangParserData data,
