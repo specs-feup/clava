@@ -98,6 +98,10 @@ public class TextParser {
      */
     public void addElements(App app) {
         for (TranslationUnit tu : app.getTranslationUnits()) {
+            if (!tu.hasChildren()) {
+                continue;
+            }
+
             addElements(tu);
         }
     }
