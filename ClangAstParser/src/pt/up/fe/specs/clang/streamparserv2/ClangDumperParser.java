@@ -36,7 +36,9 @@ import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
+import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.utils.ZipResourceManager;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -155,13 +157,16 @@ public class ClangDumperParser {
         }
 
         // Check if there where no interleaved executions
-        checkInterleavedExecutions();
+        // checkInterleavedExecutions();
 
         ClangStreamParser clangStreamParser = new ClangStreamParser(output.getStdErr(), SpecsSystem.isDebug());
         App app = clangStreamParser.parse();
 
         // Set app in context
         context.set(ClavaContext.APP, app);
+
+        // Add text elements (comments, pragmas) to the tree
+        new TextParser(app.getContext()).addElements(app);
 
         return app;
     }
@@ -296,17 +301,23 @@ public class ClangDumperParser {
 
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
+        // boolean hasLibC = true;
 
         if (!hasLibC) {
             // Obtain correct version of libc/c++
             FileResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
 
-            // Write Clang headers
-            ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
-                    ClangAstParser.class);
+            if (libcResource == null) {
+                ClavaLog.info("Could not detect LibC/C++, and currently there is no bundled alternative for platform '"
+                        + SupportedPlatform.getCurrentPlatform() + "'. System includes might not work.");
+            } else {
 
-            zipManager.extract(libcZip);
+                // Write Clang headers
+                ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
+                        ClangAstParser.class);
 
+                zipManager.extract(libcZip);
+            }
         }
 
         // Add all folders inside base folder as system include
@@ -330,21 +341,49 @@ public class ClangDumperParser {
 
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
 
-        boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
-                .parallelStream()
-                .map(resource -> testFile(clangExecutable, clangTest, resource))
-                // Check if test fails in any of cases
-                .filter(hasInclude -> !hasInclude)
-                .findAny()
-                .isPresent();
+        // Test C
+        ProcessOutput<String, ClangParserData> outputC = testFile(clangExecutable, clangTest,
+                ClangAstResource.TEST_INCLUDES_C);
+        boolean foundCIncludes = !outputC.getStdOut().isEmpty();
 
-        if (needsLib) {
-            SpecsLogs.msgLib("Could not find libc/licxx installed in the system");
-        } else {
-            SpecsLogs.msgLib("Detected libc and licxx installed in the system");
+        if (!foundCIncludes) {
+            ClavaLog.debug("Could not find C includes, output of test: " + outputC.getStdOut() + "\n----\n"
+                    + outputC.getStdErr());
         }
 
-        return !needsLib;
+        // Test C++
+        ProcessOutput<String, ClangParserData> outputCpp = testFile(clangExecutable, clangTest,
+                ClangAstResource.TEST_INCLUDES_CPP);
+        boolean foundCppIncludes = !outputCpp.getStdOut().isEmpty();
+
+        if (!foundCppIncludes) {
+            ClavaLog.debug("Could not find C++ includes, output of test: " + outputCpp.getStdOut() + "\n----\n"
+                    + outputCpp.getStdErr());
+        }
+
+        boolean hasLibs = foundCIncludes && foundCppIncludes;
+
+        return hasLibs;
+
+        // boolean needsLib = !foundCIncludes || !foundCppIncludes;
+        //
+        // return !needsLib;
+
+        // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
+        // .parallelStream()
+        // .map(resource -> testFile(clangExecutable, clangTest, resource))
+        // // Check if test fails in any of cases
+        // .filter(hasInclude -> !hasInclude)
+        // .findAny()
+        // .isPresent();
+        //
+        // if (needsLib) {
+        // SpecsLogs.msgLib("Could not find libc/licxx installed in the system");
+        // } else {
+        // SpecsLogs.msgLib("Detected libc and licxx installed in the system");
+        // }
+
+        // return !needsLib;
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
@@ -357,11 +396,14 @@ public class ClangDumperParser {
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_MAC_OS);
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         default:
-            throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
+            return null;
+        // throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
         }
     }
 
-    private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
+    // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
+    private ProcessOutput<String, ClangParserData> testFile(File clangExecutable, File testFolder,
+            ResourceProvider testResource) {
         File testFile = testResource.write(testFolder);
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
@@ -371,9 +413,10 @@ public class ClangDumperParser {
         ProcessOutput<String, ClangParserData> output = SpecsSystem.runProcess(arguments,
                 this::processOutput, inputStream -> processStdErr(inputStream, context));
 
-        boolean foundInclude = !output.getStdOut().isEmpty();
+        return output;
+        // boolean foundInclude = !output.getStdOut().isEmpty();
 
-        return foundInclude;
+        // return foundInclude;
     }
 
     private static void checkInterleavedExecutions() {

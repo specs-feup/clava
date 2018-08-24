@@ -496,32 +496,40 @@ public class ClangAstParser {
         */
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
+        // boolean hasLibC = true;
 
         if (!hasLibC) {
             // Obtain correct version of libc/c++
             FileResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
 
-            // Write Clang headers
-            ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
-                    ClangAstParser.class);
+            if (libcResource == null) {
+                ClavaLog.info("Could not detect LibC/C++, and currently there is no bundled alternative for platform '"
+                        + SupportedPlatform.getCurrentPlatform() + "'. System includes might not work.");
+            } else {
 
-            zipManager.extract(libcZip);
+                // Write Clang headers
+                ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
+                        ClangAstParser.class);
 
-            /*
-            // Unzip file, if new
-            if (libcZip.isNewFile()) {
+                zipManager.extract(libcZip);
+
+                /*
+                // Unzip file, if new
+                if (libcZip.isNewFile()) {
                 // Ensure folder is empty
                 if (!hasFolderBeenCleared) {
                     hasFolderBeenCleared = true;
                     // Ensure folder is empty
                     SpecsIo.deleteFolderContents(includesBaseFolder);
                 }
-            
+                
                 SpecsIo.extractZip(libcZip.getFile(), includesBaseFolder);
-            
+                
                 // Cannot delete zip file, it will be used to check if there is a new file or not
+                }
+                
+                */
             }
-            */
 
         }
 
@@ -573,9 +581,9 @@ public class ClangAstParser {
                 .isPresent();
 
         if (needsLib) {
-            SpecsLogs.msgLib("Could not find libc/licxx installed in the system");
+            ClavaLog.debug("Could not find libc/licxx installed in the system");
         } else {
-            SpecsLogs.msgLib("Detected libc and licxx installed in the system");
+            ClavaLog.debug("Detected libc and licxx installed in the system");
         }
 
         // If on linux, make folders and files accessible to all users
@@ -885,8 +893,12 @@ public class ClangAstParser {
         case MAC_OS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_MAC_OS);
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
+        // case CENTOS6:
+        // return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         default:
-            throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
+            return null;
+        // throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
         }
     }
 
