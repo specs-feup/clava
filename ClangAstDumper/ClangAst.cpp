@@ -30,7 +30,10 @@
 
 using namespace clang;
 
+//#define OLD_OUTPUT
+
 static llvm::cl::OptionCategory ToolingSampleCategory("Tooling Sample");
+
 
 static constexpr const char* const PREFIX = "COUNTER";
 
@@ -400,8 +403,9 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
             counter = DumpResources::runId;
         }
 
+#ifdef OLD_OUTPUT
         DumpResources::writeCounter(counter);
-
+#endif
         //llvm::errs() << "CUSTOM ID: " << DumpResources::runId  << "\n";
 
 

@@ -11,6 +11,8 @@
 
 using namespace clang;
 
+//#define OLD_OUTPUT
+
 void ClangAstDumper::visitChildrenAndData(const Type *T) {
     //llvm::errs() << "VISITING TYPE CHILDREN: " << T << "\n";
 
@@ -72,10 +74,11 @@ bool ClangAstDumper::dumpType(const QualType& type) {
     // no need to use id to disambiguate
     seenTypes.insert((void*)typeAddr);
 
+#ifdef OLD_OUTPUT
     llvm::errs() << "TYPE_BEGIN\n";
     type.dump();
     llvm::errs() << "TYPE_END\n";
-
+#endif
     //dumpIdToClassMap(typeAddr, "QualType");
 
 
@@ -124,9 +127,10 @@ void ClangAstDumper::VisitPointerType(const PointerType *T) {
     }
 
     visitChildrenAndData(T);
-
+#ifdef OLD_OUTPUT
     // Visit child
     VisitTypeTop(T->getPointeeType().getTypePtr());
+#endif
 }
 
 /*
@@ -214,6 +218,7 @@ void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
 
     visitChildrenAndData(T);
 
+    /*
     // Return type
     VisitTypeTop(T->getReturnType().getTypePtr());
 
@@ -240,6 +245,7 @@ void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
         auto noexceptExpr = EPI.ExceptionSpec.NoexceptExpr;
         llvm::errs() <<  loc2str(noexceptExpr->getLocStart(), noexceptExpr->getLocEnd()) << "\n";
     }
+     */
 
 }
 
@@ -250,9 +256,9 @@ void ClangAstDumper::VisitTypedefType(const TypedefType *T) {
     }
 
     visitChildrenAndData(T);
-
+#ifdef OLD_OUTPUT
     VisitTypeTop(T->getDecl()->getUnderlyingType().getTypePtr());
-
+#endif
 }
 
 
@@ -262,8 +268,9 @@ void ClangAstDumper::VisitElaboratedType(const ElaboratedType *T) {
     }
 
     visitChildrenAndData(T);
-
+#ifdef OLD_OUTPUT
     VisitTypeTop(T->getNamedType().getTypePtr());
+#endif
 }
 
 
@@ -273,8 +280,9 @@ void ClangAstDumper::VisitLValueReferenceType(const LValueReferenceType *T) {
     }
 
     visitChildrenAndData(T);
-
+#ifdef OLD_OUTPUT
     VisitTypeTop(T->getPointeeType().getTypePtr());
+#endif
 }
 
 
@@ -285,7 +293,7 @@ void ClangAstDumper::VisitDependentSizedArrayType(const DependentSizedArrayType 
     }
 
     visitChildrenAndData(T);
-
+#ifdef OLD_OUTPUT
     // Element type
     VisitTypeTop(T->getElementType().getTypePtr());
 
@@ -293,6 +301,7 @@ void ClangAstDumper::VisitDependentSizedArrayType(const DependentSizedArrayType 
     if(T->getSizeExpr()) {
         VisitStmtTop(T->getSizeExpr());
     }
+#endif
 }
 
 

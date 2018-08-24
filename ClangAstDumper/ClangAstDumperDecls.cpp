@@ -15,6 +15,8 @@
 using namespace clang;
 
 
+//#define OLD_OUTPUT
+
 void ClangAstDumper::visitChildrenAndData(const Decl *D) {
     // Visit children
     visitChildren(D);
@@ -95,7 +97,9 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
 
 
     // Dump location
+#ifdef OLD_OUTPUT
     dumpSourceRange(extendedId.str(), declAddr->getLocStart(), declAddr->getLocEnd());
+#endif
 /*
     // If NamedDecl, check if it has name
     if (const NamedDecl *ND = dyn_cast<NamedDecl>(declAddr)) {
@@ -179,6 +183,8 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     //VisitCXXRecordDeclChildren(D);
 
 //    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
+
+#ifdef OLD_OUTPUT
     // Visit definition
     if(D->hasDefinition()) {
         VisitDeclTop(D->getDefinition());
@@ -217,6 +223,46 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
 
     }
 
+
+    // Visit captures
+    for (const auto &I : D->captures()) {
+        if(I.capturesVariable()) {
+            VisitDeclTop(I.getCapturedVar());
+        }
+
+        //llvm::errs() << "CAPTURE:" << &I << "\n";
+    }
+
+
+    // Visit canonical decl
+    if(D->getCanonicalDecl()) {
+        VisitDeclTop(D->getCanonicalDecl());
+    }
+
+    // Visit previous decl
+    if(D->getPreviousDecl()) {
+        VisitDeclTop(D->getPreviousDecl());
+        //llvm::errs() << "PREVIUIOS DECL: " << D->getPreviousDecl() << "\n";
+    }
+
+    // Visit most recent decl
+    if(D->getMostRecentDecl()) {
+        VisitDeclTop(D->getMostRecentDecl());
+        //llvm::errs() << "MOST RECENT DECL: " << D->getMostRecentDecl() << "\n";
+    }
+
+    //  Visit member class from which it was instantiated
+    if(D->getInstantiatedFromMemberClass()) {
+        VisitDeclTop(D->getInstantiatedFromMemberClass());
+        //llvm::errs() << "INST MEMBER: " << D->getInstantiatedFromMemberClass() << "\n";
+    }
+
+    //  Visit the record declaration from which this record could be instantiated.
+    if(D->getTemplateInstantiationPattern()) {
+        VisitDeclTop(D->getTemplateInstantiationPattern());
+        //llvm::errs() << "MEMBER CLASS: " << D->getTemplateInstantiationPattern() << "\n";
+    }
+#endif
 
 
     //for (auto &I : D->redecls()) {
@@ -257,44 +303,6 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
         llvm::errs() << "FRIEND:" << &I << "\n";
     }
     */
-    // Visit captures
-    for (const auto &I : D->captures()) {
-        if(I.capturesVariable()) {
-            VisitDeclTop(I.getCapturedVar());
-        }
-
-        //llvm::errs() << "CAPTURE:" << &I << "\n";
-    }
-
-
-    // Visit canonical decl
-    if(D->getCanonicalDecl()) {
-        VisitDeclTop(D->getCanonicalDecl());
-    }
-
-    // Visit previous decl
-    if(D->getPreviousDecl()) {
-        VisitDeclTop(D->getPreviousDecl());
-        //llvm::errs() << "PREVIUIOS DECL: " << D->getPreviousDecl() << "\n";
-    }
-
-    // Visit most recent decl
-    if(D->getMostRecentDecl()) {
-        VisitDeclTop(D->getMostRecentDecl());
-        //llvm::errs() << "MOST RECENT DECL: " << D->getMostRecentDecl() << "\n";
-    }
-
-    //  Visit member class from which it was instantiated
-    if(D->getInstantiatedFromMemberClass()) {
-        VisitDeclTop(D->getInstantiatedFromMemberClass());
-        //llvm::errs() << "INST MEMBER: " << D->getInstantiatedFromMemberClass() << "\n";
-    }
-
-    //  Visit the record declaration from which this record could be instantiated.
-    if(D->getTemplateInstantiationPattern()) {
-        VisitDeclTop(D->getTemplateInstantiationPattern());
-        //llvm::errs() << "MEMBER CLASS: " << D->getTemplateInstantiationPattern() << "\n";
-    }
 
 }
 
@@ -354,7 +362,7 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     }
      */
 
-
+#ifdef OLD_OUTPUT
     // Check if there are CXXCtorInitializers
     if(D->init_begin() != D->init_end()) {
         llvm::errs() << CXX_CTOR_INITIALIZER_BEGIN << "\n";
@@ -369,7 +377,7 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
 
         llvm::errs() << CXX_CTOR_INITIALIZER_END << "\n";
     }
-
+#endif
 
 }
 
@@ -412,7 +420,7 @@ void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D
     }
 
     visitChildrenAndData(D);
-
+#ifdef OLD_OUTPUT
     // Dump data
     dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
@@ -430,7 +438,7 @@ void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D
 
         llvm::errs() << CXX_CTOR_INITIALIZER_END << "\n";
     }
-
+#endif
 
 }
 
@@ -443,8 +451,9 @@ void ClangAstDumper::VisitTemplateDecl(const TemplateDecl *D) {
 
     // Dump data
     //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
-
+#ifdef OLD_OUTPUT
     dumpNumberTemplateParameters(D, D->getTemplateParameters());
+#endif
 }
 
 void ClangAstDumper::VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D) {
@@ -464,7 +473,7 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
     }
 
     visitChildrenAndData(D);
-
+#ifdef OLD_OUTPUT
     // Dump data
     //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
@@ -472,7 +481,7 @@ void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
     llvm::errs() << DUMP_NAMESPACE_ALIAS_PREFIX << "\n";
     llvm::errs() << clava::getId(D, id) << "\n";
     llvm::errs() << loc2str(D->getQualifierLoc().getBeginLoc(), D->getQualifierLoc().getEndLoc()) << "\n";
-
+#endif
 }
 
 void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
@@ -481,7 +490,7 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
     }
 
     visitChildrenAndData(D);
-
+/*
     // Dump data
     //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 
@@ -492,7 +501,7 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
     llvm::errs() << clava::getId(D, id) << "\n";
     llvm::errs() << toBoolString(D->isBitField()) << "\n";
     llvm::errs() << toBoolString(D->getInClassInitializer() != nullptr) << "\n";
-
+*/
 }
 
 void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
@@ -512,12 +521,12 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
 
     // Old
     //DumpVarDeclData(D);
-
+#ifdef OLD_OUTPUT
     if(D->hasInheritedDefaultArg()) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";
         llvm::errs() << clava::getId(D, id) << "\n";
     }
-
+#endif
 }
 
 void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {

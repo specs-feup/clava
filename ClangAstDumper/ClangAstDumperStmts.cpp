@@ -13,6 +13,8 @@
 
 using namespace clang;
 
+//#define OLD_OUTPUT
+
 void ClangAstDumper::visitChildrenAndData(const Stmt *S) {
     // Visit children
     visitChildren(S);
@@ -58,8 +60,10 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
     std::ostringstream extendedId;
     extendedId << stmtAddr << "_" << id;
 
+#ifdef OLD_OUTPUT
     // Dump location
     dumpSourceRange(extendedId.str(), stmtAddr->getLocStart(), stmtAddr->getLocEnd());
+#endif
 
     //dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));
 
@@ -110,12 +114,13 @@ void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
     }
 
     visitChildrenAndData(Node);
-
+#ifdef OLD_OUTPUT
     VisitStmtTop(Node->getRangeStmt());
     VisitStmtTop(Node->getBeginEndStmt());
     VisitStmtTop(Node->getCond());
     VisitStmtTop(Node->getInc());
     VisitStmtTop(Node->getBody());
+#endif
 }
 
 /*
@@ -138,7 +143,7 @@ void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
     }
 
     visitChildrenAndData(Node);
-
+#ifdef OLD_OUTPUT
     if(Node->getInit() != nullptr) {
         VisitStmtTop(Node->getInit());
     }
@@ -158,7 +163,7 @@ void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
     if(Node->getBody() != nullptr) {
         VisitStmtTop(Node->getBody());
     }
-
+#endif
 
 
 

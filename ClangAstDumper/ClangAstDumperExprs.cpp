@@ -39,7 +39,7 @@ void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
 //    llvm::errs() << "DUMPING CXX CONST: " << getId(Node) << "\n";
 
     const Type* constructorType = Node->getConstructor()->getType().getTypePtrOrNull();
@@ -52,6 +52,7 @@ void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
     } else {
         llvm::errs() << "CXXConstructExpr " << Node->getConstructor()->getDeclName().getAsString() << " has null type\n";
     }
+#endif
 }
 
 void ClangAstDumper::VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExpr *Node) {
@@ -60,7 +61,7 @@ void ClangAstDumper::VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExp
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     // If argument type, dump mapping between node and type
     if (Node->isArgumentType()) {
         // Dump type
@@ -74,6 +75,7 @@ void ClangAstDumper::VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExp
     llvm::errs() << "<UnaryExprOrTypeTraitExpr Literal Code>\n";
     llvm::errs() << Node << "_" << id << "\n";
     llvm::errs() << clava::getSource(Context, Node->getSourceRange()) << "\n";
+#endif
 }
 
 
@@ -125,7 +127,7 @@ void ClangAstDumper::VisitOffsetOfExpr(const OffsetOfExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     // Dump offset set
     const Type* offsetType = Node->getTypeSourceInfo()->getType().getTypePtr();
     dumpType(offsetType);
@@ -175,7 +177,7 @@ void ClangAstDumper::VisitOffsetOfExpr(const OffsetOfExpr *Node) {
 
 
     }
-
+#endif
 }
 
 void ClangAstDumper::VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *Node) {
@@ -184,7 +186,7 @@ void ClangAstDumper::VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMem
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     llvm::errs() << CXX_MEMBER_EXPR_INFO << "\n";
 
     // Node id
@@ -195,7 +197,7 @@ void ClangAstDumper::VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMem
 
     // Member name
     llvm::errs() << Node->getMember().getAsString() << "\n";
-
+#endif
 }
 
 void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node) {
@@ -204,7 +206,7 @@ void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     if(Node->getQualifier() != nullptr) {
         // Can use the stream processor of decl ref expression qualifiers
         llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
@@ -212,7 +214,7 @@ void ClangAstDumper::VisitOverloadExpr(const OverloadExpr *Node) {
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
-
+#endif
 }
 
 void ClangAstDumper::VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node) {
@@ -222,7 +224,7 @@ void ClangAstDumper::VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node)
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     // Call parent in hierarchy
     //VisitOverloadExpr(Node, false);
 
@@ -234,6 +236,7 @@ void ClangAstDumper::VisitUnresolvedLookupExpr(const UnresolvedLookupExpr *Node)
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
+#endif
 }
 
 void ClangAstDumper::VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node) {
@@ -242,7 +245,7 @@ void ClangAstDumper::VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node)
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     // Call parent in hierarchy
     //VisitOverloadExpr(Node, false);
 
@@ -254,6 +257,7 @@ void ClangAstDumper::VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *Node)
         Node->getQualifier()->dump();
         llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
     }
+#endif
 }
 
 
@@ -264,7 +268,7 @@ void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
 //    llvm::errs() << "LAMBDA EXPR: " << getId(Node) << "\n";
 //    llvm::errs() << "LAMBDA EXPR LAMBDA CLASS: " << getId(Node->getLambdaClass()) << "\n";
 
@@ -295,7 +299,7 @@ void ClangAstDumper::VisitLambdaExpr(const LambdaExpr *Node) {
         llvm::errs()  << lambdaCapture.getCaptureKind ()  << "\n";
     }
 
-
+#endif
 }
 
 void ClangAstDumper::VisitSizeOfPackExpr(const SizeOfPackExpr *Node) {
@@ -304,11 +308,12 @@ void ClangAstDumper::VisitSizeOfPackExpr(const SizeOfPackExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     // Visit pack
     VisitDeclTop(Node->getPack());
 
     // Map expr to pack?
+#endif
 }
 
 void ClangAstDumper::VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstructExpr *Node) {
@@ -317,7 +322,7 @@ void ClangAstDumper::VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstruc
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     // Visit type as written
     VisitTypeTop(Node->getTypeAsWritten().getTypePtr());
 
@@ -325,6 +330,7 @@ void ClangAstDumper::VisitCXXUnresolvedConstructExpr(const CXXUnresolvedConstruc
     llvm::errs() << TYPE_AS_WRITTEN << "\n";
     llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
     llvm::errs() << clava::getId(Node->getTypeAsWritten().getTypePtr(), id) << "\n";
+#endif
 }
 
 void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
@@ -333,7 +339,7 @@ void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     bool isTypeOperand = Node->isTypeOperand();
     llvm::errs() << TYPEID_DATA << "\n";
     llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
@@ -352,6 +358,7 @@ void ClangAstDumper::VisitCXXTypeidExpr(const CXXTypeidExpr *Node) {
         llvm::errs() << clava::getId(Node->getExprOperand(), id) << "\n";
         VisitStmtTop(Node->getExprOperand());
     }
+#endif
 }
 
 void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
@@ -360,13 +367,14 @@ void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
+#ifdef OLD_OUTPUT
     llvm::errs() << INIT_LIST_EXPR_INFO << "\n";
     llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
 
     // InitListExpr has method isExplicit(), but is not const
     bool isExplicit = Node->getLBraceLoc().isValid() && Node->getRBraceLoc().isValid();
     llvm::errs() << isExplicit << "\n";
+#endif
 
 }
 
