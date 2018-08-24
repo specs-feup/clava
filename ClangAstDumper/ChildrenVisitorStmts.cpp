@@ -43,6 +43,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXDeleteExpr", clava::StmtNode::CXX_DELETE_EXPR},
         {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
+        {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
 
 
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
@@ -431,8 +432,8 @@ void ClangAstDumper::VisitUnaryExprOrTypeTraitExprChildren(const UnaryExprOrType
 
     if(E->isArgumentType()) {
         VisitTypeTop(E->getArgumentType());
+        //llvm::errs() << "UNARY ARG TYPE: " << clava::getId(E->getArgumentType(), id) << "\n";
     }
-
 
 }
 

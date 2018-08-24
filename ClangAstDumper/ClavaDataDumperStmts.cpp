@@ -507,7 +507,7 @@ void clava::ClavaDataDumper::DumpUnaryExprOrTypeTraitExprData(const UnaryExprOrT
     }
 
     clava::dump(clava::getSource(Context, E->getSourceRange()));
-    //llvm::errs() << "UNARY " << clava::getId(E, id) << " is argument type: " << E->isArgumentType() << "\n";
+    //llvm::errs() << "UNARY DATA" << clava::getId(E, id) << " is argument type: " << E->isArgumentType() << "\n";
  }
 
 void clava::ClavaDataDumper::DumpCXXNewExprData(const CXXNewExpr *E) {
