@@ -27,8 +27,9 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
-import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
+import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
@@ -55,18 +56,19 @@ public class ClangStreamParser {
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
             new DenanonymizeDecls(),
 
-            // new DeleteTemplateSpecializations(),
-            // new RemoveExtraNodes(),
+            new DeleteTemplateSpecializations(),
+            new RemoveExtraNodes(),
             // new RemoveClangComments(),
-            new CreateDeclStmts(),
-            // new AdaptBoolTypes(),
-            // new AdaptBoolCasts(),
-            // new RemoveBoolOperatorCalls(),
-            // new ReplaceClangLabelStmt(),
-            // new RemoveDefaultInitializers(),
-            // new RemoveImplicitConstructors(),
-            // new RecoverStdMacros(),
-            new MoveImplicitCasts());
+            new CreateDeclStmts()
+    // new AdaptBoolTypes(),
+    // new AdaptBoolCasts(),
+    // new RemoveBoolOperatorCalls(),
+    // new ReplaceClangLabelStmt(),
+    // new RemoveDefaultInitializers(),
+    // new RemoveImplicitConstructors(),
+    // new RecoverStdMacros(),
+    // new MoveImplicitCasts()
+    );
 
     private final ClangParserData data;
 
