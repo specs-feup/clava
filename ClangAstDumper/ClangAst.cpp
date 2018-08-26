@@ -43,8 +43,9 @@ static constexpr const char* const PREFIX = "COUNTER";
 bool DumpAstVisitor::TraverseDecl(Decl *D) {
     FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
     if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
+#ifdef OLD_OUTPUT
         (*D).dump(llvm::outs());
-
+#endif
         // Top-level Node
         llvm::errs() << TOP_LEVEL_NODES << "\n";
         //llvm::errs() << id << "\n";
