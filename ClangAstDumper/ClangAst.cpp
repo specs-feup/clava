@@ -172,7 +172,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     // Dump types for Expr, TypeDecl and ValueDecl, as well as the connection between them
     bool PrintNodesTypesRelationsVisitor::VisitExpr(Expr *D) {
-
+#ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
             //if(D->getType().isNull()) {
@@ -181,19 +181,19 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
             dumpNodeToType(DumpResources::nodetypes,D, D->getType());
 
         }
-
+#endif
         return true;
     }
 
     bool PrintNodesTypesRelationsVisitor::VisitTypeDecl(TypeDecl *D) {
 
-
+#ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
             //llvm::errs() << "Visiting Type Decl: " << D << "\n";
             dumpNodeToType(DumpResources::nodetypes, D, D->getTypeForDecl());
         }
-
+#endif
         return true;
     }
 
@@ -203,6 +203,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
      * @return
      */
     bool PrintNodesTypesRelationsVisitor::VisitTypedefNameDecl(TypedefNameDecl *D) {
+#ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
             //if(D->getUnderlyingType().isNull()) {
@@ -211,7 +212,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
             dumpNodeToType(DumpResources::nodetypes, D, D->getUnderlyingType());
 
         }
-
+#endif
         return true;
     }
 
@@ -232,7 +233,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
 
     bool PrintNodesTypesRelationsVisitor::VisitValueDecl(ValueDecl *D) {
-
+#ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
         if (!fullLocation.isInSystemHeader()) {
             //llvm::errs() << "Visiting Value Decl: " << D << "\n";
@@ -243,7 +244,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
             return true;
         }
-
+#endif
         return true;
     }
 
@@ -274,7 +275,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     bool PrintNodesTypesRelationsVisitor::VisitLambdaExpr(LambdaExpr *D) {
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-
+#ifdef OLD_OUTPUT
         if (!fullLocation.isInSystemHeader()) {
             // Dump self
             dumpNodeToType(DumpResources::nodetypes,D, D->getType());
@@ -284,7 +285,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
             //TraverseDecl(D->getLambdaClass());
             //VisitTypeDecl(D->getLambdaClass());
         }
-
+#endif
         return true;
     }
 
@@ -489,13 +490,13 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         clang::SourceManager &sm = compilerInstance.getSourceManager();
 
         if (!sm.isInSystemHeader(HashLoc)) {
-
+#ifdef OLD_OUTPUT
             DumpResources::includes << "source:" << sm.getFilename(HashLoc).str() << "|";
             DumpResources::includes << "include:" << FileName.str() << "|";
             DumpResources::includes << "line:" << sm.getSpellingLineNumber(HashLoc) << "|";
             DumpResources::includes << "angled:" << IsAngled ? "true" : "false";
             DumpResources::includes << "\n";
-
+#endif
             // Includes information in stream
             llvm::errs() << INCLUDES << "\n";
             // Source
@@ -611,8 +612,12 @@ void DumpResources::init(int runId) {
     DumpResources::runId = runId;
 
     // Clear files
+#ifdef OLD_OUTPUT
     DumpResources::includes.open("includes.txt", std::ofstream::out | std::fstream::trunc);
     DumpResources::nodetypes.open("nodetypes.txt", std::ofstream::out | std::ofstream::trunc);
+#endif
+
+
     //DumpResources::template_args.open("template_args.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::is_temporary.open("is_temporary.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::omp.open("omp.txt", std::ofstream::out | std::ofstream::trunc);
@@ -622,8 +627,12 @@ void DumpResources::init(int runId) {
 }
 
 void DumpResources::finish() {
+#ifdef OLD_OUTPUT
     DumpResources::includes.close();
     DumpResources::nodetypes.close();
+#endif
+
+
     //DumpResources::template_args.close();
     DumpResources::is_temporary.close();
     DumpResources::omp.close();
