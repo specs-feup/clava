@@ -29,6 +29,7 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
+import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -59,7 +60,9 @@ public class ClangStreamParser {
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
             // new RemoveClangComments(),
-            new CreateDeclStmts()
+            new CreateDeclStmts(),
+            new MoveImplicitCasts()
+
     // new AdaptBoolTypes(),
     // new AdaptBoolCasts(),
     // new RemoveBoolOperatorCalls(),
@@ -67,7 +70,6 @@ public class ClangStreamParser {
     // new RemoveDefaultInitializers(),
     // new RemoveImplicitConstructors(),
     // new RecoverStdMacros(),
-    // new MoveImplicitCasts()
     );
 
     private final ClangParserData data;
@@ -78,6 +80,10 @@ public class ClangStreamParser {
 
     private ClavaFactory getFactory() {
         return data.get(ClavaNode.CONTEXT).get(ClavaContext.FACTORY);
+    }
+
+    public static Collection<ClavaRule> getPostParsingRules() {
+        return POST_PARSING_RULES;
     }
 
     public App parse() {
@@ -274,6 +280,160 @@ public class ClangStreamParser {
         app.setIdsAlias(normalizedNodes.getRepeatedIdsMap());
 
         return app;
+    }
+
+    public TranslationUnit parseTu(File sourceFile) {
+        // Get top-level nodes
+        Set<String> topLevelDecls = data.get(ClangParserData.TOP_LEVEL_DECL_IDS);
+        Set<String> topLevelTypes = data.get(ClangParserData.TOP_LEVEL_TYPE_IDS);
+        Set<String> topLevelAttributes = data.get(ClangParserData.TOP_LEVEL_ATTR_IDS);
+
+        // Parse top-level decls
+
+        List<ClavaNode> topLevelDeclNodes = new ArrayList<>();
+        // for (String topLevelDeclId : topLevelDecls.flatValues()) {
+        for (String topLevelDeclId : topLevelDecls) {
+            ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelDeclId);
+            Preconditions.checkNotNull(parsedNode, "No node for decl '" + topLevelDeclId + "'");
+            // Check
+            topLevelDeclNodes.add(parsedNode);
+        }
+
+        // Parse top-level types
+        for (String topLevelTypeId : topLevelTypes) {
+            if (ClavaNodes.isNullId(topLevelTypeId)) {
+                continue;
+            }
+            ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelTypeId);
+            Preconditions.checkNotNull(parsedNode, "No node for type '" + topLevelTypeId + "'");
+
+        }
+
+        // Parse top-level attributes
+        for (String topLevelAttributeId : topLevelAttributes) {
+            ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelAttributeId);
+            Preconditions.checkNotNull(parsedNode, "No node for attribute '" + topLevelAttributeId + "'");
+        }
+
+        // Create TU node
+        return createTu(sourceFile, topLevelDeclNodes, data.get(ClangParserData.INCLUDES));
+
+    }
+
+    private TranslationUnit createTu(File sourceFile, Collection<? extends ClavaNode> topLevelDecls,
+            List<Include> includes) {
+        // Each node belongs to a file, maintain a map of what nodes belong to each file,
+        // in the end create the file nodes and add them to the App node
+
+        // Using LinkedHashMap to maintain order of keys
+        MultiMap<String, Decl> declarations = new MultiMap<>(() -> new LinkedHashMap<>());
+
+        // There can be repeated top level declarations, with different values for the addresses.
+        // Because the parser uses the addresses as ids, it can be problematic if declarations with mismatched addresses
+        // appear in the final AST tree.
+        //
+        // To solve this, use the location of the node to remove repetitions,
+        // and create a map between repeated ids and normalized ids
+
+        NormalizedNodes normalizedNodes = NormalizedNodes.newInstance(topLevelDecls);
+
+        for (ClavaNode clavaNode : normalizedNodes.getUniqueNodes()) {
+
+            // Normalize node source path
+            String filepath = clavaNode.getLocation().getFilepath();
+            if (filepath == null) {
+                SpecsLogs.msgWarn("Filepath null, check if ok. Skipping node:\n" + clavaNode);
+                continue;
+            }
+
+            String canonicalPath = SpecsIo.getCanonicalPath(new File(filepath));
+
+            if (!(clavaNode instanceof Decl)) {
+                throw new RuntimeException(
+                        "Expecting a DeclNode, found a '" + clavaNode.getClass().getSimpleName() + "'");
+            }
+
+            Decl decl = (Decl) clavaNode;
+
+            declarations.put(canonicalPath, decl);
+        }
+
+        // Create includes map
+        MultiMap<String, Include> includesMap = new MultiMap<>();
+        includes.stream()
+                .forEach(include -> includesMap.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include));
+
+        // For each enty in MultiMap, create a Translation Unit
+        // if (declarations.size() > 1) {
+        // // Just to check, for now
+        // throw new RuntimeException("Declarations size is not one, check:" + declarations.keySet());
+        // // ClavaLog.warning("DECLA");
+        // }
+
+        // System.out.println("DECLARATION KEYS:");
+        // System.out.println(declarations.keySet());
+        //
+        // System.out.println("DECLARATIONS:");
+        // System.out.println(declarations);
+
+        String path = sourceFile.getAbsolutePath();
+        if (declarations.size() > 0 && !declarations.containsKey(path)) {
+            // Just to check, for now
+            throw new RuntimeException("Expeted declarations to have key '" + path + "':" + declarations);
+        }
+
+        // Declaration nodes of the translation unit
+        List<Decl> declNodes = declarations.get(path);
+
+        // Set<Decl> decls = new LinkedHashSet<>();
+        List<Decl> decls = new ArrayList<>();
+
+        // Build filename
+        // File sourcePath = new File(path);
+
+        // Declaration nodes of the translation unit
+        // List<Decl> declNodes = declarations.get(path);
+
+        // Remove ParmVarDecl nodes
+        declNodes = declNodes.stream()
+                .filter(decl -> !(decl instanceof ParmVarDecl))
+                .collect(Collectors.toList());
+
+        // Get corresponding includes
+        File declFile = new File(path);
+
+        List<Include> sourceIncludes = includesMap.get(SpecsIo.getCanonicalPath(declFile));
+
+        if (sourceIncludes == null) {
+            throw new RuntimeException("Could not find includes for source file '" + declFile + "'");
+        }
+
+        List<Include> uniqueIncludes = SpecsCollections.filter(sourceIncludes, include -> include.toString());
+
+        // Add includes
+        uniqueIncludes.stream()
+                // .map(include -> ClavaNodeFactory.include(include, path))
+                .map(include -> getFactory().includeDecl(include, path))
+                .forEach(decls::add);
+
+        // Add declarations
+        decls.addAll(declNodes);
+
+        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
+        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
+        TranslationUnit tUnit = getFactory().translationUnit(sourceFile, decls);
+
+        // Language language = data.get(ClangParserKeys.FILE_LANGUAGE_DATA).get(new File(filenamePath, filename));
+        Language language = data.get(ClangParserData.FILE_LANGUAGE_DATA).get(sourceFile);
+        if (language != null) {
+            tUnit.setLanguage(language);
+        }
+        // Clean translation unit
+        // ClavaPostProcessing.applyPostPasses(tUnit);
+
+        // tUnits.add(tUnit);
+
+        return tUnit;
     }
 
 }

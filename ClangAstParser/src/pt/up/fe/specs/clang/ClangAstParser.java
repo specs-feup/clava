@@ -249,10 +249,10 @@ public class ClangAstParser {
         // Set app in context
         context.set(ClavaContext.APP, newApp);
 
-        if (SpecsSystem.isDebug()) {
-            // App newApp = new ClangStreamParser(stderr).parse();
-            System.out.println("NEW APP CODE:\n" + newApp.getCode());
-        }
+        // if (SpecsSystem.isDebug()) {
+        // // App newApp = new ClangStreamParser(stderr).parse();
+        // System.out.println("NEW APP CODE:\n" + newApp.getCode());
+        // }
 
         /*
         ClangStreamParser clangStreamParser = new ClangStreamParser(stderr, SpecsSystem.isDebug());
@@ -569,6 +569,11 @@ public class ClangAstParser {
      * @return
      */
     private boolean hasLibC(File clangExecutable) {
+
+        // If Windows, return false and always use bundled LIBC++
+        if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+            return false;
+        }
 
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
 

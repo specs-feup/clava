@@ -43,9 +43,12 @@ public class MoveImplicitCasts implements SimplePreClavaRule {
         // Set cast as field of sub-expression
         subExpression.setImplicitCast(implicitCastExpr);
 
+        // Set sub-expression as field of implicit cast
+        implicitCastExpr.set(ImplicitCastExpr.SUB_EXPR, subExpression);
+
         // Add sub expression as dummy expr in implicit cast node
-        queue.addChild(implicitCastExpr, subExpression.getFactoryWithNode()
-                .dummyExpr("Implicit cast of node " + subExpression.get(ClavaNode.ID)));
+        // queue.addChild(implicitCastExpr, subExpression.getFactoryWithNode()
+        // .dummyExpr("Implicit cast of node " + subExpression.get(ClavaNode.ID)));
     }
 
 }

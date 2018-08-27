@@ -18,10 +18,11 @@ import java.io.File;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.language.Standard;
 
 public interface ClangParser {
 
-    TranslationUnit parse(File file, DataStore config);
+    TranslationUnit parse(File file, Standard standard, DataStore config);
 
     File getLastWorkingFolder();
 

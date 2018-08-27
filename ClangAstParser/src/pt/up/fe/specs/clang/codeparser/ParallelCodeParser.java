@@ -27,16 +27,18 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
+import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -58,23 +60,42 @@ import pt.up.fe.specs.util.SpecsSystem;
 public class ParallelCodeParser extends CodeParser {
 
     /// DATAKEY BEGIN
-    public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing").setDefault(() -> false);
+    public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing").setDefault(() -> true);
     /// DATAKEY END
 
     @Override
     public App parse(List<File> sources, List<String> compilerOptions) {
 
         List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
+
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
+
+        System.out.println(
+                "All Sources:" + allSources.keySet().stream().map(Object::toString).collect(Collectors.joining(", ")));
 
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
         // ConcurrentLinkedQueue<File> workingFolders = new ConcurrentLinkedQueue<>();
 
+        DataStore options = ClavaOptions.toDataStore(compilerOptions);
+
+        // Add context to config
+        ClavaContext context = new ClavaContext();
+        options.add(ClavaNode.CONTEXT, context);
+
+        Standard standard = getStandard(sources, options);
+        // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
+
         long tic = System.nanoTime();
 
         List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
-                .map(sourceFile -> parseSource(new File(sourceFile), compilerOptions, clangDump))
+                .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump))
                 .collect(Collectors.toList());
+
+        // // Sort translation units
+        // Collections.sort(tUnits, (tunit1, tunit2) -> tunit1.getFile().compareTo(tunit2.getFile()));
+
+        // System.out.println(
+        // "TUNITS:" + tUnits.stream().map(tunit -> tunit.getFile().toString()).collect(Collectors.joining(", ")));
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("Code to TUs", tic));
@@ -137,7 +158,8 @@ public class ParallelCodeParser extends CodeParser {
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
-        new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
+        // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
+        new TreeTransformer(ClangStreamParser.getPostParsingRules()).transform(app);
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("TUs to Clava AST", tic));
@@ -178,10 +200,55 @@ public class ParallelCodeParser extends CodeParser {
     // return sourceFiles.stream();
     // }
 
-    private TranslationUnit parseSource(File sourceFile, List<String> compilerOptions,
+    private Standard getStandard(List<File> sources, DataStore options) {
+        // If standard has been defined, return it
+        if (options.hasValue(ClavaOptions.STANDARD)) {
+            return options.get(ClavaOptions.STANDARD);
+        }
+
+        // Try to infer the standard form the sources extension
+        Set<Standard> possibleStandards = new HashSet<>();
+        boolean isCl = false;
+
+        for (File source : sources) {
+            String extension = SpecsIo.getExtension(source);
+
+            if (extension.equals("cl")) {
+                isCl = true;
+                continue;
+            }
+
+            Standard.fromExtension(extension).ifPresent(std -> possibleStandards.add(std));
+        }
+
+        if (possibleStandards.isEmpty()) {
+            if (isCl) {
+                return Standard.C99;
+            }
+
+            // Use C99 as standard, possible only .h files
+            return Standard.C99;
+            // throw new RuntimeException(
+            // "Could not determing a default standard from this list of source files: " + sources);
+        }
+
+        if (possibleStandards.size() == 1) {
+            return possibleStandards.stream().findFirst().get();
+        }
+
+        throw new RuntimeException("Found more than one possible standard (" + possibleStandards
+                + ") from this list of source files: " + sources);
+
+        // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
+        // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
+
+        // TODO Auto-generated method stub
+        // return null;
+    }
+
+    private TranslationUnit parseSource(File sourceFile, Standard standard, DataStore options,
             ConcurrentLinkedQueue<String> clangDump) {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
-        DataStore options = ClavaOptions.toDataStore(compilerOptions);
 
         // Adapt compiler options according to the file
         adaptOptions(options, sourceFile);
@@ -191,7 +258,7 @@ public class ParallelCodeParser extends CodeParser {
         ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
                 streamConsoleOutput);
 
-        TranslationUnit tunit = clangParser.parse(sourceFile, options);
+        TranslationUnit tunit = clangParser.parse(sourceFile, standard, options);
 
         if (get(SHOW_CLANG_DUMP)) {
             // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));

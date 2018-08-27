@@ -55,7 +55,7 @@ public class ClangStreamParserV2 {
         ClangParserData clangParserData = new ClangParserData();
         clangParserData.set(ClangParserData.CONTEXT, context);
         LineStreamParser<ClangParserData> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
-
+        streamParser.setLineIgnore(ClangStreamParserV2::ignoreLine);
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));
         // streamParser.getData().add(ClavaNode.CONTEXT, context);
@@ -71,5 +71,15 @@ public class ClangStreamParserV2 {
         // data.add(ClangParserKeys.VISITED_CHILDREN, new HashMap<>());
         //
         // return lineStreamParser;
+    }
+
+    private static boolean ignoreLine(String line) {
+        // System.out.println("LINE:" + line);
+        if (line.equals("error: invalid argument '-std=c++11' not allowed with 'C/ObjC'")) {
+            // System.out.println("IGNORING LINE");
+            return true;
+        }
+
+        return false;
     }
 }

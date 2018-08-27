@@ -26,8 +26,6 @@ import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.ClangAstFileResource;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangAstParser;
@@ -52,7 +50,6 @@ import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
-import pt.up.fe.specs.util.utilities.StringLines;
 
 public class ClangDumperParser {
 
@@ -339,6 +336,11 @@ public class ClangDumperParser {
      */
     private boolean hasLibC(File clangExecutable) {
 
+        // If Windows, return false and always use bundled LIBC++
+        if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+            return false;
+        }
+
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
 
         // Test C
@@ -419,37 +421,37 @@ public class ClangDumperParser {
         // return foundInclude;
     }
 
-    private static void checkInterleavedExecutions() {
-        File consumerOrder = new File("consumer_order.txt");
-        if (!consumerOrder.isFile()) {
-            SpecsLogs.msgInfo("Could not find file 'consumer_order.txt'");
-            return;
-        }
-
-        List<String> lines = StringLines.getLines(new File("consumer_order.txt"));
-
-        // if (lines.size() % 2 == 0) {
-        // LoggingUtils.msgWarn("Expected even number of lines, got '" + lines.size() + "'");
-        // return;
-        // }
-        Preconditions.checkArgument(lines.size() % 2 == 0, "Expected even number of lines, got '" + lines.size() + "'");
-
-        String line1Prefix = "ASTConsumer built ";
-        String line2Prefix = "ASTConsumer destroyed ";
-
-        for (int i = 0; i < lines.size(); i += 2) {
-            String line1 = lines.get(i);
-            String line2 = lines.get(i + 1);
-
-            Preconditions.checkArgument(line1.startsWith(line1Prefix));
-            Preconditions.checkArgument(line2.startsWith(line2Prefix));
-
-            String subString1 = line1.substring(line1Prefix.length());
-            String subString2 = line2.substring(line2Prefix.length());
-
-            Preconditions.checkArgument(subString1.equals(subString2));
-        }
-
-    }
+    // private static void checkInterleavedExecutions() {
+    // File consumerOrder = new File("consumer_order.txt");
+    // if (!consumerOrder.isFile()) {
+    // SpecsLogs.msgInfo("Could not find file 'consumer_order.txt'");
+    // return;
+    // }
+    //
+    // List<String> lines = StringLines.getLines(new File("consumer_order.txt"));
+    //
+    // // if (lines.size() % 2 == 0) {
+    // // LoggingUtils.msgWarn("Expected even number of lines, got '" + lines.size() + "'");
+    // // return;
+    // // }
+    // Preconditions.checkArgument(lines.size() % 2 == 0, "Expected even number of lines, got '" + lines.size() + "'");
+    //
+    // String line1Prefix = "ASTConsumer built ";
+    // String line2Prefix = "ASTConsumer destroyed ";
+    //
+    // for (int i = 0; i < lines.size(); i += 2) {
+    // String line1 = lines.get(i);
+    // String line2 = lines.get(i + 1);
+    //
+    // Preconditions.checkArgument(line1.startsWith(line1Prefix));
+    // Preconditions.checkArgument(line2.startsWith(line2Prefix));
+    //
+    // String subString1 = line1.substring(line1Prefix.length());
+    // String subString2 = line2.substring(line2Prefix.length());
+    //
+    // Preconditions.checkArgument(subString1.equals(subString2));
+    // }
+    //
+    // }
 
 }

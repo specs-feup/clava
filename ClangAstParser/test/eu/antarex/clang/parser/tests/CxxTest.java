@@ -139,6 +139,7 @@ public class CxxTest {
     @Test
     public void testTemplates() {
         new CxxTester("templates.cpp", "templates.h").test();
+        // new CxxTester("templates.h").onePass().test();
     }
 
     @Test
