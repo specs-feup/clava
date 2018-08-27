@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.language;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,6 +41,9 @@ public enum Standard implements StringProvider {
     GNUXX98("gnu++98", true),
     GNUXX11("gnu++11", true),
     GNUXX14("gnu++14", true);
+
+    private static final Set<String> C_EXTENSIONS = new HashSet<>(Arrays.asList("c"));
+    private static final Set<String> CPP_EXTENSIONS = new HashSet<>(Arrays.asList("cpp, cc, hpp"));
 
     private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(Standard.class);
@@ -128,6 +133,18 @@ public enum Standard implements StringProvider {
         }
 
         return Optional.ofNullable(previousStandard);
+    }
+
+    public static Optional<Standard> fromExtension(String extension) {
+        if (C_EXTENSIONS.contains(extension)) {
+            return Optional.of(C99);
+        }
+
+        if (CPP_EXTENSIONS.contains(extension)) {
+            return Optional.of(Standard.CXX11);
+        }
+
+        return Optional.empty();
     }
 
 }

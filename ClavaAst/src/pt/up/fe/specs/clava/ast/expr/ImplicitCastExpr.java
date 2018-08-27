@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,6 +29,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public class ImplicitCastExpr extends CastExpr {
+
+    /// DATAKEY BEGIN
+
+    public final static DataKey<Expr> SUB_EXPR = KeyFactory.object("subExpr", Expr.class);
+
+    /// DATAKEY END
 
     public ImplicitCastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -41,6 +49,15 @@ public class ImplicitCastExpr extends CastExpr {
     public String getCode() {
         // The code of its only child
         return getSubExpr().getCode();
+    }
+
+    @Override
+    public Expr getSubExpr() {
+        if (!hasChildren()) {
+            return get(SUB_EXPR);
+        }
+
+        return super.getSubExpr();
     }
 
     /**
