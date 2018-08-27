@@ -569,14 +569,15 @@ public class ClangAstParser {
      * @return
      */
     private boolean hasLibC(File clangExecutable) {
-
+        return false;
+        /*
         // If Windows, return false and always use bundled LIBC++
         if (SupportedPlatform.getCurrentPlatform().isWindows()) {
             return false;
         }
-
+        
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-
+        
         boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
                 .parallelStream()
                 .map(resource -> testFile(clangExecutable, clangTest, resource))
@@ -584,19 +585,20 @@ public class ClangAstParser {
                 .filter(hasInclude -> !hasInclude)
                 .findAny()
                 .isPresent();
-
+        
         if (needsLib) {
             ClavaLog.debug("Could not find libc/licxx installed in the system");
         } else {
             ClavaLog.debug("Detected libc and licxx installed in the system");
         }
-
+        
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
         }
-
+        
         return !needsLib;
+        */
     }
 
     private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
@@ -897,6 +899,10 @@ public class ClangAstParser {
         // return ClangAstWebResource.LIBC_CXX_WINDOWS;
         case MAC_OS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_MAC_OS);
+        case CENTOS6:
+        case LINUX:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_LINUX);
+
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         // case CENTOS6:
         // return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);

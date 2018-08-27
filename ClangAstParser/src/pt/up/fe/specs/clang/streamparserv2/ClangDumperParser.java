@@ -29,7 +29,6 @@ import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstFileResource;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangAstParser;
-import pt.up.fe.specs.clang.ClangAstResource;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
@@ -336,41 +335,43 @@ public class ClangDumperParser {
      */
     private boolean hasLibC(File clangExecutable) {
 
+        return false;
+        /*
         // If Windows, return false and always use bundled LIBC++
         if (SupportedPlatform.getCurrentPlatform().isWindows()) {
             return false;
         }
-
+        
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-
+        
         // Test C
         ProcessOutput<String, ClangParserData> outputC = testFile(clangExecutable, clangTest,
                 ClangAstResource.TEST_INCLUDES_C);
         boolean foundCIncludes = !outputC.getStdOut().isEmpty();
-
+        
         if (!foundCIncludes) {
             ClavaLog.debug("Could not find C includes, output of test: " + outputC.getStdOut() + "\n----\n"
                     + outputC.getStdErr());
         }
-
+        
         // Test C++
         ProcessOutput<String, ClangParserData> outputCpp = testFile(clangExecutable, clangTest,
                 ClangAstResource.TEST_INCLUDES_CPP);
         boolean foundCppIncludes = !outputCpp.getStdOut().isEmpty();
-
+        
         if (!foundCppIncludes) {
             ClavaLog.debug("Could not find C++ includes, output of test: " + outputCpp.getStdOut() + "\n----\n"
                     + outputCpp.getStdErr());
         }
-
+        
         boolean hasLibs = foundCIncludes && foundCppIncludes;
-
+        
         return hasLibs;
-
+        
         // boolean needsLib = !foundCIncludes || !foundCppIncludes;
         //
         // return !needsLib;
-
+        
         // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
         // .parallelStream()
         // .map(resource -> testFile(clangExecutable, clangTest, resource))
@@ -384,8 +385,9 @@ public class ClangDumperParser {
         // } else {
         // SpecsLogs.msgLib("Detected libc and licxx installed in the system");
         // }
-
+        
         // return !needsLib;
+         */
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
@@ -396,6 +398,9 @@ public class ClangDumperParser {
         // return ClangAstWebResource.LIBC_CXX_WINDOWS;
         case MAC_OS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_MAC_OS);
+        case CENTOS6:
+        case LINUX:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_LINUX);
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         default:
             return null;
