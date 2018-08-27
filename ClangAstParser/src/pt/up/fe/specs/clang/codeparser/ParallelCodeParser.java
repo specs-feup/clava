@@ -70,8 +70,8 @@ public class ParallelCodeParser extends CodeParser {
 
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
 
-        System.out.println(
-                "All Sources:" + allSources.keySet().stream().map(Object::toString).collect(Collectors.joining(", ")));
+        // System.out.println(
+        // "All Sources:" + allSources.keySet().stream().map(Object::toString).collect(Collectors.joining(", ")));
 
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
         // ConcurrentLinkedQueue<File> workingFolders = new ConcurrentLinkedQueue<>();
@@ -98,8 +98,9 @@ public class ParallelCodeParser extends CodeParser {
         // "TUNITS:" + tUnits.stream().map(tunit -> tunit.getFile().toString()).collect(Collectors.joining(", ")));
 
         if (get(SHOW_EXEC_INFO)) {
-            ClavaLog.metrics(SpecsStrings.takeTime("Code to TUs", tic));
-            ClavaLog.metrics("Current memory used (Java):" + SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
+            ClavaLog.metrics(SpecsStrings.takeTime("Code to AST", tic));
+            // ClavaLog.metrics("Current memory used (Java):" +
+            // SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true)));
         }
 
         if (get(SHOW_CLANG_DUMP)) {
@@ -162,7 +163,7 @@ public class ParallelCodeParser extends CodeParser {
         new TreeTransformer(ClangStreamParser.getPostParsingRules()).transform(app);
 
         if (get(SHOW_EXEC_INFO)) {
-            ClavaLog.metrics(SpecsStrings.takeTime("TUs to Clava AST", tic));
+            ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
             String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true));
             ClavaLog.metrics("Current memory used (Java):" + usedSize);
         }

@@ -399,6 +399,7 @@ public class ClangDumperParser {
         case MAC_OS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_MAC_OS);
         case CENTOS6:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_CENTOS6);
         case LINUX:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_LINUX);
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
