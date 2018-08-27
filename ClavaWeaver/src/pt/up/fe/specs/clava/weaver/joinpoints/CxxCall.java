@@ -152,7 +152,13 @@ public class CxxCall extends ACall {
 
         // Return the type of the function (return type)
         Type calleeType = call.getCallee().getType();
-
+        // System.out.println("CALLEE:" + call.getCallee());
+        // If PointerType to FunctionType, remove pointer
+        // if (calleeType instanceof PointerType && ((PointerType) calleeType).getPointeeType() instanceof FunctionType)
+        // {
+        // calleeType = ((PointerType) calleeType).getPointeeType();
+        // }
+        // System.out.println("CALLEE TYPE:" + calleeType);
         if (calleeType instanceof FunctionType) {
             return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType(), this);
         }

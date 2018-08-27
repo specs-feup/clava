@@ -98,6 +98,7 @@ public class AstFactory {
         boolean isNrvo = false;
 
         Type initType = (Type) init.getTypeImpl().getNode();
+
         // System.out.println("INIT JP:" + init.getClass());
         // System.out.println("INIT expr:" + initExpr);
         // System.out.println("INIT expr TYPE:" + initExpr.getType());
@@ -137,6 +138,7 @@ public class AstFactory {
     }
 
     private static Type getVarDeclType(Standard standard, Type returnType) {
+
         // If C, use the return type
         if (!standard.isCxx()) {
             return returnType;
