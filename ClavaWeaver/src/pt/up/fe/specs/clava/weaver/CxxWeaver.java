@@ -21,8 +21,6 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.storedefinition.StoreDefinition;
-import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 
 import com.google.common.base.Preconditions;
 
@@ -31,6 +29,7 @@ import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -61,7 +60,6 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.csv.CsvField;
 import pt.up.fe.specs.util.csv.CsvWriter;
-import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -157,16 +155,17 @@ public class CxxWeaver extends ACxxWeaver {
     /**
      * All definitions, including default LaraI keys and Clava-specific keys.
      */
-    private static final Lazy<StoreDefinition> WEAVER_DEFINITION = Lazy.newInstance(() -> {
-        return new StoreDefinitionBuilder("Clava Weaver")
-                .addDefinition(LaraiKeys.STORE_DEFINITION)
-                .addDefinition(CxxWeaverOption.STORE_DEFINITION)
-                .build();
-    });
+    // private static final Lazy<StoreDefinition> WEAVER_DEFINITION = Lazy.newInstance(() -> {
+    // return new StoreDefinitionBuilder("Clava Weaver")
+    // .addDefinition(LaraiKeys.STORE_DEFINITION)
+    // .addDefinition(CxxWeaverOption.STORE_DEFINITION)
+    //// .addKey(ParallelCodeParser.PARALLEL_PARSING)
+    // .build();
+    // });
 
-    public static StoreDefinition getWeaverDefinition() {
-        return WEAVER_DEFINITION.get();
-    }
+    // public static StoreDefinition getWeaverDefinition() {
+    // return WEAVER_DEFINITION.get();
+    // }
 
     // Weaver configuration
     private DataStore args = null;
@@ -560,6 +559,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         CodeParser codeParser = CodeParser.newInstance();
         codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
+        codeParser.set(ParallelCodeParser.PARALLEL_PARSING, getConfig().get(ParallelCodeParser.PARALLEL_PARSING));
         App app = codeParser.parse(SpecsCollections.map(implementationFilenames, File::new), parserOptions);
         // Set source paths of each TranslationUnit
         // app.setSourcesFromStrings(allFiles);

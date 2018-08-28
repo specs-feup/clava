@@ -21,6 +21,8 @@ import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.options.WeaverOptionBuilder;
 import org.suikasoft.jOptions.Datakey.DataKey;
 
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -86,7 +88,9 @@ public class CxxWeaverOptions {
 
         // addBooleanOption(CxxWeaverOption.UNIT_TESTING_MODE, getUnitTestFlag(), "unit-test",
         // "Starts Clava in unit-testing mode");
-
+        //
+        addBooleanOption(ParallelCodeParser.PARALLEL_PARSING, "par", "parallel-parsing",
+                "Enables parallel parsing of source files");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
@@ -107,6 +111,8 @@ public class CxxWeaverOptions {
         if (option != null) {
             return option;
         }
+
+        ClavaLog.warning("Key '" + key + "' is not defined in class 'WEAVER_OPTIONS'");
 
         return WeaverOptionBuilder.build(key);
     }
