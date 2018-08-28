@@ -84,7 +84,7 @@ public class CTest {
 
     @Test
     public void testBuiltinTypesCl() {
-        new CTester("builtin_types.cl").addFlags("-x", "cl").test();
+        new CTester("builtin_types.cl").test();
     }
 
     @Test
