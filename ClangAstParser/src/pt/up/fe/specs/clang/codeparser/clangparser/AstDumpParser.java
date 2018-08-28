@@ -208,6 +208,11 @@ public class AstDumpParser implements ClangParser {
 
             // parsedData = lineStreamParser.getData();
             parsedData = output.getStdErr();
+
+            // If console output streaming is disabled, show output only at the end
+            if (!streamConsoleOutput) {
+                ClavaLog.info(output.getStdOut());
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
@@ -229,7 +234,10 @@ public class AstDumpParser implements ClangParser {
             while (lines.hasNextLine()) {
                 String nextLine = lines.nextLine();
                 // Ignore line about 'invalid argument', it will happen when input source is a header file
-                ClavaLog.info(nextLine);
+                if (streamConsoleOutput) {
+                    ClavaLog.info(nextLine);
+                }
+
                 output.append(nextLine).append("\n");
             }
         }

@@ -62,7 +62,7 @@ public class ParallelCodeParser extends CodeParser {
     /// DATAKEY BEGIN
 
     public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing")
-            .setDefault(() -> true)
+            // .setDefault(() -> true)
             .setLabel("Parallel parsing of source files");
 
     /// DATAKEY END
@@ -89,10 +89,15 @@ public class ParallelCodeParser extends CodeParser {
         Standard standard = getStandard(sources, options);
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
+        System.out.println("Found " + allSources.size() + " source files");
+        // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
+        ParallelProgressCounter counter = new ParallelProgressCounter(allSources.size());
+
         long tic = System.nanoTime();
 
         List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
-                .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump))
+                .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
+                        counter))
                 .collect(Collectors.toList());
 
         // // Sort translation units
@@ -252,16 +257,20 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private TranslationUnit parseSource(File sourceFile, Standard standard, DataStore options,
-            ConcurrentLinkedQueue<String> clangDump) {
+            ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter) {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
         // Adapt compiler options according to the file
         adaptOptions(options, sourceFile);
 
         // Disable streaming of console output if parsing is to be done in parallel
+        // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
         ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
                 streamConsoleOutput);
+
+        counter.print(sourceFile);
+        // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
 
         TranslationUnit tunit = clangParser.parse(sourceFile, standard, options);
 
