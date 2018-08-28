@@ -34,8 +34,6 @@ import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.textparser.TextParser;
-import pt.up.fe.specs.clang.utils.ZipResourceManager;
-import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -282,39 +280,64 @@ public class ClangDumperParser {
         File resourceFolder = getClangResourceFolder();
 
         File includesBaseFolder = SpecsIo.mkdir(resourceFolder, "clang_includes");
-        ZipResourceManager zipManager = new ZipResourceManager(includesBaseFolder);
+        // ZipResourceManager zipManager = new ZipResourceManager(includesBaseFolder);
 
+        // Download includes zips, check if any of them is new
+        List<FileResourceProvider> includesZips = Arrays.asList(
+                clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8),
+                getLibCResource(SupportedPlatform.getCurrentPlatform()));
+
+        List<ResourceWriteData> zipFiles = includesZips.stream()
+                .map(resource -> resource.writeVersioned(resourceFolder, ClangAstParser.class))
+                .collect(Collectors.toList());
+
+        // .filter(resourceOutput -> resourceOutput.isNewFile())
+        // .findAny()
+        // .isPresent();
+
+        // If a new file has been written, delete includes folder, and extract all zips again
+        // Extracting all because zips might have several folders and we are not determining which should be updated
+        if (zipFiles.stream().filter(ResourceWriteData::isNewFile).findAny().isPresent()) {
+            // Clean folder
+            SpecsIo.deleteFolderContents(includesBaseFolder);
+
+            // Extract zips
+            zipFiles.stream().forEach(zipFile -> SpecsIo.extractZip(zipFile.getFile(), includesBaseFolder));
+        }
+
+        /*
         // Clang built-in includes, to be used in all platforms
         // Write Clang headers
         ResourceWriteData builtinIncludesZip = clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8)
                 .writeVersioned(resourceFolder, ClangAstParser.class);
         // ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
         // resourceFolder, ClangAstParser.class);
-
+        
         // boolean hasFolderBeenCleared = false;
-
+        
         zipManager.extract(builtinIncludesZip);
-
+        
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
         // boolean hasLibC = true;
-
+        
         if (!hasLibC) {
             // Obtain correct version of libc/c++
             FileResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
-
+        
             if (libcResource == null) {
                 ClavaLog.info("Could not detect LibC/C++, and currently there is no bundled alternative for platform '"
                         + SupportedPlatform.getCurrentPlatform() + "'. System includes might not work.");
             } else {
-
+        
                 // Write Clang headers
                 ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
                         ClangAstParser.class);
-
+        
                 zipManager.extract(libcZip);
             }
         }
+        */
 
         // Add all folders inside base folder as system include
         List<String> includes = SpecsIo.getFolders(includesBaseFolder).stream()
