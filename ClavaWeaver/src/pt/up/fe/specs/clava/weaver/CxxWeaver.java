@@ -21,6 +21,8 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 
 import com.google.common.base.Preconditions;
 
@@ -60,6 +62,7 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.csv.CsvField;
 import pt.up.fe.specs.util.csv.CsvWriter;
+import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -155,17 +158,21 @@ public class CxxWeaver extends ACxxWeaver {
     /**
      * All definitions, including default LaraI keys and Clava-specific keys.
      */
-    // private static final Lazy<StoreDefinition> WEAVER_DEFINITION = Lazy.newInstance(() -> {
-    // return new StoreDefinitionBuilder("Clava Weaver")
-    // .addDefinition(LaraiKeys.STORE_DEFINITION)
-    // .addDefinition(CxxWeaverOption.STORE_DEFINITION)
-    //// .addKey(ParallelCodeParser.PARALLEL_PARSING)
-    // .build();
-    // });
+    private static final Lazy<StoreDefinition> WEAVER_DEFINITION = Lazy.newInstance(() -> {
+        return new StoreDefinitionBuilder("Clava Weaver")
+                .addDefinition(LaraiKeys.STORE_DEFINITION)
+                .addDefinition(CxxWeaverOption.STORE_DEFINITION)
+                .build();
+    });
 
-    // public static StoreDefinition getWeaverDefinition() {
-    // return WEAVER_DEFINITION.get();
-    // }
+    /**
+     * This is used by a LARA aspect.
+     * 
+     * @return
+     */
+    public static StoreDefinition getWeaverDefinition() {
+        return WEAVER_DEFINITION.get();
+    }
 
     // Weaver configuration
     private DataStore args = null;
