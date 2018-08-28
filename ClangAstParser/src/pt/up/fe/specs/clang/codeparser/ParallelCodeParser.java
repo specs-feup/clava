@@ -60,7 +60,11 @@ import pt.up.fe.specs.util.SpecsSystem;
 public class ParallelCodeParser extends CodeParser {
 
     /// DATAKEY BEGIN
-    public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing").setDefault(() -> true);
+
+    public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing")
+            .setDefault(() -> true)
+            .setLabel("Parallel parsing of source files");
+
     /// DATAKEY END
 
     @Override
