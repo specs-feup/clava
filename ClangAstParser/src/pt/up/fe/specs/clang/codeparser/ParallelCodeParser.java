@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.codeparser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -69,12 +70,16 @@ public class ParallelCodeParser extends CodeParser {
     /// DATAKEY END
 
     @Override
-    public App parse(List<File> sources, List<String> compilerOptions) {
+    public App parse(List<File> inputSources, List<String> compilerOptions) {
 
-        List<File> allSourceFolders = getInputSourceFolders(sources, compilerOptions);
+        // All files, header and implementation
+        Map<String, File> allUserSources = SpecsIo.getFileMap(inputSources, SourceType.getPermittedExtensions());
+
+        // System.out.println("sources:" + sources);
+        List<File> allSourceFolders = getInputSourceFolders(inputSources, compilerOptions);
 
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
-
+        // System.out.println("ALL SOURCES:" + allSources);
         // System.out.println(
         // "All Sources:" + allSources.keySet().stream().map(Object::toString).collect(Collectors.joining(", ")));
 
@@ -87,22 +92,31 @@ public class ParallelCodeParser extends CodeParser {
         ClavaContext context = new ClavaContext();
         options.add(ClavaNode.CONTEXT, context);
 
+        List<File> sources = allUserSources.keySet().stream()
+                .map(File::new)
+                .collect(Collectors.toList());
+
         Standard standard = getStandard(sources, options);
+        // Standard standard = getStandard(allUserSources.values(), options);
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
-        ClavaLog.info("Found " + allSources.size() + " source files");
-        ClavaLog.debug("Files to parse:" + allSources.keySet());
+        ClavaLog.info("Found " + sources.size() + " source files");
+        ClavaLog.debug("Files to parse:" + sources);
 
         File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
         ClavaLog.debug("Parsing using folder '" + parsingFolder + "'");
 
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
-        ParallelProgressCounter counter = new ParallelProgressCounter(allSources.size());
+        ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());
 
         long tic = System.nanoTime();
 
-        List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
-                .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
+        // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
+        // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
+        // counter, parsingFolder))
+        // .collect(Collectors.toList());
+        List<TranslationUnit> tUnits = SpecsCollections.getStream(sources, get(PARALLEL_PARSING))
+                .map(sourceFile -> parseSource(sourceFile, standard, options, clangDump,
                         counter, parsingFolder))
                 .collect(Collectors.toList());
 
@@ -219,7 +233,7 @@ public class ParallelCodeParser extends CodeParser {
     // return sourceFiles.stream();
     // }
 
-    private Standard getStandard(List<File> sources, DataStore options) {
+    private Standard getStandard(Collection<File> sources, DataStore options) {
         // If standard has been defined, return it
         if (options.hasValue(ClavaOptions.STANDARD)) {
             return options.get(ClavaOptions.STANDARD);
