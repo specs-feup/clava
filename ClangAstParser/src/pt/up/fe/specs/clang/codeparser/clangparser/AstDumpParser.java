@@ -73,6 +73,7 @@ public class AstDumpParser implements ClangParser {
 
     private final List<File> workingFolders;
     private File lastWorkingFolder;
+    private File baseFolder;
 
     public AstDumpParser() {
         this(false, false, true);
@@ -85,12 +86,19 @@ public class AstDumpParser implements ClangParser {
         this.streamConsoleOutput = streamConsoleOutput;
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
+        this.baseFolder = null;
         // context = new ClavaContext();
     }
 
     @Override
     public File getLastWorkingFolder() {
         return lastWorkingFolder;
+    }
+
+    @Override
+    public AstDumpParser setBaseFolder(File baseFolder) {
+        this.baseFolder = baseFolder;
+        return this;
     }
 
     private int nextId() {
@@ -195,7 +203,11 @@ public class AstDumpParser implements ClangParser {
 
             // Create temporary working folder, in order to support running several dumps in parallel
             // File workingFolder = SpecsIo.mkdir(UUID.randomUUID().toString());
-            lastWorkingFolder = SpecsIo.mkdir(sourceFile.getName() + "_" + id);
+            lastWorkingFolder = SpecsIo.mkdir(baseFolder, sourceFile.getName() + "_" + id);
+
+            // Ensure folder is empty
+            SpecsIo.deleteFolderContents(lastWorkingFolder);
+
             workingFolders.add(lastWorkingFolder);
 
             output = SpecsSystem.runProcess(arguments, lastWorkingFolder,

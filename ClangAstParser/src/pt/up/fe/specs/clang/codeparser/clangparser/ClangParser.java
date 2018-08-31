@@ -28,4 +28,6 @@ public interface ClangParser {
 
     String getClangDump();
 
+    ClangParser setBaseFolder(File baseFolder);
+
 }
