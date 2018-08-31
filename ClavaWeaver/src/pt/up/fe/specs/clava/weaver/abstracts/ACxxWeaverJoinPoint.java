@@ -898,7 +898,15 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // Get key
         DataKey<?> datakey = getNode().getKeys().getKey(key);
 
-        return getNode().get(datakey);
+        Object value = getNode().get(datakey);
+
+        // Special cases
+
+        if (value instanceof ClavaNode) {
+            value = CxxJoinpoints.create((ClavaNode) value, this);
+        }
+
+        return value;
     }
 
     @Override
@@ -909,6 +917,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // If string, use decoder
         if (value instanceof String) {
             value = datakey.decode((String) value);
+        }
+
+        // If join point, use underlying node
+        if (value instanceof AJoinPoint) {
+            value = ((AJoinPoint) value).getNode();
         }
 
         // Returns new join point of the node, using the same parent
