@@ -44,6 +44,7 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -433,6 +434,11 @@ public class App extends ClavaNode {
             // System.out.println("ADJUSTED PATH:" + adjustedRelativePath);
             // System.out.println("RELATIVE WOVEN:" + relativeWoven);
             if (relativeWoven.contains(adjustedRelativePath)) {
+                continue;
+            }
+
+            // Only create empty sources for header files
+            if (SourceType.getType(originalRelativePath) != SourceType.HEADER) {
                 continue;
             }
 
