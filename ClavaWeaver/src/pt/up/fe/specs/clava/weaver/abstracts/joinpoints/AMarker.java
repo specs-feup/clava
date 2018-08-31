@@ -215,6 +215,16 @@ public abstract class AMarker extends APragma {
     }
 
     /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        return this.aPragma.setValueImpl(key, value);
+    }
+
+    /**
      * 
      * @param message 
      */
@@ -391,7 +401,6 @@ public abstract class AMarker extends APragma {
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),

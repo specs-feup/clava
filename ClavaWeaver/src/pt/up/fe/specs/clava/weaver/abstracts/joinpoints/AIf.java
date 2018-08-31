@@ -390,6 +390,16 @@ public abstract class AIf extends AStatement {
     }
 
     /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        return this.aStatement.setValueImpl(key, value);
+    }
+
+    /**
      * 
      * @param message 
      */
@@ -603,7 +613,6 @@ public abstract class AIf extends AStatement {
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),

@@ -90,10 +90,12 @@
 		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
 			<parameter name="key" type="String" />	
 		</attribute>
+		<!--
 		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
 			<parameter name="key" type="String" />	
 			<parameter name="value" type="Object" />				
-		</attribute>		
+		</attribute>
+		-->		
 	</global>
 
 

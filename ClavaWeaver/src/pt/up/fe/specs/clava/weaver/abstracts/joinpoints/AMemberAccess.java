@@ -254,6 +254,16 @@ public abstract class AMemberAccess extends AExpression {
     }
 
     /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        return this.aExpression.setValueImpl(key, value);
+    }
+
+    /**
      * 
      * @param message 
      */
@@ -411,7 +421,6 @@ public abstract class AMemberAccess extends AExpression {
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),

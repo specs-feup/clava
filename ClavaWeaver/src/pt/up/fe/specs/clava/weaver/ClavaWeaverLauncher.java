@@ -13,14 +13,23 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import org.junit.runner.Result;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.joptions.gui.LaraLauncher;
 
+import eu.antarex.clang.parser.tests.CBenchTest;
+import eu.antarex.clang.parser.tests.CxxBenchTest;
+import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.cxxweaver.tests.CApiTest;
+import pt.up.fe.specs.cxxweaver.tests.CTest;
+import pt.up.fe.specs.cxxweaver.tests.CxxApiTest;
+import pt.up.fe.specs.cxxweaver.tests.CxxTest;
 import pt.up.fe.specs.lara.doc.LaraDocLauncher;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -47,6 +56,24 @@ public class ClavaWeaverLauncher {
         // } catch (IOException e) {
         // LoggingUtils.msgWarn("Error message:\n", e);
         // }
+
+        // If junit file present, run junit
+        if (new File("junit").isFile()) {
+            ClavaLog.info("Found file 'junit', running unit tets");
+            Result result = org.junit.runner.JUnitCore.runClasses(CApiTest.class, CTest.class, CxxApiTest.class,
+                    CxxTest.class);
+            System.out.println("RESULT:\n" + result);
+            return result.getFailures().isEmpty();
+        }
+
+        if (new File("junit-parser").isFile()) {
+            ClavaLog.info("Found file 'junit-parser', running parser unit tets");
+            Result result = org.junit.runner.JUnitCore.runClasses(CBenchTest.class,
+                    eu.antarex.clang.parser.tests.CTest.class, CxxBenchTest.class,
+                    eu.antarex.clang.parser.tests.CxxTest.class);
+            System.out.println("RESULT:\n" + result);
+            return result.getFailures().isEmpty();
+        }
 
         // If unit testing flag is present, run unit tester
         Optional<Boolean> unitTesterResult = runUnitTester(args);

@@ -203,6 +203,16 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        return this.aRecord.setValueImpl(key, value);
+    }
+
+    /**
      * 
      * @param message 
      */
@@ -359,7 +369,6 @@ public abstract class AClass extends ARecord {
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),

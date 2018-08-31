@@ -79,6 +79,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("copy()");
         actions.add("setUserField(String fieldName, Object value)");
         actions.add("setUserField(Map<?, ?> fieldNameAndValue)");
+        actions.add("setValue(String key, Object value)");
         actions.add("messageToUser(String message)");
     }
 
@@ -376,6 +377,35 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    public AJoinPoint setValueImpl(String key, Object value) {
+        throw new UnsupportedOperationException(get_class()+": Action setValue not implemented ");
+    }
+
+    /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    public final AJoinPoint setValue(String key, Object value) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setValue", this, Optional.empty(), key, value);
+        	}
+        	AJoinPoint result = this.setValueImpl(key, value);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setValue", this, Optional.ofNullable(result), key, value);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setValue", e);
+        }
+    }
+
+    /**
      * 
      * @param message 
      */
@@ -445,7 +475,6 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("data");
         attributes.add("keys");
         attributes.add("getValue(String key)");
-        attributes.add("setValue(String key, Object value)");
     }
 
     /**
@@ -1502,35 +1531,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getValue", e);
-        }
-    }
-
-    /**
-     * 
-     * @param key
-     * @param value
-     * @return 
-     */
-    public abstract AJoinPoint setValueImpl(String key, Object value);
-
-    /**
-     * 
-     * @param key
-     * @param value
-     * @return 
-     */
-    public final Object setValue(String key, Object value) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "setValue", Optional.empty(), key, value);
-        	}
-        	AJoinPoint result = this.setValueImpl(key, value);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "setValue", Optional.ofNullable(result), key, value);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "setValue", e);
         }
     }
 

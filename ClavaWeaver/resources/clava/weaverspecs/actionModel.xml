@@ -56,6 +56,11 @@
 		<!--  <parameter name="value" type="Object" /> -->	
 	</action>
 
+	<action name="setValue" return="joinpoint" tooltip="Sets the value associated with the given property key">	
+		<parameter name="key" type="String" />	
+		<parameter name="value" type="Object" />				
+	</action>
+
 	<!-- PROGRAM -->
 
 	<!-- Internally generates the code for the current program and rebuilds 

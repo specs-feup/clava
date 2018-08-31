@@ -856,6 +856,16 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Sets the value associated with the given property key
+     * @param key 
+     * @param value 
+     */
+    @Override
+    public AJoinPoint setValueImpl(String key, Object value) {
+        return this.aNamedDecl.setValueImpl(key, value);
+    }
+
+    /**
      * 
      * @param message 
      */
@@ -1073,7 +1083,6 @@ public abstract class AFunction extends ANamedDecl {
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
-        SETVALUE("setValue"),
         JAVAFIELDTYPE("javaFieldType"),
         USERFIELD("userField"),
         LOCATION("location"),
