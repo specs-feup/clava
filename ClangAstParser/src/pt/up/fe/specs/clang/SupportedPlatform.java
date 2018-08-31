@@ -49,7 +49,8 @@ public enum SupportedPlatform implements StringProvider {
         }
 
         // CentOS 6
-        if (System.getProperty("os.version").contains(".el6.")) {
+        // if (System.getProperty("os.version").contains(".el6.")) {
+        if (System.getProperty("os.version").contains(".el") || System.getProperty("os.version").contains(".fc")) {
             return CENTOS6;
         }
 
