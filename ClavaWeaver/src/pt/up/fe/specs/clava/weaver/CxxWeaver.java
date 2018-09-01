@@ -548,26 +548,26 @@ public class CxxWeaver extends ACxxWeaver {
         // System.out.println("ALL SOURCES:" + allSources);
 
         // All files, header and implementation
-        Map<String, File> allFiles = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
+        Map<String, File> allFilesMap = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
 
         // List<String> implementationFilenames = processSources(sources);
-        List<String> implementationFilenames = processSources(allFiles);
+        List<String> allFiles = processSources(allFilesMap);
 
         // TODO: If option to separe include folders in generation is on, it should return just that folder
         // List<File> includeFolders = sources;
 
         // addFlagsFromFiles(includeFolders, filenames, parserOptions);
-        addFlagsFromFiles(implementationFilenames, parserOptions);
+        addFlagsFromFiles(allFiles, parserOptions);
 
         // Sort filenames so that select order of files is consistent between OSes
-        Collections.sort(implementationFilenames);
+        Collections.sort(allFiles);
 
         boolean useCustomResources = getConfig().get(ClavaOptions.CUSTOM_RESOURCES);
 
         CodeParser codeParser = CodeParser.newInstance();
         codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING, getConfig().get(ParallelCodeParser.PARALLEL_PARSING));
-        App app = codeParser.parse(SpecsCollections.map(implementationFilenames, File::new), parserOptions);
+        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), parserOptions);
         // Set source paths of each TranslationUnit
         // app.setSourcesFromStrings(allFiles);
 
@@ -695,7 +695,16 @@ public class CxxWeaver extends ACxxWeaver {
         throw new RuntimeException("Could not find C/C++ files in the given source folders (" + sources + ")");
     }
     */
+
     private List<String> processSources(Map<String, File> sourceFiles) {
+        SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
+                () -> "No C/C++ files found in the given source folders:" + getSources());
+
+        return sourceFiles.keySet().stream()
+                .collect(Collectors.toList());
+    }
+
+    private List<String> processSourcesOld(Map<String, File> sourceFiles) {
         SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
                 () -> "No C/C++ files found in the given source folders:" + getSources());
 
