@@ -27,7 +27,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider BUILTIN_INCLUDES_3_8 = create("clang_builtin_includes_3.8.zip", "v1.2");
 
-    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v2.2");
+    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v2.3");
     WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
     WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
     WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");

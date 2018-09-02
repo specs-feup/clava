@@ -913,7 +913,8 @@ public class ClangAstParser {
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-
+        return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        /*        
         switch (platform) {
         case WINDOWS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
@@ -924,7 +925,7 @@ public class ClangAstParser {
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_CENTOS6);
         case LINUX:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_LINUX);
-
+        
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         // case CENTOS6:
         // return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
@@ -933,6 +934,7 @@ public class ClangAstParser {
             return null;
         // throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
         }
+        */
     }
 
     public static File getClangResourceFolder() {

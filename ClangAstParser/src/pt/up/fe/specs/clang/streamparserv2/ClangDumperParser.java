@@ -414,7 +414,8 @@ public class ClangDumperParser {
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-
+        return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        /*
         switch (platform) {
         case WINDOWS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
@@ -430,6 +431,7 @@ public class ClangDumperParser {
             return null;
         // throw new RuntimeException("LibC/C++ not available for platform '" + platform + "'");
         }
+        */
     }
 
     // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
