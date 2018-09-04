@@ -123,6 +123,29 @@ public abstract class AVardecl extends ANamedDecl {
     }
 
     /**
+     * true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
+     */
+    public abstract Boolean getIsGlobalImpl();
+
+    /**
+     * true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
+     */
+    public final Object getIsGlobal() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isGlobal", Optional.empty());
+        	}
+        	Boolean result = this.getIsGlobalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isGlobal", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isGlobal", e);
+        }
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -323,6 +346,15 @@ public abstract class AVardecl extends ANamedDecl {
     }
 
     /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aNamedDecl.setNameImpl(name);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -399,6 +431,7 @@ public abstract class AVardecl extends ANamedDecl {
         attributes.add("init");
         attributes.add("isParam");
         attributes.add("storageClass");
+        attributes.add("isGlobal");
     }
 
     /**
@@ -449,6 +482,7 @@ public abstract class AVardecl extends ANamedDecl {
         INIT("init"),
         ISPARAM("isParam"),
         STORAGECLASS("storageClass"),
+        ISGLOBAL("isGlobal"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
@@ -466,6 +500,7 @@ public abstract class AVardecl extends ANamedDecl {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -80,6 +81,32 @@ public abstract class ANamedDecl extends ADecl {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPublic", e);
+        }
+    }
+
+    /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    public void setNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    public final void setName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
+        	}
+        	this.setNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
         }
     }
 
@@ -288,6 +315,7 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aDecl.fillWithActions(actions);
+        actions.add("void setName(String)");
     }
 
     /**
@@ -332,6 +360,7 @@ public abstract class ANamedDecl extends ADecl {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

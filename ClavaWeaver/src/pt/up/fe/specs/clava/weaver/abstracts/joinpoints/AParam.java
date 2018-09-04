@@ -62,6 +62,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Get value on attribute isGlobal
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsGlobalImpl() {
+        return this.aVardecl.getIsGlobalImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -350,6 +359,7 @@ public abstract class AParam extends AVardecl {
         INIT("init"),
         ISPARAM("isParam"),
         STORAGECLASS("storageClass"),
+        ISGLOBAL("isGlobal"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         PARENT("parent"),
@@ -367,6 +377,7 @@ public abstract class AParam extends AVardecl {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

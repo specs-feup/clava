@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
 import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
 
@@ -926,5 +927,17 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         // Returns new join point of the node, using the same parent
         return CxxJoinpoints.create(getNode().set(datakey, value), getParentImpl());
+    }
+
+    @Override
+    public Object keyTypeImpl(String key) {
+        StoreDefinition def = getNode().getKeys();
+
+        if (!def.hasKey(key)) {
+            ClavaLog.info("$jp.keyType(): key '" + key + "' does not exist");
+            return null;
+        }
+
+        return def.getKey(key).getValueClass();
     }
 }

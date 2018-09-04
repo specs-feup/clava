@@ -91,4 +91,9 @@ public class CxxVardecl extends AVardecl {
     public String getStorageClassImpl() {
         return varDecl.get(VarDecl.STORAGE_CLASS).name().toLowerCase();
     }
+
+    @Override
+    public Boolean getIsGlobalImpl() {
+        return varDecl.get(VarDecl.HAS_GLOBAL_STORAGE);
+    }
 }

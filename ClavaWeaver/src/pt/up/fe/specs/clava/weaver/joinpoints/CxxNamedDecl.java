@@ -64,4 +64,9 @@ public class CxxNamedDecl extends ANamedDecl {
         // By default, return true
         return true;
     }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
 }

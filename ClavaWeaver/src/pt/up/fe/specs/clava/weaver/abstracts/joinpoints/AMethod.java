@@ -446,15 +446,6 @@ public abstract class AMethod extends AFunction {
 
     /**
      * 
-     * @param name 
-     */
-    @Override
-    public void setNameImpl(String name) {
-        this.aFunction.setNameImpl(name);
-    }
-
-    /**
-     * 
      * @param args 
      */
     @Override
@@ -630,6 +621,7 @@ public abstract class AMethod extends AFunction {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

@@ -326,6 +326,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -982,6 +995,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -1733,6 +1759,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -2436,6 +2475,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -3217,6 +3269,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -4028,6 +4093,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -4790,6 +4868,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -5435,6 +5526,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -6061,6 +6165,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -6665,6 +6782,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -7311,6 +7441,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -7920,6 +8063,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -8556,6 +8712,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -8637,6 +8806,20 @@
                   "type": "select",
                   "clazz": "enumeratorDecl",
                   "alias": "enumerator"
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",
@@ -9287,6 +9470,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -9948,6 +10144,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -10023,6 +10232,20 @@
                            {
                               "type": "String",
                               \name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -10586,6 +10809,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -11311,6 +11547,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -12297,6 +12546,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -12478,19 +12740,6 @@
                },
                {
                   "type": "action",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setName"
-                           },
-                           {
-                              "type": "String",
-                              "name": "name",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the parameters of the function",
                   "children": [
                            {
@@ -12514,6 +12763,20 @@
                            {
                               "type": "String[]",
                               "name": "params",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
                               "defaultValue": ""
                            }]
                },
@@ -13174,6 +13437,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -13877,6 +14153,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -14611,6 +14900,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -15373,6 +15675,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -16280,6 +16595,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -16979,6 +17307,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -17774,6 +18115,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -18631,6 +18985,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -18812,19 +19179,6 @@
                },
                {
                   "type": "action",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setName"
-                           },
-                           {
-                              "type": "String",
-                              "name": "name",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the parameters of the function",
                   "children": [
                            {
@@ -18848,6 +19202,20 @@
                            {
                               "type": "String[]",
                               "name": "params",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
                               "defaultValue": ""
                            }]
                },
@@ -19398,6 +19766,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -19473,6 +19854,20 @@
                            {
                               "type": "String",
                               \name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -20036,6 +20431,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -20860,6 +21268,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -21438,6 +21859,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              \name": "isGlobal"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if vardecl is a function parameter",
                   "children": [
                            {
@@ -21788,6 +22218,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -21893,6 +22336,20 @@
                            {
                               "type": "String",
                               "name": "init",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
                               "defaultValue": ""
                            }]
                },
@@ -22558,6 +23015,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -23219,6 +23689,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -23951,6 +24434,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -24801,6 +25297,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -25462,6 +25971,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -26141,6 +26663,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -27000,6 +27535,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -27697,6 +28245,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -28340,6 +28901,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -29101,6 +29675,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -29892,6 +30479,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -30647,6 +31247,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -31304,6 +31917,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -31379,6 +32005,20 @@
                            {
                               "type": "String",
                               \name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -31982,6 +32622,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -32670,6 +33323,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -32985,6 +33651,15 @@
                            {
                               "type": "joinpoint",
                               \name": "init"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              \name": "isGlobal"
                            }]
                },
                {
@@ -33339,6 +34014,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "A list of the properties currently supported by this node",
                   "children": [
                            {
@@ -33444,6 +34132,20 @@
                            {
                               "type": "String",
                               "name": "init",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
                               "defaultValue": ""
                            }]
                },
@@ -34051,6 +34753,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {
@@ -34709,6 +35424,19 @@
                            {
                               "type": "String",
                               \name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              \name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              \name": "key"
                            }]
                },
                {

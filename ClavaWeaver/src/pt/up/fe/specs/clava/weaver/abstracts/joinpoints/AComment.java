@@ -127,6 +127,7 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

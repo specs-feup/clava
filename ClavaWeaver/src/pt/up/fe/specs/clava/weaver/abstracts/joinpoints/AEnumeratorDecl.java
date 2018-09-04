@@ -168,6 +168,15 @@ public abstract class AEnumeratorDecl extends ANamedDecl {
     }
 
     /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aNamedDecl.setNameImpl(name);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -297,6 +306,7 @@ public abstract class AEnumeratorDecl extends ANamedDecl {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

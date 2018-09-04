@@ -90,6 +90,9 @@
 		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
 			<parameter name="key" type="String" />	
 		</attribute>
+		<attribute name="keyType" type="Object" tooltip="Java Class instance with the type of the given key">		
+			<parameter name="key" type="String" />	
+		</attribute>
 		<!--
 		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
 			<parameter name="key" type="String" />	
@@ -280,6 +283,7 @@
 		<attribute name="init" type="joinpoint" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
 		<attribute name="storageClass" type="String"/>
+		<attribute name="isGlobal" type="Boolean" tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function." />
 	</artifact>
 
 	<!-- VARREF -->

@@ -237,6 +237,11 @@
 	</action>	
 
 
+	<!-- NAMED DECL -->
+	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
+		<parameter name="name" type="String" />
+	</action>	
+
 
 	<!-- LOOP -->
 	<action name="changeKind" class="loop" tooltip="DEPRECATED: use 'setKind' instead">
@@ -367,10 +372,11 @@
 	
 	
 	<!-- FUNCTION -->
+	<!-- 
 	<action name="setName" class="function">
 		<parameter name="name" type="String" />
 	</action>
-	
+	 -->
 	
 	<action name="newCall" class="function" return="call">
 		<parameter name="args" type="joinpoint[]" />

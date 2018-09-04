@@ -681,32 +681,6 @@ public abstract class AFunction extends ANamedDecl {
 
     /**
      * 
-     * @param name 
-     */
-    public void setNameImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
-    }
-
-    /**
-     * 
-     * @param name 
-     */
-    public final void setName(String name) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), name);
-        	}
-        	this.setNameImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), name);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setName", e);
-        }
-    }
-
-    /**
-     * 
      * @param args 
      */
     public ACall newCallImpl(AJoinPoint[] args) {
@@ -875,6 +849,15 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aNamedDecl.setNameImpl(name);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1006,7 +989,6 @@ public abstract class AFunction extends ANamedDecl {
         actions.add("void insertReturn(String)");
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
-        actions.add("void setName(String)");
         actions.add("call newCall(joinpoint[])");
     }
 
@@ -1068,6 +1050,7 @@ public abstract class AFunction extends ANamedDecl {
         ASTCHILDREN("astChildren"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
+        KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),

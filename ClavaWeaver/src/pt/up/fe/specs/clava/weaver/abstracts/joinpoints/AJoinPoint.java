@@ -475,6 +475,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("data");
         attributes.add("keys");
         attributes.add("getValue(String key)");
+        attributes.add("keyType(String key)");
     }
 
     /**
@@ -1531,6 +1532,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getValue", e);
+        }
+    }
+
+    /**
+     * 
+     * @param key
+     * @return 
+     */
+    public abstract Object keyTypeImpl(String key);
+
+    /**
+     * 
+     * @param key
+     * @return 
+     */
+    public final Object keyType(String key) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "keyType", Optional.empty(), key);
+        	}
+        	Object result = this.keyTypeImpl(key);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "keyType", Optional.ofNullable(result), key);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "keyType", e);
         }
     }
 
