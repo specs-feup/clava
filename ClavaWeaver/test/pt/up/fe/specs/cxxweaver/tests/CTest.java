@@ -116,4 +116,9 @@ public class CTest {
         newTester().test("InlineNasFt.lara", "inline_nas_ft.c");
     }
 
+    @Test
+    public void testNullNodes() {
+        newTester().test("NullNodes.lara", "null_nodes.c");
+    }
+
 }

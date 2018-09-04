@@ -1,0 +1,7 @@
+aspectdef NullNodes
+    select function.body.stmt end
+    apply
+        JP = $stmt;
+        println('\t\t\t code : ' + JP.code + '\t astName : ' + JP.astName);
+    end   
+end
