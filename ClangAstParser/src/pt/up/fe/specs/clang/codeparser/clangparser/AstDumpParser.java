@@ -56,7 +56,8 @@ public class AstDumpParser implements ClangParser {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
-    private final static String HEADER_WARNING = "error: invalid argument '-std=c++11' not allowed with 'C/ObjC'";
+    // private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
+    // private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
 
     private int currentId;
     private final boolean dumpStdOut;

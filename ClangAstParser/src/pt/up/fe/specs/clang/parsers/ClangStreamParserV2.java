@@ -22,8 +22,12 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.clang.version.Clang_3_8;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.util.SpecsCheck;
 
 public class ClangStreamParserV2 {
+
+    private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
+    private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
 
     private static final Map<String, LineStreamWorker<ClangParserData>> WORKERS;
     static {
@@ -74,11 +78,18 @@ public class ClangStreamParserV2 {
     }
 
     private static boolean ignoreLine(String line) {
-        // System.out.println("LINE:" + line);
-        if (line.equals("error: invalid argument '-std=c++11' not allowed with 'C/ObjC'")) {
-            // System.out.println("IGNORING LINE");
+        if (line.startsWith(HEADER_WARNING_PREFIX)) {
+            SpecsCheck.checkArgument(line.endsWith(HEADER_WARNING_SUFFIX),
+                    () -> "Expected line to end with '" + HEADER_WARNING_SUFFIX + "': " + line);
+
             return true;
         }
+
+        // System.out.println("LINE:" + line);
+        // if (line.equals("error: invalid argument '-std=c++11' not allowed with 'C/ObjC'")) {
+        // // System.out.println("IGNORING LINE");
+        // return true;
+        // }
 
         return false;
     }
