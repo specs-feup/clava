@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
@@ -84,12 +85,22 @@ public class CreateDeclStmts implements SimplePostClavaRule {
 
             if (DECL_CLASSES.contains(child.getClass())) {
                 // Nodes on the set are NamedDecls
-                NamedDecl namedDecl = (NamedDecl) child;
-                DeclStmt stmt = namedDecl.getFactoryWithNode()
-                        .declStmt(namedDecl);
+                SpecsCheck.checkArgument(child instanceof NamedDecl,
+                        () -> "Expected child to be a NamedDecl: " + child);
+                // NamedDecl namedDecl = (NamedDecl) child;
+
+                // System.out.println("PARENT:" + child.getParent());
+
+                // Create empty DeclStmt.
+                // First it will be inserted in place of the child, then child will be added to the declStmt
+                DeclStmt stmt = child.getFactoryWithNode().declStmt();
+
                 // DeclStmt stmt = ClavaNodeFactory.declStmt(namedDecl.getInfo(), Arrays.asList(namedDecl));
 
+                // After replace, child becomes detached
                 queue.replace(child, stmt);
+                // Add child after replace, to avoid creating a copy of the child
+                queue.addChild(stmt, child);
             }
         }
     }
