@@ -1,0 +1,7 @@
+function.name : test
+	arrayAccess.code : elapsed[n]
+	arrayAccess.arrayVar.code : elapsed
+	vardecl.code : double elapsed[64]
+	vardecl.currentRegion : Joinpoint 'file'
+	arrayAccess.arrayVar.vardecl.code : double elapsed[64]
+	arrayAccess.arrayVar.vardecl.currentRegion : Joinpoint 'file'

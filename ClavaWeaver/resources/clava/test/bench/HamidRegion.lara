@@ -1,0 +1,25 @@
+aspectdef HamidRegion
+/*
+    select vardecl end
+    apply
+        println("Vardecl: " + $vardecl.astId + " -> " + $vardecl.location);
+    end
+*/	
+
+    select function.body.arrayAccess end
+    apply
+        
+        println('function.name : ' + $function.name);
+        println('\t' + 'arrayAccess.code : ' + $arrayAccess.code);
+        println('\t' + 'arrayAccess.arrayVar.code : ' + $arrayAccess.arrayVar.code);
+        
+        // 1 
+        println('\t' + 'vardecl.code : ' + $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.code);
+        println('\t' + 'vardecl.currentRegion : ' + $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion);
+        
+        // 2 
+        println('\t' + 'arrayAccess.arrayVar.vardecl.code : ' + $arrayAccess.arrayVar.vardecl.code);
+        println('\t' + 'arrayAccess.arrayVar.vardecl.currentRegion : ' + $arrayAccess.arrayVar.vardecl.currentRegion);            
+    end
+	
+end

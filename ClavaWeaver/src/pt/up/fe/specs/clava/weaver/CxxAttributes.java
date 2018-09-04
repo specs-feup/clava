@@ -98,6 +98,7 @@ public class CxxAttributes {
     }
 
     public static Optional<? extends ClavaNode> getCurrentRegion(ClavaNode node) {
+
         // Check if top region
         if (TOP_REGION.isInstance(node)) {
             return Optional.of(node);

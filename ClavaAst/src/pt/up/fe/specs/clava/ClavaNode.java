@@ -731,9 +731,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             newDataStore.put(ID, newId);
             newDataStore.put(PREVIOUS_ID, previousId);
 
-            // if (newId.equals("fromTypedefDecl_1")) {
-            // System.out.println("PREVIOUS DATA:::\n" + dataI);
-            // System.out.println("DATA:::\n" + newDataStore);
+            // if (newId.equals("fromVarDecl_1")) {
+            // throw new RuntimeException();
+            // // System.out.println("PREVIOUS DATA:::\n" + dataI);
+            // // System.out.println("DATA:::\n" + newDataStore);
             // }
         }
 
