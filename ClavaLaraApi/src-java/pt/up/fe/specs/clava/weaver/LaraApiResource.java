@@ -72,7 +72,8 @@ public enum LaraApiResource implements LaraResourceProvider {
     CLAVA("Clava.lara"),
     CLAVA_ASPECTS("ClavaAspects.lara"),
     CLAVA_CODE("ClavaCode.lara"),
-    CLAVA_JOIN_POINTS("ClavaJoinPoints.lara");
+    CLAVA_JOIN_POINTS("ClavaJoinPoints.lara"),
+    CLAVA_TYPE("ClavaType.lara");
 
     private final String resource;
 

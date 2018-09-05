@@ -1,0 +1,57 @@
+
+/**
+ * Utility methods related with the type join points.
+ *
+ * @class
+ */
+var ClavaType = {};
+
+/**
+ * @param type the type to visit
+ * @param exprFunction a function that receives an $expr join point
+ *
+ * @return the $type after applying the given exprFunction to its $expr nodes. If any of the fields of the type is visited, a copy of the type is returned.
+ */
+ClavaType.visitExprInTypeCopy = function($type, exprFunction) {
+
+	if($type.instanceOf("pointerType")) {
+		var $typeCopy = $type.deepCopy();
+		$typeCopy.pointee = ClavaType.visitExprInTypeCopy($typeCopy.pointee, exprFunction);	
+		return $typeCopy;
+	}
+	
+	if($type.instanceOf("parenType")) {
+		var $typeCopy = $type.deepCopy();
+		$typeCopy.desugar = ClavaType.visitExprInTypeCopy($typeCopy.desugar, exprFunction);		
+		return $typeCopy;
+	}
+	
+	if($type.instanceOf("variableArrayType")) {
+		var $typeCopy = $type.deepCopy();
+		exprFunction($typeCopy.sizeExpr);
+		return $typeCopy;
+     }
+
+	return $type;
+}
+
+
+
+/**
+ * @param type a type join point that will be visited looking for $expr join points. Any visited nodes in the type (e.g., desugar) will be copied, so that the returned varrefs can be safely modified.
+ * 
+ * @param varrefs an array (possibly empty) where the $varref join points found in the given type will be stored
+ *
+ * @return a copy of the given $type, to which the varrefs refer to
+ */
+ClavaType.getVarrefsInTypeCopy = function($type, varrefs) {
+		
+	var exprFunction = function($expr) {
+
+		for(var $varref of $expr.descendantsAndSelf("varref")) {
+			varrefs.push($varref);
+		}
+	};
+	
+	return ClavaType.visitExprInTypeCopy($type, exprFunction);
+}
