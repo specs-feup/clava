@@ -233,10 +233,25 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
                 child = processChild(child, clavaNodeClass, data);
 
                 newChildren.add(child);
+
+                // if (child instanceof UnaryOperator) {
+                // System.out.println(
+                // "UNARY: '" + child.get(ClavaNode.ID) + " -> " + child);
+                // System.out.println("FUTURE PARENT:" + clavaNode);
+                //
+                // }
+                // //
+                // if (child.hasParent()) {
+                // System.out.println(
+                // "CHILD '" + child.get(ClavaNode.ID) + "' ALREADY HAS PARENT:" + child.getParent().toTree());
+                // }
+
             }
 
             // clavaNode.setChildren(newChildren);
+            // ClavaNode.SKIP_EXCEPTION = true;
             clavaNode.setChildren(childrenAdapter.adaptChildren(clavaNode, newChildren));
+            // ClavaNode.SKIP_EXCEPTION = false;
         });
 
         return clavaNode;

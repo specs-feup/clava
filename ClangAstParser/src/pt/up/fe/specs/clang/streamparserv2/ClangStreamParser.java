@@ -419,6 +419,13 @@ public class ClangStreamParser {
         // Add declarations
         decls.addAll(declNodes);
 
+        // for (Decl decl : decls) {
+        // if (decl.hasParent()) {
+        // System.out.println("DECL '" + decl.getId() + "' HAS PARENT: " + decl.getParent().toTree());
+        // }
+        //
+        // }
+
         // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, filenamePath, decls);
         // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(sourcePath, decls);
         TranslationUnit tUnit = getFactory().translationUnit(sourceFile, decls);
