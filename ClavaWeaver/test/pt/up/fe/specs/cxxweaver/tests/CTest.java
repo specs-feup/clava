@@ -121,4 +121,9 @@ public class CTest {
         newTester().test("NullNodes.lara", "null_nodes.c");
     }
 
+    @Test
+    public void testTypeRenamer() {
+        newTester().test("TypeRenamer.lara", "type_renamer.c");
+    }
+
 }

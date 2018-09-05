@@ -406,7 +406,9 @@
 		<parameter name="templateArgType" type="type" />
 	</action>
 	
-
+	<action name="setDesugar" class="type" tooltip="Sets the desugared type of this type">
+		<parameter name="desugaredType" type="type" />
+	</action>
 
 	
 	<!-- UnaryExprOrType -->
@@ -414,5 +416,9 @@
 		<parameter name="argType" type="type" />
 	</action>
 	
+	<!-- POINTER TYPE -->
+	<action name="setPointee" class="type" tooltip="Sets the pointee type of this pointer type">
+		<parameter name="pointeeType" type="type" />
+	</action>
 	
 </actions>

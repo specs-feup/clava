@@ -186,6 +186,13 @@ public abstract class AArrayType extends AType {
 
     /**
      * 
+     */
+    public void defDesugarImpl(AJoinPoint value) {
+        this.aType.defDesugarImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -329,6 +336,24 @@ public abstract class AArrayType extends AType {
     }
 
     /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    @Override
+    public void setDesugarImpl(AType desugaredType) {
+        this.aType.setDesugarImpl(desugaredType);
+    }
+
+    /**
+     * Sets the pointee type of this pointer type
+     * @param pointeeType 
+     */
+    @Override
+    public void setPointeeImpl(AType pointeeType) {
+        this.aType.setPointeeImpl(pointeeType);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -358,7 +383,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
@@ -372,7 +397,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -388,6 +413,13 @@ public abstract class AArrayType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "desugar": {
+        	if(value instanceof AJoinPoint){
+        		this.defDesugarImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -396,7 +428,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("elementType");
     }
@@ -405,7 +437,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aType.fillWithSelects(selects);
     }
 
@@ -413,7 +445,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
     }
 
@@ -422,7 +454,7 @@ public abstract class AArrayType extends AType {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "arrayType";
     }
 
@@ -431,7 +463,7 @@ public abstract class AArrayType extends AType {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;

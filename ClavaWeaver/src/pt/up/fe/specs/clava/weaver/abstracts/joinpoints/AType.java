@@ -298,6 +298,13 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     */
+    public void defDesugarImpl(AJoinPoint value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def desugar with type AJoinPoint not implemented ");
+    }
+
+    /**
      * Get value on attribute isBuiltin
      * @return the attribute's value
      */
@@ -448,6 +455,58 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    public void setDesugarImpl(AType desugaredType) {
+        throw new UnsupportedOperationException(get_class()+": Action setDesugar not implemented ");
+    }
+
+    /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    public final void setDesugar(AType desugaredType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setDesugar", this, Optional.empty(), desugaredType);
+        	}
+        	this.setDesugarImpl(desugaredType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setDesugar", this, Optional.empty(), desugaredType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setDesugar", e);
+        }
+    }
+
+    /**
+     * Sets the pointee type of this pointer type
+     * @param pointeeType 
+     */
+    public void setPointeeImpl(AType pointeeType) {
+        throw new UnsupportedOperationException(get_class()+": Action setPointee not implemented ");
+    }
+
+    /**
+     * Sets the pointee type of this pointer type
+     * @param pointeeType 
+     */
+    public final void setPointee(AType pointeeType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setPointee", this, Optional.empty(), pointeeType);
+        	}
+        	this.setPointeeImpl(pointeeType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setPointee", this, Optional.empty(), pointeeType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setPointee", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -477,6 +536,13 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "desugar": {
+        	if(value instanceof AJoinPoint){
+        		this.defDesugarImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -523,6 +589,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         super.fillWithActions(actions);
         actions.add("void setTemplateArgsTypes(type[])");
         actions.add("void setTemplateArgsTypes(Integer, type)");
+        actions.add("void setDesugar(type)");
+        actions.add("void setPointee(type)");
     }
 
     /**

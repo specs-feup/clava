@@ -445,7 +445,9 @@
 			<def type="type[]"/>
 		</attribute>		
 		<attribute name="hasSugar" type="Boolean" />
-		<attribute name="desugar" type="joinpoint" />
+		<attribute name="desugar" type="joinpoint">
+			<def/>
+		</attribute>
 		<attribute name="isBuiltin" type="Boolean" />
 		<attribute name="constant" type="Boolean" />
 		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
@@ -456,7 +458,9 @@
 
 	<!-- POINTER TYPE -->
 	<artifact class="pointerType">
-		<attribute name="pointee" type="type" />
+		<attribute name="pointee" type="type">
+			<def/>
+		</attribute>
 		<attribute name="pointerLevels" type="Integer" tooltip="Number of pointer levels from this pointer" />
 	</artifact>
 	
@@ -464,6 +468,11 @@
 	<!-- ARRAY TYPE -->
 	<artifact class="arrayType">
 		<attribute name="elementType" type="type" />
+	</artifact>
+	
+	<!-- VARIABLE ARRAY TYPE -->
+	<artifact class="variableArrayType">
+		<attribute name="sizeExpr" type="expression" />
 	</artifact>
 
 	<!-- ENUM TYPE -->

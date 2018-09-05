@@ -260,6 +260,9 @@
 	<joinpoint class="arrayType" extends="type">
 	</joinpoint>
 			
+	<!--  VARIABLE ARRAY TYPE -->
+	<joinpoint class="variableArrayType" extends="arrayType">
+	</joinpoint>		
 		
 	<!--  ENUM TYPE -->
 	<joinpoint class="enumType" extends="type">
@@ -285,6 +288,10 @@
 
 	<!--  BUILTIN TYPE -->
 	<joinpoint class="builtinType" extends="type">
+	</joinpoint>
+
+	<!--  PAREN TYPE -->
+	<joinpoint class="parenType" extends="type">
 	</joinpoint>
 	 	
 </joinpoints>

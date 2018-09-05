@@ -14,22 +14,21 @@
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.type.PointerType;
-import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APointerType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVariableArrayType;
 
-public class CxxPointerType extends APointerType {
+public class CxxVariableArrayType extends AVariableArrayType {
 
-    private final PointerType pointerType;
+    private final VariableArrayType arrayType;
     private final ACxxWeaverJoinPoint parent;
 
-    public CxxPointerType(PointerType pointerType, ACxxWeaverJoinPoint parent) {
-        super(new CxxType(pointerType, parent));
+    public CxxVariableArrayType(VariableArrayType arrayType, ACxxWeaverJoinPoint parent) {
+        super(new CxxArrayType(arrayType, parent));
 
-        this.pointerType = pointerType;
+        this.arrayType = arrayType;
         this.parent = parent;
     }
 
@@ -40,27 +39,12 @@ public class CxxPointerType extends APointerType {
 
     @Override
     public ClavaNode getNode() {
-        return pointerType;
+        return arrayType;
     }
 
     @Override
-    public AType getPointeeImpl() {
-        return CxxJoinpoints.create(pointerType.getPointeeType(), this, AType.class);
-    }
-
-    @Override
-    public Integer getPointerLevelsImpl() {
-        return pointerType.getPointerLevels();
-    }
-
-    @Override
-    public void defPointeeImpl(AType value) {
-        pointerType.set(PointerType.POINTEE_TYPE, (Type) value.getNode());
-    }
-
-    @Override
-    public void setPointeeImpl(AType pointeeType) {
-        defPointeeImpl(pointeeType);
+    public AExpression getSizeExprImpl() {
+        return (AExpression) CxxJoinpoints.create(arrayType.get(VariableArrayType.SIZE_EXPR), this);
     }
 
 }

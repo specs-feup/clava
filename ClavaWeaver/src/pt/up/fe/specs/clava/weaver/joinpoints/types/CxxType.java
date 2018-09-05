@@ -87,11 +87,22 @@ public class CxxType extends AType {
     public Boolean getHasSugarImpl() {
         // return type.getTypeData().hasSugar();
         return type.hasSugar();
+
     }
 
     @Override
     public AJoinPoint getDesugarImpl() {
         return CxxJoinpoints.create(type.desugar(), this);
+    }
+
+    @Override
+    public void defDesugarImpl(AJoinPoint value) {
+        type.setDesugar((Type) value.getNode());
+    }
+
+    @Override
+    public void setDesugarImpl(AType desugaredType) {
+        defDesugarImpl(desugaredType);
     }
 
     @Override

@@ -10,75 +10,55 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point APointerType
+ * Auto-Generated class for join point AVariableArrayType
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class APointerType extends AType {
+public abstract class AVariableArrayType extends AArrayType {
 
-    protected AType aType;
-
-    /**
-     * 
-     */
-    public APointerType(AType aType){
-        this.aType = aType;
-    }
-    /**
-     * Get value on attribute pointee
-     * @return the attribute's value
-     */
-    public abstract AType getPointeeImpl();
-
-    /**
-     * Get value on attribute pointee
-     * @return the attribute's value
-     */
-    public final Object getPointee() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointee", Optional.empty());
-        	}
-        	AType result = this.getPointeeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "pointee", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "pointee", e);
-        }
-    }
+    protected AArrayType aArrayType;
 
     /**
      * 
      */
-    public void defPointeeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def pointee with type AType not implemented ");
+    public AVariableArrayType(AArrayType aArrayType){
+        super(aArrayType);
+        this.aArrayType = aArrayType;
     }
+    /**
+     * Get value on attribute sizeExpr
+     * @return the attribute's value
+     */
+    public abstract AExpression getSizeExprImpl();
 
     /**
-     * Number of pointer levels from this pointer
+     * Get value on attribute sizeExpr
+     * @return the attribute's value
      */
-    public abstract Integer getPointerLevelsImpl();
-
-    /**
-     * Number of pointer levels from this pointer
-     */
-    public final Object getPointerLevels() {
+    public final Object getSizeExpr() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointerLevels", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "sizeExpr", Optional.empty());
         	}
-        	Integer result = this.getPointerLevelsImpl();
+        	AExpression result = this.getSizeExprImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "pointerLevels", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "sizeExpr", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "pointerLevels", e);
+        	throw new AttributeException(get_class(), "sizeExpr", e);
         }
+    }
+
+    /**
+     * Get value on attribute elementType
+     * @return the attribute's value
+     */
+    @Override
+    public AType getElementTypeImpl() {
+        return this.aArrayType.getElementTypeImpl();
     }
 
     /**
@@ -87,7 +67,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public String getKindImpl() {
-        return this.aType.getKindImpl();
+        return this.aArrayType.getKindImpl();
     }
 
     /**
@@ -96,7 +76,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getIsTopLevelImpl() {
-        return this.aType.getIsTopLevelImpl();
+        return this.aArrayType.getIsTopLevelImpl();
     }
 
     /**
@@ -105,7 +85,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getIsArrayImpl() {
-        return this.aType.getIsArrayImpl();
+        return this.aArrayType.getIsArrayImpl();
     }
 
     /**
@@ -114,7 +94,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getIsPointerImpl() {
-        return this.aType.getIsPointerImpl();
+        return this.aArrayType.getIsPointerImpl();
     }
 
     /**
@@ -123,7 +103,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Integer getArraySizeImpl() {
-        return this.aType.getArraySizeImpl();
+        return this.aArrayType.getArraySizeImpl();
     }
 
     /**
@@ -132,7 +112,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getHasTemplateArgsImpl() {
-        return this.aType.getHasTemplateArgsImpl();
+        return this.aArrayType.getHasTemplateArgsImpl();
     }
 
     /**
@@ -141,7 +121,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public String[] getTemplateArgsStringsArrayImpl() {
-        return this.aType.getTemplateArgsStringsArrayImpl();
+        return this.aArrayType.getTemplateArgsStringsArrayImpl();
     }
 
     /**
@@ -150,7 +130,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AType[] getTemplateArgsTypesArrayImpl() {
-        return this.aType.getTemplateArgsTypesArrayImpl();
+        return this.aArrayType.getTemplateArgsTypesArrayImpl();
     }
 
     /**
@@ -159,7 +139,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getHasSugarImpl() {
-        return this.aType.getHasSugarImpl();
+        return this.aArrayType.getHasSugarImpl();
     }
 
     /**
@@ -168,7 +148,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint getDesugarImpl() {
-        return this.aType.getDesugarImpl();
+        return this.aArrayType.getDesugarImpl();
     }
 
     /**
@@ -177,7 +157,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getIsBuiltinImpl() {
-        return this.aType.getIsBuiltinImpl();
+        return this.aArrayType.getIsBuiltinImpl();
     }
 
     /**
@@ -186,7 +166,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Boolean getConstantImpl() {
-        return this.aType.getConstantImpl();
+        return this.aArrayType.getConstantImpl();
     }
 
     /**
@@ -195,7 +175,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AType getUnwrapImpl() {
-        return this.aType.getUnwrapImpl();
+        return this.aArrayType.getUnwrapImpl();
     }
 
     /**
@@ -204,21 +184,21 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AType getNormalizeImpl() {
-        return this.aType.getNormalizeImpl();
+        return this.aArrayType.getNormalizeImpl();
     }
 
     /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
+        this.aArrayType.defTemplateArgsTypesImpl(value);
     }
 
     /**
      * 
      */
     public void defDesugarImpl(AJoinPoint value) {
-        this.aType.defDesugarImpl(value);
+        this.aArrayType.defDesugarImpl(value);
     }
 
     /**
@@ -227,7 +207,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aType.replaceWithImpl(node);
+        return this.aArrayType.replaceWithImpl(node);
     }
 
     /**
@@ -236,7 +216,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aType.replaceWithImpl(node);
+        return this.aArrayType.replaceWithImpl(node);
     }
 
     /**
@@ -245,7 +225,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aType.insertBeforeImpl(node);
+        return this.aArrayType.insertBeforeImpl(node);
     }
 
     /**
@@ -254,7 +234,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aType.insertBeforeImpl(node);
+        return this.aArrayType.insertBeforeImpl(node);
     }
 
     /**
@@ -263,7 +243,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aType.insertAfterImpl(node);
+        return this.aArrayType.insertAfterImpl(node);
     }
 
     /**
@@ -272,7 +252,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aType.insertAfterImpl(code);
+        return this.aArrayType.insertAfterImpl(code);
     }
 
     /**
@@ -280,7 +260,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public void detachImpl() {
-        this.aType.detachImpl();
+        this.aArrayType.detachImpl();
     }
 
     /**
@@ -289,7 +269,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aType.setTypeImpl(type);
+        this.aArrayType.setTypeImpl(type);
     }
 
     /**
@@ -297,7 +277,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aType.copyImpl();
+        return this.aArrayType.copyImpl();
     }
 
     /**
@@ -305,7 +285,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aType.deepCopyImpl();
+        return this.aArrayType.deepCopyImpl();
     }
 
     /**
@@ -315,7 +295,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aType.setUserFieldImpl(fieldName, value);
+        return this.aArrayType.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -324,7 +304,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aType.setUserFieldImpl(fieldNameAndValue);
+        return this.aArrayType.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -334,7 +314,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aType.setValueImpl(key, value);
+        return this.aArrayType.setValueImpl(key, value);
     }
 
     /**
@@ -343,44 +323,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aType.messageToUserImpl(message);
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        this.aType.setTemplateArgsTypesImpl(templateArgTypes);
-    }
-
-    /**
-     * Sets a single template argument type of a template type
-     * @param index 
-     * @param templateArgType 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
-        this.aType.setTemplateArgsTypesImpl(index, templateArgType);
-    }
-
-    /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
-     */
-    @Override
-    public void setDesugarImpl(AType desugaredType) {
-        this.aType.setDesugarImpl(desugaredType);
-    }
-
-    /**
-     * Sets the pointee type of this pointer type
-     * @param pointeeType 
-     */
-    @Override
-    public void setPointeeImpl(AType pointeeType) {
-        this.aType.setPointeeImpl(pointeeType);
+        this.aArrayType.messageToUserImpl(message);
     }
 
     /**
@@ -390,7 +333,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aType.insertImpl(position, code);
+        this.aArrayType.insertImpl(position, code);
     }
 
     /**
@@ -398,15 +341,15 @@ public abstract class APointerType extends AType {
      */
     @Override
     public String toString() {
-        return this.aType.toString();
+        return this.aArrayType.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AType> getSuper() {
-        return Optional.of(this.aType);
+    public Optional<? extends AArrayType> getSuper() {
+        return Optional.of(this.aArrayType);
     }
 
     /**
@@ -417,7 +360,7 @@ public abstract class APointerType extends AType {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
-        		joinPointList = this.aType.select(selectName);
+        		joinPointList = this.aArrayType.select(selectName);
         		break;
         }
         return joinPointList;
@@ -432,13 +375,6 @@ public abstract class APointerType extends AType {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
-        case "pointee": {
-        	if(value instanceof AType){
-        		this.defPointeeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -466,9 +402,8 @@ public abstract class APointerType extends AType {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aType.fillWithAttributes(attributes);
-        attributes.add("pointee");
-        attributes.add("pointerLevels");
+        this.aArrayType.fillWithAttributes(attributes);
+        attributes.add("sizeExpr");
     }
 
     /**
@@ -476,7 +411,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aType.fillWithSelects(selects);
+        this.aArrayType.fillWithSelects(selects);
     }
 
     /**
@@ -484,7 +419,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aType.fillWithActions(actions);
+        this.aArrayType.fillWithActions(actions);
     }
 
     /**
@@ -493,7 +428,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public final String get_class() {
-        return "pointerType";
+        return "variableArrayType";
     }
 
     /**
@@ -506,14 +441,14 @@ public abstract class APointerType extends AType {
         if(isInstance) {
         	return true;
         }
-        return this.aType.instanceOf(joinpointClass);
+        return this.aArrayType.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum PointerTypeAttributes {
-        POINTEE("pointee"),
-        POINTERLEVELS("pointerLevels"),
+    protected enum VariableArrayTypeAttributes {
+        SIZEEXPR("sizeExpr"),
+        ELEMENTTYPE("elementType"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
@@ -571,13 +506,13 @@ public abstract class APointerType extends AType {
         /**
          * 
          */
-        private PointerTypeAttributes(String name){
+        private VariableArrayTypeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<PointerTypeAttributes> fromString(String name) {
+        public static Optional<VariableArrayTypeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -585,7 +520,7 @@ public abstract class APointerType extends AType {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(PointerTypeAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(VariableArrayTypeAttributes::name).collect(Collectors.toList());
         }
 
         /**

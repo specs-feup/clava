@@ -1,86 +1,29 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point APointerType
+ * Auto-Generated class for join point AParenType
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class APointerType extends AType {
+public abstract class AParenType extends AType {
 
     protected AType aType;
 
     /**
      * 
      */
-    public APointerType(AType aType){
+    public AParenType(AType aType){
         this.aType = aType;
     }
-    /**
-     * Get value on attribute pointee
-     * @return the attribute's value
-     */
-    public abstract AType getPointeeImpl();
-
-    /**
-     * Get value on attribute pointee
-     * @return the attribute's value
-     */
-    public final Object getPointee() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointee", Optional.empty());
-        	}
-        	AType result = this.getPointeeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "pointee", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "pointee", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defPointeeImpl(AType value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def pointee with type AType not implemented ");
-    }
-
-    /**
-     * Number of pointer levels from this pointer
-     */
-    public abstract Integer getPointerLevelsImpl();
-
-    /**
-     * Number of pointer levels from this pointer
-     */
-    public final Object getPointerLevels() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pointerLevels", Optional.empty());
-        	}
-        	Integer result = this.getPointerLevelsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "pointerLevels", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "pointerLevels", e);
-        }
-    }
-
     /**
      * Get value on attribute kind
      * @return the attribute's value
@@ -436,13 +379,6 @@ public abstract class APointerType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "pointee": {
-        	if(value instanceof AType){
-        		this.defPointeeImpl((AType)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
@@ -467,8 +403,6 @@ public abstract class APointerType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("pointee");
-        attributes.add("pointerLevels");
     }
 
     /**
@@ -493,7 +427,7 @@ public abstract class APointerType extends AType {
      */
     @Override
     public final String get_class() {
-        return "pointerType";
+        return "parenType";
     }
 
     /**
@@ -511,9 +445,7 @@ public abstract class APointerType extends AType {
     /**
      * 
      */
-    protected enum PointerTypeAttributes {
-        POINTEE("pointee"),
-        POINTERLEVELS("pointerLevels"),
+    protected enum ParenTypeAttributes {
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
@@ -571,13 +503,13 @@ public abstract class APointerType extends AType {
         /**
          * 
          */
-        private PointerTypeAttributes(String name){
+        private ParenTypeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<PointerTypeAttributes> fromString(String name) {
+        public static Optional<ParenTypeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -585,7 +517,7 @@ public abstract class APointerType extends AType {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(PointerTypeAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(ParenTypeAttributes::name).collect(Collectors.toList());
         }
 
         /**

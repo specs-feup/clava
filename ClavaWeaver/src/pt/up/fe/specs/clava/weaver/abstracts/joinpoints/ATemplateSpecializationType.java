@@ -272,6 +272,13 @@ public abstract class ATemplateSpecializationType extends AType {
 
     /**
      * 
+     */
+    public void defDesugarImpl(AJoinPoint value) {
+        this.aType.defDesugarImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -415,6 +422,24 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
+     * Sets the desugared type of this type
+     * @param desugaredType 
+     */
+    @Override
+    public void setDesugarImpl(AType desugaredType) {
+        this.aType.setDesugarImpl(desugaredType);
+    }
+
+    /**
+     * Sets the pointee type of this pointer type
+     * @param pointeeType 
+     */
+    @Override
+    public void setPointeeImpl(AType pointeeType) {
+        this.aType.setPointeeImpl(pointeeType);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -470,6 +495,13 @@ public abstract class ATemplateSpecializationType extends AType {
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "desugar": {
+        	if(value instanceof AJoinPoint){
+        		this.defDesugarImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
