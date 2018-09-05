@@ -46,7 +46,6 @@ public class TypeRenamerFilter {
     }
 
     private void typeVisitor(Type type, List<ClavaNode> currentNodes) {
-        // System.out.println("TYPE:" + type);
 
         if (type instanceof PointerType) {
             // Copy pointee, continue through it

@@ -135,42 +135,43 @@ public abstract class Type extends ClavaNode {
         return copy;
     }
 
+    /*
     @Override
     public Type deepCopy() {
         Set<String> seenNodes = new HashSet<>();
         Type copy = deepCopy(false, seenNodes);
-
+    
         // System.out.println("COPIED NODES:" + seenNodes);
-
+    
         return copy;
     }
-
+    
     @SuppressWarnings("unchecked")
     private Type deepCopy(boolean keepId, Set<String> seenNodes) {
         // Copies the node, without children
         Type copy = (Type) copyPrivate(keepId);
-
+    
         // Type nodes do not have children
-
+    
         // Copy fields that are types
         for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
             if (!hasValue(keyWithNode)) {
                 continue;
             }
-
+    
             // ClavaNode keys
             if (Type.class.isAssignableFrom(keyWithNode.getValueClass())) {
                 DataKey<Type> clavaNodeKey = (DataKey<Type>) keyWithNode;
                 ClavaNode value = get(clavaNodeKey);
-
+    
                 if (!seenNodes.contains(value.getId())) {
                     seenNodes.add(value.getId());
                     copy.set(clavaNodeKey, ((Type) value).deepCopy(keepId, seenNodes), false);
                 }
-
+    
                 continue;
             }
-
+    
             // Optional nodes
             if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
                 // Since this came from getKeysWithNodes(), it is guaranteed that is an Optional of ClavaNode
@@ -179,30 +180,31 @@ public abstract class Type extends ClavaNode {
                 if (!value.isPresent()) {
                     continue;
                 }
-
+    
                 Object possibleNode = value.get();
-
+    
                 if (!(possibleNode instanceof Type)) {
                     continue;
                 }
-
+    
                 Type node = (Type) possibleNode;
                 seenNodes.add(node.getId());
-
+    
                 copy.set(optionalKey, Optional.of(node.deepCopy(keepId, seenNodes)), false);
                 continue;
             }
-
+    
             // ClavaLog.info("Case not supported yet:" + keyWithNode);
         }
-
+    
         // if (copy.hasSugar()) {
         // set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(copy.desugar().copyDeep()));
         // }
-
+    
         return copy;
-
+    
     }
+    */
 
     @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {

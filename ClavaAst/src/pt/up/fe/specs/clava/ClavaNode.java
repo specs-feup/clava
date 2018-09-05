@@ -56,6 +56,8 @@ import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
 public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClass<ClavaNode>, Copyable<ClavaNode> {
 
+    // public static boolean SKIP_EXCEPTION = false;
+
     /**
      * Maps Type classes to a List of DataKeys corresponding to the properties of that class that return ClavaNode
      * instances.
@@ -731,6 +733,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             newDataStore.put(ID, newId);
             newDataStore.put(PREVIOUS_ID, previousId);
 
+            // if (!SKIP_EXCEPTION && newId.startsWith("from")) {
+            // throw new RuntimeException("Copying node:" + this);
+            // }
+
             // if (newId.equals("fromVarDecl_1")) {
             // throw new RuntimeException();
             // // System.out.println("PREVIOUS DATA:::\n" + dataI);
@@ -969,35 +975,31 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     /**
      * Copy the node, including nodes in fields.
      * 
+     * <p>
+     * This function is not recursive, it only copies the first level of nodes it has in the fields (nodes in the fields
+     * of the fields are not copied).
+     * 
      * @return
      */
 
     public ClavaNode deepCopy() {
-        return deepCopy(false, new HashSet<>());
+        return deepCopy(false);
     }
 
     @SuppressWarnings("unchecked")
-    private ClavaNode deepCopy(boolean keepId, Set<String> seenNodes) {
-        // return copy(keepId);
+    private ClavaNode deepCopy(boolean keepId) {
 
-        // Copy node itself
-        // ClavaNode copy = copy(keepId, true);
-
-        // Copies the node, without children
+        // Simple copy of the node, without children
         ClavaNode copy = copyPrivate(keepId);
 
+        // Deep copy of the children
         for (ClavaNode child : getChildren()) {
-            // Copy children of token
-            // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
-            ClavaNode newChildToken = child.deepCopy(keepId, seenNodes);
+            // Copy children of node
+            ClavaNode newChildToken = child.deepCopy(keepId);
             copy.addChild(newChildToken);
         }
 
-        // System.out.println("DEEP COPYING " + this);
-        // if (this instanceof VariableArrayType) {
-        // System.out.println("EXPR:" + get(VariableArrayType.SIZE_EXPR));
-        // }
-        // Copy fields
+        // Simple copy of fields (1st level only)
         for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
             if (!hasValue(keyWithNode)) {
                 continue;
@@ -1007,18 +1009,16 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
                 DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
                 ClavaNode value = get(clavaNodeKey);
-                if (!seenNodes.contains(value.getId())) {
-                    seenNodes.add(value.getId());
-                    set(clavaNodeKey, value.deepCopy(keepId, seenNodes));
-                }
-
+                copy.set(clavaNodeKey, value.copy(keepId));
                 continue;
             }
 
             // Optional nodes
             if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
-                // Since this came from getKeysWithNodes(), it is guaranteed that is an Optional of ClavaNode
                 DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
+
+                // Since this came from getKeysWithNodes(), it is guaranteed that is has an Optional value that we can
+                // test for ClavaNode
                 Optional<?> value = get(optionalKey);
                 if (!value.isPresent()) {
                     continue;
@@ -1031,9 +1031,35 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
                 }
 
                 ClavaNode node = (ClavaNode) possibleNode;
-                seenNodes.add(node.getId());
 
-                set(optionalKey, Optional.of(node.deepCopy(keepId, seenNodes)));
+                copy.set(optionalKey, Optional.of(node.copy(keepId)));
+                continue;
+            }
+
+            // List nodes
+            if (List.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                DataKey<List<?>> listKey = (DataKey<List<?>>) keyWithNode;
+
+                // Since this came from getKeysWithNodes(), it is guaranteed that is has a List value that we can
+                // test for ClavaNodes
+                List<?> list = get(listKey);
+
+                if (list.isEmpty()) {
+                    // copy.set(listKey, new ArrayList<>());
+                    continue;
+                }
+
+                if (!(list.get(0) instanceof ClavaNode)) {
+                    continue;
+                }
+
+                List<ClavaNode> newList = new ArrayList<>(list.size());
+
+                for (Object listValue : list) {
+                    newList.add(((ClavaNode) listValue).copy());
+                }
+
+                copy.set(listKey, newList);
                 continue;
             }
 
@@ -1047,6 +1073,79 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         return copy;
 
     }
+    /*
+    @SuppressWarnings("unchecked")
+    private ClavaNode deepCopy(boolean keepId, Set<String> seenNodes) {
+        // return copy(keepId);
+    
+        // Copy node itself
+        // ClavaNode copy = copy(keepId, true);
+    
+        // Copies the node, without children
+        ClavaNode copy = copyPrivate(keepId);
+    
+        for (ClavaNode child : getChildren()) {
+            // Copy children of token
+            // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
+            ClavaNode newChildToken = child.deepCopy(keepId, seenNodes);
+            copy.addChild(newChildToken);
+        }
+    
+        // System.out.println("DEEP COPYING " + this);
+        // if (this instanceof VariableArrayType) {
+        // System.out.println("EXPR:" + get(VariableArrayType.SIZE_EXPR));
+        // }
+        // Copy fields
+        for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
+            if (!hasValue(keyWithNode)) {
+                continue;
+            }
+    
+            // ClavaNode keys
+            if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
+                ClavaNode value = get(clavaNodeKey);
+                if (!seenNodes.contains(value.getId())) {
+                    seenNodes.add(value.getId());
+                    set(clavaNodeKey, value.deepCopy(keepId, seenNodes));
+                }
+    
+                continue;
+            }
+    
+            // Optional nodes
+            if (Optional.class.isAssignableFrom(keyWithNode.getValueClass())) {
+                // Since this came from getKeysWithNodes(), it is guaranteed that is an Optional of ClavaNode
+                DataKey<Optional<?>> optionalKey = (DataKey<Optional<?>>) keyWithNode;
+                Optional<?> value = get(optionalKey);
+                if (!value.isPresent()) {
+                    continue;
+                }
+    
+                Object possibleNode = value.get();
+    
+                if (!(possibleNode instanceof ClavaNode)) {
+                    continue;
+                }
+    
+                ClavaNode node = (ClavaNode) possibleNode;
+                seenNodes.add(node.getId());
+    
+                set(optionalKey, Optional.of(node.deepCopy(keepId, seenNodes)));
+                continue;
+            }
+    
+            // ClavaLog.info("Case not supported yet:" + keyWithNode);
+        }
+    
+        // if (copy.hasSugar()) {
+        // set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(copy.desugar().copyDeep()));
+        // }
+    
+        return copy;
+    
+    }
+    */
     //
     // @SuppressWarnings("unchecked")
     // public List<ClavaNode> copyNodeField(DataKey<?> keyWithNode) {
