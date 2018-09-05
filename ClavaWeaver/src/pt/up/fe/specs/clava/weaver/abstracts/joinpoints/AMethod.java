@@ -335,11 +335,19 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * 
+     * Performs a copy of the node and its children, but not of the nodes in its fields
      */
     @Override
     public AJoinPoint copyImpl() {
         return this.aFunction.copyImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aFunction.deepCopyImpl();
     }
 
     /**

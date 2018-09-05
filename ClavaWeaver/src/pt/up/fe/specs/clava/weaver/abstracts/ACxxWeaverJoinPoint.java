@@ -773,6 +773,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public AJoinPoint deepCopyImpl() {
+        return CxxJoinpoints.create(getNode().deepCopy(), null);
+    }
+
+    @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return getNode().getChildren().stream()
                 .map(node -> CxxJoinpoints.create(node, this))

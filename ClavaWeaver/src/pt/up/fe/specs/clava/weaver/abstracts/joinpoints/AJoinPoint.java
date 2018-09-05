@@ -77,6 +77,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("detach()");
         actions.add("setType(AJoinPoint type)");
         actions.add("copy()");
+        actions.add("deepCopy()");
         actions.add("setUserField(String fieldName, Object value)");
         actions.add("setUserField(Map<?, ?> fieldNameAndValue)");
         actions.add("setValue(String key, Object value)");
@@ -296,14 +297,14 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Performs a copy of the node and its children, but not of the nodes in its fields
      */
     public AJoinPoint copyImpl() {
         throw new UnsupportedOperationException(get_class()+": Action copy not implemented ");
     }
 
     /**
-     * 
+     * Performs a copy of the node and its children, but not of the nodes in its fields
      */
     public final AJoinPoint copy() {
         try {
@@ -317,6 +318,31 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "copy", e);
+        }
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    public AJoinPoint deepCopyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action deepCopy not implemented ");
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    public final AJoinPoint deepCopy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "deepCopy", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.deepCopyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "deepCopy", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "deepCopy", e);
         }
     }
 

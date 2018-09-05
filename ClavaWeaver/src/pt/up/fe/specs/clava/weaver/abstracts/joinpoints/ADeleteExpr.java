@@ -141,11 +141,19 @@ public abstract class ADeleteExpr extends AExpression {
     }
 
     /**
-     * 
+     * Performs a copy of the node and its children, but not of the nodes in its fields
      */
     @Override
     public AJoinPoint copyImpl() {
         return this.aExpression.copyImpl();
+    }
+
+    /**
+     * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
+     */
+    @Override
+    public AJoinPoint deepCopyImpl() {
+        return this.aExpression.deepCopyImpl();
     }
 
     /**

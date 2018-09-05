@@ -43,8 +43,10 @@
 		<parameter name="type" type="joinpoint" />
 	</action>
 
-	<!-- Performs a deep copy of the node -->
-	<action name="copy" return="joinpoint"/>
+	<!-- Performs a copy of the node and its children, but not of the nodes in its fields -->
+	<action name="copy" return="joinpoint" tooltip="Performs a copy of the node and its children, but not of the nodes in its fields"/>
+	
+	<action name="deepCopy" return="joinpoint" tooltip="Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)"/>
 
 	<action name="setUserField" return="Object">
 		<parameter name="fieldName" type="String" />

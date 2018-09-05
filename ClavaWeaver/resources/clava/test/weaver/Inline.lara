@@ -1,5 +1,5 @@
 aspectdef Inline
-
+	
 	select function{"main"}.call end
 	apply
 		$call.exec inline;

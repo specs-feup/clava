@@ -454,10 +454,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -1144,10 +1154,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -1920,10 +1940,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -2622,10 +2652,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -3434,10 +3474,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -4308,10 +4358,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -5001,10 +5061,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -5664,10 +5734,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -6293,10 +6373,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -6914,10 +7004,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -7574,10 +7674,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -8195,10 +8305,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -8859,10 +8979,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -9635,10 +9765,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -10286,10 +10426,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -10946,10 +11096,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -11904,10 +12064,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -12818,10 +12988,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -13616,10 +13796,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -14375,10 +14565,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -15032,10 +15232,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -16061,10 +16271,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -16759,10 +16979,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -17444,10 +17674,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -18334,10 +18574,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -19257,10 +19507,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -19908,10 +20168,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -20568,10 +20838,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -21665,10 +21945,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -22391,10 +22681,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -23176,10 +23476,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -23852,10 +24162,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -24674,10 +24994,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -25458,10 +25788,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -26108,10 +26448,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -27026,10 +27376,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -27728,10 +28088,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -28378,10 +28748,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -29064,10 +29444,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -29840,10 +30230,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -30640,10 +31040,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -31408,10 +31818,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -32059,10 +32479,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -32772,10 +33202,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -33461,10 +33901,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -34187,10 +34637,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -34903,10 +35363,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
@@ -35621,10 +36091,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
                   "children": [
                            {
                               "type": "joinpoint",
                               \name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              \name": "deepCopy"
                            }]
                },
                {
