@@ -1,4 +1,6 @@
 
+# Installation
+
 ## Building Clava
 
 Download [eclipse-build](http://specs.fe.up.pt/tools/eclipse-build.jar) [GitHub](https://github.com/specs-feup/specs-java-tools/tree/master/EclipseBuild) and run the following command:
@@ -16,9 +18,13 @@ Clava can be downloaded from this [link](http://specs.fe.up.pt/tools/clava.jar).
 
 There is a demo online version of Clava available [here](http://specs.fe.up.pt/tools/clava).
 
+## Troubleshooting
 
+### Error 'missing libtinfo.so.5'
 
-## Running Clava
+On Fedora >28 systems this can be solved by installing the package `ncurses-compat-libs`
+
+# Running Clava
 
 
 Clava has two modes, command-line and GUI.
@@ -40,7 +46,7 @@ There are two main modes in command line, either passing all arguments (LARA fil
 
 
 
-### Manually:
+### Using parameters:
 
 	java -jar Clava.jar <aspect.lara> -p <source_folder>
 
