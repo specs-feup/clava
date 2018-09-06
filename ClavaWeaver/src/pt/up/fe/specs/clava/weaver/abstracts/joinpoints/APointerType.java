@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -78,6 +79,32 @@ public abstract class APointerType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "pointerLevels", e);
+        }
+    }
+
+    /**
+     * Sets the pointee type of this pointer type
+     * @param pointeeType 
+     */
+    public void setPointeeImpl(AType pointeeType) {
+        throw new UnsupportedOperationException(get_class()+": Action setPointee not implemented ");
+    }
+
+    /**
+     * Sets the pointee type of this pointer type
+     * @param pointeeType 
+     */
+    public final void setPointee(AType pointeeType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setPointee", this, Optional.empty(), pointeeType);
+        	}
+        	this.setPointeeImpl(pointeeType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setPointee", this, Optional.empty(), pointeeType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setPointee", e);
         }
     }
 
@@ -375,15 +402,6 @@ public abstract class APointerType extends AType {
     }
 
     /**
-     * Sets the pointee type of this pointer type
-     * @param pointeeType 
-     */
-    @Override
-    public void setPointeeImpl(AType pointeeType) {
-        this.aType.setPointeeImpl(pointeeType);
-    }
-
-    /**
      * 
      * @param position 
      * @param code 
@@ -485,6 +503,7 @@ public abstract class APointerType extends AType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
+        actions.add("void setPointee(type)");
     }
 
     /**

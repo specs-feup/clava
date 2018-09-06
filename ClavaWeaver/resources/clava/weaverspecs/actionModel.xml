@@ -417,8 +417,13 @@
 	</action>
 	
 	<!-- POINTER TYPE -->
-	<action name="setPointee" class="type" tooltip="Sets the pointee type of this pointer type">
+	<action name="setPointee" class="pointerType" tooltip="Sets the pointee type of this pointer type">
 		<parameter name="pointeeType" type="type" />
+	</action>
+
+	<!-- VARIABLE ARRAY TYPE -->
+	<action name="setSizeExpr" class="variableArrayType" tooltip="Sets the size expression of this variable array type">
+		<parameter name="sizeExpr" type="expression" />
 	</action>
 	
 </actions>

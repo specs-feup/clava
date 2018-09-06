@@ -1885,20 +1885,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
                            {
@@ -3442,20 +3428,6 @@
                            {
                               "type": "type",
                               "name": "desugaredType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
                               "defaultValue": ""
                            }]
                },
@@ -9766,20 +9738,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
                            {
@@ -13820,20 +13778,6 @@
                            {
                               "type": "type",
                               "name": "desugaredType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
                               "defaultValue": ""
                            }]
                },
@@ -23516,20 +23460,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
                            {
@@ -24325,20 +24255,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the desugared type of this type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setDesugar"
-                           },
-                           {
-                              "type": "type",
-                              "name": "desugaredType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the pointee type of this pointer type",
                   "children": [
                            {
@@ -24348,6 +24264,20 @@
                            {
                               "type": "type",
                               "name": "pointeeType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the desugared type of this type",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setDesugar"
+                           },
+                           {
+                              "type": "type",
+                              "name": "desugaredType",
                               "defaultValue": ""
                            }]
                },
@@ -26674,20 +26604,6 @@
                            {
                               "type": "type",
                               "name": "desugaredType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
                               "defaultValue": ""
                            }]
                },
@@ -31149,20 +31065,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
                            {
@@ -31987,20 +31889,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Sets the template argument types of a template type",
                   "children": [
                            {
@@ -32788,20 +32676,6 @@
                            {
                               "type": "type",
                               "name": "desugaredType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
                               "defaultValue": ""
                            }]
                },
@@ -36420,6 +36294,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the size expression of this variable array type",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setSizeExpr"
+                           },
+                           {
+                              "type": "expression",
+                              "name": "sizeExpr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the desugared type of this type",
                   "children": [
                            {
@@ -36429,20 +36317,6 @@
                            {
                               "type": "type",
                               "name": "desugaredType",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
-                  "tooltip": "Sets the pointee type of this pointer type",
-                  "children": [
-                           {
-                              "type": "void",
-                              \name": "setPointee"
-                           },
-                           {
-                              "type": "type",
-                              "name": "pointeeType",
                               "defaultValue": ""
                            }]
                },

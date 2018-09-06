@@ -472,7 +472,9 @@
 	
 	<!-- VARIABLE ARRAY TYPE -->
 	<artifact class="variableArrayType">
-		<attribute name="sizeExpr" type="expression" />
+		<attribute name="sizeExpr" type="expression">
+			<def/>
+		</attribute>
 	</artifact>
 
 	<!-- ENUM TYPE -->

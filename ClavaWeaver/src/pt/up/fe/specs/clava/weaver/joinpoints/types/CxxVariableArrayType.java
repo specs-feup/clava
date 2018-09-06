@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -45,6 +46,16 @@ public class CxxVariableArrayType extends AVariableArrayType {
     @Override
     public AExpression getSizeExprImpl() {
         return (AExpression) CxxJoinpoints.create(arrayType.get(VariableArrayType.SIZE_EXPR), this);
+    }
+
+    @Override
+    public void defSizeExprImpl(AExpression value) {
+        arrayType.set(VariableArrayType.SIZE_EXPR, (Expr) value.getNode());
+    }
+
+    @Override
+    public void setSizeExprImpl(AExpression sizeExpr) {
+        defSizeExprImpl(sizeExpr);
     }
 
 }

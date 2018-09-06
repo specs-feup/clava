@@ -481,32 +481,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Sets the pointee type of this pointer type
-     * @param pointeeType 
-     */
-    public void setPointeeImpl(AType pointeeType) {
-        throw new UnsupportedOperationException(get_class()+": Action setPointee not implemented ");
-    }
-
-    /**
-     * Sets the pointee type of this pointer type
-     * @param pointeeType 
-     */
-    public final void setPointee(AType pointeeType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setPointee", this, Optional.empty(), pointeeType);
-        	}
-        	this.setPointeeImpl(pointeeType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setPointee", this, Optional.empty(), pointeeType);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setPointee", e);
-        }
-    }
-
-    /**
      * 
      */
     @Override
@@ -590,7 +564,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         actions.add("void setTemplateArgsTypes(type[])");
         actions.add("void setTemplateArgsTypes(Integer, type)");
         actions.add("void setDesugar(type)");
-        actions.add("void setPointee(type)");
     }
 
     /**

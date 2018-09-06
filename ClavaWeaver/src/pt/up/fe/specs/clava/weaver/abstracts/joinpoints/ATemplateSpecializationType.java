@@ -431,15 +431,6 @@ public abstract class ATemplateSpecializationType extends AType {
     }
 
     /**
-     * Sets the pointee type of this pointer type
-     * @param pointeeType 
-     */
-    @Override
-    public void setPointeeImpl(AType pointeeType) {
-        this.aType.setPointeeImpl(pointeeType);
-    }
-
-    /**
      * 
      * @param position 
      * @param code 

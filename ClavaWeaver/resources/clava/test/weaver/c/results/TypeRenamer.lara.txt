@@ -1,3 +1,4 @@
+Original type: double (*)[ldmx / 2 * 2 + 1][5]
 /**** File 'type_renamer.c' ****/
 
 

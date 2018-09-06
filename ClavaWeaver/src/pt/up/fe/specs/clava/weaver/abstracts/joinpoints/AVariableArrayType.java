@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -49,6 +50,39 @@ public abstract class AVariableArrayType extends AArrayType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sizeExpr", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defSizeExprImpl(AExpression value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def sizeExpr with type AExpression not implemented ");
+    }
+
+    /**
+     * Sets the size expression of this variable array type
+     * @param sizeExpr 
+     */
+    public void setSizeExprImpl(AExpression sizeExpr) {
+        throw new UnsupportedOperationException(get_class()+": Action setSizeExpr not implemented ");
+    }
+
+    /**
+     * Sets the size expression of this variable array type
+     * @param sizeExpr 
+     */
+    public final void setSizeExpr(AExpression sizeExpr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setSizeExpr", this, Optional.empty(), sizeExpr);
+        	}
+        	this.setSizeExprImpl(sizeExpr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setSizeExpr", this, Optional.empty(), sizeExpr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setSizeExpr", e);
         }
     }
 
@@ -379,6 +413,13 @@ public abstract class AVariableArrayType extends AArrayType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "sizeExpr": {
+        	if(value instanceof AExpression){
+        		this.defSizeExprImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
@@ -420,6 +461,7 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aArrayType.fillWithActions(actions);
+        actions.add("void setSizeExpr(expression)");
     }
 
     /**

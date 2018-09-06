@@ -12,6 +12,7 @@ aspectdef TypeRenamer
 			$varref.name = $varref.name + "_renamed";
 		}
 				
+		println("Original type: " + $vardecl.type.code);		
 		$vardecl.type = $typeCopy;
 	end
 
