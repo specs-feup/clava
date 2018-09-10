@@ -362,6 +362,12 @@ public class ParallelCodeParser extends CodeParser {
 
         // Add folders of includes
         for (String parserOption : parserOptions) {
+
+            // TODO: Check if needs to check for quotes before checking for -I
+
+            boolean isInclude = parserOption.startsWith("-I");
+            parserOption = parserOption.substring("-I".length());
+
             // Remove possible quotes
             if (parserOption.startsWith("\"")) {
                 parserOption = parserOption.substring(1);
@@ -371,11 +377,15 @@ public class ParallelCodeParser extends CodeParser {
                 parserOption = parserOption.substring(0, parserOption.length() - 1);
             }
 
-            if (parserOption.startsWith("-I")) {
-                sourceFolders
-                        .add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption.substring("-I".length()))));
+            if (isInclude) {
+                sourceFolders.add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption)));
                 continue;
             }
+            // if (parserOption.startsWith("-I")) {
+            // sourceFolders
+            // .add(SpecsIo.getCanonicalFile(SpecsIo.existingFolder(parserOption.substring("-I".length()))));
+            // continue;
+            // }
         }
 
         // Reorder source folders, shortest to longest
