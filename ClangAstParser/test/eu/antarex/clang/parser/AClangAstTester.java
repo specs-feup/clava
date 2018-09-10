@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -190,6 +191,9 @@ public abstract class AClangAstTester {
         // .setShowCode(showCode);
 
         File workFolder = new File(AClangAstTester.OUTPUT_FOLDERNAME);
+
+        // Enable parallel parsing
+        codeParser.set(ParallelCodeParser.PARALLEL_PARSING);
 
         App clavaAst = codeParser.parse(Arrays.asList(workFolder), compilerOptions);
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());

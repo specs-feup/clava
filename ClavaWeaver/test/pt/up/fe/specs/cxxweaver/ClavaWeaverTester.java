@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import larai.LaraI;
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -199,6 +200,10 @@ public class ClavaWeaverTester {
         data.set(ClavaOptions.FLAGS, compilerFlags);
         data.set(CxxWeaverOption.CHECK_SYNTAX, checkWovenCodeSyntax);
         data.set(CxxWeaverOption.DISABLE_CLAVA_INFO, false);
+
+        // Enable parallel parsing
+        data.set(ParallelCodeParser.PARALLEL_PARSING);
+
         // TEMP
         // data.set(ClavaOptions.DISABLE_NEW_PARSING_METHOD, true);
 
