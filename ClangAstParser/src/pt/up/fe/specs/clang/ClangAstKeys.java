@@ -19,4 +19,11 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 public interface ClangAstKeys {
 
     DataKey<String> CLANGAST_VERSION = KeyFactory.string("clangast_version", "");
+
+    /**
+     * If true, tries to use the platform system includes (if available), instead of the built-in system includes.
+     */
+    DataKey<Boolean> USE_PLATFORM_INCLUDES = KeyFactory.bool("platform_includes")
+            .setLabel("Uses the platform system includes headers (if available)");
+
 }

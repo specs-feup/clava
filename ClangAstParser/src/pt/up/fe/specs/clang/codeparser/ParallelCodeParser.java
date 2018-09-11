@@ -29,6 +29,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
@@ -262,7 +263,7 @@ public class ParallelCodeParser extends CodeParser {
             // Use C99 as standard, possible only .h files
             return Standard.C99;
             // throw new RuntimeException(
-            // "Could not determing a default standard from this list of source files: " + sources);
+            // "Could not determine a default standard from this list of source files: " + sources);
         }
 
         if (possibleStandards.size() == 1) {
@@ -291,7 +292,8 @@ public class ParallelCodeParser extends CodeParser {
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
         ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
                 streamConsoleOutput)
-                        .setBaseFolder(parsingFolder);
+                        .setBaseFolder(parsingFolder)
+                        .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
         // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");

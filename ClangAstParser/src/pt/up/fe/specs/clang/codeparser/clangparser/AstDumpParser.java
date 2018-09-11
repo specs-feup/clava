@@ -75,6 +75,7 @@ public class AstDumpParser implements ClangParser {
     private final List<File> workingFolders;
     private File lastWorkingFolder;
     private File baseFolder;
+    private boolean usePlatformLibc;
 
     public AstDumpParser() {
         this(false, false, true);
@@ -88,6 +89,7 @@ public class AstDumpParser implements ClangParser {
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
         this.baseFolder = null;
+        this.usePlatformLibc = false;
         // context = new ClavaContext();
     }
 
@@ -141,6 +143,7 @@ public class AstDumpParser implements ClangParser {
 
         // Get version for the executable
         String version = config.get(ClangAstKeys.CLANGAST_VERSION);
+        // boolean usePlatformIncludes = config.get(ClangAstKeys.USE_PLATFORM_INCLUDES);
 
         // Copy resources
         File clangExecutable = clangAstParser.prepareResources(version);
@@ -173,7 +176,7 @@ public class AstDumpParser implements ClangParser {
         // Add includes bundled with program
         // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
         // if (Platforms.isWindows()) {
-        systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable));
+        systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
         // }
 
         // Add custom includes
@@ -573,6 +576,13 @@ public class AstDumpParser implements ClangParser {
         }
 
         return clangDump.toString();
+    }
+
+    @Override
+    public ClangParser setUsePlatformLibc(boolean usePlatformLibc) {
+        this.usePlatformLibc = usePlatformLibc;
+
+        return this;
     }
 
 }

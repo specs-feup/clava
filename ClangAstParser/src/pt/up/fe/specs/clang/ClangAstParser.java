@@ -53,6 +53,7 @@ import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.omp.OMPDirective;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -61,7 +62,6 @@ import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
-import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.StringLines;
 
@@ -159,6 +159,8 @@ public class ClangAstParser {
 
         // Get version for the executable
         String version = config.get(ClangAstKeys.CLANGAST_VERSION);
+        // boolean usePlatformIncludes = config.get(ClangAstKeys.USE_PLATFORM_INCLUDES);
+        boolean usePlatformIncludes = false;
 
         // Copy resources
         File clangExecutable = prepareResources(version);
@@ -183,7 +185,7 @@ public class ClangAstParser {
         // Add includes bundled with program
         // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
         // if (Platforms.isWindows()) {
-        systemIncludes.addAll(prepareIncludes(clangExecutable));
+        systemIncludes.addAll(prepareIncludes(clangExecutable, usePlatformIncludes));
         // }
 
         // Add custom includes
@@ -463,18 +465,27 @@ public class ClangAstParser {
         		*/
     }
 
-    public List<String> prepareIncludes(File clangExecutable) {
+    public List<String> prepareIncludes(File clangExecutable, boolean usePlatformIncludes) {
 
         File resourceFolder = getClangResourceFolder();
 
         File includesBaseFolder = SpecsIo.mkdir(resourceFolder, "clang_includes");
         // ZipResourceManager zipManager = new ZipResourceManager(includesBaseFolder);
 
-        // Download includes zips, check if any of them is new
-        List<FileResourceProvider> includesZips = Arrays.asList(
-                clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8),
-                getLibCResource(SupportedPlatform.getCurrentPlatform()));
+        // Create list of include zips
+        List<FileResourceProvider> includesZips = new ArrayList<>();
+        includesZips.add(clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8));
 
+        // Check if built-in libc/c++ needs to be included
+        if (useBuiltinLibc(clangExecutable, usePlatformIncludes)) {
+            includesZips.add(getLibCResource(SupportedPlatform.getCurrentPlatform()));
+        }
+
+        // List<FileResourceProvider> includesZips = Arrays.asList(
+        // clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8),
+        // getLibCResource(SupportedPlatform.getCurrentPlatform()));
+
+        // Download includes zips, check if any of them is new
         List<ResourceWriteData> zipFiles = includesZips.stream()
                 .map(resource -> resource.writeVersioned(resourceFolder, ClangAstParser.class))
                 .collect(Collectors.toList());
@@ -583,6 +594,17 @@ public class ClangAstParser {
         return includes;
     }
 
+    private boolean useBuiltinLibc(File clangExecutable, boolean usePlatformIncludes) {
+
+        // If platform includes is disable, always use built-in headers
+        if (!usePlatformIncludes) {
+            return true;
+        }
+
+        // If headers of both libc and libc++ are available, do not use built-in libc
+        return !hasLibC(clangExecutable);
+    }
+
     /**
      * Detects if the system has libc/licxx installed.
      * 
@@ -590,40 +612,73 @@ public class ClangAstParser {
      * @return
      */
     private boolean hasLibC(File clangExecutable) {
-        return false;
-        /*
+        // return false;
+
         // If Windows, return false and always use bundled LIBC++
-        if (SupportedPlatform.getCurrentPlatform().isWindows()) {
-            return false;
-        }
-        
+        // if (SupportedPlatform.getCurrentPlatform().isWindows()) {
+        // return false;
+        // }
+
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-        
-        boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
-                .parallelStream()
-                .map(resource -> testFile(clangExecutable, clangTest, resource))
-                // Check if test fails in any of cases
-                .filter(hasInclude -> !hasInclude)
-                .findAny()
-                .isPresent();
-        
-        if (needsLib) {
-            ClavaLog.debug("Could not find libc/licxx installed in the system");
-        } else {
-            ClavaLog.debug("Detected libc and licxx installed in the system");
-        }
-        
+
+        // Write test files
+        List<File> testFiles = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
+                .stream()
+                .map(resource -> resource.write(clangTest))
+                .collect(Collectors.toList());
+
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
         }
-        
-        return !needsLib;
+
+        // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
+        /*
+        boolean needsLib = testFiles.parallelStream()
+                .map(testFile -> testFile(clangExecutable, clangTest, testFile))
+                // Check if test fails in any of cases
+                .filter(hasInclude -> !hasInclude)
+                .findAny()
+                .isPresent();
         */
+        boolean needsLib = false;
+        for (File testFile : testFiles) {
+            ProcessOutput<List<ClangNode>, DataStore> output = testFile(clangExecutable, clangTest, testFile);
+            // ClavaLog.debug(message);
+            // System.out.println("RETURN VALUE:" + output.getReturnValue());
+            // System.out.println("STD OUT:" + output.getStdOut());
+            // System.out.println("STD ERR:" + output.getStdErr().get(StreamKeys.WARNINGS));
+
+            // boolean foundInclude = !output.getStdOut().isEmpty();
+            boolean foundInclude = output.getReturnValue() == 0;
+
+            if (foundInclude) {
+                SpecsCheck.checkArgument(output.getStdOut().isEmpty(),
+                        () -> "Expected std output to be empty: " + output.getStdOut());
+                SpecsCheck.checkArgument(output.getStdErr().get(StreamKeys.WARNINGS).isEmpty(),
+                        () -> "Expected err output to be empty: " + output.getStdErr().get(StreamKeys.WARNINGS));
+            }
+
+            if (!foundInclude) {
+                needsLib = true;
+                break;
+            }
+            // return foundInclude;
+        }
+
+        if (needsLib) {
+            ClavaLog.debug("Could not find system libc/licxx");
+        } else {
+            ClavaLog.debug("Detected system's libc and licxx");
+        }
+
+        return !needsLib;
+
     }
 
-    private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
-        File testFile = testResource.write(testFolder);
+    // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
+    private ProcessOutput<List<ClangNode>, DataStore> testFile(File clangExecutable, File testFolder, File testFile) {
+        // File testFile = testResource.write(testFolder);
 
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
         ClavaContext context = new ClavaContext();
@@ -634,9 +689,10 @@ public class ClangAstParser {
                     inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
                             clangStreamParser));
 
-            boolean foundInclude = !output.getStdOut().isEmpty();
-
-            return foundInclude;
+            return output;
+            // boolean foundInclude = !output.getStdOut().isEmpty();
+            //
+            // return foundInclude;
 
         } catch (Exception e) {
             throw new RuntimeException("Error while testing include", e);

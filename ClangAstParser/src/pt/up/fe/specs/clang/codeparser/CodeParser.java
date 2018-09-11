@@ -62,6 +62,7 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
      * @return
      */
     public static CodeParser newInstance() {
-        return new MonolithicCodeParser();
+        // return new MonolithicCodeParser();
+        return new ParallelCodeParser();
     }
 }
