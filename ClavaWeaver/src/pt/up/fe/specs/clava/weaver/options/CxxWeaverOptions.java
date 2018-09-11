@@ -21,6 +21,7 @@ import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.options.WeaverOptionBuilder;
 import org.suikasoft.jOptions.Datakey.DataKey;
 
+import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -91,6 +92,9 @@ public class CxxWeaverOptions {
         //
         addBooleanOption(ParallelCodeParser.PARALLEL_PARSING, "par", "parallel-parsing",
                 "Enables parallel parsing of source files");
+
+        addBooleanOption(ClangAstKeys.USE_PLATFORM_INCLUDES, "psi", "platform-includes",
+                "Uses the platform system includes headers (if available)");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,

@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.antarex.clava.AntarexClavaLaraApis;
 import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
+import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -567,6 +568,7 @@ public class CxxWeaver extends ACxxWeaver {
         CodeParser codeParser = CodeParser.newInstance();
         codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING, getConfig().get(ParallelCodeParser.PARALLEL_PARSING));
+        codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
         App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), parserOptions);
         // Set source paths of each TranslationUnit
         // app.setSourcesFromStrings(allFiles);
