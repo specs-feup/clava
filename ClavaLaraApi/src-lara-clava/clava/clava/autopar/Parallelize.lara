@@ -19,8 +19,11 @@ var Parallelize = {};
  */
 Parallelize.forLoops = function($loops) {
 
-	var parallelLoops = Parallelize.getForLoopsPragmas($loops);
-
+	//var parallelLoops = Parallelize.getForLoopsPragmas($loops);
+	var autoparResult = Parallelize.getForLoopsPragmas($loops);
+	var parallelLoops = autoparResult["parallelLoops"];
+	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
+	
 	// Add pragmas to loops
 	for(var $loop of $loops) {
 		var ompPragma = parallelLoops[$loop.astId];
@@ -47,7 +50,10 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		outputFolder = Io.getPath("./");
 	}
 
-	var parallelLoops = Parallelize.getForLoopsPragmas($loops);
+	//var parallelLoops = Parallelize.getForLoopsPragmas($loops);
+	var autoparResult = Parallelize.getForLoopsPragmas($loops);
+	var parallelLoops = autoparResult["parallelLoops"];
+	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
 
 	var codeInserter = new CodeInserter();
 	var filesWithPragmas = {};
@@ -149,6 +155,12 @@ Parallelize.getForLoopsPragmas = function($loops) {
 	// Revert AST changes
 	Clava.popAst();
 	
-	return parallelLoops;
+	var result = {};
+	result["parallelLoops"] = parallelLoops;
+	result["unparallelizableLoops"] = unparallelizableLoops;
+	
+	return result;
+	
+	//return parallelLoops;
 }	
 	
