@@ -19,14 +19,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.utils.SourceType;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class SourceRange {
-    private static boolean COMMAND_APPEARED = false;
+    // private static boolean COMMAND_APPEARED = false;
     private static final SourceRange INVALID_SOURCE_RANGE = new SourceRange(SourceLocation.invalidLocation());
 
     public static SourceRange newUndefined(String filepath) {
@@ -238,110 +235,113 @@ public class SourceRange {
         return true;
     }
 
+    /*
     public static SourceRange parse(String locationString, SourceLocation baseLocation) {
         if (locationString.isEmpty()) {
             return SourceRange.newUndefined(baseLocation == null ? null : baseLocation.getFilepath());
         }
-
+    
         // Split start and end
         int commaIndex = locationString.indexOf(',');
         // Location start = null;
         // Location end = null;
-
+    
         if (commaIndex != -1) {
             SourceLocation start = SourceRange.parseSub(locationString.substring(0, commaIndex).trim(), baseLocation,
                     null);
             SourceLocation end = SourceRange.parseSub(locationString.substring(commaIndex + 1).trim(), baseLocation,
                     start);
-
+    
             // If 'end' is not a valid location, use start
             if (!end.isValid()) {
                 end = start;
             }
-
+    
             return new SourceRange(start, end);
         }
-
+    
         // When there is no start, end line and col are the same for the start/end
         SourceLocation end = SourceRange.parseSub(locationString.trim(), baseLocation, null);
         return new SourceRange(end, end);
     }
-
+    */
     /**
      * Parses a partial location (file, line and col). Stores the results in the start portion of the Location object.
      * 
      * @param trim
      * @return
      */
+    /*
     private static SourceLocation parseSub(String partialLocation, SourceLocation baseLocation,
             SourceLocation startLocation) {
-
+    
         if (partialLocation.startsWith("col:")) {
             String integerString = partialLocation.substring("col:".length());
-
+    
             int startLine = startLocation == null ? baseLocation.getLine() : startLocation.getLine();
             String filepath = startLocation == null ? baseLocation.getFilepath() : startLocation.getFilepath();
-
+    
             return new SourceLocation(filepath, startLine, Integer.parseInt(integerString));
         }
-
+    
         if (partialLocation.startsWith("line:")) {
             String lineColString = partialLocation.substring("line:".length());
-
+    
             int separatorIndex = lineColString.indexOf(":");
             Preconditions.checkArgument(separatorIndex != -1,
                     "Could not find line/col separator ':' in '" + lineColString + "'");
-
+    
             int line = Integer.parseInt(lineColString.substring(0, separatorIndex));
             int col = Integer.parseInt(lineColString.substring(separatorIndex + 1));
-
+    
             String filepath = startLocation == null ? baseLocation.getFilepath() : startLocation.getFilepath();
-
+    
             return new SourceLocation(filepath, line, col);
         }
-
+    
         // Command line location
         if (partialLocation.startsWith("<command line")) {
             if (!SourceRange.COMMAND_APPEARED) {
                 SourceRange.COMMAND_APPEARED = true;
                 SpecsLogs.msgWarn("Command-line locations not yet supported");
             }
-
+    
             return SourceLocation.invalidLocation();
         }
-
+    
         // Invalid source location for the columns
         if (partialLocation.startsWith("<invalid sloc")) {
             return SourceLocation.invalidLocation();
         }
-
+    
         // Built-in code, defined by the parser/compiler probably
         if (partialLocation.startsWith("<built-in>")) {
             return SourceLocation.invalidLocation();
         }
-
+    
         // Get filepath. Start from the end to avoid problems with paths such as 'C:\...'
         int lastSeparator = partialLocation.lastIndexOf(":");
         if (lastSeparator == -1) {
             throw new RuntimeException("Could not find ':' in location '" + partialLocation + "'");
         }
-
+    
         int pathSeparatorIndex = partialLocation.substring(0, lastSeparator).lastIndexOf(":");
         Preconditions.checkArgument(pathSeparatorIndex != -1,
                 "Could not find path separator ':' in '" + partialLocation + "'");
-
+    
         String path = partialLocation.substring(0, pathSeparatorIndex);
         String lineCol = partialLocation.substring(pathSeparatorIndex + 1);
-
+    
         int separatorIndex = lineCol.indexOf(":");
         Preconditions.checkArgument(pathSeparatorIndex != -1,
                 "Could not find line/col separator ':' in '" + lineCol + "'");
-
+    
         int line = Integer.parseInt(lineCol.substring(0, separatorIndex));
         int col = Integer.parseInt(lineCol.substring(separatorIndex + 1));
-
+    
         return new SourceLocation(path, line, col);
     }
+    */
 
     /*
      * WORK IN PROGRESS

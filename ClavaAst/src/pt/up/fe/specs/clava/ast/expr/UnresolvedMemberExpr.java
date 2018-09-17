@@ -19,10 +19,18 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * A C++ member access expression for which lookup produced a set of overloaded functions.
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class UnresolvedMemberExpr extends OverloadExpr {
 
     public UnresolvedMemberExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+        // System.out.println(
+        // "UNRESOLVED MEMBER LOCATION:" + getLocation() + " -> System header? " + get(IS_IN_SYSTEM_HEADER));
     }
 
 }

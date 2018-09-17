@@ -162,8 +162,15 @@ public class CXXConstructExpr extends Expr {
         return get(IS_LIST_INITIALIZATION) || get(IS_STD_LIST_INITIALIZATION);
     }
 
-    private String getCode(String cxxRecordName) {
-
+    /**
+     * 
+     * @param cxxRecordName
+     * @return
+     */
+    public String getCode(String cxxRecordName) {
+        // System.out.println("CXX CONSTRUCTOR:" + this);
+        // System.out.println("IS LIST INIT:" + isListInit());
+        // System.out.println("NAME:" + cxxRecordName);
         if (cxxRecordName == null) {
             return "";
         }

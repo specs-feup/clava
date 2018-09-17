@@ -13,19 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.language.CXXOperator;
-import pt.up.fe.specs.clava.utils.Nameable;
 
 /**
  * A reference to a name which we were able to look up during parsing but could not resolve to a specific declaration.
@@ -33,7 +27,7 @@ import pt.up.fe.specs.clava.utils.Nameable;
  * @author JoaoBispo
  *
  */
-public class UnresolvedLookupExpr extends OverloadExpr implements Nameable {
+public class UnresolvedLookupExpr extends OverloadExpr {
 
     /// DATAKEYS BEGIN
 
@@ -41,17 +35,6 @@ public class UnresolvedLookupExpr extends OverloadExpr implements Nameable {
      * True if this declaration should be extended by argument-dependent lookup.
      */
     public final static DataKey<Boolean> REQUIRES_ADL = KeyFactory.bool("requiresAdl");
-
-    /**
-     * The looked up name.
-     */
-    public final static DataKey<String> NAME = KeyFactory.string("name");
-
-    /**
-     * The declarations in the unresolved set.
-     */
-    public final static DataKey<List<Decl>> UNRESOLVED_DECLS = KeyFactory
-            .generic("unresolvedDecls", (List<Decl>) new ArrayList<Decl>());
 
     /// DATAKEYS END
 
@@ -79,35 +62,5 @@ public class UnresolvedLookupExpr extends OverloadExpr implements Nameable {
     // return new UnresolvedLookupExpr(requiresAdl, name, decls, getQualifier().orElse(null), getExprData(),
     // getInfo());
     // }
-
-    @Override
-    public String getCode() {
-        StringBuilder code = new StringBuilder();
-
-        // Append qualifier, if present
-        getQualifier().ifPresent(code::append);
-
-        // Case operator
-        Optional<CXXOperator> operator = CXXOperator.parseTry(get(NAME));
-        if (operator.isPresent()) {
-            code.append(operator.get().getString());
-            return code.toString();
-        }
-
-        code.append(get(NAME));
-
-        return code.toString();
-    }
-
-    @Override
-    public String getName() {
-        return get(NAME);
-    }
-
-    @Override
-    public void setName(String name) {
-        set(NAME, name);
-        // this.name = name;
-    }
 
 }

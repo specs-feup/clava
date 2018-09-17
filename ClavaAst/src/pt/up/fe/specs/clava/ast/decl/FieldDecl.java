@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 
@@ -97,6 +98,7 @@ public class FieldDecl extends DeclaratorDecl {
 
     @Override
     public String getCode() {
+        // System.out.println("FIELD:" + this);
         StringBuilder code = new StringBuilder();
 
         if (get(IS_MUTABLE)) {
@@ -106,15 +108,29 @@ public class FieldDecl extends DeclaratorDecl {
         // code.append(getTypeCode()).append(getDeclName());
         String name = getDeclName();
 
+        // if (init.isPresent() && init.get() instanceof CXXConstructExpr) {
+        // CXXConstructExpr cxxConstructor = (CXXConstructExpr) init.get();
+        // code.append(cxxConstructor.getCode(name));
+        // } else {
         code.append(getType().getCode(this, name));
 
         getBitwidth().ifPresent(expr -> code.append(": ").append(expr.getCode()));
 
         // getInitExpr().ifPresent(expr -> code.append(" = ").append(expr.getCode()));
-        getInitialization().ifPresent(expr -> code.append(" = ").append(expr.getCode()));
+        Optional<Expr> init = getInitialization();
+        if (init.isPresent() && init.get() instanceof CXXConstructExpr) {
+            CXXConstructExpr cxxConstructor = (CXXConstructExpr) init.get();
+            code.append(cxxConstructor.getCode(name));
+        } else {
+            init.ifPresent(expr -> code.append(" = ").append(expr.getCode()));
+        }
+
+        // }
 
         code.append(";");
-
+        // System.out.println("FIELD DECL:" + code);
+        // System.out.println("INIT:" + getInitialization().map(expr -> expr.getCode()));
+        // System.out.println("INIT CLASS:" + getInitialization().map(expr -> expr.getClass()));
         return code.toString();
         // TODO: Should add ';'?
     }
