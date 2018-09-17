@@ -185,6 +185,11 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.add(OverloadExpr.QUALIFIER, lines.nextLine());
+        data.add(OverloadExpr.NAME, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNodeList(data, OverloadExpr.UNRESOLVED_DECLS,
+                LineStreamParsers.stringList(lines));
+        data.add(OverloadExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines,
+                ClavaDataParsers::literalSource));
 
         return data;
     }
@@ -227,13 +232,16 @@ public class ExprDataParser {
         return data;
     }
 
+    public static DataStore parseUnresolvedMemberExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseOverloadExprData(lines, dataStore);
+
+        return data;
+    }
+
     public static DataStore parseUnresolvedLookupExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseOverloadExprData(lines, dataStore);
 
         data.add(UnresolvedLookupExpr.REQUIRES_ADL, LineStreamParsers.oneOrZero(lines));
-        data.add(UnresolvedLookupExpr.NAME, lines.nextLine());
-        dataStore.getClavaNodes().queueSetNodeList(data, UnresolvedLookupExpr.UNRESOLVED_DECLS,
-                LineStreamParsers.stringList(lines));
 
         return data;
     }

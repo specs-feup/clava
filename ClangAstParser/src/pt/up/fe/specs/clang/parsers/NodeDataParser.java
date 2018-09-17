@@ -259,6 +259,7 @@ public class NodeDataParser {
         boolean isMacro = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
+        boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
         DataStore data = DataStore.newInstance("Data from Parser");
 
@@ -267,6 +268,7 @@ public class NodeDataParser {
         data.add(ClavaNode.LOCATION, location);
         data.add(ClavaNode.IS_MACRO, isMacro);
         data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
+        data.add(ClavaNode.IS_IN_SYSTEM_HEADER, isInSystemHeader);
 
         return data;
     }
