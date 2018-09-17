@@ -100,6 +100,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             .setCopyFunction(inlineComments -> new ArrayList<>(inlineComments));
 
     /**
+     * True if the location of this node is valid, and is in a system header.
+     */
+    public final static DataKey<Boolean> IS_IN_SYSTEM_HEADER = KeyFactory.bool("isInSystemHeader");
+
+    /**
      * True if this node was created using legacy parser classes.
      */
     public final static DataKey<Boolean> IS_LEGACY_NODE = KeyFactory.bool("isLegacyNode");
@@ -172,6 +177,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     }
 
     public String getCode() {
+        ClavaLog.info("getCode() not implemented for this node: " + this);
         throw new NotImplementedException(getClass());
         // stringreturn toUnimplementedCode();
     }
