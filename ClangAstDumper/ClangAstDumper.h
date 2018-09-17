@@ -253,7 +253,8 @@ private:
     void VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<std::string> &children);
     void VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vector<std::string> &children);
     void VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children);
-    void VisitUnresolvedLookupExprChildren(const UnresolvedLookupExpr *E, std::vector<std::string> &children);
+    //void VisitUnresolvedLookupExprChildren(const UnresolvedLookupExpr *E, std::vector<std::string> &children);
+    void VisitOverloadExprChildren(const OverloadExpr *E, std::vector<std::string> &children);
     void VisitCallExprChildren(const CallExpr *E, std::vector<std::string> &children);
     void VisitCXXMemberCallExprChildren(const CXXMemberCallExpr *E, std::vector<std::string> &children);
     void VisitCXXTypeidExprChildren(const CXXTypeidExpr *E, std::vector<std::string> &children);

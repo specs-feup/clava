@@ -34,7 +34,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"StringLiteral", clava::StmtNode::STRING_LITERAL},
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
         {"UnresolvedLookupExpr", clava::StmtNode::UNRESOLVED_LOOKUP_EXPR},
-        {"UnresolvedMemberExpr", clava::StmtNode::OVERLOAD_EXPR},
+        {"UnresolvedMemberExpr", clava::StmtNode::UNRESOLVED_MEMBER_EXPR},
         {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
         {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
         {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
@@ -122,8 +122,10 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpInitListExprData(static_cast<const InitListExpr *>(S)); break;
         case clava::StmtNode ::DECL_REF_EXPR:
             DumpDeclRefExprData(static_cast<const DeclRefExpr *>(S)); break;
-        case clava::StmtNode ::OVERLOAD_EXPR:
-            DumpOverloadExprData(static_cast<const OverloadExpr *>(S)); break;
+//        case clava::StmtNode ::OVERLOAD_EXPR:
+//            DumpOverloadExprData(static_cast<const OverloadExpr *>(S)); break;
+        case clava::StmtNode ::UNRESOLVED_MEMBER_EXPR:
+            DumpUnresolvedMemberExprData(static_cast<const UnresolvedMemberExpr *>(S)); break;
         case clava::StmtNode ::UNRESOLVED_LOOKUP_EXPR:
             DumpUnresolvedLookupExprData(static_cast<const UnresolvedLookupExpr *>(S)); break;
         case clava::StmtNode ::CXX_CONSTRUCT_EXPR:
@@ -375,20 +377,10 @@ void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
 
     // Dump qualifier
     clava::dump(E->getQualifier(), Context);
-}
 
-void clava::ClavaDataDumper::DumpUnresolvedLookupExprData(const UnresolvedLookupExpr *E) {
-    DumpOverloadExprData(E);
-
-    clava::dump(E->requiresADL());
+    // Name
     clava::dump([&E](llvm::raw_string_ostream& stream){stream << E->getName();});
-/*
-    if(E->requiresADL()) {
-        clava::dump([&E](llvm::raw_string_ostream& stream){stream << E->getName();});
-    } else {
-        clava::dump("");
-    }
-*/
+
     // Number of decls
     clava::dump(E->getNumDecls());
     auto currentDecl = E->decls_begin(), declsEnd = E->decls_end();
@@ -397,6 +389,38 @@ void clava::ClavaDataDumper::DumpUnresolvedLookupExprData(const UnresolvedLookup
     }
 
 
+    // Dump template arguments
+    if(E->hasExplicitTemplateArgs()) {
+        // Number of template args
+        clava::dump(E->getNumTemplateArgs());
+
+        auto templateArgs = E->getTemplateArgs();
+        for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+            auto templateArg = templateArgs + i;
+            clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
+        }
+    } else {
+        clava::dump(0);
+    }
+}
+
+
+void clava::ClavaDataDumper::DumpUnresolvedMemberExprData(const UnresolvedMemberExpr *E) {
+    DumpOverloadExprData(E);
+}
+
+void clava::ClavaDataDumper::DumpUnresolvedLookupExprData(const UnresolvedLookupExpr *E) {
+    DumpOverloadExprData(E);
+
+    clava::dump(E->requiresADL());
+
+/*
+    if(E->requiresADL()) {
+        clava::dump([&E](llvm::raw_string_ostream& stream){stream << E->getName();});
+    } else {
+        clava::dump("");
+    }
+*/
 }
 
 void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E) {

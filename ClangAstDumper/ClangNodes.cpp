@@ -103,6 +103,15 @@ void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLoca
         clava::dumpSourceRange(Context, Context->getSourceManager().getSpellingLoc(begin), Context->getSourceManager().getSpellingLoc(end));
     }
 
+    // If is in system header
+    FullSourceLoc fullLocation = Context->getFullLoc(begin);
+    if (fullLocation.isValid() && fullLocation.isInSystemHeader()) {
+        clava::dump(true);
+    } else {
+        clava::dump(false);
+    }
+
+
 }
 
 

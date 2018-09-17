@@ -141,6 +141,7 @@ namespace clava {
         void DumpInitListExprData(const InitListExpr *E);
         void DumpDeclRefExprData(const DeclRefExpr *E);
         void DumpOverloadExprData(const OverloadExpr *E);
+        void DumpUnresolvedMemberExprData(const UnresolvedMemberExpr *E);
         void DumpUnresolvedLookupExprData(const UnresolvedLookupExpr *E);
         void DumpCXXConstructExprData(const CXXConstructExpr *E);
         void DumpMemberExprData(const MemberExpr *E);
