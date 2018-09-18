@@ -129,6 +129,11 @@ public class CXXMethodDecl extends FunctionDecl {
             return false;
         }
 
+        // Do not add if inside record decl
+        if (isInsideRecordDecl()) {
+            return false;
+        }
+
         return true;
 
     }
@@ -183,8 +188,9 @@ public class CXXMethodDecl extends FunctionDecl {
             // code.append(getFunctionType().getReturnType().getCode()).append(" ");
         }
 
-        // Add namespace if not inside namespace decl
+        // Add namespace if not inside namespace decl and not inside RecordDecl
         // if (!isInsideNamespaceDecl()) {
+
         if (addNamespace()) {
             String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
             // String namespace = getMethodData().getNamespace();
@@ -194,6 +200,7 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         // Add record if not inside record decl
+
         if (!isInsideRecordDecl()) {
             // code.append(getMethodData().getRecord()).append("::");
             code.append(getRecordName()).append("::");
