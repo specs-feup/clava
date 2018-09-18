@@ -65,6 +65,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
+import pt.up.fe.specs.util.SpecsBits;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -139,8 +140,9 @@ public class ExprDataParser {
         data.add(StringLiteral.LENGTH, LineStreamParsers.longInt(lines));
         data.add(StringLiteral.CHAR_BYTE_WIDTH, LineStreamParsers.integer(lines));
 
+        // Bytes in Java are signed
         data.add(StringLiteral.STRING_BYTES,
-                LineStreamParsers.list(lines, lineStream -> Short.valueOf(lineStream.nextLine())));
+                LineStreamParsers.list(lines, lineStream -> SpecsBits.decodeUnsignedByte(lineStream.nextLine())));
         // data.add(StringLiteral.STRING, ClavaDataParsers.literalSource(lines));
 
         return data;

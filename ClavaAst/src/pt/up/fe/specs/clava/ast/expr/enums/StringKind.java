@@ -13,15 +13,27 @@
 
 package pt.up.fe.specs.clava.ast.expr.enums;
 
+import java.nio.charset.Charset;
+
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public enum StringKind {
 
     ASCII,
     WIDE,
-    UTF8,
-    UTF16,
-    UTF32;
+    UTF8(true),
+    UTF16(true),
+    UTF32(true);
+
+    private final boolean isUTF;
+
+    private StringKind(boolean isUtf) {
+        this.isUTF = isUtf;
+    }
+
+    private StringKind() {
+        this(false);
+    }
 
     public String getPrefix() {
         switch (this) {
@@ -39,5 +51,23 @@ public enum StringKind {
             throw new NotImplementedException(this);
         }
 
+    }
+
+    public boolean isUTF() {
+        return isUTF;
+    }
+
+    public Charset getCharset() {
+        switch (this) {
+        case UTF8:
+            return Charset.forName("UTF-8");
+        case UTF16:
+            return Charset.forName("UTF-16BE");
+        case UTF32:
+            return Charset.forName("UTF-32BE");
+        default:
+            throw new RuntimeException("No charset defined for string kind '" + this + "'");
+
+        }
     }
 }

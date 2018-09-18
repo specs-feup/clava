@@ -43,8 +43,8 @@ public class StringLiteral extends Literal {
 
     // public final static DataKey<String> STRING = KeyFactory.string("string");
 
-    public final static DataKey<List<Short>> STRING_BYTES = KeyFactory.generic("stringBytes",
-            (List<Short>) new ArrayList<Short>());
+    public final static DataKey<List<Byte>> STRING_BYTES = KeyFactory.generic("stringBytes",
+            (List<Byte>) new ArrayList<Byte>());
 
     /// DATAKEY END
 
@@ -89,20 +89,29 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getLiteral() {
-        // If raw string literal, build the string from the bytes
-        if (isRawStringLiteral()) {
-            return get(STRING_KIND).getPrefix() + "\"" + SpecsStrings.escapeJson(getStringFromBytes()) + "\"";
+        // Optimization: if not a raw string and is ASCII (most common case) can use stored literal
+        if (get(STRING_KIND) == StringKind.ASCII && !isRawStringLiteral()) {
+            return super.getLiteral();
         }
 
-        return super.getLiteral();
+        return get(STRING_KIND).getPrefix() + "\"" + SpecsStrings.escapeJson(getStringFromBytes()) + "\"";
+        // // If raw string literal, build the string from the bytes
+        // if (isRawStringLiteral()) {
+        // return get(STRING_KIND).getPrefix() + "\"" + SpecsStrings.escapeJson(getStringFromBytes()) + "\"";
+        // }
+        //
+        // return super.getLiteral();
     }
 
     @Override
     public String getCode() {
+        // System.out.println("KIND:" + get(STRING_KIND));
+        // System.out.println("BYTES:" + get(STRING_BYTES));
+        // System.out.println("SUPER LITERAL:" + super.getLiteral());
+        // System.out.println("LITERAL:" + getLiteral());
+        // System.out.println("IS RAW STRING:" + isRawStringLiteral());
 
-        System.out.println("LITERAL:" + getLiteral());
-        System.out.println("IS RAW STRING:" + isRawStringLiteral());
-        System.out.println("BYTES:" + get(STRING_BYTES));
+        // System.out.println("String from BYTES:" + SpecsStrings.escapeJson(getStringFromBytes()));
         return getLiteral();
         /*
         // String string = getEscapedString();
@@ -134,7 +143,7 @@ public class StringLiteral extends Literal {
     }
 
     public boolean isRawStringLiteral() {
-        return super.getLiteral().equals("R");
+        return super.getLiteral().endsWith("R");
     }
 
     /**
@@ -157,46 +166,124 @@ public class StringLiteral extends Literal {
     */
 
     private String getStringFromBytes() {
-        switch (get(STRING_KIND)) {
-        case ASCII:
-            return new String(getBytesAsChars());
-        case WIDE:
-            return new String(getBytesAsWideChars());
-        default:
-            // ClavaLog.debug("String literals of kind '" + get(STRING_KIND)
-            // + "' not properly implemented yet, using Clang literal");
-            // return null;
-            throw new RuntimeException(
-                    "String literals from bytes of kind '" + get(STRING_KIND) + "' not implemented yet. Node: " + this);
+        StringKind kind = get(STRING_KIND);
+
+        // If UTF, just use String constructor from bytes
+        if (kind.isUTF()) {
+            List<Byte> byteList = get(STRING_BYTES);
+            byte[] bytes = new byte[byteList.size()];
+            for (int i = 0; i < byteList.size(); i++) {
+                bytes[i] = byteList.get(i);
+            }
+
+            return new String(bytes, kind.getCharset());
         }
+
+        return new String(getBytesAsCharArray());
+        //
+        // switch (get(STRING_KIND)) {
+        // case ASCII:
+        // return new String(getBytesAsChars());
+        // case WIDE:
+        // return new String(getBytesAsWideChars());
+        // default:
+        // // ClavaLog.debug("String literals of kind '" + get(STRING_KIND)
+        // // + "' not properly implemented yet, using Clang literal");
+        // // return null;
+        // throw new RuntimeException(
+        // "String literals from bytes of kind '" + get(STRING_KIND) + "' not implemented yet. Node: " + this);
+        // }
     }
 
-    private char[] getBytesAsChars() {
+    private char[] getBytesAsCharArray() {
+        List<Byte> bytes = get(STRING_BYTES);
+        int numBytesPerChar = get(CHAR_BYTE_WIDTH);
+        char[] chars = new char[bytes.size() / numBytesPerChar];
 
-        List<Short> bytes = get(STRING_BYTES);
-        char[] chars = new char[bytes.size()];
+        for (int i = 0; i < bytes.size(); i += numBytesPerChar) {
 
-        for (int i = 0; i < bytes.size(); i++) {
-            chars[i] = (char) bytes.get(i).intValue();
+            char currentChar = getCharFromBytes(bytes, i, numBytesPerChar);
+            chars[i / numBytesPerChar] = currentChar;
+
+            // int mask1 = 0xFF;
+            // int mask2 = 0xFF << 8;
+            //
+            // int lowerByte = bytes.get(i).intValue() & mask1;
+            // int higherByte = (bytes.get(i + 1).intValue() << 8) & mask2;
+            //
+            // // char[] newChars = Character.toChars(higherByte | lowerByte);
+            // // Preconditions.checkArgument(newChars.length == 1, "Expected length to be 1");
+            // // chars[i / 2] = newChars[0];
+            // System.out.println("HIGHER BYTE:" + Integer.toHexString(higherByte));
+            // System.out.println("LOWER BYTE:" + Integer.toHexString(lowerByte));
+            // System.out.println("FULL INT: " + Integer.toHexString((higherByte | lowerByte)));
+            // chars[i / numBytesPerChar] = (char) (higherByte | lowerByte);
+            // // for (char aChar : newChars) {
+            // // chars.add(aChar);
+            // // }
+            //
+            // // chars[i / 2] = (char) (higherByte | lowerByte);
         }
 
         return chars;
     }
 
-    private char[] getBytesAsWideChars() {
-        List<Short> bytes = get(STRING_BYTES);
-        char[] chars = new char[bytes.size() / 2];
+    private char getCharFromBytes(List<Byte> bytes, int startIndex, int numBytesPerChar) {
+        int baseMask = 0xFF;
+        int currentChar = 0;
 
-        for (int i = 0; i < bytes.size(); i += 2) {
-
-            int lowerByte = bytes.get(i).intValue();
-            int higherByte = bytes.get(i + 1).intValue() << 8;
-
-            chars[i / 2] = (char) (higherByte | lowerByte);
+        for (int i = 0; i < numBytesPerChar; i++) {
+            // int adjustedMask = baseMask << (8 * i);
+            int currentByte = bytes.get(startIndex + i) & baseMask;
+            currentChar = currentChar | (currentByte << (8 * i));
         }
 
-        return chars;
+        return (char) currentChar;
     }
+
+    // private char[] getBytesAsChars() {
+    //
+    // List<Byte> bytes = get(STRING_BYTES);
+    // char[] chars = new char[bytes.size()];
+    //
+    // for (int i = 0; i < bytes.size(); i++) {
+    // chars[i] = (char) bytes.get(i).intValue();
+    // }
+    //
+    // return chars;
+    // }
+    //
+    // private char[] getBytesAsWideChars() {
+    // // private List<Character> getBytesAsWideChars() {
+    // List<Byte> bytes = get(STRING_BYTES);
+    // char[] chars = new char[bytes.size() / 2];
+    //
+    // // List<Character> chars = new ArrayList<>();
+    //
+    // for (int i = 0; i < bytes.size(); i += 2) {
+    //
+    // int mask1 = 0xFF;
+    // int mask2 = 0xFF << 8;
+    //
+    // int lowerByte = bytes.get(i).intValue() & mask1;
+    // int higherByte = (bytes.get(i + 1).intValue() << 8) & mask2;
+    //
+    // // char[] newChars = Character.toChars(higherByte | lowerByte);
+    // // Preconditions.checkArgument(newChars.length == 1, "Expected length to be 1");
+    // // chars[i / 2] = newChars[0];
+    // System.out.println("HIGHER BYTE:" + Integer.toHexString(higherByte));
+    // System.out.println("LOWER BYTE:" + Integer.toHexString(lowerByte));
+    // System.out.println("FULL INT: " + Integer.toHexString((higherByte | lowerByte)));
+    // chars[i / 2] = (char) (higherByte | lowerByte);
+    // // for (char aChar : newChars) {
+    // // chars.add(aChar);
+    // // }
+    //
+    // // chars[i / 2] = (char) (higherByte | lowerByte);
+    // }
+    //
+    // return chars;
+    // }
 
     // @Override
     // public String toContentString() {
