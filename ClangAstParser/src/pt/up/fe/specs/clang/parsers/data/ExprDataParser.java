@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
+import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.UnresolvedLookupExpr;
@@ -58,6 +59,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.PredefinedIdType;
+import pt.up.fe.specs.clava.ast.expr.enums.StringKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -133,6 +135,9 @@ public class ExprDataParser {
     public static DataStore parseStringLiteralData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseLiteralData(lines, dataStore);
 
+        data.add(StringLiteral.STRING_KIND, LineStreamParsers.enumFromName(StringKind.class, lines));
+        data.add(StringLiteral.STRING_BYTES,
+                LineStreamParsers.list(lines, lineStream -> Integer.valueOf(lineStream.nextLine())));
         // data.add(StringLiteral.STRING, ClavaDataParsers.literalSource(lines));
 
         return data;
