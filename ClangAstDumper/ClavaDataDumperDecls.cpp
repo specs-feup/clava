@@ -41,6 +41,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"NamespaceAliasDecl",                     clava::DeclNode::NAMESPACE_ALIAS_DECL},
         {"LinkageSpecDecl",                        clava::DeclNode::LINKAGE_SPEC_DECL},
         {"LabelDecl",                              clava::DeclNode::NAMED_DECL},
+        {"StaticAssertDecl",                       clava::DeclNode::STATIC_ASSERT_DECL},
 
 };
 
@@ -132,6 +133,9 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             break;
         case clava::DeclNode::LINKAGE_SPEC_DECL:
             DumpLinkageSpecDeclData(static_cast<const LinkageSpecDecl *>(D));
+            break;
+        case clava::DeclNode::STATIC_ASSERT_DECL:
+            DumpStaticAssertDeclData(static_cast<const StaticAssertDecl *>(D));
             break;
         default:
             throw std::invalid_argument(
@@ -558,5 +562,17 @@ void clava::ClavaDataDumper::DumpLinkageSpecDeclData(const LinkageSpecDecl *D) {
                     "ClangDataDumper::DumpLinkageSpecDeclData():: Case not implemented, '" + std::to_string(D->getLanguage()) + "'");
     }
     //clava::dump(clava::getSource(Context, D->getQualifierLoc().getSourceRange()));
+}
+
+void clava::ClavaDataDumper::DumpStaticAssertDeclData(const StaticAssertDecl *D) {
+
+    // Hierarchy
+    DumpDeclData(D);
+
+    //clava::dump(clava::getId(D->getAssertExpr(), id));
+    //clava::dump(clava::getId(D->getMessage(), id));
+
+    //clava::dump([&D](llvm::raw_string_ostream& stream){D->getMessage()->dump(stream);});
+    clava::dump(D->isFailed());
 }
 

@@ -417,6 +417,9 @@ void dump(Consumer<Stream> consumer) {
 
 void clava::dump(std::function<void(llvm::raw_string_ostream&)> dumper) {
 
+    // Example of call to this function:
+    // clava::dump([&T](llvm::raw_string_ostream& stream){T->getTemplateName().dump(stream);});
+
     std::string string;
     llvm::raw_string_ostream stream(string);
     dumper(stream);

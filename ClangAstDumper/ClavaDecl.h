@@ -44,6 +44,7 @@ namespace clava {
         NAMESPACE_ALIAS_DECL,
         LINKAGE_SPEC_DECL,
         LABEL_DECL,
+        STATIC_ASSERT_DECL,
     };
 
     const std::string getName(const DeclNode D);

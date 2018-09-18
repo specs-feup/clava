@@ -38,6 +38,7 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::NAMESPACE_ALIAS_DECL: return "NamespaceAliasDecl";
         case clava::DeclNode::LINKAGE_SPEC_DECL: return "LinkageSpecDecl";
         case clava::DeclNode::LABEL_DECL: return "LabelDecl";
+        case clava::DeclNode::STATIC_ASSERT_DECL: return "StaticAssertDecl";
 
 
         default: {

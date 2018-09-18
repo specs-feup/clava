@@ -39,6 +39,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"FriendDecl", clava::DeclNode::FRIEND_DECL},
         {"NamespaceAliasDecl", clava::DeclNode::NAMESPACE_ALIAS_DECL},
         {"LinkageSpecDecl", clava::DeclNode::LINKAGE_SPEC_DECL},
+        {"StaticAssertDecl", clava::DeclNode::STATIC_ASSERT_DECL},
 
 
 
@@ -108,6 +109,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitNamespaceAliasDeclChildren(static_cast<const NamespaceAliasDecl *>(D), visitedChildren); break;
         case clava::DeclNode::LINKAGE_SPEC_DECL:
             VisitLinkageSpecDeclChildren(static_cast<const LinkageSpecDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::STATIC_ASSERT_DECL:
+            VisitStaticAssertDeclChildren(static_cast<const StaticAssertDecl *>(D), visitedChildren); break;
 
 
 
@@ -577,4 +580,13 @@ void ClangAstDumper::VisitLinkageSpecDeclChildren(const LinkageSpecDecl *D, std:
     //VisitDeclChildren(D, children);
 
     addChildren(D->decls(), children);
+}
+
+void ClangAstDumper::VisitStaticAssertDeclChildren(const StaticAssertDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    //VisitDeclChildren(D, children);
+
+    addChild(D->getAssertExpr(), children);
+    addChild(D->getMessage(), children);
+    //VisitStmtTop(D->getAssertExpr());
 }
