@@ -41,6 +41,9 @@ int main() {
     xceref[2] = 0.1011551749967e+01;
     xceref[3] = 0.9235878729944e+00;
     xceref[4] = 0.1018045837718e+02;
-	
+
+	auto stringLiteral = "A string literal with escape characters: \n \t";
+	auto rawStringLiteral = R"(splot "-" u 1:2:3 with points ls 3 title "Ligand"\)";
+	auto wideStringLiteral = L"wide string literal";
 	return 0;
 }
