@@ -43,7 +43,13 @@ int main() {
     xceref[4] = 0.1018045837718e+02;
 
 	auto stringLiteral = "A string literal with escape characters: \n \t";
+	auto wideStringLiteral = L"Wide literal: ç";
+	auto utf8StringLiteral = u8"UTF-8 literal: ç";
+	auto utf16StringLiteral = u"UTF-16 literal: ç";
 	auto rawStringLiteral = R"(splot "-" u 1:2:3 with points ls 3 title "Ligand"\)";
-	auto wideStringLiteral = L"wide string literal";
+	auto rawWideStringLiteral = LR"("Wide" Raw String)";
+	auto rawUtf8StringLiteral = u8R"("UTF-8" Raw String)";
+	auto rawUtf16StringLiteral = uR"("UTF-16" Raw String)";
+	//auto rawUtf32StringLiteral = UR"("UTF-32" Raw String)";
 	return 0;
 }
