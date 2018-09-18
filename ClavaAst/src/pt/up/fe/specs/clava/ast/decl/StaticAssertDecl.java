@@ -15,20 +15,54 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 
 /**
- * Represents a C++11 static_assert declaration.
+ * A C++11 static_assert declaration.
  * 
  * @author JoaoBispo
  *
  */
 public class StaticAssertDecl extends Decl {
 
+    /// DATAKEYS BEGIN
+
+    // public final static DataKey<Expr> ASSERT_EXPR = KeyFactory.object("assertExpr", Expr.class);
+
+    // public final static DataKey<String> MESSAGE = KeyFactory.string("message");
+
+    public final static DataKey<Boolean> IS_FAILED = KeyFactory.bool("isFailed");
+
+    /// DATAKEYS END
+
     public StaticAssertDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
+    public Expr getAssertExpr() {
+        return getChild(Expr.class, 0);
+    }
+
+    public StringLiteral getMessage() {
+        return getChild(StringLiteral.class, 1);
+    }
+
+    @Override
+    public String getCode() {
+        StringBuilder code = new StringBuilder();
+
+        code.append("static_assert(");
+        code.append(getAssertExpr().getCode());
+        code.append(", ");
+        code.append(getMessage().getCode());
+        code.append(")");
+
+        return code.toString();
+    }
 }
