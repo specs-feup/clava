@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.StaticAssertDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
@@ -383,5 +384,22 @@ public class DeclDataParser {
 
         return data;
     }
+
+    public static DataStore parseStaticAssertDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseDeclData(lines, dataStore);
+
+        // dataStore.getClavaNodes().queueSetNode(data, StaticAssertDecl.ASSERT_EXPR, lines.nextLine());
+        // data.add(StaticAssertDecl.MESSAGE, lines.nextLine());
+        data.add(StaticAssertDecl.IS_FAILED, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    // public final static DataKey<Expr> ASSERT_EXPR = KeyFactory.object("assertExpr", Expr.class);
+    //
+    // public final static DataKey<String> MESSAGE = KeyFactory.string("message");
+    //
+    // public final static DataKey<Boolean> IS_FAILED = KeyFactory.bool("isFailed");
 
 }

@@ -20,16 +20,16 @@ import java.util.Set;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
+import pt.up.fe.specs.clava.ast.decl.StaticAssertDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
@@ -42,11 +42,12 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 public class CreateDeclStmts implements SimplePostClavaRule {
 
     // Create statements for the following Decls
-    private static final Set<Class<? extends NamedDecl>> DECL_CLASSES = new HashSet<>(Arrays.asList(
+    private static final Set<Class<? extends Decl>> DECL_CLASSES = new HashSet<>(Arrays.asList(
             VarDecl.class,
             TypedefDecl.class,
             UsingDirectiveDecl.class,
-            NamespaceAliasDecl.class));
+            NamespaceAliasDecl.class,
+            StaticAssertDecl.class));
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
@@ -85,8 +86,8 @@ public class CreateDeclStmts implements SimplePostClavaRule {
 
             if (DECL_CLASSES.contains(child.getClass())) {
                 // Nodes on the set are NamedDecls
-                SpecsCheck.checkArgument(child instanceof NamedDecl,
-                        () -> "Expected child to be a NamedDecl: " + child);
+                // SpecsCheck.checkArgument(child instanceof NamedDecl,
+                // () -> "Expected child to be a NamedDecl: " + child);
                 // NamedDecl namedDecl = (NamedDecl) child;
 
                 // System.out.println("PARENT:" + child.getParent());
