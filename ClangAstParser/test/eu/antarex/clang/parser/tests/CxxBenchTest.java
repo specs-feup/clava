@@ -67,4 +67,8 @@ public class CxxBenchTest {
         new CxxTester("bench/pair_hash.cpp", "bench/pair_hash.h").test();
     }
 
+    @Test
+    public void testMiniLogger() {
+        new CxxTester("bench/mini_logger.hpp").test();
+    }
 }

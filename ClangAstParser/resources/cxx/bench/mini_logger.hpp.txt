@@ -1,0 +1,48 @@
+#ifndef _MINI_LOGGER_HPP_
+#define _MINI_LOGGER_HPP_
+
+#include <cstdio>
+#include <fstream>
+#include <iomanip>
+#include <string>
+
+struct my_logger_t {
+   std::filebuf log_file;
+   std::ostream out_stream{nullptr};
+   my_logger_t(std::string const& file_name) {
+      this->log_file.open(file_name, std::ios::out);
+      this->out_stream.rdbuf(&this->log_file);
+   }
+   
+   ~my_logger_t() throw() {
+      this->log_file.close();
+   }
+   
+   template <class... Ys>
+   inline void operator()(Ys const ... fields) {
+      print(fields...);
+      this->endl();
+   }
+   
+   
+   
+   private:
+   template <class T, class... Ys>
+   inline void print(T const what, Ys const ... remainder) {
+      print(what);
+      print<Ys...>(remainder...);
+   }
+   
+   template <class T>
+   inline void print(T const what) {
+      this->out_stream << std::left << std::setw(20) << std::setfill(' ') << what;
+   }
+   
+   inline void endl() {
+      this->out_stream << std::endl;
+   }
+   
+   
+};
+
+#endif
