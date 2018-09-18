@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.StringKind;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -79,6 +80,12 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getCode() {
+        String string = getString();
+
+        if (string == null) {
+            return getLiteral();
+        }
+
         // Build the string from the bytes
         // System.out.println("STRING LITRAL:" + getString());
         // return getLiteral();
@@ -86,7 +93,7 @@ public class StringLiteral extends Literal {
 
         code.append(get(STRING_KIND).getPrefix());
         code.append("\"");
-        code.append(getString());
+        code.append(string);
         code.append("\"");
 
         return code.toString();
@@ -98,8 +105,21 @@ public class StringLiteral extends Literal {
         // return "\"" + SpecsStrings.escapeJson(getStringContents()) + "\"";
     }
 
+    /**
+     * The string, built from the original bytes.
+     * 
+     * <p>
+     * TODO: UTF prefixes not supported yet, will return null for those cases. Use getLiteral() instead.
+     * 
+     * @return
+     */
     public String getString() {
-        return SpecsStrings.escapeJson(getStringUnescaped());
+        String unescapedString = SpecsStrings.escapeJson(getStringUnescaped());
+        if (unescapedString == null) {
+            return null;
+        }
+
+        return unescapedString;
     }
 
     private String getStringUnescaped() {
@@ -109,7 +129,10 @@ public class StringLiteral extends Literal {
         case WIDE:
             return new String(getBytesAsWideChars());
         default:
-            throw new RuntimeException("String literals of kind '" + get(STRING_KIND) + "' not implemented yet");
+            ClavaLog.debug("String literals of kind '" + get(STRING_KIND)
+                    + "' not properly implemented yet, using Clang literal");
+            return null;
+        // throw new RuntimeException("String literals of kind '" + get(STRING_KIND) + "' not implemented yet");
         }
     }
 
