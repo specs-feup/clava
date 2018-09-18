@@ -304,6 +304,8 @@ void clava::ClavaDataDumper::DumpStringLiteralData(const StringLiteral *E) {
     DumpLiteralData(E);
 
     clava::dump(clava::STRING_KIND[E->getKind()]);
+    clava::dump(E->getLength());
+    clava::dump(E->getCharByteWidth());
     //clava::dump(E->getBytes().str());
 
     clava::dump(E->getByteLength());

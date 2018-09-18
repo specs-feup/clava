@@ -136,8 +136,11 @@ public class ExprDataParser {
         DataStore data = parseLiteralData(lines, dataStore);
 
         data.add(StringLiteral.STRING_KIND, LineStreamParsers.enumFromName(StringKind.class, lines));
+        data.add(StringLiteral.LENGTH, LineStreamParsers.longInt(lines));
+        data.add(StringLiteral.CHAR_BYTE_WIDTH, LineStreamParsers.integer(lines));
+
         data.add(StringLiteral.STRING_BYTES,
-                LineStreamParsers.list(lines, lineStream -> Integer.valueOf(lineStream.nextLine())));
+                LineStreamParsers.list(lines, lineStream -> Short.valueOf(lineStream.nextLine())));
         // data.add(StringLiteral.STRING, ClavaDataParsers.literalSource(lines));
 
         return data;

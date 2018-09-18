@@ -90,7 +90,6 @@ public class CxxTest {
     @Test
     public void testLiterals() {
         new CxxTester("literals.cpp")
-                .showClavaAst()
                 .addFlags("-std=c++14")
                 .test();
     }
