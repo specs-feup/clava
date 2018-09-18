@@ -563,4 +563,12 @@ extern const std::string clava::PREDEFINED_ID_TYPE[]{
         "PRETTY_FUNCTION_NO_VIRTUAL"
 };
 
+extern const std::string clava::STRING_KIND[]{
+        "ASCII",
+        "WIDE",
+        "UTF8",
+        "UTF16",
+        "UTF32"
+};
+
 //const std::string BUILTIN_KIND[] {};
