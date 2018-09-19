@@ -207,9 +207,9 @@ public class CxxTest {
         new CxxTester("friend.cpp").test();
     }
 
-    @Test
-    public void testBoost() {
-        new CxxTester("boost.cpp").test();
-    }
+    // @Test
+    // public void testBoost() {
+    // new CxxTester("boost.cpp").test();
+    // }
 
 }
