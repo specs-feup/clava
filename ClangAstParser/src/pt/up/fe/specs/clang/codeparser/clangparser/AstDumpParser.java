@@ -23,7 +23,6 @@ import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
-import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
@@ -75,21 +74,28 @@ public class AstDumpParser implements ClangParser {
     private final List<File> workingFolders;
     private File lastWorkingFolder;
     private File baseFolder;
-    private boolean usePlatformLibc;
+    // private boolean usePlatformLibc;
+    private File clangExecutable;
+    private List<String> builtinIncludes;
 
-    public AstDumpParser() {
-        this(false, false, true);
-    }
+    // public AstDumpParser() {
+    // this(false, false, true);
+    // }
 
-    public AstDumpParser(boolean dumpStdOut, boolean useCustomResources, boolean streamConsoleOutput) {
+    public AstDumpParser(boolean dumpStdOut, boolean useCustomResources, boolean streamConsoleOutput,
+            File clangExecutable, List<String> builtinIncludes) {
         this.currentId = 0;
         this.dumpStdOut = dumpStdOut;
         this.useCustomResources = useCustomResources;
         this.streamConsoleOutput = streamConsoleOutput;
+
+        this.clangExecutable = clangExecutable;
+        this.builtinIncludes = builtinIncludes;
+
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
         this.baseFolder = null;
-        this.usePlatformLibc = false;
+        // this.usePlatformLibc = false;
         // context = new ClavaContext();
     }
 
@@ -136,17 +142,17 @@ public class AstDumpParser implements ClangParser {
     @Override
     public TranslationUnit parse(File sourceFile, Standard standard, DataStore config) {
         // Create instance of ClangAstParser
-        ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
+        // ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
 
         DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.getLocalOptionsFile(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
         // Get version for the executable
-        String version = config.get(ClangAstKeys.CLANGAST_VERSION);
+        // String version = config.get(ClangAstKeys.CLANGAST_VERSION);
         // boolean usePlatformIncludes = config.get(ClangAstKeys.USE_PLATFORM_INCLUDES);
 
         // Copy resources
-        File clangExecutable = clangAstParser.prepareResources(version);
+        // File clangExecutable = clangAstParser.prepareResources(version);
 
         List<String> arguments = new ArrayList<>();
         arguments.add(clangExecutable.getAbsolutePath());
@@ -176,7 +182,8 @@ public class AstDumpParser implements ClangParser {
         // Add includes bundled with program
         // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
         // if (Platforms.isWindows()) {
-        systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
+        // systemIncludes.addAll(clangAstParser.prepareIncludes(clangExecutable, usePlatformLibc));
+        systemIncludes.addAll(builtinIncludes);
         // }
 
         // Add custom includes
@@ -578,11 +585,11 @@ public class AstDumpParser implements ClangParser {
         return clangDump.toString();
     }
 
-    @Override
-    public ClangParser setUsePlatformLibc(boolean usePlatformLibc) {
-        this.usePlatformLibc = usePlatformLibc;
-
-        return this;
-    }
+    // @Override
+    // public ClangParser setUsePlatformLibc(boolean usePlatformLibc) {
+    // this.usePlatformLibc = usePlatformLibc;
+    //
+    // return this;
+    // }
 
 }

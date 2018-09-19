@@ -30,6 +30,6 @@ public interface ClangParser {
 
     ClangParser setBaseFolder(File baseFolder);
 
-    ClangParser setUsePlatformLibc(boolean usePlatformLibc);
+    // ClangParser setUsePlatformLibc(boolean usePlatformLibc);
 
 }

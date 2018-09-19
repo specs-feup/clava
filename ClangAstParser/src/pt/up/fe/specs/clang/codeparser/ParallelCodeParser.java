@@ -30,6 +30,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
@@ -101,6 +102,16 @@ public class ParallelCodeParser extends CodeParser {
         // Standard standard = getStandard(allUserSources.values(), options);
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
 
+        // Get version for the executable
+        String version = options.get(ClangAstKeys.CLANGAST_VERSION);
+
+        // Prepare resources before execution
+        ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
+        File clangExecutable = clangResources.prepareResources(version);
+
+        List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
+                get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+
         ClavaLog.info("Found " + sources.size() + " source files");
         ClavaLog.debug("Files to parse:" + sources);
 
@@ -118,7 +129,7 @@ public class ParallelCodeParser extends CodeParser {
         // .collect(Collectors.toList());
         List<TranslationUnit> tUnits = SpecsCollections.getStream(sources, get(PARALLEL_PARSING))
                 .map(sourceFile -> parseSource(sourceFile, standard, options, clangDump,
-                        counter, parsingFolder))
+                        counter, parsingFolder, clangExecutable, builtinIncludes))
                 .collect(Collectors.toList());
 
         // // Sort translation units
@@ -281,7 +292,8 @@ public class ParallelCodeParser extends CodeParser {
     }
 
     private TranslationUnit parseSource(File sourceFile, Standard standard, DataStore options,
-            ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder) {
+            ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
+            File clangExecutable, List<String> builtinIncludes) {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
         // Adapt compiler options according to the file
@@ -291,9 +303,9 @@ public class ParallelCodeParser extends CodeParser {
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
         ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
-                streamConsoleOutput)
-                        .setBaseFolder(parsingFolder)
-                        .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+                streamConsoleOutput, clangExecutable, builtinIncludes)
+                        .setBaseFolder(parsingFolder);
+        // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);
         // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");

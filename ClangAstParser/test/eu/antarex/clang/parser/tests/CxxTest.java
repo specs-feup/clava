@@ -39,7 +39,7 @@ public class CxxTest {
 
     @Test
     public void testCharacter() {
-        new CxxTester("character.cpp").onePass().test();
+        new CxxTester("character.cpp").test();
     }
 
     @Test
