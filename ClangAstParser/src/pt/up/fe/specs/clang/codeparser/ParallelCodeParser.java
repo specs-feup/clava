@@ -195,6 +195,9 @@ public class ParallelCodeParser extends CodeParser {
 
         App app = LegacyToDataStore.getFactory().app(tUnits);
 
+        // Add App to context
+        app.getContext().set(ClavaContext.APP, app);
+
         app.setSourcesFromStrings(allSources);
         app.addConfig(ClavaOptions.toDataStore(compilerOptions));
 

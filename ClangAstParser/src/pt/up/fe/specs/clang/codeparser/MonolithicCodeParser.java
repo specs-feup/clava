@@ -36,9 +36,10 @@ import pt.up.fe.specs.util.SpecsSystem;
  * TODO: Make this class extend ACodeParser
  * 
  * @author JoaoBispo
- *
+ * @deprecated Use ParallelCodeParser instead (parallelism can be disabled)
  */
 // public class MonolithicCodeParser extends ACodeParser {
+@Deprecated
 public class MonolithicCodeParser extends CodeParser {
 
     private static final boolean ONLY_NEW_PARSE_METHOD = false;
