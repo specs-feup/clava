@@ -161,23 +161,29 @@ public class CallExpr extends Expr {
         // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
         // return Optional.empty();
         // }
-        Optional<FunctionDecl> functionDecl = getFunctionDecl();
+        // Optional<FunctionDecl> functionDecl = getFunctionDecl();
 
-        if (!functionDecl.isPresent()) {
-            return Optional.empty();
-        }
-
-        // If no body, return immediately
-        if (!functionDecl.get().hasBody()) {
-            // return Optional.of(functionDecl);
-            return functionDecl;
-        }
-
-        // Search for the declaration
-        return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
-                functionDecl.get().getFunctionType()));
+        return getFunctionDecl().flatMap(FunctionDecl::getDeclaration);
+        // if (!functionDecl.isPresent()) {
+        // return Optional.empty();
+        // }
+        //
+        // // If no body, return immediately
+        // if (!functionDecl.get().hasBody()) {
+        // // return Optional.of(functionDecl);
+        // return functionDecl;
+        // }
+        //
+        // // Search for the declaration
+        // return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
+        // functionDecl.get().getFunctionType()));
     }
 
+    /**
+     * The FunctionDecl as given by Clang. Usually it is the first that appears in the code.
+     * 
+     * @return
+     */
     public Optional<FunctionDecl> getFunctionDecl() {
         // TODO: Replace with get(DIRECT_CALLEE) when refactoring to new format is complete
         return get(DIRECT_CALLEE);
@@ -245,20 +251,22 @@ public class CallExpr extends Expr {
      * @return the definition of this function call, if present
      */
     public Optional<FunctionDecl> getDefinition() {
-        Optional<FunctionDecl> functionDecl = getFunctionDecl();
+        // Optional<FunctionDecl> functionDecl = getFunctionDecl();
 
-        if (!functionDecl.isPresent()) {
-            return Optional.empty();
-        }
-
-        // If has body, return immediately
-        if (functionDecl.get().hasBody()) {
-            // return Optional.of(functionDecl);
-            return functionDecl;
-        }
-
-        // Search for the definition
-        return getApp().getFunctionDefinition(functionDecl.get().getDeclName(), functionDecl.get().getFunctionType());
+        return getFunctionDecl().flatMap(FunctionDecl::getDefinition);
+        // if (!functionDecl.isPresent()) {
+        // return Optional.empty();
+        // }
+        //
+        // // If has body, return immediately
+        // if (functionDecl.get().hasBody()) {
+        // // return Optional.of(functionDecl);
+        // return functionDecl;
+        // }
+        //
+        // // Search for the definition
+        // return getApp().getFunctionDefinition(functionDecl.get().getDeclName(),
+        // functionDecl.get().getFunctionType());
     }
 
     /**

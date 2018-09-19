@@ -26,9 +26,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
@@ -41,9 +39,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
-import pt.up.fe.specs.util.lazy.Lazy;
 
 /**
  * Represents a function declaration or definition.
@@ -115,9 +111,8 @@ public class FunctionDecl extends DeclaratorDecl {
 
     // private final FunctionDeclData functionDeclData;
 
-    // TODO: Remove
-    private Lazy<FunctionDecl> declaration;
-    private Lazy<FunctionDecl> definition;
+    // private Lazy<FunctionDecl> declaration;
+    // private Lazy<FunctionDecl> definition;
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
     // prevents direct transformations in the tree (e.g., if we remove a parameter, the value needs to be updated)
     // Solutions:
@@ -141,8 +136,8 @@ public class FunctionDecl extends DeclaratorDecl {
     public FunctionDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
         // this.functionDeclData = null;
-        this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
-        this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
+        // this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
+        // this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
 
         // SpecsLogs.debug("FUNCTION DECL CHILDREN:" + children);
         // System.out.println("CREATING FUNCTION DECL WITH ID " + get(ID) + ", hash " + hashCode());
@@ -222,16 +217,12 @@ public class FunctionDecl extends DeclaratorDecl {
         return getFunctionType().getReturnType();
     }
 
-    /**
-     * @deprecated to remove
-     * @return
-     */
-    @Deprecated
-    protected FunctionDeclData getFunctionDeclData() {
-        return DataStoreToLegacy.getFunctionDecl(getData());
-
-        // return functionDeclData;
-    }
+    // @Deprecated
+    // protected FunctionDeclData getFunctionDeclData() {
+    // return DataStoreToLegacy.getFunctionDecl(getData());
+    //
+    // // return functionDeclData;
+    // }
 
     public boolean isInline() {
         return get(IS_INLINE);
@@ -308,56 +299,79 @@ public class FunctionDecl extends DeclaratorDecl {
      * @return the node representing the declaration of this function, if it exists
      */
     public Optional<FunctionDecl> getDeclaration() {
-        // If no body, this node already is the declaration
+
+        // If no body, return immediately
         if (!hasBody()) {
             return Optional.of(this);
         }
 
-        // Get 'cached' value
-        return Optional.ofNullable(declaration.get());
+        // Search for the declaration
+        return getAppTry().flatMap(app -> app.getFunctionDeclaration(getDeclName(), getFunctionType()));
+
+        // // If no body, this node already is the declaration
+        // if (!hasBody()) {
+        // return Optional.of(this);
+        // }
+        //
+        // // Get 'cached' value
+        // return Optional.ofNullable(declaration.get());
     }
 
     /**
      * The function declaration corresponding to the definition of the function represented by this node.
      * 
+     * @deprecated use .getDefinition() instead
      * @return
      */
+    @Deprecated
     public Optional<FunctionDecl> getDefinitionDeclaration() {
-        // If has body, this node is already the definition
+        return getDefinition();
+        // // If has body, this node is already the definition
+        // if (hasBody()) {
+        // return Optional.of(this);
+        // }
+        //
+        // // Get 'cached' value
+        // return Optional.ofNullable(definition.get());
+    }
+
+    public Optional<FunctionDecl> getDefinition() {
+
+        // If has body, return immediately
         if (hasBody()) {
             return Optional.of(this);
         }
 
-        // Get 'cached' value
-        return Optional.ofNullable(definition.get());
+        // Search for the definition
+        return getApp().getFunctionDefinition(getDeclName(), getFunctionType());
     }
 
     // private FunctionDecl findDeclaration() {
     //
     // }
 
-    private FunctionDecl findDeclOrDef(boolean findDecl) {
-        App app = getAppTry().orElse(null);
-
-        if (app == null) {
-            return null;
-        }
-
-        // Find function declarations with the same name and the same signature
-        List<FunctionDecl> decls = getApp().getDescendantsStream()
-                .filter(FunctionDecl.class::isInstance)
-                .map(FunctionDecl.class::cast)
-                .filter(fdecl -> findDecl ? !fdecl.hasBody() : fdecl.hasBody())
-                .filter(fdecl -> fdecl.getDeclName().equals(getDeclName()))
-                .filter(fdecl -> fdecl.getDeclarationId(false).equals(getDeclarationId(false)))
-                .collect(Collectors.toList());
-
-        if (decls.size() > 1) {
-            SpecsLogs.msgInfo("getDeclaration(): Found more than one declaration for function at " + getLocation());
-        }
-
-        return !decls.isEmpty() ? decls.get(0) : null;
-    }
+    // private FunctionDecl findDeclOrDef(boolean findDecl) {
+    // App app = getAppTry().orElse(null);
+    //
+    // if (app == null) {
+    // return null;
+    // }
+    //
+    // // Find function declarations with the same name and the same signature
+    // List<FunctionDecl> decls = getApp().getDescendantsStream()
+    // .filter(FunctionDecl.class::isInstance)
+    // .map(FunctionDecl.class::cast)
+    // .filter(fdecl -> findDecl ? !fdecl.hasBody() : fdecl.hasBody())
+    // .filter(fdecl -> fdecl.getDeclName().equals(getDeclName()))
+    // .filter(fdecl -> fdecl.getDeclarationId(false).equals(getDeclarationId(false)))
+    // .collect(Collectors.toList());
+    //
+    // if (decls.size() > 1) {
+    // SpecsLogs.msgInfo("getDeclaration(): Found more than one declaration for function at " + getLocation());
+    // }
+    //
+    // return !decls.isEmpty() ? decls.get(0) : null;
+    // }
 
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
@@ -561,11 +575,11 @@ public class FunctionDecl extends DeclaratorDecl {
      * @param original
      * @param tentative
      */
-    private void testAndSetCallName(CallExpr call, String newName) {
-        if (isCorrespondingCall(call)) {
-            call.setCallName(newName);
-        }
-    }
+    // private void testAndSetCallName(CallExpr call, String newName) {
+    // if (isCorrespondingCall(call)) {
+    // call.setCallName(newName);
+    // }
+    // }
 
     private boolean isCorrespondingCall(CallExpr call) {
         // If declaration exists, declaration of call must exist too, if call refers to this function
