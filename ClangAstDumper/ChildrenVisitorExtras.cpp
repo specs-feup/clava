@@ -25,6 +25,9 @@ void ClangAstDumper::VisitTemplateArgChildren(const TemplateArgument& templateAr
         case TemplateArgument::ArgKind::Integral:
             // Do nothing
             break;
+        case TemplateArgument::ArgKind::Template:
+            // Do nothing
+            break;
         default: throw std::invalid_argument("ClangAstDumper::VisitTemplateArgChildren(const TemplateArgument&): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
     }
 }

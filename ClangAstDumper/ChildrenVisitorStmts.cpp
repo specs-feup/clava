@@ -332,6 +332,13 @@ void ClangAstDumper::VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<
     VisitExprChildren(E, children);
 
     VisitDeclTop(E->getDecl());
+
+    auto templateArgs = E->getTemplateArgs();
+    for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+        auto templateArg = templateArgs + i;
+        VisitTemplateArgument(templateArg->getArgument());
+    }
+
     // Visit decl
     //VisitDeclTop(E->getDecl());
     //children.push_back(clava::getId(E->getDecl(), id));

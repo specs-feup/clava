@@ -571,4 +571,16 @@ extern const std::string clava::STRING_KIND[]{
         "UTF32"
 };
 
+
+extern const std::string clava::TEMPLATE_NAME_KIND[]{
+        "Template",
+        "OverloadedTemplate",
+        "QualifiedTemplate",
+        "DependentTemplate",
+        "SubstTemplateTemplateParm",
+        "SubstTemplateTemplateParmPack"
+};
+
+
+
 //const std::string BUILTIN_KIND[] {};

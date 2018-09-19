@@ -390,6 +390,9 @@ void clava::dump(const TemplateArgument &templateArg, int id) {
 //    const std::string source = getSource(E);
 //    clava::dump(source);
             break;
+        case TemplateArgument::ArgKind::Template:
+            clava::dump(clava::TEMPLATE_NAME_KIND[templateArg.getAsTemplate().getKind()]);
+            break;
         default:
             throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '" +
                                         clava::TEMPLATE_ARG_KIND[templateArg.getKind()] + "'");
