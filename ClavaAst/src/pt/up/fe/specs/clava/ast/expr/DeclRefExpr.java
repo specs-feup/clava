@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.language.CXXOperator;
@@ -51,8 +52,11 @@ public class DeclRefExpr extends Expr implements Nameable {
      */
     public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
 
-    public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
-            .generic("templateArguments", (List<String>) new ArrayList<String>())
+    // public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
+    // .generic("templateArguments", (List<String>) new ArrayList<String>())
+    // .setDefault(() -> new ArrayList<>());
+    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
+            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>())
             .setDefault(() -> new ArrayList<>());
 
     // public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
@@ -165,9 +169,11 @@ public class DeclRefExpr extends Expr implements Nameable {
         String refNameSuffix = "";
 
         // Check if it has template arguments
-        List<String> templateArguments = get(TEMPLATE_ARGUMENTS);
+        List<TemplateArgument> templateArguments = get(TEMPLATE_ARGUMENTS);
         if (!templateArguments.isEmpty()) {
-            String templateArgs = templateArguments.stream().collect(Collectors.joining(", "));
+            String templateArgs = templateArguments.stream()
+                    .map(templateArg -> templateArg.getCode(this))
+                    .collect(Collectors.joining(", "));
 
             refNameSuffix = "<" + templateArgs + ">";
         }

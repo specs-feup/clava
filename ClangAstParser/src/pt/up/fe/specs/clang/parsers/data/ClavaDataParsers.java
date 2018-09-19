@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentIntegral;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfArray;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
@@ -44,6 +45,7 @@ import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
+import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -251,6 +253,12 @@ public class ClavaDataParsers {
             TemplateArgumentIntegral integral = new TemplateArgumentIntegral();
             integral.set(TemplateArgumentIntegral.INTEGRAL, LineStreamParsers.integer(lines));
             return integral;
+        case Template:
+            TemplateArgumentTemplate template = new TemplateArgumentTemplate();
+            template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND,
+                    LineStreamParsers.enumFromName(TemplateNameKind.class, lines));
+            return template;
+
         default:
             throw new NotImplementedException(kind);
         }

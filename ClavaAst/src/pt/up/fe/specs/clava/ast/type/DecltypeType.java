@@ -51,6 +51,12 @@ public class DecltypeType extends Type {
         return getChild(Expr.class, 0);
     }
 
+    // @Override
+    // public String getCode() {
+    // System.out.println("DECLTYPE CODE:" + super.getCode());
+    // return super.getCode();
+    // }
+
     // public Type getUnderlyingType() {
     // return getChild(Type.class, 1);
     // }
