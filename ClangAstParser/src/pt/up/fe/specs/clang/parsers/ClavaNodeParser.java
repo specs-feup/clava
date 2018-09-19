@@ -24,7 +24,6 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.streamparserv2.ClassesService;
 import pt.up.fe.specs.clang.utils.ChildrenAdapter;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
@@ -32,6 +31,7 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -301,8 +301,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
             DataStore nodeData,
             Class<? extends ClavaNode> clavaNodeClass) {
         // Get constructor based on DataStore
-        BiFunction<DataStore, List<ClavaNode>, ClavaNode> dataStoreBuilder = classesService
-                .getDataStoreBuilder(clavaNodeClass);
+        BiFunction<DataStore, List<? extends ClavaNode>, ClavaNode> dataStoreBuilder = classesService
+                .getClavaNodeBuilder(clavaNodeClass);
 
         if (dataStoreBuilder != null) {
             // Build node based on data and children

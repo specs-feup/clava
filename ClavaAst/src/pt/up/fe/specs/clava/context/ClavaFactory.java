@@ -31,7 +31,9 @@ import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.DummyNode;
 import pt.up.fe.specs.clava.ast.LiteralNode;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.DummyAttr;
+import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -74,6 +76,7 @@ import pt.up.fe.specs.clava.ast.omp.SimpleOmpPragma;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClause;
 import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind;
 import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
+import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -101,7 +104,9 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.classmap.ClassMap;
 
 /**
  * Factory methods for ClavaNodes that use the DataStore format.
@@ -129,8 +134,21 @@ public class ClavaFactory {
     private static final String PRAGMA_ID_PREFIX = "pragma_";
     private static final String COMMENT_ID_PREFIX = "comment_";
 
+    private static final ClassMap<ClavaNode, String> PREFIX_MAP;
+    static {
+        PREFIX_MAP = new ClassMap<>(EXTRA_ID_PREFIX);
+        PREFIX_MAP.put(Type.class, TYPE_ID_PREFIX);
+        PREFIX_MAP.put(Expr.class, EXPR_ID_PREFIX);
+        PREFIX_MAP.put(Decl.class, DECL_ID_PREFIX);
+        PREFIX_MAP.put(Stmt.class, STMT_ID_PREFIX);
+        PREFIX_MAP.put(Attribute.class, ATTR_ID_PREFIX);
+        PREFIX_MAP.put(Pragma.class, PRAGMA_ID_PREFIX);
+        PREFIX_MAP.put(Comment.class, COMMENT_ID_PREFIX);
+    }
+
     private final ClavaContext context;
     private final DataStore baseData;
+    private final ClassesService classesService;
 
     public ClavaFactory(ClavaContext context) {
         this(context, null);
@@ -139,6 +157,7 @@ public class ClavaFactory {
     public ClavaFactory(ClavaContext context, DataStore baseData) {
         this.context = context;
         this.baseData = baseData;
+        this.classesService = new ClassesService();
     }
 
     public DataStore newDataStore(String idPrefix) {
@@ -202,6 +221,14 @@ public class ClavaFactory {
         TranslationUnit.setDataStore(sourceFile, data);
 
         return new TranslationUnit(data, declarations);
+    }
+
+    public <T extends ClavaNode> T node(Class<T> nodeClass, List<? extends ClavaNode> children) {
+        // Get the correct prefix for the given class
+        String prefix = PREFIX_MAP.get(nodeClass);
+        DataStore data = newDataStore(prefix);
+
+        return nodeClass.cast(classesService.getClavaNodeBuilder(nodeClass).apply(data, children));
     }
 
     /// TYPES

@@ -15,12 +15,12 @@ package pt.up.fe.specs.clang.version;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.streamparserv2.ClassesService;
-import pt.up.fe.specs.clang.streamparserv2.CustomClassnameMapper;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
+import pt.up.fe.specs.clava.utils.ClassesService;
+import pt.up.fe.specs.clava.utils.CustomClassnameMapper;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 public class Clang_3_8 {

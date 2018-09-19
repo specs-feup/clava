@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.streamparserv2;
+package pt.up.fe.specs.clava.utils;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
@@ -121,7 +121,7 @@ public class ClassesService {
         return CLAVA_AST_PACKAGE + ".expr." + nodeClassname;
     }
 
-    public BiFunction<DataStore, List<ClavaNode>, ClavaNode> getDataStoreBuilder(
+    public BiFunction<DataStore, List<? extends ClavaNode>, ClavaNode> getClavaNodeBuilder(
             Class<? extends ClavaNode> clavaNodeClass) {
 
         // Create builder
