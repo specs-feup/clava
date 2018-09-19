@@ -343,7 +343,7 @@ public class FunctionDecl extends DeclaratorDecl {
         }
 
         // Search for the definition
-        return getApp().getFunctionDefinition(getDeclName(), getFunctionType());
+        return getAppTry().flatMap(app -> app.getFunctionDefinition(getDeclName(), getFunctionType()));
     }
 
     // private FunctionDecl findDeclaration() {
