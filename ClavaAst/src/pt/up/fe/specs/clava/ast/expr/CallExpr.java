@@ -252,7 +252,6 @@ public class CallExpr extends Expr {
      */
     public Optional<FunctionDecl> getDefinition() {
         // Optional<FunctionDecl> functionDecl = getFunctionDecl();
-
         return getFunctionDecl().flatMap(FunctionDecl::getDefinition);
         // if (!functionDecl.isPresent()) {
         // return Optional.empty();

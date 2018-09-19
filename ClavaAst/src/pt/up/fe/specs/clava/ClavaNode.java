@@ -223,20 +223,26 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
     public App getApp() {
         return getAppTry()
-                .orElseThrow(() -> new RuntimeException("Node does not have a parent: " + this));
+                .orElseThrow(() -> new RuntimeException("App has not been set in ClavaContext: " + this));
     }
 
+    /**
+     * 
+     * @return
+     */
     public Optional<App> getAppTry() {
-        ClavaNode root = this;
-        while (root.hasParent()) {
-            root = root.getParent();
-        }
+        return Optional.of(get(CONTEXT).get(ClavaContext.APP));
 
-        if (!(root instanceof App)) {
-            return Optional.empty();
-        }
-
-        return Optional.of((App) root);
+        // ClavaNode root = this;
+        // while (root.hasParent()) {
+        // root = root.getParent();
+        // }
+        //
+        // if (!(root instanceof App)) {
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of((App) root);
     }
 
     /**
