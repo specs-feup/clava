@@ -26,7 +26,6 @@ import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
-import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -240,7 +239,8 @@ public class CxxCall extends ACall {
             return;
         }
 
-        call.getAncestor(App.class).inline(call);
+        call.getApp().inline(call);
+        // call.getAncestor(App.class).inline(call);
         // new CallInliner(call).inline();
     }
 

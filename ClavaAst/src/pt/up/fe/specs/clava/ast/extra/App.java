@@ -825,4 +825,38 @@ public class App extends ClavaNode {
 
         throw new RuntimeException("Could not find");
     }
+
+    /**
+     * When an App is copied, it needs to create a new ClavaContext for itself.
+     */
+    /*
+    @Override
+    public App copy(boolean keepId) {
+    
+        ClavaContext currentContext = getContext();
+    
+        // Create new context
+        ClavaContext newContext = new ClavaContext(currentContext);
+    
+        // Before copy, temporarily set new context, so that all copied nodes point to the new Context
+        // set(CONTEXT, newContext);
+    
+        // Copy App
+        App newApp = (App) super.copy(keepId);
+    
+        System.out.println("ORIGINAL APP:" + hashCode());
+        System.out.println("COPY APP:" + newApp.hashCode());
+    
+        // Restore current context
+        // set(CONTEXT, currentContext);
+    
+        // Set the new App in the new Context
+        newContext.set(ClavaContext.APP, newApp);
+    
+        // Set the new Context in all new App nodes
+        newApp.getDescendantsAndSelfStream().forEach(node -> node.set(CONTEXT, newContext));
+    
+        return newApp;
+    }
+    */
 }

@@ -20,6 +20,10 @@ public class ClavaMetrics {
     public ClavaMetrics() {
     }
 
+    public ClavaMetrics(ClavaMetrics clavaMetrics) {
+        this.numCopies = clavaMetrics.numCopies;
+    }
+
     public long getNumCopies() {
         return numCopies;
     }

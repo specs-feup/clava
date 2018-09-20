@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.context;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.util.SpecsCollections;
 
 public class ClavaContext extends ADataClass<ClavaContext> {
 
@@ -33,20 +35,22 @@ public class ClavaContext extends ADataClass<ClavaContext> {
      * The arguments used to call the parser.
      */
     public final static DataKey<Map<File, List<String>>> ARGUMENTS = KeyFactory
-            .generic("arguments", new HashMap<>());
+            .generic("arguments", (Map<File, List<String>>) new HashMap<File, List<String>>())
+            .setCopyFunction(map -> new HashMap<>(map));
 
     /**
      * IDs generator
      */
     public final static DataKey<ClavaIdGenerator> ID_GENERATOR = KeyFactory
             .object("idGenerator", ClavaIdGenerator.class)
-            .setDefault(() -> new ClavaIdGenerator());
+            .setDefault(() -> new ClavaIdGenerator())
+            .setCopyFunction(id -> new ClavaIdGenerator(id));
 
     public final static DataKey<ClavaFactory> FACTORY = KeyFactory
             .object("factory", ClavaFactory.class);
 
-    public final static DataKey<App> APP = KeyFactory
-            .object("app", App.class);
+    // public final static DataKey<App> APP = KeyFactory
+    // .object("app", App.class);
 
     public final static DataKey<ClavaMetrics> METRICS = KeyFactory
             .object("metrics", ClavaMetrics.class);
@@ -65,6 +69,8 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     // private final ClavaIdGenerator idGenerator;
     // private final ClavaFactory factory;
 
+    private final List<App> appStack;
+
     public ClavaContext() {
 
         // this.data = DataStore.newInstance(getClass());
@@ -80,7 +86,18 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         LegacyToDataStore.CLAVA_CONTEXT.set(this);
 
         set(METRICS, new ClavaMetrics());
+
+        appStack = new ArrayList<>();
     }
+
+    // public ClavaContext(ClavaContext context) {
+    // set(ARGUMENTS, ARGUMENTS.copy(context.get(ARGUMENTS)));
+    // set(ID_GENERATOR, ID_GENERATOR.copy(context.get(ID_GENERATOR)));
+    // set(METRICS, METRICS.copy(context.get(METRICS)));
+    //
+    // // Initialize factory
+    // set(FACTORY, new ClavaFactory(this));
+    // }
 
     public ClavaContext addArguments(File sourceFile, List<String> arguments) {
         get(ARGUMENTS).put(sourceFile, arguments);
@@ -91,6 +108,21 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         return get(FACTORY);
     }
 
+    public void pushApp(App newApp) {
+        appStack.add(newApp);
+    }
+
+    public App popApp() {
+        return appStack.remove(appStack.size() - 1);
+    }
+
+    public App getApp() {
+        if (appStack.isEmpty()) {
+            throw new RuntimeException("No App has been set yet");
+        }
+
+        return SpecsCollections.last(appStack);
+    }
     // public <T> T get(DataKey<T> key) {
     // return this.data.get(key);
     // }

@@ -248,7 +248,8 @@ public class ClangAstParser {
         App newApp = clangStreamParser.parse();
 
         // Set app in context
-        context.set(ClavaContext.APP, newApp);
+        context.pushApp(newApp);
+        // context.set(ClavaContext.APP, newApp);
 
         // if (SpecsSystem.isDebug()) {
         // // App newApp = new ClangStreamParser(stderr).parse();

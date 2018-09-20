@@ -157,7 +157,8 @@ public class ClangDumperParser {
         App app = clangStreamParser.parse();
 
         // Set app in context
-        context.set(ClavaContext.APP, app);
+        // context.set(ClavaContext.APP, app);
+        context.pushApp(app);
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);

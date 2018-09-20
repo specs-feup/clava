@@ -231,7 +231,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * @return
      */
     public Optional<App> getAppTry() {
-        return Optional.of(get(CONTEXT).get(ClavaContext.APP));
+        // return Optional.of(get(CONTEXT).get(ClavaContext.APP));
+        return Optional.of(get(CONTEXT).getApp());
 
         // ClavaNode root = this;
         // while (root.hasParent()) {
@@ -298,17 +299,19 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     // return this == obj;
     // }
 
+    /*
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-
+    
         boolean isValid = get(LOCATION).isValid();
-
+    
         result = prime * result + (!isValid ? 0 : get(LOCATION).hashCode());
         return result;
     }
-
+    */
+    /*
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -318,22 +321,22 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         if (getClass() != obj.getClass())
             return false;
         ClavaNode other = (ClavaNode) obj;
-
+    
         // Use the location, if valid
         SourceRange location = get(LOCATION);
         if (!location.isValid()) {
             return false;
         }
-
+    
         SourceRange objLocation = other.get(LOCATION);
         if (!objLocation.isValid()) {
             return false;
         }
-
+    
         // return location.toString().equals(objLocation.toString());
         return location.equals(objLocation);
     }
-
+    */
     /**
      *
      * @return true if the node is a 'wrapper' node. Examples of wrapper nodes: WrapperStmt

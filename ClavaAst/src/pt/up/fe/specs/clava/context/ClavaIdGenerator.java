@@ -26,6 +26,10 @@ public class ClavaIdGenerator {
         this.acc = new AccumulatorMap<>();
     }
 
+    public ClavaIdGenerator(ClavaIdGenerator idGenerator) {
+        this.acc = new AccumulatorMap<>(idGenerator.acc);
+    }
+
     public String next(String prefix) {
         Integer suffixValue = acc.add(prefix);
 
