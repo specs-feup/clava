@@ -73,6 +73,7 @@ public interface CxxWeaverOption {
                     GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
+            .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
             .build();
 

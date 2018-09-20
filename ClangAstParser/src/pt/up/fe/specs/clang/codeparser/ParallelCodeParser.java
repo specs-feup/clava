@@ -71,6 +71,9 @@ public class ParallelCodeParser extends CodeParser {
             // .setDefault(() -> true)
             .setLabel("Parallel parsing of source files");
 
+    public static final DataKey<Integer> PARSING_NUM_THREADS = KeyFactory.integer("parsingNumThreads", 1)
+            .setLabel("Number of threads to use for parallel parsing");
+
     /// DATAKEY END
 
     @Override
@@ -128,7 +131,7 @@ public class ParallelCodeParser extends CodeParser {
         long tic = System.nanoTime();
 
         // TODO: Allow parameter to specify parallelism
-        int numThreads = get(PARALLEL_PARSING) ? Runtime.getRuntime().availableProcessors() : 1;
+        int numThreads = get(PARALLEL_PARSING) ? get(PARSING_NUM_THREADS) : 1;
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
