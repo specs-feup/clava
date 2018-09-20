@@ -15499,6 +15499,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              \name": "hasCondRelation"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Uniquely identifies the loop inside the program",
                   "children": [
                            {
@@ -16159,6 +16168,34 @@
                            {
                               "type": "String",
                               "name": "condCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setCondRelation"
+                           },
+                           {
+                              "type": "Relation",
+                              "name": "operator",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setCondRelation"
+                           },
+                           {
+                              "type": "String",
+                              "name": "operator",
                               "defaultValue": ""
                            }]
                },

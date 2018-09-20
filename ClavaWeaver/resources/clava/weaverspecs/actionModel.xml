@@ -278,8 +278,6 @@
 		<parameter name="isParallel" type="Boolean"/>
 	</action>
 
-
-
 	<action name="interchange" class="loop" tooltip="Interchanges two for loops, if possible.">
 		<parameter name="otherLoop" type="loop" />
 	</action>
@@ -295,6 +293,13 @@
 		<parameter name="useTernary" type="Boolean"/>
 	</action>
 	
+	<action name="setCondRelation" class="loop" tooltip="Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge">
+		<parameter name="operator" type="Relation" />
+	</action>
+
+	<action name="setCondRelation" class="loop" tooltip="Changes the operator of a canonical condition, if possible. Supported operators: &lt;, &lt;=, >, >=">
+		<parameter name="operator" type="String" />
+	</action>
 	
 	<!-- OMP -->
 	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">

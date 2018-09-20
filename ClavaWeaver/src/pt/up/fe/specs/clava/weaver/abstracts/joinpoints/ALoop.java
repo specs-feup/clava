@@ -435,6 +435,29 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
+     */
+    public abstract Boolean getHasCondRelationImpl();
+
+    /**
+     * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
+     */
+    public final Object getHasCondRelation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasCondRelation", Optional.empty());
+        	}
+        	Boolean result = this.getHasCondRelationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasCondRelation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasCondRelation", e);
+        }
+    }
+
+    /**
      * Get value on attribute condRelation
      * @return the attribute's value
      */
@@ -457,6 +480,20 @@ public abstract class ALoop extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condRelation", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defCondRelationImpl(Relation value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def condRelation with type Relation not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public void defCondRelationImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def condRelation with type String not implemented ");
     }
 
     /**
@@ -774,6 +811,58 @@ public abstract class ALoop extends AStatement {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "tile", e);
+        }
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+     * @param operator 
+     */
+    public void setCondRelationImpl(Relation operator) {
+        throw new UnsupportedOperationException(get_class()+": Action setCondRelation not implemented ");
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+     * @param operator 
+     */
+    public final void setCondRelation(Relation operator) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCondRelation", this, Optional.empty(), operator);
+        	}
+        	this.setCondRelationImpl(operator);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCondRelation", this, Optional.empty(), operator);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCondRelation", e);
+        }
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
+     * @param operator 
+     */
+    public void setCondRelationImpl(String operator) {
+        throw new UnsupportedOperationException(get_class()+": Action setCondRelation not implemented ");
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
+     * @param operator 
+     */
+    public final void setCondRelation(String operator) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCondRelation", this, Optional.empty(), operator);
+        	}
+        	this.setCondRelationImpl(operator);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCondRelation", this, Optional.empty(), operator);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCondRelation", e);
         }
     }
 
@@ -1166,6 +1255,17 @@ public abstract class ALoop extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "condRelation": {
+        	if(value instanceof Relation){
+        		this.defCondRelationImpl((Relation)value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defCondRelationImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -1191,6 +1291,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("initValue");
         attributes.add("endValue");
         attributes.add("stepValue");
+        attributes.add("hasCondRelation");
         attributes.add("condRelation");
     }
 
@@ -1223,6 +1324,8 @@ public abstract class ALoop extends AStatement {
         actions.add("void interchange(loop)");
         actions.add("statement tile(String, statement)");
         actions.add("statement tile(String, statement, Boolean)");
+        actions.add("void setCondRelation(Relation)");
+        actions.add("void setCondRelation(String)");
     }
 
     /**
@@ -1265,6 +1368,7 @@ public abstract class ALoop extends AStatement {
         INITVALUE("initValue"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
+        HASCONDRELATION("hasCondRelation"),
         CONDRELATION("condRelation"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),

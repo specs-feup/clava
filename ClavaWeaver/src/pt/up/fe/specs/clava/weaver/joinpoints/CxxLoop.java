@@ -15,10 +15,12 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.lara.interpreter.utils.DefMap;
 
@@ -28,6 +30,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
@@ -49,6 +52,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.ALoopKindEnum;
 import pt.up.fe.specs.clava.weaver.defs.CxxLoopDefs;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
 import pt.up.fe.specs.util.SpecsEnums;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
 
@@ -65,6 +69,9 @@ public class CxxLoop extends ALoop {
 
         return loopTypes;
     }
+
+    private static final Set<BinaryOperatorKind> VALID_RELATION_OP_SETTER = EnumSet.of(BinaryOperatorKind.GT,
+            BinaryOperatorKind.GE, BinaryOperatorKind.LT, BinaryOperatorKind.LE);
 
     private final LoopStmt loop;
     private final ACxxWeaverJoinPoint parent;
@@ -573,9 +580,30 @@ public class CxxLoop extends ALoop {
     @Override
     public Relation getCondRelationImpl() {
 
+        BinaryOperator condOp = getConditionOp();
+        if (condOp == null) {
+            return null;
+        }
+
+        return Relation.getHelper().fromNameTry(condOp.getOp().name()).orElse(null);
+    }
+
+    @Override
+    public Boolean getHasCondRelationImpl() {
+        return getConditionOp(false) != null;
+    }
+
+    private BinaryOperator getConditionOp() {
+        return getConditionOp(true);
+    }
+
+    private BinaryOperator getConditionOp(boolean showWarnings) {
         if (!(loop instanceof ForStmt)) {
-            ClavaLog.warning(
-                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            if (showWarnings) {
+                ClavaLog.info(
+                        "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            }
+
             return null;
         }
 
@@ -583,13 +611,86 @@ public class CxxLoop extends ALoop {
         BinaryOperator binOp = forLoop.getCondOperator().orElse(null);
 
         if (binOp == null) {
-            ClavaLog.warning(
-                    "Could not obtain the condition operator for the expression '"
-                            + forLoop.getCond().map(ClavaNode::getCode).orElse("") + "'");
+            if (showWarnings) {
+                ClavaLog.info(
+                        "Could not obtain the condition operator for the expression '"
+                                + forLoop.getCond().map(ClavaNode::getCode).orElse("") + "'");
+            }
+
             return null;
         }
 
-        return Relation.getHelper().fromNameTry(binOp.getOp().name()).orElse(null);
+        return binOp;
+    }
+
+    @Override
+    public void defCondRelationImpl(Relation value) {
+        if (value == Relation.EQ || value == Relation.NE) {
+            ClavaLog.info(
+                    "Relation not supported for 'def' of 'condRelation': " + value);
+            return;
+        }
+
+        BinaryOperator condOp = getConditionOp();
+        if (condOp == null) {
+            return;
+        }
+
+        condOp.set(BinaryOperator.OP, getOpKind(value));
+
+    }
+
+    @Override
+    public void defCondRelationImpl(String value) {
+        BinaryOperatorKind kind = BinaryOperatorKind.getHelper().fromValueTry(value).orElse(null);
+        // BinaryOperatorKind kind = SpecsEnums.valueOfTry(BinaryOperatorKind.class, value).orElse(null);
+
+        if (kind == null) {
+            ClavaLog.info("def 'condRelation': Invalid binary operator " + value);
+            return;
+        }
+
+        // Verify kind
+        if (!VALID_RELATION_OP_SETTER.contains(kind)) {
+            ClavaLog.info("def 'condRelation': Invalid relation operator for def " + kind);
+            return;
+        }
+
+        BinaryOperator condOp = getConditionOp();
+        if (condOp == null) {
+            return;
+        }
+
+        condOp.set(BinaryOperator.OP, kind);
+    }
+
+    @Override
+    public void setCondRelationImpl(String operator) {
+        defCondRelationImpl(operator);
+    }
+
+    private BinaryOperatorKind getOpKind(Relation relation) {
+        switch (relation) {
+        case EQ:
+            return BinaryOperatorKind.EQ;
+        case GE:
+            return BinaryOperatorKind.GE;
+        case GT:
+            return BinaryOperatorKind.GT;
+        case LE:
+            return BinaryOperatorKind.LE;
+        case LT:
+            return BinaryOperatorKind.LT;
+        case NE:
+            return BinaryOperatorKind.NE;
+        default:
+            throw new NotImplementedException(relation);
+        }
+    }
+
+    @Override
+    public void setCondRelationImpl(Relation operator) {
+        defCondRelationImpl(operator);
     }
 
     @Override
