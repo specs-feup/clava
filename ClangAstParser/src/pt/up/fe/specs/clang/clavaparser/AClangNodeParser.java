@@ -155,7 +155,8 @@ public abstract class AClangNodeParser<N extends ClavaNode> implements ClangNode
 
         // Mark node
         if (isLegacyParser()) {
-            clavaNode.setIsLegacyNode(true);
+            throw new RuntimeException("Legacy parser no longer supported");
+            // clavaNode.setIsLegacyNode(true);
         }
 
         return clavaNode;
