@@ -39,12 +39,10 @@ public class ClavaWeaverLauncher {
 
     public static void main(String[] args) {
         SpecsSystem.programStandardInit();
+
         // System.out.println("Press any key to proceed");
-        // try {
-        // System.in.read();
-        // } catch (IOException e) {
-        // SpecsLogs.msgWarn("Error message:\n", e);
-        // }
+        // SpecsIo.read();
+
         execute(args);
     }
 

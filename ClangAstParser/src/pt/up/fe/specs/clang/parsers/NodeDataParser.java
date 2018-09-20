@@ -47,6 +47,8 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class NodeDataParser {
 
+    // public final static AtomicInteger INVALID_COUNTER = new AtomicInteger(0);
+
     private static final Map<String, BiFunction<LineStream, ClangParserData, DataStore>> STATIC_DATA_PARSERS;
     static {
         STATIC_DATA_PARSERS = new HashMap<>();
@@ -265,9 +267,15 @@ public class NodeDataParser {
 
         data.add(ClavaNode.CONTEXT, dataStore.get(ClavaNode.CONTEXT));
         data.add(ClavaNode.ID, id);
-        data.add(ClavaNode.LOCATION, location);
+        // Only need to add Location and SpellingLocation if they are not invalid
+        if (location.isValid()) {
+            data.add(ClavaNode.LOCATION, location);
+        }
         data.add(ClavaNode.IS_MACRO, isMacro);
-        data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
+        if (spellingLocation.isValid()) {
+            data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
+        }
+
         data.add(ClavaNode.IS_IN_SYSTEM_HEADER, isInSystemHeader);
 
         return data;
