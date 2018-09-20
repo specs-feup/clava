@@ -22,7 +22,7 @@ import pt.up.fe.specs.clava.language.Standard;
 
 public interface ClangParser {
 
-    TranslationUnit parse(File file, Standard standard, DataStore config);
+    TranslationUnit parse(File file, String id, Standard standard, DataStore config);
 
     File getLastWorkingFolder();
 

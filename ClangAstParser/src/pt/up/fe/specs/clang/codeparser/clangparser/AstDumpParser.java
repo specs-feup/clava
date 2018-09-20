@@ -58,7 +58,7 @@ public class AstDumpParser implements ClangParser {
     // private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
     // private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
 
-    private int currentId;
+    // private int currentId;
     private final boolean dumpStdOut;
     private final boolean useCustomResources;
     /**
@@ -84,7 +84,7 @@ public class AstDumpParser implements ClangParser {
 
     public AstDumpParser(boolean dumpStdOut, boolean useCustomResources, boolean streamConsoleOutput,
             File clangExecutable, List<String> builtinIncludes) {
-        this.currentId = 0;
+        // this.currentId = 0;
         this.dumpStdOut = dumpStdOut;
         this.useCustomResources = useCustomResources;
         this.streamConsoleOutput = streamConsoleOutput;
@@ -110,12 +110,12 @@ public class AstDumpParser implements ClangParser {
         return this;
     }
 
-    private int nextId() {
-        // Increment and return
-        currentId++;
-
-        return currentId;
-    }
+    // private int nextId() {
+    // // Increment and return
+    // currentId++;
+    //
+    // return currentId;
+    // }
 
     //
     // @Override
@@ -140,7 +140,7 @@ public class AstDumpParser implements ClangParser {
     // }
 
     @Override
-    public TranslationUnit parse(File sourceFile, Standard standard, DataStore config) {
+    public TranslationUnit parse(File sourceFile, String id, Standard standard, DataStore config) {
         // Create instance of ClangAstParser
         // ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
 
@@ -159,7 +159,7 @@ public class AstDumpParser implements ClangParser {
 
         arguments.add(sourceFile.getAbsolutePath());
 
-        int id = nextId();
+        // int id = nextId();
         arguments.add("-id=" + id);
 
         arguments.add("--");

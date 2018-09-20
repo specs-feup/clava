@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -45,7 +48,6 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -96,6 +98,8 @@ public class ParallelCodeParser extends CodeParser {
 
         List<File> sources = allUserSources.keySet().stream()
                 .map(File::new)
+                // Sort files in order to maintain a consistent execution order
+                .sorted()
                 .collect(Collectors.toList());
 
         Standard standard = getStandard(sources, options);
@@ -123,14 +127,40 @@ public class ParallelCodeParser extends CodeParser {
 
         long tic = System.nanoTime();
 
+        // TODO: Allow parameter to specify parallelism
+        int numThreads = get(PARALLEL_PARSING) ? Runtime.getRuntime().availableProcessors() : 1;
+
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+
+        List<Future<TranslationUnit>> futureTUnits = new ArrayList<>();
+        for (int i = 0; i < sources.size(); i++) {
+            String id = Integer.toString(i + 1);
+            File source = sources.get(i);
+
+            Future<TranslationUnit> tUnit = executor
+                    .submit(() -> parseSource(source, id, standard, options, clangDump,
+                            counter, parsingFolder, clangExecutable, builtinIncludes));
+
+            futureTUnits.add(tUnit);
+
+        }
+
+        // No more taks to submit
+        executor.shutdown();
+
+        // Collect parsing results
+        List<TranslationUnit> tUnits = futureTUnits.stream()
+                .map(SpecsSystem::get)
+                .collect(Collectors.toList());
+
         // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
         // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
         // counter, parsingFolder))
         // .collect(Collectors.toList());
-        List<TranslationUnit> tUnits = SpecsCollections.getStream(sources, get(PARALLEL_PARSING))
-                .map(sourceFile -> parseSource(sourceFile, standard, options, clangDump,
-                        counter, parsingFolder, clangExecutable, builtinIncludes))
-                .collect(Collectors.toList());
+        // List<TranslationUnit> tUnits = SpecsCollections.getStream(sources, get(PARALLEL_PARSING))
+        // .map(sourceFile -> parseSource(sourceFile, standard, options, clangDump,
+        // counter, parsingFolder, clangExecutable, builtinIncludes))
+        // .collect(Collectors.toList());
 
         // // Sort translation units
         // Collections.sort(tUnits, (tunit1, tunit2) -> tunit1.getFile().compareTo(tunit2.getFile()));
@@ -295,7 +325,7 @@ public class ParallelCodeParser extends CodeParser {
         // return null;
     }
 
-    private TranslationUnit parseSource(File sourceFile, Standard standard, DataStore options,
+    private TranslationUnit parseSource(File sourceFile, String id, Standard standard, DataStore options,
             ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
             File clangExecutable, List<String> builtinIncludes) {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
@@ -314,7 +344,7 @@ public class ParallelCodeParser extends CodeParser {
         counter.print(sourceFile);
         // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
 
-        TranslationUnit tunit = clangParser.parse(sourceFile, standard, options);
+        TranslationUnit tunit = clangParser.parse(sourceFile, id, standard, options);
 
         if (get(SHOW_CLANG_DUMP)) {
             // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
