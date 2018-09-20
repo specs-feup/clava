@@ -814,6 +814,7 @@ public class CxxWeaver extends ACxxWeaver {
             if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
                 SpecsLogs.msgInfo("Checking woven code syntax...");
                 rebuildAst(false);
+                // rebuildAst(true);
             }
 
             // Terminate weaver execution with final steps required and writing output files
@@ -1037,6 +1038,12 @@ public class CxxWeaver extends ACxxWeaver {
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
         getApp().write(tempFolder, flattenFolders);
+
+        // If AST will be updated, discard current App, to free memory
+        if (update) {
+            weaverData.popAst();
+        }
+
         /*
         // For all Translation Units, collect new destination folders
         List<File> srcFolders = getApp().getTranslationUnits().stream()
@@ -1085,7 +1092,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Base folder is now the temporary folder
         if (update) {
             // Discard current app
-            weaverData.popAst();
+            // weaverData.popAst();
 
             // Add rebuilt app
             weaverData.pushAst(rebuiltApp);

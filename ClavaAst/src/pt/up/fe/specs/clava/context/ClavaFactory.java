@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
+import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
@@ -48,6 +49,7 @@ import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
+import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -63,9 +65,12 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.Literal;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
+import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
@@ -100,10 +105,12 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
+import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.language.CastKind;
+import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.ClassMap;
@@ -307,7 +314,22 @@ public class ClavaFactory {
         return new PointerType(data, Collections.emptyList());
     }
 
+    public RecordType recordType(TagDecl recordDecl) {
+        DataStore data = newTypeDataStore()
+                .put(RecordType.DECL, recordDecl);
+
+        return new RecordType(data, Collections.emptyList());
+    }
+
     /// EXPRS
+
+    public MemberExpr memberExpr(String memberName, Expr baseExpr) {
+        DataStore data = newExprDataStore()
+                .put(MemberExpr.MEMBER_NAME, memberName)
+                .put(Expr.TYPE, Optional.of(dummyType("dummy type")));
+
+        return new MemberExpr(data, Arrays.asList(baseExpr));
+    }
 
     public DummyExpr dummyExpr(String dummyContent) {
         DataStore data = newExprDataStore()
@@ -392,6 +414,14 @@ public class ClavaFactory {
         return new BinaryOperator(data, Arrays.asList(lhs, rhs));
     }
 
+    public UnaryOperator unaryOperator(UnaryOperatorKind op, Type type, Expr subExpr) {
+        DataStore data = newExprDataStore()
+                .put(Expr.TYPE, Optional.of(type))
+                .put(UnaryOperator.OP, op);
+
+        return new UnaryOperator(data, Arrays.asList(subExpr));
+    }
+
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
         DataStore data = newExprDataStore()
                 .put(Expr.TYPE, Optional.of(type));
@@ -468,6 +498,14 @@ public class ClavaFactory {
                 .put(ValueDecl.TYPE, type);
 
         return new ParmVarDecl(data, Collections.emptyList());
+    }
+
+    public RecordDecl recordDecl(String declName, TagKind kind, Collection<FieldDecl> fields) {
+        DataStore data = newDeclDataStore()
+                .put(RecordDecl.DECL_NAME, declName)
+                .put(RecordDecl.TAG_KIND, kind);
+
+        return new RecordDecl(data, fields);
     }
 
     public IncludeDecl includeDecl(Include include, String filepath) {
@@ -586,6 +624,14 @@ public class ClavaFactory {
                 .put(ClavaNode.LOCATION, expr.getLocation());
 
         return new ExprStmt(exprStmtData, Arrays.asList(expr));
+    }
+
+    public ExprStmt exprStmtAssignment(Expr lhs, Expr rhs) {
+        // Create assignment
+        BinaryOperator assign = binaryOperator(BinaryOperatorKind.ASSIGN, dummyType("exprStmtAssignment Type"), lhs,
+                rhs);
+
+        return exprStmt(assign);
     }
 
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody) {
