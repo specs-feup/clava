@@ -827,6 +827,34 @@ public class App extends ClavaNode {
     }
 
     /**
+     * Creates a copy of this App, pushes it to the stack of Apps in ClavaContext, returns the new copied App.
+     * 
+     * @return the new App in the top of the stack.
+     */
+    public App pushAst() {
+        // Create a copy of the App
+        App newApp = (App) copy(true);
+
+        // Push new App in ClavaContext
+        get(App.CONTEXT).pushApp(newApp);
+
+        return newApp;
+    }
+
+    /**
+     * Removes the top-most App from the stack
+     * 
+     * @return
+     */
+    // public App popAst() {
+    // // Pop top-most App in ClavaContext
+    // return get(App.CONTEXT).popApp();
+    //
+    // // Return app now on top
+    // // return get(App.CONTEXT).getApp();
+    // }
+
+    /**
      * When an App is copied, it needs to create a new ClavaContext for itself.
      */
     /*

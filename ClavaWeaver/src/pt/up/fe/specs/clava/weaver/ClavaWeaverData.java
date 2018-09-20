@@ -93,9 +93,6 @@ public class ClavaWeaverData {
 
         userValuesStack.push(userValuesCopy);
 
-        // Push new App in ClavaContext
-        app.get(App.CONTEXT).pushApp(app);
-
         // userValuesStack.push(new HashMap<>());
 
         // Apply AST processing
@@ -159,8 +156,10 @@ public class ClavaWeaverData {
         userValuesStack.pop();
         App topApp = apps.pop();
 
+        topApp.getContext().popApp();
+        // topApp.popAst();
         // Pop top-most App in ClavaContext
-        topApp.get(App.CONTEXT).popApp();
+        // topApp.get(App.CONTEXT).popApp();
 
         return topApp;
     }

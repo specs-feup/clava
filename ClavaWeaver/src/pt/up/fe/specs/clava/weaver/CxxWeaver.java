@@ -1167,8 +1167,10 @@ public class CxxWeaver extends ACxxWeaver {
 
     public void pushAst() {
         // Create a copy of app and push it
-        App clonedApp = (App) getApp().copy(true);
-        weaverData.pushAst(clonedApp);
+        // App clonedApp = (App) getApp().copy(true);
+        App newApp = getApp().pushAst();
+        weaverData.pushAst(newApp);
+        // weaverData.pushAst(clonedApp);
     }
 
     public void popAst() {
