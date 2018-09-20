@@ -1,4 +1,4 @@
 - Testing keys, setValue, getValue -
-type keys: hasSugar,previousId,unqualifiedDesugaredType,spellingLocation,typeDependency,isVariablyModified,builtinKind,inlineComments,isFromAst,isLegacyNode,containsUnexpandedParameterPack,typeAsString,isInSystemHeader,isMacro,kindLiteral,context,location,id
+type keys: hasSugar,previousId,unqualifiedDesugaredType,spellingLocation,typeDependency,isVariablyModified,builtinKind,inlineComments,isFromAst,containsUnexpandedParameterPack,typeAsString,isInSystemHeader,isMacro,kindLiteral,context,location,id
 type builtin kind: Int
 Changed vardecl: float a = 10
