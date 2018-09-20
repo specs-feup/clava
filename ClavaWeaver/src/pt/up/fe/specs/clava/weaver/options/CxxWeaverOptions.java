@@ -93,8 +93,8 @@ public class CxxWeaverOptions {
         addBooleanOption(ParallelCodeParser.PARALLEL_PARSING, "par", "parallel-parsing",
                 "Enables parallel parsing of source files");
 
-        addOneArgOption(ParallelCodeParser.PARSING_NUM_THREADS, "thd", "parallel-parsing-threads",
-                "Number of threads to use", "Sets the number of threads for parallel parsing");
+        addOneArgOption(ParallelCodeParser.PARSING_NUM_THREADS, "thd", "parsing-threads",
+                "#threads", "Sets the number of threads for parallel parsing");
 
         addBooleanOption(ClangAstKeys.USE_PLATFORM_INCLUDES, "psi", "platform-includes",
                 "Uses the platform system includes headers (if available)");
