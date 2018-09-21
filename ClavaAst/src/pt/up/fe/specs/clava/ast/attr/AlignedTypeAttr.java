@@ -16,18 +16,15 @@ package pt.up.fe.specs.clava.ast.attr;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.type.Type;
 
 public class AlignedTypeAttr extends AlignedAttr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
+    // public final static DataKey<Type> TYPE = KeyFactory.object("type", Type.class);
 
     /// DATAKEYS END
 

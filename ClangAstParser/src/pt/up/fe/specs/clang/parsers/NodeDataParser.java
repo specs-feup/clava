@@ -277,6 +277,11 @@ public class NodeDataParser {
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
         // DataStore data = DataStore.newInstance("Data from Parser");
+
+        // Due to the number of Attributes, not every attribute that appears in the code
+        // has a corresponding node yet.
+        // boolean isClosed = nodeClass.equals(Attribute.class) ? false : true;
+
         DataStore data = DataStore.newInstance(nodeKeys, true);
 
         data.add(ClavaNode.CONTEXT, dataStore.get(ClavaNode.CONTEXT));
