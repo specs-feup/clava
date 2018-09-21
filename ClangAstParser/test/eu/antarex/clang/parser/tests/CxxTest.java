@@ -72,7 +72,7 @@ public class CxxTest {
         new CxxTester("exceptions.cpp").test();
     }
 
-    // @Test
+    @Test
     public void testFor() {
         new CxxTester("for.cpp").test();
     }
