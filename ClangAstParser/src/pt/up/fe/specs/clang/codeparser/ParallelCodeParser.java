@@ -376,16 +376,17 @@ public class ParallelCodeParser extends CodeParser {
 
     private void adaptOptions(DataStore options, File source) {
         // Check if the standard is compatible with the file type
-        Standard standard = options.getTry(ClavaOptions.STANDARD).orElse(null);
-
+        // Standard standard = options.getTry(ClavaOptions.STANDARD).orElse(null);
+        // System.out.println("OPTIONS BEFORE:" + options);
         // Remove standard if extensions do not match
-        if (standard != null) {
-            if ((SourceType.isCExtension(SpecsIo.getExtension(source)) && standard.isCxx())
-                    || SourceType.isCxxExtension(SpecsIo.getExtension(source)) && !standard.isCxx()) {
-
-                options.remove(ClavaOptions.STANDARD);
-            }
-        }
+        // if (standard != null) {
+        // if ((SourceType.isCExtension(SpecsIo.getExtension(source)) && standard.isCxx())
+        // || SourceType.isCxxExtension(SpecsIo.getExtension(source)) && !standard.isCxx()) {
+        //
+        // options.remove(ClavaOptions.STANDARD);
+        // }
+        // }
+        // System.out.println("OPTIONS AFTER:" + options);
 
     }
 
