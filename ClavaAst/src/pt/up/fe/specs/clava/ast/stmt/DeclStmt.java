@@ -319,12 +319,17 @@ public class DeclStmt extends Stmt {
 
         Type firstType = typables.get(0).getType();
 
-        boolean diffTypes = typables.stream()
+        // If array, return false
+        if (firstType.isArray()) {
+            return false;
+        }
+
+        boolean isMultiLine = typables.stream()
                 .filter(typable -> !typable.getType().equals(firstType))
                 .findFirst()
                 .isPresent();
 
-        return !diffTypes;
+        return !isMultiLine;
         // boolean allTypable = decls.size() == decls.stream()
         // .filter(decl -> (decl instanceof Typable))
         // .count();
