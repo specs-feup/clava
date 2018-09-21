@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.DataStore.GenericDataClass;
+import org.suikasoft.jOptions.DataStore.ListDataStore;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -46,6 +47,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -127,6 +129,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
+
+        SpecsCheck.checkArgument(dataI instanceof ListDataStore,
+                () -> "Expected ListDataStore, found  " + dataI.getClass());
 
         this.dataI = dataI;
         disableModification = false;
@@ -253,9 +258,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * @param node
      * @return
      */
-    private String toUnimplementedCode() {
-        return ClavaNodes.toCode("NOT IMPLEMENTED: " + getClass().getSimpleName(), this);
-    }
+    // private String toUnimplementedCode() {
+    // return ClavaNodes.toCode("NOT IMPLEMENTED: " + getClass().getSimpleName(), this);
+    // }
 
     protected static List<ClavaNode> sanitize(ClavaNodeInfo info, ClavaNode... nodes) {
         return sanitize(info, Arrays.asList(nodes));
@@ -1327,7 +1332,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
             }
 
             if (value instanceof Optional) {
-                nodes.add((ClavaNode) ((Optional) value).get());
+                nodes.add((ClavaNode) ((Optional<?>) value).get());
                 continue;
             }
 

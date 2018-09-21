@@ -241,6 +241,9 @@ public class NodeDataParser {
         // System.out.println("LINE DATA:" + lines.getLastLineIndex());
         DataStore clavaData = dataParser.apply(lines, data);
 
+        // SpecsCheck.checkArgument(clavaData instanceof ListDataStore,
+        // () -> "Expected a ListDataStore, foud " + clavaData.getClass() + ". DataParser: " + dataParser);
+
         DataStore previousValue = data.get(ClangParserData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
 
         if (previousValue != null) {
@@ -274,7 +277,7 @@ public class NodeDataParser {
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
         // DataStore data = DataStore.newInstance("Data from Parser");
-        DataStore data = DataStore.newInstance(nodeKeys);
+        DataStore data = DataStore.newInstance(nodeKeys, true);
 
         data.add(ClavaNode.CONTEXT, dataStore.get(ClavaNode.CONTEXT));
         data.add(ClavaNode.ID, id);
@@ -288,6 +291,9 @@ public class NodeDataParser {
         }
 
         data.add(ClavaNode.IS_IN_SYSTEM_HEADER, isInSystemHeader);
+
+        // SpecsCheck.checkArgument(data instanceof ListDataStore,
+        // () -> "Expected a ListDataStore, foud " + data.getClass());
 
         return data;
     }
