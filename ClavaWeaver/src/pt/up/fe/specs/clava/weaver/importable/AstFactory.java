@@ -25,10 +25,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
@@ -154,7 +152,7 @@ public class AstFactory {
             autoCode = autoCode + "&";
         }
 
-        return ClavaNodeFactory.literalType(autoCode);
+        return CxxWeaver.getFactory().literalType(autoCode);
     }
 
     public static CxxFunction functionVoid(String name) {
@@ -194,16 +192,16 @@ public class AstFactory {
 
     public static AExpression exprLiteral(String code) {
         return exprLiteral(code,
-                CxxJoinpoints.create(ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()), null));
+                CxxJoinpoints.create(CxxWeaver.getFactory().nullType(), null));
     }
 
     public static AExpression exprLiteral(String code, AJoinPoint type) {
         Type astType = type instanceof AType ? (Type) type.getNode()
-                : ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo());
+                : CxxWeaver.getFactory().nullType();
 
         // Type astType = type == null ? ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()) : type.getNode();
 
-        return CxxJoinpoints.create(ClavaNodeFactory.literalExpr(code, astType), null, AExpression.class);
+        return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), null, AExpression.class);
     }
 
     public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
@@ -315,7 +313,7 @@ public class AstFactory {
 
     // public static ACxxWeaverJoinPoint constArrayType(String typeCode, Standard standard, List<Integer> dims) {
     public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, List<Integer> dims) {
-        return constArrayType(ClavaNodeFactory.literalType(typeCode), standard, dims);
+        return constArrayType(CxxWeaver.getFactory().literalType(typeCode), standard, dims);
     }
 
     // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {

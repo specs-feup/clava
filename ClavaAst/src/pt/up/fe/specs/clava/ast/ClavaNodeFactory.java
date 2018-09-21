@@ -42,9 +42,11 @@ import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 /**
  * Contains methods to create Clava nodes.
  *
+ * @deprecated Use ClavaFactory
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class ClavaNodeFactory {
 
     /*

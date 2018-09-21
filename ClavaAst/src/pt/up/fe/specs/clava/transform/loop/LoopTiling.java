@@ -15,7 +15,6 @@ package pt.up.fe.specs.clava.transform.loop;
 
 import java.util.List;
 
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -34,13 +33,13 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class LoopTiling {
 
-    private final ClavaContext context;
+    // private final ClavaContext context;
     private final ClavaFactory factory;
 
     private Stmt lastReferenceStmt;
 
     public LoopTiling(ClavaContext context) {
-        this.context = context;
+        // this.context = context;
         this.factory = context.get(ClavaContext.FACTORY);
         lastReferenceStmt = null;
     }
@@ -158,7 +157,7 @@ public class LoopTiling {
 
             String newLimitCode = "(" + oldUpperBoundCode + " < " + blockLimit + " ? " + oldUpperBoundCode + " : "
                     + blockLimit + ")";
-            newLimit = ClavaNodeFactory.literalExpr(newLimitCode, oldUpperBoundType);
+            newLimit = factory.literalExpr(newLimitCode, oldUpperBoundType);
         } else {
 
             // add limit check and limit variable before the target loop
@@ -169,7 +168,7 @@ public class LoopTiling {
             limitDecl = makeLimitCheck(targetFor, oldUpperBoundType, oldUpperBoundCode, blockLimit, limitVar);
 
             // change the limit code in the target loop
-            newLimit = ClavaNodeFactory.literalExpr(limitVar, oldUpperBoundType);
+            newLimit = factory.literalExpr(limitVar, oldUpperBoundType);
         }
 
         NodeInsertUtils.replace(oldUpperBound, newLimit);

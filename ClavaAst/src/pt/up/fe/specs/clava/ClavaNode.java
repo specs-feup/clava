@@ -36,7 +36,6 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
@@ -262,9 +261,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
     // return ClavaNodes.toCode("NOT IMPLEMENTED: " + getClass().getSimpleName(), this);
     // }
 
-    protected static List<ClavaNode> sanitize(ClavaNodeInfo info, ClavaNode... nodes) {
-        return sanitize(info, Arrays.asList(nodes));
-    }
+    // protected static List<ClavaNode> sanitize(ClavaNodeInfo info, ClavaNode... nodes) {
+    // return sanitize(info, Arrays.asList(nodes));
+    // }
 
     /**
      * Replaces null elements with NullNodes with the given info.
@@ -273,11 +272,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
      * @param nodes
      * @return
      */
-    protected static List<ClavaNode> sanitize(ClavaNodeInfo info, Collection<? extends ClavaNode> nodes) {
-        return nodes.stream()
-                .map(node -> node == null ? ClavaNodeFactory.nullNode(info) : node)
-                .collect(Collectors.toList());
-    }
+    // protected static List<ClavaNode> sanitize(ClavaNodeInfo info, Collection<? extends ClavaNode> nodes) {
+    // return nodes.stream()
+    // .map(node -> node == null ? ClavaNodeFactory.nullNode(info) : node)
+    // .collect(Collectors.toList());
+    // }
 
     /**
      * Helper method that returns a child that can be a NullNode. Ignores WrapperStmt, Pragma and Comment nodes.

@@ -28,7 +28,6 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -439,7 +438,7 @@ public class CallWrap {
         Expr function = call.getCallee();
 
         List<Expr> args = paramNames.stream()
-                .map(param -> ClavaNodeFactory.literalExpr(param, ClavaNodeFactory.nullType(null)))
+                .map(param -> factory.literalExpr(param, factory.nullType()))
                 .collect(Collectors.toList());
 
         CallExpr callExpr = CxxWeaver.getFactory().callExpr(function, returnType, args);

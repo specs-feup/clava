@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -98,7 +97,8 @@ public class ClavaNodes {
      */
     public static ClavaNode toLiteral(String code, Type type, ClavaNode hint) {
         if (hint instanceof Expr) {
-            return ClavaNodeFactory.literalExpr(code, type);
+            return hint.getFactory().literalExpr(code, type);
+            // return ClavaNodeFactory.literalExpr(code, type);
         }
 
         if (hint instanceof Decl) {

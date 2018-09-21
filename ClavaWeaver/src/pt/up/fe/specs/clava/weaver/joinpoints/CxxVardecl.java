@@ -16,10 +16,10 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -79,7 +79,7 @@ public class CxxVardecl extends AVardecl {
 
     @Override
     public void setInitImpl(String init) {
-        varDecl.setInit(ClavaNodeFactory.literalExpr(init, varDecl.getType()));
+        varDecl.setInit(CxxWeaver.getFactory().literalExpr(init, varDecl.getType()));
     }
 
     @Override
