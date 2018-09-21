@@ -62,6 +62,7 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
     // Dump header
     llvm::errs() << getDataName(declNode) << "\n";
     llvm::errs() << clava::getId(D, id) << "\n";
+    llvm::errs() << clava::getClassName(D) << "\n";
     //DumpHeader(getDataName(declNode), D);
 
     switch (declNode) {

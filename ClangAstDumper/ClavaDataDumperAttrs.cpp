@@ -31,6 +31,8 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
     // Dump header
     llvm::errs() << getDataName(attrNode) << "\n";
     llvm::errs() << clava::getId(A, id) << "\n";
+    llvm::errs() << clava::getClassName(A) << "\n";
+
     //DumpHeader(getDataName(attrNode), A);
 
     switch(attrNode) {

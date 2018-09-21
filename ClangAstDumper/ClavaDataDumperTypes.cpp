@@ -53,6 +53,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
     // Dump header
     llvm::errs() << getDataName(typeNode) << "\n";
     llvm::errs() << clava::getId(T, id) << "\n";
+    llvm::errs() << clava::getClassName(T) << "\n";
+
     //DumpHeader(getDataName(typeNode), T);
 
     switch(typeNode) {
@@ -193,6 +195,8 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
     // Dump header
     llvm::errs() << "<QualTypeData>" << "\n";
     llvm::errs() << clava::getId(T, id) << "\n";
+    llvm::errs() << "QualType" << "\n";
+
     //DumpHeader("<QualTypeData>", T.getAsOpaquePtr());
 
     auto qualifiers = T.getQualifiers();

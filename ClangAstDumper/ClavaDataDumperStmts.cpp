@@ -85,6 +85,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
     // Dump header
     llvm::errs() << getDataName(stmtNode) << "\n";
     llvm::errs() << clava::getId(S, id) << "\n";
+    llvm::errs() << clava::getClassName(S) << "\n";
+
     //DumpHeader(getDataName(stmtNode), S);
 
     switch(stmtNode) {
