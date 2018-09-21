@@ -269,6 +269,10 @@ public class ParallelCodeParser extends CodeParser {
 
         SpecsLogs.msgInfo("--- AST parsing report ---");
         // checkUndefinedNodes(app);
+        //
+        // if (true) {
+        // throw new RuntimeException("STOP");
+        // }
 
         return app;
 

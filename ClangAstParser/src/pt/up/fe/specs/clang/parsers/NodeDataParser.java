@@ -26,6 +26,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
+import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
@@ -37,6 +39,7 @@ import pt.up.fe.specs.clang.parsers.data.StmtDataParser;
 import pt.up.fe.specs.clang.parsers.data.TypeDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
@@ -255,6 +258,13 @@ public class NodeDataParser {
     public static DataStore parseNodeData(LineStream lines, boolean hasLocation, ClangParserData dataStore) {
 
         String id = lines.nextLine();
+        String className = lines.nextLine();
+
+        Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(className);
+        StoreDefinition nodeKeys = StoreDefinitions.fromInterface(nodeClass);
+
+        // Get ClavaNode class of this id
+        // dataStore.get(ClangParserData.CL)
 
         SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
@@ -263,7 +273,8 @@ public class NodeDataParser {
                 : SourceRange.invalidRange();
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
-        DataStore data = DataStore.newInstance("Data from Parser");
+        // DataStore data = DataStore.newInstance("Data from Parser");
+        DataStore data = DataStore.newInstance(nodeKeys);
 
         data.add(ClavaNode.CONTEXT, dataStore.get(ClavaNode.CONTEXT));
         data.add(ClavaNode.ID, id);

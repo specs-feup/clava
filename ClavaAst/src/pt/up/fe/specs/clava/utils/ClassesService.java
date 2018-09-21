@@ -23,11 +23,15 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class ClassesService {
 
     private static final String CLAVA_AST_PACKAGE = "pt.up.fe.specs.clava.ast";
+    private static final DataStore EMPTY_DATA_STORE = DataStore.newInstance("Empty DataStore");
+
+    private static final ClassesService STATIC_INSTANCE = new ClassesService();
 
     private final CustomClassnameMapper customClassMap;
     private final Map<String, Class<? extends ClavaNode>> autoClassMap;
@@ -45,8 +49,17 @@ public class ClassesService {
         return customClassMap;
     }
 
+    public static Class<? extends ClavaNode> getClavaClass(String classname) {
+        return STATIC_INSTANCE.getClass(classname, EMPTY_DATA_STORE);
+    }
+
     // public void addCustomMapping(String className, Class<? extends ClavaNode> clavaNodeClass) {
     // autoClassMap.put(className, clavaNodeClass);
+    // }
+
+    // public Class<? extends ClavaNode> getClass(String classname) {
+    // // TODO: Maybe DataStore argument is no longer needed? It is required only for custom mappings
+    // return getClass(classname, EMPTY_DATA_STORE);
     // }
 
     public Class<? extends ClavaNode> getClass(String classname, DataStore data) {
@@ -95,6 +108,11 @@ public class ClassesService {
             return aClass.asSubclass(ClavaNode.class);
 
         } catch (ClassNotFoundException e) {
+            // Before throwing exception, try some cases
+            if (clangClassname.endsWith("Attr")) {
+                return Attribute.class;
+            }
+
             throw new RuntimeException("Could not map classname '" + clangClassname + "' to a ClavaNode class");
             // return Optional.empty();
         }

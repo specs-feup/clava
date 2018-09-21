@@ -69,7 +69,8 @@ public abstract class Decl extends ClavaNode {
      * A list of attributes associated with this Decl.
      */
     public final static DataKey<List<Attribute>> ATTRIBUTES = KeyFactory
-            .generic("attributes", (List<Attribute>) new ArrayList<Attribute>());
+            .generic("attributes", (List<Attribute>) new ArrayList<Attribute>())
+            .setDefault(() -> new ArrayList<>());
 
     /// DATAKEYS END
 

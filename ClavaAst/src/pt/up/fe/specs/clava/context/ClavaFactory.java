@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
@@ -162,8 +163,14 @@ public class ClavaFactory {
         this.classesService = new ClassesService();
     }
 
-    public DataStore newDataStore(String idPrefix) {
-        DataStore data = DataStore.newInstance("ClavaFactory Node");
+    // public DataStore newDataStore(String idPrefix) {
+    public DataStore newDataStore(Class<? extends ClavaNode> nodeClass) {
+
+        // Get the correct prefix for the given class
+        String idPrefix = PREFIX_MAP.get(nodeClass);
+
+        // DataStore data = DataStore.newInstance("ClavaFactory Node");
+        DataStore data = DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true);
 
         // Add base node, if present
         if (baseData != null) {
@@ -178,57 +185,56 @@ public class ClavaFactory {
         return data;
     }
 
-    protected DataStore newTypeDataStore() {
-        return newDataStore(TYPE_ID_PREFIX);
-    }
-
-    protected DataStore newExprDataStore() {
-        return newDataStore(EXPR_ID_PREFIX);
-    }
-
-    protected DataStore newExtraDataStore() {
-        return newDataStore(EXTRA_ID_PREFIX);
-    }
-
-    protected DataStore newDeclDataStore() {
-        return newDataStore(DECL_ID_PREFIX)
-                .set(Decl.ATTRIBUTES, new ArrayList<>());
-    }
-
-    protected DataStore newStmtDataStore() {
-        return newDataStore(STMT_ID_PREFIX);
-    }
-
-    protected DataStore newAttrDataStore() {
-        return newDataStore(ATTR_ID_PREFIX);
-    }
-
-    protected DataStore newPragmaDataStore() {
-        return newDataStore(PRAGMA_ID_PREFIX);
-    }
-
-    protected DataStore newCommentDataStore() {
-        return newDataStore(COMMENT_ID_PREFIX);
-    }
+    // protected DataStore newTypeDataStore() {
+    // return newDataStore(TYPE_ID_PREFIX);
+    // }
+    //
+    // protected DataStore newExprDataStore() {
+    // return newDataStore(EXPR_ID_PREFIX);
+    // }
+    //
+    // protected DataStore newExtraDataStore() {
+    // return newDataStore(EXTRA_ID_PREFIX);
+    // }
+    //
+    // protected DataStore newDeclDataStore() {
+    // return newDataStore(DECL_ID_PREFIX)
+    // .set(Decl.ATTRIBUTES, new ArrayList<>());
+    // }
+    //
+    // protected DataStore newStmtDataStore() {
+    // return newDataStore(STMT_ID_PREFIX);
+    // }
+    //
+    // protected DataStore newAttrDataStore() {
+    // return newDataStore(ATTR_ID_PREFIX);
+    // }
+    //
+    // protected DataStore newPragmaDataStore() {
+    // return newDataStore(PRAGMA_ID_PREFIX);
+    // }
+    //
+    // protected DataStore newCommentDataStore() {
+    // return newDataStore(COMMENT_ID_PREFIX);
+    // }
 
     /// EXTRA
 
     public App app(List<TranslationUnit> tUnits) {
-        DataStore data = newExtraDataStore();
+        DataStore data = newDataStore(App.class);
         return new App(data, tUnits);
     }
 
     public TranslationUnit translationUnit(File sourceFile, Collection<Decl> declarations) {
-        DataStore data = newExtraDataStore();
+        DataStore data = newDataStore(TranslationUnit.class);
         TranslationUnit.setDataStore(sourceFile, data);
 
         return new TranslationUnit(data, declarations);
     }
 
     public <T extends ClavaNode> T node(Class<T> nodeClass, List<? extends ClavaNode> children) {
-        // Get the correct prefix for the given class
-        String prefix = PREFIX_MAP.get(nodeClass);
-        DataStore data = newDataStore(prefix);
+
+        DataStore data = newDataStore(nodeClass);
 
         return nodeClass.cast(classesService.getClavaNodeBuilder(nodeClass).apply(data, children));
     }
@@ -240,7 +246,7 @@ public class ClavaFactory {
     }
 
     public FunctionProtoType functionProtoType(Type returnType, Collection<Type> argTypes) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(FunctionProtoType.class)
                 .put(FunctionProtoType.NUM_PARAMETERS, argTypes.size())
                 .put(FunctionProtoType.RETURN_TYPE, returnType)
                 .put(FunctionProtoType.PARAMETERS_TYPES, new ArrayList<>(argTypes));
@@ -250,7 +256,7 @@ public class ClavaFactory {
     }
 
     public NullType nullType() {
-        DataStore data = newTypeDataStore();
+        DataStore data = newDataStore(NullType.class);
         return new NullType(data, Collections.emptyList());
     }
 
@@ -263,19 +269,19 @@ public class ClavaFactory {
     }
 
     public BuiltinType builtinType(BuiltinKind kind) {
-        DataStore data = newTypeDataStore().put(BuiltinType.KIND, kind);
+        DataStore data = newDataStore(BuiltinType.class).put(BuiltinType.KIND, kind);
         return new BuiltinType(data, Collections.emptyList());
     }
 
     public DummyType dummyType(String dummyContent) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(DummyType.class)
                 .put(DummyType.DUMMY_CONTENT, dummyContent);
 
         return new DummyType(data, Collections.emptyList());
     }
 
     public LiteralType literalType(String code) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(LiteralType.class)
                 .put(LiteralNode.LITERAL_CODE, code);
 
         return new LiteralType(data, Collections.emptyList());
@@ -286,7 +292,7 @@ public class ClavaFactory {
     }
 
     public ConstantArrayType constantArrayType(Type elementType, BigInteger size) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(ConstantArrayType.class)
                 .put(ConstantArrayType.ARRAY_SIZE, size)
                 .put(ConstantArrayType.ELEMENT_TYPE, elementType);
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
@@ -296,7 +302,7 @@ public class ClavaFactory {
     }
 
     public VariableArrayType variableArrayType(Type elementType, Expr sizeExpr) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(VariableArrayType.class)
                 .put(VariableArrayType.ELEMENT_TYPE, elementType)
                 .put(VariableArrayType.SIZE_EXPR, sizeExpr);
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
@@ -306,7 +312,7 @@ public class ClavaFactory {
     }
 
     public PointerType pointerType(Type pointeeType) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(PointerType.class)
                 .put(PointerType.POINTEE_TYPE, pointeeType);
         // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
@@ -315,7 +321,7 @@ public class ClavaFactory {
     }
 
     public RecordType recordType(TagDecl recordDecl) {
-        DataStore data = newTypeDataStore()
+        DataStore data = newDataStore(RecordType.class)
                 .put(RecordType.DECL, recordDecl);
 
         return new RecordType(data, Collections.emptyList());
@@ -324,7 +330,7 @@ public class ClavaFactory {
     /// EXPRS
 
     public MemberExpr memberExpr(String memberName, Expr baseExpr) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(MemberExpr.class)
                 .put(MemberExpr.MEMBER_NAME, memberName)
                 .put(Expr.TYPE, Optional.of(dummyType("dummy type")));
 
@@ -332,7 +338,7 @@ public class ClavaFactory {
     }
 
     public DummyExpr dummyExpr(String dummyContent) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(DummyExpr.class)
                 .put(DummyExpr.DUMMY_CONTENT, dummyContent)
                 .put(Expr.TYPE, Optional.of(dummyType("dummy type")));
 
@@ -340,14 +346,14 @@ public class ClavaFactory {
     }
 
     public NullExpr nullExpr() {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(NullExpr.class)
                 .put(Expr.TYPE, Optional.of(nullType()));
 
         return new NullExpr(data, Collections.emptyList());
     }
 
     public IntegerLiteral integerLiteral(int integer) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(IntegerLiteral.class)
                 .put(Literal.SOURCE_LITERAL, Integer.toString(integer))
                 .put(IntegerLiteral.VALUE, BigInteger.valueOf(integer))
                 .put(Expr.TYPE, Optional.of(builtinType(BuiltinKind.Int)));
@@ -356,7 +362,7 @@ public class ClavaFactory {
     }
 
     public FloatingLiteral floatingLiteral(FloatKind floatKind, double value) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(FloatingLiteral.class)
                 .put(Literal.SOURCE_LITERAL, Double.toString(value))
                 .put(FloatingLiteral.VALUE, value)
                 .put(Expr.TYPE, Optional.of(builtinType(floatKind.getBuiltinKind())));
@@ -365,7 +371,7 @@ public class ClavaFactory {
     }
 
     public LiteralExpr literalExpr(String code, Type type) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(LiteralExpr.class)
                 .put(LiteralNode.LITERAL_CODE, code)
                 .put(Expr.TYPE, Optional.of(type));
 
@@ -373,7 +379,7 @@ public class ClavaFactory {
     }
 
     public DeclRefExpr declRefExpr(String declName, Type type) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(DeclRefExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
         // .put(DeclRefExpr.DECL_NAME, declName);
 
@@ -394,20 +400,20 @@ public class ClavaFactory {
     // }
 
     public CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(CallExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
 
         return new CallExpr(data, SpecsCollections.concat(function, args));
     }
 
     public CXXFunctionalCastExpr cxxFunctionalCastExpr(CastExpr expr, Expr subExpr) {
-        DataStore data = expr.getFactoryWithNode().newExprDataStore();
+        DataStore data = expr.getFactoryWithNode().newDataStore(CXXFunctionalCastExpr.class);
 
         return new CXXFunctionalCastExpr(data, Arrays.asList(subExpr));
     }
 
     public BinaryOperator binaryOperator(BinaryOperatorKind op, Type type, Expr lhs, Expr rhs) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(BinaryOperator.class)
                 .put(Expr.TYPE, Optional.of(type));
         data.set(BinaryOperator.OP, op);
 
@@ -415,7 +421,7 @@ public class ClavaFactory {
     }
 
     public UnaryOperator unaryOperator(UnaryOperatorKind op, Type type, Expr subExpr) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(UnaryOperator.class)
                 .put(Expr.TYPE, Optional.of(type))
                 .put(UnaryOperator.OP, op);
 
@@ -423,7 +429,7 @@ public class ClavaFactory {
     }
 
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
-        DataStore data = newExprDataStore()
+        DataStore data = newDataStore(CStyleCastExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
 
         data.set(CastExpr.CAST_KIND, CastKind.NO_OP);
@@ -434,11 +440,11 @@ public class ClavaFactory {
     /// DECLS
 
     public NullDecl nullDecl() {
-        return new NullDecl(newDeclDataStore(), Collections.emptyList());
+        return new NullDecl(newDataStore(NullDecl.class), Collections.emptyList());
     }
 
     public DummyDecl dummyDecl(String dummyContent) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(DummyDecl.class)
                 .put(DummyDecl.DUMMY_CONTENT, dummyContent);
 
         return new DummyDecl(data, Collections.emptyList());
@@ -450,7 +456,7 @@ public class ClavaFactory {
     }
 
     public DummyNamedDecl dummyNamedDecl(String declName) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(DummyNamedDecl.class)
                 .put(DummyDecl.DUMMY_CONTENT, declName)
                 .put(NamedDecl.DECL_NAME, declName);
 
@@ -458,7 +464,7 @@ public class ClavaFactory {
     }
 
     public DummyValueDecl dummyValueDecl(String declName, Type type) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(DummyValueDecl.class)
                 .put(DummyDecl.DUMMY_CONTENT, declName)
                 .put(NamedDecl.DECL_NAME, declName)
                 .put(ValueDecl.TYPE, type);
@@ -469,7 +475,7 @@ public class ClavaFactory {
     }
 
     public FunctionDecl functionDecl(String declName, Type type) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(FunctionDecl.class)
                 .put(NamedDecl.DECL_NAME, declName)
                 .put(ValueDecl.TYPE, type);
 
@@ -479,7 +485,7 @@ public class ClavaFactory {
     }
 
     public VarDecl varDecl(String declName, Type type) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(VarDecl.class)
                 .put(NamedDecl.DECL_NAME, declName)
                 .put(ValueDecl.TYPE, type);
 
@@ -493,7 +499,7 @@ public class ClavaFactory {
     }
 
     public ParmVarDecl parmVarDecl(String declName, Type type) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(ParmVarDecl.class)
                 .put(NamedDecl.DECL_NAME, declName)
                 .put(ValueDecl.TYPE, type);
 
@@ -501,7 +507,7 @@ public class ClavaFactory {
     }
 
     public RecordDecl recordDecl(String declName, TagKind kind, Collection<FieldDecl> fields) {
-        DataStore data = newDeclDataStore()
+        DataStore data = newDataStore(RecordDecl.class)
                 .put(RecordDecl.DECL_NAME, declName)
                 .put(RecordDecl.TAG_KIND, kind);
 
@@ -509,7 +515,7 @@ public class ClavaFactory {
     }
 
     public IncludeDecl includeDecl(Include include, String filepath) {
-        DataStore data = newDeclDataStore();
+        DataStore data = newDataStore(IncludeDecl.class);
 
         data.set(IncludeDecl.INCLUDE, include);
         if (filepath != null) {
@@ -528,7 +534,7 @@ public class ClavaFactory {
     }
 
     public LiteralDecl literalDecl(String code) {
-        DataStore data = newDeclDataStore();
+        DataStore data = newDataStore(LiteralDecl.class);
 
         data.set(LiteralDecl.LITERAL_CODE, code);
 
@@ -540,7 +546,7 @@ public class ClavaFactory {
     }
 
     public LinkageSpecDecl linkageSpecDecl(LanguageId language, List<? extends Decl> decls) {
-        DataStore data = newDeclDataStore();
+        DataStore data = newDataStore(LinkageSpecDecl.class);
 
         data.set(LinkageSpecDecl.LINKAGE_TYPE, language);
 
@@ -554,20 +560,20 @@ public class ClavaFactory {
     }
 
     public LabelStmt labelStmt(String label, Stmt subStmt) {
-        DataStore data = newStmtDataStore()
+        DataStore data = newDataStore(LabelStmt.class)
                 .set(LabelStmt.LABEL, label);
 
         return new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
     }
 
     public WrapperStmt wrapperStmt(ClavaNode node) {
-        DataStore data = newStmtDataStore();
+        DataStore data = newDataStore(WrapperStmt.class);
 
         return new WrapperStmt(data, Arrays.asList(node));
     }
 
     public NullStmt nullStmt() {
-        return new NullStmt(newStmtDataStore(), Collections.emptyList());
+        return new NullStmt(newDataStore(NullStmt.class), Collections.emptyList());
     }
 
     public DeclStmt declStmt(Decl... decls) {
@@ -575,25 +581,26 @@ public class ClavaFactory {
     }
 
     public DeclStmt declStmt(List<Decl> decls) {
-        DataStore data = newStmtDataStore();
+        DataStore data = newDataStore(DeclStmt.class);
         return new DeclStmt(data, decls);
     }
 
     public DeclStmt declStmt(RecordDecl recordDecl, List<VarDecl> varDecls) {
-        DataStore data = newStmtDataStore();
+        DataStore data = newDataStore(DeclStmt.class);
         return new DeclStmt(data, SpecsCollections.concat(recordDecl, varDecls));
     }
 
     public ReturnStmt returnStmt(Expr retValue) {
-        return new ReturnStmt(newStmtDataStore(), Arrays.asList(retValue));
+        return new ReturnStmt(newDataStore(ReturnStmt.class), Arrays.asList(retValue));
     }
 
     public ReturnStmt returnStmt() {
-        return new ReturnStmt(newStmtDataStore(), Collections.emptyList());
+        return new ReturnStmt(newDataStore(ReturnStmt.class), Collections.emptyList());
     }
 
     public LiteralStmt literalStmt(String literalCode) {
-        return new LiteralStmt(newStmtDataStore().put(LiteralStmt.LITERAL_CODE, literalCode), Collections.emptyList());
+        return new LiteralStmt(newDataStore(LiteralStmt.class).put(LiteralStmt.LITERAL_CODE, literalCode),
+                Collections.emptyList());
     }
 
     public CompoundStmt compoundStmt(String statement) {
@@ -605,7 +612,7 @@ public class ClavaFactory {
     }
 
     public CompoundStmt compoundStmt(Collection<Stmt> children) {
-        return new CompoundStmt(newStmtDataStore(), children);
+        return new CompoundStmt(newDataStore(CompoundStmt.class), children);
     }
 
     // public CompoundStmt compoundStmt(boolean isNaked, Collection<? extends ClavaNode> children) {
@@ -619,7 +626,7 @@ public class ClavaFactory {
      * @return
      */
     public ExprStmt exprStmt(Expr expr) {
-        DataStore exprStmtData = newStmtDataStore()
+        DataStore exprStmtData = newDataStore(ExprStmt.class)
                 .put(ExprStmt.HAS_SEMICOLON, true)
                 .put(ClavaNode.LOCATION, expr.getLocation());
 
@@ -643,50 +650,50 @@ public class ClavaFactory {
     }
 
     private IfStmt ifStmt(Expr condition, CompoundStmt thenBody, ClavaNode elseBody) {
-        DataStore ifStmtData = newStmtDataStore();
+        DataStore ifStmtData = newDataStore(IfStmt.class);
 
         return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenBody, elseBody));
     }
 
     public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
-        DataStore forStmtData = newStmtDataStore();
+        DataStore forStmtData = newDataStore(ForStmt.class);
 
         return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body));
     }
 
     public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {
-        DataStore whileStmtData = newStmtDataStore();
+        DataStore whileStmtData = newDataStore(WhileStmt.class);
 
         return new WhileStmt(whileStmtData, Arrays.asList(cond, body));
     }
 
     public BreakStmt breakStmt() {
-        DataStore breakStmtData = newStmtDataStore();
+        DataStore breakStmtData = newDataStore(BreakStmt.class);
 
         return new BreakStmt(breakStmtData, Collections.emptyList());
     }
 
     public CaseStmt caseStmt(Expr caseExpr, Stmt subStmt) {
-        DataStore caseStmtData = newStmtDataStore();
+        DataStore caseStmtData = newDataStore(CaseStmt.class);
 
         return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, subStmt));
     }
 
     public SwitchStmt switchStmt(Expr condition, Stmt body) {
-        DataStore data = newStmtDataStore();
+        DataStore data = newDataStore(SwitchStmt.class);
 
         return new SwitchStmt(data, Arrays.asList(condition, body));
     }
 
     public DummyStmt dummyStmt(ClavaNode node) {
-        DataStore data = newStmtDataStore()
+        DataStore data = newDataStore(DummyStmt.class)
                 .put(DummyNode.DUMMY_CONTENT, node.toString());
 
         return new DummyStmt(data, node.getChildren());
     }
 
     public DummyStmt dummyStmt(String dummyContent) {
-        DataStore data = newStmtDataStore()
+        DataStore data = newDataStore(DummyStmt.class)
                 .put(DummyNode.DUMMY_CONTENT, dummyContent);
 
         return new DummyStmt(data, Collections.emptyList());
@@ -695,7 +702,7 @@ public class ClavaFactory {
     /// ATTRIBUTES
 
     public DummyAttr dummyAttr(String dummyContent) {
-        DataStore data = newAttrDataStore()
+        DataStore data = newDataStore(DummyAttr.class)
                 .put(DummyNode.DUMMY_CONTENT, dummyContent);
 
         return new DummyAttr(data, Collections.emptyList());
@@ -706,14 +713,14 @@ public class ClavaFactory {
     public GenericPragma genericPragma(List<String> content) {
         // content = content instanceof ArrayList ? content : new ArrayList<>(content);
 
-        DataStore data = newPragmaDataStore()
+        DataStore data = newDataStore(GenericPragma.class)
                 .set(GenericPragma.CONTENT, new ArrayList<>(content));
 
         return new GenericPragma(data, Collections.emptyList());
     }
 
     public SimpleOmpPragma simpleOmpPragma(OmpDirectiveKind kind) {
-        DataStore data = newPragmaDataStore()
+        DataStore data = newDataStore(SimpleOmpPragma.class)
                 .set(OmpPragma.DIRECTIVE_KIND, kind);
 
         return new SimpleOmpPragma(data, Collections.emptyList());
@@ -724,7 +731,7 @@ public class ClavaFactory {
     }
 
     public OmpClausePragma ompClausePragma(OmpDirectiveKind kind, Map<OmpClauseKind, List<OmpClause>> clauses) {
-        DataStore data = newPragmaDataStore()
+        DataStore data = newDataStore(OmpClausePragma.class)
                 .set(OmpPragma.DIRECTIVE_KIND, kind)
                 .set(OmpClausePragma.CLAUSES, clauses);
 
@@ -732,7 +739,7 @@ public class ClavaFactory {
     }
 
     public OmpLiteralPragma ompLiteralPragma(OmpDirectiveKind kind, String customContent) {
-        DataStore data = newPragmaDataStore()
+        DataStore data = newDataStore(OmpLiteralPragma.class)
                 .set(OmpPragma.DIRECTIVE_KIND, kind)
                 .set(OmpLiteralPragma.CUSTOM_CONTENT, customContent);
 
@@ -742,7 +749,7 @@ public class ClavaFactory {
     /// COMMENTS
 
     public InlineComment inlineComment(String text, boolean isStmtComment) {
-        DataStore data = newCommentDataStore()
+        DataStore data = newDataStore(InlineComment.class)
                 .set(InlineComment.TEXT, text)
                 .set(InlineComment.IS_STMT_COMMENT, isStmtComment);
 
@@ -750,7 +757,7 @@ public class ClavaFactory {
     }
 
     public MultiLineComment multiLineComment(List<String> lines) {
-        DataStore data = newCommentDataStore()
+        DataStore data = newDataStore(MultiLineComment.class)
                 .set(MultiLineComment.LINES, new ArrayList<>(lines));
 
         return new MultiLineComment(data, Collections.emptyList());

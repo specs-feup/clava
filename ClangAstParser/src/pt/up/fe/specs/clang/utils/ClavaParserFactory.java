@@ -31,14 +31,14 @@ public class ClavaParserFactory extends ClavaFactory {
     /// PRAGMAS
 
     public LaraMarkerPragma laraMarkerPragma(String markedId) {
-        DataStore data = newPragmaDataStore()
+        DataStore data = newDataStore(LaraMarkerPragma.class)
                 .set(LaraMarkerPragma.MARKER_ID, markedId);
 
         return new LaraMarkerPragma(data, Collections.emptyList());
     }
 
     public LaraTagPragma laraTagPragma(String tagId) {
-        DataStore data = newPragmaDataStore()
+        DataStore data = newDataStore(LaraTagPragma.class)
                 .set(LaraTagPragma.TAG_ID, tagId);
 
         return new LaraTagPragma(data, Collections.emptyList());

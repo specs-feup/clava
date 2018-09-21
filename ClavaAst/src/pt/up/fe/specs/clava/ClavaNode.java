@@ -132,8 +132,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
         disableModification = false;
 
         // Set definition of DataStore
-        this.dataI.setDefinition(getClass());
+        // this.dataI.setDefinition(getClass());
 
+        // To avoid implementing methods again in ClavaNode
         this.dataClass = new GenericDataClass<>(this.dataI);
     }
 

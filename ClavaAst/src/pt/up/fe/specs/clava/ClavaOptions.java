@@ -53,7 +53,7 @@ public interface ClavaOptions extends StoreDefinitionProvider {
     }
 
     static DataStore toDataStore(List<String> flags) {
-        DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION);
+        DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
 
         // Search options
