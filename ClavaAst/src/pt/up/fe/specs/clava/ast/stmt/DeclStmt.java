@@ -24,9 +24,12 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.stmt.enums.DeclStmtType;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.utils.Typable;
 
 public class DeclStmt extends Stmt {
 
@@ -234,9 +237,17 @@ public class DeclStmt extends Stmt {
             return getChildren(Decl.class).get(0).getCode();
         }
 
-        // All elements are Decls
+        // All elements are Decls with types
         // List<NamedDecl> decls = getChildren(NamedDecl.class);
         List<Decl> decls = getChildren(Decl.class);
+
+        // Check if all types of decls are the same
+        Type firstType = ((Typable) decls.get(0)).getType();
+        boolean typesAreDiff = decls.stream()
+                .map(decl -> ((Typable) decl).getType())
+                .filter(type -> !type.equals(firstType))
+                .findFirst()
+                .isPresent();
 
         // Write code of first type, add code of next types without variable declaration
         // System.out.println("DECLS:");
@@ -254,12 +265,20 @@ public class DeclStmt extends Stmt {
         // if(!firstDecl.endsWith(";")) {
         // code.append(";");
         // }
-        for (int i = 1; i < decls.size(); i++) {
-            if (!code.trim().endsWith(";")) {
-                code += ";";
-            }
 
-            code += ln() + decls.get(i).getCode();
+        if (typesAreDiff) {
+            for (int i = 1; i < decls.size(); i++) {
+                if (!code.trim().endsWith(";")) {
+                    code += ";";
+                }
+
+                code += ln() + decls.get(i).getCode();
+            }
+        } else {
+            for (int i = 1; i < decls.size(); i++) {
+                code += ", ";
+                code += ((NamedDecl) decls.get(i)).getTypelessCode();
+            }
         }
 
         // String code = decls.stream()
@@ -273,6 +292,7 @@ public class DeclStmt extends Stmt {
             // System.out.println("ADDING ;");
             code += ";";
         }
+
         // System.out.println("FINAL CODE:" + code);
         return code;
     }
