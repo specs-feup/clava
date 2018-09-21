@@ -60,9 +60,7 @@ template void f(int); // instantiates f<int>(int), template argument deduced
 
 int main() {
    // calling template function creates specialized versions that need to be removed
-   std::vector<double> m1;
-   std::vector<double> m2;
-   std::vector<double> m3;
+   std::vector<double> m1, m2, m3;
    matrix_mult_tiling(m1, m2, m3, 2, 4, 7, 2, 2);
    return 0;
 }

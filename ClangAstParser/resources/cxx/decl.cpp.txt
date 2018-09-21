@@ -47,19 +47,14 @@ static int a;
 
 int main() {
    int a;
-   int b;
-   int c = 0;
-   int d;
+   int b, c = 0, d;
    /** Full comment*/
-   int const e = 2;
-   int const f = 3;
+   int const e = 2, f = 3;
    int constexpr constexpr_local = 1;
    int g = 4;
-   std::vector<int> v1;
-   std::vector<int> v2;
+   std::vector<int> v1, v2;
    {
-      int aa;
-      int bb;
+      int aa, bb;
    }
    auto fooResult = foo();
    auto fooRefResult = fooRef("Hello");

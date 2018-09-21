@@ -50,14 +50,14 @@ public class CxxProblematicTester {
         new CxxTester("classes.cpp").test();
     }
 
-    @Test
-    public void testLambda() {
-        // Lambdas not implemented
-        // Reference for tests: https://msdn.microsoft.com/en-us/library/dd293608.aspx
-        new CxxTester("lambda.cpp")
-                .addFlags("-std=c++14")
-                .test();
-    }
+    // @Test
+    // public void testLambda() {
+    // // Lambdas not implemented
+    // // Reference for tests: https://msdn.microsoft.com/en-us/library/dd293608.aspx
+    // new CxxTester("lambda.cpp")
+    // .addFlags("-std=c++14")
+    // .test();
+    // }
 
     @Test
     public void testTemplateAuto() {

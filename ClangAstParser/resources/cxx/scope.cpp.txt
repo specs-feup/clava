@@ -4,9 +4,7 @@ void foo() {
 
 
 int main() {
-   int x;
-   int a;
-   int i;
+   int x, a, i;
    while(x) a++;
    while(x) {
       a++;

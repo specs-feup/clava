@@ -2,8 +2,7 @@
 // Taken from here: https://msdn.microsoft.com/en-us/library/2c002fdz.aspx
 
 int main() {
-   int i;
-   int j;
+   int i, j;
    for(i = 0; i < 10; i++) {
       printf_s("Outer loop executing. i = %d\n", i);
       for(j = 0; j < 3; j++) {

@@ -82,8 +82,7 @@ void wtime(double * t);
 int main(int argc, char * argv[]) {
 int niter;
 char Class;
-double total_time;
-double mflops;
+double total_time, mflops;
 int verified;
 FILE * fp;
 if((fp = fopen("timer.flag", "r")) != ((void *) 0)) {
@@ -133,18 +132,7 @@ return 'U';
 }
 }
 void appft(int niter, double * total_time, int * verified) {
-int i;
-int j;
-int k;
-int kt;
-int n12;
-int n22;
-int n32;
-int ii;
-int jj;
-int kk;
-int ii2;
-int ik2;
+int i, j, k, kt, n12, n22, n32, ii, jj, kk, ii2, ik2;
 double ap;
 dcomplex exp1[128];
 dcomplex exp2[128];
@@ -223,14 +211,8 @@ printf(" %26s =%9.4f\n", "Benchmark time            ", *total_time);
 // compute the roots-of-unity array that will be used for subsequent FFTs.
 //---------------------------------------------------------------------
 void CompExp(int n, dcomplex exponent[n]) {
-int m;
-int nu;
-int ku;
-int i;
-int j;
-int ln;
-double t;
-double ti;
+int m, nu, ku, i, j, ln;
+double t, ti;
 double const pi = 3.141592653589793238;
 nu = n;
 m = ilog2(n);
@@ -248,8 +230,7 @@ ln = 2 * ln;
 }
 }
 int ilog2(int n) {
-int nn;
-int lg;
+int nn, lg;
 if(n == 1)
 return 0;
 lg = 1;
@@ -264,12 +245,8 @@ return lg;
 // compute a^exponent mod 2^46
 //---------------------------------------------------------------------
 double ipow46(double a, int exponent) {
-double result;
-double dummy;
-double q;
-double r;
-int n;
-int n2;
+double result, dummy, q, r;
+int n, n2;
 //---------------------------------------------------------------------
 // Use
 //   a^n = a^(n/2)*a^(n/2) if n even else
@@ -297,11 +274,7 @@ result = r;
 return result;
 }
 void CalculateChecksum(dcomplex * csum, int iterN, int d1, int d2, int d3, dcomplex u[d3][d2][d1 + 1]) {
-int i;
-int i1;
-int ii;
-int ji;
-int ki;
+int i, i1, ii, ji, ki;
 dcomplex csum_temp = (dcomplex){0.0, 0.0};
 for(i = 1; i <= 1024; i++) {
 i1 = i;
@@ -316,14 +289,9 @@ printf(" T =%5d     Checksum =%22.12E%22.12E\n", iterN, csum_temp.real, csum_tem
 }
 void compute_initial_conditions(int d1, int d2, int d3, dcomplex u0[d3][d2][d1 + 1]) {
 dcomplex tmp[128];
-double x0;
-double start;
-double an;
-double dummy;
+double x0, start, an, dummy;
 double RanStarts[128];
-int i;
-int j;
-int k;
+int i, j, k;
 double const seed = 314159265.0;
 double const a = 1220703125.0;
 start = seed;
@@ -352,9 +320,7 @@ u0[k][j][i] = tmp[i];
 }
 }
 void evolve(int nx, int ny, int nz, dcomplex x[nz][ny][nx + 1], dcomplex y[nz][ny][nx + 1], double twiddle[nz][ny][nx + 1]) {
-int i;
-int j;
-int k;
+int i, j, k;
 for(i = 0; i < nz; i++) {
 for(k = 0; k < ny; k++) {
 for(j = 0; j < nx; j++) {
@@ -373,22 +339,9 @@ x[i][k][j] = y[i][k][j];
 //---------------------------------------------------------------------
 void Swarztrauber(int is, int m, int vlen, int n, int xd1, void * ox, dcomplex exponent[n]) {
 dcomplex (*x)[xd1] = (dcomplex (*)[xd1]) ox;
-int i;
-int j;
-int l;
-dcomplex u1;
-dcomplex x11;
-dcomplex x21;
-int k;
-int n1;
-int li;
-int lj;
-int lk;
-int ku;
-int i11;
-int i12;
-int i21;
-int i22;
+int i, j, l;
+dcomplex u1, x11, x21;
+int k, n1, li, lj, lk, ku, i11, i12, i21, i22;
 if(timers_enabled) timer_start(4);
 //---------------------------------------------------------------------
 // Perform one variant of the Stockham FFT.
@@ -458,12 +411,8 @@ x[i22 + k][j] = (dcomplex){((u1).real * ((dcomplex){(x11).real - (x21).real, (x1
 if(timers_enabled) timer_stop(4);
 }
 void fftXYZ(int sign, int n1, int n2, int n3, dcomplex x[n3][n2][n1 + 1], dcomplex xout[(n1 + 1) * n2 * n3], dcomplex exp1[n1], dcomplex exp2[n2], dcomplex exp3[n3]) {
-int i;
-int j;
-int k;
-int log;
-int bls;
-int ble;
+int i, j, k, log;
+int bls, ble;
 int len;
 int blkp;
 if(timers_enabled) timer_start(3);
@@ -536,8 +485,7 @@ void verify(int n1, int n2, int n3, int nt, dcomplex cksum[nt + 1], int * verifi
 // Local variables.
 int kt;
 dcomplex cexpd[26];
-double epsilon;
-double err;
+double epsilon, err;
 // Initialize tolerance level and success flag.
 epsilon = 1.0e-12;
 *verified = 1;
@@ -758,15 +706,7 @@ double const r23 = 1.1920928955078125e-07;
 double const r46 = r23 * r23;
 double const t23 = 8.388608e+06;
 double const t46 = t23 * t23;
-double t1;
-double t2;
-double t3;
-double t4;
-double a1;
-double a2;
-double x1;
-double x2;
-double z;
+double t1, t2, t3, t4, a1, a2, x1, x2, z;
 double r;
 //--------------------------------------------------------------------
 //  Break A into two parts such that A = 2^23 * A1 + A2.
@@ -824,15 +764,7 @@ double const r23 = 1.1920928955078125e-07;
 double const r46 = r23 * r23;
 double const t23 = 8.388608e+06;
 double const t46 = t23 * t23;
-double t1;
-double t2;
-double t3;
-double t4;
-double a1;
-double a2;
-double x1;
-double x2;
-double z;
+double t1, t2, t3, t4, a1, a2, x1, x2, z;
 int i;
 //--------------------------------------------------------------------
 //  Break A into two parts such that A = 2^23 * A1 + A2.
@@ -893,8 +825,7 @@ start[n] = elapsed_time();
 /******            T  I  M  E  R  _  S  T  O  P             ******/
 /*****************************************************************/
 void timer_stop(int n) {
-double t;
-double now;
+double t, now;
 now = elapsed_time();
 t = now - start[n];
 elapsed[n] += t;
