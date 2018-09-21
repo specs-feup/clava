@@ -46,4 +46,8 @@ int main() {
 	for(auto element : intVector) {
 		
 	}
+	
+	for(int ii=0, jj=0; ii<10 && jj<10; ii++, jj++) {
+        i+= ii + jj;
+    }
 }

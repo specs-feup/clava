@@ -32,6 +32,7 @@ import pt.up.fe.specs.cxxweaver.tests.CxxApiTest;
 import pt.up.fe.specs.cxxweaver.tests.CxxTest;
 import pt.up.fe.specs.lara.doc.LaraDocLauncher;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 
@@ -40,8 +41,8 @@ public class ClavaWeaverLauncher {
     public static void main(String[] args) {
         SpecsSystem.programStandardInit();
 
-        // System.out.println("Press any key to proceed");
-        // SpecsIo.read();
+        System.out.println("Press any key to proceed");
+        SpecsIo.read();
 
         execute(args);
     }

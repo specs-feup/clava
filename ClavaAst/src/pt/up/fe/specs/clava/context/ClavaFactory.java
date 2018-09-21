@@ -232,6 +232,10 @@ public class ClavaFactory {
         return new TranslationUnit(data, declarations);
     }
 
+    public <T extends ClavaNode> T node(Class<T> nodeClass, ClavaNode... children) {
+        return node(nodeClass, Arrays.asList(children));
+    }
+
     public <T extends ClavaNode> T node(Class<T> nodeClass, List<? extends ClavaNode> children) {
 
         DataStore data = newDataStore(nodeClass);
@@ -329,10 +333,14 @@ public class ClavaFactory {
 
     /// EXPRS
 
-    public MemberExpr memberExpr(String memberName, Expr baseExpr) {
+    public MemberExpr memberExpr(String memberName, Type memberType, Expr baseExpr) {
         DataStore data = newDataStore(MemberExpr.class)
                 .put(MemberExpr.MEMBER_NAME, memberName)
-                .put(Expr.TYPE, Optional.of(dummyType("dummy type")));
+                .put(Expr.TYPE, Optional.of(memberType));
+
+        if (baseExpr.getType() instanceof PointerType) {
+            data.put(MemberExpr.IS_ARROW, true);
+        }
 
         return new MemberExpr(data, Arrays.asList(baseExpr));
     }
@@ -511,7 +519,19 @@ public class ClavaFactory {
                 .put(RecordDecl.DECL_NAME, declName)
                 .put(RecordDecl.TAG_KIND, kind);
 
-        return new RecordDecl(data, fields);
+        RecordDecl decl = new RecordDecl(data, fields);
+        decl.set(RecordDecl.TYPE_FOR_DECL, Optional.of(recordType(decl)));
+        decl.set(RecordDecl.IS_COMPLETE_DEFINITION);
+
+        return decl;
+    }
+
+    public FieldDecl fieldDecl(String fieldName, Type fieldType) {
+        DataStore data = newDataStore(FieldDecl.class)
+                .put(FieldDecl.DECL_NAME, fieldName)
+                .put(FieldDecl.TYPE, fieldType);
+
+        return new FieldDecl(data, Arrays.asList(nullExpr(), nullExpr()));
     }
 
     public IncludeDecl includeDecl(Include include, String filepath) {
@@ -635,7 +655,7 @@ public class ClavaFactory {
 
     public ExprStmt exprStmtAssignment(Expr lhs, Expr rhs) {
         // Create assignment
-        BinaryOperator assign = binaryOperator(BinaryOperatorKind.ASSIGN, dummyType("exprStmtAssignment Type"), lhs,
+        BinaryOperator assign = binaryOperator(BinaryOperatorKind.ASSIGN, rhs.getExprType(), lhs,
                 rhs);
 
         return exprStmt(assign);
