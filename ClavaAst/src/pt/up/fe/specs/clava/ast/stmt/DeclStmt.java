@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -241,13 +242,21 @@ public class DeclStmt extends Stmt {
         // List<NamedDecl> decls = getChildren(NamedDecl.class);
         List<Decl> decls = getChildren(Decl.class);
 
-        // Check if all types of decls are the same
-        Type firstType = ((Typable) decls.get(0)).getType();
-        boolean typesAreDiff = decls.stream()
-                .map(decl -> ((Typable) decl).getType())
-                .filter(type -> !type.equals(firstType))
-                .findFirst()
-                .isPresent();
+        // boolean allTypable = decls.size() == decls.stream()
+        // .filter(decl -> (decl instanceof Typable))
+        // .count();
+        //
+        // // Check if all types of decls are the same
+        //
+        // Type firstType = allTypable ? ((Typable) decls.get(0)).getType() : null;
+        // boolean typesAreDiff = allTypable ? decls.stream()
+        // .map(decl -> ((Typable) decl).getType())
+        // .filter(type -> !type.equals(firstType))
+        // .findFirst()
+        // .isPresent()
+        // : true;
+
+        boolean singleLineDecl = isSingleLineDecl(decls);
 
         // Write code of first type, add code of next types without variable declaration
         // System.out.println("DECLS:");
@@ -266,18 +275,18 @@ public class DeclStmt extends Stmt {
         // code.append(";");
         // }
 
-        if (typesAreDiff) {
+        if (singleLineDecl) {
+            for (int i = 1; i < decls.size(); i++) {
+                code += ", ";
+                code += ((NamedDecl) decls.get(i)).getTypelessCode();
+            }
+        } else {
             for (int i = 1; i < decls.size(); i++) {
                 if (!code.trim().endsWith(";")) {
                     code += ";";
                 }
 
                 code += ln() + decls.get(i).getCode();
-            }
-        } else {
-            for (int i = 1; i < decls.size(); i++) {
-                code += ", ";
-                code += ((NamedDecl) decls.get(i)).getTypelessCode();
             }
         }
 
@@ -295,6 +304,45 @@ public class DeclStmt extends Stmt {
 
         // System.out.println("FINAL CODE:" + code);
         return code;
+    }
+
+    private boolean isSingleLineDecl(List<Decl> decls) {
+        // If not all decls have a type, return false
+        List<Typable> typables = decls.stream()
+                .filter(decl -> decl instanceof Typable)
+                .map(Typable.class::cast)
+                .collect(Collectors.toList());
+
+        if (typables.size() != decls.size()) {
+            return false;
+        }
+
+        Type firstType = typables.get(0).getType();
+
+        boolean diffTypes = typables.stream()
+                .filter(typable -> !typable.getType().equals(firstType))
+                .findFirst()
+                .isPresent();
+
+        return !diffTypes;
+        // boolean allTypable = decls.size() == decls.stream()
+        // .filter(decl -> (decl instanceof Typable))
+        // .count();
+        //
+        // if (!allTypable) {
+        // return false;
+        // }
+        //
+        // // Check if all types of decls are the same
+        // Type firstType = ((Typable) decls.get(0)).getType();
+        // boolean typesAreDiff = decls.stream()
+        // .map(decl -> ((Typable) decl).getType())
+        // .filter(type -> !type.equals(firstType))
+        // .findFirst()
+        // .isPresent();
+        //
+        // // TODO Auto-generated method stub
+        // return false;
     }
 
     public DeclStmt setHasSemicolon(boolean hasSemicolon) {
