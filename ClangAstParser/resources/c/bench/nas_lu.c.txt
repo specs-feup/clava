@@ -1570,15 +1570,17 @@ void setbv() {
 //---------------------------------------------------------------------
 int i, j, k, m;
 double temp1[5];
-double temp2;
+double temp2[5];
 //---------------------------------------------------------------------
 // set the dependent variable values along the top and bottom faces
 //---------------------------------------------------------------------
 for(j = 0; j < ny; j++) {
 for(i = 0; i < nx; i++) {
 exact(i, j, 0, temp1);
+exact(i, j, nz - 1, temp2);
 for(m = 0; m < 5; m++) {
 u[0][j][i][m] = temp1[m];
+u[nz - 1][j][i][m] = temp2[m];
 }
 }
 }
@@ -1588,8 +1590,10 @@ u[0][j][i][m] = temp1[m];
 for(k = 0; k < nz; k++) {
 for(i = 0; i < nx; i++) {
 exact(i, 0, k, temp1);
+exact(i, ny - 1, k, temp2);
 for(m = 0; m < 5; m++) {
 u[k][0][i][m] = temp1[m];
+u[k][ny - 1][i][m] = temp2[m];
 }
 }
 }
@@ -1599,8 +1603,10 @@ u[k][0][i][m] = temp1[m];
 for(k = 0; k < nz; k++) {
 for(j = 0; j < ny; j++) {
 exact(0, j, k, temp1);
+exact(nx - 1, j, k, temp2);
 for(m = 0; m < 5; m++) {
 u[k][j][0][m] = temp1[m];
+u[k][j][nx - 1][m] = temp2[m];
 }
 }
 }
@@ -1619,11 +1625,11 @@ int i, j, k, m;
 double xi, eta, zeta;
 double pxi, peta, pzeta;
 double ue_1jk[5];
-double ue_nx0jk;
-double ue_i1k;
+double ue_nx0jk[5];
+double ue_i1k[5];
 double ue_iny0k[5];
-double ue_ij1;
-double ue_ijnz;
+double ue_ij1[5];
+double ue_ijnz[5];
 for(k = 1; k < nz - 1; k++) {
 zeta = ((double) k) / (nz - 1);
 for(j = 1; j < ny - 1; j++) {
@@ -1631,8 +1637,15 @@ eta = ((double) j) / (ny0 - 1);
 for(i = 1; i < nx - 1; i++) {
 xi = ((double) i) / (nx0 - 1);
 exact(0, j, k, ue_1jk);
+exact(nx0 - 1, j, k, ue_nx0jk);
+exact(i, 0, k, ue_i1k);
 exact(i, ny0 - 1, k, ue_iny0k);
+exact(i, j, 0, ue_ij1);
+exact(i, j, nz - 1, ue_ijnz);
 for(m = 0; m < 5; m++) {
+pxi = (1.0 - xi) * ue_1jk[m] + xi * ue_nx0jk[m];
+peta = (1.0 - eta) * ue_i1k[m] + eta * ue_iny0k[m];
+pzeta = (1.0 - zeta) * ue_ij1[m] + zeta * ue_ijnz[m];
 u[k][j][i][m] = pxi + peta + pzeta - pxi * peta - peta * pzeta - pzeta * pxi + pxi * peta * pzeta;
 }
 }
