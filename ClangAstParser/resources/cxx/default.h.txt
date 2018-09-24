@@ -12,6 +12,7 @@ class Test2 {
    
    public:
    Test2()noexcept = default;
+   ~Test2()noexcept = default;
    double function1(double x);
    float function2();
 };

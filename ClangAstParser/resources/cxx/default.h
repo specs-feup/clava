@@ -9,6 +9,7 @@ private:
    
 public:
   Test2() = default;
+  ~Test2() = default;
   double function1(double x);
   float function2();
 };
