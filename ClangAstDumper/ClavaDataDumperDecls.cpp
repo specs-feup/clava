@@ -315,6 +315,7 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     clava::dump(D->isVirtualAsWritten());
     clava::dump(D->isPure());
     clava::dump(D->isDeletedAsWritten());
+    clava::dump(D->isExplicitlyDefaulted());
 
     clava::dump(clava::getId(D->getPreviousDecl(), id));
     clava::dump(clava::getId(D->getCanonicalDecl(), id));
@@ -412,6 +413,11 @@ void clava::ClavaDataDumper::DumpCXXConstructorDeclData(const CXXConstructorDecl
         clava::dump((*init)->isWritten());
 
     }
+
+    clava::dump(D->isDefaultConstructor());
+    clava::dump(D->isExplicit());
+    clava::dump(D->isExplicitSpecified());
+
 }
 
 void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
