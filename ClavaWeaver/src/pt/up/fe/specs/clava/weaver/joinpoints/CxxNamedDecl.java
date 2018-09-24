@@ -69,4 +69,9 @@ public class CxxNamedDecl extends ANamedDecl {
     public void setNameImpl(String name) {
         defNameImpl(name);
     }
+
+    @Override
+    public void defNameImpl(String value) {
+        namedDecl.set(NamedDecl.DECL_NAME, value);
+    }
 }

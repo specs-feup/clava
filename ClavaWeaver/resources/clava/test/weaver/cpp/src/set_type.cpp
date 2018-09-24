@@ -8,6 +8,9 @@ void static_cast_foo() {
 	auto y = static_cast<double>(x * 2);
 }	
 
+
+typedef double x_double;
+
 int main() {
 
 }

@@ -424,10 +424,10 @@ public class CxxFunction extends AFunction {
         function.setType(functionTypeCopy);
     }
 
-    @Override
-    public void defNameImpl(String value) {
-        function.setName(value);
-    }
+    // @Override
+    // public void defNameImpl(String value) {
+    // function.setName(value);
+    // }
 
     @Override
     public void setNameImpl(String name) {

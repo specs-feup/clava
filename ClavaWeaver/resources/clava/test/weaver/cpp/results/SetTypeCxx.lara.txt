@@ -12,6 +12,7 @@ void static_cast_foo() {
    auto y = static_cast<float>(x * 2);
 }
 
+typedef float x_float;
 
 int main() {
 }

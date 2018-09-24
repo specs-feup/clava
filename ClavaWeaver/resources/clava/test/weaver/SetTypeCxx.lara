@@ -18,6 +18,11 @@ aspectdef Launcher
 		}
 	end
 	
+	select typedefDecl end
+	apply
+		$typedefDecl.type = $floatType;
+		$typedefDecl.name = "x_float";
+	end
 	
 	select program end
 	apply
