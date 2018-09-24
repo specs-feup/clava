@@ -893,10 +893,14 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String[] getKeysArrayImpl() {
-        return getNode().getKeys()
+        List<String> keys = new ArrayList<>(getNode().getKeys()
                 .getKeyMap()
-                .keySet()
-                .toArray(new String[0]);
+                .keySet());
+
+        // To have consistent outputs
+        Collections.sort(keys);
+
+        return keys.toArray(new String[0]);
     }
 
     @Override
