@@ -40,6 +40,16 @@ public abstract class ExplicitCastExpr extends CastExpr {
         super(data, children);
     }
 
+    /**
+     * Besides setting the key 'TYPE', it also sets the key 'TYPE_AS_WRITTEN'.
+     */
+    @Override
+    public void setType(Type type) {
+        super.setType(type);
+
+        set(TYPE_AS_WRITTEN, type);
+    }
+
     // public ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
     // Expr subExpr) {
     //
