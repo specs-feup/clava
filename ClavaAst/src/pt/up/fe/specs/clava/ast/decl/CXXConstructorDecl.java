@@ -47,6 +47,21 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     public final static DataKey<List<CXXCtorInitializer>> CONSTRUCTOR_INITS = KeyFactory.generic("constructorInits",
             (List<CXXCtorInitializer>) new ArrayList<CXXCtorInitializer>());
 
+    /**
+     * True if this constructor is a default constructor.
+     */
+    public final static DataKey<Boolean> IS_DEFAULT_CONSTRUCTOR = KeyFactory.bool("isDefaultConstructor");
+
+    /**
+     * True if this constructor was marked "explicit".
+     */
+    public final static DataKey<Boolean> IS_EXPLICIT = KeyFactory.bool("isExplicit");
+
+    /**
+     * True if this constructor declaration has 'explicit' keyword.
+     */
+    public final static DataKey<Boolean> IS_EXPLICIT_SPECIFIED = KeyFactory.bool("isExplicitSpecified");
+
     /// DATAKEYS END
 
     public CXXConstructorDecl(DataStore data, Collection<? extends ClavaNode> children) {
@@ -128,6 +143,10 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     }
 
     private String getCodeInitList() {
+
+        if (get(IS_EXPLICITLY_DEFAULTED)) {
+            return " = default";
+        }
 
         List<String> initList = getInitializers().stream()
                 // Do not take into account default initializers

@@ -41,10 +41,11 @@ public class RemoveExtraNodes implements SimplePreClavaRule {
     static {
         RemoveExtraNodes.CLEANUP_NODES = new HashSet<>();
         RemoveExtraNodes.CLEANUP_NODES.add(ExprWithCleanups.class);
-        // RemoveExtraNodes.CLEANUP_NODES.add(ImplicitCastExpr.class);
         RemoveExtraNodes.CLEANUP_NODES.add(MaterializeTemporaryExpr.class);
         RemoveExtraNodes.CLEANUP_NODES.add(CXXBindTemporaryExpr.class);
         RemoveExtraNodes.CLEANUP_NODES.add(OpaqueValueExpr.class);
+
+        // RemoveExtraNodes.CLEANUP_NODES.add(ImplicitCastExpr.class);
     }
 
     @Override

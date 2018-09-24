@@ -95,6 +95,11 @@ public class FunctionDecl extends DeclaratorDecl {
      */
     public final static DataKey<Boolean> IS_DELETED = KeyFactory.bool("isDeleted");
 
+    /**
+     * True if this function is explicitly defaulted (via the C++0x "= default" syntax).
+     */
+    public final static DataKey<Boolean> IS_EXPLICITLY_DEFAULTED = KeyFactory.bool("isExplicitlyDefaulted");
+
     // TODO: Change to FunctionDecl when refactoring is complete
     public final static DataKey<Optional<Decl>> PREVIOUS_DECL = KeyFactory.optional("previousDecl");
 

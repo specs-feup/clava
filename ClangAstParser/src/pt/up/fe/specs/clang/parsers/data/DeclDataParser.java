@@ -222,6 +222,7 @@ public class DeclDataParser {
         data.add(FunctionDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_DELETED, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_EXPLICITLY_DEFAULTED, LineStreamParsers.oneOrZero(lines));
 
         dataStore.getClavaNodes().queueSetOptionalNode(data, FunctionDecl.PREVIOUS_DECL, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, FunctionDecl.CANONICAL_DECL, lines.nextLine());
@@ -262,6 +263,11 @@ public class DeclDataParser {
         }
 
         data.set(CXXConstructorDecl.CONSTRUCTOR_INITS, inits);
+
+        data.add(CXXConstructorDecl.IS_DEFAULT_CONSTRUCTOR, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXConstructorDecl.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXConstructorDecl.IS_EXPLICIT_SPECIFIED, LineStreamParsers.oneOrZero(lines));
+
         // List<CXXCtor>
         // dataStore.getClavaNodes().queueSetNode(data, CXXConstructorDecl.INI, data.get(CXXMethodDecl.RECORD_ID));
 
