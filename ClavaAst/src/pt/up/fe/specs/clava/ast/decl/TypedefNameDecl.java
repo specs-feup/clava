@@ -39,6 +39,13 @@ public abstract class TypedefNameDecl extends TypeDecl {
         super(data, children);
     }
 
+    @Override
+    public void setType(Type type) {
+        super.setType(type);
+
+        set(UNDERLYING_TYPE, type);
+    }
+
     // private final Type underlyingType;
     //
     // public TypedefNameDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
