@@ -207,6 +207,11 @@ public class CxxTest {
         new CxxTester("friend.cpp").test();
     }
 
+    @Test
+    public void testDefault() {
+        new CxxTester("default.h").test();
+    }
+
     // @Test
     // public void testBoost() {
     // new CxxTester("boost.cpp").test();
