@@ -1,0 +1,19 @@
+/**** File 'set_type.cpp' ****/
+
+
+void cstyle_cast() {
+   int u;
+   auto x = (float) u;
+}
+
+
+void static_cast_foo() {
+   int x;
+   auto y = static_cast<float>(x * 2);
+}
+
+
+int main() {
+}
+
+/**** End File ****/

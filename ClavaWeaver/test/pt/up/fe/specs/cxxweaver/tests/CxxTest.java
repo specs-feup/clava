@@ -201,4 +201,8 @@ public class CxxTest {
         newTester().test("GlobalAttributes.lara", "global_attributes.cpp");
     }
 
+    @Test
+    public void testSetType() {
+        newTester().test("SetTypeCxx.lara", "set_type.cpp");
+    }
 }
