@@ -156,7 +156,16 @@ public class CXXMethodDecl extends FunctionDecl {
 
         // System.out.println("CXXMETHOD DECL CODE:" + getDeclarationId(useReturnType) + getCodeBody());
         // System.out.println("TREE:" + toTree());
-        return getDeclarationId(useReturnType) + getCodeBody();
+        return getDeclarationId(useReturnType) + getCodeInitList() + getCodeBody();
+    }
+
+    public String getCodeInitList() {
+
+        if (get(IS_EXPLICITLY_DEFAULTED)) {
+            return " = default";
+        }
+
+        return "";
     }
 
     @Override

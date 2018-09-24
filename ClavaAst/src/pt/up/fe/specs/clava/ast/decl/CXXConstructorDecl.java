@@ -142,10 +142,13 @@ public class CXXConstructorDecl extends CXXMethodDecl {
         return getDeclarationId(false) + getCodeInitList() + getCodeBody();
     }
 
-    private String getCodeInitList() {
+    @Override
+    public String getCodeInitList() {
 
-        if (get(IS_EXPLICITLY_DEFAULTED)) {
-            return " = default";
+        // Check if super is not empty
+        String superCode = super.getCodeInitList();
+        if (!superCode.isEmpty()) {
+            return superCode;
         }
 
         List<String> initList = getInitializers().stream()
