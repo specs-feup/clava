@@ -140,7 +140,7 @@ public class AstDumpParser implements ClangParser {
     // }
 
     @Override
-    public TranslationUnit parse(File sourceFile, String id, Standard standard, DataStore config) {
+    public ClangParserData parse(File sourceFile, String id, Standard standard, DataStore config) {
         // Create instance of ClangAstParser
         // ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
 
@@ -242,8 +242,11 @@ public class AstDumpParser implements ClangParser {
 
         ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug());
 
-        return clangStreamParser.parseTu(sourceFile);
+        TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
 
+        parsedData.set(ClangParserData.TRANSLATION_UNIT, tUnit);
+
+        return parsedData;
         // App newApp = clangStreamParser.parse();
         //
         // return newApp.getTranslationUnits().get(0);

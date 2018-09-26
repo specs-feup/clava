@@ -36,13 +36,13 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
 import pt.up.fe.specs.clang.codeparser.clangparser.ClangParser;
+import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -135,12 +135,12 @@ public class ParallelCodeParser extends CodeParser {
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-        List<Future<TranslationUnit>> futureTUnits = new ArrayList<>();
+        List<Future<ClangParserData>> futureTUnits = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
             String id = Integer.toString(i + 1);
             File source = sources.get(i);
 
-            Future<TranslationUnit> tUnit = executor
+            Future<ClangParserData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
                             counter, parsingFolder, clangExecutable, builtinIncludes));
 
@@ -152,7 +152,7 @@ public class ParallelCodeParser extends CodeParser {
         executor.shutdown();
 
         // Collect parsing results
-        List<TranslationUnit> tUnits = futureTUnits.stream()
+        List<ClangParserData> clangParserResults = futureTUnits.stream()
                 .map(SpecsSystem::get)
                 .collect(Collectors.toList());
 
@@ -226,7 +226,9 @@ public class ParallelCodeParser extends CodeParser {
 
         tic = System.nanoTime();
 
-        App app = LegacyToDataStore.getFactory().app(tUnits);
+        List<TranslationUnit> tUnits = new TUnitProcessor(clangParserResults, true).getTranslationUnits();
+
+        App app = context.get(ClavaContext.FACTORY).app(tUnits);
 
         // Add App to context
         // app.getContext().set(ClavaContext.APP, app);
@@ -332,7 +334,7 @@ public class ParallelCodeParser extends CodeParser {
         // return null;
     }
 
-    private TranslationUnit parseSource(File sourceFile, String id, Standard standard, DataStore options,
+    private ClangParserData parseSource(File sourceFile, String id, Standard standard, DataStore options,
             ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
             File clangExecutable, List<String> builtinIncludes) {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
@@ -350,8 +352,7 @@ public class ParallelCodeParser extends CodeParser {
 
         counter.print(sourceFile);
         // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
-
-        TranslationUnit tunit = clangParser.parse(sourceFile, id, standard, options);
+        ClangParserData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
         if (get(SHOW_CLANG_DUMP)) {
             // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
@@ -371,7 +372,7 @@ public class ParallelCodeParser extends CodeParser {
 
         }
 
-        return tunit;
+        return clangParserData;
     }
 
     private void adaptOptions(DataStore options, File source) {

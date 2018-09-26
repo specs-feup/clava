@@ -28,6 +28,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
@@ -91,6 +92,12 @@ public class ClangParserData extends ADataClass<ClangParserData> {
 
     public final static DataKey<VisitingChildrenCheck> VISITING_CHILDREN = KeyFactory
             .object("visitingChildren", VisitingChildrenCheck.class);
+
+    /**
+     * Parsed translation unit.
+     */
+    public final static DataKey<TranslationUnit> TRANSLATION_UNIT = KeyFactory
+            .object("translationUnit", TranslationUnit.class);
 
     /**
      * Enables debug prints.
