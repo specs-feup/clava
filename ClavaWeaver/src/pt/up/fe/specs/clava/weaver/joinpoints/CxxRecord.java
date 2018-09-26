@@ -65,4 +65,14 @@ public class CxxRecord extends ARecord {
     public String getKindImpl() {
         return recordDecl.getTagKind().getCode();
     }
+
+    @Override
+    public void defNameImpl(String value) {
+        recordDecl.setDeclName(value);
+    }
+
+    @Override
+    public void setNameImpl(String name) {
+        defNameImpl(name);
+    }
 }

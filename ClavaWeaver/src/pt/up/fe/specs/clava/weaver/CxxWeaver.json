@@ -5729,6 +5729,19 @@
                   "children": [
                            {
                               "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               \name": "insert"
                            },
                            {
@@ -27342,6 +27355,19 @@
                   "children": [
                            {
                               "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               \name": "insert"
                            },
                            {
@@ -29636,6 +29662,19 @@
                   "type": "select",
                   "clazz": "namedDecl",
                   "alias": "field"
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              \name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",

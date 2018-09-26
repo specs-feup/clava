@@ -106,6 +106,13 @@ public abstract class AClass extends ARecord {
 
     /**
      * 
+     */
+    public void defNameImpl(String value) {
+        this.aRecord.defNameImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -231,6 +238,15 @@ public abstract class AClass extends ARecord {
 
     /**
      * 
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aRecord.setNameImpl(name);
+    }
+
+    /**
+     * 
      * @param position 
      * @param code 
      */
@@ -284,6 +300,13 @@ public abstract class AClass extends ARecord {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

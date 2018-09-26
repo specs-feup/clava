@@ -152,7 +152,9 @@
 
 	<!-- RECORD -->
 	<artifact class="record" default="name">
-		<attribute name="name" type="String" />
+		<attribute name="name" type="String">
+			<def/>
+		</attribute>
 		<attribute name="kind" type="String" />
 		<!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
 		<attribute name="fields" type="joinpoint[]" />
