@@ -26,6 +26,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.utils.Nameable;
@@ -91,6 +92,21 @@ public class CallExpr extends Expr {
 
     public Expr getCallee() {
         return getChild(Expr.class, 0);
+    }
+
+    public void setCallee(Expr callee) {
+        if (callee instanceof DeclRefExpr) {
+            ValueDecl decl = callee.get(DeclRefExpr.DECL);
+            if (decl instanceof FunctionDecl) {
+                set(DIRECT_CALLEE, Optional.of((FunctionDecl) decl));
+            } else {
+                set(DIRECT_CALLEE, Optional.empty());
+            }
+        } else {
+            set(DIRECT_CALLEE, Optional.empty());
+        }
+
+        setChild(0, callee);
     }
 
     /*

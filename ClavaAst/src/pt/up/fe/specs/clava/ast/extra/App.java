@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.extra;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
@@ -37,6 +39,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
@@ -45,6 +48,7 @@ import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
 import pt.up.fe.specs.clava.utils.SourceType;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -75,6 +79,9 @@ public class App extends ClavaNode {
             .setCopyFunction(dataStore -> DataStore.newInstance(dataStore.getName(), dataStore));
 
     /// DATAKEYS END
+
+    private final static Set<Class<? extends ClavaNode>> IGNORE_CLASSES = new HashSet<>(
+            Arrays.asList(ImplicitCastExpr.class));
 
     // private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
 
@@ -151,6 +158,8 @@ public class App extends ClavaNode {
         idNormalizer = new IdNormalizer();
         callInliner = new CallInliner(idNormalizer);
 
+        // normalizeFields();
+
         // getDataI().add(EXTERNAL_DEPENDENCIES, new ExternalDependencies());
         // externalDependencies = new ExternalDependencies();
         // this.idsAlias = Collections.emptyMap();
@@ -178,6 +187,66 @@ public class App extends ClavaNode {
         return appCopy;
     }
     */
+
+    /**
+     * Ensures that fields of the AST point to nodes in other TranslationUnits, when that is the case.
+     */
+    @SuppressWarnings("unchecked")
+    private void normalizeFields() {
+        Map<String, ClavaNode> locationToNodeMap = new HashMap<>();
+        for (TranslationUnit tUnit : getTranslationUnits()) {
+            tUnit.getDescendantsAndSelfStream()
+                    .filter(node -> node.getLocation().isValid())
+                    .filter(node -> !IGNORE_CLASSES.contains(node.getClass()))
+                    .forEach(node -> App.addNode(node, locationToNodeMap));
+            // .collect(Collectors.toMap(node -> node.getLocation(), node -> node));
+        }
+
+        for (ClavaNode node : locationToNodeMap.values()) {
+            for (DataKey<?> key : node.getKeysWithNodes()) {
+                // Field is a ClavaNode
+                if (key.getValueClass().equals(ClavaNode.class)) {
+                    ClavaNode value = (ClavaNode) node.get(key);
+                    ClavaNode normalizedNode = locationToNodeMap.get(getLocationId(value));
+                    if (normalizedNode == null) {
+                        continue;
+                    }
+                    System.out.println("REPLACING " + value + " with " + normalizedNode);
+                    node.set((DataKey<Object>) key, normalizedNode);
+                    continue;
+                }
+
+                // Field is a Optional<ClavaNode>
+                if (key.getValueClass().equals(Optional.class)) {
+                    ClavaNode value = ((Optional<ClavaNode>) node.get(key)).get();
+                    ClavaNode normalizedNode = locationToNodeMap.get(getLocationId(value));
+                    if (normalizedNode == null) {
+                        continue;
+                    }
+                    System.out.println("REPLACING " + value + " with " + normalizedNode);
+                    node.set((DataKey<Object>) key, Optional.of(normalizedNode));
+                    continue;
+                }
+
+                ClavaLog.warning("Case not implemented: " + key);
+            }
+        }
+
+        // TODO Auto-generated method stub
+
+    }
+
+    private static void addNode(ClavaNode node, Map<String, ClavaNode> locationToNodeMap) {
+        String id = getLocationId(node);
+        ClavaNode previousNode = locationToNodeMap.put(id, node);
+        SpecsCheck.checkArgument(previousNode == null,
+                () -> "Found repeated location '" + id + "'.\nOriginal node: " + previousNode
+                        + "\nNew node:" + node);
+    }
+
+    private static String getLocationId(ClavaNode node) {
+        return node.getClass().getSimpleName() + "_" + node.getLocation();
+    }
 
     public DataStore getAppData() {
         return get(APP_DATA);

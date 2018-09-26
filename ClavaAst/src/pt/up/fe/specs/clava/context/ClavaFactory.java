@@ -386,6 +386,13 @@ public class ClavaFactory {
         return new LiteralExpr(data, Collections.emptyList());
     }
 
+    public DeclRefExpr declRefExpr(ValueDecl decl) {
+        DeclRefExpr declRefExpr = declRefExpr(decl.get(ValueDecl.DECL_NAME), decl.getType());
+        declRefExpr.set(DeclRefExpr.DECL, decl);
+
+        return declRefExpr;
+    }
+
     public DeclRefExpr declRefExpr(String declName, Type type) {
         DataStore data = newDataStore(DeclRefExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
