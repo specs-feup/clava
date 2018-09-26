@@ -1309,6 +1309,26 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
                 keys.add(key);
                 continue;
             }
+
+            if (List.class.isAssignableFrom(key.getValueClass())) {
+                DataKey<List<?>> listKey = (DataKey<List<?>>) key;
+                List<?> list = get(listKey);
+                if (list.isEmpty()) {
+                    continue;
+                }
+
+                // Check if elements of the list are ClavaNodes
+                boolean clavaNodeList = list.stream()
+                        .filter(elem -> elem instanceof ClavaNode)
+                        .count() == list.size();
+
+                if (!clavaNodeList) {
+                    continue;
+                }
+
+                keys.add(key);
+                continue;
+            }
         }
 
         return keys;
