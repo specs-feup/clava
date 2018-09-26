@@ -205,4 +205,9 @@ public class CxxTest {
     public void testSetType() {
         newTester().test("SetTypeCxx.lara", "set_type.cpp");
     }
+
+    @Test
+    public void testMultiFile() {
+        newTester().test("MultiFile.lara", "multiFile.cpp", "multiFile.h");
+    }
 }

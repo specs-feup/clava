@@ -1,0 +1,24 @@
+/**** File 'multiFile.cpp' ****/
+
+#include <multiFile.h>
+
+int main() {
+   A_renamed a;
+}
+
+/**** End File ****/
+
+/**** File 'multiFile.h' ****/
+
+#ifndef _MULTIFILE_H_
+#define _MULTIFILE_H_
+
+
+struct A_renamed {
+   int x;
+   int y;
+};
+
+#endif
+
+/**** End File ****/

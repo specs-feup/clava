@@ -1,0 +1,17 @@
+aspectdef MultiFileTest
+
+	// Rename record in a header, change should propagate
+	select struct{"A"} end
+	apply
+		$struct.name = "A_renamed";
+		//println("JP: " + $struct.kind);
+		//println("Node: " + $struct.astName);
+		//println("Struct name: " + $struct.name);
+	end
+	
+	select program end
+	apply
+		println($program.code);
+	end
+
+end
