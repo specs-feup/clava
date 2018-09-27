@@ -320,6 +320,14 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     clava::dump(clava::getId(D->getPreviousDecl(), id));
     clava::dump(clava::getId(D->getCanonicalDecl(), id));
 
+    FunctionTemplateDecl* primaryTemplate =  D->getPrimaryTemplate();
+    if(primaryTemplate != nullptr) {
+        clava::dump(clava::getId(primaryTemplate->getTemplatedDecl(), id));
+    } else {
+        clava::dump(clava::getId((const Decl *) nullptr, id));
+    }
+
+
     // Template specialization args
     auto templateSpecializationArgs = D->getTemplateSpecializationArgs();
     if (templateSpecializationArgs != nullptr) {

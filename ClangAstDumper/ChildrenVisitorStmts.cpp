@@ -396,7 +396,6 @@ void ClangAstDumper::VisitOverloadExprChildren(const OverloadExpr *E, std::vecto
 void ClangAstDumper::VisitCallExprChildren(const CallExpr *E, std::vector<std::string> &children) {
     // Hierarchy
     VisitExprChildren(E, children);
-
     VisitDeclTop(E->getDirectCallee());
 
 }

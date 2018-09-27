@@ -111,6 +111,8 @@ void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLoca
         clava::dump(false);
     }
 
+    //Context->getSourceManager().getCharacterData(begin)
+    //const char *getCharacterData(SourceLocation SL, bool *Invalid = nullptr) const;
 
 }
 

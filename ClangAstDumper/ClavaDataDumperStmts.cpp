@@ -448,6 +448,8 @@ void clava::ClavaDataDumper::DumpCXXConstructExprData(const CXXConstructExpr *E)
     clava::dump(E->isListInitialization());
     clava::dump(E->isStdInitListInitialization());
     clava::dump(clava::CONSTRUCTION_KIND[E->getConstructionKind()]);
+    // Taken from here: http://codergears.com/Blog/?p=328
+    clava::dump(E->isTemporaryObject(*Context, E->getConstructor()->getParent()));
 }
 
 void clava::ClavaDataDumper::DumpMemberExprData(const MemberExpr *E) {

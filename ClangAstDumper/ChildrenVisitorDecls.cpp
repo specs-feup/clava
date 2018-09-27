@@ -281,6 +281,11 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     VisitDeclTop(D->getPreviousDecl());
     VisitDeclTop(D->getCanonicalDecl());
 
+    FunctionTemplateDecl* primaryTemplate =  D->getPrimaryTemplate();
+    if(primaryTemplate != nullptr) {
+        VisitDeclTop(primaryTemplate->getTemplatedDecl());
+    }
+
     // Visit template arguments
     auto templateSpecializationArgs = D->getTemplateSpecializationArgs();
     if(templateSpecializationArgs != nullptr) {
