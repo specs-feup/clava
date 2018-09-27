@@ -226,6 +226,7 @@ public class DeclDataParser {
 
         dataStore.getClavaNodes().queueSetOptionalNode(data, FunctionDecl.PREVIOUS_DECL, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, FunctionDecl.CANONICAL_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, FunctionDecl.PRIMARY_TEMPLATE_DECL, lines.nextLine());
 
         data.add(FunctionDecl.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
 

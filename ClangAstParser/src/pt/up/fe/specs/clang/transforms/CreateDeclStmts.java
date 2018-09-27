@@ -94,7 +94,9 @@ public class CreateDeclStmts implements SimplePostClavaRule {
 
                 // Create empty DeclStmt.
                 // First it will be inserted in place of the child, then child will be added to the declStmt
+                // Use child information in order to have location data for TextElements insertion
                 DeclStmt stmt = child.getFactoryWithNode().declStmt();
+                // DeclStmt stmt = child.getFactory().declStmt();
 
                 // DeclStmt stmt = ClavaNodeFactory.declStmt(namedDecl.getInfo(), Arrays.asList(namedDecl));
 

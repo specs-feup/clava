@@ -189,41 +189,6 @@ public class ParallelCodeParser extends CodeParser {
         // Delete temporary folder
         SpecsIo.deleteFolder(parsingFolder);
 
-        // if (get(CLEAN)) {
-        // workingFolders.stream().forEach(SpecsIo::deleteFolder);
-        // }
-
-        // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
-        // System.out.println("ALL SOURCES:" + allSources);
-
-        // Map<String, TranslationUnit> tunits = new HashMap<>();
-        // List<TranslationUnit> tUnits = new ArrayList<>();
-        // Parse files, individually
-        // int id = 1;
-
-        // for (Entry<String, File> sourceFile : allSources.entrySet()) {
-        // DataStore options = ClavaOptions.toDataStore(compilerOptions);
-        //
-        // // Adapt compiler options according to the file
-        // adaptOptions(options, new File(sourceFile.getKey()));
-        //
-        // ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES));
-        //
-        // TranslationUnit tunit = clangParser.parse(new File(sourceFile.getKey()), options);
-        // tUnits.add(tunit);
-        //
-        // if (get(SHOW_CLANG_DUMP)) {
-        // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-        // }
-        //
-        // // if (showClangAst) {
-        // if (get(SHOW_CLANG_AST)) {
-        // // TODO: Flag in dumper that dumps Clang AST to file
-        // SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
-        // }
-        //
-        // }
-
         tic = System.nanoTime();
 
         List<TranslationUnit> tUnits = new TUnitProcessor(clangParserResults, true).getTranslationUnits();
