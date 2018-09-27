@@ -50,12 +50,15 @@ import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
+import pt.up.fe.specs.util.providers.StringProvider;
 import pt.up.fe.specs.util.system.Copyable;
 import pt.up.fe.specs.util.treenode.ATreeNode;
 import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 
-public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClass<ClavaNode>, Copyable<ClavaNode> {
+public abstract class ClavaNode extends ATreeNode<ClavaNode>
+        implements DataClass<ClavaNode>, Copyable<ClavaNode>, StringProvider {
 
     // public static boolean SKIP_EXCEPTION = false;
 
@@ -1336,7 +1339,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
     }
 
-    @SuppressWarnings("unchecked")
+    // @SuppressWarnings("unchecked")
     public List<ClavaNode> getNodes(DataKey<?> keyWithNodes) {
 
         List<ClavaNode> nodes = new ArrayList<>();
@@ -1361,6 +1364,61 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode> implements DataClas
 
         return nodes;
 
+    }
+
+    /**
+     * A String that uniquely identifies the contents of this node.
+     * 
+     * @return
+     */
+    public String getNodeSignature() {
+
+        StringBuilder signature = new StringBuilder();
+
+        signature.append(getClass().getSimpleName());
+
+        for (DataKey<?> key : getSignatureKeys()) {
+            // if (getClass() == CXXConstructExpr.class) {
+            // System.out.println("CURRENT SIG:" + signature);
+            // System.out.println("CURRENT KEY:" + key);
+            // System.out.println("KEY VALUE:" + get(key).toString());
+            // }
+            Object value = get(key);
+            String valueSig = value instanceof StringProvider ? ((StringProvider) value).getString() : value.toString();
+            signature.append("_").append(valueSig);
+            // if (getClass() == CXXConstructExpr.class) {
+            // System.out.println("SIG AFTER:" + signature);
+            // }
+        }
+
+        for (String customString : getSignatureCustomStrings()) {
+            signature.append("_").append(customString);
+        }
+
+        return signature.toString();
+
+        // return getClass().getSimpleName() + "_" + getLocation();
+    }
+
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return SpecsList.convert(new ArrayList<DataKey<?>>()).andAdd(LOCATION);
+        // List<DataKey<?>> signatureKeys = new ArrayList<>();
+        // signatureKeys.add(LOCATION);
+        // return signatureKeys;
+    }
+
+    /**
+     * By default, returns empty.
+     * 
+     * @return
+     */
+    public SpecsList<String> getSignatureCustomStrings() {
+        return SpecsList.newInstance(String.class);
+    }
+
+    @Override
+    public String getString() {
+        return getClass().getSimpleName() + " (" + getId() + ")";
     }
 
     // public <T> copyField(DataKey<T> key) {

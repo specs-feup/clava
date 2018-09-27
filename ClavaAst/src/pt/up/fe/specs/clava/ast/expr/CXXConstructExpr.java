@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents a call to a C++ constructor.
@@ -56,6 +57,8 @@ public class CXXConstructExpr extends Expr {
 
     public final static DataKey<ConstructionKind> CONSTRUCTION_KIND = KeyFactory.enumeration("constructionKind",
             ConstructionKind.class);
+
+    public final static DataKey<Boolean> IS_TEMPORARY_OBJECT = KeyFactory.bool("isTemporaryObject");
 
     /// DATAKEYS END
 
@@ -237,6 +240,18 @@ public class CXXConstructExpr extends Expr {
 
     protected boolean isTemporary() {
         return false;
+    }
+
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        SpecsList<DataKey<?>> list = super.getSignatureKeys().andAdd(IS_ELIDABLE);
+
+        // If temporary constructor, add ID in order to "ignore" it during normalization
+        if (get(IS_TEMPORARY_OBJECT)) {
+            list.add(ID);
+        }
+
+        return list;
     }
 
     // @Override

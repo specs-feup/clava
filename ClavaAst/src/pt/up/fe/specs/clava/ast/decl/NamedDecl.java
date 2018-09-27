@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents a decl with a name.
@@ -265,6 +266,7 @@ public abstract class NamedDecl extends Decl {
         // String recordName = record.getDeclName();
         // String recordName = getRecordName();
 
+        // Removed check due to using the signature before decls are deanonymized, during normalization
         SpecsCheck.checkArgument(namespaceAndRecord.endsWith(recordName),
                 () -> "Expected current string '" + namespaceAndRecord + "' to end with '" + recordName + "'");
 
@@ -287,6 +289,11 @@ public abstract class NamedDecl extends Decl {
         // SpecsLogs.debug("QUALIFIED NAME:" + data.get(CXXMethodDecl.QUALIFIED_NAME));
         // SpecsLogs.debug("DECL NAME:" + data.get(NamedDecl.DECL_NAME));
         */
+    }
+
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_NAME);
     }
 
 }

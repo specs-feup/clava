@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
+import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 /**
@@ -315,5 +316,10 @@ public class CXXMemberCallExpr extends CallExpr {
         // System.out.println("Decl ref expr:" + declRefExpr);
 
         return Optional.empty();
+    }
+
+    @Override
+    public SpecsList<String> getSignatureCustomStrings() {
+        return super.getSignatureCustomStrings().andAdd(getCalleeNameTry().orElse("<no_calle_name>"));
     }
 }

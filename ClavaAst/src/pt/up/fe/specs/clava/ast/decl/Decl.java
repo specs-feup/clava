@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents one declaration (or definition).
@@ -105,6 +106,11 @@ public abstract class Decl extends ClavaNode {
                 .filter(attr -> attr.get(Attribute.KIND) == kind)
                 .findFirst()
                 .isPresent();
+    }
+
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return super.getSignatureKeys().andAdd(IS_REFERENCED);
     }
 
 }

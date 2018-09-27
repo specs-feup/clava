@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.language.CXXOperator;
 import pt.up.fe.specs.clava.utils.Nameable;
+import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 /**
@@ -518,5 +519,15 @@ public class DeclRefExpr extends Expr implements Nameable {
     @Override
     public void setName(String name) {
         setRefName(name);
+    }
+
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return super.getSignatureKeys().andAdd(DECL);
+    }
+
+    @Override
+    public SpecsList<String> getSignatureCustomStrings() {
+        return super.getSignatureCustomStrings().andAdd(getRefName());
     }
 }

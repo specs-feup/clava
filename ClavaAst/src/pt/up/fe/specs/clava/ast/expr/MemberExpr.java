@@ -26,6 +26,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents members of a structure/union.
@@ -238,4 +239,8 @@ public class MemberExpr extends Expr {
     }
     */
 
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return super.getSignatureKeys().andAdd(MEMBER_NAME);
+    }
 }

@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents the declaration of a variable, function or enum constant.
@@ -79,4 +80,14 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
         set(TYPE, type);
     }
 
+    @Override
+    public SpecsList<String> getSignatureCustomStrings() {
+        SpecsList<String> list = super.getSignatureCustomStrings();
+
+        if (hasValue(TYPE)) {
+            list.andAdd(get(TYPE).get(Type.TYPE_AS_STRING));
+        }
+
+        return list;
+    }
 }

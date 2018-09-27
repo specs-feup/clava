@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
  * @author JoaoBispo
  *
  */
+// public abstract class Type extends ClavaNode implements StringProvider {
 public abstract class Type extends ClavaNode {
 
     /// DATAKEYS BEGIN
@@ -862,4 +863,12 @@ public abstract class Type extends ClavaNode {
 
         return builder.toString();
     }
+
+    /**
+     * Used for instance, to provide signatures of the Type node.
+     */
+    // @Override
+    // public String getString() {
+    // return getCode();
+    // }
 }

@@ -168,6 +168,19 @@ public class SourceRange {
         return end.getColumn();
     }
 
+    /**
+     * True if location is valid, and the start and end location points are different.
+     * 
+     * @return
+     */
+    public boolean isComplete() {
+        if (!isValid()) {
+            return false;
+        }
+
+        return !start.equals(end);
+    }
+
     @Override
     public String toString() {
         if (!isValid()) {

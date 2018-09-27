@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents an implicit type conversions which has no direct representation in the original source code.
@@ -73,4 +74,8 @@ public class ImplicitCastExpr extends CastExpr {
         return super.getType();
     }
 
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        return super.getSignatureKeys().andAdd(TYPE);
+    }
 }

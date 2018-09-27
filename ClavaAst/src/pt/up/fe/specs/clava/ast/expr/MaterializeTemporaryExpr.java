@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
  * Represents a prvalue (pure rvalue - does not have identity, can be moved) temporary that is written into memory so
@@ -75,4 +76,9 @@ public class MaterializeTemporaryExpr extends Expr {
         return getChild(Expr.class, 0);
     }
 
+    @Override
+    public SpecsList<DataKey<?>> getSignatureKeys() {
+        // Add ID in order to "ignore" it during normalization
+        return super.getSignatureKeys().andAdd(ID);
+    }
 }
