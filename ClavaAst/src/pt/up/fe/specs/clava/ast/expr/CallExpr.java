@@ -25,6 +25,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -178,6 +179,8 @@ public class CallExpr extends Expr {
         // return Optional.empty();
         // }
         // Optional<FunctionDecl> functionDecl = getFunctionDecl();
+        // System.out.println("CALL EXPR getDeclaration: " + getFunctionDecl());
+        // System.out.println("CALL EXPR getDeclaration.getDeclaration: " + getFunctionDecl().get().getDeclaration());
 
         return getFunctionDecl().flatMap(FunctionDecl::getDeclaration);
         // if (!functionDecl.isPresent()) {
@@ -201,8 +204,17 @@ public class CallExpr extends Expr {
      * @return
      */
     public Optional<FunctionDecl> getFunctionDecl() {
+
         // TODO: Replace with get(DIRECT_CALLEE) when refactoring to new format is complete
-        return get(DIRECT_CALLEE);
+        return get(DIRECT_CALLEE)
+                // If FunctionDecl has a primary template decl (e.g., is a template specialization), return original
+                // template instead
+                .map(ClavaNodes::normalizeDecl)
+                .map(FunctionDecl.class::cast);
+        // .flatMap(fDecl -> fDecl.hasValue(FunctionDecl.PRIMARY_TEMPLATE_DECL)
+        // ? fDecl.get(FunctionDecl.PRIMARY_TEMPLATE_DECL)
+        // : Optional.of(fDecl));
+
         // Decl calleeDecl = get(DIRECT_CALLEE);
         // return calleeDecl instanceof FunctionDecl ? Optional.of((FunctionDecl) calleeDecl) : Optional.empty();
         // return (FunctionDecl) get(CALLEE_DECL);
@@ -268,6 +280,7 @@ public class CallExpr extends Expr {
      */
     public Optional<FunctionDecl> getDefinition() {
         // Optional<FunctionDecl> functionDecl = getFunctionDecl();
+
         return getFunctionDecl().flatMap(FunctionDecl::getDefinition);
         // if (!functionDecl.isPresent()) {
         // return Optional.empty();

@@ -31,6 +31,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -688,7 +689,9 @@ public class App extends ClavaNode {
                 .filter(fdecl -> fdecl.getFunctionType().equals(functionType))
                 // Filter by const
                 .filter(fdecl -> fdecl.getFunctionType().isConst() == functionType.isConst())
-                .findFirst();
+                .findFirst()
+                // Normalize FunctionDecl before returning
+                .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl));
 
         // Store return in cache
         cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(getNoFunctionFound()));

@@ -106,7 +106,8 @@ public class FunctionDecl extends DeclaratorDecl {
     // TODO: Change to FunctionDecl when refactoring is complete
     public final static DataKey<Decl> CANONICAL_DECL = KeyFactory.object("canonicalDecl", Decl.class);
 
-    public final static DataKey<Optional<Decl>> PRIMARY_TEMPLATE_DECL = KeyFactory.optional("primaryTemplateDecl");
+    public final static DataKey<Optional<FunctionDecl>> PRIMARY_TEMPLATE_DECL = KeyFactory
+            .optional("primaryTemplateDecl");
 
     /**
      * Template arguments of this function, if any.

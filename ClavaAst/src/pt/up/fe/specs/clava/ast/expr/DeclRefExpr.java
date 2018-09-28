@@ -214,7 +214,7 @@ public class DeclRefExpr extends Expr implements Nameable {
         // return customName;
         // }
 
-        return get(DECL).get(ValueDecl.DECL_NAME);
+        return getDeclaration().get(ValueDecl.DECL_NAME);
         // return get(DECL_NAME);
         // return getDeclaration().getDeclName();
         // return declData.getDeclName();
@@ -239,7 +239,7 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     // public Optional<? extends Decl> getDeclaration() {
     public ValueDecl getDeclaration() {
-        return get(DECL);
+        return (ValueDecl) ClavaNodes.normalizeDecl(get(DECL));
         // return Optional.of(get(DECL));
         /*
         // If no id, return

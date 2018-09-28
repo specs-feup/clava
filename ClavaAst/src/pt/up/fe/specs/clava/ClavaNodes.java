@@ -27,6 +27,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
@@ -441,4 +442,13 @@ public class ClavaNodes {
     // return node;
     // }
 
+    public static Decl normalizeDecl(Decl decl) {
+        // Replace Template Specializations with Templace declarations
+        if (decl instanceof FunctionDecl) {
+            FunctionDecl fDecl = (FunctionDecl) decl;
+            return fDecl.get(FunctionDecl.PRIMARY_TEMPLATE_DECL).orElse((fDecl));
+        }
+
+        return decl;
+    }
 }
