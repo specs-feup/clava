@@ -430,8 +430,22 @@ public class CxxFunction extends AFunction {
     // }
 
     @Override
+    public void defNameImpl(String value) {
+        // Set both the names of corresponding definition and declaration
+        // Needs to first fetch both definition and declaration.
+        // If one is renamed before fetching the other, the other will not be found
+        Optional<FunctionDecl> def = function.getDefinition();
+        Optional<FunctionDecl> decl = function.getDeclaration();
+        // System.out.println("DEF:" + def);
+        // System.out.println("DECL:" + decl);
+        def.ifPresent(node -> node.setName(value));
+        decl.ifPresent(node -> node.setName(value));
+    }
+
+    @Override
     public void setNameImpl(String name) {
         defNameImpl(name);
+
     }
 
     @Override
