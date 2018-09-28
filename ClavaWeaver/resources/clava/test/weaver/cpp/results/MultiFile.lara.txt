@@ -1,24 +1,39 @@
 /**** File 'multiFile.cpp' ****/
-
 #include <multiFile.h>
-
 int main() {
-   A_renamed a;
+A_renamed a;
+std::vector<double> vector_double;
+std::vector<int> vector_int;
+template_foo_renamed(vector_double);
+template_foo_renamed(vector_int);
+template_foo_2_renamed(vector_double);
+template_foo_2_renamed(vector_int);
+template_foo_3_renamed(vector_double);
+template_foo_3_renamed(vector_int);
 }
-
 /**** End File ****/
-
 /**** File 'multiFile.h' ****/
-
 #ifndef _MULTIFILE_H_
 #define _MULTIFILE_H_
-
-
+#include <vector>
 struct A_renamed {
-   int x;
-   int y;
+int x;
+int y;
 };
-
+template <typename T>
+void template_foo_renamed(std::vector<T> const& A);
+template <typename T>
+void template_foo_renamed(std::vector<T> const& A) {
+}
+template <typename T>
+void template_foo_2_renamed(std::vector<T> const& A);
+template <typename T>
+void template_foo_2_renamed(std::vector<T> const& A) {
+}
+template <typename T>
+void template_foo_3_renamed(std::vector<T> const& A);
+template <typename T>
+void template_foo_3_renamed(std::vector<T> const& A) {
+}
 #endif
-
 /**** End File ****/
