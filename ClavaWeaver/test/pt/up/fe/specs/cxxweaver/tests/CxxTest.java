@@ -210,4 +210,9 @@ public class CxxTest {
     public void testMultiFile() {
         newTester().test("MultiFile.lara", "multiFile.cpp", "multiFile.h");
     }
+
+    @Test
+    public void testField() {
+        newTester().test("Field.lara", "field.hpp");
+    }
 }
