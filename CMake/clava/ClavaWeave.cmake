@@ -57,7 +57,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}"
 		WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
 	)
-	
+		
 	# read new sources
 	if(EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
         file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)

@@ -24,7 +24,8 @@
 set(LARA_WORKING_DIR ${CMAKE_CURRENT_BINARY_DIR}/lara)
 
 # Include the working directory, such that generated headers can be included in the rest of the parent project
-include_directories(${LARA_WORKING_DIR})
+# TODO: Disabled, check where this is used
+#include_directories(${LARA_WORKING_DIR})
 
 # apply_lara_aspect function
 # Used to define custom build step for Clava execution.
