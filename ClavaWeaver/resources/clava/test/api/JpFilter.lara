@@ -1,0 +1,48 @@
+import lara.util.JpFilter;
+
+aspectdef JpFilterTest
+
+	var $records = [];
+	select record end
+	apply
+		$records.push($record);
+	end
+	
+	
+	var filter1 = new JpFilter({name: 'A'});
+	println(convert(filter1.filter($records)));
+	
+	var filter2 = new JpFilter({rx_name: 'A'});
+	println(convert(filter2.filter($records)));
+	
+	var filter3 = new JpFilter({rx_name: 'A', kind: 'class'});
+	println(convert(filter3.filter($records)));
+	
+	//println("FILTER:");
+	//printObject(filter2);
+
+end
+
+function convert($jps) {
+	var string = "";
+	
+	var first = true;
+	for(var $jp of $jps) {
+		//println("JP:" + $jp);
+		//println("JP NAME:" + $jp.name);	
+		if(first) {
+			first = false;
+		} else {
+			string += ", ";
+		}
+		
+		string += $jp.name;
+	}
+	
+	return string;
+	//return $jps.map(jpName).join(", ");
+}
+
+function jpName($jp) {
+	return $jp.name;
+}
