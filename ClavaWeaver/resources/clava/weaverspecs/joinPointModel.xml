@@ -46,9 +46,12 @@
 	
 	<!-- RECORD -->
 	<joinpoint class="record">
-		<select alias="field"	class="namedDecl"/>		
+		<select 	class="field"/>		
 	</joinpoint>
 	
+	<!-- FIELD -->
+	<joinpoint class="field" extends="namedDecl">
+	</joinpoint>
 	
 	<!-- STRUCT -->
 	<joinpoint class="struct" extends="record">

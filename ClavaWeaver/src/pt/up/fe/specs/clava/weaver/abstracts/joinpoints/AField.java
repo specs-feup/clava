@@ -1,114 +1,53 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import javax.script.Bindings;
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AClass
+ * Auto-Generated class for join point AField
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AClass extends ARecord {
+public abstract class AField extends ANamedDecl {
 
-    protected ARecord aRecord;
+    protected ANamedDecl aNamedDecl;
 
     /**
      * 
      */
-    public AClass(ARecord aRecord){
-        this.aRecord = aRecord;
+    public AField(ANamedDecl aNamedDecl){
+        super(aNamedDecl);
+        this.aNamedDecl = aNamedDecl;
     }
-    /**
-     * Get value on attribute methods
-     * @return the attribute's value
-     */
-    public abstract AMethod[] getMethodsArrayImpl();
-
-    /**
-     * Get value on attribute methods
-     * @return the attribute's value
-     */
-    public Bindings getMethodsImpl() {
-        AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * Get value on attribute methods
-     * @return the attribute's value
-     */
-    public final Object getMethods() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "methods", Optional.empty());
-        	}
-        	Bindings result = this.getMethodsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "methods", e);
-        }
-    }
-
-    /**
-     * Method used by the lara interpreter to select methods
-     * @return 
-     */
-    public abstract List<? extends AMethod> selectMethod();
-
     /**
      * Get value on attribute name
      * @return the attribute's value
      */
     @Override
     public String getNameImpl() {
-        return this.aRecord.getNameImpl();
+        return this.aNamedDecl.getNameImpl();
     }
 
     /**
-     * Get value on attribute kind
+     * Get value on attribute isPublic
      * @return the attribute's value
      */
     @Override
-    public String getKindImpl() {
-        return this.aRecord.getKindImpl();
-    }
-
-    /**
-     * Get value on attribute fieldsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getFieldsArrayImpl() {
-        return this.aRecord.getFieldsArrayImpl();
-    }
-
-    /**
-     * Method used by the lara interpreter to select fields
-     * @return 
-     */
-    @Override
-    public List<? extends AField> selectField() {
-        return this.aRecord.selectField();
+    public Boolean getIsPublicImpl() {
+        return this.aNamedDecl.getIsPublicImpl();
     }
 
     /**
      * 
      */
     public void defNameImpl(String value) {
-        this.aRecord.defNameImpl(value);
+        this.aNamedDecl.defNameImpl(value);
     }
 
     /**
@@ -117,7 +56,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aRecord.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -126,7 +65,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aRecord.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -135,7 +74,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aRecord.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -144,7 +83,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aRecord.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -153,7 +92,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aRecord.insertAfterImpl(node);
+        return this.aNamedDecl.insertAfterImpl(node);
     }
 
     /**
@@ -162,7 +101,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aRecord.insertAfterImpl(code);
+        return this.aNamedDecl.insertAfterImpl(code);
     }
 
     /**
@@ -170,7 +109,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public void detachImpl() {
-        this.aRecord.detachImpl();
+        this.aNamedDecl.detachImpl();
     }
 
     /**
@@ -179,7 +118,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aRecord.setTypeImpl(type);
+        this.aNamedDecl.setTypeImpl(type);
     }
 
     /**
@@ -187,7 +126,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aRecord.copyImpl();
+        return this.aNamedDecl.copyImpl();
     }
 
     /**
@@ -195,7 +134,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aRecord.deepCopyImpl();
+        return this.aNamedDecl.deepCopyImpl();
     }
 
     /**
@@ -205,7 +144,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aRecord.setUserFieldImpl(fieldName, value);
+        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -214,7 +153,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aRecord.setUserFieldImpl(fieldNameAndValue);
+        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -224,7 +163,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aRecord.setValueImpl(key, value);
+        return this.aNamedDecl.setValueImpl(key, value);
     }
 
     /**
@@ -233,16 +172,16 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aRecord.messageToUserImpl(message);
+        this.aNamedDecl.messageToUserImpl(message);
     }
 
     /**
-     * 
+     * Sets the name of this namedDecl
      * @param name 
      */
     @Override
     public void setNameImpl(String name) {
-        this.aRecord.setNameImpl(name);
+        this.aNamedDecl.setNameImpl(name);
     }
 
     /**
@@ -252,7 +191,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aRecord.insertImpl(position, code);
+        this.aNamedDecl.insertImpl(position, code);
     }
 
     /**
@@ -260,15 +199,15 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public String toString() {
-        return this.aRecord.toString();
+        return this.aNamedDecl.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends ARecord> getSuper() {
-        return Optional.of(this.aRecord);
+    public Optional<? extends ANamedDecl> getSuper() {
+        return Optional.of(this.aNamedDecl);
     }
 
     /**
@@ -278,14 +217,8 @@ public abstract class AClass extends ARecord {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
-        	case "method": 
-        		joinPointList = selectMethod();
-        		break;
-        	case "field": 
-        		joinPointList = selectField();
-        		break;
         	default:
-        		joinPointList = this.aRecord.select(selectName);
+        		joinPointList = this.aNamedDecl.select(selectName);
         		break;
         }
         return joinPointList;
@@ -320,8 +253,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aRecord.fillWithAttributes(attributes);
-        attributes.add("methods");
+        this.aNamedDecl.fillWithAttributes(attributes);
     }
 
     /**
@@ -329,8 +261,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aRecord.fillWithSelects(selects);
-        selects.add("method");
+        this.aNamedDecl.fillWithSelects(selects);
     }
 
     /**
@@ -338,7 +269,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aRecord.fillWithActions(actions);
+        this.aNamedDecl.fillWithActions(actions);
     }
 
     /**
@@ -347,7 +278,7 @@ public abstract class AClass extends ARecord {
      */
     @Override
     public final String get_class() {
-        return "class";
+        return "field";
     }
 
     /**
@@ -360,16 +291,14 @@ public abstract class AClass extends ARecord {
         if(isInstance) {
         	return true;
         }
-        return this.aRecord.instanceOf(joinpointClass);
+        return this.aNamedDecl.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum ClassAttributes {
-        METHODS("methods"),
+    protected enum FieldAttributes {
         NAME("name"),
-        KIND("kind"),
-        FIELDS("fields"),
+        ISPUBLIC("isPublic"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -413,13 +342,13 @@ public abstract class AClass extends ARecord {
         /**
          * 
          */
-        private ClassAttributes(String name){
+        private FieldAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<ClassAttributes> fromString(String name) {
+        public static Optional<FieldAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -427,7 +356,7 @@ public abstract class AClass extends ARecord {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(ClassAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(FieldAttributes::name).collect(Collectors.toList());
         }
 
         /**

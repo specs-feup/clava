@@ -18,7 +18,9 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
+import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 
@@ -61,8 +63,12 @@ public class CxxNamedDecl extends ANamedDecl {
             }
         }
 
-        // By default, return true
-        return true;
+        boolean isInsideClass = namedDecl.getAncestorTry(RecordDecl.class)
+                .map(recordDecl -> recordDecl.get(RecordDecl.TAG_KIND) == TagKind.CLASS)
+                .orElse(false);
+
+        // By default, return true, unless is inside a class
+        return isInsideClass ? false : true;
     }
 
     @Override

@@ -116,7 +116,7 @@ public abstract class ARecord extends ACxxWeaverJoinPoint {
      * Method used by the lara interpreter to select fields
      * @return 
      */
-    public abstract List<? extends ANamedDecl> selectField();
+    public abstract List<? extends AField> selectField();
 
     /**
      * 

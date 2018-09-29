@@ -56,7 +56,7 @@ public abstract class AStruct extends ARecord {
      * @return 
      */
     @Override
-    public List<? extends ANamedDecl> selectField() {
+    public List<? extends AField> selectField() {
         return this.aRecord.selectField();
     }
 
