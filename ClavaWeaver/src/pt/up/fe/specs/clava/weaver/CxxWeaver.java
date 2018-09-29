@@ -540,6 +540,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     public App createApp(List<File> sources, List<String> parserOptions) {
 
+        List<File> adaptedSources = adaptSources(sources, parserOptions);
         // App newApp = new CodeParser().parseParallel(sources, parserOptions);
         // System.out.println("APP SOURCE:" + newApp.getCode());
 
@@ -549,7 +550,7 @@ public class CxxWeaver extends ACxxWeaver {
         // System.out.println("ALL SOURCES:" + allSources);
 
         // All files, header and implementation
-        Map<String, File> allFilesMap = SpecsIo.getFileMap(sources, SourceType.getPermittedExtensions());
+        Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
 
         // List<String> implementationFilenames = processSources(sources);
         List<String> allFiles = processSources(allFilesMap);
@@ -631,6 +632,30 @@ public class CxxWeaver extends ACxxWeaver {
             throw new RuntimeException(e);
         }
         */
+    }
+
+    /**
+     * Adapts initial source files.
+     * 
+     * <p>
+     * E.g., if compiling for CMake, adds normal include folders as source folders.
+     * 
+     * @param sources
+     * @param parserOptions2
+     * @return
+     */
+    private List<File> adaptSources(List<File> sources, List<String> parserOptions) {
+        List<File> adaptedSources = new ArrayList<>(sources);
+        // if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
+
+        // Add files in normal include folders to the tree
+        parserOptions.stream()
+                .filter(option -> option.startsWith("-I"))
+                .map(option -> option.substring("-I".length()))
+                .forEach(includeFolder -> adaptedSources.add(new File(includeFolder)));
+        // }
+
+        return adaptedSources;
     }
 
     // private void addFlagsFromFiles(List<File> includeFolders, List<String> filenames, List<String> parserOptions) {
