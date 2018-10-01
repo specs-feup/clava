@@ -1,0 +1,40 @@
+import clava.ClavaJoinPoints;
+import clava.hdf5.Hdf5;
+import lara.util.JpFilter;
+
+
+aspectdef ApplyHdf5
+
+	input filter end
+	
+	var jpFilter = new JpFilter(filter);
+/*
+	println("Filter");
+	printObject(jpFilter);
+	println();
+	*/
+	
+	// Get all classes and structs
+	var $records = [];
+	select record{kind === "class", kind === "struct"} end
+	apply
+		$records.push($record);
+	end
+
+	// Filter records
+	var $filteredRecords = jpFilter.filter($records);
+	
+	// Create new library files
+	var $files = Hdf5.toLibrary($filteredRecords);
+	
+	// Write files
+	for(var $file of $files) {
+		$file.write(".");
+	}
+	//call Hdf5Types($filteredRecords);
+	//var $hFile = ClavaJoinPoints.file("test.h");
+	//$hFile.write(".");
+	//var $cppFile = ClavaJoinPoints.file("test.cpp");
+	//$cppFile.write(".");
+	
+end

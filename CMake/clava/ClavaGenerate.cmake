@@ -6,8 +6,10 @@ cmake_minimum_required(VERSION 3.3)
 # Automatic code generation is disabled, only manually generated files in the
 # given aspect are considered as generated code, i.e., calls to $file.write
 #
-# TODO: Add variable for aspect arguments
-# e.g., -av "{inputFile:'data.json',execute:true,iterations:10}"
+# Parameter 1: ORIG_TARGET
+# Parameter 2: GENERATED_TARGET 
+# Parameter 3: ASPECT
+# Optional parameter: Aspect arguments e.g., "inputFile:'data.json', execute:true, iterations:10"
 function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT) 
 
 
@@ -25,8 +27,11 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
 	#message(STATUS "ORIG_CMAKE_DIR: ${ORIG_CMAKE_DIR}")
 	
-	# get full path of aspect file
-	set(ASPECT "${ORIG_CMAKE_DIR}/${ASPECT}")
+	# set absolute path of aspect file relative to the source folder, in case path is relative
+	if(NOT IS_ABSOLUTE ${ASPECT})
+		set(ASPECT "${ORIG_CMAKE_DIR}/${ASPECT}")	
+	endif()
+
 	#message(STATUS "ASPECT: ${ASPECT}")
 
 	# get woven directory path

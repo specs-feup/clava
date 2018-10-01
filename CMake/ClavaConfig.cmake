@@ -8,7 +8,7 @@
 # This module defines the following variables
 # ::
 #   CLAVA_JAR - Absolute path to clava.jar executable
-#
+#   CLAVA_CMAKE_HOME - Absolute path to the Clava CMake folder
 #
 # Module parameters:
 #
@@ -19,6 +19,10 @@
 
 # Check for Java JRE
 find_package(Java COMPONENTS Runtime REQUIRED)
+
+# Save current Clava folder
+set(CLAVA_CMAKE_HOME ${CMAKE_CURRENT_LIST_DIR})
+
 
 # Check if installation file with JAR path exists
 if(LOCAL_CLAVA)
@@ -76,8 +80,15 @@ set(CLAVA_JAR_FOUND)
 #include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake RESULT_VARIABLE LARA_RESULT)
 include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake)
 
+### Base functions
+
 # Add function 'clava_generate'
 include(${CMAKE_CURRENT_LIST_DIR}/clava/ClavaGenerate.cmake)
 
 # Add function 'clava_weave'
 include(${CMAKE_CURRENT_LIST_DIR}/clava/ClavaWeave.cmake)
+
+### Utility functions
+
+# Add function 'clava_generate_hdf5'
+include(${CMAKE_CURRENT_LIST_DIR}/util/ClavaHdf5.cmake)

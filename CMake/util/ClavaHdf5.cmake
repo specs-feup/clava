@@ -1,0 +1,34 @@
+# Target that calls all HDF5 generator jobs (just the generation)
+#add_custom_target(hdf5-generate)
+
+# Adds an HDF5 target that generates interfaces based on the given target
+# Parameter 1: ORIG_TARGET
+# Parameter 2: GENERATED_TARGET 
+# Parameter 3: FILTER A succession of attribute names of records and patterns e.g., "rx_name: 'A', kind: 'class'". If attribute is prefixed by 'rx_', it is interpreted as a regex
+function(clava_generate_hdf5 ORIG_TARGET GENERATED_TARGET FILTER)
+	message(STATUS "Generating HDF5 support library for target '${ORIG_TARGET}'")
+
+	# This is imported by package Clava
+	#find_package(Clava REQUIRED)
+	
+	# HDF5 Support
+	find_package(HDF5 REQUIRED)
+	
+	set(HDF5_ASPECT "${CLAVA_CMAKE_HOME}/util/ApplyHdf5.lara")
+	set(HDF5_ASPECT_ARGS "filter: {${FILTER}}")
+	
+	# Generate HDF5 interfaces for current code
+	clava_generate(${ORIG_TARGET} ${GENERATED_TARGET} ${HDF5_ASPECT} ${HDF5_ASPECT_ARGS}) # If attribute is prefixed by 'rx_', it is interpreted as a regex 
+	target_include_directories(${GENERATED_TARGET} PUBLIC ${HDF5_INCLUDE_DIRS})
+	target_link_libraries(${GENERATED_TARGET} ${HDF5_LIBRARIES} ${HDF5_CXX_LIBRARIES})
+	
+	#"filter: {rx_name: 'A', kind: 'class'}") # If attribute is prefixed by 'rx_', it is interpreted as a regex
+	
+	#set(HDF5_GENERATE_TARGET "${INPUT_TARGET}_clava_hdf5_generate")
+	#set(HDF5_LIB_TARGET "${INPUT_TARGET}_clava_hdf5_lib")
+
+	#clava_generate(${INPUT_TARGET} ${HDF5_LIB_TARGET} ${HDF5_GENERATE_TARGET})
+
+	#add_dependencies(hdf5-generate ${HDF5_GENERATE_TARGET})
+	
+endfunction(clava_generate_hdf5)
