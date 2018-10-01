@@ -44,10 +44,17 @@ cd /usr/local/lib/clava
 
 wget -N specs.fe.up.pt/tools/clava/ClavaConfig.cmake
 wget -N specs.fe.up.pt/tools/clava/ApplyLARA.cmake
+#wget -N specs.fe.up.pt/tools/clava/ClavaUtilConfig.cmake
 echo -n "$SCRIPTPATH/clava.jar" > clava-installation-jar.txt
 
 mkdir clava
 cd clava
 wget -N specs.fe.up.pt/tools/clava/ClavaGenerate.cmake
 wget -N specs.fe.up.pt/tools/clava/ClavaWeave.cmake
+cd ..
+
+mkdir util
+cd util
+wget -N specs.fe.up.pt/tools/clava/ApplyHdf5.lara
+wget -N specs.fe.up.pt/tools/clava/ClavaHdf5.cmake
 cd ..
