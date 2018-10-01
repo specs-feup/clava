@@ -4,10 +4,17 @@
 # Adds an HDF5 target that generates interfaces based on the given target
 # Parameter 1: ORIG_TARGET
 # Parameter 2: GENERATED_TARGET 
-# Parameter 3: FILTER A succession of attribute names of records and patterns e.g., "rx_name: 'A', kind: 'class'". If attribute is prefixed by 'rx_', it is interpreted as a regex
-function(clava_generate_hdf5 ORIG_TARGET GENERATED_TARGET FILTER)
+# (Optional) Parameter 3: FILTER A succession of attribute names of records and patterns e.g., "rx_name: 'A', kind: 'class'". If attribute is prefixed by 'rx_', it is interpreted as a regex
+function(clava_generate_hdf5 ORIG_TARGET GENERATED_TARGET)
 	message(STATUS "Generating HDF5 support library for target '${ORIG_TARGET}'")
 
+	
+	if(ARGC GREATER 2)
+		set(FILTER ${ARGV2})
+	else()
+		set(FILTER "")	
+	endif()
+	
 	# This is imported by package Clava
 	#find_package(Clava REQUIRED)
 	
