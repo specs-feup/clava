@@ -63,8 +63,6 @@ H5::CompType hdf5type::TestClassType::GetCompType() {
     itype.insertMember("uint16_t_field",offsetof(TestClass, uint16_t_field), H5::PredType::NATIVE_USHORT);
     itype.insertMember("int32_t_field",offsetof(TestClass, int32_t_field), H5::PredType::NATIVE_INT);
     itype.insertMember("uint32_t_field",offsetof(TestClass, uint32_t_field), H5::PredType::NATIVE_UINT);
-    itype.insertMember("int64_t_field",offsetof(TestClass, int64_t_field), H5::PredType::NATIVE_LLONG);
-    itype.insertMember("uint64_t_field",offsetof(TestClass, uint64_t_field), H5::PredType::NATIVE_ULLONG);
 
     return itype;
 }

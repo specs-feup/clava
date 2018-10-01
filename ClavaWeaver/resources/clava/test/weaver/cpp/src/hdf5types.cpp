@@ -40,6 +40,6 @@ public:
 	uint16_t uint16_t_field;
 	int32_t int32_t_field;
 	uint32_t uint32_t_field;
-	int64_t int64_t_field;
-	uint64_t uint64_t_field;
+	//int64_t int64_t_field; // Diff in test and dev machine
+	//uint64_t uint64_t_field; // Diff in test and dev machine
 };
