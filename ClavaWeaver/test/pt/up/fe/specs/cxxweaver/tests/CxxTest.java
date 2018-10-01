@@ -85,10 +85,10 @@ public class CxxTest {
         newTester().test("AttributeUse.lara", "attribute_use.cpp");
     }
 
-    // @Test
-    // public void testHdf5Types() {
-    // new newTester().test("Hdf5Types.lara", "hdf5types.cpp");
-    // }
+    @Test
+    public void testHdf5Types() {
+        newTester().test("Hdf5Types.lara", "hdf5types.cpp");
+    }
 
     @Test
     public void testOmpThreadsExplore() {

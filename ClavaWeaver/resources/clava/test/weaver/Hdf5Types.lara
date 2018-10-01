@@ -1,8 +1,28 @@
+import clava.hdf5.Hdf5;
+import clava.Clava;
+
 aspectdef Launcher
 
-	// Example 
-	call Hdf5Types("./", "Routing");
+	var $records = [];
+	select record end
+	apply
+		$records.push($record);
+	end
+	
+	var $hdf5LibFiles = Hdf5.toLibrary($records);
 
+	
+	// Output
+	for(var $file of $hdf5LibFiles) {
+		println($file.code);	
+	
+		// Add files so that their syntax can be checked
+		Clava.getProgram().addFile($file);
+	}
+	
+	// Example 
+	//call Hdf5Types("./", "Routing");
+/*
 	// Output
 	select file{"CompType.h"} end
 	apply
@@ -16,7 +36,8 @@ aspectdef Launcher
 	        println($file.code);
 	end
 end
-
+*/
+end
 
 aspectdef Hdf5Types
 	input 
