@@ -12,6 +12,8 @@ HDF5Types["float"] = "NATIVE_FLOAT";
 
 function toHdf5($type) {
 
+		println("toHdf5($type): this JS function is deprecated, use import clava.hdf5.Hdf5; instead");
+
 		//println("ORIGINAL TYPE:"+$type.ast);
 
 		// Desugar type

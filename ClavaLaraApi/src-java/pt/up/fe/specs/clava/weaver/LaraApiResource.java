@@ -21,10 +21,6 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraApiResource implements LaraResourceProvider {
 
-    // Gprofer
-    GPROFER("gprofer/Gprofer.lara"),
-    GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
-
     // AUTOPAR
     ADDITIONAL_CONDITIONS_CHECK("autopar/additionalConditionsCheck.lara"),
     ADD_OPENMP_DIRECTIVES("autopar/AddOpenMPDirectivesForLoop.lara"),
@@ -46,6 +42,13 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_15("autopar/SetVariableAccess.lara"),
     AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
     AUTOPAR_17("autopar/Parallelize.lara"),
+
+    // Gprofer
+    GPROFER("gprofer/Gprofer.lara"),
+    GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
+
+    // Hdf5
+    HDF5("hdf5/Hdf5.lara"),
 
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
