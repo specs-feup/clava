@@ -242,7 +242,9 @@ public class CxxWeaver extends ACxxWeaver {
             throw new RuntimeException("Tried to access top-level node, but weaving is disabled");
         }
 
-        return getAppTry().get();
+        return getAppTry()
+                .orElseThrow(() -> new RuntimeException(
+                        "No App available, check if the code has compilation errors"));
     }
 
     public Optional<App> getAppTry() {
