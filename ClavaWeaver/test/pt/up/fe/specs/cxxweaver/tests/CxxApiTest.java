@@ -108,4 +108,9 @@ public class CxxApiTest {
     public void testJpFilter() {
         newTester().test("JpFilter.lara", "jp_filter.hpp");
     }
+
+    @Test
+    public void testRebuild() {
+        newTester().test("RebuildTest.lara", "rebuild.cpp");
+    }
 }

@@ -1,0 +1,49 @@
+Temporary code:
+/**** File 'rebuild.cpp' ****/
+
+
+void b() {
+   int i;
+}
+
+
+void a() {
+   int j;
+   b();
+}
+
+// Hello
+
+int main() {
+   int k;
+   a();
+   
+   return 0;
+}
+
+/**** End File ****/
+
+
+Original code:
+/**** File 'rebuild.cpp' ****/
+
+
+void b() {
+   int i;
+}
+
+
+void a() {
+   int j;
+   b();
+}
+
+
+int main() {
+   int k;
+   a();
+   
+   return 0;
+}
+
+/**** End File ****/

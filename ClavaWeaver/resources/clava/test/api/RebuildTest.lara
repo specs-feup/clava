@@ -1,0 +1,31 @@
+import clava.Clava;
+
+aspectdef RebuildTest
+
+	//println("Pushing");
+	Clava.pushAst();
+	
+	select function{"main"} end
+	apply
+		$function.insert before "// Hello";
+	end
+
+	//println("Rebuilding");
+	Clava.rebuild();
+	println("Temporary code:\n" + Clava.getProgram().code);
+	
+	//println("Poping");
+	Clava.popAst();
+	//println("Rebuilding");
+	Clava.rebuild();
+	println("Original code:\n" + Clava.getProgram().code);
+	
+//	select program end
+//	apply
+//		$program.rebuild();
+//	end
+
+
+
+end
+
