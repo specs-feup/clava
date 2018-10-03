@@ -210,7 +210,19 @@ public class ForStmt extends LoopStmt {
         // var = var - incr
 
         if (incExpr instanceof BinaryOperator) {
-            ClavaLog.warning("Not yet implemented for binary operators");
+            BinaryOperator binaryOp = (BinaryOperator) incExpr;
+            BinaryOperatorKind kind = binaryOp.getOp();
+
+            if (kind == BinaryOperatorKind.ADD_ASSIGN) {
+                return Optional.of(binaryOp.getRhs());
+            }
+
+            if (kind == BinaryOperatorKind.SUB_ASSIGN) {
+                Expr rhs = binaryOp.getRhs();
+                return Optional.of(getFactory().unaryOperator(UnaryOperatorKind.MINUS, rhs.getExprType(), rhs));
+            }
+
+            ClavaLog.warning("Not yet implemented for binary operator of kind " + kind);
             return Optional.empty();
         }
 
