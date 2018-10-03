@@ -178,6 +178,9 @@ public class CxxWeaver extends ACxxWeaver {
     // Weaver configuration
     private DataStore args = null;
 
+    // Parsing Context
+    private final ClavaContext context;
+
     // Gears
     private final ModifiedFilesGear modifiedFilesGear;
     private final InsideApplyGear insideApplyGear;
@@ -208,6 +211,8 @@ public class CxxWeaver extends ACxxWeaver {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
         this.insideApplyGear = new InsideApplyGear();
+
+        context = new ClavaContext();
 
         // Weaver configuration
         args = null;
@@ -573,7 +578,7 @@ public class CxxWeaver extends ACxxWeaver {
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING, getConfig().get(ParallelCodeParser.PARALLEL_PARSING));
         codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, getConfig().get(ParallelCodeParser.PARSING_NUM_THREADS));
         codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
-        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), parserOptions);
+        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), parserOptions, context);
         // Set source paths of each TranslationUnit
         // app.setSourcesFromStrings(allFiles);
 
@@ -1071,9 +1076,9 @@ public class CxxWeaver extends ACxxWeaver {
         getApp().write(tempFolder, flattenFolders);
 
         // If AST will be updated, discard current App, to free memory
-        if (update) {
-            weaverData.popAst();
-        }
+        // if (update) {
+        // weaverData.popAst();
+        // }
 
         /*
         // For all Translation Units, collect new destination folders
@@ -1112,6 +1117,16 @@ public class CxxWeaver extends ACxxWeaver {
 
         App rebuiltApp = createApp(srcFolders, rebuildOptions);
 
+        // Creating an app automatically pushes the App in the Context
+        context.popApp();
+
+        // if (update) {
+        // // Top app is the one we want, pop the app before that one
+        // weaverData.popAst();
+        // weaverData.pushAst(rebuiltApp);
+        // currentSources = srcFolders;
+        //
+        // }
         // System.out.println("TUs:"
         // + getApp().getTranslationUnits().stream().map(tu -> tu.getFilename())
         // .collect(Collectors.toList()));
@@ -1123,7 +1138,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Base folder is now the temporary folder
         if (update) {
             // Discard current app
-            // weaverData.popAst();
+            weaverData.popAst();
 
             // Add rebuilt app
             weaverData.pushAst(rebuiltApp);
@@ -1206,8 +1221,11 @@ public class CxxWeaver extends ACxxWeaver {
     public void pushAst() {
         // Create a copy of app and push it
         // App clonedApp = (App) getApp().copy(true);
-        App newApp = getApp().pushAst();
-        weaverData.pushAst(newApp);
+
+        // App newApp = getApp().pushAst();
+        // weaverData.pushAst(newApp);
+        weaverData.pushAst(getApp());
+
         // weaverData.pushAst(clonedApp);
     }
 

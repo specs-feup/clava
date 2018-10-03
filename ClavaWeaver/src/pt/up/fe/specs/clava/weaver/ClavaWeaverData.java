@@ -30,8 +30,10 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.pragmas.ClavaPragmas;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 
@@ -41,20 +43,21 @@ public class ClavaWeaverData {
     private final DataStore data;
 
     // Parsed program state
-    private final Deque<App> apps;
+    // private final Deque<App> apps;
     private final Deque<Map<ClavaNode, Map<String, Object>>> userValuesStack;
     private final Set<File> manuallyWrittenFiles;
     private Collection<File> generatedFiles;
+    private ClavaContext context;
 
     public ClavaWeaverData(DataStore data) {
         this.data = data;
 
-        this.apps = new ArrayDeque<>();
+        // this.apps = new ArrayDeque<>();
         this.userValuesStack = new ArrayDeque<>();
         // this.manuallyWrittenFiles = new LinkedHashSet<>();
         this.manuallyWrittenFiles = new HashSet<>();
         this.generatedFiles = Collections.emptySet();
-
+        this.context = null;
     }
 
     public void addManualWrittenFile(File file) {
@@ -67,28 +70,44 @@ public class ClavaWeaverData {
 
     public Optional<App> getAst() {
 
-        App app = apps.peek();
+        // App app = apps.peek();
 
-        if (app == null) {
+        // if (app == null) {
+        if (context == null) {
             // Verify if weaving is disabled
             if (data.get(CxxWeaverOption.DISABLE_WEAVING)) {
                 SpecsLogs.msgInfo("'Disable weaving' option is set, cannot use AST-related code (e.g., 'select')");
                 return Optional.empty();
             }
 
-            SpecsLogs.msgInfo("No parsed tree available");
+            SpecsLogs.msgWarn("No parsed tree available");
             return Optional.empty();
         }
 
-        return Optional.of(app);
+        return Optional.of(context.getApp());
+
+        // return Optional.of(app);
     }
 
     public void pushAst(App app) {
-        App previousApp = apps.peek();
-        apps.push(app);
+        Optional<App> previousApp = Optional.empty();
+
+        // If first app, set context, app should already be in Context
+        if (context == null) {
+            context = app.getContext();
+            SpecsCheck.checkArgument(context.getApp() == app,
+                    () -> "Expected given App to be the current App of the Context");
+        }
+        // Otherwise, use context to push App
+        else {
+            previousApp = context.pushApp(app);
+        }
+
+        // App previousApp = apps.peek();
+        // apps.push(app);
 
         // Preserve previous user values
-        Map<ClavaNode, Map<String, Object>> userValuesCopy = getUserValuesCopy(app, previousApp,
+        Map<ClavaNode, Map<String, Object>> userValuesCopy = getUserValuesCopy(app, previousApp.orElse(null),
                 userValuesStack.peek());
 
         userValuesStack.push(userValuesCopy);
@@ -153,10 +172,20 @@ public class ClavaWeaverData {
     }
 
     public App popAst() {
-        userValuesStack.pop();
-        App topApp = apps.pop();
+        return popAst(0);
+    }
 
-        topApp.getContext().popApp();
+    // Not implemented yet
+    private App popAst(int astIndex) {
+        SpecsCheck.checkNotNull(context, () -> "No App to pop");
+
+        // System.out.println("DATA:" + data);
+        userValuesStack.pop();
+
+        App topApp = context.popApp();
+        // App topApp = apps.pop();
+
+        // topApp.getContext().popApp();
         // topApp.popAst();
         // Pop top-most App in ClavaContext
         // topApp.get(App.CONTEXT).popApp();

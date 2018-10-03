@@ -77,7 +77,7 @@ public class ParallelCodeParser extends CodeParser {
     /// DATAKEY END
 
     @Override
-    public App parse(List<File> inputSources, List<String> compilerOptions) {
+    public App parse(List<File> inputSources, List<String> compilerOptions, ClavaContext context) {
 
         // All files, header and implementation
         Map<String, File> allUserSources = SpecsIo.getFileMap(inputSources, SourceType.getPermittedExtensions());
@@ -96,7 +96,7 @@ public class ParallelCodeParser extends CodeParser {
         DataStore options = ClavaOptions.toDataStore(compilerOptions);
 
         // Add context to config
-        ClavaContext context = new ClavaContext();
+        // ClavaContext context = new ClavaContext();
         options.add(ClavaNode.CONTEXT, context);
 
         List<File> sources = allUserSources.keySet().stream()

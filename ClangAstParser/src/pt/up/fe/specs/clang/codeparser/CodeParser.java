@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
 
 /**
  * Parses C/C++/OpenCL code into a Clava AST.
@@ -54,7 +55,11 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
 
     // BEGIN DATAKEY
 
-    public abstract App parse(List<File> sources, List<String> compilerOptions);
+    public abstract App parse(List<File> sources, List<String> compilerOptions, ClavaContext context);
+
+    public App parse(List<File> sources, List<String> compilerOptions) {
+        return parse(sources, compilerOptions, new ClavaContext());
+    }
 
     /**
      * Currently returns a MonolithicCodeParser, which has higher compatibility than ParallelCodeParser.

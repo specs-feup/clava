@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -25,6 +26,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class ClavaContext extends ADataClass<ClavaContext> {
@@ -108,12 +110,23 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         return get(FACTORY);
     }
 
-    public void pushApp(App newApp) {
+    public Optional<App> pushApp(App newApp) {
+        // Verify if apps have the same context
+        SpecsCheck.checkArgument(newApp.getContext() == this, () -> "Expected new App to have the same context");
+        Optional<App> previousApp = SpecsCollections.lastTry(appStack);
         appStack.add(newApp);
+
+        // ClavaLog.warning("APP PUSH: " + appStack.size() + " context: " + hashCode());
+
+        return previousApp;
     }
 
     public App popApp() {
-        return appStack.remove(appStack.size() - 1);
+        App app = appStack.remove(appStack.size() - 1);
+
+        // ClavaLog.warning("APP POP: " + appStack.size() + " context: " + hashCode());
+
+        return app;
     }
 
     public App getApp() {

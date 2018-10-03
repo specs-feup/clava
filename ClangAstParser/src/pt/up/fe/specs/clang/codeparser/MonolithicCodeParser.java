@@ -24,6 +24,7 @@ import pt.up.fe.specs.clang.clavaparser.ClavaParser;
 import pt.up.fe.specs.clang.streamparserv2.ClangDumperParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -91,7 +92,7 @@ public class MonolithicCodeParser extends CodeParser {
     // }
 
     @Override
-    public App parse(List<File> sources, List<String> compilerOptions) {
+    public App parse(List<File> sources, List<String> compilerOptions, ClavaContext context) {
 
         if (ONLY_PARALLEL_PARSING) {
             return new ParallelCodeParser()
