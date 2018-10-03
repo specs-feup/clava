@@ -25,6 +25,7 @@ import org.lara.interpreter.joptions.gui.LaraLauncher;
 
 import eu.antarex.clang.parser.tests.CBenchTest;
 import eu.antarex.clang.parser.tests.CxxBenchTest;
+import larai.LaraI;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.cxxweaver.tests.CApiTest;
 import pt.up.fe.specs.cxxweaver.tests.CTest;
@@ -44,8 +45,14 @@ public class ClavaWeaverLauncher {
         // SpecsIo.read();
 
         boolean success = execute(args);
-        int exitValue = success ? 0 : 1;
-        System.exit(exitValue);
+
+        // Only exit if GUI is not running
+        if (!LaraI.isRunningGui()) {
+            int exitValue = success ? 0 : 1;
+            ClavaLog.debug("Calling System.exit() on ClavaWeaverLauncher, no running GUI detected");
+            System.exit(exitValue);
+        }
+
     }
 
     public static boolean execute(String[] args) {
