@@ -43,7 +43,9 @@ public class ClavaWeaverLauncher {
         // System.out.println("Press any key to proceed");
         // SpecsIo.read();
 
-        execute(args);
+        boolean success = execute(args);
+        int exitValue = success ? 0 : 1;
+        System.exit(exitValue);
     }
 
     public static boolean execute(String[] args) {
@@ -120,7 +122,7 @@ public class ClavaWeaverLauncher {
 
         int unitResults = LaraUnitLauncher.execute(laraUnitArgs.toArray(new String[0]));
 
-        return Optional.of(unitResults != -1);
+        return Optional.of(unitResults == 0);
     }
 
     private static Optional<Boolean> runDocGenerator(String[] args) {
