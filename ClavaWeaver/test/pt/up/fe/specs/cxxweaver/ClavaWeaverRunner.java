@@ -54,7 +54,7 @@ public class ClavaWeaverRunner {
         File configFile = new File(
                 "C:\\Users\\JoaoBispo\\Desktop\\shared\\clava-tests\\Tests\\2017-09_lara_resource\\resource_example.clava");
 
-        ClavaWeaverLauncher.main(new String[] { "--config", configFile.getAbsolutePath() });
+        ClavaWeaverLauncher.execute(new String[] { "--config", configFile.getAbsolutePath() });
     }
 
     @Test
