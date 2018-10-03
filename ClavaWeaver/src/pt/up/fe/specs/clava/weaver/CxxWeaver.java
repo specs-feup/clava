@@ -908,6 +908,7 @@ public class CxxWeaver extends ACxxWeaver {
                 // Convert to absolute path
                 // .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
                 .map(file -> SpecsIo.getCanonicalPath(file))
+                .map(SpecsIo::normalizePath)
                 // CMake-friendly list
                 .collect(Collectors.joining(";"));
 
@@ -920,6 +921,7 @@ public class CxxWeaver extends ACxxWeaver {
                 .filter(file -> SourceType.getType(file.getName()) == SourceType.IMPLEMENTATION)
                 // .map(file -> SpecsIo.getCanonicalFile(file).getAbsolutePath())
                 .map(file -> SpecsIo.getCanonicalPath(file))
+                .map(SpecsIo::normalizePath)
                 // CMake-friendly list
                 .collect(Collectors.joining(";"));
 
@@ -932,6 +934,7 @@ public class CxxWeaver extends ACxxWeaver {
         String includeFoldersContent = getAllIncludeFolders(getWeavingFolder()).stream()
                 // .map(File::getAbsolutePath)
                 .map(SpecsIo::getCanonicalPath)
+                .map(SpecsIo::normalizePath)
                 .collect(Collectors.joining(";"));
 
         File cmakeIncludes = new File(getWeavingFolder(), CMAKE_INCLUDE_DIRS_FILENAME);
