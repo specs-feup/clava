@@ -116,7 +116,7 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         Optional<App> previousApp = SpecsCollections.lastTry(appStack);
         appStack.add(newApp);
 
-        // ClavaLog.warning("APP PUSH: " + appStack.size() + " context: " + hashCode());
+        // ClavaLog.info("APP PUSH: " + appStack.size() + " pushed app: " + newApp.hashCode());
 
         return previousApp;
     }
@@ -124,7 +124,7 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     public App popApp() {
         App app = appStack.remove(appStack.size() - 1);
 
-        // ClavaLog.warning("APP POP: " + appStack.size() + " context: " + hashCode());
+        // ClavaLog.info("APP POP: " + appStack.size() + " popped app: " + app.hashCode());
 
         return app;
     }
