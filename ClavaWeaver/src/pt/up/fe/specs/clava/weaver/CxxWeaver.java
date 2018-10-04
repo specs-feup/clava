@@ -546,7 +546,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
-
+        System.out.println("SOURCES:" + sources);
         List<File> adaptedSources = adaptSources(sources, parserOptions);
         // App newApp = new CodeParser().parseParallel(sources, parserOptions);
         // System.out.println("APP SOURCE:" + newApp.getCode());
@@ -555,12 +555,14 @@ public class CxxWeaver extends ACxxWeaver {
         // Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
         // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
         // System.out.println("ALL SOURCES:" + allSources);
-
+        System.out.println("ADAPTED SOURCES:" + adaptedSources);
         // All files, header and implementation
         Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
+        System.out.println("ALL FILES MAP:" + allFilesMap);
 
         // List<String> implementationFilenames = processSources(sources);
         List<String> allFiles = processSources(allFilesMap);
+        System.out.println("ALL FILES:" + allFiles);
 
         // TODO: If option to separe include folders in generation is on, it should return just that folder
         // List<File> includeFolders = sources;
@@ -656,10 +658,15 @@ public class CxxWeaver extends ACxxWeaver {
         // if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
 
         // Add files in normal include folders to the tree
-        parserOptions.stream()
-                .filter(option -> option.startsWith("-I"))
-                .map(option -> option.substring("-I".length()))
-                .forEach(includeFolder -> adaptedSources.add(new File(includeFolder)));
+        for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
+            adaptedSources.add(includeFolder);
+            // parserOptions.add("-I" + parseIncludePath(includeFolder));
+        }
+
+        // parserOptions.stream()
+        // .filter(option -> option.startsWith("-I"))
+        // .map(option -> option.substring("-I".length()))
+        // .forEach(includeFolder -> adaptedSources.add(new File(includeFolder)));
         // }
 
         return adaptedSources;
