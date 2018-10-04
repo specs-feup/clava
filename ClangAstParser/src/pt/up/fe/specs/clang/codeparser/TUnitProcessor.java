@@ -218,6 +218,11 @@ public class TUnitProcessor {
             return Optional.empty();
         }
 
+        // If node is a macro, cannot be normalized
+        if (node.get(ClavaNode.IS_MACRO)) {
+            return Optional.empty();
+        }
+
         String signature = node.getNodeSignature();
 
         // If signature is ambiguous, cannot normalize node
