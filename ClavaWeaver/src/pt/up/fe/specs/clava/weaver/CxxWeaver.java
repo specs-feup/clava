@@ -546,8 +546,11 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
-        System.out.println("SOURCES:" + sources);
+        // System.out.println("SOURCES:" + sources);
+
         List<File> adaptedSources = adaptSources(sources, parserOptions);
+        // System.out.println("ADAPTED SOURCES:" + adaptedSources);
+
         // App newApp = new CodeParser().parseParallel(sources, parserOptions);
         // System.out.println("APP SOURCE:" + newApp.getCode());
 
@@ -555,14 +558,14 @@ public class CxxWeaver extends ACxxWeaver {
         // Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
         // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
         // System.out.println("ALL SOURCES:" + allSources);
-        System.out.println("ADAPTED SOURCES:" + adaptedSources);
+
         // All files, header and implementation
         Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
-        System.out.println("ALL FILES MAP:" + allFilesMap);
+        // System.out.println("ALL FILES MAP:" + allFilesMap);
 
         // List<String> implementationFilenames = processSources(sources);
         List<String> allFiles = processSources(allFilesMap);
-        System.out.println("ALL FILES:" + allFiles);
+        // System.out.println("ALL FILES:" + allFiles);
 
         // TODO: If option to separe include folders in generation is on, it should return just that folder
         // List<File> includeFolders = sources;
@@ -1080,8 +1083,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
-        getApp().write(tempFolder, flattenFolders);
-
+        List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
+        ClavaLog.debug("Files written during rebuild: " + writtenFiles);
         // If AST will be updated, discard current App, to free memory
         // if (update) {
         // weaverData.popAst();
@@ -1098,11 +1101,12 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
         List<File> includeFolders = srcFolders;
         */
+
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
 
         List<String> rebuildOptions = new ArrayList<>();
 
-        // Copy current options, removing previous includes
+        // Copy current options, removing previous normal includes
         parserOptions.stream()
                 .filter(option -> !option.startsWith("-I"))
                 .forEach(rebuildOptions::add);
@@ -1120,9 +1124,10 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
-        List<File> srcFolders = new ArrayList<>(includeFolders);
+        // List<File> srcFolders = new ArrayList<>(includeFolders);
 
-        App rebuiltApp = createApp(srcFolders, rebuildOptions);
+        // App rebuiltApp = createApp(srcFolders, rebuildOptions);
+        App rebuiltApp = createApp(writtenFiles, rebuildOptions);
 
         // Creating an app automatically pushes the App in the Context
         context.popApp();
@@ -1151,7 +1156,8 @@ public class CxxWeaver extends ACxxWeaver {
             weaverData.pushAst(rebuiltApp);
 
             // TODO: When separation of src/include is done, update accordingly
-            currentSources = srcFolders;
+            // currentSources = srcFolders;
+            currentSources = writtenFiles;
 
             // baseFolder = tempFolder;
         }
