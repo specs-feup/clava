@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
@@ -129,8 +130,16 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
 
     @Override
     public String getCode() {
+        switch (getUettKind()) {
+        case SIZE_OF:
+            return "sizeof(" + getExpressionCode() + ")";
+        default:
+            ClavaLog.debug(
+                    "UnaryExprOrTypeTraitExpr.getCode(): Not implemented yet for kind '" + getUettKind()
+                            + "', using 'sourceLiteral'");
+            return get(SOURCE_LITERAL);
+        }
 
-        return get(SOURCE_LITERAL);
         // return literalCode;
         /*
         if (useLiteralCode) {
@@ -151,6 +160,18 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         
         return uettKind.getString() + " " + argumentCode;
         */
+    }
+
+    private String getExpressionCode() {
+        if (hasArgumentExpression()) {
+            return getArgumentExpression().getCode();
+        }
+
+        if (hasTypeExpression()) {
+            return getArgumentType().get().getCode(this);
+        }
+
+        throw new RuntimeException("Expression code not implemented yet for this node: " + this);
     }
 
     // @Override
