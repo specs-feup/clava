@@ -666,6 +666,11 @@ public class TranslationUnit extends ClavaNode {
         String folderpath = folderpathTry.get();
         File folder = new File(folderpath);
 
+        // System.out.println("BASE FOLDER: " + baseFolder);
+        // System.out.println("FOLDERPATH: " + folderpath);
+        // System.out.println("FOLDER: " + folder);
+        // System.out.println("CURRENT FOLDER: " + SpecsIo.getWorkingDir().getAbsolutePath());
+
         // If folderpath is absolute, return only last name; otherwise, use it fully
         String path = folder.isAbsolute() ? folder.getName() : folderpath;
         return new File(baseFolder, path);
@@ -698,7 +703,6 @@ public class TranslationUnit extends ClavaNode {
 
         File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
         // System.out.println("ACTUAL DESTINATION FOLDER:" + actualDestinationFolder);
-
         // String relativePath = getRelativeFolderpath();
 
         // Build destination path

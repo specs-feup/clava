@@ -58,6 +58,11 @@ public class ClavaContext extends ADataClass<ClavaContext> {
             .object("metrics", ClavaMetrics.class);
 
     /**
+     * If set, represents the root folder where we are working on.
+     */
+    // public final static DataKey<Optional<File>> ROOT_FOLDER = KeyFactory.optional("rootFolder");
+
+    /**
      * Temporary measure due to TextParser being called more than once over the same nodes.
      */
     // public final static DataKey<Set<ClavaNode>> ASSOCIATED_COMMENTS = KeyFactory.generic(

@@ -14,8 +14,8 @@
 package pt.up.fe.specs.clava.ast.extra;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +45,6 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
-import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -325,18 +324,22 @@ public class App extends ClavaNode {
      * @param baseInputFolder
      * @param destinationFolder
      */
-    public void write(File destinationFolder) {
+    public List<File> write(File destinationFolder) {
         // Previous default behavior was to flatten the structure of the output folder
-        write(destinationFolder, true);
+        return write(destinationFolder, true);
     }
 
-    public void write(File destinationFolder, boolean flattenFolder) {
+    public List<File> write(File destinationFolder, boolean flattenFolder) {
+        List<File> writtenFiles = new ArrayList<>();
         // System.out.println("DESTINATION FOLDER:" + destinationFolder);
         for (Entry<File, String> entry : getCode(destinationFolder, flattenFolder).entrySet()) {
             SpecsIo.write(entry.getKey(), entry.getValue());
+            writtenFiles.add(entry.getKey());
             // System.out.println("WRITING: " + entry.getKey());
             // System.out.println("WRITTEN FILE: " + entry.getKey());
         }
+
+        return writtenFiles;
     }
 
     /**
@@ -453,109 +456,111 @@ public class App extends ClavaNode {
         // List<File> allFiles = getAllSourcefiles(localSources, true);
 
         // System.out.println("All files:" + allFiles);
-
-        Set<File> relativeWoven = files.keySet().stream()
-                .map(file -> SpecsIo.getRelativePath(file, destinationFolder))
-                // .map(file -> flattenFolders ? file.getPath() : SpecsIo.getRelativePath(file, destinationFolder))
-                .map(path -> new File(path))
-                .collect(Collectors.toSet());
+        //
+        // Set<File> relativeWoven = files.keySet().stream()
+        // .map(file -> SpecsIo.getRelativePath(file, destinationFolder))
+        // // .map(file -> flattenFolders ? file.getPath() : SpecsIo.getRelativePath(file, destinationFolder))
+        // .map(path -> new File(path))
+        // .collect(Collectors.toSet());
 
         // System.out.println("Generated files:" + relativeWoven);
         // System.out.println("Original files:" + sourceFiles.entrySet());
         // for (File file : allFiles) {
         // for (Entry<String, File> sourceFile : sourceFiles.entrySet()) {
-        for (Entry<File, File> sourceFile : sourceFiles.entrySet()) {
-            File originalSourceFile = sourceFile.getKey();
-            File originalSourcePath = sourceFile.getValue();
 
-            // System.out.println("SOURCE FILE:" + originalSourceFile);
-            // System.out.println("ORIGINAL SOURCE PATH:" + originalSourcePath);
-            // String relativeSource = SpecsIo.getRelativePath(file, baseInputFolder);
-            // String clavaCodeOutput = ClavaCode.getRelativePath(file, baseInputFolder);
-            String originalRelativePath = TranslationUnit.getRelativePath(originalSourceFile, originalSourcePath);
-            // System.out.println("ORIGINAL SOURCE FILE: " + originalSourceFile);
-            // System.out.println("ORIGINAL SOURCE PATH: " + originalSourcePath);
-            // System.out.println("ORIGINAL RELATIVE PATH: " + originalRelativePath);
-
-            // System.out.println("ORIGINAL RELATIVE PATH:" + originalRelativePath);
-            File originalSourceFolder = originalSourcePath.isDirectory() ? originalSourcePath
-                    : originalSourcePath.getParentFile();
-            // System.out.println("ORIGINAL SOURCE FOLDER: " + originalSourceFolder);
-
-            File adjustedRelativePath = new File(originalRelativePath);
-            // System.out.println("FLATTEN FOLDER:" + flattenFolders);
-            // System.out.println("ORIGINAL NULL?:" + originalSourceFolder != null);
-            if (!flattenFolders && originalSourceFolder != null) {
-                adjustedRelativePath = new File(originalSourceFolder.getName(), originalRelativePath);
-            }
-            // System.out.println("Adjusted relative path:" + adjustedRelativePath);
-
-            // System.out.println("ADJUSTED RELATIVE PATH:" + adjustedRelativePath);
-            // if (!relativeSource.equals(clavaCodeOutput)) {
-            // SpecsLogs.msgWarn("TEMPORARY TEST: expected '" + clavaCodeOutput + "', got '" + relativeSource + "'");
-            // }
-            // System.out.println("ADJUSTED PATH:" + adjustedRelativePath);
-            // System.out.println("RELATIVE WOVEN:" + relativeWoven);
-            if (relativeWoven.contains(adjustedRelativePath)) {
-                continue;
-            }
-
-            // Only create empty sources for header files
-            if (SourceType.getType(originalRelativePath) != SourceType.HEADER) {
-                continue;
-            }
-
-            SpecsLogs.msgInfo("Creating empty source for file '" + originalRelativePath + "'");
-
-            // New source path will be destination folder + parent name of the original source path, if present
-            File newSourcePath = destinationFolder;
-            if (!flattenFolders) {
-
-                if (originalSourceFolder != null) {
-                    newSourcePath = new File(newSourcePath, originalSourceFolder.getName());
-                }
-            }
-
-            // System.out.println("NEW SOURCE PATH:" + newSourcePath);
-
-            File newSourceFile = new File(newSourcePath, originalRelativePath);
-            // System.out.println("NEW SOURCE FILE:" + newSourceFile);
-
-            // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(newSourceFile.getName(),
-            // newSourcePath.getAbsolutePath(), Collections.emptyList());
-            TranslationUnit tUnit = getFactory().translationUnit(newSourceFile, Collections.emptyList());
-            tUnit.setRelativePath(new File(originalRelativePath).getParent());
-            // System.out.println("NEW SOURCE FILE:" + newSourceFile);
-            // System.out.println("NEW SOURCE PATH:" + newSourcePath);
-            // System.out.println("RELATIVE FOLDER:" + new File(originalRelativePath).getParent());
-
-            files.put(newSourceFile, tUnit.getCode());
-            /*
-            // Create translation unit for the missing file
-            String relativePath = SpecsIo.getRelativePath(originalSourceFile.getParentFile(), sourceFile.getValue());
-            // String relativePath = SpecsIo.getRelativePath(file.getParentFile(), baseInputFolder);
-            
-            // Avoid writing outside of the destination folder, if relative path has '../', remove them
-            while (relativePath.startsWith("../")) {
-                relativePath = relativePath.substring("../".length());
-            }
-            
-            // Build destination path
-            File actualDestinationFolder = destinationFolder;
-            if (!flattenFolders) {
-            
-            }
-            
-            actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
-            File destinationFile = new File(actualDestinationFolder, originalSourceFile.getName());
-            
-            TranslationUnit tUnit = ClavaNodeFactory.translationUnit(originalSourceFile.getName(),
-                    originalSourceFile.getParent(),
-                    Collections.emptyList());
-            
-            files.put(destinationFile, tUnit.getCode());
-            */
-        }
+        // // Create translation unit for the missing file
+        // for (Entry<File, File> sourceFile : sourceFiles.entrySet()) {
+        // File originalSourceFile = sourceFile.getKey();
+        // File originalSourcePath = sourceFile.getValue();
+        //
+        // // System.out.println("SOURCE FILE:" + originalSourceFile);
+        // // System.out.println("ORIGINAL SOURCE PATH:" + originalSourcePath);
+        // // String relativeSource = SpecsIo.getRelativePath(file, baseInputFolder);
+        // // String clavaCodeOutput = ClavaCode.getRelativePath(file, baseInputFolder);
+        // String originalRelativePath = TranslationUnit.getRelativePath(originalSourceFile, originalSourcePath);
+        // // System.out.println("ORIGINAL SOURCE FILE: " + originalSourceFile);
+        // // System.out.println("ORIGINAL SOURCE PATH: " + originalSourcePath);
+        // // System.out.println("ORIGINAL RELATIVE PATH: " + originalRelativePath);
+        //
+        // // System.out.println("ORIGINAL RELATIVE PATH:" + originalRelativePath);
+        // File originalSourceFolder = originalSourcePath.isDirectory() ? originalSourcePath
+        // : originalSourcePath.getParentFile();
+        // // System.out.println("ORIGINAL SOURCE FOLDER: " + originalSourceFolder);
+        //
+        // File adjustedRelativePath = new File(originalRelativePath);
+        // // System.out.println("FLATTEN FOLDER:" + flattenFolders);
+        // // System.out.println("ORIGINAL NULL?:" + originalSourceFolder != null);
+        // if (!flattenFolders && originalSourceFolder != null) {
+        // adjustedRelativePath = new File(originalSourceFolder.getName(), originalRelativePath);
+        // }
+        // // System.out.println("Adjusted relative path:" + adjustedRelativePath);
+        //
+        // // System.out.println("ADJUSTED RELATIVE PATH:" + adjustedRelativePath);
+        // // if (!relativeSource.equals(clavaCodeOutput)) {
+        // // SpecsLogs.msgWarn("TEMPORARY TEST: expected '" + clavaCodeOutput + "', got '" + relativeSource + "'");
+        // // }
+        // // System.out.println("ADJUSTED PATH:" + adjustedRelativePath);
+        // // System.out.println("RELATIVE WOVEN:" + relativeWoven);
+        // if (relativeWoven.contains(adjustedRelativePath)) {
+        // continue;
+        // }
+        //
+        // // Only create empty sources for header files
+        // if (SourceType.getType(originalRelativePath) != SourceType.HEADER) {
+        // continue;
+        // }
+        //
+        // SpecsLogs.msgInfo("Creating empty source for file '" + originalRelativePath + "'");
+        //
+        // // New source path will be destination folder + parent name of the original source path, if present
+        // File newSourcePath = destinationFolder;
+        // if (!flattenFolders) {
+        //
+        // if (originalSourceFolder != null) {
+        // newSourcePath = new File(newSourcePath, originalSourceFolder.getName());
+        // }
+        // }
+        //
+        // // System.out.println("NEW SOURCE PATH:" + newSourcePath);
+        //
+        // File newSourceFile = new File(newSourcePath, originalRelativePath);
+        // // System.out.println("NEW SOURCE FILE:" + newSourceFile);
+        //
+        // // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(newSourceFile.getName(),
+        // // newSourcePath.getAbsolutePath(), Collections.emptyList());
+        // TranslationUnit tUnit = getFactory().translationUnit(newSourceFile, Collections.emptyList());
+        // tUnit.setRelativePath(new File(originalRelativePath).getParent());
+        // // System.out.println("NEW SOURCE FILE:" + newSourceFile);
+        // // System.out.println("NEW SOURCE PATH:" + newSourcePath);
+        // // System.out.println("RELATIVE FOLDER:" + new File(originalRelativePath).getParent());
+        //
+        // files.put(newSourceFile, tUnit.getCode());
+        // /*
+        // // Create translation unit for the missing file
+        // String relativePath = SpecsIo.getRelativePath(originalSourceFile.getParentFile(), sourceFile.getValue());
+        // // String relativePath = SpecsIo.getRelativePath(file.getParentFile(), baseInputFolder);
+        //
+        // // Avoid writing outside of the destination folder, if relative path has '../', remove them
+        // while (relativePath.startsWith("../")) {
+        // relativePath = relativePath.substring("../".length());
+        // }
+        //
+        // // Build destination path
+        // File actualDestinationFolder = destinationFolder;
+        // if (!flattenFolders) {
+        //
+        // }
+        //
+        // actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
+        // File destinationFile = new File(actualDestinationFolder, originalSourceFile.getName());
+        //
+        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(originalSourceFile.getName(),
+        // originalSourceFile.getParent(),
+        // Collections.emptyList());
+        //
+        // files.put(destinationFile, tUnit.getCode());
+        // */
+        // }
 
         return files;
     }
