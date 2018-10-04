@@ -9,5 +9,8 @@ int main() {
 	double d1, d2;
 	double d3 = (double){(d1) + (d2)};   
    
+   // Macro in size_of
+	int size = sizeof(double);
+   
    return 0;
 }
