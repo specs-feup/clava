@@ -713,8 +713,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     @Override
-    public Collection<DataKey<?>> keysWithValues() {
-        return dataClass.keysWithValues();
+    public Collection<DataKey<?>> getDataKeysWithValues() {
+        return dataClass.getDataKeysWithValues();
     }
 
     public ClavaContext getContext() {
