@@ -34,3 +34,7 @@ typedef_to_change type_of_changed_typedef;
 
 typedef std::vector<double>::const_iterator a_typedef;
 a_typedef changed_typedef_type;
+
+void type_params() {
+	std::map<int, int> intVector;
+}

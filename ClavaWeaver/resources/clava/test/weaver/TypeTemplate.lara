@@ -89,5 +89,13 @@ aspectdef Test
 	end
 	
 
+
+
+	// Def on arrays
+	select function{"type_params"}.vardecl{"intVector"} end
+	apply
+		var arrayType = ClavaJoinPoints.constArrayType("float", 1, 2);
+		$vardecl.type.def templateArgsTypes = [doubleType, arrayType];
+	end
 	
 end
