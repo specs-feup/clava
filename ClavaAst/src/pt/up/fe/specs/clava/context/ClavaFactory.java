@@ -72,6 +72,7 @@ import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
@@ -439,6 +440,9 @@ public class ClavaFactory {
         DataStore data = newDataStore(UnaryOperator.class)
                 .put(Expr.TYPE, Optional.of(type))
                 .put(UnaryOperator.OP, op);
+
+        if (op.equals(UnaryOperatorKind.POST_INC) || op.equals(UnaryOperatorKind.POST_DEC))
+            data.put(UnaryOperator.POSITION, UnaryOperatorPosition.POSTFIX);
 
         return new UnaryOperator(data, Arrays.asList(subExpr));
     }

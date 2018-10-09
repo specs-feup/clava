@@ -29,7 +29,7 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.utils.IncludeManager;
@@ -532,13 +532,13 @@ public class TranslationUnit extends ClavaNode {
         addInclude(include.getInclude().getInclude(), include.getInclude().isAngled());
     }
 
-    public void addDeclaration(VarDecl varDecl) {
+    public void addDeclaration(NamedDecl namedDecl) {
         // Find insertion point. Insert before first function declaration
         Optional<ClavaNode> firstFunction = getChildrenStream()
                 .filter(child -> child instanceof FunctionDecl)
                 .findFirst();
 
-        DeclStmt stmt = getFactory().declStmt(varDecl);
+        DeclStmt stmt = getFactory().declStmt(namedDecl);
         // DeclStmt stmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
 
         if (firstFunction.isPresent()) {
