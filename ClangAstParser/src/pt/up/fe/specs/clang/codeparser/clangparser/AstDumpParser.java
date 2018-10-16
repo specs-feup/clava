@@ -147,6 +147,9 @@ public class AstDumpParser implements ClangParser {
         DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.getLocalOptionsFile(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
+        // Apply local options
+        // applyLocalOptions(localData);
+
         // Get version for the executable
         // String version = config.get(ClangAstKeys.CLANGAST_VERSION);
         // boolean usePlatformIncludes = config.get(ClangAstKeys.USE_PLATFORM_INCLUDES);
