@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 3.3)
 # Optional parameter: List of sources that trigger the generation of code. If empty, code is generated everytime ORIG_TARGET is modified
 function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT) 
 
-
+	# Aspect arguments
 	if(ARGC GREATER 3)
 		set(ASPECT_ARGS_FLAG "-av")
 		set(ASPECT_ARGS "{${ARGV3}}")

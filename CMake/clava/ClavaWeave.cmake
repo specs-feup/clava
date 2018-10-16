@@ -1,12 +1,23 @@
 # TODO: Documentation
 function(clava_weave ORIG_TARGET ASPECT)
 
+	# Aspect arguments
+	if(ARGC GREATER 2)
+		set(ASPECT_ARGS_FLAG "-av")
+		set(ASPECT_ARGS "{${ARGV2}}")
+	else()
+		set(ASPECT_ARGS_FLAG "")
+		set(ASPECT_ARGS "")
+	endif()
+
 	# get CMakeLists.txt dir
 	get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
 	#message(STATUS "ORIG_CMAKE_DIR: ${ORIG_CMAKE_DIR}")
 	
-	# get full path of aspect file
-	set(ASPECT "${ORIG_CMAKE_DIR}/${ASPECT}")
+	# set absolute path of aspect file relative to the source folder, in case path is relative
+	if(NOT IS_ABSOLUTE ${ASPECT})
+		set(ASPECT "${ORIG_CMAKE_DIR}/${ASPECT}")	
+	endif()
 	#message(STATUS "ASPECT: ${ASPECT}")
 
 	# get woven directory path
@@ -34,7 +45,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
 		string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
 	endif()
-	message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
+	#message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
 	
 	set(WOVEN_DIR "${ORIG_CMAKE_DIR}/${WOVEN_DIR_NAME}")
 	
@@ -48,13 +59,13 @@ function(clava_weave ORIG_TARGET ASPECT)
 	# mark Clava output directory as a target for 'make clean'
 	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "${WOVEN_DIR}")
 	
-	set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME}")
+	#set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME}")
 	
 	# execute Clava (TODO: set correct standard from cmake) (TODO: set correct clava jar)
 	execute_process(
 		# -std c99 
 		#COMMAND ${CLAVA_COMMAND}
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}"
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}"
 		WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
 	)
 		
