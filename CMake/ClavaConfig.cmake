@@ -22,7 +22,7 @@ find_package(Java COMPONENTS Runtime REQUIRED)
 
 # Save current Clava folder
 set(CLAVA_CMAKE_HOME ${CMAKE_CURRENT_LIST_DIR})
-
+message(STATUS "Clava home: ${CLAVA_CMAKE_HOME}")
 
 # Check if installation file with JAR path exists
 if(LOCAL_CLAVA)
@@ -92,3 +92,5 @@ include(${CMAKE_CURRENT_LIST_DIR}/clava/ClavaWeave.cmake)
 
 # Add function 'clava_generate_hdf5'
 include(${CMAKE_CURRENT_LIST_DIR}/util/ClavaHdf5.cmake)
+# Add function 'clava_weave_autopar'
+include(${CMAKE_CURRENT_LIST_DIR}/util/ClavaAutopar.cmake)
