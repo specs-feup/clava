@@ -1,0 +1,13 @@
+import clava.autopar.Parallelize;
+
+aspectdef ApplyAutopar
+
+	var $loops = [];
+	select file.function.loop end
+	apply
+		$loops.push($loop);
+	end
+	    
+	Parallelize.forLoops($loops);
+
+end
