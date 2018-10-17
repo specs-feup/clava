@@ -141,4 +141,8 @@ public enum SourceType {
         return extensions.contains(extension.toLowerCase());
     }
 
+    public static boolean isHeader(File file) {
+        return SourceType.HEADER.hasExtension(SpecsIo.getExtension(file));
+    }
+
 }
