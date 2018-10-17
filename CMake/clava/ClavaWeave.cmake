@@ -2,12 +2,18 @@
 function(clava_weave ORIG_TARGET ASPECT)
 
 	# Aspect arguments
-	if(ARGC GREATER 2)
+	if((ARGC GREATER 2) AND NOT ("${ARGV2}" STREQUAL ""))
 		set(ASPECT_ARGS_FLAG "-av")
 		set(ASPECT_ARGS "{${ARGV2}}")
 	else()
 		set(ASPECT_ARGS_FLAG "")
 		set(ASPECT_ARGS "")
+	endif()
+	# Weaver arguments
+	if(ARGC GREATER 3)
+		set(WEAVER_CUSTOM_ARGS ${ARGV3})
+	else()
+		set(WEAVER_CUSTOM_ARGS "")
 	endif()
 
 	# get build dir
@@ -106,9 +112,9 @@ function(clava_weave ORIG_TARGET ASPECT)
 	execute_process(
 		# -std c99 
 		#COMMAND ${CLAVA_COMMAND}
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES}
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of "${WOVEN_DIR_NAME}" ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} ${WEAVER_CUSTOM_ARGS}
 		#WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
-		WORKING_DIRECTORY ${WORKING_DIR}
+		WORKING_DIRECTORY ${BUILD_DIR}
 	)
 		
 	#-of "${WOVEN_DIR_NAME}"
