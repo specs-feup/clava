@@ -934,7 +934,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Determine new include dirs
         // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
-        String includeFoldersContent = getAllIncludeFolders(getWeavingFolder()).stream()
+        String includeFoldersContent = getAllIncludeFolders(getWeavingFolder(), generatedFiles).stream()
                 // .map(File::getAbsolutePath)
                 .map(SpecsIo::getCanonicalPath)
                 .map(SpecsIo::normalizePath)
@@ -1332,12 +1332,29 @@ public class CxxWeaver extends ACxxWeaver {
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 
-    private Set<File> getAllIncludeFolders(File weavingFolder) {
+    private Set<File> getAllIncludeFolders(File weavingFolder, Set<File> generatedFiles) {
         Set<File> includePaths = new LinkedHashSet<>();
-
+        // System.out.println("SOURCE INCLUDE FOLDERS: " + getSourceIncludeFolders(weavingFolder, true));
+        // System.out.println("EXTERNAL INCLUDE FOLDERS: " + getExternalIncludeFolders());
+        // System.out.println("GENERATED FILES: " + generatedFiles);
         includePaths.addAll(getSourceIncludeFolders(weavingFolder, true));
         includePaths.addAll(getExternalIncludeFolders());
 
+        /*
+        if(!generatedFiles.isEmpty()) {
+            // Get translation units that correspond to generated files            
+            getApp().getTranslationUnits();
+        }
+        */
+
+        // System.out.println("INCLUDES BEFORE:" + includePaths);
+        // Add includes to manually generated files
+        generatedFiles.stream()
+                .filter(SourceType::isHeader)
+                .map(File::getParentFile)
+                .forEach(includePaths::add);
+        // .collect(Collectors.toList());
+        // System.out.println("INCLUDES AFTER:" + includePaths);
         return includePaths;
     }
 
