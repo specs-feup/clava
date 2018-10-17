@@ -28,6 +28,9 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 		set(GENERATED_TARGET_DEPENDENCIES "")
 	endif()
 	
+	# get build dir
+	set(BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+	
 	#message(STATUS "DEPENDENCIES: ${GENERATED_TARGET_DEPENDENCIES}")
 
 	#message(STATUS "ASPECT ARGS: ${ASPECT_ARGS}")
@@ -44,14 +47,25 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	#message(STATUS "ASPECT: ${ASPECT}")
 
 	# get woven directory path
-	set(WOVEN_DIR_NAME "clava_${ORIG_TARGET}")
+	#set(WOVEN_DIR_NAME "clava_${ORIG_TARGET}")
 	#message(STATUS "WOVEN_DIR_NAME: ${WOVEN_DIR_NAME}")
 
+	
+	#set(WOVEN_DIR "${ORIG_CMAKE_DIR}/${WOVEN_DIR_NAME}")
+
+
+	# woven dir name
+	set(WOVEN_DIR_NAME "woven")
+	
+	# working dir
+	#string(TIMESTAMP CURRENT_TIMESTAMP)
+	#string(MAKE_C_IDENTIFIER ${CURRENT_TIMESTAMP} TIME_ID)
+	set(WORKING_DIR "${BUILD_DIR}/${GENERATED_TARGET}")
+	set(WOVEN_DIR "${WORKING_DIR}/${WOVEN_DIR_NAME}")
+	#message(STATUS "WOVEN_DIR: ${WOVEN_DIR}")	
+	
 	# get original source files
 	get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
-
-	
-	
 	#message(STATUS "ORIG_SOURCES: ${ORIG_SOURCES}")
 	
 	# process original source file list
@@ -79,7 +93,6 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	endif()
 	#message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
 	
-	set(WOVEN_DIR "${ORIG_CMAKE_DIR}/${WOVEN_DIR_NAME}")
 	
 	
 	# make the cmake configuration depend on the LARA file
@@ -103,14 +116,18 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	if(NOT EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
 		message(STATUS "Generating source code for target '${GENERATED_TARGET}' for the first time")
 		execute_process(
-			COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} -ncg
-			WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
+			COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} -ncg
+			#WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
+			#WORKING_DIRECTORY ${BUILD_DIR} 			
+			WORKING_DIRECTORY ${WORKING_DIR} 			
 		)	
 	endif()
 	
 	add_custom_command(OUTPUT "${WOVEN_DIR}/clava_generated_files.txt"
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" INCLUDE_HEADERS_FLAG ${PROC_ORIG_INCLUDES} -ncg
-		WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} INCLUDE_HEADERS_FLAG ${PROC_ORIG_INCLUDES} -ncg
+		#WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
+		#WORKING_DIRECTORY ${BUILD_DIR} 
+		WORKING_DIRECTORY ${WORKING_DIR} 
 		DEPENDS ${GENERATOR_DEPENDENCIES}
 		COMMENT "Generating source code for target '${GENERATED_TARGET}'"
 	)
@@ -157,7 +174,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	
 
 	get_target_property(GEN_INCLUDES ${GENERATED_TARGET} INCLUDE_DIRECTORIES)
-	message(STATUS "Generated Includes: ${GEN_INCLUDES}")
+	#message(STATUS "Generated Includes: ${GEN_INCLUDES}")
 	
 
 	add_dependencies(${GENERATED_TARGET} "${GENERATED_TARGET}_checker")
