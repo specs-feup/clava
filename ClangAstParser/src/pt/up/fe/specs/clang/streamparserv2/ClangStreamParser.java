@@ -32,6 +32,7 @@ import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.Include;
@@ -375,11 +376,14 @@ public class ClangStreamParser {
         //
         // System.out.println("DECLARATIONS:");
         // System.out.println(declarations);
+        // System.out.println("DECLARATIONS KEYS:" + declarations.keySet());
 
         String path = sourceFile.getAbsolutePath();
         if (declarations.size() > 0 && !declarations.containsKey(path)) {
             // Just to check, for now
-            throw new RuntimeException("Expeted declarations to have key '" + path + "':" + declarations);
+            ClavaLog.debug("ClangStreamParser.createTu(): expeted declarations to have key '" + path + ": "
+                    + declarations.keySet());
+            // throw new RuntimeException("Expeted declarations to have key '" + path + "':" + declarations);
         }
 
         // Declaration nodes of the translation unit
