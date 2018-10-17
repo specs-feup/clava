@@ -81,63 +81,20 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	
 	set(WOVEN_DIR "${ORIG_CMAKE_DIR}/${WOVEN_DIR_NAME}")
 	
-	# get original include directories
-	#get_target_property(ORIG_INC_DIRS ${ORIG_TARGET} INCLUDE_DIRECTORIES)
-	#message(STATUS "ORIG_INC_DIRS: ${ORIG_INC_DIRS}")
 	
 	# make the cmake configuration depend on the LARA file
-	#set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ASPECT};${ORIG_SOURCES}")
 	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ASPECT}")
 	
 	# mark Clava output directory as a target for 'make clean'
 	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "${WOVEN_DIR}")
-	
-	#set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME}")
-	
-	# execute Clava (TODO: set correct standard from cmake) (TODO: set correct clava jar)
-	#message(STATUS "Running command: java -jar ${CLAVA_JAR_PATH} ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME} -ih ${PROC_ORIG_INCLUDES} -ncg")
 
-	# if file with generated sources does not exist, run process
-	#if(NOT EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
-	#	set(EXECUTE_CLAVA TRUE)
-	# if file exists, check time-stamp
-	#else()
-	#	set(EXECUTE_CLAVA FALSE)
-	#endif()
-	
-	#if(EXECUTE_CLAVA)
-	#	execute_process(
-	#		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}" -ncg
-	#		WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
-	#	)
-	#endif()
 
 	# if no dependencies given, use source files
 	if("${GENERATED_TARGET_DEPENDENCIES}" STREQUAL "")
 		set(GENERATOR_DEPENDENCIES "${PROC_ORIG_SOURCES}")
-
-		#message(STATUS "No target dependencies")
-		#add_custom_target("${GENERATED_TARGET}_always_run"
-		#	COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}" -ncg
-		#	WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
-		#	COMMENT "Generating source code for target '${GENERATED_TARGET}'"
-		#)	
 	# otherwise, make generator depend on given files
 	else()
 		set(GENERATOR_DEPENDENCIES "${GENERATED_TARGET_DEPENDENCIES}")
-		#message(STATUS "Generator that depends on given dependencies")	
-		#add_custom_command(OUTPUT "${WOVEN_DIR}/clava_generated_files.txt"
-		#	COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}" -ncg
-		#	WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
-		#	DEPENDS ${GENERATED_TARGET_DEPENDENCIES}
-		#	COMMENT "Generating source code for target '${GENERATED_TARGET}'"
-		#)
-	
-		# checks if re-generation of target '${GENERATED_TARGET}' is required"
-		#set("${GENERATED_TARGET}_checker" "${GENERATED_TARGET}_dependencies")
-		#ADD_CUSTOM_TARGET("${GENERATED_TARGET}_checker"
-		#	DEPENDS "${WOVEN_DIR}/clava_generated_files.txt" 
-		#)
 	endif()
 	#message(STATUS "clava_generate dependencies: ${GENERATOR_DEPENDENCIES}")
 
@@ -194,10 +151,6 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	# add new sources
 	add_library(${GENERATED_TARGET} "${CLAVA_WOVEN_SOURCES}")
 
-	# add original target includes
-#	set_target_properties(${GENERATED_TARGET}
-#		PROPERTIES INCLUDE_DIRECTORIES "${ORIG_INCLUDES}"
-#	)
 	# add new include directories
 	target_include_directories(${GENERATED_TARGET} PUBLIC "${CLAVA_INCLUDE_DIRS}")
 	target_include_directories(${GENERATED_TARGET} PUBLIC "${ORIG_INCLUDES}")
@@ -206,53 +159,8 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	get_target_property(GEN_INCLUDES ${GENERATED_TARGET} INCLUDE_DIRECTORIES)
 	message(STATUS "Generated Includes: ${GEN_INCLUDES}")
 	
-	#set(GENERATED_TARGET_DEPENDENCIES "${GENERATED_TARGET}_dependencies")
-	#add_custom_target(${GENERATED_TARGET_DEPENDENCIES} DEPENDS "include/test_lib.h")
-	
-	#target_link_libraries(${GENERATED_TARGET} ${ORIG_TARGET})
-	#add_dependencies(${GENERATED_TARGET} ${ASPECT})
-	
-	#add_dependencies(${GENERATED_TARGET} ${ORIG_TARGET})
-	#message(STATUS "Target ${GENERATED_TARGET} depends on ${GENERATED_TARGET_DEPENDENCIES}")
-	#add_dependencies(${GENERATED_TARGET} ${GENERATED_TARGET_DEPENDENCIES})
 
-	#get the file timestamp of the 'source' resource file
-    #FILE(TIMESTAMP "${GENERATED_TARGET}.timestamp" CLAVA_GENERATE_TIMESTAMP)
-    #FILE(TIMESTAMP "${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_GENERATE_TIMESTAMP)
-	#message(STATUS "Timestamp: ${CLAVA_GENERATE_TIMESTAMP}")
-
-	
-	#add_custom_command(OUTPUT ${GENERATED_TARGET}.timestamp
-	#	COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -b 2 -p "${PROC_ORIG_SOURCES}" -of "${WOVEN_DIR_NAME}" -ih "${PROC_ORIG_INCLUDES}" -ncg
-	#	COMMAND ${CMAKE_COMMAND} -E touch ${GENERATED_TARGET}.timestamp
-	#	WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
-	#	DEPENDS "include/test_lib.h"
-	#	COMMENT "Generating source code for target '${GENERATED_TARGET}'"
-	#)
-	
-	#set("${GENERATED_TARGET}_checker" "${GENERATED_TARGET}_dependencies")
-	#ADD_CUSTOM_TARGET("${GENERATED_TARGET}_checker"
-	#	DEPENDS ${GENERATED_TARGET}.timestamp 
-    #   COMMENT "Checking if re-generation of target '${GENERATED_TARGET}' is required"
-	#)
-	
-	
-	#if("${GENERATED_TARGET_DEPENDENCIES}" STREQUAL "")
-	#	add_dependencies(${GENERATED_TARGET} "${GENERATED_TARGET}_always_run")
-	#else()
-	#	add_dependencies(${GENERATED_TARGET} "${GENERATED_TARGET}_checker")
-	#endif()
 	add_dependencies(${GENERATED_TARGET} "${GENERATED_TARGET}_checker")
-
-	
-	# if no given dependencies, make generated target depend on the original target
-	#if("${GENERATED_TARGET_DEPENDENCIES}" STREQUAL "")
-		#add_dependencies(${GENERATED_TARGET} ${ORIG_TARGET})
-	# otherwise, make generated target depend on checker target
-	#else()
-	#	add_dependencies(${GENERATED_TARGET} "${GENERATED_TARGET}_checker")
-	#endif()
-	
 
 	
 endfunction(clava_generate)
