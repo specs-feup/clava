@@ -9,8 +9,8 @@ cmake_minimum_required(VERSION 3.3)
 # Parameter 1: The target that the LARA file will be applied to
 # Parameter 2: Name of the new target that will represent the generated code
 # Parameter 3: A LARA file
-# Parameter ASPECT_ARGS (one value): A string with the aspect arguments e.g., "inputFile:'data.json', execute:true, iterations:10"
-# Parameter WEAVER_ARGS (multi-value): A list of flags that will be passed to Clava during execution
+# Parameter ARGS (one value): A string with the aspect arguments e.g., "inputFile:'data.json', execute:true, iterations:10"
+# Parameter FLAGS (multi-value): A list of flags that will be passed to Clava during execution
 function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT) 
 
     set(options)
@@ -23,9 +23,9 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	#message(STATUS "WEAVER_ARGS: " ${CLAVA_GENERATE_WEAVER_ARGS})
 
 	# Create aspect arguments
-	if(NOT ("${CLAVA_GENERATE_ASPECT_ARGS}" STREQUAL ""))
+	if(NOT ("${CLAVA_GENERATE_ARGS}" STREQUAL ""))
 		set(ASPECT_ARGS_FLAG "-av")
-		set(ASPECT_ARGS "{${CLAVA_GENERATE_ASPECT_ARGS}}")	
+		set(ASPECT_ARGS "{${CLAVA_GENERATE_ARGS}}")	
 	else()
 		set(ASPECT_ARGS_FLAG "")
 		set(ASPECT_ARGS "")	
@@ -138,7 +138,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	if(NOT EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
 		message(STATUS "Generating source code for target '${GENERATED_TARGET}' for the first time")
 		execute_process(
-			COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} -ncg ${CLAVA_GENERATE_WEAVER_ARGS}
+			COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} -ncg ${CLAVA_GENERATE_FLAGS}
 			#WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
 			#WORKING_DIRECTORY ${BUILD_DIR} 			
 			WORKING_DIRECTORY ${WORKING_DIR} 			
@@ -146,7 +146,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	endif()
 	
 	add_custom_command(OUTPUT "${WOVEN_DIR}/clava_generated_files.txt"
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} INCLUDE_HEADERS_FLAG ${PROC_ORIG_INCLUDES} -ncg ${CLAVA_GENERATE_WEAVER_ARGS}
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} INCLUDE_HEADERS_FLAG ${PROC_ORIG_INCLUDES} -ncg ${CLAVA_GENERATE_WEAVER_FLAGS}
 		#WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
 		#WORKING_DIRECTORY ${BUILD_DIR} 
 		WORKING_DIRECTORY ${WORKING_DIR} 

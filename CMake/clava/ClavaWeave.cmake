@@ -6,13 +6,13 @@ cmake_minimum_required(VERSION 3.5)
 #
 # Parameter 1: The target that the LARA file will be applied to
 # Parameter 2: A LARA file
-# Parameter ASPECT_ARGS (one value): A string with the aspect arguments e.g., "inputFile:'data.json', execute:true, iterations:10"
-# Parameter WEAVER_ARGS (multi-value): A list of flags that will be passed to Clava during execution
+# Parameter ARGS (one value): A string with the aspect arguments e.g., "inputFile:'data.json', execute:true, iterations:10"
+# Parameter FLAGS (multi-value): A list of flags that will be passed to Clava during execution
 function(clava_weave ORIG_TARGET ASPECT)
 
     set(options)
-    set(oneValueArgs ASPECT_ARGS)
-    set(multiValueArgs WEAVER_ARGS)
+    set(oneValueArgs ARGS)
+    set(multiValueArgs FLAGS)
 
     cmake_parse_arguments(PARSE_ARGV 2 CLAVA_WEAVE "${options}" "${oneValueArgs}" "${multiValueArgs}")
 
@@ -20,9 +20,9 @@ function(clava_weave ORIG_TARGET ASPECT)
 	#message(STATUS "WEAVER_ARGS: " ${CLAVA_WEAVE_WEAVER_ARGS})
 
 	# Create aspect arguments
-	if(NOT ("${CLAVA_WEAVE_ASPECT_ARGS}" STREQUAL ""))
+	if(NOT ("${CLAVA_WEAVE_ARGS}" STREQUAL ""))
 		set(ASPECT_ARGS_FLAG "-av")
-		set(ASPECT_ARGS "{${CLAVA_WEAVE_ASPECT_ARGS}}")	
+		set(ASPECT_ARGS "{${CLAVA_WEAVE_ARGS}}")	
 	else()
 		set(ASPECT_ARGS_FLAG "")
 		set(ASPECT_ARGS "")	
@@ -140,7 +140,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	execute_process(
 		# -std c99 
 		#COMMAND ${CLAVA_COMMAND}
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} ${CLAVA_WEAVE_WEAVER_ARGS} 
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} ${CLAVA_WEAVE_FLAGS} 
 		#WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
 		WORKING_DIRECTORY ${BUILD_DIR}
 	)
