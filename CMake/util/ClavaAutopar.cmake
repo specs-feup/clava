@@ -8,7 +8,7 @@ function(clava_weave_autopar ORIG_TARGET)
 	set(AUTORPAR_ASPECT "${CLAVA_CMAKE_HOME}/util/ApplyAutopar.lara")
 
 	# Generate HDF5 interfaces for current code
-	clava_weave(${ORIG_TARGET} ${AUTORPAR_ASPECT}) # If attribute is prefixed by 'rx_', it is interpreted as a regex 
+	clava_weave(${ORIG_TARGET} ${AUTORPAR_ASPECT}) 
 
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" PARENT_SCOPE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" PARENT_SCOPE)
