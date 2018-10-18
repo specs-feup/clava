@@ -179,5 +179,12 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 
 	add_dependencies(${GENERATED_TARGET} "${GENERATED_TARGET}_checker")
 
+	# create variables with include directories of generate target
+	set(${GENERATED_TARGET}_INCLUDE_DIRS "${CLAVA_INCLUDE_DIRS}" PARENT_SCOPE)
+	#message(STATUS "Target '${GENERATED_TARGET}' include dirs: ${${GENERATED_TARGET}_INCLUDE_DIRS}")
+	
+	# include generated target as part of the link libraries
+	set(${GENERATED_TARGET}_LIBRARIES ${GENERATED_TARGET} PARENT_SCOPE)
+	#message(STATUS "Target '${GENERATED_TARGET}' libraries: ${${GENERATED_TARGET}_LIBRARIES}")
 	
 endfunction(clava_generate)
