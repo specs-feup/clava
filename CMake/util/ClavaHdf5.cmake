@@ -39,7 +39,13 @@ function(clava_generate_hdf5 ORIG_TARGET GENERATED_TARGET)
 	
 	target_include_directories(${GENERATED_TARGET} PUBLIC ${HDF5_INCLUDE_DIRS})
 	#target_link_libraries(${GENERATED_TARGET} ${HDF5_LIBRARIES} ${HDF5_CXX_LIBRARIES})
-	target_link_libraries(${GENERATED_TARGET} hdf5::hdf5-shared hdf5_cpp)
+	#target_link_libraries(${GENERATED_TARGET} hdf5::hdf5-shared hdf5_cpp)
+	#target_link_libraries(${GENERATED_TARGET} hdf5_cpp)
+	target_link_libraries(${GENERATED_TARGET} ${HDF5_LIBRARIES})
+	
+	#message(STATUS "HDF5_C_LIBRARIES ${HDF5_C_LIBRARIES}")
+	#message(STATUS "HDF5_CXX_LIBRARIES ${HDF5_CXX_LIBRARIES}")
+	#message(STATUS "HDF5_LIBRARIES ${HDF5_LIBRARIES}")
 	
 	# update generated target variables
 	
@@ -49,7 +55,9 @@ function(clava_generate_hdf5 ORIG_TARGET GENERATED_TARGET)
 	#set(${GENERATED_TARGET}_INCLUDE_DIRS "${${GENERATED_TARGET}_INCLUDE_DIRS} ${HDF5_INCLUDE_DIRS}" PARENT_SCOPE)
 	
 	# include generated target as part of the link libraries
-	list(APPEND ${GENERATED_TARGET}_LIBRARIES hdf5::hdf5-shared hdf5_cpp)
+	#list(APPEND ${GENERATED_TARGET}_LIBRARIES hdf5::hdf5-shared hdf5_cpp)
+	#list(APPEND ${GENERATED_TARGET}_LIBRARIES hdf5_cpp)	
+	list(APPEND ${GENERATED_TARGET}_LIBRARIES ${HDF5_LIBRARIES})	
 	set(${GENERATED_TARGET}_LIBRARIES ${${GENERATED_TARGET}_LIBRARIES} PARENT_SCOPE)
 	#set(${GENERATED_TARGET}_LIBRARIES "${GENERATED_TARGET}_LIBRARIES hdf5::hdf5-shared hdf5_cpp" PARENT_SCOPE)
 	
