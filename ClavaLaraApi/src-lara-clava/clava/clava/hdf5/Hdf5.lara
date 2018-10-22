@@ -212,7 +212,8 @@ Hdf5.convertRecord = function($record, typeName) {
 //	input $record, typeName end
 //	output code end
 
-	var recordName = $record.type.code;
+	//var recordName = $record.type.code;
+	var recordName = $record.getValue("qualifiedName");
 	code = "H5::CompType "+ typeName +"(sizeof("+recordName+"));\n";
 
 //	select $record.field end
