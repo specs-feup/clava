@@ -29,7 +29,7 @@ function(clava_generate_hdf5 ORIG_TARGET GENERATED_TARGET)
 	#find_package(Clava REQUIRED)
 	
 	# HDF5 Support
-	find_package(HDF5 REQUIRED)
+	find_package(HDF5 REQUIRED CXX)
 	
 	set(HDF5_ASPECT "${CLAVA_CMAKE_HOME}/util/ApplyHdf5.lara")
 	set(HDF5_ASPECT_ARGS "filter: {${CLAVA_GENERATE_HDF5_FILTER}}")
