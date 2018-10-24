@@ -1,68 +1,72 @@
 #ifndef _COMPTYPE_H_
 #define _COMPTYPE_H_
-
 #include <H5Cpp.h>
-
 namespace hdf5type {
-
-    //  hdf5types.cpp
-    class IndexInfoType {
-    	public:
-    	static H5::CompType GetCompType();
-    };
-    //  hdf5types.cpp
-    class TestStructType {
-    	public:
-    	static H5::CompType GetCompType();
-    };
-    //  hdf5types.cpp
-    class TestClassType {
-    	public:
-    	static H5::CompType GetCompType();
-    };
+//  hdf5types.cpp
+class IndexInfoType {
+public:
+static H5::CompType GetCompType();
+};
+//  hdf5types.cpp
+class TestStructType {
+public:
+static H5::CompType GetCompType();
+};
+//  hdf5types.cpp
+class TestClassType {
+public:
+static H5::CompType GetCompType();
+};
+//  hdf5types.cpp
+class NamespacedDataType {
+public:
+static H5::CompType GetCompType();
+};
 }
-
 #endif
-
 #include "CompType.h"
 #include <H5CompType.h>
 #include "hdf5types.cpp"
 H5::CompType hdf5type::IndexInfoType::GetCompType() {
-    H5::CompType itype(sizeof(IndexInfo));
-    itype.insertMember("timeCreated",offsetof(IndexInfo, timeCreated), H5::PredType::NATIVE_LLONG);
-    itype.insertMember("isDirectMapped",offsetof(IndexInfo, isDirectMapped), H5::PredType::NATIVE_SCHAR);
-    itype.insertMember("numOfParts",offsetof(IndexInfo, numOfParts), H5::PredType::NATIVE_UINT);
-
-    return itype;
+H5::CompType itype(sizeof(IndexInfo));
+itype.insertMember("timeCreated",offsetof(IndexInfo, timeCreated), H5::PredType::NATIVE_LLONG);
+itype.insertMember("isDirectMapped",offsetof(IndexInfo, isDirectMapped), H5::PredType::NATIVE_SCHAR);
+itype.insertMember("numOfParts",offsetof(IndexInfo, numOfParts), H5::PredType::NATIVE_UINT);
+return itype;
 }
-
 H5::CompType hdf5type::TestStructType::GetCompType() {
-    H5::CompType itype(sizeof(TestStruct));
-    itype.insertMember("signed_char_field",offsetof(TestStruct, signed_char_field), H5::PredType::NATIVE_SCHAR);
-    itype.insertMember("long_long_field",offsetof(TestStruct, long_long_field), H5::PredType::NATIVE_LLONG);
-    itype.insertMember("int_field",offsetof(TestStruct, int_field), H5::PredType::NATIVE_INT);
-    itype.insertMember("char_field",offsetof(TestStruct, char_field), H5::PredType::C_S1);
-    itype.insertMember("char_array_field",offsetof(TestStruct, char_array_field), H5::StrType(H5::PredType::C_S1, 30));
-    itype.insertMember("float_field",offsetof(TestStruct, float_field), H5::PredType::NATIVE_FLOAT);
-
-    return itype;
+H5::CompType itype(sizeof(TestStruct));
+itype.insertMember("signed_char_field",offsetof(TestStruct, signed_char_field), H5::PredType::NATIVE_SCHAR);
+itype.insertMember("long_long_field",offsetof(TestStruct, long_long_field), H5::PredType::NATIVE_LLONG);
+itype.insertMember("int_field",offsetof(TestStruct, int_field), H5::PredType::NATIVE_INT);
+itype.insertMember("char_field",offsetof(TestStruct, char_field), H5::PredType::C_S1);
+itype.insertMember("char_array_field",offsetof(TestStruct, char_array_field), H5::StrType(H5::PredType::C_S1, 30));
+itype.insertMember("float_field",offsetof(TestStruct, float_field), H5::PredType::NATIVE_FLOAT);
+return itype;
 }
-
 H5::CompType hdf5type::TestClassType::GetCompType() {
-    H5::CompType itype(sizeof(TestClass));
-    itype.insertMember("short_field",offsetof(TestClass, short_field), H5::PredType::NATIVE_SHORT);
-    itype.insertMember("unsigned_short_field",offsetof(TestClass, unsigned_short_field), H5::PredType::NATIVE_USHORT);
-    itype.insertMember("long_field",offsetof(TestClass, long_field), H5::PredType::NATIVE_LONG);
-    itype.insertMember("unsigned_long_field",offsetof(TestClass, unsigned_long_field), H5::PredType::NATIVE_ULONG);
-    itype.insertMember("unsigned_long_long_field",offsetof(TestClass, unsigned_long_long_field), H5::PredType::NATIVE_ULLONG);
-    itype.insertMember("double_field",offsetof(TestClass, double_field), H5::PredType::NATIVE_DOUBLE);
-    itype.insertMember("long_double_field",offsetof(TestClass, long_double_field), H5::PredType::NATIVE_LDOUBLE);
-    itype.insertMember("int8_t_field",offsetof(TestClass, int8_t_field), H5::PredType::NATIVE_SCHAR);
-    itype.insertMember("uint8_t_field",offsetof(TestClass, uint8_t_field), H5::PredType::NATIVE_UCHAR);
-    itype.insertMember("int16_t_field",offsetof(TestClass, int16_t_field), H5::PredType::NATIVE_SHORT);
-    itype.insertMember("uint16_t_field",offsetof(TestClass, uint16_t_field), H5::PredType::NATIVE_USHORT);
-    itype.insertMember("int32_t_field",offsetof(TestClass, int32_t_field), H5::PredType::NATIVE_INT);
-    itype.insertMember("uint32_t_field",offsetof(TestClass, uint32_t_field), H5::PredType::NATIVE_UINT);
-
-    return itype;
+H5::CompType itype(sizeof(TestClass));
+itype.insertMember("short_field",offsetof(TestClass, short_field), H5::PredType::NATIVE_SHORT);
+itype.insertMember("unsigned_short_field",offsetof(TestClass, unsigned_short_field), H5::PredType::NATIVE_USHORT);
+itype.insertMember("long_field",offsetof(TestClass, long_field), H5::PredType::NATIVE_LONG);
+itype.insertMember("unsigned_long_field",offsetof(TestClass, unsigned_long_field), H5::PredType::NATIVE_ULONG);
+itype.insertMember("unsigned_long_long_field",offsetof(TestClass, unsigned_long_long_field), H5::PredType::NATIVE_ULLONG);
+itype.insertMember("double_field",offsetof(TestClass, double_field), H5::PredType::NATIVE_DOUBLE);
+itype.insertMember("long_double_field",offsetof(TestClass, long_double_field), H5::PredType::NATIVE_LDOUBLE);
+itype.insertMember("int8_t_field",offsetof(TestClass, int8_t_field), H5::PredType::NATIVE_SCHAR);
+itype.insertMember("uint8_t_field",offsetof(TestClass, uint8_t_field), H5::PredType::NATIVE_UCHAR);
+itype.insertMember("int16_t_field",offsetof(TestClass, int16_t_field), H5::PredType::NATIVE_SHORT);
+itype.insertMember("uint16_t_field",offsetof(TestClass, uint16_t_field), H5::PredType::NATIVE_USHORT);
+itype.insertMember("int32_t_field",offsetof(TestClass, int32_t_field), H5::PredType::NATIVE_INT);
+itype.insertMember("uint32_t_field",offsetof(TestClass, uint32_t_field), H5::PredType::NATIVE_UINT);
+return itype;
+}
+H5::CompType hdf5type::NamespacedDataType::GetCompType() {
+H5::CompType itype(sizeof(H5EX::NamespacedData));
+itype.insertMember("id",offsetof(H5EX::NamespacedData, id), H5::PredType::NATIVE_LONG);
+itype.insertMember("lon",offsetof(H5EX::NamespacedData, lon), H5::PredType::NATIVE_FLOAT);
+itype.insertMember("lat",offsetof(H5EX::NamespacedData, lat), H5::PredType::NATIVE_FLOAT);
+itype.insertMember("cls",offsetof(H5EX::NamespacedData, cls), H5::PredType::C_S1);
+itype.insertMember("velocity",offsetof(H5EX::NamespacedData, velocity), H5::PredType::NATIVE_DOUBLE);
+return itype;
 }

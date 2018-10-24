@@ -43,3 +43,16 @@ public:
 	//int64_t int64_t_field; // Diff in test and dev machine
 	//uint64_t uint64_t_field; // Diff in test and dev machine
 };
+
+namespace H5EX 
+{
+  struct NamespacedData
+  {
+    long id;
+    float lon;
+    float lat;
+    char cls;
+    double velocity;
+
+  };
+}
