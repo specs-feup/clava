@@ -339,6 +339,13 @@ public class CxxCall extends ACall {
         return "<" + getNameImpl() + ">";
     }
 
+    @Override
+    public AFunction getDeclImpl() {
+        return call.getFunctionDecl()
+                .map(fDecl -> CxxJoinpoints.create(fDecl, this, AFunction.class))
+                .orElse(null);
+    }
+
     // @Override
     // public String getSignatureImpl() {
     // return call.getSignature();

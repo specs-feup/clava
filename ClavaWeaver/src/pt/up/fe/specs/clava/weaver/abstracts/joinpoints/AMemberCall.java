@@ -105,6 +105,15 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction getDeclImpl() {
+        return this.aCall.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute declaration
      * @return the attribute's value
      */
@@ -582,6 +591,7 @@ public abstract class AMemberCall extends ACall {
         NAME("name"),
         NUMARGS("numArgs"),
         MEMBERNAMES("memberNames"),
+        DECL("decl"),
         DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),

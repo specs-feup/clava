@@ -3718,6 +3718,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "decl"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found",
                   "children": [
                            {
@@ -18669,6 +18678,15 @@
                            {
                               "type": "expression[]",
                               "name": "args"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "decl"
                            }]
                },
                {
