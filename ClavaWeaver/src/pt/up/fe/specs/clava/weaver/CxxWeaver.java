@@ -661,9 +661,11 @@ public class CxxWeaver extends ACxxWeaver {
         // if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
 
         // Add files in normal include folders to the tree
-        for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
-            adaptedSources.add(includeFolder);
-            // parserOptions.add("-I" + parseIncludePath(includeFolder));
+        if (!args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
+            for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
+                adaptedSources.add(includeFolder);
+                // parserOptions.add("-I" + parseIncludePath(includeFolder));
+            }
         }
 
         // parserOptions.stream()
