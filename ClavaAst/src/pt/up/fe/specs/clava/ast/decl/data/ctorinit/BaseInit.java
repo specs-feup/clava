@@ -29,6 +29,9 @@ public class BaseInit extends CXXCtorInitializer {
 
     @Override
     public String getCode(CXXConstructorDecl sourceNode) {
-        return get(BASE_CLASS).getCode(sourceNode) + "()";
+        // System.out.println("BASE CTOR DATA: " + toString());
+        // System.out.println("BASE CTOR CONSTRUCTOR:" + sourceNode.toTree());
+        // System.out.println("BASE INIT EXPR: " + get(BaseInit.INIT_EXPR).getCode());
+        return get(BASE_CLASS).getCode(sourceNode) + "(" + get(BaseInit.INIT_EXPR).getCode() + ")";
     }
 }
