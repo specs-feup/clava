@@ -304,6 +304,7 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
         reset();
 
+        ClavaLog.debug("Clava Weaver arguments: " + args);
         // Add normal include folders to the sources
         // sources.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
 
@@ -935,8 +936,18 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.write(cmakeImplementationFiles, implementationFilesContent);
 
         // Determine new include dirs
+        List<File> newIncludeDirs = new ArrayList<>();
+        // Add folders for generated files
+        newIncludeDirs.addAll(getAllIncludeFolders(getWeavingFolder(), generatedFiles));
+        // If we are skipping the parsing of include folders, we should include the original include folders as includes
+        if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
+            List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
+            newIncludeDirs.addAll(originalHeaderIncludes);
+            ClavaLog.debug("Skip headers is enabled, adding original headers: " + originalHeaderIncludes);
+        }
+
         // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
-        String includeFoldersContent = getAllIncludeFolders(getWeavingFolder(), generatedFiles).stream()
+        String includeFoldersContent = newIncludeDirs.stream()
                 // .map(File::getAbsolutePath)
                 .map(SpecsIo::getCanonicalPath)
                 .map(SpecsIo::normalizePath)
