@@ -64,11 +64,13 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.util.Preconditions;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class AstFactory {
@@ -477,5 +479,15 @@ public class AstFactory {
         // ClavaNodeInfo.undefinedInfo());
 
         return CxxJoinpoints.create(intLiteral, null, AExpression.class);
+    }
+
+    public static AScope scope() {
+        return scope(new ArrayList<>());
+    }
+
+    public static AScope scope(List<? extends AStatement> statements) {
+        List<Stmt> stmtNodes = SpecsCollections.map(statements, stmt -> (Stmt) stmt.getNode());
+        return CxxJoinpoints.create(CxxWeaver.getFactory().compoundStmt(stmtNodes), null, AScope.class);
+
     }
 }

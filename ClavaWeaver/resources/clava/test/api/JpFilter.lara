@@ -1,4 +1,5 @@
 import lara.util.JpFilter;
+import weaver.WeaverJps;
 
 aspectdef JpFilterTest
 
@@ -17,6 +18,12 @@ aspectdef JpFilterTest
 	
 	var filter3 = new JpFilter({rx_name: 'A', kind: 'class'});
 	println(convert(filter3.filter($records)));
+	
+	var $jps = WeaverJps.search("record", {rx_name: 'A'}).search("field", {name: 'x'}).get();
+	
+	for(var $selected of $jps) {
+		println("Select function: " + $selected.code);
+	}
 	
 	//println("FILTER:");
 	//printObject(filter2);
