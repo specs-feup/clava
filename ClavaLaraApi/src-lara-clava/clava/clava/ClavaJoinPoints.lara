@@ -159,3 +159,10 @@ ClavaJoinPoints.omp = function(directiveName) {
 	return AstFactory.omp(directiveName);
 }
 
+ClavaJoinPoints.scope = function($stmts) {
+	if($stmts === undefined) {
+		return AstFactory.scope();
+	}
+	
+	return AstFactory.scope($stmts);
+}
