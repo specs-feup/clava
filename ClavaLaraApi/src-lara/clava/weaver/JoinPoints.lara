@@ -1,0 +1,43 @@
+import weaver.JoinPointsBase;
+import lara.Check;
+import clava.Clava;
+
+JoinPoints.prototype.root = function() {
+	return Clava.getProgram();
+}
+
+JoinPoints.prototype.children = function($jp) {
+	if($jp === undefined) {
+		return [];
+	}
+	
+	Check.isJoinPoint($jp);
+
+	return this._filterNodes($jp.astChildren);
+}
+
+JoinPoints.prototype.descendants = function($jp) {
+	if($jp === undefined) {
+		return [];
+	}
+	
+	Check.isJoinPoint($jp);
+	return this._filterNodes($jp.descendants);
+}
+
+JoinPoints.prototype._filterNodes = function($jps) {
+
+	var filteredJps = [];
+	
+	for(var $jp of $jps) {
+		// Skip NullNodes
+		if($jp.getNode().isNullNode()) {
+			continue;
+		}
+		
+		filteredJps.push($jp);
+	}
+	
+	return filteredJps;
+
+}

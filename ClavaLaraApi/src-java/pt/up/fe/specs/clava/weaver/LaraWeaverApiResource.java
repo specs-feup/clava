@@ -21,6 +21,7 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  */
 public enum LaraWeaverApiResource implements LaraResourceProvider {
 
+    JOIN_POINTS("JoinPoints.lara"),
     WEAVER_LAUNCHER("WeaverLauncher.lara");
 
     private final String resource;
