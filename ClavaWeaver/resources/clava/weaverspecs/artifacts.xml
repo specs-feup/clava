@@ -317,7 +317,9 @@
 		<attribute name="declaration" type="String">
 			<parameter name="withReturnType" type="Boolean" />
 		</attribute>
-		<attribute name="body" type="joinpoint" />
+		<attribute name="body" type="scope">
+			<def/>
+		</attribute>
 		<attribute name="paramNames" type="String[]"/>
 		<attribute name="params" type="param[]">
 			<def type="param[]"/>

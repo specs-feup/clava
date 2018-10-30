@@ -13009,7 +13009,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "scope",
                               "name": "body"
                            }]
                },
@@ -13670,6 +13670,20 @@
                            {
                               "type": "joinpoint[]",
                               "name": "args",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the body of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setBody"
+                           },
+                           {
+                              "type": "scope",
+                              "name": "body",
                               "defaultValue": ""
                            }]
                },
@@ -19604,7 +19618,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "scope",
                               "name": "body"
                            }]
                },
@@ -20265,6 +20279,20 @@
                            {
                               "type": "joinpoint[]",
                               "name": "args",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the body of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setBody"
+                           },
+                           {
+                              "type": "scope",
+                              "name": "body",
                               "defaultValue": ""
                            }]
                },

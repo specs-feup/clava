@@ -161,7 +161,7 @@ public abstract class AFunction extends ANamedDecl {
      * Get value on attribute body
      * @return the attribute's value
      */
-    public abstract AJoinPoint getBodyImpl();
+    public abstract AScope getBodyImpl();
 
     /**
      * Get value on attribute body
@@ -172,7 +172,7 @@ public abstract class AFunction extends ANamedDecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
         	}
-        	AJoinPoint result = this.getBodyImpl();
+        	AScope result = this.getBodyImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
         	}
@@ -180,6 +180,13 @@ public abstract class AFunction extends ANamedDecl {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "body", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defBodyImpl(AScope value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
     }
 
     /**
@@ -705,6 +712,32 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Sets the body of the function
+     * @param body 
+     */
+    public void setBodyImpl(AScope body) {
+        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
+    }
+
+    /**
+     * Sets the body of the function
+     * @param body 
+     */
+    public final void setBody(AScope body) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
+        	}
+        	this.setBodyImpl(body);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setBody", e);
+        }
+    }
+
+    /**
      * 
      * @param args 
      */
@@ -952,6 +985,13 @@ public abstract class AFunction extends ANamedDecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "params": {
         	if(value instanceof AParam[]){
         		this.defParamsImpl((AParam[])value);
@@ -1023,6 +1063,7 @@ public abstract class AFunction extends ANamedDecl {
         actions.add("void insertReturn(String)");
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
+        actions.add("void setBody(scope)");
         actions.add("call newCall(joinpoint[])");
     }
 

@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
@@ -71,7 +72,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public List<? extends AScope> selectBody() {
-        CxxScope body = getBodyImpl();
+        AScope body = getBodyImpl();
 
         return body == null ? Collections.emptyList() : Arrays.asList(body);
 
@@ -121,12 +122,14 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return CxxActions.insertJpAsStatement(this, node, "after", getWeaverEngine());
+        // return CxxActions.insertJpAsStatement(this, node, "after", getWeaverEngine());
+        return CxxActions.insertJp(this, node, "after", getWeaverEngine());
     }
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
+        // return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
+        return CxxActions.insertJp(this, node, "before", getWeaverEngine());
     }
 
     @Override
@@ -170,12 +173,12 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public CxxScope getBodyImpl() {
+    public AScope getBodyImpl() {
         if (!function.hasBody()) {
             return null;
         }
 
-        return (CxxScope) CxxJoinpoints.create(function.getBody().get(), this);
+        return (AScope) CxxJoinpoints.create(function.getBody().get(), this);
     }
 
     // TODO check if the new name clashes with other symbol?
@@ -546,5 +549,15 @@ public class CxxFunction extends AFunction {
     @Override
     public String getSignatureImpl() {
         return function.getSignature();
+    }
+
+    @Override
+    public void defBodyImpl(AScope value) {
+        function.setBody((CompoundStmt) value.getNode());
+    }
+
+    @Override
+    public void setBodyImpl(AScope body) {
+        defBodyImpl(body);
     }
 }

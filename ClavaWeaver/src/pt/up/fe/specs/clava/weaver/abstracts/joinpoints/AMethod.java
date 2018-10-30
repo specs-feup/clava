@@ -103,7 +103,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getBodyImpl() {
+    public AScope getBodyImpl() {
         return this.aFunction.getBodyImpl();
     }
 
@@ -256,6 +256,13 @@ public abstract class AMethod extends AFunction {
      */
     public void defNameImpl(String value) {
         this.aFunction.defNameImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defBodyImpl(AScope value) {
+        this.aFunction.defBodyImpl(value);
     }
 
     /**
@@ -462,6 +469,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the body of the function
+     * @param body 
+     */
+    @Override
+    public void setBodyImpl(AScope body) {
+        this.aFunction.setBodyImpl(body);
+    }
+
+    /**
      * 
      * @param args 
      */
@@ -528,6 +544,13 @@ public abstract class AMethod extends AFunction {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

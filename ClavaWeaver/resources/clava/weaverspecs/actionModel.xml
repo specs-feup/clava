@@ -249,6 +249,10 @@
 		<parameter name="params" type="String[]" />
 	</action>	
 
+	<action name="setBody" class="function" tooltip="Sets the body of the function">
+		<parameter name="body" type="scope" />
+	</action>	
+
 
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
