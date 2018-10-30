@@ -129,6 +129,8 @@
 		<parameter name="message" type="String" />
 	</action>
 
+	<action name="rebuild" class="file" return="file"/>
+
 
 	<!-- RECORD -->
 

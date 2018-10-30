@@ -424,4 +424,13 @@ public class CxxFile extends AFile {
         boolean flattenFolders = getWeaverEngine().getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
         return tunit.getDestinationFile(new File(destinationFolderpath), flattenFolders).getAbsolutePath();
     }
+
+    @Override
+    public AFile rebuildImpl() {
+        TranslationUnit rebuiltTunit = getWeaverEngine().rebuildFile(tunit);
+
+        AFile rebuiltFile = CxxJoinpoints.create(rebuiltTunit, getParentImpl(), AFile.class);
+        replaceWith(rebuiltFile);
+        return rebuiltFile;
+    }
 }

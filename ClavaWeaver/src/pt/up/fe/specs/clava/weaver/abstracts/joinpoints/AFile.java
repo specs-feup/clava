@@ -528,6 +528,31 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     */
+    public AFile rebuildImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public final AFile rebuild() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
+        	}
+        	AFile result = this.rebuildImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuild", e);
+        }
+    }
+
+    /**
      * Adds the node in the join point to the start of the file
      * @param node 
      */
@@ -788,6 +813,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void addIncludeJp(joinpoint)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
         actions.add("String write(String)");
+        actions.add("file rebuild()");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");
         actions.add("void insertEnd(joinpoint)");

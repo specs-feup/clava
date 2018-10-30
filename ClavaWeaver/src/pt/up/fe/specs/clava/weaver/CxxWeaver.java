@@ -39,6 +39,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.SnippetParser;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
@@ -1068,6 +1069,53 @@ public class CxxWeaver extends ACxxWeaver {
         return args;
     }
 
+    public TranslationUnit rebuildFile(TranslationUnit tUnit) {
+
+        // Write current tree to a temporary folder
+        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER).getAbsoluteFile();
+        SpecsIo.deleteFolderContents(tempFolder, true);
+
+        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+
+        File destinationFile = tUnit.getDestinationFile(tempFolder, flattenFolders);
+        String code = tUnit.getCode();
+        SpecsIo.write(destinationFile, code);
+
+        // List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
+        ClavaLog.debug("Rebuilding file '" + destinationFile + "'");
+
+        Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
+
+        List<String> rebuildOptions = new ArrayList<>();
+
+        // Copy current options, removing previous normal includes
+        parserOptions.stream()
+                .filter(option -> !option.startsWith("-I"))
+                .forEach(rebuildOptions::add);
+
+        // Add include folders
+        for (File includeFolder : includeFolders) {
+            rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+        }
+
+        // Add extra includes
+        for (File extraInclude : getExternalIncludeFolders()) {
+            rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+        }
+
+        // App rebuiltApp = createApp(srcFolders, rebuildOptions);
+        App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
+
+        SpecsCheck.checkArgument(rebuiltApp.getTranslationUnits().size() == 1,
+                () -> "Expected number of translation units to be 1, got " + rebuiltApp.getTranslationUnits().size()
+                        + ":\n" + rebuiltApp);
+
+        // After rebuilding, clear current app cache
+        getApp().clearCache();
+
+        return rebuiltApp.getTranslationUnits().get(0);
+    }
+
     /**
      *
      * @param update
@@ -1084,22 +1132,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
         ClavaLog.debug("Files written during rebuild: " + writtenFiles);
-        // If AST will be updated, discard current App, to free memory
-        // if (update) {
-        // weaverData.popAst();
-        // }
-
-        /*
-        // For all Translation Units, collect new destination folders
-        List<File> srcFolders = getApp().getTranslationUnits().stream()
-                // .map(tu -> tu.getDestinationFolder(tempFolder, flattenFolders))
-                .map(tu -> new File(tu.getDestinationFolder(tempFolder, flattenFolders), tu.getRelativeFolderpath()))
-                .collect(Collectors.toList());
-        
-        // TODO: When separation of src/include is done, take it into account here
-        // List<File> srcFolders = SpecsCollections.concat(tempFolder, SpecsIo.getFoldersRecursive(tempFolder));
-        List<File> includeFolders = srcFolders;
-        */
 
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
 

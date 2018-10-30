@@ -12766,6 +12766,14 @@
                   "type": "action",
                   "children": [
                            {
+                              "type": "file",
+                              "name": "rebuild"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "write"
                            },
