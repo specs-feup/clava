@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
@@ -42,6 +43,7 @@ import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
+import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -51,11 +53,13 @@ import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
+import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
@@ -64,6 +68,7 @@ import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
@@ -115,6 +120,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTagType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTemplateSpecializationType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxVariableArrayType;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.classmap.BiFunctionClassMap;
 
@@ -172,14 +178,20 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(OmpPragma.class, CxxOmp::new);
         JOINPOINT_FACTORY.put(TranslationUnit.class, CxxFile::new);
         JOINPOINT_FACTORY.put(App.class, CxxJoinpoints::programFactory);
-        // JOINPOINT_FACTORY.put(NullExpr.class, CxxEmpty::new);
-        // JOINPOINT_FACTORY.put(NullDecl.class, CxxEmpty::new);
-        // JOINPOINT_FACTORY.put(NullStmt.class, CxxEmpty::new);
-        // JOINPOINT_FACTORY.put(NullType.class, CxxEmpty::new);
+        JOINPOINT_FACTORY.put(NullExpr.class, CxxJoinpoints::nullNode);
+        JOINPOINT_FACTORY.put(NullDecl.class, CxxJoinpoints::nullNode);
+        JOINPOINT_FACTORY.put(NullStmt.class, CxxJoinpoints::nullNode);
+        JOINPOINT_FACTORY.put(NullType.class, CxxJoinpoints::nullNode);
         // JOINPOINT_FACTORY.put(NullNodeOld.class, CxxEmpty::new);
         JOINPOINT_FACTORY.put(Comment.class, CxxComment::new);
         // JOINPOINT_FACTORY.put(WrapperStmt.class, CxxJoinpoints::wrapperStmtFactory);
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);
+    }
+
+    private static ACxxWeaverJoinPoint nullNode(ClavaNode node, ACxxWeaverJoinPoint parent) {
+        SpecsCheck.checkArgument(node instanceof NullNode, () -> "Expected an instance of NullNode, received: " + node);
+
+        return null;
     }
 
     /**
