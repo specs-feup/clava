@@ -85,6 +85,17 @@ public class ClangStreamParserV2 {
             return true;
         }
 
+        // Rule for #pragma once in header files
+        if (line.endsWith("warning: #pragma once in main file [-Wpragma-once-outside-header]")) {
+            return true;
+        }
+        if (line.trim().equals("^")) {
+            return true;
+        }
+        if (line.equals("#pragma once")) {
+            return true;
+        }
+
         // System.out.println("LINE:" + line);
         // if (line.equals("error: invalid argument '-std=c++11' not allowed with 'C/ObjC'")) {
         // // System.out.println("IGNORING LINE");
