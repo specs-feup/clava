@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 
 public class FunctionProtoType extends FunctionType {
@@ -49,7 +50,8 @@ public class FunctionProtoType extends FunctionType {
             .enumeration("referenceQualifier", ReferenceQualifier.class);
 
     public final static DataKey<ExceptionSpecification> EXCEPTION_SPECIFICATION = KeyFactory
-            .object("exceptionSpecification", ExceptionSpecification.class);
+            .object("exceptionSpecification", ExceptionSpecification.class)
+            .setDefault(() -> ExceptionSpecificationType.None.newInstance());
 
     // public final static DataKey<ExceptionSpecificationType> EXCEPTION_SPECIFICATION_TYPE = KeyFactory
     // .enumeration("exceptionSpecificationType", ExceptionSpecificationType.class);
