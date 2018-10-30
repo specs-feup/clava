@@ -24,7 +24,6 @@ import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxType extends AType {
@@ -91,12 +90,17 @@ public class CxxType extends AType {
     }
 
     @Override
-    public AJoinPoint getDesugarImpl() {
-        return CxxJoinpoints.create(type.desugar(), this);
+    public AType getDesugarImpl() {
+        return CxxJoinpoints.create(type.desugar(), this, AType.class);
     }
 
     @Override
-    public void defDesugarImpl(AJoinPoint value) {
+    public AType getDesugarAllImpl() {
+        return CxxJoinpoints.create(type.desugarAll(), this, AType.class);
+    }
+
+    @Override
+    public void defDesugarImpl(AType value) {
         type.setDesugar((Type) value.getNode());
     }
 
@@ -174,4 +178,5 @@ public class CxxType extends AType {
     public AType getNormalizeImpl() {
         return CxxJoinpoints.create(type.normalize(), this, AType.class);
     }
+
 }

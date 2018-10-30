@@ -1366,8 +1366,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -2914,8 +2922,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -9241,8 +9257,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -13933,8 +13957,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -23670,8 +23702,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -24479,8 +24519,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -26819,8 +26867,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -31301,8 +31357,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -32125,8 +32189,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -32917,8 +32989,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {
@@ -36544,8 +36624,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "desugar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "desugarAll"
                            }]
                },
                {

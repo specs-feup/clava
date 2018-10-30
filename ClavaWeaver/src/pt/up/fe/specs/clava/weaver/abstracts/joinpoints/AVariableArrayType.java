@@ -181,8 +181,17 @@ public abstract class AVariableArrayType extends AArrayType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getDesugarImpl() {
+    public AType getDesugarImpl() {
         return this.aArrayType.getDesugarImpl();
+    }
+
+    /**
+     * Get value on attribute desugarAll
+     * @return the attribute's value
+     */
+    @Override
+    public AType getDesugarAllImpl() {
+        return this.aArrayType.getDesugarAllImpl();
     }
 
     /**
@@ -231,7 +240,7 @@ public abstract class AVariableArrayType extends AArrayType {
     /**
      * 
      */
-    public void defDesugarImpl(AJoinPoint value) {
+    public void defDesugarImpl(AType value) {
         this.aArrayType.defDesugarImpl(value);
     }
 
@@ -428,8 +437,8 @@ public abstract class AVariableArrayType extends AArrayType {
         	this.unsupportedTypeForDef(attribute, value);
         }
         case "desugar": {
-        	if(value instanceof AJoinPoint){
-        		this.defDesugarImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -501,6 +510,7 @@ public abstract class AVariableArrayType extends AArrayType {
         TEMPLATEARGSTYPES("templateArgsTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
+        DESUGARALL("desugarAll"),
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
         UNWRAP("unwrap"),

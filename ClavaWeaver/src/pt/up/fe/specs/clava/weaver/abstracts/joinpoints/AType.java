@@ -276,7 +276,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * Get value on attribute desugar
      * @return the attribute's value
      */
-    public abstract AJoinPoint getDesugarImpl();
+    public abstract AType getDesugarImpl();
 
     /**
      * Get value on attribute desugar
@@ -287,7 +287,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugar", Optional.empty());
         	}
-        	AJoinPoint result = this.getDesugarImpl();
+        	AType result = this.getDesugarImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "desugar", Optional.ofNullable(result));
         	}
@@ -300,8 +300,33 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     /**
      * 
      */
-    public void defDesugarImpl(AJoinPoint value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def desugar with type AJoinPoint not implemented ");
+    public void defDesugarImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def desugar with type AType not implemented ");
+    }
+
+    /**
+     * Get value on attribute desugarAll
+     * @return the attribute's value
+     */
+    public abstract AType getDesugarAllImpl();
+
+    /**
+     * Get value on attribute desugarAll
+     * @return the attribute's value
+     */
+    public final Object getDesugarAll() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "desugarAll", Optional.empty());
+        	}
+        	AType result = this.getDesugarAllImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "desugarAll", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "desugarAll", e);
+        }
     }
 
     /**
@@ -515,8 +540,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	this.unsupportedTypeForDef(attribute, value);
         }
         case "desugar": {
-        	if(value instanceof AJoinPoint){
-        		this.defDesugarImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defDesugarImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -541,6 +566,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("templateArgsTypes");
         attributes.add("hasSugar");
         attributes.add("desugar");
+        attributes.add("desugarAll");
         attributes.add("isBuiltin");
         attributes.add("constant");
         attributes.add("unwrap");
@@ -588,6 +614,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         TEMPLATEARGSTYPES("templateArgsTypes"),
         HASSUGAR("hasSugar"),
         DESUGAR("desugar"),
+        DESUGARALL("desugarAll"),
         ISBUILTIN("isBuiltin"),
         CONSTANT("constant"),
         UNWRAP("unwrap"),

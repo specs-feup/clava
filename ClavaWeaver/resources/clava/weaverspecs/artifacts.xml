@@ -453,9 +453,10 @@
 			<def type="type[]"/>
 		</attribute>		
 		<attribute name="hasSugar" type="Boolean" />
-		<attribute name="desugar" type="joinpoint">
+		<attribute name="desugar" type="type">
 			<def/>
 		</attribute>
+		<attribute name="desugarAll" type="type"/>
 		<attribute name="isBuiltin" type="Boolean" />
 		<attribute name="constant" type="Boolean" />
 		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
