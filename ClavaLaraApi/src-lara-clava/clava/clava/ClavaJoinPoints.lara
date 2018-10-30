@@ -172,16 +172,21 @@ ClavaJoinPoints.scope = function($stmts) {
  * @param {String} declName - The name of the varref.
  * @param {$type} $type - The type of the varref.
  */
-ClavaJoinPoints.varref = function(declName, $type) {
+ClavaJoinPoints.varRef = function(declName, $type) {
 	Check.isString(declName);
 	Check.isJoinPoint($type);
 	
 	return AstFactory.varref(declName, $type);
 }
 
+ClavaJoinPoints.varRefFromDecl = function($namedDecl) {
+	Check.isJoinPoint($namedDecl);
+	
+	return AstFactory.varref($namedDecl);
+}
+
 /**
- * @param {String} declName - The name of the varref.
- * @param {$type} $type - The type of the varref.
+ * @param {[$expr]} $expr - An expression to return.
  */
 ClavaJoinPoints.returnStmt = function($expr) {
 	
@@ -191,3 +196,42 @@ ClavaJoinPoints.returnStmt = function($expr) {
 	
 	return AstFactory.returnStmt($expr);
 }
+
+/**
+ * Creates a new join point 'functionType'. 
+ *
+ * @param {$type} $returnType - The return type of the function type.
+ * @param {...$type} argTypes - The types of the arguments of the function type.
+ */
+ClavaJoinPoints.functionType = function($returnType) {
+	var argTypes = arrayFromArgs(arguments, 1);
+	return AstFactory.functionType($function, argTypes);
+}
+
+/**
+ * Creates a new join point 'function'. 
+ *
+ * @param {String} functionName - The name of the function.
+ * @param {$functionType} $functionType - The type of the function.
+ */
+ClavaJoinPoints.functionDeclFromType = function(functionName, $functionType) {
+	Check.isString(functionName);	
+	Check.isJoinPoint($functionType);
+	
+	return AstFactory.functionDeclFromType(functionName, $functionType);
+}
+
+
+/**
+ * Creates a new join point 'function'. 
+ *
+ * @param {String} functionName - The name of the function.
+ * @param {...$Decl} params - The parameters of the function.
+ */
+ClavaJoinPoints.functionDecl = function(functionName, $returnType) {
+	Check.isString(functionName);	
+	var $parmVarDecls = arrayFromArgs(arguments, 2);
+	
+	return AstFactory.functionDecl(functionName, $returnType, $parmVarDecls);
+}
+

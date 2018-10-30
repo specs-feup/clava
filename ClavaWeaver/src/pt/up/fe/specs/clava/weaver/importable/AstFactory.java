@@ -26,10 +26,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
-import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
@@ -47,11 +49,9 @@ import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.ReferenceType;
+import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.data.FunctionTypeData;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
-import pt.up.fe.specs.clava.ast.type.enums.CallingConv;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.utils.Typable;
@@ -63,7 +63,9 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -140,22 +142,28 @@ public class AstFactory {
 
     private static Type getVarDeclType(Standard standard, Type returnType) {
 
+        return returnType;
+
+        /*
         // If C, use the return type
         if (!standard.isCxx()) {
             return returnType;
         }
-
+        
+        
+        
         // If C++, use auto as type
-
+        
         String autoCode = "auto";
-
+        
         // Check if reference type
-
+        
         if (returnType instanceof ReferenceType) {
             autoCode = autoCode + "&";
         }
-
+        
         return CxxWeaver.getFactory().literalType(autoCode);
+        */
     }
 
     public static CxxFunction functionVoid(String name) {
@@ -222,7 +230,7 @@ public class AstFactory {
                 .map(arg -> ((Typable) arg.getNode()).getType())
                 .collect(Collectors.toList());
 
-        FunctionTypeData fData = new FunctionTypeData(Types.isVoid(returnType), false, false, null, CallingConv.C);
+        // FunctionTypeData fData = new FunctionTypeData(Types.isVoid(returnType), false, false, null, CallingConv.C);
         // FunctionProtoType type = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(), fData,
         // new TypeData(""), ClavaNodeInfo.undefinedInfo(), returnType, argTypes);
 
@@ -497,6 +505,18 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().declRefExpr(declName, typeNode), null, AVarref.class);
     }
 
+    public static AVarref varref(ANamedDecl namedDecl) {
+        NamedDecl decl = (NamedDecl) namedDecl.getNode();
+
+        if (!(decl instanceof ValueDecl)) {
+            ClavaLog.info(
+                    "AstFactory.varref: Given node '" + decl.getClass() + "' is not compatible as input of varref");
+            return null;
+        }
+
+        return CxxJoinpoints.create(CxxWeaver.getFactory().declRefExpr((ValueDecl) decl), null, AVarref.class);
+    }
+
     public static AStatement returnStmt(AExpression expr) {
         return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt((Expr) expr.getNode()), null, AStatement.class);
     }
@@ -504,4 +524,57 @@ public class AstFactory {
     public static AStatement returnStmt() {
         return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt(), null, AStatement.class);
     }
+
+    public static AFunctionType functionType(AType returnTypeJp, AType... argTypesJps) {
+
+        Type returnType = (Type) returnTypeJp.getNode();
+
+        List<Type> argTypes = Arrays.stream(argTypesJps)
+                .map(arg -> ((Type) arg.getNode()))
+                .collect(Collectors.toList());
+
+        FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
+
+        return CxxJoinpoints.create(type, null, AFunctionType.class);
+    }
+
+    public static AFunction functionDeclFromType(String functionName, AFunctionType functionTypeJp) {
+        FunctionType functionType = (FunctionType) functionTypeJp.getNode();
+        return CxxJoinpoints.create(CxxWeaver.getFactory().functionDecl(functionName, functionType), null,
+                AFunction.class);
+    }
+
+    public static AFunction functionDecl(String functionName, AType returnTypeJp, AJoinPoint... namedDeclJps) {
+
+        Type returnType = (Type) returnTypeJp.getNode();
+
+        // Get the arg types and create the parameters
+        List<Type> argTypes = new ArrayList<>(namedDeclJps.length);
+        List<ParmVarDecl> params = new ArrayList<>();
+
+        for (AJoinPoint namedDeclJp : namedDeclJps) {
+            ClavaNode node = namedDeclJp.getNode();
+            if (!(node instanceof ValueDecl)) {
+                ClavaLog.info("AstFactory.functionDecl: decl '" + node.getClass()
+                        + "' is not compatible as parameter of function");
+                return null;
+            }
+
+            ValueDecl valueDecl = (ValueDecl) node;
+            argTypes.add(valueDecl.getType());
+            params.add(CxxWeaver.getFactory().parmVarDecl(valueDecl.getDeclName(), valueDecl.getType()));
+        }
+
+        // Create the function type
+        FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
+
+        // Create function decl
+        FunctionDecl functionDecl = CxxWeaver.getFactory().functionDecl(functionName, functionType);
+
+        // Add parameters
+        functionDecl.addChildren(params);
+
+        return CxxJoinpoints.create(functionDecl, null, AFunction.class);
+    }
+
 }
