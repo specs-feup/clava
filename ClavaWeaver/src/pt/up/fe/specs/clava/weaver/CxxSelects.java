@@ -49,6 +49,8 @@ public class CxxSelects {
 
         return currentStream.filter(filter)
                 .map(mapper)
+                // Filter null join points
+                .filter(jp -> jp != null)
                 .collect(Collectors.toList());
     }
 

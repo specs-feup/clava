@@ -4,7 +4,6 @@
 			 code : i < 100;	 astName : ExprStmt
 			 code : i++	 astName : ExprStmt
 			 code : A[i] = i;	 astName : ExprStmt
-			 code : ;	 astName : NullStmt
 			 code : 
 return 0;
 	 astName : ReturnStmt
