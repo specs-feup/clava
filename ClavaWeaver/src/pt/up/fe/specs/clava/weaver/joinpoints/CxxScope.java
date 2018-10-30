@@ -128,7 +128,7 @@ public class CxxScope extends AScope {
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
         // 'body' behaviour
-        if (!scope.isNestedScope()) {
+        if (!scope.isNestedScope() && !(node instanceof AScope)) {
             // Transform, if needed, the given node into a stmt
             Stmt stmt = ClavaNodes.toStmt(node.getNode());
             return insertBodyImplJp("replace", stmt);
