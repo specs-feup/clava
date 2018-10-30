@@ -12,8 +12,8 @@ JoinPoints.prototype.children = function($jp) {
 	}
 	
 	Check.isJoinPoint($jp);
-
-	return this._filterNodes($jp.astChildren);
+	return $jp.astChildren;
+	//return this._filterNodes($jp.astChildren);
 }
 
 JoinPoints.prototype.descendants = function($jp) {
@@ -22,16 +22,18 @@ JoinPoints.prototype.descendants = function($jp) {
 	}
 	
 	Check.isJoinPoint($jp);
-	return this._filterNodes($jp.descendants);
+	return $jp.descendants;
+	//return this._filterNodes($jp.descendants);
 }
 
+/*
 JoinPoints.prototype._filterNodes = function($jps) {
 
 	var filteredJps = [];
 	
 	for(var $jp of $jps) {
-		// Skip NullNodes
-		if($jp.getNode().isNullNode()) {
+		// Skip null nodes
+		if($jp === undefined) {
 			continue;
 		}
 		
@@ -41,3 +43,4 @@ JoinPoints.prototype._filterNodes = function($jps) {
 	return filteredJps;
 
 }
+*/
