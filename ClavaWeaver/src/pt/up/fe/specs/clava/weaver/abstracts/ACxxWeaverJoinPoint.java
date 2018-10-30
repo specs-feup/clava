@@ -168,7 +168,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         return getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
-                .filter(jp -> jp.instanceOf(type))
+                .filter(jp -> jp != null && jp.instanceOf(type))
                 // .filter(jp -> jp.getJoinpointType().equals(type))
                 .toArray(AJoinPoint[]::new);
 
@@ -178,6 +178,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint[] getDescendantsArrayImpl() {
         return getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .filter(jp -> jp != null)
                 .toArray(AJoinPoint[]::new);
     }
 
@@ -781,6 +782,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return getNode().getChildren().stream()
                 .map(node -> CxxJoinpoints.create(node, this))
+                .filter(jp -> jp != null)
                 .collect(Collectors.toList())
                 .toArray(new AJoinPoint[0]);
 
