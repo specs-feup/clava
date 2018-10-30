@@ -497,4 +497,11 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().declRefExpr(declName, typeNode), null, AVarref.class);
     }
 
+    public static AStatement returnStmt(AExpression expr) {
+        return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt((Expr) expr.getNode()), null, AStatement.class);
+    }
+
+    public static AStatement returnStmt() {
+        return CxxJoinpoints.create(CxxWeaver.getFactory().returnStmt(), null, AStatement.class);
+    }
 }

@@ -179,3 +179,15 @@ ClavaJoinPoints.varref = function(declName, $type) {
 	return AstFactory.varref(declName, $type);
 }
 
+/**
+ * @param {String} declName - The name of the varref.
+ * @param {$type} $type - The type of the varref.
+ */
+ClavaJoinPoints.returnStmt = function($expr) {
+	
+	if($expr === undefined) {
+		return AstFactory.returnStmt();
+	}
+	
+	return AstFactory.returnStmt($expr);
+}
