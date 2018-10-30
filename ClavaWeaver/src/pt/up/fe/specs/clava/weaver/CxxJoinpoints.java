@@ -119,6 +119,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxQualType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTagType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTemplateSpecializationType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType;
+import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxUndefinedType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxVariableArrayType;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -181,7 +182,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(NullExpr.class, CxxJoinpoints::nullNode);
         JOINPOINT_FACTORY.put(NullDecl.class, CxxJoinpoints::nullNode);
         JOINPOINT_FACTORY.put(NullStmt.class, CxxJoinpoints::nullNode);
-        JOINPOINT_FACTORY.put(NullType.class, CxxJoinpoints::nullNode);
+        JOINPOINT_FACTORY.put(NullType.class, CxxUndefinedType::new);
         // JOINPOINT_FACTORY.put(NullNodeOld.class, CxxEmpty::new);
         JOINPOINT_FACTORY.put(Comment.class, CxxComment::new);
         // JOINPOINT_FACTORY.put(WrapperStmt.class, CxxJoinpoints::wrapperStmtFactory);

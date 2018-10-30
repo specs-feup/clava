@@ -253,7 +253,6 @@
 	<!-- TYPE -->
 	<joinpoint class="type">
 	</joinpoint>
-
 		
 	<!--  POINTER TYPE -->
 	<joinpoint class="pointerType" extends="type">
@@ -296,5 +295,10 @@
 	<!--  PAREN TYPE -->
 	<joinpoint class="parenType" extends="type">
 	</joinpoint>
+	
+	<!--  UNDEFINED TYPE -->
+	<joinpoint class="undefinedType" extends="type">
+	</joinpoint>
+	
 	 	
 </joinpoints>

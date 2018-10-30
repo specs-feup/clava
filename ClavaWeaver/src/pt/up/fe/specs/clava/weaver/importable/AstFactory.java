@@ -84,6 +84,7 @@ public class AstFactory {
      * @return
      */
     public static AJoinPoint varDecl(String varName, AJoinPoint init) {
+
         // Check that init is an expression
         ClavaNode expr = init.getNode();
         if (!(expr instanceof Expr)) {
@@ -94,10 +95,9 @@ public class AstFactory {
 
         Expr initExpr = (Expr) expr;
 
-        boolean isUsed = true;
-        boolean isImplicit = false;
-        boolean isNrvo = false;
-
+        // boolean isUsed = true;
+        // boolean isImplicit = false;
+        // boolean isNrvo = false;
         Type initType = (Type) init.getTypeImpl().getNode();
 
         // System.out.println("INIT JP:" + init.getClass());
