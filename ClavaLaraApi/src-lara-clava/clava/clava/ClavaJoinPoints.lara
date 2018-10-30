@@ -140,7 +140,8 @@ ClavaJoinPoints.stmtLiteral = function(stmtString) {
  */
 ClavaJoinPoints.call = function($function) {
 	var callArgs = arrayFromArgs(arguments, 1);
-	return AstFactory.stmtLiteral($function, callArgs);
+	return AstFactory.callFromFunction($function, callArgs);
+	//return AstFactory.stmtLiteral($function, callArgs);
 }
 
 /**
@@ -166,3 +167,15 @@ ClavaJoinPoints.scope = function($stmts) {
 	
 	return AstFactory.scope($stmts);
 }
+
+/**
+ * @param {String} declName - The name of the varref.
+ * @param {$type} $type - The type of the varref.
+ */
+ClavaJoinPoints.varref = function(declName, $type) {
+	Check.isString(declName);
+	Check.isJoinPoint($type);
+	
+	return AstFactory.varref(declName, $type);
+}
+

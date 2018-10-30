@@ -68,6 +68,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -490,4 +491,10 @@ public class AstFactory {
         return CxxJoinpoints.create(CxxWeaver.getFactory().compoundStmt(stmtNodes), null, AScope.class);
 
     }
+
+    public static AVarref varref(String declName, AType type) {
+        Type typeNode = (Type) type.getNode();
+        return CxxJoinpoints.create(CxxWeaver.getFactory().declRefExpr(declName, typeNode), null, AVarref.class);
+    }
+
 }
