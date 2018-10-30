@@ -106,6 +106,31 @@ public abstract class AFunction extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute definitionJp
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint getDefinitionJpImpl();
+
+    /**
+     * Get value on attribute definitionJp
+     * @return the attribute's value
+     */
+    public final Object getDefinitionJp() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definitionJp", Optional.empty());
+        	}
+        	AJoinPoint result = this.getDefinitionJpImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "definitionJp", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "definitionJp", e);
+        }
+    }
+
+    /**
      * 
      * @param withReturnType
      * @return 
@@ -958,6 +983,7 @@ public abstract class AFunction extends ANamedDecl {
         attributes.add("hasDefinition");
         attributes.add("functionType");
         attributes.add("declarationJp");
+        attributes.add("definitionJp");
         attributes.add("declaration");
         attributes.add("body");
         attributes.add("paramNames");
@@ -1028,6 +1054,7 @@ public abstract class AFunction extends ANamedDecl {
         HASDEFINITION("hasDefinition"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
+        DEFINITIONJP("definitionJp"),
         DECLARATION("declaration"),
         BODY("body"),
         PARAMNAMES("paramNames"),

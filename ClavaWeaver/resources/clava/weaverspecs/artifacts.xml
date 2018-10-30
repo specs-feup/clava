@@ -313,6 +313,7 @@
 		<attribute name="hasDefinition" type="Boolean" />
 		<attribute name="functionType" type="functionType" />
 		<attribute name="declarationJp" type="joinpoint" />
+		<attribute name="definitionJp" type="joinpoint" />		
 		<attribute name="declaration" type="String">
 			<parameter name="withReturnType" type="Boolean" />
 		</attribute>

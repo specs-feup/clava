@@ -403,6 +403,13 @@ public class CxxFunction extends AFunction {
                 .orElse(null);
     }
 
+    @Override
+    public AJoinPoint getDefinitionJpImpl() {
+        return function.getDefinition()
+                .map(node -> CxxJoinpoints.create(node, null))
+                .orElse(null);
+    }
+
     /**
      * Setting the type of a Function join point sets the return type
      */

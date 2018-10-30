@@ -81,6 +81,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute definitionJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getDefinitionJpImpl() {
+        return this.aFunction.getDefinitionJpImpl();
+    }
+
+    /**
      * Get value on attribute declaration
      * @return the attribute's value
      */
@@ -599,6 +608,7 @@ public abstract class AMethod extends AFunction {
         HASDEFINITION("hasDefinition"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
+        DEFINITIONJP("definitionJp"),
         DECLARATION("declaration"),
         BODY("body"),
         PARAMNAMES("paramNames"),

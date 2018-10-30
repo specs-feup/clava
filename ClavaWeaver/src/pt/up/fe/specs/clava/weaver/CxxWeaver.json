@@ -13037,6 +13037,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "joinpoint",
+                              "name": "definitionJp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "functionType",
                               "name": "functionType"
                            }]
@@ -19618,6 +19626,14 @@
                            {
                               "type": "joinpoint",
                               "name": "declarationJp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "definitionJp"
                            }]
                },
                {
