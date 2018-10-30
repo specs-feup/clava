@@ -1,0 +1,5 @@
+file_rebuild.h before:
+Function: foo()
+file_rebuild.h after:
+Function: foo()
+Function: foo2()

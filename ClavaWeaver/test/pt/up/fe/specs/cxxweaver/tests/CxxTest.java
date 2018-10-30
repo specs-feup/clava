@@ -215,4 +215,9 @@ public class CxxTest {
     public void testField() {
         newTester().test("Field.lara", "field.hpp");
     }
+
+    @Test
+    public void testFileRebuild() {
+        newTester().test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h");
+    }
 }
