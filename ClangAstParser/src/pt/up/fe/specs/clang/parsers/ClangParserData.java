@@ -93,6 +93,10 @@ public class ClangParserData extends ADataClass<ClangParserData> {
     public final static DataKey<VisitingChildrenCheck> VISITING_CHILDREN = KeyFactory
             .object("visitingChildren", VisitingChildrenCheck.class);
 
+    public final static DataKey<Map<String, String>> SKIPPED_NODES_MAP = KeyFactory.generic(
+            "skippedNodesMap",
+            new HashMap<>());
+
     /**
      * Parsed translation unit.
      */

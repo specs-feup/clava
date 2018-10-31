@@ -54,14 +54,17 @@ public class ClavaNodes {
 
     // private final ClangParserKeys data;
     private final Map<String, ClavaNode> clavaNodes;
+    // private final Map<String, String> skippedNodes;
     private final List<Runnable> delayedNodesToAdd;
     private final ClavaFactory factory;
 
     public ClavaNodes(ClavaFactory factory) {
+        // public ClavaNodes(ClavaFactory factory, Map<String, String> skippedNodes) {
         // this.data = data;
         this.clavaNodes = new HashMap<>();
         this.delayedNodesToAdd = new ArrayList<>();
         this.factory = factory;
+        // this.skippedNodes = skippedNodes;
     }
 
     public Map<String, ClavaNode> getNodes() {
@@ -74,6 +77,14 @@ public class ClavaNodes {
 
     public ClavaNode get(String nodeId) {
         ClavaNode clavaNode = clavaNodes.get(nodeId);
+
+        // Check if in skipped nodes
+        // if (clavaNode == null) {
+        // String nullptrId = skippedNodes.get(nodeId);
+        // if (nullptrId != null) {
+        // clavaNode = nullNode(nullptrId);
+        // }
+        // }
 
         Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + nodeId
                 + "'. Check if node is being visited.");
@@ -272,16 +283,45 @@ public class ClavaNodes {
 
             Class<T> valueClass = key.getValueClass();
 
-            SpecsCheck.checkArgument(valueClass.isInstance(node),
-                    () -> "Expected id '" + nodeId + "' to be '" + valueClass.getSimpleName() + "', is "
-                            + node.getClass().getSimpleName());
+            ClavaNode adaptedNode = adaptNode(node, valueClass);
 
-            data.set(key, valueClass.cast(node));
+            // SpecsCheck.checkArgument(!(adaptedNode instanceof NullNode),
+            // () -> "Did not expect NullNode at this point: " + adaptedNode);
+            // if (adaptedNode instanceof NullNode) {
+            // System.out.println("Adapted node: " + adaptedNode);
+            // System.out.println("NODE: " + node);
+            //
+            // throw new RuntimeException("NullNode!");
+            // }
+
+            // if (adaptedNode != node) {
+            // System.out.println("NODE: " + node.getNodeName());
+            // System.out.println("ADAPTED NODE: " + adaptedNode.getNodeName());
+            // }
+            SpecsCheck.checkArgument(valueClass.isInstance(adaptedNode),
+                    () -> "Expected id '" + nodeId + "' to be '" + valueClass.getSimpleName() + "', is "
+                            + adaptedNode.getClass().getSimpleName());
+
+            data.set(key, valueClass.cast(adaptedNode));
 
             // System.out.println("SETTING node " + nodeId + " for key " + key);
         };
 
         delayedNodesToAdd.add(nodeToAdd);
+    }
+
+    private <T extends ClavaNode> ClavaNode adaptNode(ClavaNode node, Class<T> valueClass) {
+
+        // Adapt NullNode to ValueClass, if needed
+        // if (node instanceof NullNode && !valueClass.isInstance(node)) {
+        // if (node instanceof NullNode) {
+        // // System.out.println("VALUE CLASS: " + valueClass);
+        // ClavaNode newNode = node.newInstance(false, valueClass, Collections.emptyList());
+        // // System.out.println("NEW NODE CLASS: " + newNode.getClass());
+        // return newNode;
+        // }
+
+        return node;
     }
 
     // private <T extends ClavaNode> ClavaNode getWithoutDummy(DataKey<T> key, String nodeId) {
@@ -306,8 +346,17 @@ public class ClavaNodes {
 
         Runnable nodeToAdd = () -> {
 
+            // if (get(nodeId) instanceof NullNode) {
+            // System.out.println("NULL NODE:" + get(nodeId));
+            // }
             Optional<T> value = isNullId(nodeId) ? Optional.empty()
+                    // Optional<T> value = isNullId(nodeId) ? Optional.empty()
                     : key.getValueClass().cast(Optional.of(get(nodeId)));
+
+            // if (value.isPresent() && value.get() instanceof NullNode) {
+            // value = Optional.empty();
+            // // System.out.println("ADSADASD");
+            // }
 
             /*
             Optional<T> value;

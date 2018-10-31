@@ -71,6 +71,9 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         }
 
         // data.add(ClangParserKeys.CLAVA_NODES, new HashMap<>());
+
+        // ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserData.CONTEXT).get(ClavaContext.FACTORY),
+        // data.get(ClangParserData.SKIPPED_NODES_MAP));
         ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserData.CONTEXT).get(ClavaContext.FACTORY));
         data.set(ClangParserData.CLAVA_NODES, clavaNodes);
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
@@ -223,6 +226,14 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
                 if (child == null && ClavaNodes.isNullId(childId)) {
                     child = data.get(ClangParserData.CLAVA_NODES).nullNode(childId);
                 }
+
+                // Check if skipped node
+                // if (child == null) {
+                // String nullptrId = data.get(ClangParserData.SKIPPED_NODES_MAP).get(childId);
+                // if (nullptrId != null) {
+                // child = data.get(ClangParserData.CLAVA_NODES).nullNode(nullptrId);
+                // }
+                // }
 
                 int index = i;
                 SpecsCheck.checkNotNull(child,

@@ -40,6 +40,7 @@ public class ClangStreamParserV2 {
         TopLevelNodesParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
         NodeDataParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
         addWorker(SystemHeadersClangNodes::new);
+        // addWorker(SkippedNodesParser::new);
         // addWorker(VisitStartParser::new);
         // addWorker(VisitEndParser::new);
         VisitingChildrenCheck.getWorkers().forEach(ClangStreamParserV2::addWorker);
