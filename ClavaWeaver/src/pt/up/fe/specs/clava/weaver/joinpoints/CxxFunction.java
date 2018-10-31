@@ -122,14 +122,22 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        // return CxxActions.insertJpAsStatement(this, node, "after", getWeaverEngine());
-        return CxxActions.insertJp(this, node, "after", getWeaverEngine());
+        // If node is a FunctionDecl, insert it as it is
+        if (node.getNode() instanceof FunctionDecl) {
+            return CxxActions.insertJp(this, node, "after", getWeaverEngine());
+        }
+
+        return CxxActions.insertJpAsStatement(this, node, "after", getWeaverEngine());
     }
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        // return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
-        return CxxActions.insertJp(this, node, "before", getWeaverEngine());
+        // If node is a FunctionDecl, insert it as it is
+        if (node.getNode() instanceof FunctionDecl) {
+            return CxxActions.insertJp(this, node, "before", getWeaverEngine());
+        }
+
+        return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
     }
 
     @Override
