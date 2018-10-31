@@ -421,6 +421,11 @@ void ClangAstDumper::emptyChildren(const void *pointer) {
 
 const void ClangAstDumper::addChild(const Decl *addr, std::vector<std::string> &children) {
 
+    // Do not add child if goes above system header threshold
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        return;
+    }
+
     std::string clavaId = clava::getId(addr, id);
 
 #ifdef VISIT_CHECK
@@ -444,6 +449,8 @@ const void ClangAstDumper::addChild(const Decl *addr, std::vector<std::string> &
 
 const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vector<std::string> &children) {
 
+
+
     for (auto decl = decls.begin(), endDecl = decls.end(); decl != endDecl; ++decl) {
 
         // If CXXRecordDecl without definition, skip
@@ -464,6 +471,11 @@ const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vecto
 };
 
 const void ClangAstDumper::addChild(const Stmt *addr, std::vector<std::string> &children) {
+
+    // Do not add child if goes above system header threshold
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        return;
+    }
 
     std::string clavaId = clava::getId(addr, id);
 
@@ -487,6 +499,11 @@ const void ClangAstDumper::addChild(const Stmt *addr, std::vector<std::string> &
 };
 
 const void ClangAstDumper::addChild(const Expr *addr, std::vector<std::string> &children) {
+    // Do not add child if goes above system header threshold
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        return;
+    }
+
     std::string clavaId = clava::getId(addr, id);
 
 #ifdef VISIT_CHECK
@@ -509,6 +526,11 @@ const void ClangAstDumper::addChild(const Expr *addr, std::vector<std::string> &
 };
 
 const void ClangAstDumper::addChild(const Type *addr, std::vector<std::string> &children) {
+
+    // Do not add child if goes above system header threshold
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        return;
+    }
 
     std::string clavaId = clava::getId(addr, id);
 
@@ -533,6 +555,11 @@ const void ClangAstDumper::addChild(const Type *addr, std::vector<std::string> &
 
 const void ClangAstDumper::addChild(const QualType &addr, std::vector<std::string> &children) {
 
+    // Do not add child if goes above system header threshold
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        return;
+    }
+
     std::string clavaId = clava::getId(addr, id);
 
 #ifdef VISIT_CHECK
@@ -551,6 +578,11 @@ const void ClangAstDumper::addChild(const QualType &addr, std::vector<std::strin
 };
 
 const void ClangAstDumper::addChild(const Attr *addr, std::vector<std::string> &children) {
+
+    // Do not add child if goes above system header threshold
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        return;
+    }
 
     std::string clavaId = clava::getId(addr, id);
 

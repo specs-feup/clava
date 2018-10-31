@@ -26,6 +26,9 @@ private:
     ASTContext *Context;
     int id;
 
+    int systemHeaderThreashold = 2;
+    int currentSystemHeaderLevel = 0;
+
     std::set<const void*> seenTypes;
     std::set<const Stmt*> seenStmts;
     std::set<const Decl*> seenDecls;
@@ -56,6 +59,7 @@ public:
      * TYPES
      */
     void VisitType(const Type *T); // Should not be manually called, instead call VisitTypeTop()
+/*
     // TODO: We should only need to call VisitType, children/data maps should handle all cases
     //void VisitBuiltinType(const BuiltinType *T);
     void VisitPointerType(const PointerType *T);
@@ -65,23 +69,25 @@ public:
     void VisitElaboratedType(const ElaboratedType *T);
     void VisitLValueReferenceType(const LValueReferenceType *T);
     void VisitDependentSizedArrayType(const DependentSizedArrayType *T);
-
+*/
 
         /*
          * STMTS
          */
     void VisitStmt(const Stmt *T); // Should not be manually called, instead call VisitStmtTop()
+    /*
     //void VisitDeclStmt(const DeclStmt *Node);
     void VisitCXXForRangeStmt(const CXXForRangeStmt *Node);
     //void VisitCompoundStmt(const CompoundStmt *Node);
     void VisitForStmt(const ForStmt *Node);
-
+    */
 
     /*
      * EXPRS
      */
 
     void VisitExpr(const Expr *Node);
+    /*
     void VisitUnaryExprOrTypeTraitExpr(const UnaryExprOrTypeTraitExpr *Node);
     void VisitCXXConstructExpr(const CXXConstructExpr *Node);
     void VisitDeclRefExpr(const DeclRefExpr *Node);
@@ -99,7 +105,7 @@ public:
     //void VisitCharacterLiteral(const CharacterLiteral *Node);
 
     //void VisitImplicitCastExpr(const ImplicitCastExpr *Node);
-
+*/
 
 
 
@@ -107,6 +113,7 @@ public:
      * DELCS
      */
     void VisitDecl(const Decl *D); // Should not be manually called, instead call VisitDeclTop()
+/*
     //void VisitVarDecl(const VarDecl *D);
     //void VisitFunctionDecl(const FunctionDecl *D);
     //void VisitCXXMethodDecl(const CXXMethodDecl *D);
@@ -121,7 +128,7 @@ public:
     void VisitFieldDecl(const FieldDecl *D);
     void VisitParmVarDecl(const ParmVarDecl *D);
     void VisitTypedefDecl(const TypedefDecl *D);
-
+*/
     /*
      * ATTR
      */

@@ -16,6 +16,11 @@ using namespace clang;
 //#define OLD_OUTPUT
 
 void ClangAstDumper::visitChildrenAndData(const Stmt *S) {
+
+
+
+    //llvm::errs() << "Current stmt system header level: " << this->currentSystemHeaderLevel << "\n";
+
     // Visit children
     visitChildren(S);
 
@@ -24,6 +29,8 @@ void ClangAstDumper::visitChildrenAndData(const Stmt *S) {
 
     // Dump id
     dumpIdToClassMap(S, clava::getClassName(S));
+
+
 }
 
 void ClangAstDumper::visitChildrenAndData(const Expr *E) {
@@ -75,10 +82,28 @@ void ClangAstDumper::VisitStmt(const Stmt *Node) {
         return;
     }
 
+    bool isSystemHeader = clava::isSystemHeader(Node, Context);
+    if(isSystemHeader) {
+        currentSystemHeaderLevel++;
+    }
+/*
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        // Add node as skipped node
+        llvm::errs() << SKIPPED_NODES_MAP << "\n";
+        llvm::errs() << clava::getId(Node, id) << "\n";
+        llvm::errs() << clava::getId((Stmt*) nullptr, id) << "\n";
+
+        currentSystemHeaderLevel--;
+        return;
+    }
+*/
     visitChildrenAndData(Node);
 
+    if(isSystemHeader) {
+        currentSystemHeaderLevel--;
+    }
 }
-
+/*
 void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
     if(dumpStmt(Node)) {
         return;
@@ -127,3 +152,4 @@ void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
 
 }
 
+*/

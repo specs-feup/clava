@@ -14,6 +14,7 @@ using namespace clang;
 //#define OLD_OUTPUT
 
 void ClangAstDumper::visitChildrenAndData(const Type *T) {
+
     //llvm::errs() << "VISITING TYPE CHILDREN: " << T << "\n";
 
     // Visit children
@@ -93,7 +94,7 @@ void ClangAstDumper::VisitType(const Type *T){
     visitChildrenAndData(T);
 }
 
-
+/*
 void ClangAstDumper::VisitPointerType(const PointerType *T) {
     if(dumpType(T)) {
         return;
@@ -171,4 +172,4 @@ void ClangAstDumper::VisitDependentSizedArrayType(const DependentSizedArrayType 
 #endif
 }
 
-
+*/

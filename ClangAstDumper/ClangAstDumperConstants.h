@@ -79,4 +79,7 @@ static const std::string TOP_VISIT_START = "<Top Visit Start>";
 
 static const std::string TOP_VISIT_END = "<Top Visit End>";
 
+static const std::string SKIPPED_NODES_MAP = "<Skipped Nodes Map>";
+
+
 #endif //CLANGASTDUMPER_CLANGASTDUMPERCONSTANTS_H

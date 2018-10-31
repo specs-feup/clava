@@ -147,10 +147,31 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
         return;
     }
 
+    bool isSystemHeader = clava::isSystemHeader(D, Context);
+    if(isSystemHeader) {
+        currentSystemHeaderLevel++;
+    }
+
+    /*
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        // Add node as skipped node
+        llvm::errs() << SKIPPED_NODES_MAP << "\n";
+        llvm::errs() << clava::getId(D, id) << "\n";
+        llvm::errs() << clava::getId((Decl*) nullptr, id) << "\n";
+
+        currentSystemHeaderLevel--;
+        return;
+    }
+     */
+
     visitChildrenAndData(D);
+
+    if(isSystemHeader) {
+        currentSystemHeaderLevel--;
+    }
 }
 
-
+/*
 void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     if(dumpDecl(D)) {
         return;
@@ -364,4 +385,4 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
 
     visitChildrenAndData(D);
 }
-
+*/

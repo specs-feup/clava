@@ -120,7 +120,8 @@ namespace clava {
     //void dump(const TemplateName& templateName);
     void dump(std::function<void(llvm::raw_string_ostream&)> dumper);
 
-
+    bool isSystemHeader(const Stmt* S, ASTContext* context);
+    bool isSystemHeader(const Decl* S, ASTContext* context);
         //  void dump(llvm::raw_string_ostream llvmStringStream);
 
 

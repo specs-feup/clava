@@ -20,10 +20,29 @@ void ClangAstDumper::VisitExpr(const Expr *Node) {
         return;
     }
 
+    bool isSystemHeader = clava::isSystemHeader(Node, Context);
+    if(isSystemHeader) {
+        currentSystemHeaderLevel++;
+    }
+/*
+    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+        // Add node as skipped node
+        llvm::errs() << SKIPPED_NODES_MAP << "\n";
+        llvm::errs() << clava::getId(Node, id) << "\n";
+        llvm::errs() << clava::getId((Expr*) nullptr, id) << "\n";
+
+        currentSystemHeaderLevel--;
+        return;
+    }
+*/
     visitChildrenAndData(Node);
+
+    if(isSystemHeader) {
+        currentSystemHeaderLevel--;
+    }
 }
 
-
+/*
 void ClangAstDumper::VisitCXXConstructExpr(const CXXConstructExpr *Node) {
     if(dumpStmt(Node)) {
         return;
@@ -336,4 +355,4 @@ void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
 
 }
 
-
+*/

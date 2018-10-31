@@ -458,3 +458,13 @@ void clava::dump(llvm::raw_string_ostream llvmStringStream) {
 }
 */
 
+bool clava::isSystemHeader(const Stmt* S, ASTContext* Context) {
+    FullSourceLoc fullLocation = Context->getFullLoc(S->getLocStart());
+    return fullLocation.isValid() && fullLocation.isInSystemHeader();
+}
+
+
+bool clava::isSystemHeader(const Decl* D, ASTContext* Context) {
+    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+    return fullLocation.isValid() && fullLocation.isInSystemHeader();
+}
