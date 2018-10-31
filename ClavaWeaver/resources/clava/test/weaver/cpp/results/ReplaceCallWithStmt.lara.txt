@@ -1,5 +1,5 @@
 
 int main() {
-   auto fooResult = foo();
-   auto& fooRefResult = fooRef("Hello");
+   std::vector<std::string> fooResult = foo();
+   std::string const& fooRefResult = fooRef("Hello");
 }

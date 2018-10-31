@@ -17,8 +17,8 @@ aspectdef InsertsJp
 
 	select function{"fooBodyBeforeAfter"}.body end
 	apply
-		$body.exec insertBefore($bDecl);
-		$body.exec insertAfter($cDecl);
+		$body.exec insertBegin($bDecl);
+		$body.exec insertEnd($cDecl);
 	end
 	
 	select function{"fooBodyReplace"}.body end
@@ -28,8 +28,8 @@ aspectdef InsertsJp
 	
 	select function{"fooBodyEmptyBeforeAfter"}.body end
 	apply
-		$body.exec insertBefore($bDecl);
-		$body.exec insertAfter($cDecl);
+		$body.exec insertBegin($bDecl);
+		$body.exec insertEnd($cDecl);
 	end
 	
 	select function{"fooBodyEmptyReplace"}.body end

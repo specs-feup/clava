@@ -50,6 +50,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.language.Standard;
@@ -141,29 +142,26 @@ public class AstFactory {
     }
 
     private static Type getVarDeclType(Standard standard, Type returnType) {
+        // Special case, NullType
+        if (returnType instanceof NullType) {
+            if (!standard.isCxx()) {
+                throw new RuntimeException("Found NullType and we are on C standard, cannot use 'auto'");
+            }
+
+            // If C++, use auto as type
+
+            String autoCode = "auto";
+
+            // Check if reference type
+            //
+            // if (returnType instanceof ReferenceType) {
+            // autoCode = autoCode + "&";
+            // }
+
+            return CxxWeaver.getFactory().literalType(autoCode);
+        }
 
         return returnType;
-
-        /*
-        // If C, use the return type
-        if (!standard.isCxx()) {
-            return returnType;
-        }
-        
-        
-        
-        // If C++, use auto as type
-        
-        String autoCode = "auto";
-        
-        // Check if reference type
-        
-        if (returnType instanceof ReferenceType) {
-            autoCode = autoCode + "&";
-        }
-        
-        return CxxWeaver.getFactory().literalType(autoCode);
-        */
     }
 
     public static CxxFunction functionVoid(String name) {
