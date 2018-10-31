@@ -192,6 +192,14 @@ void ClangAstDumper::VisitDeclTop(const Decl *Node) {
 
     visitChildrenAndData(Node);
 */
+    // Do not visit if in system header
+    // If is in system header
+    /*
+    FullSourceLoc fullLocation = Context->getFullLoc(Node->getLocStart());
+    if (fullLocation.isValid() && fullLocation.isInSystemHeader()) {
+        return;
+    }
+     */
 
     ConstDeclVisitor::Visit(Node);
 

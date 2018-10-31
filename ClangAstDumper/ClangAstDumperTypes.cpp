@@ -45,13 +45,6 @@ bool ClangAstDumper::dumpType(const Type* typeAddr) {
     // A TypeDumper is created for each context,
     // no need to use id to disambiguate
     seenTypes.insert((void*)typeAddr);
-    /*
-    llvm::errs() << "TYPE_BEGIN\n";
-    typeAddr->dump();
-    llvm::errs() << "TYPE_END\n";
-    */
-    //dumpIdToClassMap(typeAddr, clava::getClassName(typeAddr));
-
 
     return false;
 }
@@ -98,28 +91,8 @@ void ClangAstDumper::VisitType(const Type *T){
     }
 
     visitChildrenAndData(T);
-    /*
-    // Visit children
-    visitChildren(clava::TypeNode::TYPE, T);
-
-    // Dump data
-    dataDumper.dump(clava::TypeNode::TYPE, T);
-     */
 }
 
-/*
-void ClangAstDumper::VisitBuiltinType(const BuiltinType *T) {
-    if(dumpType(T)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::TypeNode::TYPE, T);
-
-    // Dump data
-    dataDumper.dump(clava::TypeNode::BUILTIN_TYPE, T);
-}
- */
 
 void ClangAstDumper::VisitPointerType(const PointerType *T) {
     if(dumpType(T)) {
@@ -133,119 +106,13 @@ void ClangAstDumper::VisitPointerType(const PointerType *T) {
 #endif
 }
 
-/*
-void ClangAstDumper::VisitTemplateSpecializationType(const TemplateSpecializationType *T){
-    // If already parsed, return
-    if(seenTypes.count(T) != 0) {
-        return;
-    }
 
-    visitChildrenAndData(T);
-
-    // Visit template types
-    for (auto &Arg : *T) {
-        // currently only supports Type kind
-        if(Arg.getKind() != 1) {
-            continue;
-        }
-
-        const Type* argType = Arg.getAsType().getTypePtrOrNull();
-        if(argType != nullptr) {
-            VisitTypeTop(argType);
-        } else {
-            llvm::errs() << "VisitTemplateSpecializationType: arg type is null\n";
-        }
-
-    }
-
-    // Dump template names
-    llvm::errs() << "TEMPLATE_NAME_BEGIN\n";
-    llvm::errs() << "Template_type:" << T  << "_" << id << "\n";
-    for (auto &Arg : *T) {
-        Arg.print(Context->getPrintingPolicy(), llvm::errs());
-        llvm::errs() << "\n";
-    }
-    llvm::errs() << "TEMPLATE_NAME_END\n";
-
-    // Dump template arguments types
-    llvm::errs() << "TEMPLATE_ARGUMENT_TYPES_BEGIN\n";
-    llvm::errs() << "Template_type:" << T  << "_" << id << "\n";
-    for (auto &Arg : *T) {
-        // Currently only supports Type kind
-        if(Arg.getKind() != 1) {
-            continue;
-        }
-
-        const Type* argType = Arg.getAsType().getTypePtrOrNull();
-        if(argType != nullptr) {
-            llvm::errs() << "Template_arg:" << argType  << "_" << id << "\n";
-        }  else {
-            llvm::errs() << "VisitTemplateSpecializationType: template arg type is null\n";
-        }
-
-    }
-    llvm::errs() << "TEMPLATE_ARGUMENT_TYPES_END\n";
-
-
-
-
-    // Visit type alias
-    if(T->isTypeAlias()) {
-        const Type* aliasedType = T->getAliasedType().getTypePtrOrNull();
-        if(aliasedType != nullptr) {
-            VisitTypeTop(aliasedType);
-        } else {
-            llvm::errs() << "VisitTemplateSpecializationType: aliased type is null\n";
-        }
-
-    }
-
-    if(T->isSugared()) {
-        VisitTypeTop(T->getUnqualifiedDesugaredType());
-    }
-
-    // Dump type, in the end
-    if(dumpType(T)) {
-        return;
-    }
-
-}
-*/
 void ClangAstDumper::VisitFunctionProtoType(const FunctionProtoType *T) {
     if(dumpType(T)) {
         return;
     }
 
     visitChildrenAndData(T);
-
-    /*
-    // Return type
-    VisitTypeTop(T->getReturnType().getTypePtr());
-
-    // Parameters type
-    for (QualType PT : T->getParamTypes()) {
-        // QUALTYPE EXP
-        VisitTypeTop(PT.getTypePtr());
-        //VisitTypeTop(PT);
-        //VisitTypeTop(PT.getAsOpaquePtr());
-    }
-
-    auto EI = T->getExtInfo();
-
-    // Dump template names
-    llvm::errs() << FUNCTION_PROTO_TYPE_EXCEPTION << "\n";
-    llvm::errs() << clava::getId(T, id) << "\n";
-    auto EPI = T->getExtProtoInfo();
-
-    llvm::errs() << EPI.ExceptionSpec.Type << "\n";
-
-    llvm::errs() << (EPI.ExceptionSpec.NoexceptExpr != nullptr) << "\n";
-
-    if(EPI.ExceptionSpec.NoexceptExpr != nullptr) {
-        auto noexceptExpr = EPI.ExceptionSpec.NoexceptExpr;
-        llvm::errs() <<  loc2str(noexceptExpr->getLocStart(), noexceptExpr->getLocEnd()) << "\n";
-    }
-     */
 
 }
 

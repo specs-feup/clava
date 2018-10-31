@@ -18,6 +18,7 @@ using namespace clang;
 //#define OLD_OUTPUT
 
 void ClangAstDumper::visitChildrenAndData(const Decl *D) {
+
     // Visit children
     visitChildren(D);
 
@@ -87,10 +88,18 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
 
     log(declAddr);
 
-
     // A StmtDumper is created for each context,
     // no need to use id to disambiguate
     seenDecls.insert(declAddr);
+/*
+    // If system header dumping is disabled, add to null nodes
+    FullSourceLoc fullLocation = Context->getFullLoc(declAddr->getLocStart());
+    if (fullLocation.isValid() && fullLocation.isInSystemHeader()) {
+        // Add as a null node
+        // ...
+        return true;
+    }
+*/
 
     std::ostringstream extendedId;
     extendedId << declAddr << "_" << id;
@@ -139,33 +148,8 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
     }
 
     visitChildrenAndData(D);
-
-    // Dump data
-    //dataDumper.dump(clava::DeclNode::DECL, D);
-
-
-//    llvm::errs() << DECL_INFO << "\n";
-//    llvm::errs() << getId(D) << "\n";
-//    DumpDeclData(D);
 }
-/*
-void ClangAstDumper::VisitVarDecl(const VarDecl *D) {
-    if(dumpDecl(D)) {
-        return;
-    }
 
-    // Visit children
-    visitChildren(clava::DeclNode::VAR_DECL, D);
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::VAR_DECL, D);
-
-    //VisitVarDeclChildren(D);
-
-    // Old
-    //DumpVarDeclData(D);
-}
-*/
 
 void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     if(dumpDecl(D)) {
@@ -173,16 +157,6 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     }
 
     visitChildrenAndData(D);
-/*
-    // Visit children
-    visitChildren(clava::DeclNode::CXX_RECORD_DECL, D);
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
-*/
-    //VisitCXXRecordDeclChildren(D);
-
-//    llvm::errs() << "CXXRECPRD DECL: " << getId(D) <<  "\n";
 
 #ifdef OLD_OUTPUT
     // Visit definition
@@ -264,80 +238,8 @@ void ClangAstDumper::VisitCXXRecordDecl(const CXXRecordDecl *D) {
     }
 #endif
 
-
-    //for (auto &I : D->redecls()) {
-    //for (auto &I : ((clang::Redeclarable<clang::TagDecl>*) D)->redecls()) {
-    /*
-    for (auto &I : ((clang::Decl*) D)->redecls()) {
-        //llvm::errs() << "REDECLARABLE___:" << getId(I) << "\n";
-        VisitDeclTop(I);
-    }
-     */
-
-    /*
-    // Visit constructors
-    for (auto ctor : D->ctors()) {
-        VisitDeclTop(ctor);
-    }
-     */
-
-
-//    llvm::errs() << "LAMBDA CALL OP:" << D->getLambdaCallOperator() << "\n";
-//    llvm::errs() << "LAMBDA CONTEXT DECL:" << D->getLambdaContextDecl() << "\n";
-
-
-
-    /*
-    // Visit bases
-    for (const auto &I : D->bases()) {
-        llvm::errs() << "BASE:" << &I << "\n";
-    }
-
-    // Visit virtual bases
-    for (const auto &I : D->vbases()) {
-        llvm::errs() << "VBASE:" << &I << "\n";
-    }
-
-    // Visit friends
-    for (const auto &I : D->friends()) {
-        llvm::errs() << "FRIEND:" << &I << "\n";
-    }
-    */
-
 }
 
-
-/*
-void ClangAstDumper::VisitFunctionDecl(const FunctionDecl *D) {
-    if(dumpDecl(D)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::FUNCTION_DECL, D);
-
-    //VisitFunctionDeclChildren(D);
-}
-*/
-
-/*
-void ClangAstDumper::VisitCXXMethodDecl(const CXXMethodDecl *D) {
-    if(dumpDecl(D)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
-
-    //VisitFunctionDeclChildren(D);
-}
- */
 
 void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     if(dumpDecl(D)) {
@@ -345,22 +247,6 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
     }
 
     visitChildrenAndData(D);
-    /*
-    // Visit children
-    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
-
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
-*/
-    //std::vector<std::string> children = VisitFunctionDeclChildren(D);
-
-    /*
-    llvm::errs() << "children:\n";
-    for(auto childId : children) {
-        llvm::errs() << "child: " << childId << "\n";
-    }
-     */
 
 #ifdef OLD_OUTPUT
     // Check if there are CXXCtorInitializers
@@ -381,37 +267,6 @@ void ClangAstDumper::VisitCXXConstructorDecl(const CXXConstructorDecl *D) {
 
 }
 
-/*
-void ClangAstDumper::VisitCXXConversionDecl(const CXXConversionDecl *D) {
-    if(dumpDecl(D)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
-
-    //VisitFunctionDeclChildren(D);
-}
- */
-
-/*
-void ClangAstDumper::VisitCXXDestructorDecl(const CXXDestructorDecl *D) {
-    if(dumpDecl(D)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::DeclNode::FUNCTION_DECL, D);
-
-    // Dump data
-    dataDumper.dump(clava::DeclNode::CXX_METHOD_DECL, D);
-
-    //VisitFunctionDeclChildren(D);
-}
- */
 
 
 void ClangAstDumper::VisitObjCImplementationDecl(const ObjCImplementationDecl *D) {
@@ -449,8 +304,6 @@ void ClangAstDumper::VisitTemplateDecl(const TemplateDecl *D) {
 
     visitChildrenAndData(D);
 
-    // Dump data
-    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 #ifdef OLD_OUTPUT
     dumpNumberTemplateParameters(D, D->getTemplateParameters());
 #endif
@@ -462,9 +315,6 @@ void ClangAstDumper::VisitTemplateTypeParmDecl(const TemplateTypeParmDecl *D) {
     }
 
     visitChildrenAndData(D);
-
-    // Dump data
-    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
 }
 
 void ClangAstDumper::VisitNamespaceAliasDecl(const NamespaceAliasDecl *D) {
@@ -490,18 +340,6 @@ void ClangAstDumper::VisitFieldDecl(const FieldDecl *D) {
     }
 
     visitChildrenAndData(D);
-/*
-    // Dump data
-    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
-
-//    llvm::errs() << "DUMPING FIELD DECL: " << getId(D) << "\n";
-
-    // Dump nested namespace prefix
-    llvm::errs() << DUMP_FIELD_DECL_INFO << "\n";
-    llvm::errs() << clava::getId(D, id) << "\n";
-    llvm::errs() << toBoolString(D->isBitField()) << "\n";
-    llvm::errs() << toBoolString(D->getInClassInitializer() != nullptr) << "\n";
-*/
 }
 
 void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
@@ -510,17 +348,7 @@ void ClangAstDumper::VisitParmVarDecl(const ParmVarDecl *D) {
     }
 
     visitChildrenAndData(D);
-/*
-    // Visit children
-    visitChildren(clava::DeclNode::VAR_DECL, D);
 
-    // Dump data
-    dataDumper.dump(clava::DeclNode::PARM_VAR_DECL, D);
-*/
-    //VisitParmVarDeclChildren(D);
-
-    // Old
-    //DumpVarDeclData(D);
 #ifdef OLD_OUTPUT
     if(D->hasInheritedDefaultArg()) {
         llvm::errs() << DUMP_PARM_VAR_DECL_HAS_INHERITED_DEFAULT_ARG << "\n";
@@ -535,14 +363,5 @@ void ClangAstDumper::VisitTypedefDecl(const TypedefDecl *D) {
     }
 
     visitChildrenAndData(D);
-
-    // Dump data
-    //dataDumper.dump(clava::DeclNode::NAMED_DECL, D);
-
-    // Dump typedef source
-    // TODO: To remove, this is not taking into account code that spans more than one line
-    //llvm::errs() << TYPEDEF_DECL_SOURCE << "\n";
-    //llvm::errs() << clava::getId(D, id) << "\n";
-    //llvm::errs() << loc2str(D->getLocStart(), D->getLocEnd()) << "\n";
 }
 

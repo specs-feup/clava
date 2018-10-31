@@ -21,15 +21,6 @@ void ClangAstDumper::VisitExpr(const Expr *Node) {
     }
 
     visitChildrenAndData(Node);
-    /*
-    // Visit children
-    visitChildren(clava::StmtNode::EXPR, Node);
-
-    // Dump data
-    dataDumper.dump(clava::StmtNode::EXPR, Node);
-*/
-    // Dump type to parse
-    //dumpTopLevelType(Node->getType());
 }
 
 
@@ -85,39 +76,6 @@ void ClangAstDumper::VisitDeclRefExpr(const DeclRefExpr *Node) {
     }
 
     visitChildrenAndData(static_cast<const Expr*>(Node));
-
-    // Dump qualifier
-/*
-    if(Node->getQualifier() != nullptr) {
-        // Can use the stream processor of decl ref expression qualifiers
-        llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
-        Node->getQualifier()->dump();
-        llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
-    }
-*/
-
-
-    // Dump template arguments
-/*
-    if(Node->hasExplicitTemplateArgs()) {
-        llvm::errs() << DUMP_TEMPLATE_ARGS << "\n";
-
-        // Node id
-        llvm::errs() << clava::getId(static_cast<const Expr*>(Node), id) << "\n";
-
-        // Number of template args
-        llvm::errs() << Node->getNumTemplateArgs() << "\n";
-
-        auto templateArgs = Node->getTemplateArgs();
-        for (unsigned i = 0; i < Node->getNumTemplateArgs(); ++i) {
-            auto templateArg = templateArgs + i;
-
-            llvm::errs() << loc2str(templateArg->getSourceRange().getBegin(), templateArg->getSourceRange().getEnd()) << "\n";
-        }
-
-    }
-*/
 }
 
 
@@ -378,33 +336,4 @@ void ClangAstDumper::VisitInitListExpr(const InitListExpr *Node) {
 
 }
 
-//void ClangAstDumper::VisitImplicitCastExpr(const ImplicitCastExpr *Node) {
-/*
-void ClangAstDumper::VisitCastExpr(const CastExpr *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::StmtNode::EXPR, Node);
-
-    // Dump data
-    dataDumper.dump(clava::StmtNode::CAST_EXPR , Node);
-}
- */
-
-/*
-void ClangAstDumper::VisitCharacterLiteral(const CharacterLiteral *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    // Visit children
-    visitChildren(clava::StmtNode::EXPR, Node);
-
-    // Dump data
-    dataDumper.dump(clava::StmtNode::CHARACTER_LITERAL , Node);
-
-}
- */
 
