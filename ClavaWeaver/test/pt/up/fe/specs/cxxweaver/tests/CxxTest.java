@@ -218,6 +218,6 @@ public class CxxTest {
 
     @Test
     public void testFileRebuild() {
-        newTester().test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h");
+        newTester().test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h", "file_rebuild_2.h");
     }
 }
