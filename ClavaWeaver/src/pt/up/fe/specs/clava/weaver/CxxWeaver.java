@@ -1103,8 +1103,28 @@ public class CxxWeaver extends ACxxWeaver {
             rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
         }
 
+        // Write the other translation units and add folder as includes, in case they are needed
+        String currentCodeFoldername = TEMP_WEAVING_FOLDER + "_for_file_rebuild";
+        File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
+
+        // Add include
+        rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");
+
+        for (TranslationUnit otherTUnit : tUnit.getApp().getTranslationUnits()) {
+
+            // Skip self
+            if (otherTUnit == tUnit) {
+                continue;
+            }
+
+            otherTUnit.write(currentCodeFolder);
+        }
+
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
         App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
+
+        // Delete current code folder
+        SpecsIo.deleteFolder(currentCodeFolder);
 
         SpecsCheck.checkArgument(rebuiltApp.getTranslationUnits().size() == 1,
                 () -> "Expected number of translation units to be 1, got " + rebuiltApp.getTranslationUnits().size()
