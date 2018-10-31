@@ -743,10 +743,17 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     public <T extends ClavaNode> T newInstance(boolean keepId, boolean shareData, Class<T> nodeClass,
             List<ClavaNode> children) {
 
+        // System.out.println("NODE CLASS: " + nodeClass);
+        // if (nodeClass.getSimpleName().equals("NullDecl")) {
+        // throw new RuntimeException("STOP");
+        // }
         // DataStore newDataStore = dataI.copy();
 
-        // Use the same datastore
+        // TODO: CHECK IF CANNOT SIMPLY COPY DATA! NEEDS TO AT LEAST SPECIFY DEFINITION OF NEW CLASS
+        // SpecsCheck.checkArgument(nodeClass.isInstance(this), () -> "Expected class to be of same instance");
+        // Use the same data store
         DataStore newDataStore = shareData ? dataI : dataI.copy();
+        // DataStore newDataStore = newDataStore(shareData, nodeClass);
 
         // Set id
         if (!keepId) {
@@ -772,6 +779,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                     Collection.class);
 
             try {
+                // System.out.println("NODE CLASS: " + nodeClass);
+                // System.out.println("CONSTRUCTOR METHOD: " + constructorMethod);
                 return nodeClass.cast(constructorMethod.newInstance(newDataStore, children));
             } catch (Exception e) {
                 throw new RuntimeException("Could not call constructor for ClavaNode", e);
@@ -782,6 +791,19 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
             throw new RuntimeException("Could not create constructor for ClavaNode", e);
         }
     }
+
+    // private <T extends ClavaNode> DataStore newDataStore(boolean shareData, Class<T> nodeClass) {
+    //
+    // if (shareData) {
+    // return dataI;
+    // }
+    //
+    // if (!nodeClass.isInstance(this)) {
+    // return DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true);
+    // }
+    //
+    // return dataI.copy();
+    // }
 
     /**
      * Legacy support.

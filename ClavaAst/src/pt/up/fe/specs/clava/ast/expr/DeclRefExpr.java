@@ -239,6 +239,10 @@ public class DeclRefExpr extends Expr implements Nameable {
 
     // public Optional<? extends Decl> getDeclaration() {
     public ValueDecl getDeclaration() {
+        // System.out.println("DECL: " + get(DECL));
+        // Decl decl = ClavaNodes.normalizeDecl(get(DECL));
+        // System.out.println("NORMALIZED DECL: " + decl);
+
         return (ValueDecl) ClavaNodes.normalizeDecl(get(DECL));
         // return Optional.of(get(DECL));
         /*
