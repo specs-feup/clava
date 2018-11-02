@@ -1,11 +1,11 @@
+#include "clone.h"
 #include <iostream>
 
-class TestClass {
-  
-    void foobar();
-};
+void foo_in_header() {
+	std::cout << "foo_in_header" << std::endl;
+}
 
-void TestClass::foobar() {
+void test::TestClass::foobar() {
     return;
 }
 

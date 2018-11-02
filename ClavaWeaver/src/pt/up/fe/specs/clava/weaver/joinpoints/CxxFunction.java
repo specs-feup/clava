@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -49,7 +48,6 @@ import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -199,22 +197,23 @@ public class CxxFunction extends AFunction {
 
     private AFunction makeCloneAndInsert(String newName, ClavaNode reference) {
 
-        if (function instanceof CXXMethodDecl) {
+        // if (function instanceof CXXMethodDecl) {
+        //
+        // SpecsLogs.msgInfo(
+        // "function " + function.getDeclName() + " is a class method, which is not supported yet for clone");
+        // return null;
+        // }
 
-            SpecsLogs.msgInfo(
-                    "function " + function.getDeclName() + " is a class method, which is not supported yet for clone");
-            return null;
-        }
+        // FunctionDecl newFunc = makeNewFuncDecl(newName);
 
-        FunctionDecl newFunc = makeNewFuncDecl(newName);
-
+        FunctionDecl newFunc = null;
         if (reference instanceof FunctionDecl) {
 
-            NodeInsertUtils.insertAfter(function, newFunc);
-
+            // NodeInsertUtils.insertAfter(function, newFunc);
+            newFunc = function.cloneAndInsert(newName);
         } else if (reference instanceof TranslationUnit) {
-
-            ((TranslationUnit) reference).addChild(newFunc);
+            newFunc = function.cloneAndInsertOnFile(newName, (TranslationUnit) reference);
+            // ((TranslationUnit) reference).addChild(newFunc);
 
         } else {
             throw new IllegalArgumentException(
@@ -233,53 +232,54 @@ public class CxxFunction extends AFunction {
      * @param newName
      * @return
      */
+    /*
     private FunctionDecl makeNewFuncDecl(String newName) {
-
+    
+        // // Get both declaration and definition (if present)
+        // Optional<FunctionDecl> definition2 = function.getDefinition()
+        // .map(def -> ((FunctionDecl) def.copy()).setName(newName));
+        //
+        // Optional<FunctionDecl> declaration = function.getDeclaration()
+        // .map(decl -> ((FunctionDecl) decl.copy()).setName(newName));
+        //
+        // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
+        // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
+    
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
         Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
-
+    
         // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
         // .getDescendants();
         //
         // List<ClavaNode> copiedCasts = definition.getDescendants();
-        /*
-        System.out.println("ORIGINAL CAST:" + originalCasts.get(0));
-        System.out.println("COPIED CAST:" + copiedCasts.get(0));
-        copiedCasts.get(0).setType(new BuiltinType(BuiltinKind.FLOAT));
-        System.out.println("ORIGINAL CAST 2:" + originalCasts.get(0));
-        System.out.println("COPIED CAST 2:" + copiedCasts.get(0));
-        
-        System.out.println("ORIGINAL CAST 2 code:" + originalCasts.get(0).getCode());
-        System.out.println("COPIED CAST 2 code:" + copiedCasts.get(0).getCode());
-        */
-        // for (int i = 0; i < originalCasts.size(); i++) {
-        // if (originalCasts.get(i) == copiedCasts.get(i)) {
-        // System.out.println("FOUND SAME");
-        // }
-        // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
-        // }
-        // System.out.println("FINISH");
-
-        // make a new function declaration with the new name
-
-        // FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
-        // function.getParameters(),
-        // (FunctionType) function.getFunctionType().copy(),
-        // function.getFunctionDeclData(), // check
-        // function.getDeclData(), // check
-        // ClavaNodeInfo.undefinedInfo(), // check
-        // definition);
-
-        FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
-
-        newFunc.setParameters(function.getParameters());
-        if (definition != null) {
+    // for (int i = 0; i < originalCasts.size(); i++) {
+    // if (originalCasts.get(i) == copiedCasts.get(i)) {
+    // System.out.println("FOUND SAME");
+    // }
+    // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
+    // }
+    // System.out.println("FINISH");
+    
+    // make a new function declaration with the new name
+    
+    // FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
+    // function.getParameters(),
+    // (FunctionType) function.getFunctionType().copy(),
+    // function.getFunctionDeclData(), // check
+    // function.getDeclData(), // check
+    // ClavaNodeInfo.undefinedInfo(), // check
+    // definition);
+    
+    FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
+    
+    newFunc.setParameters(function.getParameters());if(definition!=null)
+    {
             newFunc.setBody(definition);
         }
-
-        return newFunc;
-    }
+    
+    return newFunc;
+    }*/
 
     @Override
     public String cloneOnFileImpl(String newName) {

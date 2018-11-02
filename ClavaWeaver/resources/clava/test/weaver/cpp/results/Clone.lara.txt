@@ -1,56 +1,53 @@
+#include "clone.h"
 #include <iostream>
-class TestClass {
-   void foobar();
-};
-void TestClass::foobar() {
-   
-   return;
+void foo_in_header() {
+std::cout << "foo_in_header" << std::endl;
+}
+void new_foo_in_header() {
+std::cout << "foo_in_header" << std::endl;
+}
+void test::TestClass::foobar() {
+return;
+}
+void test::TestClass::new_foobar() {
+return;
 }
 int foo(int ne);
-
 int new_foo(int ne);
-
 int foo(int ne = 0) {
-   
-   return ne + 2;
+return ne + 2;
 }
-
-
 int new_foo(int ne = 0) {
-   
-   return ne + 2;
+return ne + 2;
 }
-
-
 int bar(int ne = 0) try {
-   
-   return ne + 2;
+return ne + 2;
 }
 catch (std::exception const& e) {
-   
-   return 0;
+return 0;
 }
-
-
 int new_bar(int ne = 0) try {
-   
-   return ne + 2;
+return ne + 2;
 }
 catch (std::exception const& e) {
-   
-   return 0;
+return 0;
 }
-
-
 int main() {
-   std::cout << foo(4) << std::endl;
-   
-   return 0;
+std::cout << foo(4) << std::endl;
+return 0;
 }
-
-
 int new_main() {
-   std::cout << foo(4) << std::endl;
-   
-   return 0;
+std::cout << foo(4) << std::endl;
+return 0;
 }
+#ifndef _CLONE_H_
+#define _CLONE_H_
+namespace test {
+class TestClass {
+void foobar();
+void new_foobar();
+};
+}
+void foo_in_header();
+void new_foo_in_header();
+#endif

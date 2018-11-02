@@ -102,7 +102,7 @@ public class CxxTest {
 
     @Test
     public void testClone() {
-        newTester().test("Clone.lara", "clone.cpp");
+        newTester().test("Clone.lara", "clone.cpp", "clone.h");
     }
 
     @Test
