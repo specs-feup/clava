@@ -41,6 +41,10 @@ public abstract class NamedDecl extends Decl {
 
     /// DATAKEYS BEGIN
 
+    /**
+     * @deprecated Should be replaced in the future with QUALIFIED_PREFIX
+     */
+    @Deprecated
     public final static DataKey<String> QUALIFIED_NAME = KeyFactory.string("qualifiedName");
 
     public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
