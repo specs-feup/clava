@@ -32,14 +32,17 @@ import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
  * Represents a function declaration or definition.
@@ -519,13 +522,33 @@ public class FunctionDecl extends DeclaratorDecl {
 
     }
 
-    public void setName(String name) {
+    public FunctionDecl setName(String name) {
         // System.out.println("SETTING NAME:" + get(ID));
         // System.out.println("SETTING NAME OF FUNCTIONDECL " + get(ID));
         // System.out.println("PREVIOUS NAME:" + get(DECL_NAME));
+        String previousName = get(DECL_NAME);
+
         set(DECL_NAME, name);
+
+        // Adapt QualifiedName
+        String qualifiedName = get(QUALIFIED_NAME);
+        SpecsCheck.checkArgument(qualifiedName.endsWith(previousName),
+                () -> "Expected qualified name to end with '" + previousName + "': " + qualifiedName);
+
+        boolean hasColons = qualifiedName.contains("::");
+
+        String qualifiedPrefix = hasColons ? qualifiedName.substring(0, qualifiedName.lastIndexOf("::")) + "::" : "";
+
+        String newQualifiedName = qualifiedPrefix + name;
+        set(QUALIFIED_NAME, newQualifiedName);
+
+        // System.out.println("OLD QUALIFIED NAME: " + qualifiedName);
+        // System.out.println("NEW QUALIFIED NAME: " + newQualifiedName);
+
         // System.out.println("NEW NAME:" + get(DECL_NAME));
         // System.out.println("THIS HASH: " + hashCode());
+
+        return this;
     }
     //
     // public String getName() {
@@ -737,4 +760,58 @@ public class FunctionDecl extends DeclaratorDecl {
     // public SpecsList<String> getSignatureCustomStrings() {
     // return super.getSignatureCustomStrings().andAdd(getSignature());
     // }
+
+    /**
+     * Clones this function (both declaration and definition, if present), and inserts the cloned functions after the
+     * corresponding original functions.
+     * 
+     * @param newName
+     * 
+     * @return the definition or the declaration of the cloned function, according to this node being a definition or a
+     *         declaration.
+     */
+    public FunctionDecl cloneAndInsert(String newName) {
+        return cloneAndInsert(newName, null);
+    }
+
+    public FunctionDecl cloneAndInsertOnFile(String newName, TranslationUnit destinationUnit) {
+        return cloneAndInsert(newName, destinationUnit);
+    }
+
+    private FunctionDecl cloneAndInsert(String newName, TranslationUnit destinationUnit) {
+        // Get both declaration and definition (if present)
+        Optional<FunctionDecl> definition = getDefinition();
+        Optional<FunctionDecl> declaration = getDeclaration();
+
+        Optional<FunctionDecl> newDefinition = definition.map(def -> ((FunctionDecl) def.copy()).setName(newName));
+
+        Optional<FunctionDecl> newDeclaration = declaration.map(decl -> ((FunctionDecl) decl.copy()).setName(newName));
+
+        if (destinationUnit == null) {
+            definition.ifPresent(def -> NodeInsertUtils.insertAfter(def, newDefinition.get()));
+            declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
+        } else {
+            definition.ifPresent(def -> destinationUnit.addChild(newDefinition.get()));
+
+            // Declarationn should still be inserted next to their original declarations
+            declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
+            /*
+            if (this instanceof CXXMethodDecl) {
+                declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
+            } else {
+                declaration.ifPresent(decl -> destinationUnit.addChild(newDeclaration.get()));
+            }
+            */
+
+        }
+
+        // Return corresponding clone
+        if (hasBody()) {
+            return newDefinition.get();
+        } else {
+            return newDeclaration.get();
+        }
+        // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
+        // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
+    }
 }
