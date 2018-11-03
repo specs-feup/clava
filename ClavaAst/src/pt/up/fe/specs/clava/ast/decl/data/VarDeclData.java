@@ -177,7 +177,11 @@ public class VarDeclData {
     }
 
     public Optional<String> getQualifiedName() {
-        return Optional.of(varDeclData2.get(VarDecl.QUALIFIED_NAME));
+        String qualifiedPrefix = varDeclData2.get(VarDecl.QUALIFIED_PREFIX);
+        String qualifiedName = qualifiedPrefix.isEmpty() ? varDeclData2.get(VarDecl.DECL_NAME)
+                : qualifiedPrefix + "::" + varDeclData2.get(VarDecl.DECL_NAME);
+        return Optional.of(qualifiedName);
+        // return Optional.of(varDeclData2.get(VarDecl.QUALIFIED_NAME));
         // return getVarDeclDumperInfo().map(data -> data.getQualifiedName());
     }
 }

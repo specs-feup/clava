@@ -92,7 +92,8 @@ public class RecordType extends TagType {
     }
 
     public String getRecordName() {
-        return getDecl().get(RecordDecl.QUALIFIED_NAME);
+        return getDecl().getQualifiedName();
+        // return getDecl().get(RecordDecl.QUALIFIED_NAME);
         // return recordName;
     }
 

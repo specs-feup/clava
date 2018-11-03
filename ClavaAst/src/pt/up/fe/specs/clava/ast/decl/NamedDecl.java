@@ -41,11 +41,9 @@ public abstract class NamedDecl extends Decl {
 
     /// DATAKEYS BEGIN
 
-    /**
-     * @deprecated Should be replaced in the future with QUALIFIED_PREFIX
-     */
-    @Deprecated
-    public final static DataKey<String> QUALIFIED_NAME = KeyFactory.string("qualifiedName");
+    // public final static DataKey<String> QUALIFIED_NAME = KeyFactory.string("qualifiedName");
+
+    public final static DataKey<String> QUALIFIED_PREFIX = KeyFactory.string("qualifiedPrefix");
 
     public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
 
@@ -232,7 +230,8 @@ public abstract class NamedDecl extends Decl {
     public Optional<String> getNamespace(String recordName) {
 
         // Qualified name has full name
-        String qualifiedName = get(QUALIFIED_NAME);
+        // String qualifiedName = get(QUALIFIED_NAME);
+        String qualifiedName = get(QUALIFIED_PREFIX);
 
         if (qualifiedName.isEmpty()) {
             return Optional.empty();
@@ -242,20 +241,23 @@ public abstract class NamedDecl extends Decl {
             return Optional.empty();
         }
 
+        String currentString = qualifiedName;
+
+        /*
         // Remove decl name
         String declName = "::" + get(DECL_NAME);
         // String declName = get(DECL_NAME);
         SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
                 () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
-
+        
         // String declSuffix = declName;
         // if (qualifiedName.endsWith("::" + declName)) {
         // declSuffix = "::" + declSuffix;
         // }
-
+        
         // String currentString = qualifiedName.substring(0, qualifiedName.length() - declSuffix.length());
         String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
-
+        */
         // Remove template parameters
         int templateParamStart = currentString.indexOf('<');
         if (templateParamStart != -1) {
@@ -295,9 +297,19 @@ public abstract class NamedDecl extends Decl {
         */
     }
 
+    public String getQualifiedName() {
+        String qualifiedPrefix = get(QUALIFIED_PREFIX);
+        if (qualifiedPrefix.isEmpty()) {
+            return get(DECL_NAME);
+        }
+
+        return qualifiedPrefix + "::" + get(DECL_NAME);
+    }
+
     @Override
     public SpecsList<DataKey<?>> getSignatureKeys() {
-        return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_NAME);
+        // return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_NAME);
+        return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_PREFIX);
     }
 
 }

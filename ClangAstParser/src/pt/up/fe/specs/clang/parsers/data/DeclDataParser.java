@@ -96,7 +96,8 @@ public class DeclDataParser {
         // Parse Decl data
         DataStore data = parseDeclData(lines, dataStore);
 
-        data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
+        // data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
+        data.add(NamedDecl.QUALIFIED_PREFIX, lines.nextLine());
         data.add(NamedDecl.DECL_NAME, lines.nextLine());
         data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
 
@@ -157,7 +158,7 @@ public class DeclDataParser {
         if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
             String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
             data.set(NamedDecl.DECL_NAME, anonName);
-            data.set(NamedDecl.QUALIFIED_NAME, anonName);
+            // data.set(NamedDecl.QUALIFIED_NAME, anonName);
 
             // After all nodes are parsed, also set the name of the corresponding decl type
             // dataStore.getClavaNodes()

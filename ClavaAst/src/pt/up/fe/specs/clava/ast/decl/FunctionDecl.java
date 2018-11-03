@@ -39,7 +39,6 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -526,21 +525,23 @@ public class FunctionDecl extends DeclaratorDecl {
         // System.out.println("SETTING NAME:" + get(ID));
         // System.out.println("SETTING NAME OF FUNCTIONDECL " + get(ID));
         // System.out.println("PREVIOUS NAME:" + get(DECL_NAME));
-        String previousName = get(DECL_NAME);
+        // String previousName = get(DECL_NAME);
 
         set(DECL_NAME, name);
 
+        /*
         // Adapt QualifiedName
         String qualifiedName = get(QUALIFIED_NAME);
         SpecsCheck.checkArgument(qualifiedName.endsWith(previousName),
                 () -> "Expected qualified name to end with '" + previousName + "': " + qualifiedName);
-
+        
         boolean hasColons = qualifiedName.contains("::");
-
+        
         String qualifiedPrefix = hasColons ? qualifiedName.substring(0, qualifiedName.lastIndexOf("::")) + "::" : "";
-
+        
         String newQualifiedName = qualifiedPrefix + name;
         set(QUALIFIED_NAME, newQualifiedName);
+        */
 
         // System.out.println("OLD QUALIFIED NAME: " + qualifiedName);
         // System.out.println("NEW QUALIFIED NAME: " + newQualifiedName);

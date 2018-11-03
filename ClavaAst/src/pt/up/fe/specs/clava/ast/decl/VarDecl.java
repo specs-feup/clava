@@ -204,7 +204,8 @@ public class VarDecl extends DeclaratorDecl {
 
         // Check if it is a static member outside of the record
         if (get(IS_STATIC_DATA_MEMBER) && get(IS_OUT_OF_LINE)) {
-            name = get(QUALIFIED_NAME);
+            // name = get(QUALIFIED_NAME);
+            name = getQualifiedName();
         }
 
         return name;
