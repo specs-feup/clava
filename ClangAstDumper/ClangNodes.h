@@ -125,6 +125,7 @@ namespace clava {
         //  void dump(llvm::raw_string_ostream llvmStringStream);
 
 
+    const std::string getQualifiedPrefix(const NamedDecl *D);
 
 
 }

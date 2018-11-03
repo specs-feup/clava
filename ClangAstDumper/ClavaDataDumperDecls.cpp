@@ -182,7 +182,8 @@ void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
     DumpDeclData(D);
 
     // Print information about NamedDecl
-    clava::dump(D->getQualifiedNameAsString());
+    //clava::dump(D->getQualifiedNameAsString());
+    clava::dump(clava::getQualifiedPrefix(D));
     clava::dump(D->getDeclName().getAsString());
     clava::dump(D->getDeclName().getNameKind());
     clava::dump(D->isHidden());

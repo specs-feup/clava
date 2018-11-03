@@ -468,3 +468,49 @@ bool clava::isSystemHeader(const Decl* D, ASTContext* Context) {
     FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
     return fullLocation.isValid() && fullLocation.isInSystemHeader();
 }
+
+/**
+ * Taken from here: https://stackoverflow.com/questions/874134/find-if-string-ends-with-another-string-in-c#874160
+ *
+ * @param str
+ * @param suffix
+ * @return
+ */
+static bool endsWith(const std::string& str, const std::string& suffix)
+{
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
+/**
+ *  Taken from here: https://stackoverflow.com/questions/874134/find-if-string-ends-with-another-string-in-c#874160
+ *
+ * @param str
+ * @param prefix
+ * @return
+ */
+static bool startsWith(const std::string& str, const std::string& prefix)
+{
+    return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
+}
+
+const std::string clava::getQualifiedPrefix(const NamedDecl *D) {
+    const std::string qualifiedName = D->getQualifiedNameAsString();
+    const std::string declName = D->getDeclName().getAsString();
+//llvm::errs() << "QUALIFIED NAME: " << qualifiedName << "\n";
+//    llvm::errs() << "DECL NAME: " << declName << "\n";
+    // If declName is the same as the qualified name, return empty string
+    if(declName == qualifiedName) {
+        return "";
+    }
+
+    // Remove decl name and :: from qualified name
+    const std::string expectedSuffix = "::" + declName;
+    if(!endsWith(qualifiedName, expectedSuffix)) {
+        throw std::invalid_argument("ClangNodes::getQualifiedPrefix(const NamedDecl *): Expected string '"+qualifiedName+"' to have the suffix '" +
+                                            expectedSuffix + "'");
+    }
+
+    int endIndex = qualifiedName.length() - declName.length() - 2;
+
+    return qualifiedName.substr(0, endIndex);
+}
