@@ -1,5 +1,6 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,6 +42,15 @@ public abstract class AParam extends AVardecl {
     @Override
     public AJoinPoint getInitImpl() {
         return this.aVardecl.getInitImpl();
+    }
+
+    /**
+     * Get value on attribute initStyle
+     * @return the attribute's value
+     */
+    @Override
+    public InitializationStyle getInitStyleImpl() {
+        return this.aVardecl.getInitStyleImpl();
     }
 
     /**
@@ -383,6 +393,7 @@ public abstract class AParam extends AVardecl {
     protected enum ParamAttributes {
         HASINIT("hasInit"),
         INIT("init"),
+        INITSTYLE("initStyle"),
         ISPARAM("isParam"),
         STORAGECLASS("storageClass"),
         ISGLOBAL("isGlobal"),

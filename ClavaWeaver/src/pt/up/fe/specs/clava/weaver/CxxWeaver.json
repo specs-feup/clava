@@ -23139,6 +23139,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The initialization style of this vardecl",
+                  "children": [
+                           {
+                              "type": "InitializationStyle",
+                              "name": "initStyle"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.",
                   "children": [
                            {
@@ -36927,6 +36936,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The initialization style of this vardecl",
+                  "children": [
+                           {
+                              "type": "InitializationStyle",
+                              "name": "initStyle"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.",
                   "children": [
                            {
@@ -39996,6 +40014,28 @@
                {
                   "string": "null",
                   "value": "NE"
+               }]
+      },
+      {
+         "type": "enum",
+         "name": "InitializationStyle"
+         ,
+         "children": [
+               {
+                  "string": "null",
+                  "value": "CALL_INIT"
+               },
+               {
+                  "string": "null",
+                  "value": "CINIT"
+               },
+               {
+                  "string": "null",
+                  "value": "LIST_INIT"
+               },
+               {
+                  "string": "null",
+                  "value": "NO_INIT"
                }]
       }]
 }

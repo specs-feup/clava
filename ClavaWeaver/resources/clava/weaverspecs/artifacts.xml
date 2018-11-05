@@ -293,6 +293,7 @@
 	<artifact class="vardecl" default="name">
 		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
 		<attribute name="init" type="joinpoint" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
+		<attribute name="initStyle" type="InitializationStyle" tooltip="The initialization style of this vardecl"/>
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
 		<attribute name="storageClass" type="String"/>
 		<attribute name="isGlobal" type="Boolean" tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function." />
@@ -593,6 +594,12 @@
 		<value name="NE"/>
 	</enum>
 	
+	<enum name="InitializationStyle">	
+		<value name="NO_INIT"/>
+		<value name="CINIT"/>
+		<value name="CALL_INIT"/>
+		<value name="LIST_INIT"/>
+	</enum>
 
 
 </artifacts>

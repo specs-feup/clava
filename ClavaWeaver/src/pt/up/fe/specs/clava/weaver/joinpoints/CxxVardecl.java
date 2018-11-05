@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
+import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -95,5 +96,10 @@ public class CxxVardecl extends AVardecl {
     @Override
     public Boolean getIsGlobalImpl() {
         return varDecl.get(VarDecl.HAS_GLOBAL_STORAGE);
+    }
+
+    @Override
+    public InitializationStyle getInitStyleImpl() {
+        return InitializationStyle.valueOf(varDecl.get(VarDecl.INIT_STYLE).name());
     }
 }

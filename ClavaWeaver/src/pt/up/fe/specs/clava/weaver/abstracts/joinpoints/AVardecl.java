@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import java.util.List;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
@@ -71,6 +72,29 @@ public abstract class AVardecl extends ANamedDecl {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
+        }
+    }
+
+    /**
+     * The initialization style of this vardecl
+     */
+    public abstract InitializationStyle getInitStyleImpl();
+
+    /**
+     * The initialization style of this vardecl
+     */
+    public final Object getInitStyle() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initStyle", Optional.empty());
+        	}
+        	InitializationStyle result = this.getInitStyleImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "initStyle", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "initStyle", e);
         }
     }
 
@@ -455,6 +479,7 @@ public abstract class AVardecl extends ANamedDecl {
         this.aNamedDecl.fillWithAttributes(attributes);
         attributes.add("hasInit");
         attributes.add("init");
+        attributes.add("initStyle");
         attributes.add("isParam");
         attributes.add("storageClass");
         attributes.add("isGlobal");
@@ -506,6 +531,7 @@ public abstract class AVardecl extends ANamedDecl {
     protected enum VardeclAttributes {
         HASINIT("hasInit"),
         INIT("init"),
+        INITSTYLE("initStyle"),
         ISPARAM("isParam"),
         STORAGECLASS("storageClass"),
         ISGLOBAL("isGlobal"),
