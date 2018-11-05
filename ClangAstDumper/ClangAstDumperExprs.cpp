@@ -25,7 +25,7 @@ void ClangAstDumper::VisitExpr(const Expr *Node) {
         currentSystemHeaderLevel++;
     }
 /*
-    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+    if(systemHeaderThreshold > 0 && currentSystemHeaderLevel > systemHeaderThreshold) {
         // Add node as skipped node
         llvm::errs() << SKIPPED_NODES_MAP << "\n";
         llvm::errs() << clava::getId(Node, id) << "\n";

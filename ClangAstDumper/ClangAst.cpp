@@ -420,7 +420,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
         ASTContext *Context = &CI.getASTContext();
 
-        ClangAstDumper dumper(Context, counter);
+        ClangAstDumper dumper(Context, counter, DumpResources::systemHeaderThreshold);
 
         return llvm::make_unique<MyASTConsumer>(Context, counter, dumper);
         //return llvm::make_unique<MyASTConsumer>(Context, counter, &dumper);
@@ -593,6 +593,7 @@ std::ofstream DumpResources::enum_integer_type;
 std::ofstream DumpResources::consumer_order;
 std::ofstream DumpResources::types_with_templates;
 int DumpResources::runId;
+int DumpResources::systemHeaderThreshold;
 
 
 void DumpResources::writeCounter(int id) {
@@ -607,9 +608,10 @@ void DumpResources::writeCounter(int id) {
 
 }
 
-void DumpResources::init(int runId) {
+void DumpResources::init(int runId, int systemLevelThreshold) {
 
     DumpResources::runId = runId;
+    DumpResources::systemHeaderThreshold = systemLevelThreshold;
 
     // Clear files
 #ifdef OLD_OUTPUT

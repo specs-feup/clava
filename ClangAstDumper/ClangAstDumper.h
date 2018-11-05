@@ -10,6 +10,7 @@
 #include "clang/AST/TypeVisitor.h"
 #include "clang/AST/StmtVisitor.h"
 #include "clang/AST/DeclVisitor.h"
+//#include "ClangAst.h"
 
 #include <set>
 #include <string>
@@ -26,7 +27,7 @@ private:
     ASTContext *Context;
     int id;
 
-    int systemHeaderThreashold = 2;
+    int systemHeaderThreshold = 2;
     int currentSystemHeaderLevel = 0;
 
     std::set<const void*> seenTypes;
@@ -46,7 +47,7 @@ private:
 
 
 public:
-    explicit ClangAstDumper(ASTContext *Context, int id);
+    explicit ClangAstDumper(ASTContext *Context, int id, int systemHeaderThreashold);
 
     void VisitTypeTop(const Type *T);
     void VisitTypeTop(const QualType& T);

@@ -24,7 +24,7 @@ using namespace clang;
 class DumpResources {
 
 public:
-    static void init(int runId);
+    static void init(int runId, int systemLevelThreshold);
     static void finish();
 
     static void writeCounter(int set);
@@ -39,6 +39,7 @@ public:
     static std::ofstream consumer_order;
     static std::ofstream types_with_templates;
     static int runId;
+    static int systemHeaderThreshold;
 
 private:
 

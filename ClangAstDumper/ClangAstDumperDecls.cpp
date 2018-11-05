@@ -153,7 +153,7 @@ void ClangAstDumper::VisitDecl(const Decl *D) {
     }
 
     /*
-    if(systemHeaderThreashold > 0 && currentSystemHeaderLevel > systemHeaderThreashold) {
+    if(systemHeaderThreshold > 0 && currentSystemHeaderLevel > systemHeaderThreshold) {
         // Add node as skipped node
         llvm::errs() << SKIPPED_NODES_MAP << "\n";
         llvm::errs() << clava::getId(D, id) << "\n";
