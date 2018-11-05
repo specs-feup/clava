@@ -98,6 +98,24 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Get value on attribute qualifiedPrefix
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedPrefixImpl() {
+        return this.aVardecl.getQualifiedPrefixImpl();
+    }
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedNameImpl() {
+        return this.aVardecl.getQualifiedNameImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -370,6 +388,8 @@ public abstract class AParam extends AVardecl {
         ISGLOBAL("isGlobal"),
         NAME("name"),
         ISPUBLIC("isPublic"),
+        QUALIFIEDPREFIX("qualifiedPrefix"),
+        QUALIFIEDNAME("qualifiedName"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

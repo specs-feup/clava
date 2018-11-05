@@ -30,6 +30,7 @@ public class CxxRecord extends ARecord {
     private final ACxxWeaverJoinPoint parent;
 
     public CxxRecord(RecordDecl recordDecl, ACxxWeaverJoinPoint parent) {
+        super(new CxxNamedDecl(recordDecl, parent));
         this.recordDecl = recordDecl;
         this.parent = parent;
     }
@@ -66,13 +67,13 @@ public class CxxRecord extends ARecord {
         return recordDecl.getTagKind().getCode();
     }
 
-    @Override
-    public void defNameImpl(String value) {
-        recordDecl.setDeclName(value);
-    }
-
-    @Override
-    public void setNameImpl(String name) {
-        defNameImpl(name);
-    }
+    // @Override
+    // public void defNameImpl(String value) {
+    // recordDecl.setDeclName(value);
+    // }
+    //
+    // @Override
+    // public void setNameImpl(String name) {
+    // defNameImpl(name);
+    // }
 }

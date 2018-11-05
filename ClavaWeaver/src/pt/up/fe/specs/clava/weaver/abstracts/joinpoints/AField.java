@@ -44,6 +44,24 @@ public abstract class AField extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute qualifiedPrefix
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedPrefixImpl() {
+        return this.aNamedDecl.getQualifiedPrefixImpl();
+    }
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedNameImpl() {
+        return this.aNamedDecl.getQualifiedNameImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -299,6 +317,8 @@ public abstract class AField extends ANamedDecl {
     protected enum FieldAttributes {
         NAME("name"),
         ISPUBLIC("isPublic"),
+        QUALIFIEDPREFIX("qualifiedPrefix"),
+        QUALIFIEDNAME("qualifiedName"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

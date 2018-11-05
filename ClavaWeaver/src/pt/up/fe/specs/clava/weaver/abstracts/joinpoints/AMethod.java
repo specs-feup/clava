@@ -252,6 +252,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute qualifiedPrefix
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedPrefixImpl() {
+        return this.aFunction.getQualifiedPrefixImpl();
+    }
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedNameImpl() {
+        return this.aFunction.getQualifiedNameImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -647,6 +665,8 @@ public abstract class AMethod extends AFunction {
         SIGNATURE("signature"),
         NAME("name"),
         ISPUBLIC("isPublic"),
+        QUALIFIEDPREFIX("qualifiedPrefix"),
+        QUALIFIEDNAME("qualifiedName"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

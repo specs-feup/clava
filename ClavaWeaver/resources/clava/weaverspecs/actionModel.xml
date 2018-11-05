@@ -135,10 +135,11 @@
 	<!-- RECORD -->
 
 	<!-- Adds an include to the file -->
+	<!--  
 	<action name="setName" class="record">
 		<parameter name="name" type="string" />
 	</action>
-
+ 	-->
 
 	<!-- CALL -->
 	<!-- Changes the name of the call -->

@@ -25,6 +25,7 @@ public abstract class AClass extends ARecord {
      * 
      */
     public AClass(ARecord aRecord){
+        super(aRecord);
         this.aRecord = aRecord;
     }
     /**
@@ -69,15 +70,6 @@ public abstract class AClass extends ARecord {
     public abstract List<? extends AMethod> selectMethod();
 
     /**
-     * Get value on attribute name
-     * @return the attribute's value
-     */
-    @Override
-    public String getNameImpl() {
-        return this.aRecord.getNameImpl();
-    }
-
-    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -102,6 +94,42 @@ public abstract class AClass extends ARecord {
     @Override
     public List<? extends AField> selectField() {
         return this.aRecord.selectField();
+    }
+
+    /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aRecord.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute isPublic
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPublicImpl() {
+        return this.aRecord.getIsPublicImpl();
+    }
+
+    /**
+     * Get value on attribute qualifiedPrefix
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedPrefixImpl() {
+        return this.aRecord.getQualifiedPrefixImpl();
+    }
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    @Override
+    public String getQualifiedNameImpl() {
+        return this.aRecord.getQualifiedNameImpl();
     }
 
     /**
@@ -238,15 +266,6 @@ public abstract class AClass extends ARecord {
 
     /**
      * 
-     * @param name 
-     */
-    @Override
-    public void setNameImpl(String name) {
-        this.aRecord.setNameImpl(name);
-    }
-
-    /**
-     * 
      * @param position 
      * @param code 
      */
@@ -367,9 +386,12 @@ public abstract class AClass extends ARecord {
      */
     protected enum ClassAttributes {
         METHODS("methods"),
-        NAME("name"),
         KIND("kind"),
         FIELDS("fields"),
+        NAME("name"),
+        ISPUBLIC("isPublic"),
+        QUALIFIEDPREFIX("qualifiedPrefix"),
+        QUALIFIEDNAME("qualifiedName"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

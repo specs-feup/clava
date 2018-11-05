@@ -5326,8 +5326,32 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Boolean",
+                              "name": "isPublic"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -5751,6 +5775,7 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
                   "children": [
                            {
                               "type": "void",
@@ -8583,6 +8608,22 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String[]",
                               "name": "attributes"
                            }]
@@ -10057,6 +10098,22 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String[]",
                               "name": "attributes"
                            }]
@@ -11382,6 +11439,22 @@
                            {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -13160,6 +13233,22 @@
                            {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -19775,6 +19864,22 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String[]",
                               "name": "attributes"
                            }]
@@ -20574,6 +20679,22 @@
                            {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -23056,6 +23177,22 @@
                            {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -27697,7 +27834,7 @@
       {
          "type": "joinpoint",
          "name": "record",
-         "extends": "joinpoint"      ,
+         "extends": "namedDecl"      ,
          "children": [
                {
                   "type": "attribute",
@@ -27719,8 +27856,32 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Boolean",
+                              "name": "isPublic"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -28139,6 +28300,7 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
                   "children": [
                            {
                               "type": "void",
@@ -30032,8 +30194,32 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Boolean",
+                              "name": "isPublic"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {
@@ -30452,6 +30638,7 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the name of this namedDecl",
                   "children": [
                            {
                               "type": "void",
@@ -33841,6 +34028,22 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String[]",
                               "name": "attributes"
                            }]
@@ -36762,6 +36965,22 @@
                            {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix"
                            }]
                },
                {

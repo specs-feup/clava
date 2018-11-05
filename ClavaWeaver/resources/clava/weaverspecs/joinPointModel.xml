@@ -45,7 +45,7 @@
 	</joinpoint>
 	
 	<!-- RECORD -->
-	<joinpoint class="record">
+	<joinpoint class="record" extends="namedDecl">
 		<select 	class="field"/>		
 	</joinpoint>
 	

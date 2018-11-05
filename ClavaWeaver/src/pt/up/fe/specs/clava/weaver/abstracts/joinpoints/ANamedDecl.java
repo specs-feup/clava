@@ -85,6 +85,56 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * Get value on attribute qualifiedPrefix
+     * @return the attribute's value
+     */
+    public abstract String getQualifiedPrefixImpl();
+
+    /**
+     * Get value on attribute qualifiedPrefix
+     * @return the attribute's value
+     */
+    public final Object getQualifiedPrefix() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiedPrefix", Optional.empty());
+        	}
+        	String result = this.getQualifiedPrefixImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedPrefix", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "qualifiedPrefix", e);
+        }
+    }
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    public abstract String getQualifiedNameImpl();
+
+    /**
+     * Get value on attribute qualifiedName
+     * @return the attribute's value
+     */
+    public final Object getQualifiedName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiedName", Optional.empty());
+        	}
+        	String result = this.getQualifiedNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedName", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "qualifiedName", e);
+        }
+    }
+
+    /**
      * Sets the name of this namedDecl
      * @param name 
      */
@@ -307,6 +357,8 @@ public abstract class ANamedDecl extends ADecl {
         this.aDecl.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("isPublic");
+        attributes.add("qualifiedPrefix");
+        attributes.add("qualifiedName");
     }
 
     /**
@@ -353,6 +405,8 @@ public abstract class ANamedDecl extends ADecl {
     protected enum NamedDeclAttributes {
         NAME("name"),
         ISPUBLIC("isPublic"),
+        QUALIFIEDPREFIX("qualifiedPrefix"),
+        QUALIFIEDNAME("qualifiedName"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
