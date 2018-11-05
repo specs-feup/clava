@@ -25,4 +25,8 @@ public class EmptyDecl extends Decl {
         super(data, children);
     }
 
+    @Override
+    public String getCode() {
+        return "";
+    }
 }
