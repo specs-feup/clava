@@ -163,8 +163,8 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     }
     */
 
-    @Override
-    public String toString() {
-        return "ClavaContext:" + Integer.toString(hashCode());
-    }
+    // @Override
+    // public String toString() {
+    // return "ClavaContext:" + Integer.toString(hashCode());
+    // }
 }

@@ -52,6 +52,10 @@ public interface CxxWeaverOption {
             .setLabel("System Includes")
             .setDefault(() -> FileList.newInstance());
 
+    // DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold")
+    // .setLabel("System Includes parsing threshold (0 parses all system include headers found)")
+    // .setDefault(() -> 1);
+
     DataKey<Boolean> DISABLE_WEAVING = KeyFactory.bool("Disable Weaving")
             .setLabel("Disable weaving (only executes the LARA code, does not parse C/C++ code)");
 
@@ -72,8 +76,9 @@ public interface CxxWeaverOption {
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
-                    HEADER_INCLUDES, SKIP_HEADER_INCLUDES_PARSING, SYSTEM_INCLUDES, DISABLE_WEAVING,
-                    DISABLE_CODE_GENERATION,
+                    HEADER_INCLUDES, SKIP_HEADER_INCLUDES_PARSING, SYSTEM_INCLUDES,
+                    ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
+                    DISABLE_WEAVING, DISABLE_CODE_GENERATION,
                     // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
                     GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)

@@ -74,6 +74,12 @@ public class ParallelCodeParser extends CodeParser {
     public static final DataKey<Integer> PARSING_NUM_THREADS = KeyFactory.integer("parsingNumThreads", 1)
             .setLabel("Number of threads to use for parallel parsing");
 
+    public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
+            .setLabel("System Includes parsing threshold (0 parses all system include headers found)");
+
+    // public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
+    // .setLabel("Number of threads to use for parallel parsing");
+
     /// DATAKEY END
 
     @Override
@@ -310,9 +316,11 @@ public class ParallelCodeParser extends CodeParser {
         // Disable streaming of console output if parsing is to be done in parallel
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
+
         ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
                 streamConsoleOutput, clangExecutable, builtinIncludes)
-                        .setBaseFolder(parsingFolder);
+                        .setBaseFolder(parsingFolder)
+                        .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);

@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
@@ -77,6 +78,7 @@ public class AstDumpParser implements ClangParser {
     // private boolean usePlatformLibc;
     private File clangExecutable;
     private List<String> builtinIncludes;
+    private int systemIncludesThreshold;
 
     // public AstDumpParser() {
     // this(false, false, true);
@@ -95,6 +97,7 @@ public class AstDumpParser implements ClangParser {
         this.workingFolders = new ArrayList<>();
         this.lastWorkingFolder = null;
         this.baseFolder = null;
+        this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         // this.usePlatformLibc = false;
         // context = new ClavaContext();
     }
@@ -107,6 +110,11 @@ public class AstDumpParser implements ClangParser {
     @Override
     public AstDumpParser setBaseFolder(File baseFolder) {
         this.baseFolder = baseFolder;
+        return this;
+    }
+
+    public AstDumpParser setSystemIncludesThreshold(int systemIncludesThreshold) {
+        this.systemIncludesThreshold = systemIncludesThreshold;
         return this;
     }
 
@@ -164,6 +172,8 @@ public class AstDumpParser implements ClangParser {
 
         // int id = nextId();
         arguments.add("-id=" + id);
+
+        arguments.add("-system-header-threshold=" + systemIncludesThreshold);
 
         arguments.add("--");
 
