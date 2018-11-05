@@ -496,12 +496,20 @@ static bool startsWith(const std::string& str, const std::string& prefix)
 const std::string clava::getQualifiedPrefix(const NamedDecl *D) {
     const std::string qualifiedName = D->getQualifiedNameAsString();
     const std::string declName = D->getDeclName().getAsString();
-//llvm::errs() << "QUALIFIED NAME: " << qualifiedName << "\n";
-//    llvm::errs() << "DECL NAME: " << declName << "\n";
+    //llvm::errs() << "QUALIFIED NAME: " << qualifiedName << "\n";
+    //llvm::errs() << "DECL NAME: " << declName << "\n";
+
+    // If declName is empty, return empty string
+    if(declName.empty()) {
+        return "";
+    }
+
     // If declName is the same as the qualified name, return empty string
     if(declName == qualifiedName) {
         return "";
     }
+
+
 
     // Remove decl name and :: from qualified name
     const std::string expectedSuffix = "::" + declName;
