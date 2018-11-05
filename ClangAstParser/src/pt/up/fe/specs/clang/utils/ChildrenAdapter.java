@@ -83,6 +83,11 @@ public class ChildrenAdapter {
     }
 
     public List<ClavaNode> adaptChildren(ClavaNode node, List<ClavaNode> children) {
+        // If no children, just return list
+        if (children.isEmpty()) {
+            return children;
+        }
+
         // Replace NullNodeOld instances with NullNode
         List<ClavaNode> adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
                 node, children);
