@@ -99,7 +99,7 @@ public class ParallelCodeParser extends CodeParser {
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
         // ConcurrentLinkedQueue<File> workingFolders = new ConcurrentLinkedQueue<>();
 
-        DataStore options = ClavaOptions.toDataStore(compilerOptions);
+        DataStore options = ClangAstKeys.toDataStore(compilerOptions);
 
         // Add context to config
         // ClavaContext context = new ClavaContext();
@@ -206,7 +206,7 @@ public class ParallelCodeParser extends CodeParser {
         app.getContext().pushApp(app);
 
         app.setSourcesFromStrings(allSources);
-        app.addConfig(ClavaOptions.toDataStore(compilerOptions));
+        app.addConfig(ClangAstKeys.toDataStore(compilerOptions));
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);

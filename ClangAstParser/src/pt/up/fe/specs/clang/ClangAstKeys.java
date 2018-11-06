@@ -13,8 +13,17 @@
 
 package pt.up.fe.specs.clang;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+
+import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaOptions;
+import pt.up.fe.specs.clava.language.Standard;
 
 public interface ClangAstKeys {
 
@@ -25,5 +34,51 @@ public interface ClangAstKeys {
      */
     DataKey<Boolean> USE_PLATFORM_INCLUDES = KeyFactory.bool("platformIncludes")
             .setLabel("Uses the platform system includes headers (if available)");
+
+    /**
+     * Transform flags to the ClangAstDumper into a DataStore.
+     * 
+     * @param flags
+     * @return
+     */
+    static DataStore toDataStore(List<String> flags) {
+        DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
+        final String stdPrefix = "-std=";
+        final String clangAstDumperPrefix = "-clang-dumper=";
+
+        // Search options
+        List<String> parsedFlags = new ArrayList<>();
+        for (int i = 0; i < flags.size(); i++) {
+            String flag = flags.get(i);
+
+            // If standard flag, add option
+            if (flag.startsWith(stdPrefix)) {
+                Standard standard = Standard.getEnumHelper().getValuesTranslationMap()
+                        .get(flag.substring(stdPrefix.length()));
+
+                if (config.hasValue(ClavaOptions.STANDARD)) {
+                    ClavaLog.info("Overriding previous standard " + config.get(ClavaOptions.STANDARD) + " with "
+                            + standard);
+                }
+
+                config.set(ClavaOptions.STANDARD, standard);
+
+                continue;
+            }
+
+            // If ClangAstDumper version, parse option
+            if (flag.startsWith(clangAstDumperPrefix)) {
+                String version = flag.substring(clangAstDumperPrefix.length());
+                config.set(ClangAstKeys.CLANGAST_VERSION, version);
+                continue;
+            }
+
+            parsedFlags.add(flag);
+        }
+
+        config.add(ClavaOptions.FLAGS, parsedFlags.stream().collect(Collectors.joining(" ")));
+
+        return config;
+    }
 
 }

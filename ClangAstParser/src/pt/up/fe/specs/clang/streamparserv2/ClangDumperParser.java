@@ -78,7 +78,7 @@ public class ClangDumperParser {
 
     public App parse(Collection<String> files, List<String> options) {
 
-        return parse(files, ClavaOptions.toDataStore(options));
+        return parse(files, ClangAstKeys.toDataStore(options));
     }
 
     public App parse(Collection<String> files, DataStore config) {

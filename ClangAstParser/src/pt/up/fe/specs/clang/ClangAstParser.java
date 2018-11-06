@@ -143,7 +143,7 @@ public class ClangAstParser {
 
     public ClangRootNode parse(Collection<String> files, List<String> options) {
 
-        ClangRootNode output = parse(files, ClavaOptions.toDataStore(options));
+        ClangRootNode output = parse(files, ClangAstKeys.toDataStore(options));
 
         return output;
     }
