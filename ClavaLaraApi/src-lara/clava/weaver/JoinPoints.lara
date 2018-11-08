@@ -6,36 +6,51 @@ JoinPoints.prototype.root = function() {
 	return Clava.getProgram();
 }
 
-JoinPoints.prototype.children = function($jp) {
+JoinPoints.prototype.children = function($jp, jpType) {
 	if($jp === undefined) {
 		return [];
 	}
 	
 	Check.isJoinPoint($jp);
-	return $jp.astChildren;
-	//return this._filterNodes($jp.astChildren);
+	
+	var children = $jp.astChildren;
+	if(jpType === undefined) {
+		return children;
+	}
+	
+	//return $jp.astChildren;
+	return this._filterNodes(children, jpType);
 }
 
-JoinPoints.prototype.descendants = function($jp) {
+JoinPoints.prototype.descendants = function($jp, jpType) {
 	if($jp === undefined) {
 		return [];
 	}
 	
+	var descendants = $jp.descendants;
+	if(jpType === undefined) {
+		return descendants;
+	}	
+	
 	Check.isJoinPoint($jp);
-	return $jp.descendants;
-	//return this._filterNodes($jp.descendants);
+	//return $jp.descendants;
+	return this._filterNodes(descendants, jpType);
 }
 
-/*
-JoinPoints.prototype._filterNodes = function($jps) {
+
+JoinPoints.prototype._filterNodes = function($jps, jpType) {
 
 	var filteredJps = [];
 	
 	for(var $jp of $jps) {
-		// Skip null nodes
-		if($jp === undefined) {
+	
+		if(!$jp.instanceOf(jpType)) {
 			continue;
 		}
+		// Skip null nodes
+		//if($jp === undefined) {
+		//	continue;
+		//}
 		
 		filteredJps.push($jp);
 	}
@@ -43,4 +58,3 @@ JoinPoints.prototype._filterNodes = function($jps) {
 	return filteredJps;
 
 }
-*/
