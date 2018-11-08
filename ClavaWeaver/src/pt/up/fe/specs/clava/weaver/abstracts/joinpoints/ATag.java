@@ -373,6 +373,7 @@ public abstract class ATag extends APragma {
         ASTID("astId"),
         GETVALUE("getValue"),
         CONTAINS("contains"),
+        FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),

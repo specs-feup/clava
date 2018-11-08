@@ -1415,6 +1415,7 @@ public abstract class AOmp extends APragma {
         ASTID("astId"),
         GETVALUE("getValue"),
         CONTAINS("contains"),
+        FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),

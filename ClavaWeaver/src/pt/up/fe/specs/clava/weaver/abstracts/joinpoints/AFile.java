@@ -875,6 +875,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         ASTID("astId"),
         GETVALUE("getValue"),
         CONTAINS("contains"),
+        FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),

@@ -251,6 +251,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -958,6 +971,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -1768,6 +1794,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -2536,6 +2575,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -3376,6 +3428,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -4261,6 +4326,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -5074,6 +5152,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -5794,6 +5885,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -6485,6 +6589,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -7140,6 +7257,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -7837,6 +7967,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -8497,6 +8640,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -9196,6 +9352,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -10008,6 +10177,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -10746,6 +10928,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -11453,6 +11648,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -12145,6 +12353,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -12930,6 +13151,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -13999,6 +14233,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -14954,6 +15201,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -15718,6 +15978,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -16503,6 +16776,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -17325,6 +17611,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -18311,6 +18610,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -19061,6 +19373,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -19916,6 +20241,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -20848,6 +21186,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -21697,6 +22048,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -22400,6 +22764,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -23271,6 +23648,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -24288,6 +24678,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -25110,6 +25513,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -25959,6 +26375,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -26699,6 +27128,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -27482,6 +27924,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -28391,6 +28846,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -29145,6 +29613,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -29885,6 +30366,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -30795,6 +31289,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -31567,6 +32074,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -32275,6 +32795,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -33095,6 +33628,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -33959,6 +34505,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -34787,6 +35346,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -35521,6 +36093,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -36272,6 +36857,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -37003,6 +37601,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -37798,6 +38409,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -38585,6 +39209,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {
@@ -39431,6 +40068,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -40228,6 +40878,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Object",
@@ -40933,6 +41596,19 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
                            }]
                },
                {

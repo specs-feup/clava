@@ -338,6 +338,7 @@ public abstract class ADeleteExpr extends AExpression {
         ASTID("astId"),
         GETVALUE("getValue"),
         CONTAINS("contains"),
+        FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),

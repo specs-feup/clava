@@ -438,6 +438,7 @@ public abstract class ANamedDecl extends ADecl {
         ASTID("astId"),
         GETVALUE("getValue"),
         CONTAINS("contains"),
+        FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),

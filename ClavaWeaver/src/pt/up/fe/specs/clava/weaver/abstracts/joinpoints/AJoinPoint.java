@@ -475,6 +475,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("contains(AJoinPoint jp)");
         attributes.add("hasParent");
         attributes.add("hasAstParent");
+        attributes.add("firstJp(String type)");
         attributes.add("line");
         attributes.add("column");
         attributes.add("endLine");
@@ -844,6 +845,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasAstParent", e);
+        }
+    }
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public abstract AJoinPoint firstJpImpl(String type);
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public final Object firstJp(String type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstJp", Optional.empty(), type);
+        	}
+        	AJoinPoint result = this.firstJpImpl(type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "firstJp", Optional.ofNullable(result), type);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "firstJp", e);
         }
     }
 

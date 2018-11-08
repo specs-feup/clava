@@ -972,4 +972,26 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         return def.getKey(key).getValueClass();
     }
+
+    @Override
+    public AJoinPoint firstJpImpl(String type) {
+        AJoinPoint firstJp = getNode().getDescendantsStream()
+                .map(descendant -> CxxJoinpoints.create(descendant, null))
+                .filter(jp -> jp != null && jp.getJoinpointTypeImpl().equals(type))
+                .findFirst()
+                .orElse(null);
+
+        if (firstJp == null) {
+            ClavaLog.debug("Could not find a join point '" + type + "' inside the node at " + getNode().getLocation());
+        }
+
+        return firstJp;
+        // for (AJoinPoint descendant : getDescendantsArrayImpl()) {
+        // if (descendant.getJoinPointType().equals(type)) {
+        // return descendant;
+        // }
+        // }
+        //
+        // return null;
+    }
 }
