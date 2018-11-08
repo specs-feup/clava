@@ -160,6 +160,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -220,6 +229,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -348,6 +375,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -843,6 +871,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -903,6 +940,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -1031,6 +1086,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -1621,6 +1677,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -1681,6 +1746,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -1809,6 +1892,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -2365,6 +2449,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -2425,6 +2518,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -2553,6 +2664,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -3177,6 +3289,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -3237,6 +3358,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -3365,6 +3504,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -4030,6 +4170,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -4090,6 +4239,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -4218,6 +4385,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -4815,6 +4983,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -4875,6 +5052,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -5003,6 +5198,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -5507,6 +5703,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -5567,6 +5772,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -5695,6 +5918,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -6170,6 +6394,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6230,6 +6463,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -6358,6 +6609,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -6801,6 +7053,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6861,6 +7122,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -6989,6 +7268,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -7466,6 +7746,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -7526,6 +7815,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -7654,6 +7961,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -8102,6 +8410,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -8162,6 +8479,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -8290,6 +8625,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -8773,6 +9109,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -8833,6 +9178,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -8961,6 +9324,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -9553,6 +9917,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -9613,6 +9986,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -9741,6 +10132,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -10263,6 +10655,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -10323,6 +10724,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -10451,6 +10870,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -10942,6 +11362,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -11002,6 +11431,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -11130,6 +11577,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -11610,6 +12058,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -11670,6 +12127,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -11798,6 +12273,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -12367,6 +12843,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -12427,6 +12912,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -12555,6 +13058,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -13404,6 +13908,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -13464,6 +13977,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -13592,6 +14123,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -14331,6 +14863,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -14391,6 +14932,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -14519,6 +15078,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -15071,6 +15631,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -15131,6 +15700,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -15259,6 +15846,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -15828,6 +16416,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -15888,6 +16485,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -16016,6 +16631,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -16622,6 +17238,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -16682,6 +17307,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -16810,6 +17453,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -17576,6 +18220,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -17636,6 +18289,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -17764,6 +18435,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -18302,6 +18974,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -18362,6 +19043,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -18490,6 +19189,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -19129,6 +19829,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -19189,6 +19898,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -19317,6 +20044,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -20029,6 +20757,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -20089,6 +20826,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -20217,6 +20972,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -20850,6 +21606,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -20910,6 +21675,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -21038,6 +21821,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -21529,6 +22313,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -21589,6 +22382,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -21717,6 +22528,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -22372,6 +23184,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -22432,6 +23253,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -22560,6 +23399,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -23357,6 +24197,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -23417,6 +24266,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -23545,6 +24412,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -24155,6 +25023,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -24215,6 +25092,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -24343,6 +25238,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -24972,6 +25868,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -25032,6 +25937,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -25160,6 +26083,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -25688,6 +26612,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -25748,6 +26681,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -25876,6 +26827,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -26443,6 +27395,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -26503,6 +27464,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -26631,6 +27610,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -27320,6 +28300,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -27380,6 +28369,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -27508,6 +28515,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -28046,6 +29054,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -28106,6 +29123,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -28234,6 +29269,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -28762,6 +29798,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -28822,6 +29867,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -28950,6 +30013,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -29640,6 +30704,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -29700,6 +30773,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -29828,6 +30919,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -30384,6 +31476,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -30444,6 +31545,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -30572,6 +31691,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -31068,6 +32188,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -31128,6 +32257,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -31256,6 +32403,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -31860,6 +33008,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -31920,6 +33077,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -32048,6 +33223,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -32692,6 +33868,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -32752,6 +33937,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -32880,6 +34083,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -33492,6 +34696,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -33552,6 +34765,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -33680,6 +34911,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -34202,6 +35434,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -34262,6 +35503,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -34390,6 +35649,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -34921,6 +36181,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -34981,6 +36250,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -35109,6 +36396,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -35628,6 +36916,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -35688,6 +36985,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -35816,6 +37131,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -36391,6 +37707,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -36451,6 +37776,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -36579,6 +37922,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -37154,6 +38498,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -37214,6 +38567,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -37342,6 +38713,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -37968,6 +39340,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -38028,6 +39409,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -38156,6 +39555,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -38737,6 +40137,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -38797,6 +40206,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -38925,6 +40352,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",
@@ -39418,6 +40846,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -39478,6 +40915,24 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
                            }]
                },
                {
@@ -39606,6 +41061,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
                   "children": [
                            {
                               "type": "Integer",

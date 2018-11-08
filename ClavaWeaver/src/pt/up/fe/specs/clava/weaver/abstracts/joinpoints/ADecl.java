@@ -83,7 +83,9 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum DeclAttributes {
+        ENDLINE("endLine"),
         PARENT("parent"),
+        ENDCOLUMN("endColumn"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
@@ -105,6 +107,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
         HASASTPARENT("hasAstParent"),
+        COLUMN("column"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

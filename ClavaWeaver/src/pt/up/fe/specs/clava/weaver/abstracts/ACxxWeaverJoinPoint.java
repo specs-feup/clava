@@ -19,7 +19,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.SourceLocation;
+import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -265,8 +265,29 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public Integer getLineImpl() {
         // ClavaNode node = getNode();
         // Preconditions.checkNotNull(node);
-        int line = getNode().getLocation().getStartLine();
-        return line != SourceLocation.getInvalidLoc() ? line : null;
+        // int line = getNode().getLocation().getStartLine();
+        // return line != SourceLocation.getInvalidLoc() ? line : null;
+        SourceRange location = getNode().getLocation();
+        return location.isValid() ? location.getStartLine() : null;
+
+    }
+
+    @Override
+    public Integer getColumnImpl() {
+        SourceRange location = getNode().getLocation();
+        return location.isValid() ? location.getStartCol() : null;
+    }
+
+    @Override
+    public Integer getEndLineImpl() {
+        SourceRange location = getNode().getLocation();
+        return location.isValid() ? location.getEndLine() : null;
+    }
+
+    @Override
+    public Integer getEndColumnImpl() {
+        SourceRange location = getNode().getLocation();
+        return location.isValid() ? location.getEndCol() : null;
     }
 
     @Override

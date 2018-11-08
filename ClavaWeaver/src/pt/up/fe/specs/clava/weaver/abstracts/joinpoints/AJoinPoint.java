@@ -476,6 +476,9 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("hasParent");
         attributes.add("hasAstParent");
         attributes.add("line");
+        attributes.add("column");
+        attributes.add("endLine");
+        attributes.add("endColumn");
         attributes.add("location");
         attributes.add("astId");
         attributes.add("ast");
@@ -845,14 +848,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute line
-     * @return the attribute's value
+     * The starting line of the current node in the original code
      */
     public abstract Integer getLineImpl();
 
     /**
-     * Get value on attribute line
-     * @return the attribute's value
+     * The starting line of the current node in the original code
      */
     public final Object getLine() {
         try {
@@ -866,6 +867,75 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "line", e);
+        }
+    }
+
+    /**
+     * The starting column of the current node in the original code
+     */
+    public abstract Integer getColumnImpl();
+
+    /**
+     * The starting column of the current node in the original code
+     */
+    public final Object getColumn() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "column", Optional.empty());
+        	}
+        	Integer result = this.getColumnImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "column", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "column", e);
+        }
+    }
+
+    /**
+     * The ending line of the current node in the original code
+     */
+    public abstract Integer getEndLineImpl();
+
+    /**
+     * The ending line of the current node in the original code
+     */
+    public final Object getEndLine() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endLine", Optional.empty());
+        	}
+        	Integer result = this.getEndLineImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "endLine", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "endLine", e);
+        }
+    }
+
+    /**
+     * The ending column of the current node in the original code
+     */
+    public abstract Integer getEndColumnImpl();
+
+    /**
+     * The ending column of the current node in the original code
+     */
+    public final Object getEndColumn() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "endColumn", Optional.empty());
+        	}
+        	Integer result = this.getEndColumnImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "endColumn", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "endColumn", e);
         }
     }
 

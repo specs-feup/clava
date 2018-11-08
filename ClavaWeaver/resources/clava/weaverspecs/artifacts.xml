@@ -40,7 +40,10 @@
 		</attribute>
 		<attribute name="hasParent" type="boolean" />
 		<attribute name="hasAstParent" type="boolean" />
-		<attribute name="line" type="Integer" />
+		<attribute name="line" type="Integer" tooltip="The starting line of the current node in the original code"/>
+		<attribute name="column" type="Integer" tooltip="The starting column of the current node in the original code"/>
+		<attribute name="endLine" type="Integer" tooltip="The ending line of the current node in the original code"/>
+		<attribute name="endColumn" type="Integer" tooltip="The ending column of the current node in the original code"/>		
 		<attribute name="location" type="String" />
 		<attribute name="astId" type="String" />
 		<attribute name="ast" type="String" />

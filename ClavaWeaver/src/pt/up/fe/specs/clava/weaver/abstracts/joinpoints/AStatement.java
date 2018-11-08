@@ -269,7 +269,9 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     protected enum StatementAttributes {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
+        ENDLINE("endLine"),
         PARENT("parent"),
+        ENDCOLUMN("endColumn"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
@@ -291,6 +293,7 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
         HASASTPARENT("hasAstParent"),
+        COLUMN("column"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),

@@ -112,7 +112,9 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
      */
     protected enum CommentAttributes {
         TEXT("text"),
+        ENDLINE("endLine"),
         PARENT("parent"),
+        ENDCOLUMN("endColumn"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
         CODE("code"),
@@ -134,6 +136,7 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         CURRENTREGION("currentRegion"),
         ANCESTOR("ancestor"),
         HASASTPARENT("hasAstParent"),
+        COLUMN("column"),
         ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
         ASTNAME("astName"),
