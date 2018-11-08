@@ -104,7 +104,8 @@ public class CxxWeaverOptions {
                 "#threads", "Sets the number of threads for parallel parsing");
 
         addBooleanOption(ClangAstKeys.USE_PLATFORM_INCLUDES, "psi", "platform-includes",
-                "Uses the platform system includes headers (if available)");
+                // "Uses the platform system includes headers (if available)");
+                "Disable built-in lib C/C++ includes");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,

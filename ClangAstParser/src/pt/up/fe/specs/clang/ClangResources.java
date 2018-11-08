@@ -139,6 +139,10 @@ public class ClangResources {
 
     public List<String> prepareIncludes(File clangExecutable, boolean usePlatformIncludes) {
 
+        if (usePlatformIncludes) {
+            return Collections.emptyList();
+        }
+
         File resourceFolder = getClangResourceFolder();
 
         File includesBaseFolder = SpecsIo.mkdir(resourceFolder, "clang_includes");
@@ -188,14 +192,16 @@ public class ClangResources {
     }
 
     private boolean useBuiltinLibc(File clangExecutable, boolean usePlatformIncludes) {
-
-        // If platform includes is disable, always use built-in headers
+        return !usePlatformIncludes;
+        /*
+        // If platform includes is disabled, always use built-in headers
         if (!usePlatformIncludes) {
             return true;
         }
-
+        
         // If headers of both libc and libc++ are available, do not use built-in libc
         return !hasLibC(clangExecutable);
+        */
     }
 
     /**

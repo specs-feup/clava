@@ -33,7 +33,8 @@ public interface ClangAstKeys {
      * If true, tries to use the platform system includes (if available), instead of the built-in system includes.
      */
     DataKey<Boolean> USE_PLATFORM_INCLUDES = KeyFactory.bool("platformIncludes")
-            .setLabel("Uses the platform system includes headers (if available)");
+            // .setLabel("Uses the platform system includes headers (if available)");
+            .setLabel("Disable built-in lib C/C++ includes");
 
     /**
      * Transform flags to the ClangAstDumper into a DataStore.
