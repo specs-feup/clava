@@ -707,7 +707,7 @@ public class ClavaFactory {
     public CaseStmt caseStmt(Expr caseExpr, Stmt subStmt) {
         DataStore caseStmtData = newDataStore(CaseStmt.class);
 
-        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, subStmt));
+        return new CaseStmt(caseStmtData, Arrays.asList(caseExpr, nullExpr(), subStmt));
     }
 
     public SwitchStmt switchStmt(Expr condition, Stmt body) {
