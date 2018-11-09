@@ -13,3 +13,7 @@ For an online demo version of Clava, please click [here](http://specs.fe.up.pt/t
 # configuring eclipse
 
 Please check the README file in repository [specs-java-libs](https://github.com/specs-feup/specs-java-libs).
+
+# acknowledgments
+
+This work has been partially funded by the [ANTAREX project](http://antarex-project.eu) through the EU H2020 FET-HPC program under grant no. 671623. João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
