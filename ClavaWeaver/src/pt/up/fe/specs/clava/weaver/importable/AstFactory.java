@@ -34,11 +34,13 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
@@ -59,6 +61,7 @@ import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -573,6 +576,16 @@ public class AstFactory {
         functionDecl.addChildren(params);
 
         return CxxJoinpoints.create(functionDecl, null, AFunction.class);
+    }
+
+    public static ABinaryOp assignment(AExpression leftHand, AExpression rightHand) {
+        Expr lhs = (Expr) leftHand.getNode();
+        Expr rhs = (Expr) rightHand.getNode();
+
+        BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.ASSIGN, rhs.getType(), lhs,
+                rhs);
+
+        return CxxJoinpoints.create(assign, null, ABinaryOp.class);
     }
 
 }

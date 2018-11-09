@@ -1,4 +1,6 @@
 import clava.Clava;
+import lara.Check;
+
 
 /**
  * Utility methods related with the creation of new join points.
@@ -235,3 +237,10 @@ ClavaJoinPoints.functionDecl = function(functionName, $returnType) {
 	return AstFactory.functionDecl(functionName, $returnType, $parmVarDecls);
 }
 
+
+ClavaJoinPoints.assign = function($leftHand, $rightHand) {
+	Check.isJoinPoint($leftHand, 'expression');
+	Check.isJoinPoint($rightHand, 'expression');
+	
+	return AstFactory.assignment($leftHand, $rightHand);
+}
