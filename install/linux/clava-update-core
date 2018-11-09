@@ -12,6 +12,8 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 wget -N specs.fe.up.pt/tools/clava.jar
 # get the clang_ast.resources file
 wget -N specs.fe.up.pt/tools/clang_ast.resources
+# icon
+wget -N specs.fe.up.pt/tools/clava/icon.png
 
 # Go to the previous folder
 cd ..
@@ -28,6 +30,10 @@ chmod +x clava-unit
 # get the clava-doc script
 wget -N specs.fe.up.pt/tools/clava/clava-doc
 chmod +x clava-doc
+
+# get the clava-desktop script
+wget -N specs.fe.up.pt/tools/clava/clava-desktop
+chmod +x clava-desktop
 
 # get CMake modules
 mkdir /usr/local/lib/clava

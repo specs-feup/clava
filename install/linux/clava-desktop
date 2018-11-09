@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Absolute path to this script, e.g. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f "$0")
+
+# Absolute path this script is in, thus /home/user/bin
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+# File contents
+CONTENTS="[Desktop Entry]\nEncoding=UTF-8\nName=Clava\nComment=A LARA weaver for C and C++\nTerminal=false\nType=Application\nCategories=Development;IDE\nExec=${SCRIPTPATH}/clava\nIcon=${SCRIPTPATH}/Clava/icon.png"
+
+# Paths for .desktop file
+LOCAL_PATH="$HOME/.local/share/applications/clava.desktop"
+GLOBAL_PATH="/usr/share/applications/clava.desktop"
+
+# Read parameters
+while getopts ":gh" opt; do
+	
+	case $opt in
+	g)
+		IS_GLOBAL=true
+		;;
+	h)
+		IS_HELP=true
+		;;
+	\?)
+		echo "Invalid option: -$OPTARG" >&2
+		exit 1
+		;;
+	esac
+done
+
+# Print the help and quit if needed
+if [ ${IS_HELP} ] ; then
+	echo -e "usage: $(basename "$0") [-h] [-g]\n"
+	echo -e "creates and installs a desktop entry for Clava\n"
+	echo "Optional arguments:"
+	echo -e "\t-h\tprints this help message"
+	echo -e "\t-g\tinstalls the .desktop file for all users (may need sudo)"
+	exit 0
+fi
+
+# Generate the .desktop file
+if [ ${IS_GLOBAL} ] ; then
+	echo -e "${CONTENTS}" > "$GLOBAL_PATH"
+else
+	echo -e "${CONTENTS}" > "$LOCAL_PATH"
+fi
