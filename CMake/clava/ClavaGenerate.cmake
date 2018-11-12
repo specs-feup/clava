@@ -117,12 +117,14 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	
 	# make the cmake configuration depend on the LARA file
 	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${ASPECT}")
+	message(STATUS "ASPECT: ${ASPECT}")
+
 	
 	# mark Clava output directory as a target for 'make clean'
 	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "${WOVEN_DIR}")
 
 
-	# use the source files as dependencies
+	# use the source files as dependencies. Can only be files that can be built (e.g., no aspects)
 	set(GENERATOR_DEPENDENCIES "${PROC_ORIG_SOURCES}")
 	
 	# if no dependencies given, use source files
@@ -139,7 +141,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	if(NOT EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
 		message(STATUS "Generating source code for target '${GENERATED_TARGET}' for the first time")
 		execute_process(
-			COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} ${PROC_ORIG_INCLUDES} -ncg ${CLAVA_GENERATE_FLAGS}
+			COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} "${PROC_ORIG_INCLUDES}" -ncg ${CLAVA_GENERATE_FLAGS}
 			#WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
 			#WORKING_DIRECTORY ${BUILD_DIR} 			
 			WORKING_DIRECTORY ${WORKING_DIR} 			
@@ -147,7 +149,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	endif()
 	
 	add_custom_command(OUTPUT "${WOVEN_DIR}/clava_generated_files.txt"
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} INCLUDE_HEADERS_FLAG ${PROC_ORIG_INCLUDES} -ncg ${CLAVA_GENERATE_WEAVER_FLAGS}
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} INCLUDE_HEADERS_FLAG "${PROC_ORIG_INCLUDES}" -ncg ${CLAVA_GENERATE_WEAVER_FLAGS}
 		#WORKING_DIRECTORY ${ORIG_CMAKE_DIR} 
 		#WORKING_DIRECTORY ${BUILD_DIR} 
 		WORKING_DIRECTORY ${WORKING_DIR} 
@@ -170,7 +172,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	if(EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
         file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
         string(STRIP "${CLAVA_WOVEN_SOURCES}" CLAVA_WOVEN_SOURCES)
-        set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CLAVA_WOVEN_SOURCES}")
+        set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CLAVA_WOVEN_SOURCES}" )
 
         #message(STATUS "CLAVA_WOVEN_SOURCES: ${CLAVA_WOVEN_SOURCES}")
 	else()
