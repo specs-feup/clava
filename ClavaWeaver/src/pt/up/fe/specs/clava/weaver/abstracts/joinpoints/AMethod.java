@@ -682,6 +682,7 @@ public abstract class AMethod extends AFunction {
         TYPE("type"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        ISMACRO("isMacro"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),

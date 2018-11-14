@@ -100,6 +100,9 @@
 		<attribute name="keyType" type="Object" tooltip="Java Class instance with the type of the given key">		
 			<parameter name="key" type="String" />	
 		</attribute>
+		<attribute name="isMacro" type="Boolean"
+			tooltip="true if any descendant or the node itself was defined as a macro">
+		</attribute>
 		<!--
 		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
 			<parameter name="key" type="String" />	

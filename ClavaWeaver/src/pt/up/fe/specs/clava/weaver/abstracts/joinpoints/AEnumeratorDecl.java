@@ -334,6 +334,7 @@ public abstract class AEnumeratorDecl extends ANamedDecl {
         TYPE("type"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        ISMACRO("isMacro"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),

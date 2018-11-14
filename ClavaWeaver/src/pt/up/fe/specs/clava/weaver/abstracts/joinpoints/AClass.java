@@ -407,6 +407,7 @@ public abstract class AClass extends ARecord {
         TYPE("type"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        ISMACRO("isMacro"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),

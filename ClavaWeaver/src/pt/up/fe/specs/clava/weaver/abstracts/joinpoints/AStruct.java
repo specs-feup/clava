@@ -357,6 +357,7 @@ public abstract class AStruct extends ARecord {
         TYPE("type"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        ISMACRO("isMacro"),
         ROOT("root"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),

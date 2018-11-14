@@ -994,4 +994,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         //
         // return null;
     }
+
+    @Override
+    public Boolean getIsMacroImpl() {
+        return getNode().get(ClavaNode.IS_MACRO);
+    }
 }

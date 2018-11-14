@@ -326,6 +326,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -1046,6 +1055,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -1869,6 +1887,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -2650,6 +2677,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -3503,6 +3539,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -4401,6 +4446,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -5227,6 +5281,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -5960,6 +6023,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -6664,6 +6736,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -7332,6 +7413,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -8042,6 +8132,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -8715,6 +8814,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -9427,6 +9535,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -10252,6 +10369,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -11003,6 +11129,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -11723,6 +11858,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -12428,6 +12572,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -13226,6 +13379,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -14308,6 +14470,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -15276,6 +15447,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -16053,6 +16233,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -16851,6 +17040,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -17686,6 +17884,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -18685,6 +18892,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -19448,6 +19664,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -20316,6 +20541,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -21261,6 +21495,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -22123,6 +22366,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -22839,6 +23091,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -23723,6 +23984,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -24753,6 +25023,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -25588,6 +25867,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -26450,6 +26738,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -27203,6 +27500,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -27999,6 +28305,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -28921,6 +29236,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -29688,6 +30012,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -30441,6 +30774,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -31364,6 +31706,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -32149,6 +32500,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -32870,6 +33230,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -33703,6 +34072,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -34580,6 +34958,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -35421,6 +35808,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -36168,6 +36564,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -36932,6 +37337,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -37676,6 +38090,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -38484,6 +38907,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -39284,6 +39716,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {
@@ -40143,6 +40584,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -40953,6 +41403,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -41671,6 +42130,15 @@
                            {
                               "type": "Boolean",
                               "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
                            }]
                },
                {

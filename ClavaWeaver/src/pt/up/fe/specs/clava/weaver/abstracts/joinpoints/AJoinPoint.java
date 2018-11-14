@@ -506,6 +506,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("keys");
         attributes.add("getValue(String key)");
         attributes.add("keyType(String key)");
+        attributes.add("isMacro");
     }
 
     /**
@@ -1683,6 +1684,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "keyType", e);
+        }
+    }
+
+    /**
+     * true if any descendant or the node itself was defined as a macro
+     */
+    public abstract Boolean getIsMacroImpl();
+
+    /**
+     * true if any descendant or the node itself was defined as a macro
+     */
+    public final Object getIsMacro() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isMacro", Optional.empty());
+        	}
+        	Boolean result = this.getIsMacroImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isMacro", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isMacro", e);
         }
     }
 
