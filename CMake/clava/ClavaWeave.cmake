@@ -52,9 +52,11 @@ function(clava_weave ORIG_TARGET ASPECT)
 	set(WOVEN_DIR_NAME "woven")
 	
 	# working dir
-	string(TIMESTAMP CURRENT_TIMESTAMP)
-	string(MAKE_C_IDENTIFIER ${CURRENT_TIMESTAMP} TIME_ID)
-	set(WORKING_DIR "${BUILD_DIR}/${ORIG_TARGET}_${TIME_ID}")
+	#string(TIMESTAMP CURRENT_TIMESTAMP)
+	#string(MAKE_C_IDENTIFIER ${CURRENT_TIMESTAMP} TIME_ID)
+	#set(WORKING_DIR "${BUILD_DIR}/${ORIG_TARGET}_${TIME_ID}")
+	#set(WORKING_DIR "${BUILD_DIR}/${ORIG_TARGET}_clava_weave")
+	set(WORKING_DIR "${BUILD_DIR}/${ORIG_TARGET}_weave")
 	set(WOVEN_DIR "${WORKING_DIR}/${WOVEN_DIR_NAME}")
 
 	file(MAKE_DIRECTORY ${WOVEN_DIR})
@@ -141,23 +143,104 @@ function(clava_weave ORIG_TARGET ASPECT)
 	
 	#set(CLAVA_COMMAND "java -jar ${CLAVA_JAR_PATH} ${ASPECT} --cmake -b 2 -p ${PROC_ORIG_SOURCES} -of ${WOVEN_DIR_NAME}")
 	
+	#set(PROC_ORIG_SOURCES  ${PROC_ORIG_SOURCES} $<IF:1,main2.c,main3.c>)	
+
+	#message(STATUS ${PROC_ORIG_SOURCES})
+	
 	# execute Clava (TODO: set correct standard from cmake) (TODO: set correct clava jar)
-	execute_process(
+	#execute_process(
 		# -std c99 
 		#COMMAND ${CLAVA_COMMAND}
-		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} "${PROC_ORIG_INCLUDES}" ${CLAVA_WEAVE_FLAGS} 
+	#	COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p ${PROC_ORIG_SOURCES} -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} "${PROC_ORIG_INCLUDES}" ${CLAVA_WEAVE_FLAGS} 
 		#WORKING_DIRECTORY ${ORIG_CMAKE_DIR}
-		WORKING_DIRECTORY ${BUILD_DIR}
-	)
-		
+	#	WORKING_DIRECTORY ${BUILD_DIR}
+	#)
+	
+
+
+	#set(WEAVER_DEPENDENCIES ${PROC_ORIG_SOURCES} ${ASPECT})	
+	
+	#add_custom_command(
+	#	OUTPUT "${WOVEN_DIR}/clava_generated_files.txt"
+	#	COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} "${PROC_ORIG_INCLUDES}" ${CLAVA_WEAVE_FLAGS}
+	#	WORKING_DIRECTORY ${BUILD_DIR} 
+	#	DEPENDS ${WEAVER_DEPENDENCIES}
+	#	COMMENT "Applying LARA strategy to source code for target '${ORIG_TARGET}'"
+	#)
+	
+	# checks if weaving is required"
+	#set("${ORIG_TARGET}_weave" "${GENERATED_TARGET}_dependencies")
+	#ADD_CUSTOM_TARGET("${ORIG_TARGET}_weaving"
+	#	DEPENDS "${WOVEN_DIR}/clava_generated_files.txt" 
+		#COMMAND ${CMAKE_COMMAND}
+		#COMMAND file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
+		#SOURCES ${CLAVA_WOVEN_SOURCES}
+		#SOURCES file(STRINGS "${WOVEN_DIR}/clava_generated_files.txt")
+	#)
+	#message(STATUS "Weaving target: ${ORIG_TARGET}_weaving")
+	#add_dependencies(${ORIG_TARGET} "${ORIG_TARGET}_weaving")
+	
+	
+	#message(STATUS $<TARGET_EXISTS:"${ORIG_TARGET}_weaving">)
+	#if($<TARGET_EXISTS:"${ORIG_TARGET}_weaving">)
+	#	message(STATUS "NEW TARGET EXISTS")
+	#else()
+	#	message(STATUS "NEW TARGET DOES NOT EXIST")
+	#endif()
+	
+	# Clean file with woven sources, if present
+	file(REMOVE "${WOVEN_DIR}/clava_generated_files.txt")
+	
+	#configure_file("${WOVEN_DIR}/clava_generated_files.txt" "${WOVEN_DIR}/clava_generated_files.txt.test")
+	configure_file("${Clava_DIR}/clava/ClavaWeave.CMakeLists.txt" "${WORKING_DIR}/CMakeLists.txt")
+	#configure_file("${BUILD_DIR}/CMakeCache.txt" "${WORKING_DIR}/CMakeCache.txt" COPYONLY)
+
+	message(STATUS "Configuring weaving step")
+	execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"
+                        "${WORKING_DIR}"
+               WORKING_DIRECTORY "${WORKING_DIR}")
+			   
+	message(STATUS "Executing weaving step")
+	execute_process(COMMAND ${CMAKE_COMMAND} --build . --target "${ORIG_TARGET}_weaving"
+                WORKING_DIRECTORY "${WORKING_DIR}")
+			   
+	#if(EXISTS "${WOVEN_DIR}/clava_generated_files.txt.test")
+	#	message(STATUS "TEST EXISTS")
+	#else()
+	#	message(STATUS "TEST DOES NOT EXIST")
+	#endif()
+
+	#file(GLOB_RECURSE CLAVA_WOVEN_SOURCES "${WOVEN_DIR}/*.c" "${WOVEN_DIR}/*.h" "${WOVEN_DIR}/*.cpp" "${WOVEN_DIR}/*.hpp")
+	
+	#set_source_files_properties(${CLAVA_WOVEN_SOURCES}
+    #                        PROPERTIES GENERATED TRUE)
+	
+	#set_target_properties(${ORIG_TARGET}
+	#	PROPERTIES SOURCES "${CLAVA_WOVEN_SOURCES}"
+	#)		
+	
 	#-of "${WOVEN_DIR_NAME}"
-		
+
+
+	#set(SOURCES_TEST $<IF:1,file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES),file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)>)
+	#set(SOURCES_TEST $<IF:(EXISTS("${WOVEN_DIR}/clava_generated_files.txt")) , main.c ,main2.c>)
+	#message(STATUS "Sources test: ${SOURCES_TEST}")
+	
+	#set_target_properties(${ORIG_TARGET}
+	#	PROPERTIES SOURCES "${SOURCES_TEST}"
+	#)
+	
 	# read new sources
 	if(EXISTS "${WOVEN_DIR}/clava_generated_files.txt")
         file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
         string(STRIP "${CLAVA_WOVEN_SOURCES}" CLAVA_WOVEN_SOURCES)
         set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CLAVA_WOVEN_SOURCES}")
 
+		# set new sources
+		set_target_properties(${ORIG_TARGET}
+			PROPERTIES SOURCES "${CLAVA_WOVEN_SOURCES}"
+		)		
+		
         #message(STATUS "CLAVA_WOVEN_SOURCES: ${CLAVA_WOVEN_SOURCES}")
 	else()
 		message(FATAL_ERROR "Could not find Clava file 'clava_generated_files.txt'")
@@ -168,6 +251,11 @@ function(clava_weave ORIG_TARGET ASPECT)
         file(READ "${WOVEN_DIR}/clava_include_dirs.txt" CLAVA_INCLUDE_DIRS)
         string(STRIP "${CLAVA_INCLUDE_DIRS}" CLAVA_INCLUDE_DIRS)
 
+		# set new include directories
+		set_target_properties(${ORIG_TARGET}
+			PROPERTIES INCLUDE_DIRECTORIES "${CLAVA_INCLUDE_DIRS}"
+		)			
+		
         #message(STATUS "CLAVA_INCLUDE_DIRS: ${CLAVA_INCLUDE_DIRS}")
 	else()
 		message(FATAL_ERROR "Could not find Clava file 'clava_include_dirs.txt'")
@@ -175,13 +263,13 @@ function(clava_weave ORIG_TARGET ASPECT)
 	
 
 	# set new sources
-	set_target_properties(${ORIG_TARGET}
-		PROPERTIES SOURCES "${CLAVA_WOVEN_SOURCES}"
-	)
+	#set_target_properties(${ORIG_TARGET}
+	#	PROPERTIES SOURCES "${CLAVA_WOVEN_SOURCES}"
+	#)
 	
 	# set new include directories
-	set_target_properties(${ORIG_TARGET}
-		PROPERTIES INCLUDE_DIRECTORIES "${CLAVA_INCLUDE_DIRS}"
-	)	
+	#set_target_properties(${ORIG_TARGET}
+	#	PROPERTIES INCLUDE_DIRECTORIES "${CLAVA_INCLUDE_DIRS}"
+	#)	
 	
 endfunction(clava_weave)

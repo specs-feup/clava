@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.0)
+
+
+	set(WEAVER_DEPENDENCIES ${PROC_ORIG_SOURCES} ${ASPECT})	
+	
+	add_custom_command(
+		OUTPUT "${WOVEN_DIR}/clava_generated_files.txt"
+		COMMAND java -jar "${CLAVA_JAR_PATH}" ${ASPECT} ${ASPECT_ARGS_FLAG} ${ASPECT_ARGS} --cmake -s -b 2 -p "${PROC_ORIG_SOURCES}" -o ${WORKING_DIR} -of ${WOVEN_DIR_NAME} ${INCLUDE_HEADERS_FLAG} "${PROC_ORIG_INCLUDES}" ${CLAVA_WEAVE_FLAGS}
+		WORKING_DIRECTORY ${BUILD_DIR} 
+		DEPENDS ${WEAVER_DEPENDENCIES}
+		COMMENT "Applying LARA strategy '${ASPECT}' to target '${ORIG_TARGET}'"
+	)
+	
+	add_custom_target("${ORIG_TARGET}_weaving" ALL
+		DEPENDS "${WOVEN_DIR}/clava_generated_files.txt" 
+		#COMMAND ${CMAKE_COMMAND}
+		#COMMAND file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
+		#SOURCES ${CLAVA_WOVEN_SOURCES}
+		#SOURCES file(STRINGS "${WOVEN_DIR}/clava_generated_files.txt")
+	)
