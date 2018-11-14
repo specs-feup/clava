@@ -13,8 +13,4 @@ cmake_minimum_required(VERSION 3.0)
 	
 	add_custom_target("${ORIG_TARGET}_weaving" ALL
 		DEPENDS "${WOVEN_DIR}/clava_generated_files.txt" 
-		#COMMAND ${CMAKE_COMMAND}
-		#COMMAND file(READ "${WOVEN_DIR}/clava_generated_files.txt" CLAVA_WOVEN_SOURCES)
-		#SOURCES ${CLAVA_WOVEN_SOURCES}
-		#SOURCES file(STRINGS "${WOVEN_DIR}/clava_generated_files.txt")
 	)
