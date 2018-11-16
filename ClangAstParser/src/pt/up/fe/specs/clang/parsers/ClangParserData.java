@@ -108,6 +108,16 @@ public class ClangParserData extends ADataClass<ClangParserData> {
      */
     public final static DataKey<Boolean> DEBUG = KeyFactory.bool("clang_parser_stream_debug");
 
+    /**
+     * True, if there were errors during parsing of the source code.
+     */
+    public final static DataKey<Boolean> HAS_ERRORS = KeyFactory.bool("hasErrors");
+
+    /**
+     * The errors output
+     */
+    // public final static DataKey<String> ERROR_OUTPUT = KeyFactory.string("errorOutput");
+
     /// DATAKEYS END
 
     // public ClangParserData() {

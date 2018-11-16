@@ -77,6 +77,9 @@ public class ParallelCodeParser extends CodeParser {
     public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
             .setLabel("System Includes parsing threshold (0 parses all system include headers found)");
 
+    public static final DataKey<Boolean> CONTINUE_ON_PARSING_ERRORS = KeyFactory.bool("continueOnParsingErrors")
+            .setLabel("Ignores parsing errors in C/C++ source code");
+
     // public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
     // .setLabel("Number of threads to use for parallel parsing");
 
@@ -190,6 +193,20 @@ public class ParallelCodeParser extends CodeParser {
         // if (showClangAst) {
         if (get(SHOW_CLANG_AST)) {
             SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
+        }
+
+        boolean hasParsingErrors = clangParserResults.stream()
+                .filter(data -> data.get(ClangParserData.HAS_ERRORS))
+                .findAny()
+                .isPresent();
+
+        if (hasParsingErrors && !get(CONTINUE_ON_PARSING_ERRORS)) {
+            String errors = clangParserResults.stream()
+                    .filter(data -> data.get(ClangParserData.HAS_ERRORS))
+                    .map(data -> data.get(ClangParserData.LINES_NOT_PARSED))
+                    .collect(Collectors.joining("\n"));
+
+            throw new RuntimeException("There are errors in the source code:\n" + errors);
         }
 
         // Delete temporary folder

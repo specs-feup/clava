@@ -244,6 +244,7 @@ public class AstDumpParser implements ClangParser {
 
             // parsedData = lineStreamParser.getData();
             parsedData = output.getStdErr();
+            parsedData.set(ClangParserData.HAS_ERRORS, output.isError());
 
             // If console output streaming is disabled, show output only at the end
             if (!streamConsoleOutput) {

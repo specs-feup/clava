@@ -82,9 +82,11 @@ public interface CxxWeaverOption {
                     // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
                     GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
+            .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
+            .startSection("Parsing Options")
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
-            .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
+            .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)
             .build();
 
 }

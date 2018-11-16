@@ -586,6 +586,8 @@ public class CxxWeaver extends ACxxWeaver {
         codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, getConfig().get(ParallelCodeParser.PARSING_NUM_THREADS));
         codeParser.set(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
                 getConfig().get(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD));
+        codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
+                getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
         App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), parserOptions, context);
         // Set source paths of each TranslationUnit
