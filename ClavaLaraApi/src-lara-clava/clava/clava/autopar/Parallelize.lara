@@ -13,6 +13,7 @@ import lara.Io;
  * @class
  */
 var Parallelize = {};
+var OmpPragmas = {};
 
 /**
  * @param $loops {$loop[]} an array of for loops to attempt to parallelize. If undefined, tries to parallelize all for loops in the program.
@@ -50,7 +51,6 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		outputFolder = Io.getPath("./");
 	}
 
-	//var parallelLoops = Parallelize.getForLoopsPragmas($loops);
 	var autoparResult = Parallelize.getForLoopsPragmas($loops);
 	var parallelLoops = autoparResult["parallelLoops"];
 	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
@@ -59,15 +59,19 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 	var filesWithPragmas = {};
 	
 	// Add pragmas to loops
-	for(var $loop of $loops) {
+	for(var $loop of $loops) 
+	{
 		var ompPragma = parallelLoops[$loop.astId];
-		if(ompPragma === undefined) {
-			println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
+		if(ompPragma === undefined)
+		{
+			//println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
 			continue;
 		}
 
+
 		var $file = $loop.ancestor("file");
-		if($file === undefined) {
+		if($file === undefined)
+		{
 			println("Could not find a file associated with loop@"+$loop.location);
 			continue;
 		}
@@ -121,14 +125,28 @@ Parallelize.getForLoopsPragmas = function($loops) {
 		$loop.insertBefore("#pragma parallelize_id " + $originalLoop.astId);
 	}
 	
-	// Transformations to help analysis
-	call InlineFunctionCalls;
-    call RemoveNakedloops;
-    call NormalizedBinaryOp;
-    
-	// Rebuild tree
-	Clava.rebuild();	
+	// Transformations to help analysis    
+	call RemoveNakedloops;
+	call AddPragmaLoopIndex;
+	call RunInlineFunctionCalls;
 
+
+	// Rebuild tree	
+	select program end
+	apply
+		$program.rebuild();
+	end
+	
+	call LoopInductionVariables;
+	call CheckForSafeFunctionCall;
+	call RemoveNakedloops; 	
+ 	call NormalizedBinaryOp;
+
+ 	// Rebuild tree	
+	select program end
+	apply
+		$program.rebuild();
+	end
 
     println('Parallelizing ' + $forLoops.length + ' for loops...');
 
@@ -145,16 +163,39 @@ Parallelize.getForLoopsPragmas = function($loops) {
 
 		var parallelization = call ParallelizeLoop($pragma.target);
 		
-		if(parallelization.ompPragma === undefined) {
+		/*
+		if(parallelization.ompPragma === undefined)
+		{
 			unparallelizableLoops[$pragma.content] = parallelization.errorMsg;
-		} else {
+		}
+		else
+		{
 			parallelLoops[$pragma.content] = parallelization.ompPragma;
 		}
+		*/
 	}
    
 	// Revert AST changes
 	Clava.popAst();
-	
+
+
+	select file.function.loop end
+	apply
+		var loopindex = GetLoopIndex($loop);
+		if 	(OmpPragmas[loopindex] !== undefined)
+		{
+			$loop.insert before OmpPragmas[loopindex].pragmaCode;
+			parallelLoops[$pragma.content] = OmpPragmas[loopindex].pragmaCode;
+		}
+
+	end
+
+	select program end
+	apply
+		$program.rebuild();
+	end
+
+
 	var result = {};
 	result["parallelLoops"] = parallelLoops;
 	result["unparallelizableLoops"] = unparallelizableLoops;

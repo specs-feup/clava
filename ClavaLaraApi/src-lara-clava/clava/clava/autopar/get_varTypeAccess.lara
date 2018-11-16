@@ -17,7 +17,9 @@ aspectdef get_varTypeAccess
 
 	if (
 			$varJP.joinpointType === 'arrayAccess' && 
-			['BuiltinType','QualType'].indexOf($varJP.type.astName) !== -1
+			['BuiltinType','QualType','TypedefType'].indexOf($varJP.type.astName) !== -1
+			//$varJP.type.astName !== 'RecordType' && 
+			//$varJP.type.astName === 'BuiltinType'
 		)
 		{
 			if ($varJP.arrayVar.joinpointType === 'memberAccess')
@@ -33,6 +35,7 @@ aspectdef get_varTypeAccess
 	if (
 			$varJP.joinpointType === 'memberAccess' && 
 			['BuiltinType','QualType'].indexOf($varJP.type.astName) !== -1
+			//$varJP.type.astName === 'BuiltinType'
 		)
 		{
 			varTypeAccess = 'memberAccess';
@@ -40,7 +43,8 @@ aspectdef get_varTypeAccess
 
 	if (
 			$varJP.joinpointType === 'varref' && 
-			['BuiltinType','QualType','PointerType'].indexOf($varJP.type.astName) !== -1
+			['BuiltinType','QualType','PointerType','TypedefType'].indexOf($varJP.type.astName) !== -1
+			//$varJP.type.astName === 'BuiltinType'
 		)
 		{
 			varTypeAccess = 'varref';
@@ -53,23 +57,27 @@ aspectdef get_varTypeAccess
 	if (varTypeAccess === 'memberArrayAccess')
 	{
 		varUse = $varJP.use;
+		//varName = $varJP.arrayVar.name;
 		varName = normalizeVarName($varJP.code);
 	}
 	else if (varTypeAccess === 'arrayAccess')
 	{
 		vardecl = $varJP.arrayVar.vardecl;
 		varUse = $varJP.use;
+		//varName = $varJP.arrayVar.name;
 		varName = normalizeVarName($varJP.code);
 	}
 	else if (varTypeAccess === 'memberAccess')
 	{
 		varUse = $varJP.use;
+		//varName = $varJP.name;
 		varName = normalizeVarName($varJP.code);
 	}
 	else if (varTypeAccess === 'varref')
 	{
 		varUse = $varJP.useExpr.use;
 		vardecl = $varJP.vardecl;
+		//varName = $varJP.name;
 		varName = normalizeVarName($varJP.code);
 	}
 

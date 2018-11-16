@@ -13,36 +13,29 @@ import clava.autopar.BuildPetitFileInput;
 import clava.autopar.ExecPetitDependencyTest;
 import clava.autopar.SetArrayAccessOpenMPscoping;
 
-var LoopOmpAttributes = {};
 
 aspectdef ParallelizeLoop
 	input $ForStmt end
-	output 
-		ompPragma,
-		errorMsg
-	end
+	
+	var loopindex = GetLoopIndex($ForStmt);
 
 	call checkForOpenMPCanonicalForm($ForStmt);
 
 	call additionalConditionsCheck($ForStmt);
-
 	
-
 	call SetVariableAccess($ForStmt);
 
-	
 	call SetVarrefOpenMPscoping($ForStmt);
 
 	call BuildPetitFileInput($ForStmt);
+	
 	call ExecPetitDependencyTest($ForStmt);
 	
 	call SetArrayAccessOpenMPscoping($ForStmt);
 
-	//call SetMemberAccessOpenMPscoping($ForStmt);
-
 	// remove all variable declared inside loop , i changed SetVariableAccess code!!!!
-	var ompDirectivesResult = call AddOpenMPDirectivesForLoop($ForStmt);
+	call AddOpenMPDirectivesForLoop($ForStmt);
 
-	ompPragma = ompDirectivesResult.ompPragma;
-	errorMsg = ompDirectivesResult.errorMsg;
-end // aspectdef ParallelizeLoop
+
+
+end 

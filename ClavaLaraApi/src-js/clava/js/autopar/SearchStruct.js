@@ -20,3 +20,28 @@ function SearchStruct(structObj, criteria)
                 });
             });
 }
+
+/*
+
+function multiFilter(array, filters) {
+  filterKeys = Object.keys(filters);
+  // filters all elements passing the criteria
+  return array.filter(function(item) {
+    // dynamically validate all filter criteria
+    return filterKeys.every(function(key){ !!~filters[key].indexOf(item[key])});
+  });
+}
+
+function multiFilter(arr, filters) 
+{
+  filterKeys = Object.keys(filters);
+  return arr.filter(function(eachObj) {
+    return filterKeys.every(function(eachKey) {
+      if (!filters[eachKey].length) {
+        return true; // passing an empty filter means that filter is ignored.
+      }
+      return filters[eachKey].includes(eachObj[eachKey]);
+    });
+  });
+}
+*/

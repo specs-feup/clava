@@ -3,9 +3,9 @@
 *                       SetVariableAccess
 * 
 **************************************************************/
-// should I have checking for pointerAccessVarNames !!!
 import lara.Strings;
 import clava.autopar.get_varTypeAccess;
+
 
 aspectdef SetVariableAccess
 	input $ForStmt end
@@ -14,18 +14,26 @@ aspectdef SetVariableAccess
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
 
-
 	var innerloopsControlVarname = [];
 	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
 	innerloopsControlVarname = innerloopsControlVarname.concat(LoopOmpAttributes[loopindex].innerloopsControlVarname);
 
-
 	LoopOmpAttributes[loopindex].varAccess = [];
+
+
+	var $forFunction = $ForStmt.astAncestor('FunctionDecl');
+
+	if($forFunction === undefined)
+	{
+		var $forRoot = $ForStmt.astParent;
+		while($forRoot.astParent !== undefined) 
+		{
+			$forRoot = $forRoot.astParent;
+		}
+	}
 
 	var functionvarrefset = orderedVarrefs3($ForStmt.astAncestor('FunctionDecl'));
 	var loopvarrefset = orderedVarrefs3($ForStmt);
-
-
 	var noVarrefVariables = [];
 
 	for(var index = 0; index < loopvarrefset.length; index++)
@@ -33,14 +41,13 @@ aspectdef SetVariableAccess
 		var $varref = loopvarrefset[index];
 
 		call o : get_varTypeAccess($varref);
-		var varTypeAccess = o.varTypeAccess;
 
+		var varTypeAccess = o.varTypeAccess;
 
 		if (varTypeAccess === null)
 		{
 			continue;
 		}
-
 
 		var vardecl = o.vardecl;		
 		var varUse = o.varUse;
@@ -50,12 +57,12 @@ aspectdef SetVariableAccess
 		if (varTypeAccess !== 'varref' && noVarrefVariables.indexOf(varName) === -1)
 			noVarrefVariables.push(varName);
 
-		
 		var useExpr = (varUse === 'read') ? 'R' : (varUse === 'write') ? 'W' : 'RW';
 
 		if (vardecl !== null)
 		{
 			var vardeclRegion = vardecl.currentRegion.joinpointType;
+
 			if ($ForStmt.contains(vardecl) === true)
 				declpos = 'inside';
 			else if (vardecl.joinpointType === 'param')
@@ -66,18 +73,23 @@ aspectdef SetVariableAccess
 				declpos = 'outside';
 			else if (vardeclRegion === 'loop')
 				declpos = 'outside';
+			else if (vardeclRegion === 'scope')
+				declpos = 'inside';
+			else if (vardecl.astAncestor('FunctionDecl').name === $ForStmt.astAncestor('FunctionDecl').name)
+				declpos = 'outside';			
 			else
 				{
-					Add_msgError(LoopOmpAttributes, $ForStmt,'declpos for Variable ' + $varref.name + ' can not be specified');
+					Add_msgError(LoopOmpAttributes, $ForStmt,'declpos for Variable ' + $varref.name + ' can not be specified ' 
+						+ '\t vardeclRegion : ' + vardeclRegion
+						+ '\t $ForStmt.contains(vardecl) : ' + $ForStmt.contains(vardecl) 
+						+ '\t vardecl : ' + vardecl.code + ' #' + vardecl.line);
 					return;
 				}			
 		}
 
 
-		if (
-			(varTypeAccess === 'varref' && (innerloopsControlVarname.indexOf($varref.name) !== -1 || loopControlVarname === $varref.name)) // is loop control variable
-			)
-			continue;
+		if (varTypeAccess === 'varref' && (innerloopsControlVarname.indexOf($varref.name) !== -1 || loopControlVarname === $varref.name))
+				continue;
 
 		if ($varref.isFunctionArgument === true)
 		{
@@ -118,6 +130,15 @@ aspectdef SetVariableAccess
 		
 		if (hasDescendantOfArrayAccess === true)
 		{
+			if ($varref.subscript === undefined) 
+			{
+				Add_msgError(LoopOmpAttributes, $ForStmt,' NO  subscript for Array Access ' + $varref.code);
+				return;
+			}
+
+			call o : retsubscriptcurrentloop($varref, loopControlVarname);
+			varUsage.subscriptcurrentloop = o.subscriptstr;
+
 			var subscriptVarNamelist = [];
 			for(var arrayAccessobj of  $varref.descendantsAndSelf('arrayAccess'))
 			{
@@ -142,8 +163,7 @@ aspectdef SetVariableAccess
 						subscriptVarName !== loopControlVarname && 
 						innerloopsControlVarname.indexOf(subscriptVarName) === -1
 					)
-				{
-
+				{					
 					var varObj = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'varref', name : subscriptVarName});
 
 					if (varObj.length !== 0 && varObj[0].use.indexOf('W') !== -1)
@@ -154,9 +174,11 @@ aspectdef SetVariableAccess
 
 
 			var strdep = '';
-			strdep = strdep + (varUsage.IsdependentCurrentloop === true ? 'dependentCurrentloop\t' : '');
-			strdep = strdep + (varUsage.IsdependentInnerloop === true ? 'dependentInnerloop' : '');
-			strdep = strdep + (varUsage.IsdependentOuterloop === true ? 'IsdependentOuterloop' : '');
+			strdep = strdep + (varUsage.IsdependentCurrentloop === true ? ' dependentCurrentloop\t ' : '\t ');
+			strdep = strdep + (varUsage.IsdependentInnerloop === true ? ' dependentInnerloop\t ' : '\t ');
+			strdep = strdep + (varUsage.IsdependentOuterloop === true ? ' IsdependentOuterloop\t ' : '\t ');
+
+
 		}
 
 		var varObj = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : varTypeAccess, name : varName});
@@ -172,6 +194,7 @@ aspectdef SetVariableAccess
 				declpos : declpos,
 				usedInClause : false,
 				use : useExpr,
+				sendtoPetit : false,
 				useT : useExpr,
 				nextUse : varNextUse,
 				varUsage : [varUsage],
@@ -188,7 +211,6 @@ aspectdef SetVariableAccess
 				}
 			
 			varObj[0].use = Strings.replacer(varObj[0].use,'WRW','W');
-			//varobj[0].use = Strings.replacer(varobj[0].use,'RWR','W');
 			varObj[0].varUsage.push(varUsage);		
 			varObj[0].useT += useExpr;
 		}
@@ -197,8 +219,29 @@ aspectdef SetVariableAccess
 	}
 
 
+	
+	var candidateArraylist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {usedInClause : false, hasDescendantOfArrayAccess : true});
 
-	// should be improved !!!!!!!!
+	for(var i = 0; i < candidateArraylist.length; i++)
+	{
+		var varObj = candidateArraylist[i];
+
+		if ( varObj.use.indexOf('W') !== -1)
+		{
+			tmpstr = varObj.varUsage[0].subscriptcurrentloop;
+			for(var j = 0; j < varObj.varUsage.length; j++)
+			{
+				if (varObj.varUsage[j].subscriptcurrentloop !== tmpstr || varObj.varUsage[j].subscriptcurrentloop ===  '' )
+				{
+					varObj.sendtoPetit = true;
+					break;
+				}
+			}			
+		}
+		else
+			varObj.sendtoPetit = false;
+	}
+	
 	for(var index = 0 ; index < LoopOmpAttributes[loopindex].varAccess.length; index++)
 	{
 		var varObj = LoopOmpAttributes[loopindex].varAccess[index];
@@ -208,6 +251,24 @@ aspectdef SetVariableAccess
 			index--;
 		}
 	}
+
+	var varreflist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'varref'});
+	var varreflistName = [];
+	for(var i = 0; i < varreflist.length; i++)
+		varreflistName.push(varreflist[i].name);
+
+
+	select $ForStmt.body.if.varref end
+	apply
+
+		var index = varreflistName.indexOf($varref.name);
+		if ( index !== -1 && varreflist[index].declpos !== 'inside' && varreflist[index].useT === 'W' && varreflist[index].nextUse === 'R')
+		{
+			Add_msgError(LoopOmpAttributes, $ForStmt,' Variable Access ' + $varref.name + ' is changed inside  of ifstmt');
+			return;
+		}
+	end
+	condition $varref.useExpr.use.indexOf('write') !== -1 end
 
 	LoopOmpAttributes[loopindex].privateVars = [];
 	LoopOmpAttributes[loopindex].firstprivateVars = [];
@@ -253,5 +314,23 @@ aspectdef retsubscriptVars
 
 end
 
+
+aspectdef retsubscriptcurrentloop
+	input $varref, loopControlVarname end
+	output subscriptstr end
+
+	subscriptstr = '';
+
+	select $varref.subscript  end
+	apply
+		for($varref of $subscript.descendantsAndSelf("varref"))
+			if ( $varref.name === loopControlVarname)
+			{
+				subscriptstr += '[' + $subscript.code +']';
+				break;
+			}
+	end
+
+end
 
 

@@ -13,8 +13,19 @@ aspectdef FindReductionArrays
 	var check1 = (isdependentInnerloop === true) && (isdependentCurrentloop === false) && (isdependentOuterloop === false);
 	var check2 = (isdependentInnerloop === false) && (isdependentCurrentloop === false) && (isdependentOuterloop === true);
 
-	if (check1 === false && check2 === false)
+
+	if (
+		check1 === false && check2 === false  
+		)
 		return;
+
+	// type 1 : x++, ++x, x--, --x
+	// type 2 : x binaryOp= expr , binaryOp={+, *, -, &, ^ ,|}
+	// type 3 : x = x binaryOp expr,		binaryOp={+, *, -, &, ^ ,|, &&, ||}
+	//			x = expr binaryOp x (except for subtraction)	
+	// x is not referenced in exp
+	// expr has scalar type (no array, objects etc)
+
 	
 	var loopindex = GetLoopIndex($ForStmt);
 	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
@@ -23,7 +34,6 @@ aspectdef FindReductionArrays
 	var candidateArray = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {usedInClause : false, name : candidateArrayName})[0];
 
 	var count = (candidateArray.useT.match(/RW/g) || []);
-
 
 	if (count.length >1 || count.length === 0)
 		return;
@@ -37,10 +47,11 @@ aspectdef FindReductionArrays
 			candidateArray.varUsage[i].IsdependentOuterloop !== candidateArray.varUsage[0].IsdependentOuterloop
 			)
 			return;
+
+
 	select $ForStmt.body.expr end
 	apply
-
-			call o: retReductionOpArray($expr, candidateArray, isdependentInnerloop);
+			call o: retReductionOpArray($expr, candidateArray, isdependentInnerloop, isdependentCurrentloop, isdependentOuterloop);
 			reduction = o.reduction;
 			break #$ForStmt;
 		
@@ -50,6 +61,7 @@ aspectdef FindReductionArrays
 	if (reduction.length > 0)
 	{
 		LoopOmpAttributes[loopindex].reduction = LoopOmpAttributes[loopindex].reduction.concat(reduction);
+		LoopOmpAttributes[loopindex].Reduction_listVars.push(candidateArrayName);
 		isReductionArrays = true;
 	}
 	return;
@@ -65,7 +77,7 @@ end
 * 
 **************************************************************/
 aspectdef retReductionOpArray
-	input $expr, candidateVar, isdependentInnerloop end
+	input $expr, candidateVar, isdependentInnerloop, isdependentCurrentloop, isdependentOuterloop end
 	output reduction end
 
 
@@ -93,7 +105,7 @@ aspectdef retReductionOpArray
 				op = exprvarrefset[j].ancestor('unaryOp').kind;
 			else if (typeof(exprvarrefset[j].ancestor('binaryOp')) !== 'undefined')
 				op = exprvarrefset[j].ancestor('binaryOp').kind + 
-					(( exprvarrefset[j].ancestor('binaryOp').kind !== 'assign' && exprvarrefset[j].ancestor('binaryOp').isAssignment === true) ? '-assign' :'');										
+					(( exprvarrefset[j].ancestor('binaryOp').kind !== 'assign' && exprvarrefset[j].ancestor('binaryOp').isAssignment === true) ? '' :'');										
 			if (op === 'sub' &&
 				typeof(exprvarrefset[j].ancestor('binaryOp').right.vardecl) !== 'undefined' && 
 				exprvarrefset[j].ancestor('binaryOp').right.vardecl.name === candidateVar.name
@@ -115,7 +127,7 @@ aspectdef retReductionOpArray
 	else if(candidateVarOp.length == 2 && 
 			candidateVarOp[1] == 'assign' &&
 			(
-				['add-assign', 'sub-assign', 'mul-assign','and-assign', 'or-assign' , 'xor-assign'].indexOf(candidateVarOp[0]) !== -1 ||
+				['add_assign', 'sub_assign', 'mul_assign','and_assign', 'or_assign' , 'xor_assign'].indexOf(candidateVarOp[0]) !== -1 ||
 				['add', 'mul', 'sub', 'and', 'or', 'l_and' , 'l_or'].indexOf(candidateVarOp[0]) !== -1
 			)
 		)
@@ -130,11 +142,13 @@ aspectdef retReductionOpArray
 
 	var arraysizeStr = null;
 
-	if(candidateVar.ArraySize === null) {
+	if (candidateVar.ArraySize === null)
 		return;
-	}
+	
 
-	if (isdependentInnerloop === true)
+	if (
+		isdependentInnerloop === true
+		)
 		arraysizeStr = candidateVar.name + candidateVar.ArraySize.allReplace({'\\[':'[:'});
 	else if (isdependentInnerloop === false)		
 	{
@@ -147,17 +161,17 @@ aspectdef retReductionOpArray
 
 
 	var findOpflag = true;
-	if ( ['pre_dec', 'post_dec', 'sub', 'sub-assign'].indexOf(op) !== -1 )
+	if ( ['pre_dec', 'post_dec', 'sub', 'sub_assign'].indexOf(op) !== -1 )
 		reduction.push('reduction (-:' +  arraysizeStr + ')');
-	else if ( ['pre_inc', 'post_inc', 'add', 'add-assign'].indexOf(op) !== -1 )
+	else if ( ['pre_inc', 'post_inc', 'add', 'add_assign'].indexOf(op) !== -1 )
 		reduction.push('reduction (+:' + arraysizeStr + ')');
-	else if ( ['mul' , 'mul-assign'].indexOf(op) !== -1 )
+	else if ( ['mul' , 'mul_assign'].indexOf(op) !== -1 )
 		reduction.push('reduction (*:' + arraysizeStr + ')');
-	else if ( ['and' , 'and-assign'].indexOf(op) !== -1 )
+	else if ( ['and' , 'and_assign'].indexOf(op) !== -1 )
 		reduction.push('reduction (&:' + arraysizeStr + ')');
-	else if ( ['xor' , 'xor-assign'].indexOf(op) !== -1 )
+	else if ( ['xor' , 'xor_assign'].indexOf(op) !== -1 )
 		reduction.push('reduction (^:' + arraysizeStr + ')');
-	else if ( ['or' , 'or-assign'].indexOf(op) !== -1 )
+	else if ( ['or' , 'or_assign'].indexOf(op) !== -1 )
 		reduction.push('reduction (|:' + arraysizeStr + ')');
 	else if ( ['l_and'].indexOf(op) !== -1 )
 		reduction.push('reduction (&&:' + arraysizeStr + ')');
@@ -168,8 +182,5 @@ aspectdef retReductionOpArray
 
 	if (findOpflag === true)
 		candidateVar.usedInClause = true;
-	else
-		println('something wrong for reduction Op detection !!!');			
-
 
 end

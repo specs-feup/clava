@@ -5,10 +5,6 @@
 **************************************************************/
 aspectdef AddOpenMPDirectivesForLoop
 	input $ForStmt end
-	output 
-		ompPragma,
-		errorMsg
-	end
 
 	var loopindex = GetLoopIndex($ForStmt);
 
@@ -25,10 +21,10 @@ aspectdef AddOpenMPDirectivesForLoop
 
 	if (msgError.length > 0)
 	{
-		errorMsg = msgError;
-		InsertBeforeStr = '/*' + Array(15).join('*') + ' Clava msgError ' + Array(15).join('*') +
-							'\n\t\t' + msgError.join('\n\t\t') +
-							'\n' + Array(40).join('*') + '*/';
+		//InsertBeforeStr = '/*' + Array(15).join('*') + ' Clava msgError ' + Array(15).join('*') +
+		//					'\n\t\t' + msgError.join('\n\t\t') +
+		//					'\n' + Array(40).join('*') + '*/';
+
 	}
 	else
 	{
@@ -38,7 +34,9 @@ aspectdef AddOpenMPDirectivesForLoop
 		var reduction = LoopOmpAttributes[loopindex].reduction;
 		var depPetitFileName = LoopOmpAttributes[loopindex].DepPetitFileName;
 
-		var OpenMPDirectivesStr = '#pragma omp parallel for default(shared) ';
+		var OpenMPDirectivesStr = '#pragma omp parallel for ';
+
+		OpenMPDirectivesStr += ' default(shared) ';
 
 		if (privateVars.length > 0)
 				OpenMPDirectivesStr += 'private(' + privateVars.join(', ') + ') ';
@@ -56,10 +54,196 @@ aspectdef AddOpenMPDirectivesForLoop
 			OpenMPDirectivesStr += '\n// ' + depPetitFileName;
 		
 		InsertBeforeStr = OpenMPDirectivesStr;
-		ompPragma = OpenMPDirectivesStr;
 	}
 
-	$ForStmt.insert before  InsertBeforeStr;
-	
+	$ForStmt.insert before InsertBeforeStr;
+
+
+	select $ForStmt.body end
+	apply
+
+		if ($body.astChild(0).code.indexOf('//loopindex') !== -1)
+		{
+			var loopindex_org = $body.astChildren[0].code.split(' ')[1].trim();
+			var func_name = $ForStmt.astAncestor('FunctionDecl').name;
+			if (loopindex_org.indexOf(func_name) !== -1)
+			{
+				if 	(OmpPragmas[loopindex_org] === undefined)
+				{
+					OmpPragmas[loopindex_org] = {};
+					OmpPragmas[loopindex_org].pragmaCode = InsertBeforeStr;
+				}
+				else
+				{
+					exit();
+				}
+			}
+		}	
+	end
 
 end
+
+
+
+aspectdef ret_IF_Clause
+	input $ForStmt end
+	output IF_Clause_str end
+
+	var loopindex = GetLoopIndex($ForStmt);
+	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
+	IF_Clause_str = 'if(abs(';
+
+	var cloneJP = null;
+
+	select $ForStmt.init end
+	apply
+		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		{
+			cloneJP=$cast.init.copy();
+			break #$ForStmt;
+		}
+		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		{
+			cloneJP=$cast.right.copy();
+			break #$ForStmt;
+		}
+	end
+
+
+	for($cast of cloneJP.descendantsAndSelf("cast"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+
+	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+
+	IF_Clause_str += cloneJP.code + ' - ';
+
+
+	cloneJP = null;
+	var binaryOpleft = null;
+	var binaryOpRight = null;
+	select $ForStmt.cond.binaryOp end
+	apply
+		binaryOpleft=$binaryOp.left.copy();
+		binaryOpRight=$binaryOp.right.copy();
+		break #$ForStmt;
+	end
+
+	var foundflag = false;
+	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+		if ($cast.name === loopControlVarname)
+		{
+			cloneJP=binaryOpRight;
+			foundflag = true;
+		}
+
+	if (foundflag === false)
+		cloneJP=binaryOpleft;
+
+
+
+	for($cast of cloneJP.descendantsAndSelf("cast"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+
+
+	IF_Clause_str += cloneJP.code;
+
+	IF_Clause_str += ')>500)';
+end 
+
+
+
+aspectdef ret_NUM_THREADS_Clause
+	input $ForStmt end
+	output NUM_THREADS_Clause_str end
+
+	var loopindex = GetLoopIndex($ForStmt);
+	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
+	NUM_THREADS_Clause_str = 'num_threads((abs(';
+
+	var cloneJP = null;
+
+	select $ForStmt.init end
+	apply
+		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		{
+			cloneJP=$cast.init.copy();
+			break #$ForStmt;
+		}
+		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		{
+			cloneJP=$cast.right.copy();
+			break #$ForStmt;
+		}
+	end
+
+
+	for($cast of cloneJP.descendantsAndSelf("cast"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+
+	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+
+	NUM_THREADS_Clause_str += cloneJP.code + ' - ';
+
+
+	cloneJP = null;
+	var binaryOpleft = null;
+	var binaryOpRight = null;
+	select $ForStmt.cond.binaryOp end
+	apply
+		binaryOpleft=$binaryOp.left.copy();
+		binaryOpRight=$binaryOp.right.copy();
+		break #$ForStmt;
+	end
+
+	var foundflag = false;
+	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+		if ($cast.name === loopControlVarname)
+		{
+			cloneJP=binaryOpRight;
+			foundflag = true;
+		}
+
+	if (foundflag === false)
+		cloneJP=binaryOpleft;
+
+
+
+	for($cast of cloneJP.descendantsAndSelf("cast"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	{
+		var child = $cast.astChild(0);
+		$cast.replaceWith(child);
+	}
+
+
+	NUM_THREADS_Clause_str += cloneJP.code;
+
+
+	NUM_THREADS_Clause_str += ')<500)?1:omp_get_max_threads())';
+end 

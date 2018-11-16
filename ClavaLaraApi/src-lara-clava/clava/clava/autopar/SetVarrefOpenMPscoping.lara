@@ -83,7 +83,7 @@ aspectdef SetVarrefOpenMPscoping
 
 			if (varreflist[i].nextUse === 'R' && 
 				varreflist[i].use.indexOf('W') !== -1 &&
-				varreflist[i].use.indexOf('RWR') === -1) // hamid changed for EP benchmark
+				varreflist[i].use.indexOf('RW') === -1)
 				{
 					LoopOmpAttributes[loopindex].lastprivateVars.push(varreflist[i].name);
 					varreflist[i].usedInClause = true;
@@ -110,7 +110,9 @@ aspectdef SetVarrefOpenMPscoping
 	for(var i = 0; i < varreflist.length; i++)
 		if (varreflist[i].usedInClause === false)
 		{
-			Add_msgError(LoopOmpAttributes, $ForStmt,'Variable ' + varreflist[i].name + ' could not be categorized into any OpenMP Variable Scope');
+			Add_msgError(LoopOmpAttributes, $ForStmt,'Variable ' + varreflist[i].name + ' could not be categorized into any OpenMP Variable Scope' + 'use : ' + varreflist[i].use);
+
+
 		}
 
 
@@ -123,8 +125,22 @@ aspectdef SetVarrefOpenMPscoping
 			LoopOmpAttributes[loopindex].firstprivateVars.splice(LoopOmpAttributes[loopindex].firstprivateVars.indexOf($vardecl.name), 1);
 
 		if (LoopOmpAttributes[loopindex].lastprivateVars.indexOf($vardecl.name) !== -1)
-			LoopOmpAttributes[loopindex].lastprivateVars.splice(LoopOmpAttributes[loopindex].lastprivateVars.indexOf($vardecl.name), 1);
-	
+			LoopOmpAttributes[loopindex].lastprivateVars.splice(LoopOmpAttributes[loopindex].lastprivateVars.indexOf($vardecl.name), 1);	
 	end
-						
+	
+	select $ForStmt.varref end
+	apply
+		
+		if (LoopOmpAttributes[loopindex].privateVars.indexOf($varref.name) !== -1)
+			LoopOmpAttributes[loopindex].privateVars.splice(LoopOmpAttributes[loopindex].privateVars.indexOf($varref.name), 1);
+
+		if (LoopOmpAttributes[loopindex].firstprivateVars.indexOf($varref.name) !== -1)
+			LoopOmpAttributes[loopindex].firstprivateVars.splice(LoopOmpAttributes[loopindex].firstprivateVars.indexOf($varref.name), 1);
+
+		if (LoopOmpAttributes[loopindex].lastprivateVars.indexOf($varref.name) !== -1)
+			LoopOmpAttributes[loopindex].lastprivateVars.splice(LoopOmpAttributes[loopindex].lastprivateVars.indexOf($varref.name), 1);	
+			
+	end
+	condition $varref.type.isPointer === true end
+
 end

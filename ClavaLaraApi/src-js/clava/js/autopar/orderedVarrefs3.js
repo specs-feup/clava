@@ -5,16 +5,20 @@
 **************************************************************/
 var orderedVarrefs3 = function($jp) 
 {
-
+    var varrefs = [];
     if($jp.instanceOf("expression") || $jp.joinpointType === "statement")
     {
         return orderedVarrefsBase3($jp);
     }
     
-    var varrefs = [];
     for(var i=0; i<$jp.astNumChildren; i++)
 	{
-        varrefs = varrefs.concat( orderedVarrefs3($jp.astChild(i)) );
+        var astChild = $jp.astChild(i);
+        if(astChild === undefined)
+        {
+            continue;
+        }
+        varrefs = varrefs.concat( orderedVarrefs3(astChild) );
     }
     return varrefs;
 };
@@ -69,8 +73,6 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
     }
     else
     {
-
-
         if (['arrayAccess','memberAccess'].indexOf($jp.joinpointType) !== -1)
         {
             var maxLevel = currentLevel;

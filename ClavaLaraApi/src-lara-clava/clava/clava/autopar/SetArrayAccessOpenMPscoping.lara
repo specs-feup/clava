@@ -21,19 +21,20 @@ aspectdef SetArrayAccessOpenMPscoping
 		{
 			if (LoopOmpAttributes[loopindex].firstprivateVars.indexOf(arrayAccessObj.name) === -1)
 			{
-				LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);
-				arrayAccessObj.usedInClause = true;
+				//LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);				
 			}
+			arrayAccessObj.usedInClause = true;
 		}
 
-	var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess', usedInClause : false});
+	var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess'});
 
 	if (arrayAccesslist.length ===0 )
 		return;
 
 	var arrayAccessNamelist = [];
 	for (var obj of arrayAccesslist)
-		arrayAccessNamelist.push(obj.name);
+		if (arrayAccessNamelist.indexOf(obj.name) === -1)
+			arrayAccessNamelist.push(obj.name);
 
 	for(var depObj of LoopOmpAttributes[loopindex].PetitFoundDependency)
 		if (depObj.canbeignored === false && arrayAccessNamelist.indexOf(depObj.varName) !== -1 && depObj.cannotbesolved === false)
@@ -44,7 +45,7 @@ aspectdef SetArrayAccessOpenMPscoping
 			{
 				arrayAccessNamelist.splice(arrayAccessNamelist.indexOf(depObj.varName),1);
 				continue;
-			}			
+			}
 
 			if (
 					depObj.IsdependentInnerloop_src === true && 
@@ -89,9 +90,28 @@ aspectdef SetArrayAccessOpenMPscoping
 				LoopOmpAttributes[loopindex].firstprivateVars.indexOf(arrayAccessObj.name) === -1				
 				)
 			{
-				LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);				
+				LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);
 			}
+
 		}
+
+	for(var arrayAccessObj of arrayAccesslist)
+		for(var depObj of LoopOmpAttributes[loopindex].PetitFoundDependency)
+			if (
+					depObj.varName === arrayAccessObj.name && 
+					arrayAccessObj.use === 'WR' &&
+					depObj.IsdependentCurrentloop_dst === false
+				)
+				{
+					if (LoopOmpAttributes[loopindex].firstprivateVars.indexOf(arrayAccessObj.name) === -1&&
+						LoopOmpAttributes[loopindex].Reduction_listVars.indexOf(arrayAccessObj.name) === -1
+						)
+						{
+							LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);
+							arrayAccessObj.usedInClause = true;
+						}
+
+				}
 
 	for(var arrayAccessObj of LoopOmpAttributes[loopindex].varAccess)
 		if (
@@ -99,7 +119,7 @@ aspectdef SetArrayAccessOpenMPscoping
 			arrayAccessObj.usedInClause === false
 			)
 		{
-			Add_msgError(LoopOmpAttributes, $ForStmt,'unsolved dependency for arrayAccess ' + arrayAccessObj.name );
+			Add_msgError(LoopOmpAttributes, $ForStmt,'unsolved dependency for arrayAccess ' + arrayAccessObj.name + '\t use : ' + arrayAccessObj.use );
 		}
 
 end	

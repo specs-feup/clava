@@ -68,7 +68,6 @@ function normalizeVarName2(Varname)
 String.prototype.moveBracketsToEnd3 = function(arraylistdic)
 {
 
-
 	if (this.indexOf('[') === -1)
 		return this;
 
@@ -109,13 +108,53 @@ String.prototype.moveBracketsToEnd3 = function(arraylistdic)
 		}
 		var newsubstr = arraylistdic[arrayName].name + '(' + betweenBracketslist.join(',') +')';
 
-
 		outputstr = outputstr.replace(substr, newsubstr);
 		filteredstr = filteredstr.replace(substr, '');		
 	}
 
 	return outputstr;
 
-
 }
 
+String.prototype.moveBracketsToEnd2 = function(arraylistdic)
+{
+	var index = 0;
+	var newCode = this;
+	while(true)
+	{
+		posSTBracket = this.indexOf('[', index);		
+		if (posSTBracket === -1)
+			break;
+
+		posSTspace = this.lastIndexOf(' ', posSTBracket)
+		if (posSTspace === -1) posSTspace = 0;
+
+		posFTBracket = this.indexOf(']', posSTBracket);
+		posFTspace = this.indexOf(' ', posFTBracket);
+		if (posFTspace === -1) posFTspace = this.length;
+
+		var substr = this.substring(posSTspace, posFTspace);
+		
+		var betweenBracketslist = substr.getBetweenBrackets();
+		var newsubstr = substr.replace(/\[.*?\]/g, "");
+
+		newsubstr = newsubstr + '(' + betweenBracketslist.join(',') + ')';
+
+		var arrayName = newsubstr.split('(')[0];
+		arrayName = arrayName.trim();
+		
+		var len = Object.keys(arraylistdic).length + 1;
+		if 	(arraylistdic[arrayName] === undefined)
+		{
+			arraylistdic[arrayName] = {};
+			arraylistdic[arrayName].name = 'A_' + len;
+			arraylistdic[arrayName].size = '(0:9999' + Array(betweenBracketslist.length).join(',0:9999') +')';
+		}
+		newsubstr = newsubstr.replace(arrayName, arraylistdic[arrayName].name);
+
+		newCode = newCode.replace(substr, newsubstr);
+		index = posFTspace;
+	}
+
+	return newCode;
+}

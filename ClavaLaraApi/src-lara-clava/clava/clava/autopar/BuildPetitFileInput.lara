@@ -8,6 +8,7 @@ import clava.autopar.get_varTypeAccess;
 aspectdef BuildPetitFileInput
 	input $ForStmt end
 
+	var replace_vars = [];
 	var loopindex = GetLoopIndex($ForStmt);
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
@@ -20,9 +21,12 @@ aspectdef BuildPetitFileInput
 	LoopOmpAttributes[loopindex].petit_variables.push('petit_tmp');
 
 	var varreflist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'varref'});
-	for(var i = 0; i < varreflist.length; i++)	
+	for(var i = 0; i < varreflist.length; i++)
+	{	
 		LoopOmpAttributes[loopindex].petit_variables.push(varreflist[i].name);
-	
+		if (varreflist[i].name[0] === '_')
+			replace_vars.push(varreflist[i].name);
+	}
 	var loopsControlVarname = [];
 	loopsControlVarname.push(LoopOmpAttributes[loopindex].loopControlVarname);
 	if (LoopOmpAttributes[loopindex].innerloopsControlVarname !== undefined )
@@ -33,8 +37,6 @@ aspectdef BuildPetitFileInput
 
 
 	var $cloneJPForStmt = $ForStmt.copy();
-
-
 	var tabOP = [];
 
 	call o : CovertLoopToPetitForm($ForStmt, tabOP);
@@ -53,6 +55,7 @@ aspectdef BuildPetitFileInput
 		LoopOmpAttributes[loopindex].ForStmtToPetit.push({line: LoopOmpAttributes[innerloopindex].start, str : o.loopPetitForm});
 		LoopOmpAttributes[loopindex].ForStmtToPetit.push({line: LoopOmpAttributes[innerloopindex].end, str : tabOP.join('') + 'endfor'});
 	end
+	condition $loop.astName === 'ForStmt' end
 
 	var candidateArraylist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {usedInClause : false, hasDescendantOfArrayAccess : true});
 
@@ -61,7 +64,7 @@ aspectdef BuildPetitFileInput
 	{
 		var varObj = candidateArraylist[i];
 		
-		if (varObj.use.indexOf('W')===-1)
+		if ( varObj.use.indexOf('W') === -1 || varObj.sendtoPetit === false)			
 			continue;
 		
 		for(var j = 0; j < varObj.varUsage.length; j++)
@@ -120,9 +123,10 @@ aspectdef BuildPetitFileInput
 
 	
 	for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
-	{		
+	{
 		LoopOmpAttributes[loopindex].ForStmtToPetit[i].str = LoopOmpAttributes[loopindex].ForStmtToPetit[i].str.moveBracketsToEnd3(LoopOmpAttributes[loopindex].petit_arrays);
 	}
+
 
 	var j = -6;
 	for ( var key in LoopOmpAttributes[loopindex].petit_arrays)
@@ -137,14 +141,11 @@ aspectdef BuildPetitFileInput
 		j--;
 	}
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : j, str : '!' + Array(50).join('-') +' arrays'});
-
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -5, str : '!' + Array(50).join('-') +' loop indices'});
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -4, str : 'integer ' + LoopOmpAttributes[loopindex].petit_loop_indices.join(',')});
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -3, str : '!' + Array(50).join('-') +' variables'});
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -2, str : 'integer ' + LoopOmpAttributes[loopindex].petit_variables.join(',')});
-	
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -1, str : '!' + Array(50).join('-') +' body code'});
-
 	LoopOmpAttributes[loopindex].ForStmtToPetit = LoopOmpAttributes[loopindex].ForStmtToPetit.sort(
 				function(obj1, obj2)
 				{
@@ -155,7 +156,31 @@ aspectdef BuildPetitFileInput
 				});
 
 
-	
+	var count = 1;
+	var replaceloopindices = {};
+
+	for(var loopindices of LoopOmpAttributes[loopindex].petit_loop_indices)
+		if (loopindices.length > 5)
+		{
+			replaceloopindices[loopindices] = {};
+			replaceloopindices[loopindices].rep = 'tmp' + count.toString();;
+			count = count + 1;
+		}
+
+
+	for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
+	{
+		for (var key in replaceloopindices)
+			if (LoopOmpAttributes[loopindex].ForStmtToPetit[i].str.indexOf(key) !== -1)				
+			{
+				LoopOmpAttributes[loopindex].ForStmtToPetit[i].str = Strings.replacer(LoopOmpAttributes[loopindex].ForStmtToPetit[i].str,key,replaceloopindices[key].rep);
+			}
+		
+	}
+
+	for(var replace_var of replace_vars)
+		for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
+			LoopOmpAttributes[loopindex].ForStmtToPetit[i].str = Strings.replacer(LoopOmpAttributes[loopindex].ForStmtToPetit[i].str,replace_var,replace_var.substr(1));
 end
 
 
@@ -201,10 +226,7 @@ aspectdef CovertLoopToPetitForm
 		$cast.replaceWith(child);
 	}
 
-
-
 	var str_init = 	cloneJP.code;
-
 
 	loopPetitForm +=  loopControlVarname + '  =  ' + str_init + '  to  ';
 
@@ -242,9 +264,13 @@ aspectdef CovertLoopToPetitForm
 		$cast.replaceWith(child);
 	}
 	
-
 	var str_cond = 	cloneJP.code;
 
+	for($cast of cloneJP.descendantsAndSelf("binaryOp"))
+	{
+		if (['shr' , 'shl'].indexOf($cast.kind) !==  -1)
+			str_cond = '9999';
+	}
 
 	loopPetitForm +=  str_cond;
 
@@ -273,12 +299,8 @@ aspectdef CovertLoopToPetitForm
  	}
  	else if (stepOp === 'assign')
  	{
-
  		loopPetitForm += '  do';
  	}
- 	else
- 	{
- 		println(Array(10).join('#') + ' ERROR in BuildPetitFileInput ' + Array(10).join('#'));
- 	}
+
 
 end	

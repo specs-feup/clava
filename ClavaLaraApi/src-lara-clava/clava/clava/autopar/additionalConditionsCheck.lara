@@ -13,15 +13,34 @@ aspectdef additionalConditionsCheck
 		return;
 
 
-	
+	var conterNum = null;
+
+	try
+	{
+		conterNum = eval($ForStmt.endValue + '-' +  $ForStmt.initValue);
+	}
+	catch(e)
+	{
+	}
+
+
+	if (
+		Number($ForStmt.endValue) !== NaN &&
+		conterNum !== null &&
+		Math.abs(Number(conterNum)) < 50
+		)
+	{
+		Add_msgError(LoopOmpAttributes, $ForStmt, ' Loop Iteration number is too low');
+		return;
+	}		
+
 	call o : checkForFunctionCalls($ForStmt);
 	if (o.FunctionCalls.length > 0)
 	{
-		Add_msgError(LoopOmpAttributes, $ForStmt, 'Found function call inside loop that prevented parallelization: ' + o.FunctionCalls.join(','));
+		Add_msgError(LoopOmpAttributes, $ForStmt, 'Variables Access as passed arguments Can not be traced inside of function calls : \n' + o.FunctionCalls.join('\n'));
+		return;
 	}
-	
 
-	// check non-affine array subscript A[B[j]].... ????
 	//------------------------------------------------------------
 	// check for usage of array access as the subscript A[B[.]]
 	//------------------------------------------------------------
@@ -30,11 +49,9 @@ aspectdef additionalConditionsCheck
 		if ($subscript.descendantsAndSelf('arrayAccess').length > 0)
 		{
 			Add_msgError(LoopOmpAttributes, $ForStmt,' Array access ' + $arrayAccess.code + ' has subscript of arrayType ' + $subscript.code);
-			println($subscript.code);
 			return;
 		}
 	end
-
-
+	condition $arrayAccess.use.indexOf('write') !== -1 end
 
 end

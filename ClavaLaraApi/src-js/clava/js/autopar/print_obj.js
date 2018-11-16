@@ -8,17 +8,13 @@ function print_obj(obj,msg,tap)
 
 	msg = (typeof msg !== 'undefined') ? msg : '';
 	tap = (typeof tap !== 'undefined') ? tap : '\t';
-		
-	println('\n' + tap + '| print_obj --> ' + msg);
-   
+		   
     var strobj = ObjToStr(obj);
     for (var i = 0; i < strobj.length; i++)    
     {
     	str = strobj[i];
-    	println(tap + '| \t' + str);
     }
-    
-    println(tap + '|' + Array(100).join("-"));
+
 }
 /**************************************************************
 * 
@@ -47,7 +43,6 @@ function ObjToStr(obj)
             key = keys[j];
             if (key === 'astId') continue;
             if (typeof myObject[key] === 'object' && myObject[key] !== null)
-                //str += key + ' : [' + ObjToStr(myObject[key]).join(' | ') +'] \t';
                 str += '';
             else
                 str += key + ' : ' + myObject[key] +' \t';

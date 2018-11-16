@@ -7,10 +7,6 @@ import clava.autopar.checkForInvalidStmts;
 
 aspectdef checkForOpenMPCanonicalForm	
 	input $ForStmt end
-	/*
-			this aspectdef will set some user fields such as controlVarsName, controlVarsAstId and  msgError for $ForStmt
-			however, if the loop is not in OpenMP Canonical Form, the use field hasOpenMPCanonicalForm will be false
-	*/
 
 	var loopindex = GetLoopIndex($ForStmt);
 
@@ -30,22 +26,19 @@ aspectdef checkForOpenMPCanonicalForm
 	// check if all inner loops are in OpenMP Canonical Form or not
 	select $ForStmt.body.loop end
 	apply
+		if($loop.astName !== 'ForStmt') {
+			throw "Not a for stmt: " + $loop.astName;
+		}
+
 		var innerloopindex = $loop.astAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
 		if (LoopOmpAttributes[innerloopindex] === undefined)
 			call checkForOpenMPCanonicalForm($loop);
 
-		if (LoopOmpAttributes[innerloopindex].hasOpenMPCanonicalForm === false)
-		{
-			Add_msgError(LoopOmpAttributes, $ForStmt, 'loop contains inner ForStmt which are not in OpenMP Canonical Form');
-			LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
-			return;
-		}
-		else
 		{
 
 			if (LoopOmpAttributes[innerloopindex].loopControlVarname === undefined)			
 				{
-					Add_msgError(LoopOmpAttributes, $ForStmt,'inner loop #' + $loop.line + ' dose not have loopControlVarname');
+					Add_msgError(LoopOmpAttributes, $ForStmt,'inner loop #' + $loop.line + '\t' +  innerloopindex + ' dose not have loopControlVarname');
 					return;
 				}
 
@@ -58,17 +51,16 @@ aspectdef checkForOpenMPCanonicalForm
 				LoopOmpAttributes[loopindex].innerloopsControlVarname.push(varName);
 		}
 	end
+	condition $loop.astName === 'ForStmt' end
 
 
 	var controlVarsName = [];
 	var controlVarsAstId = [];
 	var msgError = [];
-
-
-
 	var initVars = [];
 	var initVardecl = []; 	 	
  	var initmsgError = [];
+
 	select $ForStmt.init.vardecl end
 	apply
 		initVardecl.push({
@@ -161,7 +153,11 @@ aspectdef checkForOpenMPCanonicalForm
 	if (initVarref.length > 1)
 		initmsgError.push(' only single var initialization is allowed' );
 	else if (initVarref.length == 1 && initVarref[0].varType != 'int')
+	{
+		/*
 		initmsgError.push('typeOf(' + initVarref[0].name + ') = ' + initVarref[0].varType + ' as loop counter type is not allowed' );
+		*/
+	}
 
 	//------------------------------------------------------------
 	// checking loop for at least one control var
@@ -211,13 +207,9 @@ aspectdef checkForOpenMPCanonicalForm
  	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
 		stepmsgError.push('loop-step expression is not in canonical form' );
 
-
-
 	msgError = msgError.concat(initmsgError);
 	msgError = msgError.concat(condmsgError);
 	msgError = msgError.concat(stepmsgError);
-
-	
 
 	if (controlVarsAstId.length === 1)
 	{
@@ -227,7 +219,6 @@ aspectdef checkForOpenMPCanonicalForm
 			LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
 			msgError.push('For controlVar is changed inside of loop body');
 		}
-
 	}
 
 	call o : checkForInvalidStmts($ForStmt);
@@ -241,7 +232,6 @@ aspectdef checkForOpenMPCanonicalForm
 	{
 		Add_msgError(LoopOmpAttributes, $ForStmt, msgError);
 		LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
-		return;
 	}
 	
 
@@ -276,6 +266,8 @@ aspectdef checkForOpenMPCanonicalForm
 	LoopOmpAttributes[loopindex].firstprivateVars = [];
 	LoopOmpAttributes[loopindex].lastprivateVars = [];
 	LoopOmpAttributes[loopindex].Reduction = [];
+	LoopOmpAttributes[loopindex].threadprivate = [];
+	LoopOmpAttributes[loopindex].Reduction_listVars = [];
 	LoopOmpAttributes[loopindex].DepPetitFileName = null;
 
 
@@ -289,7 +281,6 @@ aspectdef checkForOpenMPCanonicalForm
 				LoopOmpAttributes[loopindex].DepArrays.push($arrayAccess.arrayVar.name);
 		}
 	end
-
 
 end
 

@@ -3,9 +3,7 @@
 *                       ExecPetitDependencyTest
 * 
 **************************************************************/
-//import OmegaConfig;
 import clava.autopar.AutoParUtils;
-import lara.util.ProcessExecutor;
 
 aspectdef ExecPetitDependencyTest
 	input $ForStmt end
@@ -15,10 +13,10 @@ aspectdef ExecPetitDependencyTest
 		return;
 
 	LoopOmpAttributes[loopindex].petitInputFileAddress = Clava.getWeavingFolder() + 
-		'/deploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' + '.t';
+		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' + '.t';
 
 	LoopOmpAttributes[loopindex].petitOutputFileAddress = Clava.getWeavingFolder() + 
-		'/deploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' +'_output.t';
+		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.astAncestor('FunctionDecl').name + ']' +'_output.t';
 
 	var petit_input_file = [];
 	for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
@@ -28,9 +26,10 @@ aspectdef ExecPetitDependencyTest
 
 	Io.writeFile(LoopOmpAttributes[loopindex].petitInputFileAddress, petit_input_file.join('\n'));
 
-
-	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4 "' + LoopOmpAttributes[loopindex].petitInputFileAddress + '" -R"' + LoopOmpAttributes[loopindex].petitOutputFileAddress +'"';
-
+	/*
+	var Petitcmd =  OmegaConfig.petitExecutable + ' -Fc -g -s -4 ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
+	*/
+	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4  ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
 
 	// RUN petit dependency test 
 	var application = new ProcessExecutor();
@@ -97,16 +96,20 @@ aspectdef ExecPetitDependencyTest
 
 
 			if (
+				//(depObj.depStatus.indexOf('Z') !== -1 && depObj.depVector[0] !== '0')||
 				outputLine[5].indexOf('#') !== -1 ||
 				String(depObj.depVector.join('')).allReplace({'\\+':'','0':'','\\*':''}).length !== 0
 				)
 			{
-				nosolvedepvarName.push(varName);
+				if (nosolvedepvarName.indexOf(varName) === -1)
+				{
+					nosolvedepvarName.push(varName);
+				}
 			}
 
 			var check_str = [];
 			if  (
-					depObj.subscriptNumber <= depObj.depVector.length &&
+					depObj.subscriptNumber === depObj.depVector.length &&
 					( depObj.IsdependentInnerloop_src || depObj.IsdependentCurrentloop_src ) &&
 					(String(depObj.depVector.join('')).allReplace({'\\+':'','0':''}).length === 0) 
 					&& (depObj.depVector[0] === '0')
@@ -116,24 +119,24 @@ aspectdef ExecPetitDependencyTest
 				depObj.canbeignored = true;
 			}
 
-			if (depObj.depVector[0] === '0' || depObj.src > depObj.dst)
-				depObj.canbeignored = true;
-
-
 			if (
-				depObj.canbeignored === true &&
-				depObj.parentlooprank_src !== depObj.parentlooprank_dst &&
-				depObj.src > depObj.dst
+					(depObj.depVector[0] === '0' && depObj.src_usge === depObj.dst_usge )||
+					//depObj.src > depObj 
+					(depObj.src > depObj.dst && depObj.subscriptNumber === depObj.depVector.length &&
+						depObj.parentlooprank_dst.indexOf(depObj.parentlooprank_src + '_') === -1 ) // add new
 				)
 			{
-				depObj.canbeignored = false;
+				depObj.canbeignored = true;				
 			}
 
+			if (depObj.IsdependentCurrentloop_src === false || depObj.IsdependentCurrentloop_dst === false)
+				depObj.canbeignored = false;
 
 			LoopOmpAttributes[loopindex].PetitFoundDependency.push(depObj);
 
 			Io.appendFile(LoopOmpAttributes[loopindex].petitInputFileAddress,'!-\t' + PetitOutputDependencyFile[i] + 
-				(depObj.canbeignored === true ?'\t canbeignored = ' + depObj.canbeignored : '') + 
+				(depObj.canbeignored === true ?'\t canbeignored = ' + depObj.canbeignored : '\t'+Array(21).join(' ')) + 
+				(nosolvedepvarName.indexOf(depObj.varName) !== -1 ?'\t cannotbesolved = true' : '') +
 				'\n');
 		}
 		

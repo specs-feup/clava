@@ -1,0 +1,78 @@
+/**************************************************************
+* 
+*                       LoopInductionVariables
+* 
+**************************************************************/
+aspectdef LoopInductionVariables
+
+	var inductionVariables = {};
+	var inductionVariablesName = [];
+	var functionNames = [];
+
+	select file.function.loop.binaryOp end
+	apply
+		if (
+				$binaryOp.left.joinpointType === 'varref'
+			)
+		{
+			$varref = $binaryOp.left;
+			astId = $varref.vardecl.astId;		
+			
+			if (inductionVariables[astId] === undefined)
+			{
+				inductionVariables[astId] = {};
+				inductionVariables[astId].varName = $varref.name;
+				inductionVariables[astId].varAccess = [];
+				
+				inductionVariablesName.push($varref.name);
+
+				if ( functionNames.indexOf($function.name) === -1)
+					functionNames.push($function.name);
+			}
+
+			if (
+				$binaryOp.isInsideLoopHeader === false &&
+				$binaryOp.ancestor('if') === undefined && 
+				$binaryOp.descendantsAndSelf("arrayAccess").length === 0 && 
+				$binaryOp.descendantsAndSelf("call").length === 0 && 
+				$binaryOp.descendantsAndSelf("unaryOp").length === 0 &&
+				$binaryOp.code.indexOf('>>')  === -1 &&
+				$binaryOp.code.indexOf('<<')  === -1				
+				)
+			{
+				inductionVariables[astId].varAccess.push({
+											line : $varref.line,
+											replaceCode : $binaryOp.right.code
+											});
+			}
+			else
+			{
+				inductionVariables[astId].varAccess.push({
+											line : $varref.line,
+											replaceCode : $varref.name
+											});				
+			}
+		}
+
+	end
+	condition $loop.nestedLevel === 0 && $binaryOp.kind === 'assign' end
+
+	select file.function.loop.body.arrayAccess.subscript end
+	apply
+		if (inductionVariables[$subscript.vardecl.astId] !== undefined )
+		{
+			var replaceCode = null;
+			for(obj of inductionVariables[$subscript.vardecl.astId].varAccess)
+				if (obj.line < $subscript.line)
+					replaceCode = obj.replaceCode;
+
+			if (replaceCode !== null && replaceCode !== $subscript.name )
+			{
+				strbefor = $arrayAccess.code;
+				$subscript.insert replace replaceCode;
+			}
+		}
+	end
+	condition $loop.nestedLevel === 0 && $subscript.joinpointType === 'varref' end
+
+end
