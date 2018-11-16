@@ -10,10 +10,15 @@ aspectdef checkForFunctionCalls
  		
 	// check for calling functions
 
+	var userSafeFunctions = $ForStmt.data.safeFunctions;
+	
 	select $ForStmt.call end
 	apply				
 		//if ($call.hasDefinition === false)
-		if (safefunctionCallslist.indexOf($call.name) === -1)
+		var isSafe = (safefunctionCallslist.indexOf($call.name) !== -1) ||
+					  (userSafeFunctions !== undefined && userSafeFunctions.indexOf($call.name) !== -1);
+		//if (safefunctionCallslist.indexOf($call.name) === -1 )
+		if (!isSafe)	
 			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
 	end
 	condition $call.astName === 'CallExpr' end

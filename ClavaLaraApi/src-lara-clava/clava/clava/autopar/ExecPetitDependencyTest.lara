@@ -4,6 +4,7 @@
 * 
 **************************************************************/
 import clava.autopar.AutoParUtils;
+import lara.util.ProcessExecutor;
 
 aspectdef ExecPetitDependencyTest
 	input $ForStmt end

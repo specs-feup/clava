@@ -3,7 +3,7 @@
 *                       RunInlineFunctionCalls
 * 
 **************************************************************/
-import clava.autopar.clava.ClavaType;
+import clava.ClavaType;
 
 var countCallInlinedFunction;
 aspectdef RunInlineFunctionCalls

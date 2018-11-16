@@ -2,10 +2,17 @@ import clava.autopar.InlineFunctionCalls;
 import clava.autopar.RemoveNakedloops;
 import clava.autopar.NormalizedBinaryOp;
 import clava.autopar.ParallelizeLoop;
+import clava.autopar.AddPragmaLoopIndex;
+import clava.autopar.RunInlineFunctionCalls;
+import clava.autopar.LoopInductionVariables;
+import clava.autopar.CheckForSafeFunctionCall;
+
 
 import clava.Clava;
 import lara.util.CodeInserter;    
 import lara.Io;
+
+import weaver.WeaverJps;
 
 /**
  * Utility methods for parallelization.
@@ -26,10 +33,12 @@ Parallelize.forLoops = function($loops) {
 	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
 	
 	// Add pragmas to loops
+	/*
 	for(var $loop of $loops) {
 		var ompPragma = parallelLoops[$loop.astId];
 		if(ompPragma === undefined) {
-			println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
+			println("Could not parallelize loop@"+$loop.location);
+			//println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
 			continue;
 		}
 
@@ -38,6 +47,7 @@ Parallelize.forLoops = function($loops) {
 		// Add include
 		$loop.ancestor("file").addInclude("omp.h",true);
 	}
+	*/
 	
     println('Parallelization finished');    
 }
@@ -132,10 +142,13 @@ Parallelize.getForLoopsPragmas = function($loops) {
 
 
 	// Rebuild tree	
+	Clava.rebuild();
+	/*
 	select program end
 	apply
 		$program.rebuild();
 	end
+	*/
 	
 	call LoopInductionVariables;
 	call CheckForSafeFunctionCall;
@@ -143,10 +156,13 @@ Parallelize.getForLoopsPragmas = function($loops) {
  	call NormalizedBinaryOp;
 
  	// Rebuild tree	
+	Clava.rebuild();
+	/*
 	select program end
 	apply
 		$program.rebuild();
 	end
+	*/
 
     println('Parallelizing ' + $forLoops.length + ' for loops...');
 
@@ -178,9 +194,10 @@ Parallelize.getForLoopsPragmas = function($loops) {
 	// Revert AST changes
 	Clava.popAst();
 
-
-	select file.function.loop end
-	apply
+	
+	for(var $loop of WeaverJps.search('loop').get()) {
+	//select file.function.loop end
+	//apply
 		var loopindex = GetLoopIndex($loop);
 		if 	(OmpPragmas[loopindex] !== undefined)
 		{
@@ -188,12 +205,16 @@ Parallelize.getForLoopsPragmas = function($loops) {
 			parallelLoops[$pragma.content] = OmpPragmas[loopindex].pragmaCode;
 		}
 
-	end
+	//end
+	}
 
+	Clava.rebuild();
+	/*
 	select program end
 	apply
 		$program.rebuild();
 	end
+	*/
 
 
 	var result = {};
