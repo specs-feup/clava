@@ -220,4 +220,9 @@ public class CxxTest {
     public void testFileRebuild() {
         newTester().test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h", "file_rebuild_2.h");
     }
+
+    @Test
+    public void testSetters() {
+        newTester().test("Setters.lara", "setters.cpp");
+    }
 }

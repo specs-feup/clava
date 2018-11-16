@@ -1,0 +1,14 @@
+aspectdef Setters
+
+	select function{"testSetQualifiedName"}.call{"now"} end
+	apply
+		println("Original qualified name: " + $call.declaration.qualifiedName);
+		$call.declaration.qualifiedName = "now";
+		println("Changed qualified name 1: " + $call.declaration.qualifiedName);
+		$call.declaration.qualifiedName = "std::now";
+		println("Changed qualified name 2: " + $call.declaration.qualifiedName);
+		$call.declaration.qualifiedPrefix = "std::chrono::_V2::system_clock";
+		println("Changed qualified name 3: " + $call.declaration.qualifiedName);
+	end
+
+end
