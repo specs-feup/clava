@@ -106,6 +106,9 @@ public class CxxWeaverOptions {
         addBooleanOption(ClangAstKeys.USE_PLATFORM_INCLUDES, "psi", "platform-includes",
                 // "Uses the platform system includes headers (if available)");
                 "Disable built-in lib C/C++ includes");
+
+        addBooleanOption(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS, "ipe", "ignore-parsing-errors",
+                "Ignores parsing errors in C/C++ source code");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
