@@ -3,6 +3,7 @@
 *                       RunInlineFunctionCalls
 * 
 **************************************************************/
+import clava.ClavaJoinPoints;
 import clava.ClavaType;
 
 var countCallInlinedFunction;
