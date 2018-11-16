@@ -112,5 +112,11 @@ public class CxxApiTest {
     @Test
     public void testRebuild() {
         newTester().test("RebuildTest.lara", "rebuild.cpp");
+        // try {
+        // newTester().test("RebuildTest.lara", "rebuild.cpp");
+        // fail("Expected an exception");
+        // } catch (Exception e) {
+        // // This is fine
+        // }
     }
 }

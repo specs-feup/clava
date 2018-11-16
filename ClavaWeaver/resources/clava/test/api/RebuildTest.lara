@@ -20,6 +20,26 @@ aspectdef RebuildTest
 	Clava.rebuild();
 	println("Original code:\n" + Clava.getProgram().code);
 	
+
+/*	
+	// Insert error in the code to parse
+	select function{"main"}.body end
+	apply
+		$body.insertBegin("a = 0;\nb = 0;");
+	
+	end
+	
+	// Should give an error
+	Clava.rebuild();
+	/*
+	try {
+		Clava.rebuild();
+		println("Did not find compilation error");		
+	} catch(e) {
+		println("Found compilation error");
+	}
+	*/
+	
 //	select program end
 //	apply
 //		$program.rebuild();
