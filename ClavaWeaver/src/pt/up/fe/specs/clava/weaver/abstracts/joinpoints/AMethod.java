@@ -279,6 +279,20 @@ public abstract class AMethod extends AFunction {
     /**
      * 
      */
+    public void defQualifiedPrefixImpl(String value) {
+        this.aFunction.defQualifiedPrefixImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defQualifiedNameImpl(String value) {
+        this.aFunction.defQualifiedNameImpl(value);
+    }
+
+    /**
+     * 
+     */
     public void defBodyImpl(AScope value) {
         this.aFunction.defBodyImpl(value);
     }
@@ -587,6 +601,20 @@ public abstract class AMethod extends AFunction {
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedPrefix": {
+        	if(value instanceof String){
+        		this.defQualifiedPrefixImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedName": {
+        	if(value instanceof String){
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

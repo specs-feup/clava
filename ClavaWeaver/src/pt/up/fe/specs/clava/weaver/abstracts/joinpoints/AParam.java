@@ -134,6 +134,20 @@ public abstract class AParam extends AVardecl {
 
     /**
      * 
+     */
+    public void defQualifiedPrefixImpl(String value) {
+        this.aVardecl.defQualifiedPrefixImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defQualifiedNameImpl(String value) {
+        this.aVardecl.defQualifiedNameImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -334,6 +348,20 @@ public abstract class AParam extends AVardecl {
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedPrefix": {
+        	if(value instanceof String){
+        		this.defQualifiedPrefixImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedName": {
+        	if(value instanceof String){
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

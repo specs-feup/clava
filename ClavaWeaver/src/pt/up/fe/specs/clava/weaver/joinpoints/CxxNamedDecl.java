@@ -90,4 +90,25 @@ public class CxxNamedDecl extends ANamedDecl {
     public String getQualifiedNameImpl() {
         return namedDecl.getQualifiedName();
     }
+
+    @Override
+    public void defQualifiedPrefixImpl(String value) {
+        namedDecl.set(NamedDecl.QUALIFIED_PREFIX, value);
+    }
+
+    @Override
+    public void defQualifiedNameImpl(String value) {
+        namedDecl.setQualifiedName(value);
+    }
+
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        defQualifiedPrefixImpl(qualifiedPrefix);
+    }
+
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        defQualifiedNameImpl(name);
+    }
+
 }

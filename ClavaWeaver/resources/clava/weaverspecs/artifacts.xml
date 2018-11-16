@@ -193,8 +193,12 @@
 			<def/>
 		</attribute>
 		<attribute name="isPublic" type="Boolean" />
-		<attribute name="qualifiedPrefix" type="String" />
-		<attribute name="qualifiedName" type="String" />		
+		<attribute name="qualifiedPrefix" type="String">
+			<def/>
+		</attribute>
+		<attribute name="qualifiedName" type="String">
+			<def/>		
+		</attribute>		
 	</artifact>
 
 

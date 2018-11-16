@@ -6189,6 +6189,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -9700,6 +9728,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -11285,6 +11341,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -12727,6 +12811,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
                               "defaultValue": ""
                            }]
                },
@@ -14765,6 +14877,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
                               "defaultValue": ""
                            }]
                },
@@ -21795,6 +21935,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -22517,6 +22685,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
                               "defaultValue": ""
                            }]
                },
@@ -25205,6 +25401,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
                               "defaultValue": ""
                            }]
                },
@@ -30173,6 +30397,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -32656,6 +32908,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
                               "defaultValue": ""
                            }]
                },
@@ -36724,6 +37004,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -39902,6 +40210,34 @@
                            {
                               "type": "String",
                               "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified name of this namedDecl (changes both the name and qualified prefix)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the qualified prefix of this namedDecl",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setQualifiedPrefix"
+                           },
+                           {
+                              "type": "String",
+                              "name": "qualifiedPrefix",
                               "defaultValue": ""
                            }]
                },

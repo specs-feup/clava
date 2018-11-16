@@ -114,6 +114,20 @@ public abstract class AEnumDecl extends ANamedDecl {
 
     /**
      * 
+     */
+    public void defQualifiedPrefixImpl(String value) {
+        this.aNamedDecl.defQualifiedPrefixImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defQualifiedNameImpl(String value) {
+        this.aNamedDecl.defQualifiedNameImpl(value);
+    }
+
+    /**
+     * 
      * @param node 
      */
     @Override
@@ -247,6 +261,24 @@ public abstract class AEnumDecl extends ANamedDecl {
     }
 
     /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aNamedDecl.setQualifiedPrefixImpl(qualifiedPrefix);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aNamedDecl.setQualifiedNameImpl(name);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -305,6 +337,20 @@ public abstract class AEnumDecl extends ANamedDecl {
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedPrefix": {
+        	if(value instanceof String){
+        		this.defQualifiedPrefixImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedName": {
+        	if(value instanceof String){
+        		this.defQualifiedNameImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

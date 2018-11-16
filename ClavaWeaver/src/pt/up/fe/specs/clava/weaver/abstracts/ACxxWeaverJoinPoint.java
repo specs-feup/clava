@@ -606,12 +606,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Integer getAstNumChildrenImpl() {
-        ClavaNode node = getNode();
-        if (node == null) {
-            return -1;
-        }
-
-        return node.getNumChildren();
+        return getAstChildrenArrayImpl().length;
+        // ClavaNode node = getNode();
+        // if (node == null) {
+        // return -1;
+        // }
+        //
+        // return node.getNumChildren();
     }
 
     @Override

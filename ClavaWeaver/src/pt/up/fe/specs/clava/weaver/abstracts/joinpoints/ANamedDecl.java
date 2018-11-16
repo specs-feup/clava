@@ -110,6 +110,13 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * 
+     */
+    public void defQualifiedPrefixImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedPrefix with type String not implemented ");
+    }
+
+    /**
      * Get value on attribute qualifiedName
      * @return the attribute's value
      */
@@ -135,6 +142,13 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * 
+     */
+    public void defQualifiedNameImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def qualifiedName with type String not implemented ");
+    }
+
+    /**
      * Sets the name of this namedDecl
      * @param name 
      */
@@ -157,6 +171,58 @@ public abstract class ANamedDecl extends ADecl {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        throw new UnsupportedOperationException(get_class()+": Action setQualifiedPrefix not implemented ");
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    public final void setQualifiedPrefix(String qualifiedPrefix) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
+        	}
+        	this.setQualifiedPrefixImpl(qualifiedPrefix);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setQualifiedPrefix", this, Optional.empty(), qualifiedPrefix);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setQualifiedPrefix", e);
+        }
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    public void setQualifiedNameImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action setQualifiedName not implemented ");
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    public final void setQualifiedName(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setQualifiedName", this, Optional.empty(), name);
+        	}
+        	this.setQualifiedNameImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setQualifiedName", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setQualifiedName", e);
         }
     }
 
@@ -345,6 +411,20 @@ public abstract class ANamedDecl extends ADecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "qualifiedPrefix": {
+        	if(value instanceof String){
+        		this.defQualifiedPrefixImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "qualifiedName": {
+        	if(value instanceof String){
+        		this.defQualifiedNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -376,6 +456,8 @@ public abstract class ANamedDecl extends ADecl {
     protected void fillWithActions(List<String> actions) {
         this.aDecl.fillWithActions(actions);
         actions.add("void setName(String)");
+        actions.add("void setQualifiedPrefix(String)");
+        actions.add("void setQualifiedName(String)");
     }
 
     /**

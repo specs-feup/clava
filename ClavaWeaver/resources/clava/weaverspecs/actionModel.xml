@@ -258,7 +258,16 @@
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
 		<parameter name="name" type="String" />
-	</action>	
+	</action>
+
+	<action name="setQualifiedPrefix" class="namedDecl" tooltip="Sets the qualified prefix of this namedDecl">
+		<parameter name="qualifiedPrefix" type="String" />
+	</action>
+	
+	<action name="setQualifiedName" class="namedDecl" tooltip="Sets the qualified name of this namedDecl (changes both the name and qualified prefix)">
+		<parameter name="name" type="String" />
+	</action>
+	
 
 
 	<!-- LOOP -->
