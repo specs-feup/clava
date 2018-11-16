@@ -312,4 +312,20 @@ public abstract class NamedDecl extends Decl {
         return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_PREFIX);
     }
 
+    public void setQualifiedName(String qualifiedName) {
+        // Split the qualified name into qualified prefix and name
+        String name = qualifiedName;
+        String qualifiedPrefix = "";
+
+        int lastIndexOfColon = qualifiedName.lastIndexOf("::");
+
+        if (lastIndexOfColon != -1) {
+            qualifiedPrefix = qualifiedName.substring(0, lastIndexOfColon);
+            name = qualifiedName.substring(lastIndexOfColon + "::".length(), qualifiedName.length());
+        }
+
+        set(QUALIFIED_PREFIX, qualifiedPrefix);
+        set(DECL_NAME, name);
+    }
+
 }
