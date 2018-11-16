@@ -57,6 +57,7 @@ mkdir clava
 cd clava
 wget -N specs.fe.up.pt/tools/clava/ClavaGenerate.cmake
 wget -N specs.fe.up.pt/tools/clava/ClavaWeave.cmake
+wget -N specs.fe.up.pt/tools/clava/ClavaWeave.CMakeLists.txt
 cd ..
 
 mkdir util
