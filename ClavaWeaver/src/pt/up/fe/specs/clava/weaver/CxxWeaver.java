@@ -1127,6 +1127,9 @@ public class CxxWeaver extends ACxxWeaver {
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
         App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
 
+        // Remove app from context stack
+        context.popApp();
+
         // Delete current code folder
         SpecsIo.deleteFolder(currentCodeFolder);
 
