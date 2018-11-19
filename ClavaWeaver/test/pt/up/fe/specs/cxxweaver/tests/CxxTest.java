@@ -87,7 +87,10 @@ public class CxxTest {
 
     @Test
     public void testHdf5Types() {
-        newTester().test("Hdf5Types.lara", "hdf5types.cpp");
+        newTester()
+                // Disable syntax checking, since test system may not have HDF5 includes automatically available
+                .setCheckWovenCodeSyntax(false)
+                .test("Hdf5Types.lara", "hdf5types.cpp");
     }
 
     @Test
