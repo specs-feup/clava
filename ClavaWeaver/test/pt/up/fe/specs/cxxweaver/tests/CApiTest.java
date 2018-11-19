@@ -72,14 +72,6 @@ public class CApiTest {
     }
 
     @Test
-    public void testAutoParBt() {
-        if (SpecsPlatforms.isUnix()) {
-            newTester().test("AutoParBtTest.lara", "autopar_bt_test.c");
-        }
-
-    }
-
-    @Test
     public void testCodeInserter() {
         newTester().test("CodeInserterTest.lara", "code_inserter.c");
     }
