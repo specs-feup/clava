@@ -1,4 +1,5 @@
 import clava.ClavaType;
+//import lara.util.StringSet;
 
 aspectdef TypeRenamer
 
@@ -9,7 +10,17 @@ aspectdef TypeRenamer
 		var $typeCopy = ClavaType.getVarrefsInTypeCopy($vardecl.type, varrefs);
 
 		for(var $varref of varrefs) {
-			$varref.name = $varref.name + "_renamed";
+			//println("Varref name: " + $varref.name);
+			//println("Vardecl name: " + $varref.declaration.name);
+			//println("Vardecl loc: " + $varref.declaration.location);
+			
+			//$varref.name = $varref.name + "_renamed";
+			var $vdecl = $varref.declaration;
+			if($vdecl.name.endsWith("_renamed")) {
+				continue;
+			}
+			
+			$vdecl.name = $vdecl.name + "_renamed";
 		}
 				
 		println("Original type: " + $vardecl.type.code);		
