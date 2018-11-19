@@ -9,6 +9,8 @@ There is an [installation script](http://specs.fe.up.pt/tools/clava/clava-update
 
 For an online demo version of Clava, please click [here](http://specs.fe.up.pt/tools/clava/).
 
+For a tutorial on how to use Clava, please click [here](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
+
 
 # configuring eclipse
 
