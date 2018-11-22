@@ -523,6 +523,7 @@ public abstract class ANamedDecl extends ADecl {
         CONTAINS("contains"),
         FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
+        FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

@@ -341,6 +341,7 @@ public abstract class ANewExpr extends AExpression {
         CONTAINS("contains"),
         FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
+        FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

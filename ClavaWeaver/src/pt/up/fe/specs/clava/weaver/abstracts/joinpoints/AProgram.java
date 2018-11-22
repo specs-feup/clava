@@ -682,6 +682,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         CONTAINS("contains"),
         FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
+        FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

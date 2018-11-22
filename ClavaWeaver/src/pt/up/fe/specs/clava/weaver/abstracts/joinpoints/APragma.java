@@ -265,6 +265,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         CONTAINS("contains"),
         FIRSTJP("firstJp"),
         ASTISINSTANCE("astIsInstance"),
+        FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),

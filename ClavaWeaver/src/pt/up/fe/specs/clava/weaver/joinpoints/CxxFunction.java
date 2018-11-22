@@ -129,6 +129,11 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
+    public AJoinPoint insertAfterImpl(String code) {
+        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), this));
+    }
+
+    @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         // If node is a FunctionDecl, insert it as it is
         if (node.getNode() instanceof FunctionDecl) {
@@ -136,6 +141,11 @@ public class CxxFunction extends AFunction {
         }
 
         return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
+    }
+
+    @Override
+    public AJoinPoint insertBeforeImpl(String code) {
+        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), this));
     }
 
     @Override

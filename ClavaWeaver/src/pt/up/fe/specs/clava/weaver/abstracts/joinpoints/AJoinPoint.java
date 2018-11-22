@@ -481,6 +481,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("endLine");
         attributes.add("endColumn");
         attributes.add("location");
+        attributes.add("filename");
         attributes.add("astId");
         attributes.add("ast");
         attributes.add("code");
@@ -990,6 +991,31 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "location", e);
+        }
+    }
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    public abstract String getFilenameImpl();
+
+    /**
+     * Get value on attribute filename
+     * @return the attribute's value
+     */
+    public final Object getFilename() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "filename", Optional.empty());
+        	}
+        	String result = this.getFilenameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "filename", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "filename", e);
         }
     }
 

@@ -251,6 +251,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -980,6 +988,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -1812,6 +1828,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -2602,6 +2626,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -3464,6 +3496,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -4371,6 +4411,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -5206,6 +5254,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -5944,6 +6000,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -6689,6 +6753,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -7366,6 +7438,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -8085,6 +8165,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -8767,6 +8855,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -9488,6 +9584,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -10350,6 +10454,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -11106,6 +11218,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -11867,6 +11987,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -12581,6 +12709,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -13416,6 +13552,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -14507,6 +14651,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -15512,6 +15664,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -16298,6 +16458,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -17105,6 +17273,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -17949,6 +18125,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -18957,6 +19141,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -19729,6 +19921,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -20606,6 +20806,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -21560,6 +21768,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -22459,6 +22675,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -23212,6 +23436,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -24105,6 +24337,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -25144,6 +25384,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -26020,6 +26268,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -26887,6 +27143,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -27649,6 +27913,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -28454,6 +28726,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -29385,6 +29665,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -30157,6 +30445,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -30951,6 +31247,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -31883,6 +32187,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -32677,6 +32989,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -33435,6 +33755,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -34277,6 +34605,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -35163,6 +35499,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -36013,6 +36357,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -36769,6 +37121,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -37570,6 +37930,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -38323,6 +38691,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -39140,6 +39516,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -39949,6 +40333,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {
@@ -40845,6 +41237,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -41664,6 +42064,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Looks in the descendants for the first node of the given type",
                   "children": [
                            {
@@ -42391,6 +42799,14 @@
                            {
                               "type": "Integer",
                               "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
                            }]
                },
                {

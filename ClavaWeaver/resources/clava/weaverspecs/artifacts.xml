@@ -49,6 +49,7 @@
 		<attribute name="endLine" type="Integer" tooltip="The ending line of the current node in the original code"/>
 		<attribute name="endColumn" type="Integer" tooltip="The ending column of the current node in the original code"/>		
 		<attribute name="location" type="String" />
+		<attribute name="filename" type="String" />
 		<attribute name="astId" type="String" />
 		<attribute name="ast" type="String" />
 		<attribute name="code" type="String" />
