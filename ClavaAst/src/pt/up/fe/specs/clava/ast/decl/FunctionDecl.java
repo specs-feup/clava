@@ -275,7 +275,7 @@ public class FunctionDecl extends DeclaratorDecl {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        code.append(ln());
+        // code.append(ln());
 
         code.append(getDeclarationId(true));
 
