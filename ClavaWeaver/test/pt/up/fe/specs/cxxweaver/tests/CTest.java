@@ -126,4 +126,9 @@ public class CTest {
         newTester().test("TypeRenamer.lara", "type_renamer.c");
     }
 
+    @Test
+    public void testAstNodes() {
+        newTester().test("AstNodes.lara", "ast_nodes.c");
+    }
+
 }

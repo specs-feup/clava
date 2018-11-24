@@ -1,0 +1,6 @@
+astNumChildren  = 4
+astChildren = ,Joinpoint 'expression',Joinpoint 'statement',
+astChild(0) = undefined
+numChildren  = 2
+children = Joinpoint 'expression',Joinpoint 'statement'
+child(0) = Joinpoint 'expression'

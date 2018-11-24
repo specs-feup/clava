@@ -1,0 +1,14 @@
+aspectdef AstNodes
+
+    select function{"testNodes"}.if end
+    apply
+        println('astNumChildren  = ' +  $if.astNumChildren);
+        println('astChildren = ' + $if.astChildren);
+        println('astChild(0) = ' + $if.astChild(0));
+        println('numChildren  = ' +  $if.numChildren);
+        println('children = ' + $if.children);
+        println('child(0) = ' + $if.child(0));        
+    end
+end
+
+
