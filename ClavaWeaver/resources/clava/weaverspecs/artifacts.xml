@@ -57,12 +57,17 @@
 		<attribute name="type" type="joinpoint">
 			<def/>
 		</attribute>
-		<attribute name="astNumChildren" type="Integer" />
-		<attribute name="astChildren" type="joinpoint[]" />
 		<attribute name="astName" type="String" />
-		<attribute name="astChild" type="joinpoint">
+		<attribute name="astNumChildren" type="Integer" tooltip="Returns the number of children of the node, considering null nodes"/>
+		<attribute name="astChildren" type="joinpoint[]" tooltip="Returns an array with the children of the node, considering null nodes" />
+		<attribute name="astChild" type="joinpoint" tooltip="Returns the child of the node at the given index, considering null nodes">
 			<parameter name="index" type="Integer" />
 		</attribute>
+		<attribute name="numChildren" type="Integer" tooltip="Returns the number of children of the node, ignoring null nodes"/>
+		<attribute name="children" type="joinpoint[]" tooltip="Returns an array with the children of the node, ignoring null nodes"/>
+		<attribute name="child" type="joinpoint" tooltip="Returns the child of the node at the given index, ignoring null nodes">
+			<parameter name="index" type="Integer" />
+		</attribute>		
 		<attribute name="astIsInstance" type="boolean">
 			<parameter name="className" type="String" />
 		</attribute>

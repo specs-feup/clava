@@ -358,7 +358,9 @@ public abstract class ATag extends APragma {
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ISMACRO("isMacro"),
+        CHILDREN("children"),
         ROOT("root"),
+        NUMCHILDREN("numChildren"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
@@ -385,7 +387,8 @@ public abstract class ATag extends APragma {
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
-        HASPARENT("hasParent");
+        HASPARENT("hasParent"),
+        CHILD("child");
         private String name;
 
         /**

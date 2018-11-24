@@ -477,7 +477,9 @@ public abstract class AUndefinedType extends AType {
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ISMACRO("isMacro"),
+        CHILDREN("children"),
         ROOT("root"),
+        NUMCHILDREN("numChildren"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
@@ -504,7 +506,8 @@ public abstract class AUndefinedType extends AType {
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
-        HASPARENT("hasParent");
+        HASPARENT("hasParent"),
+        CHILD("child");
         private String name;
 
         /**

@@ -635,7 +635,9 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ISMACRO("isMacro"),
+        CHILDREN("children"),
         ROOT("root"),
+        NUMCHILDREN("numChildren"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
@@ -662,7 +664,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
-        HASPARENT("hasParent");
+        HASPARENT("hasParent"),
+        CHILD("child");
         private String name;
 
         /**

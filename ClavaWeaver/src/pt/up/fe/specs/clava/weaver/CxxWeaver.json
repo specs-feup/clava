@@ -67,6 +67,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -79,6 +80,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -115,6 +117,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -148,6 +151,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -418,6 +443,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -808,6 +842,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -820,6 +855,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -856,6 +892,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -889,6 +926,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -1159,6 +1218,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -1644,6 +1712,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1656,6 +1725,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -1692,6 +1762,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -1725,6 +1796,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -1995,6 +2088,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -2446,6 +2548,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -2458,6 +2561,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -2494,6 +2598,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -2527,6 +2632,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -2797,6 +2924,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -3316,6 +3452,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -3328,6 +3465,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -3364,6 +3502,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -3397,6 +3536,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -3667,6 +3828,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -4227,6 +4397,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4239,6 +4410,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -4275,6 +4447,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -4308,6 +4481,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -4578,6 +4773,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -5070,6 +5274,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5082,6 +5287,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -5118,6 +5324,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -5151,6 +5358,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -5421,6 +5650,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -5820,6 +6058,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5832,6 +6071,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -5868,6 +6108,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -5901,6 +6142,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -6171,6 +6434,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -6569,6 +6841,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6581,6 +6854,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -6617,6 +6891,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -6650,6 +6925,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -6920,6 +7217,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -7258,6 +7564,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7270,6 +7577,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -7306,6 +7614,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -7339,6 +7648,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -7609,6 +7940,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -7981,6 +8321,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7993,6 +8334,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -8029,6 +8371,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -8062,6 +8405,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -8332,6 +8697,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -8675,6 +9049,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -8687,6 +9062,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -8723,6 +9099,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -8756,6 +9133,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -9026,6 +9425,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -9404,6 +9812,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9416,6 +9825,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -9452,6 +9862,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -9485,6 +9896,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -9755,6 +10188,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -10270,6 +10712,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10282,6 +10725,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -10318,6 +10762,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -10351,6 +10796,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -10621,6 +11088,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -11038,6 +11514,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11050,6 +11527,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -11086,6 +11564,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -11119,6 +11598,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -11389,6 +11890,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -11803,6 +12313,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11815,6 +12326,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -11851,6 +12363,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -11884,6 +12397,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -12154,6 +12689,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -12529,6 +13073,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -12541,6 +13086,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -12577,6 +13123,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -12610,6 +13157,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -12880,6 +13449,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -13372,6 +13950,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13384,6 +13963,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -13420,6 +14000,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -13453,6 +14034,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -13723,6 +14326,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -14467,6 +15079,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14479,6 +15092,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -14515,6 +15129,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -14548,6 +15163,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -14818,6 +15455,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -15480,6 +16126,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -15492,6 +16139,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -15528,6 +16176,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -15561,6 +16210,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -15831,6 +16502,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -16278,6 +16958,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16290,6 +16971,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -16326,6 +17008,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -16359,6 +17042,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -16629,6 +17334,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -17093,6 +17807,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17105,6 +17820,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -17141,6 +17857,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -17174,6 +17891,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -17444,6 +18183,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -17945,6 +18693,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17957,6 +18706,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -17993,6 +18743,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -18026,6 +18777,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -18296,6 +19069,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -18957,6 +19739,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -18969,6 +19752,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -19005,6 +19789,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -19038,6 +19823,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -19308,6 +20115,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -19741,6 +20557,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -19753,6 +20570,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -19789,6 +20607,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -19822,6 +20641,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -20092,6 +20933,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -20626,6 +21476,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -20638,6 +21489,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -20674,6 +21526,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -20707,6 +21560,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -20977,6 +21852,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -21584,6 +22468,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -21596,6 +22481,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -21632,6 +22518,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -21665,6 +22552,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -21935,6 +22844,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -22491,6 +23409,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22503,6 +23422,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -22539,6 +23459,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -22572,6 +23493,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -22842,6 +23785,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -23256,6 +24208,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23268,6 +24221,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -23304,6 +24258,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -23337,6 +24292,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -23607,6 +24584,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -24157,6 +25143,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24169,6 +25156,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -24205,6 +25193,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -24238,6 +25227,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -24508,6 +25519,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -25200,6 +26220,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -25212,6 +26233,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -25248,6 +26270,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -25281,6 +26304,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -25551,6 +26596,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -26084,6 +27138,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26096,6 +27151,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -26132,6 +27188,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -26165,6 +27222,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -26435,6 +27514,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -26959,6 +28047,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26971,6 +28060,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -27007,6 +28097,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -27040,6 +28131,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -27310,6 +28423,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -27733,6 +28855,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27745,6 +28868,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -27781,6 +28905,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -27814,6 +28939,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -28084,6 +29231,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -28546,6 +29702,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28558,6 +29715,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -28594,6 +29752,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -28627,6 +29786,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -28897,6 +30078,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -29481,6 +30671,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29493,6 +30684,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -29529,6 +30721,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -29562,6 +30755,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -29832,6 +31047,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -30265,6 +31489,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -30277,6 +31502,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -30313,6 +31539,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -30346,6 +31573,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -30616,6 +31865,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -31067,6 +32325,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -31079,6 +32338,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -31115,6 +32375,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -31148,6 +32409,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -31418,6 +32701,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -32003,6 +33295,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32015,6 +33308,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -32051,6 +33345,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -32084,6 +33379,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -32354,6 +33671,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -32805,6 +34131,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32817,6 +34144,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -32853,6 +34181,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -32886,6 +34215,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -33156,6 +34507,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -33575,6 +34935,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -33587,6 +34948,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -33623,6 +34985,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -33656,6 +35019,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -33926,6 +35311,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -34425,6 +35819,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34437,6 +35832,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -34473,6 +35869,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -34506,6 +35903,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -34776,6 +36195,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -35315,6 +36743,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35327,6 +36756,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -35363,6 +36793,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -35396,6 +36827,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -35666,6 +37119,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -36173,6 +37635,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -36185,6 +37648,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -36221,6 +37685,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -36254,6 +37719,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -36524,6 +38011,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -36941,6 +38437,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -36953,6 +38450,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -36989,6 +38487,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -37022,6 +38521,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -37292,6 +38813,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -37746,6 +39276,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37758,6 +39289,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -37794,6 +39326,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -37827,6 +39360,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -38097,6 +39652,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -38511,6 +40075,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38523,6 +40088,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -38559,6 +40125,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -38592,6 +40159,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -38862,6 +40451,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -39332,6 +40930,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39344,6 +40943,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -39380,6 +40980,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -39413,6 +41014,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -39683,6 +41306,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -40153,6 +41785,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -40165,6 +41798,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -40201,6 +41835,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -40234,6 +41869,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -40504,6 +42161,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -41053,6 +42719,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41065,6 +42732,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -41101,6 +42769,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -41134,6 +42803,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -41404,6 +43095,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -41880,6 +43580,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41892,6 +43593,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -41928,6 +43630,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -41961,6 +43664,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -42231,6 +43956,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {
@@ -42619,6 +44353,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -42631,6 +44366,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint[]",
@@ -42667,6 +44403,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
                   "children": [
                            {
                               "type": "Integer",
@@ -42700,6 +44437,28 @@
                            {
                               "type": "String",
                               "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
                            }]
                },
                {
@@ -42970,6 +44729,15 @@
                            {
                               "type": "String",
                               "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
                            }]
                },
                {

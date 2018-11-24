@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
@@ -612,13 +613,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Integer getAstNumChildrenImpl() {
-        return getAstChildrenArrayImpl().length;
-        // ClavaNode node = getNode();
-        // if (node == null) {
-        // return -1;
-        // }
-        //
-        // return node.getNumChildren();
+        // return getAstChildrenArrayImpl().length;
+        ClavaNode node = getNode();
+        if (node == null) {
+            return -1;
+        }
+
+        return node.getNumChildren();
+    }
+
+    @Override
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return getNode().getChildren().stream()
+                .map(node -> CxxJoinpoints.create(node, this))
+                // .filter(jp -> jp != null)
+                .collect(Collectors.toList())
+                .toArray(new AJoinPoint[0]);
+
     }
 
     @Override
@@ -635,6 +646,42 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         return CxxJoinpoints.create(node.getChild(index), this);
+    }
+
+    @Override
+    public Integer getNumChildrenImpl() {
+        return (int) getNode().getChildren().stream()
+                .filter(node -> !(node instanceof NullNode))
+                .count();
+    }
+
+    @Override
+    public AJoinPoint[] getChildrenArrayImpl() {
+        return getNode().getChildren().stream()
+                .filter(node -> !(node instanceof NullNode))
+                .map(node -> CxxJoinpoints.create(node, this))
+                .collect(Collectors.toList())
+                .toArray(new AJoinPoint[0]);
+    }
+
+    @Override
+    public AJoinPoint childImpl(Integer index) {
+        return getNode().getChildren().stream()
+                .filter(node -> !(node instanceof NullNode))
+                .skip(index)
+                .findFirst()
+                .map(node -> CxxJoinpoints.create(node, this))
+                .orElse(null);
+
+        // AJoinPoint[] children = getChildrenArrayImpl();
+        //
+        // if (index >= children.length) {
+        // ClavaLog.warning(
+        // "Index '" + index + "' is out of range, node only has " + children.length + " defined children");
+        // return null;
+        // }
+        //
+        // return children.;
     }
 
     @Override
@@ -804,16 +851,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint deepCopyImpl() {
         return CxxJoinpoints.create(getNode().deepCopy(), null);
-    }
-
-    @Override
-    public AJoinPoint[] getAstChildrenArrayImpl() {
-        return getNode().getChildren().stream()
-                .map(node -> CxxJoinpoints.create(node, this))
-                .filter(jp -> jp != null)
-                .collect(Collectors.toList())
-                .toArray(new AJoinPoint[0]);
-
     }
 
     @Override
