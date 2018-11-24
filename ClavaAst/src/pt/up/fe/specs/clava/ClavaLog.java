@@ -53,6 +53,10 @@ public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
         CLAVA_LOGGER.debug(message);
     }
 
+    public static void debug(Supplier<String> message) {
+        CLAVA_LOGGER.debug(message);
+    }
+
     public static void info(String message) {
         CLAVA_LOGGER.info(message);
     }
