@@ -562,7 +562,9 @@ public class CxxWeaver extends ACxxWeaver {
         // System.out.println("ALL SOURCES:" + allSources);
 
         // All files, header and implementation
-        Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
+        Set<String> extensions = SourceType.getPermittedExtensions();
+        Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, true, extensions, this::isCutoffFolder);
+        // Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
         // System.out.println("ALL FILES MAP:" + allFilesMap);
 
         // List<String> implementationFilenames = processSources(sources);
@@ -650,6 +652,23 @@ public class CxxWeaver extends ACxxWeaver {
             throw new RuntimeException(e);
         }
         */
+    }
+
+    private boolean isCutoffFolder(File path) {
+        // Ignore files
+        if (path.isFile()) {
+            return false;
+        }
+
+        // Ignore CMake build folder
+        if (path.isDirectory() && new File(path, "CMakeCache.txt").isFile()) {
+            ClavaLog.debug(() -> "Ignoring source folder due to being a CMake build folder: " + path.getAbsolutePath());
+            return true;
+        }
+
+        // Ignore if woven folder
+
+        return false;
     }
 
     /**
@@ -1161,6 +1180,13 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug("Files written during rebuild: " + writtenFiles);
 
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
+
+        // If we are skipping the parsing of include folders, we should include the original include folders as includes
+        if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
+            List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
+            includeFolders.addAll(originalHeaderIncludes);
+            ClavaLog.debug("Skip headers is enabled, adding original headers to rebuild: " + originalHeaderIncludes);
+        }
 
         List<String> rebuildOptions = new ArrayList<>();
 
