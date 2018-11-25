@@ -820,7 +820,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         Optional<? extends ClavaNode> currentRegionTry = CxxAttributes.getCurrentRegion(getNode());
 
         if (!currentRegionTry.isPresent()) {
-            ClavaLog.info("Join point '" + getJoinPointType() + "' does not support currentRegion");
+            ClavaLog.info(
+                    "Join point '" + getJoinPointType() + "'@" + getLocationImpl() + " does not support currentRegion");
             return null;
         }
 

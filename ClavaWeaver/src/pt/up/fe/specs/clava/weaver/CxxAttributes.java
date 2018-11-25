@@ -112,6 +112,9 @@ public class CxxAttributes {
                 currentNode = currentNode.getParent();
             }
 
+            // if (currentNode != null) {
+            // return Optional.of(currentNode);
+            // }
             return Optional.of(currentNode);
         }
 

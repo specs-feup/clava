@@ -42,7 +42,7 @@ public class CBenchTest {
 
     @Test
     public void testHamidRegion() {
-        newTester().test("HamidRegion.lara", "hamid_region.c");
+        newTester().test("HamidRegion.lara", "hamid_region.c", "hamid_region.h");
     }
 
 }

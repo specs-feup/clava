@@ -1,0 +1,1 @@
+extern int grid_points[3];

@@ -6,7 +6,7 @@ aspectdef HamidRegion
     end
 */	
 
-    select function.body.arrayAccess end
+    select file{"hamid_region.c"}.function.body.arrayAccess end
     apply
         
         println('function.name : ' + $function.name);
@@ -21,5 +21,11 @@ aspectdef HamidRegion
         println('\t' + 'arrayAccess.arrayVar.vardecl.code : ' + $arrayAccess.arrayVar.vardecl.code);
         println('\t' + 'arrayAccess.arrayVar.vardecl.currentRegion : ' + $arrayAccess.arrayVar.vardecl.currentRegion);            
     end
+	
+	
+	select file{"hamid_region.h"}.vardecl end
+	apply
+		println('header vardecl.currentRegion : ' + $vardecl.currentRegion);	
+	end
 	
 end

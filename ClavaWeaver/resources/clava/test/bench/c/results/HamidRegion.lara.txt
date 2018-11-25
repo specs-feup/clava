@@ -5,3 +5,4 @@ function.name : test
 	vardecl.currentRegion : Joinpoint 'file'
 	arrayAccess.arrayVar.vardecl.code : double elapsed[64]
 	arrayAccess.arrayVar.vardecl.currentRegion : Joinpoint 'file'
+header vardecl.currentRegion : Joinpoint 'file'
