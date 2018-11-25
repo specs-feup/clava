@@ -129,10 +129,10 @@ public class ParallelCodeParser extends CodeParser {
                 get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         ClavaLog.info("Found " + sources.size() + " source files");
-        ClavaLog.debug("Files to parse:" + sources);
+        ClavaLog.debug(() -> "Files to parse:" + sources);
 
         File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
-        ClavaLog.debug("Parsing using folder '" + parsingFolder + "'");
+        ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
 
         // AtomicInteger currentSourceFileIndex = new AtomicInteger(0);
         ParallelProgressCounter counter = new ParallelProgressCounter(sources.size());

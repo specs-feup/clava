@@ -117,14 +117,14 @@ public class TUnitProcessor {
                 .flatMap(data -> data.get(ClangParserData.CLAVA_NODES).getNodes().values().stream())
                 .forEach(node -> replaceFields(node));
 
-        ClavaLog.debug(
-                "During AST normalization processed " + processedFields + " fields in " + processedNodes + " nodes ");
-        ClavaLog.debug("Removed " + replacedNodes + " nodes during normalization and found " + ambiguousHits
+        ClavaLog.debug(() -> "During AST normalization processed " + processedFields + " fields in " + processedNodes
+                + " nodes ");
+        ClavaLog.debug(() -> "Removed " + replacedNodes + " nodes during normalization and found " + ambiguousHits
                 + " queries to ambiguous signatures, with the following classes: "
                 + ignoredNodesClasses.stream().map(Class::getSimpleName).sorted().collect(Collectors.toList()));
 
         if (ambiguousHits > 0) {
-            ClavaLog.debug("Collision report:\n" + collisionReport);
+            ClavaLog.debug(() -> "Collision report:\n" + collisionReport);
         }
 
         return tUnits;
@@ -227,15 +227,15 @@ public class TUnitProcessor {
 
         // If signature is ambiguous, cannot normalize node
         if (ambiguousSignatures.contains(signature)) {
-            ClavaLog.debug("Signature collision: " + signature);
-            ClavaLog.debug("Signature keys:" + node.getSignatureKeys());
-            ClavaLog.debug("Node:" + node);
+            ClavaLog.debug(() -> "Signature collision: " + signature);
+            ClavaLog.debug(() -> "Signature keys:" + node.getSignatureKeys());
+            ClavaLog.debug(() -> "Node:" + node);
             // System.out.println("PREVIOUS NODE:" + previousNode);
             ambiguousHits++;
             ignoredNodesClasses.add(node.getClass());
 
             if (ERROR_ON_AMBIGUOUS_SIGNATURE) {
-                ClavaLog.debug("Collision report:\n" + collisionReport);
+                ClavaLog.debug(() -> "Collision report:\n" + collisionReport);
                 throw new RuntimeException("Found ambiguous signature that could not be solved during normalization");
             }
 

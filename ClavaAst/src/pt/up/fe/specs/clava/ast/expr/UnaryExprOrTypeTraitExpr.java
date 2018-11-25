@@ -134,9 +134,8 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         case SIZE_OF:
             return "sizeof(" + getExpressionCode() + ")";
         default:
-            ClavaLog.debug(
-                    "UnaryExprOrTypeTraitExpr.getCode(): Not implemented yet for kind '" + getUettKind()
-                            + "', using 'sourceLiteral'");
+            ClavaLog.debug(() -> "UnaryExprOrTypeTraitExpr.getCode(): Not implemented yet for kind '" + getUettKind()
+                    + "', using 'sourceLiteral'");
             return get(SOURCE_LITERAL);
         }
 

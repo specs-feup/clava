@@ -212,7 +212,7 @@ public class AstDumpParser implements ClangParser {
         // If there still are arguments left using, pass them after '--'
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
 
-        ClavaLog.debug("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
+        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
         ClangParserData parsedData = null;
         ProcessOutput<String, ClangParserData> output = null;

@@ -97,7 +97,7 @@ public class VisitingChildrenCheck {
         List<String> visitChain = getCurrentVisitChain();
 
         if (visitingNodes.contains(id)) {
-            ClavaLog.debug("Found possible circular dependency, visiting node '" + id
+            ClavaLog.debug(() -> "Found possible circular dependency, visiting node '" + id
                     + "' which is already being visited. Current node visit chain: "
                     + visitChain);
         }
@@ -113,12 +113,12 @@ public class VisitingChildrenCheck {
         List<String> visitChain = getCurrentVisitChain();
 
         if (!visitingNodes.contains(id)) {
-            ClavaLog.debug("Expected visiting nodes to contain id '" + id + "': " + visitingNodes);
+            ClavaLog.debug(() -> "Expected visiting nodes to contain id '" + id + "': " + visitingNodes);
             // throw new RuntimeException("Expected visiting nodes to contain id '" + id + "': " + visitingNodes);
         }
 
         if (!visitChain.get(visitChain.size() - 1).equals(id)) {
-            ClavaLog.debug("Expected last element of visit chain to be '" + id + "': " + visitChain);
+            ClavaLog.debug(() -> "Expected last element of visit chain to be '" + id + "': " + visitChain);
             // throw new RuntimeException("Expected last element of visit chain to be '" + id + "': " + visitChain);
         }
 

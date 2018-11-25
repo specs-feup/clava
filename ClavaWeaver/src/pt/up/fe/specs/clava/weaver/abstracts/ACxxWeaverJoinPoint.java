@@ -1027,7 +1027,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .orElse(null);
 
         if (firstJp == null) {
-            ClavaLog.debug("Could not find a join point '" + type + "' inside the node at " + getNode().getLocation());
+            ClavaLog.debug(
+                    () -> "Could not find a join point '" + type + "' inside the node at " + getNode().getLocation());
         }
 
         return firstJp;

@@ -305,7 +305,7 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
         reset();
 
-        ClavaLog.debug("Clava Weaver arguments: " + args);
+        ClavaLog.debug(() -> "Clava Weaver arguments: " + args);
         // Add normal include folders to the sources
         // sources.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
 
@@ -548,6 +548,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
+        ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         // System.out.println("SOURCES:" + sources);
 
         List<File> adaptedSources = adaptSources(sources, parserOptions);
@@ -967,7 +968,7 @@ public class CxxWeaver extends ACxxWeaver {
         if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
             List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
             newIncludeDirs.addAll(originalHeaderIncludes);
-            ClavaLog.debug("Skip headers is enabled, adding original headers: " + originalHeaderIncludes);
+            ClavaLog.debug(() -> "Skip headers is enabled, adding original headers: " + originalHeaderIncludes);
         }
 
         // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
@@ -1105,7 +1106,7 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.write(destinationFile, code);
 
         // List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
-        ClavaLog.debug("Rebuilding file '" + destinationFile + "'");
+        ClavaLog.debug(() -> "Rebuilding file '" + destinationFile + "'");
 
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
 
@@ -1177,15 +1178,17 @@ public class CxxWeaver extends ACxxWeaver {
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
 
         List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
-        ClavaLog.debug("Files written during rebuild: " + writtenFiles);
+        ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
 
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
+        ClavaLog.debug(() -> "Include folders for rebuild, from folder '" + tempFolder + "': " + includeFolders);
 
         // If we are skipping the parsing of include folders, we should include the original include folders as includes
         if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
             List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
             includeFolders.addAll(originalHeaderIncludes);
-            ClavaLog.debug("Skip headers is enabled, adding original headers to rebuild: " + originalHeaderIncludes);
+            ClavaLog.debug(
+                    () -> "Skip headers is enabled, adding original headers to rebuild: " + originalHeaderIncludes);
         }
 
         List<String> rebuildOptions = new ArrayList<>();

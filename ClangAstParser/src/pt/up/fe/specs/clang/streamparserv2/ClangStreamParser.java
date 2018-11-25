@@ -381,7 +381,7 @@ public class ClangStreamParser {
         String path = sourceFile.getAbsolutePath();
         if (declarations.size() > 0 && !declarations.containsKey(path)) {
             // Just to check, for now
-            ClavaLog.debug("ClangStreamParser.createTu(): expeted declarations to have key '" + path + ": "
+            ClavaLog.debug(() -> "ClangStreamParser.createTu(): expeted declarations to have key '" + path + ": "
                     + declarations.keySet());
             // throw new RuntimeException("Expeted declarations to have key '" + path + "':" + declarations);
         }
