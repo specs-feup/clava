@@ -79,17 +79,57 @@ function(clava_weave ORIG_TARGET ASPECT)
 		string(REGEX REPLACE ";" ":" PROC_ORIG_SOURCES "${PROC_ORIG_SOURCES}")
 	endif()
 	#message(STATUS "PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
-	
-	
-	# Get original include folders
-	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
-	#message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
 
-	set(INCLUDE_HEADERS_FLAG "-ih")
-    if((${ORIG_INCLUDES} MATCHES "ORIG_INCLUDES-NOTFOUND") OR ("${ORIG_INCLUDES}" STREQUAL ""))
-        set(INCLUDE_HEADERS_FLAG "")
-        set(ORIG_INCLUDES "")
-    endif()
+	# Get all include folders
+	message(STATUS "ORIG_TARGET: '${ORIG_TARGET}'")
+	target_include_directories_recursive(${ORIG_TARGET} ORIG_INCLUDES)
+	message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
+	
+#	# Get original include folders
+#	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+#	#message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
+#	
+#	# If not found, set to empty list
+#	if((${ORIG_INCLUDES} MATCHES "ORIG_INCLUDES-NOTFOUND"))
+#		set(ORIG_INCLUDES "")
+#	endif()
+#
+#	# Add includes of target link libraries
+#	get_target_property(ORIG_LINK_LIBRARIES ${ORIG_TARGET} LINK_LIBRARIES)
+#	#message(STATUS "ORIG_LINK_LIBRARIES: ${ORIG_LINK_LIBRARIES}")		
+#	
+#	# If not found, set to empty list
+#	if("${ORIG_LINK_LIBRARIES}" MATCHES "ORIG_LINK_LIBRARIES-NOTFOUND")
+#		set(ORIG_LINK_LIBRARIES "")
+#	endif()
+#	
+#	#message(STATUS "ORIG_LINK_LIBRARIES_LENGTH: ${ORIG_LINK_LIBRARIES_LENGTH}")
+#
+#	# Add include directories of linked targets
+#	foreach(ORIG_LINK_LIB IN LISTS ORIG_LINK_LIBRARIES)
+#		#message(STATUS "ORIG_LINK_LIB: ${ORIG_LINK_LIB}")
+#		get_target_property(ORIG_LINK_LIB_INC ${ORIG_LINK_LIB} INCLUDE_DIRECTORIES)
+#		if("${ORIG_LINK_LIB_INC}" MATCHES "ORIG_LINK_LIB_INC-NOTFOUND")
+#			set(ORIG_LINK_LIB_INC "")
+#		endif()
+#		list(APPEND ORIG_INCLUDES ORIG_LINK_LIB_INC)
+#		#message(STATUS "ORIG_LINK_LIB_INC: ${ORIG_LINK_LIB_INC}")
+#	endforeach(ORIG_LINK_LIB)	
+	
+	
+	
+	# Set include headers flag if include list is not empty
+	list(LENGTH ORIG_INCLUDES ORIG_INLCUDES_LENGTH)
+	if(ORIG_INLCUDES_LENGTH GREATER 0)
+		set(INCLUDE_HEADERS_FLAG "-ih")
+	else()
+		set(INCLUDE_HEADERS_FLAG "")
+	endif()
+#	set(INCLUDE_HEADERS_FLAG "-ih")
+#   if((${ORIG_INCLUDES} MATCHES "ORIG_INCLUDES-NOTFOUND") OR ("${ORIG_INCLUDES}" STREQUAL ""))
+#        set(INCLUDE_HEADERS_FLAG "")
+#        set(ORIG_INCLUDES "")
+#    endif()
 	#message(STATUS "ORIG_INCLUDES AFTER: '${ORIG_INCLUDES}'")
 
 	

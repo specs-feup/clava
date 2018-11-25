@@ -80,6 +80,9 @@ set(CLAVA_JAR_FOUND)
 #include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake RESULT_VARIABLE LARA_RESULT)
 include(${CMAKE_CURRENT_LIST_DIR}/ApplyLARA.cmake)
 
+# Make utility functions available
+include(${CMAKE_CURRENT_LIST_DIR}/ClavaUtils.cmake)
+
 ### Base functions
 
 # Add function 'clava_generate'
