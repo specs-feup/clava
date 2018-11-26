@@ -81,9 +81,9 @@ function(clava_weave ORIG_TARGET ASPECT)
 	#message(STATUS "PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
 
 	# Get all include folders
-	message(STATUS "ORIG_TARGET: '${ORIG_TARGET}'")
+	#message(STATUS "ORIG_TARGET: '${ORIG_TARGET}'")
 	target_include_directories_recursive(${ORIG_TARGET} ORIG_INCLUDES)
-	message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
+	#message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
 	
 #	# Get original include folders
 #	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)

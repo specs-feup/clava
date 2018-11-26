@@ -11,12 +11,17 @@ function(target_include_directories_recursive CURRENT_TARGET INCLUDE_DIRECTORIES
 
 	#message(STATUS "Calling 'target_include_directories_recursive' with target ${CURRENT_TARGET}")
 
+	if(NOT TARGET ${CURRENT_TARGET})
+		#message(STATUS "Could not find target ${CURRENT_TARGET}") 
+		return()
+	endif()
+	
 	# Get original include folders
 	get_target_property(ORIG_INCLUDES ${CURRENT_TARGET} INCLUDE_DIRECTORIES)
 	#message(STATUS "ORIG_INCLUDES of ${CURRENT_TARGET}: '${ORIG_INCLUDES}'")
 	
 	# If not found, set to empty list
-	if((${ORIG_INCLUDES} MATCHES "ORIG_INCLUDES-NOTFOUND"))
+	if(("${ORIG_INCLUDES}" MATCHES "ORIG_INCLUDES-NOTFOUND"))
 		set(ORIG_INCLUDES "")
 	endif()
 	
