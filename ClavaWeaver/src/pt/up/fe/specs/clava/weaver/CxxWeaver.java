@@ -549,6 +549,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     public App createApp(List<File> sources, List<String> parserOptions) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
+        ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
         // System.out.println("SOURCES:" + sources);
 
         List<File> adaptedSources = adaptSources(sources, parserOptions);
@@ -688,10 +689,16 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add files in normal include folders to the tree
         if (!args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
-            for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
-                adaptedSources.add(includeFolder);
-                // parserOptions.add("-I" + parseIncludePath(includeFolder));
-            }
+            // Use parser options instead of weaver options, it can be a rebuild with other folders
+            parserOptions.stream()
+                    .filter(option -> option.startsWith("-I"))
+                    .map(option -> new File(option.substring("-I".length())))
+                    .forEach(adaptedSources::add);
+
+            // for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
+            // adaptedSources.add(includeFolder);
+            // // parserOptions.add("-I" + parseIncludePath(includeFolder));
+            // }
         }
 
         // parserOptions.stream()
@@ -1181,7 +1188,6 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
 
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
-        ClavaLog.debug(() -> "Include folders for rebuild, from folder '" + tempFolder + "': " + includeFolders);
 
         // If we are skipping the parsing of include folders, we should include the original include folders as includes
         if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
@@ -1190,6 +1196,8 @@ public class CxxWeaver extends ACxxWeaver {
             ClavaLog.debug(
                     () -> "Skip headers is enabled, adding original headers to rebuild: " + originalHeaderIncludes);
         }
+
+        ClavaLog.debug(() -> "Include folders for rebuild, from folder '" + tempFolder + "': " + includeFolders);
 
         List<String> rebuildOptions = new ArrayList<>();
 
