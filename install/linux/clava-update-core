@@ -50,6 +50,7 @@ cd /usr/local/lib/clava
 
 wget -N specs.fe.up.pt/tools/clava/ClavaConfig.cmake
 wget -N specs.fe.up.pt/tools/clava/ApplyLARA.cmake
+wget -N specs.fe.up.pt/tools/clava/ClavaUtils.cmake
 #wget -N specs.fe.up.pt/tools/clava/ClavaUtilConfig.cmake
 echo -n "$SCRIPTPATH/clava.jar" > clava-installation-jar.txt
 
