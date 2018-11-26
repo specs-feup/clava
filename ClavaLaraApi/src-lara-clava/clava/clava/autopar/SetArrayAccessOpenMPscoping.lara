@@ -5,12 +5,16 @@
 **************************************************************/
 import clava.autopar.FindReductionArrays;
 
+
 aspectdef SetArrayAccessOpenMPscoping
 	input $ForStmt end
 
 	var loopindex = GetLoopIndex($ForStmt);
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
+
+	
+
 
 	for(var arrayAccessObj of LoopOmpAttributes[loopindex].varAccess)
 		if (
@@ -26,7 +30,14 @@ aspectdef SetArrayAccessOpenMPscoping
 			arrayAccessObj.usedInClause = true;
 		}
 
+
+	
+
+	//var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess', usedInClause : false});
 	var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess'});
+
+
+	//print_obj(arrayAccesslist, '\n\n\n\n\n check 1 arrayAccesslist for For#' + $ForStmt.line+ '\taspectdef SetArrayAccessOpenMPscoping');
 
 	if (arrayAccesslist.length ===0 )
 		return;
@@ -74,7 +85,6 @@ aspectdef SetArrayAccessOpenMPscoping
 			}
 
 		}
-
 
 	for(var arrayAccessObj of arrayAccesslist)
 		if (arrayAccessObj.usedInClause === false)

@@ -37,6 +37,7 @@ aspectdef BuildPetitFileInput
 
 
 	var $cloneJPForStmt = $ForStmt.copy();
+
 	var tabOP = [];
 
 	call o : CovertLoopToPetitForm($ForStmt, tabOP);
@@ -127,7 +128,6 @@ aspectdef BuildPetitFileInput
 		LoopOmpAttributes[loopindex].ForStmtToPetit[i].str = LoopOmpAttributes[loopindex].ForStmtToPetit[i].str.moveBracketsToEnd3(LoopOmpAttributes[loopindex].petit_arrays);
 	}
 
-
 	var j = -6;
 	for ( var key in LoopOmpAttributes[loopindex].petit_arrays)
 	{
@@ -141,11 +141,15 @@ aspectdef BuildPetitFileInput
 		j--;
 	}
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : j, str : '!' + Array(50).join('-') +' arrays'});
+
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -5, str : '!' + Array(50).join('-') +' loop indices'});
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -4, str : 'integer ' + LoopOmpAttributes[loopindex].petit_loop_indices.join(',')});
+
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -3, str : '!' + Array(50).join('-') +' variables'});
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -2, str : 'integer ' + LoopOmpAttributes[loopindex].petit_variables.join(',')});
+	
 	LoopOmpAttributes[loopindex].ForStmtToPetit.push({line : -1, str : '!' + Array(50).join('-') +' body code'});
+
 	LoopOmpAttributes[loopindex].ForStmtToPetit = LoopOmpAttributes[loopindex].ForStmtToPetit.sort(
 				function(obj1, obj2)
 				{
@@ -181,6 +185,7 @@ aspectdef BuildPetitFileInput
 	for(var replace_var of replace_vars)
 		for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
 			LoopOmpAttributes[loopindex].ForStmtToPetit[i].str = Strings.replacer(LoopOmpAttributes[loopindex].ForStmtToPetit[i].str,replace_var,replace_var.substr(1));
+
 end
 
 
@@ -216,15 +221,16 @@ aspectdef CovertLoopToPetitForm
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
+
 
 	var str_init = 	cloneJP.code;
 
@@ -255,12 +261,12 @@ aspectdef CovertLoopToPetitForm
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 	

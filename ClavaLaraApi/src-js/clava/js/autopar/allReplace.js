@@ -67,7 +67,6 @@ function normalizeVarName2(Varname)
 
 String.prototype.moveBracketsToEnd3 = function(arraylistdic)
 {
-
 	if (this.indexOf('[') === -1)
 		return this;
 
@@ -113,7 +112,6 @@ String.prototype.moveBracketsToEnd3 = function(arraylistdic)
 	}
 
 	return outputstr;
-
 }
 
 String.prototype.moveBracketsToEnd2 = function(arraylistdic)
@@ -142,7 +140,7 @@ String.prototype.moveBracketsToEnd2 = function(arraylistdic)
 
 		var arrayName = newsubstr.split('(')[0];
 		arrayName = arrayName.trim();
-		
+
 		var len = Object.keys(arraylistdic).length + 1;
 		if 	(arraylistdic[arrayName] === undefined)
 		{
@@ -151,7 +149,7 @@ String.prototype.moveBracketsToEnd2 = function(arraylistdic)
 			arraylistdic[arrayName].size = '(0:9999' + Array(betweenBracketslist.length).join(',0:9999') +')';
 		}
 		newsubstr = newsubstr.replace(arrayName, arraylistdic[arrayName].name);
-
+		
 		newCode = newCode.replace(substr, newsubstr);
 		index = posFTspace;
 	}

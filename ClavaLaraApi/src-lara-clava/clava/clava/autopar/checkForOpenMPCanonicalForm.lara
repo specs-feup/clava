@@ -5,6 +5,7 @@
 **************************************************************/
 import clava.autopar.checkForInvalidStmts;
 
+
 aspectdef checkForOpenMPCanonicalForm	
 	input $ForStmt end
 
@@ -57,10 +58,12 @@ aspectdef checkForOpenMPCanonicalForm
 	var controlVarsName = [];
 	var controlVarsAstId = [];
 	var msgError = [];
+
+
+
 	var initVars = [];
 	var initVardecl = []; 	 	
  	var initmsgError = [];
-
 	select $ForStmt.init.vardecl end
 	apply
 		initVardecl.push({
@@ -207,9 +210,13 @@ aspectdef checkForOpenMPCanonicalForm
  	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
 		stepmsgError.push('loop-step expression is not in canonical form' );
 
+
+
 	msgError = msgError.concat(initmsgError);
 	msgError = msgError.concat(condmsgError);
 	msgError = msgError.concat(stepmsgError);
+
+	
 
 	if (controlVarsAstId.length === 1)
 	{
@@ -219,6 +226,7 @@ aspectdef checkForOpenMPCanonicalForm
 			LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
 			msgError.push('For controlVar is changed inside of loop body');
 		}
+
 	}
 
 	call o : checkForInvalidStmts($ForStmt);
@@ -232,6 +240,7 @@ aspectdef checkForOpenMPCanonicalForm
 	{
 		Add_msgError(LoopOmpAttributes, $ForStmt, msgError);
 		LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
+		//return;
 	}
 	
 

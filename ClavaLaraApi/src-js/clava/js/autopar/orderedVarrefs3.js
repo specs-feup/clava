@@ -5,17 +5,17 @@
 **************************************************************/
 var orderedVarrefs3 = function($jp) 
 {
+
     var varrefs = [];
     if($jp.instanceOf("expression") || $jp.joinpointType === "statement")
     {
         return orderedVarrefsBase3($jp);
     }
     
-    for(var i=0; i<$jp.astNumChildren; i++)
+    for(var i=0; i<$jp.numChildren; i++)
 	{
-        var astChild = $jp.astChild(i);
-        if(astChild === undefined)
-        {
+        var astChild = $jp.child(i);
+        if(astChild === undefined) {
             continue;
         }
         varrefs = varrefs.concat( orderedVarrefs3(astChild) );
@@ -44,14 +44,14 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
     {
         if($jp.kind === "assign") 
         {
-            var rightLevel = varrefUsageOrder3($jp.astChild(1), currentLevel+1, varrefTable);
-            var leftLevel = varrefUsageOrder3($jp.astChild(0), currentLevel+1, varrefTable);
+            var rightLevel = varrefUsageOrder3($jp.child(1), currentLevel+1, varrefTable);
+            var leftLevel = varrefUsageOrder3($jp.child(0), currentLevel+1, varrefTable);
             return rightLevel > leftLevel ? rightLevel : leftLevel;
         }
         else
         {
-            var leftLevel = varrefUsageOrder3($jp.astChild(0), currentLevel+1, varrefTable);
-            var rightLevel = varrefUsageOrder3($jp.astChild(1), currentLevel+1, varrefTable);
+            var leftLevel = varrefUsageOrder3($jp.child(0), currentLevel+1, varrefTable);
+            var rightLevel = varrefUsageOrder3($jp.child(1), currentLevel+1, varrefTable);
 
             return rightLevel > leftLevel ? rightLevel : leftLevel;
         }
@@ -61,7 +61,6 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
             $jp.joinpointType === "varref" && $jp.isFunctionCall === false
             )
     {        
-        
         var currentVarrefs = varrefTable[currentLevel];
         if(currentVarrefs === undefined)
         {
@@ -76,9 +75,9 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
         if (['arrayAccess','memberAccess'].indexOf($jp.joinpointType) !== -1)
         {
             var maxLevel = currentLevel;
-            for(var i=0; i<$jp.astNumChildren; i++)
+            for(var i=0; i<$jp.numChildren; i++)
             {
-                var lastLevel = varrefUsageOrder3($jp.astChild(i), currentLevel, varrefTable);
+                var lastLevel = varrefUsageOrder3($jp.child(i), currentLevel, varrefTable);
                 if(lastLevel > maxLevel)
                 {
                     maxLevel = lastLevel;
@@ -99,9 +98,9 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
         else
             {
             var maxLevel = currentLevel;
-            for(var i=0; i<$jp.astNumChildren; i++)
+            for(var i=0; i<$jp.numChildren; i++)
             {
-                var lastLevel = varrefUsageOrder3($jp.astChild(i), currentLevel+1, varrefTable);
+                var lastLevel = varrefUsageOrder3($jp.child(i), currentLevel+1, varrefTable);
                 if(lastLevel > maxLevel)
                 {
                     maxLevel = lastLevel;

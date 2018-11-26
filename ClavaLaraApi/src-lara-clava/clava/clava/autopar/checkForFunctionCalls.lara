@@ -14,13 +14,30 @@ aspectdef checkForFunctionCalls
 	
 	select $ForStmt.call end
 	apply				
-		//if ($call.hasDefinition === false)
 		var isSafe = (safefunctionCallslist.indexOf($call.name) !== -1) ||
 					  (userSafeFunctions !== undefined && userSafeFunctions.indexOf($call.name) !== -1);
-		//if (safefunctionCallslist.indexOf($call.name) === -1 )
+
 		if (!isSafe)	
 			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
 	end
 	condition $call.astName === 'CallExpr' end
 	
 end
+
+/*
+aspectdef checkForFunctionCalls
+ 	input $ForStmt end
+ 	output FunctionCalls end
+ 	FunctionCalls = [];
+ 		
+	// check for calling functions
+
+	select $ForStmt.call end
+	apply				
+		if (safefunctionCallslist.indexOf($call.name) === -1)
+			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
+	end
+	condition $call.astName === 'CallExpr' end
+	
+end
+*/

@@ -5,13 +5,13 @@
 **************************************************************/
 aspectdef RemoveNakedloops
 
-	select file.function.loop.body end
-	apply
-		$body.exec setNaked(false);
-		//$body.insert before '{';
-		//$body.insert after '}';
-	end
-	condition $body.naked === true end
+    select file.function.loop.body end
+    apply
+        $body.exec setNaked(false);
+        //$body.insert before '{';
+        //$body.insert after '}';
+    end
+    condition $body.naked === true end
 
 
     //select file.function.loop.body.if.then end
