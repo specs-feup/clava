@@ -31,6 +31,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
+import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
+import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
@@ -66,6 +68,8 @@ public class CxxLoop extends ALoop {
 
         loopTypes.put(ForStmt.class, ALoopKindEnum.FOR);
         loopTypes.put(WhileStmt.class, ALoopKindEnum.WHILE);
+        loopTypes.put(DoStmt.class, ALoopKindEnum.DOWHILE);
+        loopTypes.put(CXXForRangeStmt.class, ALoopKindEnum.FOREACH);
 
         return loopTypes;
     }

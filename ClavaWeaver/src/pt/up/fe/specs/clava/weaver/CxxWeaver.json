@@ -67,7 +67,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -155,7 +155,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -842,7 +842,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -930,7 +930,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1712,7 +1712,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1800,7 +1800,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -2548,7 +2548,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -2636,7 +2636,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -3452,7 +3452,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -3540,7 +3540,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4397,7 +4397,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4485,7 +4485,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5274,7 +5274,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5362,7 +5362,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6058,7 +6058,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6146,7 +6146,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6841,7 +6841,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6929,7 +6929,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7564,7 +7564,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7652,7 +7652,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -8321,7 +8321,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -8409,7 +8409,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9049,7 +9049,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9137,7 +9137,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9812,7 +9812,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9900,7 +9900,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10712,7 +10712,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10800,7 +10800,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11514,7 +11514,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11602,7 +11602,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -12313,7 +12313,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -12401,7 +12401,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13073,7 +13073,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13161,7 +13161,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13950,7 +13950,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14038,7 +14038,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -15079,7 +15079,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -15167,7 +15167,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16126,7 +16126,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16214,7 +16214,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16958,7 +16958,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17046,7 +17046,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17807,7 +17807,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17895,7 +17895,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -18588,7 +18588,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "[for| while]",
+                              "type": "[for| while| dowhile| foreach]",
                               "name": "kind"
                            }]
                },
@@ -18693,7 +18693,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -18781,7 +18781,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -19739,7 +19739,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -19827,7 +19827,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -20557,7 +20557,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -20645,7 +20645,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -21476,7 +21476,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -21564,7 +21564,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22468,7 +22468,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22556,7 +22556,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23409,7 +23409,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23497,7 +23497,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24208,7 +24208,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24296,7 +24296,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -25143,7 +25143,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -25231,7 +25231,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26220,7 +26220,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26308,7 +26308,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27138,7 +27138,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27226,7 +27226,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28047,7 +28047,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28135,7 +28135,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28855,7 +28855,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28943,7 +28943,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29702,7 +29702,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29790,7 +29790,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -30671,7 +30671,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -30759,7 +30759,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -31489,7 +31489,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -31577,7 +31577,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32325,7 +32325,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32413,7 +32413,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -33295,7 +33295,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -33383,7 +33383,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34131,7 +34131,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34219,7 +34219,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34935,7 +34935,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35023,7 +35023,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35819,7 +35819,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35907,7 +35907,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -36743,7 +36743,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -36831,7 +36831,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37635,7 +37635,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37723,7 +37723,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38437,7 +38437,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38525,7 +38525,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39276,7 +39276,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39364,7 +39364,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -40075,7 +40075,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -40163,7 +40163,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -40930,7 +40930,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41018,7 +41018,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41785,7 +41785,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41873,7 +41873,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -42719,7 +42719,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -42807,7 +42807,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -43580,7 +43580,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -43668,7 +43668,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -44353,7 +44353,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, considering null nodes.",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -44441,7 +44441,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes. This attribute is implemented by calling '.children' first",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
                   "children": [
                            {
                               "type": "joinpoint",

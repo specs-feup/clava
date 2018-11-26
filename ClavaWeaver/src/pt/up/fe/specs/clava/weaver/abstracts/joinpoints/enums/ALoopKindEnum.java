@@ -7,7 +7,9 @@ import org.lara.interpreter.weaver.interf.NamedEnum;
  */
 public enum ALoopKindEnum  implements NamedEnum{
     FOR("for"),
-    WHILE("while");
+    WHILE("while"),
+    DOWHILE("dowhile"),
+    FOREACH("foreach");
     private String name;
 
     /**

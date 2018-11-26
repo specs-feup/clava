@@ -216,7 +216,7 @@
 
 	<!-- LOOP -->
 	<artifact class="loop" default="kind">
-		<attribute name="kind" type="{for,while}" />
+		<attribute name="kind" type="{for,while,dowhile,foreach}" />
 		<attribute name="id" type="String" tooltip="Uniquely identifies the loop inside the program"/>
 		<attribute name="isInnermost" type="Boolean" />
 		<attribute name="isOutermost" type="Boolean" />
