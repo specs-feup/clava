@@ -553,6 +553,8 @@ public class CxxWeaver extends ACxxWeaver {
         // System.out.println("SOURCES:" + sources);
 
         List<File> adaptedSources = adaptSources(sources, parserOptions);
+        // ClavaLog.debug(() -> "Adapted sources: " + adaptedSources);
+
         // System.out.println("ADAPTED SOURCES:" + adaptedSources);
 
         // App newApp = new CodeParser().parseParallel(sources, parserOptions);
@@ -566,6 +568,8 @@ public class CxxWeaver extends ACxxWeaver {
         // All files, header and implementation
         Set<String> extensions = SourceType.getPermittedExtensions();
         Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, true, extensions, this::isCutoffFolder);
+        // ClavaLog.debug(() -> "All sources: " + allFilesMap.values());
+
         // Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
         // System.out.println("ALL FILES MAP:" + allFilesMap);
 
@@ -663,12 +667,11 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         // Ignore CMake build folder
-        if (path.isDirectory() && new File(path, "CMakeCache.txt").isFile()) {
+        // if (path.isDirectory() && new File(path, "CMakeCache.txt").isFile()) {
+        if (path.isDirectory() && new File(path, "CMakeFiles").isDirectory()) {
             ClavaLog.debug(() -> "Ignoring source folder due to being a CMake build folder: " + path.getAbsolutePath());
             return true;
         }
-
-        // Ignore if woven folder
 
         return false;
     }
@@ -690,11 +693,15 @@ public class CxxWeaver extends ACxxWeaver {
         // Add files in normal include folders to the tree
         if (!args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
             // Use parser options instead of weaver options, it can be a rebuild with other folders
-            parserOptions.stream()
+            List<File> headerIncludes = parserOptions.stream()
                     .filter(option -> option.startsWith("-I"))
                     .map(option -> new File(option.substring("-I".length())))
-                    .forEach(adaptedSources::add);
+                    .collect(Collectors.toList());
 
+            adaptedSources.addAll(headerIncludes);
+
+            ClavaLog.debug(() -> "Adding the following header includes from the options: " + headerIncludes);
+            ClavaLog.debug(() -> "Original header includes: " + args.get(CxxWeaverOption.HEADER_INCLUDES));
             // for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
             // adaptedSources.add(includeFolder);
             // // parserOptions.add("-I" + parseIncludePath(includeFolder));

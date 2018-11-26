@@ -87,12 +87,15 @@ public class ParallelCodeParser extends CodeParser {
 
     @Override
     public App parse(List<File> inputSources, List<String> compilerOptions, ClavaContext context) {
+        // ClavaLog.debug(() -> "[ParallelCodeParser] Input sources: " + inputSources);
 
         // All files, header and implementation
         Map<String, File> allUserSources = SpecsIo.getFileMap(inputSources, SourceType.getPermittedExtensions());
+        // ClavaLog.debug(() -> "[ParallelCodeParser] All user sources: " + allUserSources);
 
         // System.out.println("sources:" + sources);
         List<File> allSourceFolders = getInputSourceFolders(inputSources, compilerOptions);
+        // ClavaLog.debug(() -> "[ParallelCodeParser] All source folders: " + allSourceFolders);
 
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
         // System.out.println("ALL SOURCES:" + allSources);
@@ -129,7 +132,7 @@ public class ParallelCodeParser extends CodeParser {
                 get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         ClavaLog.info("Found " + sources.size() + " source files");
-        ClavaLog.debug(() -> "Files to parse:" + sources);
+        // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
 
         File parsingFolder = SpecsIo.getTempFolder("clava_parsing_" + UUID.randomUUID().toString());
         ClavaLog.debug(() -> "Parsing using folder '" + parsingFolder + "'");
