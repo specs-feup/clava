@@ -6,6 +6,7 @@
 import clava.autopar.AutoParUtils;
 import lara.util.ProcessExecutor;
 
+
 aspectdef ExecPetitDependencyTest
 	input $ForStmt end
 
@@ -27,9 +28,6 @@ aspectdef ExecPetitDependencyTest
 
 	Io.writeFile(LoopOmpAttributes[loopindex].petitInputFileAddress, petit_input_file.join('\n'));
 
-	/*
-	var Petitcmd =  OmegaConfig.petitExecutable + ' -Fc -g -s -4 ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
-	*/
 	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4  ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
 
 	// RUN petit dependency test 
@@ -97,7 +95,6 @@ aspectdef ExecPetitDependencyTest
 
 
 			if (
-				//(depObj.depStatus.indexOf('Z') !== -1 && depObj.depVector[0] !== '0')||
 				outputLine[5].indexOf('#') !== -1 ||
 				String(depObj.depVector.join('')).allReplace({'\\+':'','0':'','\\*':''}).length !== 0
 				)
@@ -122,12 +119,12 @@ aspectdef ExecPetitDependencyTest
 
 			if (
 					(depObj.depVector[0] === '0' && depObj.src_usge === depObj.dst_usge )||
-					//depObj.src > depObj 
 					(depObj.src > depObj.dst && depObj.subscriptNumber === depObj.depVector.length &&
 						depObj.parentlooprank_dst.indexOf(depObj.parentlooprank_src + '_') === -1 ) // add new
 				)
 			{
-				depObj.canbeignored = true;				
+				depObj.canbeignored = true;
+
 			}
 
 			if (depObj.IsdependentCurrentloop_src === false || depObj.IsdependentCurrentloop_dst === false)

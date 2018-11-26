@@ -11,7 +11,14 @@ aspectdef SetMemberAccessOpenMPscoping
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
 
+
 	var varreflist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'memberAccess'});
+
+	print_obj(varreflist, 'aspectdef SetMemberAccessOpenMPscoping : varAccess for For#' + $ForStmt.line);
+
+
+
+
 	
 	for(var i = 0; i < varreflist.length; i++)
 	{
@@ -32,6 +39,21 @@ aspectdef SetMemberAccessOpenMPscoping
 		{
 			Add_msgError(LoopOmpAttributes, $ForStmt,'Variable ' + varreflist[i].name + ' could not be categorized into any OpenMP Variable Scope');
 		}
+	
 
+
+	print_obj(varreflist, 'aspectdef SetMemberAccessOpenMPscoping : varAccess for For#' + $ForStmt.line);
 end
 
+/*
+aspectdef getVarrefobj end
+	input stmt, varname end
+	output varrefObj end
+
+	select stmt.varref end
+	apply
+
+	end
+	condition $varref.name 
+end
+*/

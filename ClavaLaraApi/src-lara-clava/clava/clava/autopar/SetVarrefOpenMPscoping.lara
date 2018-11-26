@@ -83,7 +83,7 @@ aspectdef SetVarrefOpenMPscoping
 
 			if (varreflist[i].nextUse === 'R' && 
 				varreflist[i].use.indexOf('W') !== -1 &&
-				varreflist[i].use.indexOf('RW') === -1)
+				varreflist[i].use.indexOf('RW') === -1) // hamid changed for EP benchmark
 				{
 					LoopOmpAttributes[loopindex].lastprivateVars.push(varreflist[i].name);
 					varreflist[i].usedInClause = true;
@@ -130,7 +130,6 @@ aspectdef SetVarrefOpenMPscoping
 	
 	select $ForStmt.varref end
 	apply
-		
 		if (LoopOmpAttributes[loopindex].privateVars.indexOf($varref.name) !== -1)
 			LoopOmpAttributes[loopindex].privateVars.splice(LoopOmpAttributes[loopindex].privateVars.indexOf($varref.name), 1);
 

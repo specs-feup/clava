@@ -36,6 +36,8 @@ aspectdef InlineFunctionCalls
 		call inlineFunction(sorted[i][0]);
 	}	
 
+
+
 	return;
 end
 
@@ -53,9 +55,9 @@ aspectdef inlineFunction
 				$call.astAncestor('ForStmt') === undefined ||  
 				$call.astAncestor('ForStmt').rank.join('_') === $loop.rank.join('_')
 				)
-				{
-					$call.exec inline;
-				}
+			{
+				$call.exec inline;
+			}
 
 	end
 	condition $call.name === funcname end

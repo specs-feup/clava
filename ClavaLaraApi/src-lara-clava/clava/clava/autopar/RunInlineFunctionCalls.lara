@@ -9,6 +9,8 @@ import clava.ClavaType;
 var countCallInlinedFunction;
 aspectdef RunInlineFunctionCalls
 
+	
+
 	var func_name = {};
 	countCallInlinedFunction = 0;
 	select file.function end
@@ -60,13 +62,16 @@ aspectdef RunInlineFunctionCalls
 	// check for recursive function calls
 	for (var caller_func in func_name)
 	{
+
 		if (
 			func_name[caller_func].CallingFunc.indexOf(caller_func) !== -1 &&
 			excluded_function_list.indexOf(caller_func) === -1 // not exist
 			)
 			{
 				excluded_function_list.push(caller_func);
-			}	
+			}
+
+	
 	}
 
 
@@ -79,6 +84,7 @@ aspectdef RunInlineFunctionCalls
 				if (excluded_function_list.indexOf($function.name) === -1) // not exist
 					excluded_function_list.push($function.name);
 	end
+
 
 	
 	select file.function.body.vardecl end
@@ -108,7 +114,6 @@ aspectdef RunInlineFunctionCalls
 	}
 	sorted.sort(function compare(obj1, obj2) {return obj1[1] - obj2[1];});
 
-
 	for(i in sorted)
 		if (excluded_function_list.indexOf(sorted[i][0]) === -1)
 		{
@@ -128,6 +133,8 @@ aspectdef callInline
 
 	select file.function.call end
 	apply
+
+
 		var exprStmt = $call.astAncestor('ExprStmt');
 
 		if (exprStmt === undefined)
@@ -135,17 +142,18 @@ aspectdef callInline
 			continue;
 		}
 
+
 		if (
 					(// funcCall(...)
-					exprStmt.astChildren[0].joinpointType === 'call' && 
+					exprStmt.children[0].joinpointType === 'call' && 
 					exprStmt.descendantsAndSelf('call').length ===1 && 
-					exprStmt.astChildren[0].name === func_name
+					exprStmt.children[0].name === func_name
 					) 
 			||
 					(// var op funcCall(...)
-					exprStmt.astChildren[0].joinpointType === 'binaryOp' && 
-					exprStmt.astChildren[0].right.joinpointType === 'call' && 
-					exprStmt.astChildren[0].right.descendantsAndSelf('call').length === 1
+					exprStmt.children[0].joinpointType === 'binaryOp' && 
+					exprStmt.children[0].right.joinpointType === 'call' && 
+					exprStmt.children[0].right.descendantsAndSelf('call').length === 1
 					)
 			)
 			{
@@ -154,8 +162,8 @@ aspectdef callInline
 				call o : inlinePreparation(func_name, $call, exprStmt);
 				
 
-				if(o.$newStmts.length > 0) 
-				{					
+				if(o.$newStmts.length > 0)
+				{
 					var replacedCallStr = '// ClavaInlineFunction : ' + exprStmt.code + '  countCallInlinedFunction : ' + countCallInlinedFunction;
 					exprStmt.insert before replacedCallStr;
 
@@ -171,6 +179,7 @@ aspectdef callInline
 	end
 	condition $call.name === func_name && $call.astAncestor('ForStmt') !== undefined end
 
+	call aspec_rebuild;
 end	
 
 
@@ -194,9 +203,6 @@ aspectdef inlinePreparation
 
 	$newStmts = [];	
 
-	if (func_name !== 'exact_solution')
-		return;
-
 	var funcJP = null;
 	var funcJP_backup = null;
 	select function end
@@ -218,7 +224,6 @@ aspectdef inlinePreparation
 		funcJP.detach();
 		return;
 	}
-
 
 	returnStmtJPs = [];
 	select funcJP.body.stmt end
@@ -251,7 +256,6 @@ aspectdef inlinePreparation
 		}
 
 	}
-
 	
 	if (funcJP.functionType.returnType.code === 'void' && returnStmtJPs.length === 1)
 	{
@@ -266,17 +270,17 @@ aspectdef inlinePreparation
 	apply
 		if ($vardecl.qualifiedName !== $vardecl.name)
 			continue;
-		
+
 		var newDeclName = $vardecl.qualifiedName + "_" + countCallInlinedFunction;
 		param_table[$vardecl.name] = newDeclName;
 		$vardecl.name =  newDeclName;
 
 	end
-
+	
 	select funcJP.body.varref end
 	apply
 		if (param_table[$varref.name] !== undefined)
-		{			
+		{
 			$varref.setName(param_table[$varref.name]);
 		}
 
@@ -288,6 +292,8 @@ aspectdef inlinePreparation
 	end
 	condition $varref.vardecl !== undefined && $varref.vardecl.isParam && $varref.kind === 'pointer_access' end
 	
+	
+
 	var param_index = 0;
 	param_table = {};
 	select funcJP.param end
@@ -299,15 +305,14 @@ aspectdef inlinePreparation
 		}
 
 		if ($param.type.isBuiltin === true)
-		{
-			
+		{			
 			var orgparamName = $param.qualifiedName;
 			param_table[$param.name] = $param.qualifiedName + "_" + countCallInlinedFunction;			
 			$param.name = param_table[$param.name];
 
 			$newVardecl = ClavaJoinPoints.varDecl($param.name, callStmt.argList[param_index].copy());
 
-			funcJP.body.insertBegin($newVardecl);
+			funcJP.body.insertBegin($newVardecl);			
 		}
 		
 		else if ($param.type.isArray === true)
@@ -348,17 +353,17 @@ aspectdef inlinePreparation
 			$param.name =  param_table[$param.name];
 
 		}
-
 		param_index = param_index + 1;
 	end
 
+	
 	select funcJP.body.varref end
 	apply
+
 		if (param_table[$varref.name] !== undefined)
-			$varref.setName(param_table[$varref.name]);
+		$varref.setName(param_table[$varref.name]);
 	end
 	condition $varref.vardecl.isParam === true  end	
-	
 	
     select funcJP.body.vardecl end
     apply        
@@ -374,24 +379,27 @@ aspectdef inlinePreparation
     end
     
 
-	if (exprStmt.astChildren[0].joinpointType === 'binaryOp')
-	{
-		var ret_str_replacement = exprStmt.astChildren[0].astChildren[0].code;
 
-		if (exprStmt.astChildren[0].kind === 'assign')
+
+
+	if (exprStmt.children[0].joinpointType === 'binaryOp')
+	{
+		var ret_str_replacement = exprStmt.children[0].children[0].code;
+
+		if (exprStmt.children[0].kind === 'assign')
 			ret_str_replacement += ' = ';
-		else if (exprStmt.astChildren[0].kind === 'add_assign')
+		else if (exprStmt.children[0].kind === 'add_assign')
 			ret_str_replacement += ' += ';
-		else if (exprStmt.astChildren[0].kind === 'sub_assign')
+		else if (exprStmt.children[0].kind === 'sub_assign')
 			ret_str_replacement += ' -= ';
-		else if (exprStmt.astChildren[0].kind === 'mul_assign')
+		else if (exprStmt.children[0].kind === 'mul_assign')
 			ret_str_replacement += ' *= ';
 
 		retJPs = funcJP.body.stmts.filter(function(obj){if (obj.astName === 'ReturnStmt') {return obj;}});
 		
 		for(retJP of retJPs)
 		{
-			retJP.insert replace ret_str_replacement + retJP.astChildren[0].code + ';';
+			retJP.insert replace ret_str_replacement + retJP.children[0].code + ';';
 		}
 
 	}
@@ -407,7 +415,7 @@ aspectdef inlinePreparation
 		$newStmts.push($childStmt.copy());
 		replacedCallStr += $childStmt.code + '\n';
 	end
-	
+
 	replacedCallStr = replacedCallStr.allReplace({' const ':' '});
 
 	funcJP.detach();

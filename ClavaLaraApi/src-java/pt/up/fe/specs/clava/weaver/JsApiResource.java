@@ -22,11 +22,11 @@ public enum JsApiResource implements ResourceProvider {
 	AUTOPAR_2("autopar/allReplace.js"),
 	AUTOPAR_3("autopar/GetLoopIndex.js"),
 	AUTOPAR_4("autopar/orderedVarrefs3.js"),
-	AUTOPAR_5("autopar/print_obj.js"),
+	//AUTOPAR_5("autopar/print_obj.js"),
 	AUTOPAR_6("autopar/RemoveStruct.js"),
 	AUTOPAR_7("autopar/SafeFunctionCalls.js"),
 	AUTOPAR_8("autopar/SearchStruct.js"),
-
+	
 	// OTHER
 
     HDF5("HDF5.js"),

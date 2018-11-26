@@ -41,6 +41,7 @@ aspectdef additionalConditionsCheck
 		return;
 	}
 
+	// check non-affine array subscript A[B[j]].... ????
 	//------------------------------------------------------------
 	// check for usage of array access as the subscript A[B[.]]
 	//------------------------------------------------------------

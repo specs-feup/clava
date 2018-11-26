@@ -37,6 +37,18 @@ aspectdef AddOpenMPDirectivesForLoop
 
 		OpenMPDirectivesStr += ' default(shared) ';
 
+		
+		/*
+		call o : ret_IF_Clause($ForStmt);
+		OpenMPDirectivesStr += ' ' + o.IF_Clause_str + ' ';
+		*/
+
+		/*
+		call o : ret_NUM_THREADS_Clause($ForStmt);
+		OpenMPDirectivesStr += ' ' + o.NUM_THREADS_Clause_str + ' ';
+		*/
+		
+
 		if (privateVars.length > 0)
 				OpenMPDirectivesStr += 'private(' + privateVars.join(', ') + ') ';
 
@@ -57,19 +69,20 @@ aspectdef AddOpenMPDirectivesForLoop
 
 	$ForStmt.insert before InsertBeforeStr;
 
-
 	select $ForStmt.body end
 	apply
 
-		if ($body.astChild(0).code.indexOf('//loopindex') !== -1)
+
+		if ($body.child(0).code.indexOf('//loopindex') !== -1)
 		{
-			var loopindex_org = $body.astChildren[0].code.split(' ')[1].trim();
+			var loopindex_org = $body.children[0].code.split(' ')[1].trim();
 			var func_name = $ForStmt.astAncestor('FunctionDecl').name;
 			if (loopindex_org.indexOf(func_name) !== -1)
 			{
 				if 	(OmpPragmas[loopindex_org] === undefined)
 				{
 					OmpPragmas[loopindex_org] = {};
+					
 					OmpPragmas[loopindex_org].pragmaCode = InsertBeforeStr;
 				}
 				else
@@ -111,13 +124,13 @@ aspectdef ret_IF_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 
@@ -149,17 +162,18 @@ aspectdef ret_IF_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 
 
 	IF_Clause_str += cloneJP.code;
+
 
 	IF_Clause_str += ')>500)';
 end 
@@ -193,13 +207,13 @@ aspectdef ret_NUM_THREADS_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 
@@ -231,12 +245,12 @@ aspectdef ret_NUM_THREADS_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.astChild(0);
+		var child = $cast.child(0);
 		$cast.replaceWith(child);
 	}
 

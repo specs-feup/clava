@@ -35,7 +35,7 @@ aspectdef RemoveOpenMPfromInnerloop
 		func_name = $omp.astAncestor('FunctionDecl').name;
 		if (exclude_func_from_Omp.indexOf(func_name) !== -1)
 			
-			$omp.insert replace('// ' + $omp.content + '   remove due to be part of parallel section for function call');
+			$omp.insert replace('// #pragma omp ' + $omp.content + '   remove due to be part of parallel section for function call');
 
 	end
 	condition $omp.kind === 'parallel for' end
@@ -52,7 +52,7 @@ aspectdef RemoveSubOmpParallel
 	select $loop.body.omp end
 	apply
 		if ($omp.kind === 'parallel for')
-			$omp.insert replace('// ' + $omp.content);
+			$omp.insert replace('// #pragma omp ' + $omp.content);
 	end
 
 end
