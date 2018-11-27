@@ -28,8 +28,9 @@ import pt.up.fe.specs.util.lazy.Lazy;
 
 public enum SourceType {
 
-    HEADER("h", "hpp", "incl"),
+    HEADER("h", "hpp"),
     IMPLEMENTATION("c", "cpp", "cl", "cc"),
+    // Files that are not parsed by Clava (e.g., include files such as .incl or .inc)
     OUT_OF_SOURCE();
 
     // private final static Set<String> PERMITTED_EXTENSIONS = new HashSet<>(
@@ -98,8 +99,10 @@ public enum SourceType {
 
     public static SourceType getType(String filepath) {
         return getTypeTry(filepath)
-                .orElseThrow(() -> new RuntimeException("Given filepath '" + filepath
-                        + "' is not valid, permitted extensions: " + getPermittedExtensions()));
+                .orElse(OUT_OF_SOURCE);
+        // return getTypeTry(filepath)
+        // .orElseThrow(() -> new RuntimeException("Given filepath '" + filepath
+        // + "' is not valid, permitted extensions: " + getPermittedExtensions()));
     }
 
     public static Optional<SourceType> getTypeTry(String filepath) {
