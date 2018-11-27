@@ -22,6 +22,16 @@ typedef void(*function_prt_with_vla) (int ni,int nj,double tmp[ni + 0][nj + 0]);
 
 void exact(int i, int j, int k, double u000ijk[]);
 
+int CompareSizesByValue(void const * sz0, void const * sz1) {
+	// Test multi declaration where both declarations are pointers
+   long long * size0 = (long long *) sz0, *size1 = (long long *) sz1;
+   int res = 0;
+   if(*size0 - *size1 > 0) res = 1;
+   else if(*size0 - *size1 < 0) res = -1;
+   
+   return res;
+}
+
 int main() {
 	float* aFloatPointer;
 	
@@ -32,4 +42,7 @@ int main() {
 	int n = 10;
 	base (*seq)[n + 0];
 	seq = (base(*)[n + 0])polybench_alloc_data (n + 0, sizeof(base));
+	
+	int ** matrix1, **matrix2, *simplePointer, noPointer;
+	int a, b;
 }
