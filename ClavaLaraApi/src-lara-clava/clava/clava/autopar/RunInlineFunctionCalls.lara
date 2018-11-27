@@ -240,7 +240,8 @@ aspectdef inlinePreparation
 
 	if (funcJP === null)
 	{
-		funcJP.detach();
+		debug("RunInlineFunctionCalls::inlinePreparation: Could not find the definition of function " + func_name);
+		//funcJP.detach();
 		return;
 	}
 
