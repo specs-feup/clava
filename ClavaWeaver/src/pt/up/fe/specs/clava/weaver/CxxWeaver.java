@@ -548,6 +548,20 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
+        return createApp(sources, parserOptions, Collections.emptyList());
+    }
+
+    /**
+     * 
+     * @param sources
+     * @param parserOptions
+     * @param extraOptions
+     *            options that should not be processed (e.g., header files found in folders specified by -I flags are
+     *            automatically added to the compilation, if we want to add header folders whose header files should not
+     *            be parsed, they can be specified here)
+     * @return
+     */
+    public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
         // System.out.println("SOURCES:" + sources);
@@ -602,7 +616,11 @@ public class CxxWeaver extends ACxxWeaver {
         codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
                 getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
-        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), parserOptions, context);
+
+        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + extraOptions.size());
+        allParserOptions.addAll(parserOptions);
+        allParserOptions.addAll(extraOptions);
+        App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), allParserOptions, context);
         // Set source paths of each TranslationUnit
         // app.setSourcesFromStrings(allFiles);
 
@@ -1234,7 +1252,7 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
 
         Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
-
+        /*
         // If we are skipping the parsing of include folders, we should include the original include folders as includes
         if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
             List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
@@ -1242,8 +1260,20 @@ public class CxxWeaver extends ACxxWeaver {
             ClavaLog.debug(
                     () -> "Skip headers is enabled, adding original headers to rebuild: " + originalHeaderIncludes);
         }
+        */
 
         ClavaLog.debug(() -> "Include folders for rebuild, from folder '" + tempFolder + "': " + includeFolders);
+
+        List<String> extraOptions = new ArrayList<>();
+
+        // Add original includes as extra options, in case it needs any header file that is excluded from parsing (e.g.,
+        // .incl)
+        List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
+        originalHeaderIncludes.stream().map(folder -> "-I" + folder.getAbsolutePath())
+                .forEach(extraOptions::add);
+        // includeFolders.addAll(originalHeaderIncludes);
+
+        // ClavaLog.debug(() -> "All include folders for rebuild" + includeFolders);
 
         List<String> rebuildOptions = new ArrayList<>();
 
@@ -1268,7 +1298,7 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> srcFolders = new ArrayList<>(includeFolders);
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
-        App rebuiltApp = createApp(writtenFiles, rebuildOptions);
+        App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions);
 
         // Creating an app automatically pushes the App in the Context
         context.popApp();
