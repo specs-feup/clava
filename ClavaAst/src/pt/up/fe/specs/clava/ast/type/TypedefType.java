@@ -63,6 +63,11 @@ public class TypedefType extends Type {
 
     public Type getTypeClass() {
         Decl decl = get(DECL);
+
+        if (!(decl instanceof ValueDecl)) {
+            return null;
+        }
+
         return decl.hasValue(ValueDecl.TYPE) ? decl.get(ValueDecl.TYPE) : null;
         // return getChild(Type.class, 0);
     }
