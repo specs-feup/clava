@@ -60,8 +60,15 @@ aspectdef SetVariableAccess
 
 		var useExpr = (varUse === 'read') ? 'R' : (varUse === 'write') ? 'W' : 'RW';
 
-		if (vardecl !== null)
+//		if(vardecl !== null && vardecl.currentRegion === undefined) {
+//			println("UNDEFINED REGION IN VARDECL " + vardecl.name +"@" + vardecl.location);
+//			println("VARDECL ROOT: " + vardecl.root.ast);
+//		}
+		
+//		if (vardecl !== null || vardecl === undefined)
+		if (vardecl !== null)		
 		{
+		
 			var vardeclRegion = vardecl.currentRegion.joinpointType;
 
 			if ($ForStmt.contains(vardecl) === true)

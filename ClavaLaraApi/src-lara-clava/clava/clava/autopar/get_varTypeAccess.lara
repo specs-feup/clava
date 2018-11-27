@@ -63,6 +63,10 @@ aspectdef get_varTypeAccess
 	else if (varTypeAccess === 'arrayAccess')
 	{
 		vardecl = $varJP.arrayVar.vardecl;
+		if(vardecl === undefined) {
+			debug("autopar.get_varTypeAccess: Could not find vardecl of arrayVar@" + $varJP.arrayVar.location);
+			vardecl = null;
+		}
 		varUse = $varJP.use;
 		//varName = $varJP.arrayVar.name;
 		varName = normalizeVarName($varJP.code);
@@ -77,6 +81,11 @@ aspectdef get_varTypeAccess
 	{
 		varUse = $varJP.useExpr.use;
 		vardecl = $varJP.vardecl;
+		if(vardecl === undefined) {
+			debug("autopar.get_varTypeAccess: Could not find vardecl of var@" + $varJP.location);
+			vardecl = null;
+		}
+		
 		//varName = $varJP.name;
 		varName = normalizeVarName($varJP.code);
 	}
