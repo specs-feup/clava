@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
@@ -31,6 +32,7 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.stmt.enums.DeclStmtType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class DeclStmt extends Stmt {
 
@@ -277,8 +279,10 @@ public class DeclStmt extends Stmt {
 
         if (singleLineDecl) {
             for (int i = 1; i < decls.size(); i++) {
+                NamedDecl decl = (NamedDecl) decls.get(i);
                 code += ", ";
-                code += ((NamedDecl) decls.get(i)).getTypelessCode();
+                code += getPointerPrefix(decl);
+                code += decl.getTypelessCode();
             }
         } else {
             for (int i = 1; i < decls.size(); i++) {
@@ -304,6 +308,19 @@ public class DeclStmt extends Stmt {
 
         // System.out.println("FINAL CODE:" + code);
         return code;
+    }
+
+    private String getPointerPrefix(Decl decl) {
+        if (!(decl instanceof Typable)) {
+            return "";
+        }
+
+        Type declType = ((Typable) decl).getType();
+        int pointerArity = Types.getPointerArity(declType);
+
+        String pointerPrefix = SpecsStrings.buildLine("*", pointerArity);
+        return pointerPrefix;
+
     }
 
     private boolean isSingleLineDecl(List<Decl> decls) {
