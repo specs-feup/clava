@@ -19,16 +19,16 @@ import java.util.Arrays;
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AFunction extends ANamedDecl {
+public abstract class AFunction extends ADeclarator {
 
-    protected ANamedDecl aNamedDecl;
+    protected ADeclarator aDeclarator;
 
     /**
      * 
      */
-    public AFunction(ANamedDecl aNamedDecl){
-        super(aNamedDecl);
-        this.aNamedDecl = aNamedDecl;
+    public AFunction(ADeclarator aDeclarator){
+        super(aDeclarator);
+        this.aDeclarator = aDeclarator;
     }
     /**
      * Get value on attribute hasDefinition
@@ -770,7 +770,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public String getNameImpl() {
-        return this.aNamedDecl.getNameImpl();
+        return this.aDeclarator.getNameImpl();
     }
 
     /**
@@ -779,7 +779,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public Boolean getIsPublicImpl() {
-        return this.aNamedDecl.getIsPublicImpl();
+        return this.aDeclarator.getIsPublicImpl();
     }
 
     /**
@@ -788,7 +788,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public String getQualifiedPrefixImpl() {
-        return this.aNamedDecl.getQualifiedPrefixImpl();
+        return this.aDeclarator.getQualifiedPrefixImpl();
     }
 
     /**
@@ -797,28 +797,28 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public String getQualifiedNameImpl() {
-        return this.aNamedDecl.getQualifiedNameImpl();
+        return this.aDeclarator.getQualifiedNameImpl();
     }
 
     /**
      * 
      */
     public void defNameImpl(String value) {
-        this.aNamedDecl.defNameImpl(value);
+        this.aDeclarator.defNameImpl(value);
     }
 
     /**
      * 
      */
     public void defQualifiedPrefixImpl(String value) {
-        this.aNamedDecl.defQualifiedPrefixImpl(value);
+        this.aDeclarator.defQualifiedPrefixImpl(value);
     }
 
     /**
      * 
      */
     public void defQualifiedNameImpl(String value) {
-        this.aNamedDecl.defQualifiedNameImpl(value);
+        this.aDeclarator.defQualifiedNameImpl(value);
     }
 
     /**
@@ -827,7 +827,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aNamedDecl.replaceWithImpl(node);
+        return this.aDeclarator.replaceWithImpl(node);
     }
 
     /**
@@ -836,7 +836,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aNamedDecl.replaceWithImpl(node);
+        return this.aDeclarator.replaceWithImpl(node);
     }
 
     /**
@@ -845,7 +845,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aNamedDecl.insertBeforeImpl(node);
+        return this.aDeclarator.insertBeforeImpl(node);
     }
 
     /**
@@ -854,7 +854,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aNamedDecl.insertBeforeImpl(node);
+        return this.aDeclarator.insertBeforeImpl(node);
     }
 
     /**
@@ -863,7 +863,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aNamedDecl.insertAfterImpl(node);
+        return this.aDeclarator.insertAfterImpl(node);
     }
 
     /**
@@ -872,7 +872,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aNamedDecl.insertAfterImpl(code);
+        return this.aDeclarator.insertAfterImpl(code);
     }
 
     /**
@@ -880,7 +880,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public void detachImpl() {
-        this.aNamedDecl.detachImpl();
+        this.aDeclarator.detachImpl();
     }
 
     /**
@@ -889,7 +889,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aNamedDecl.setTypeImpl(type);
+        this.aDeclarator.setTypeImpl(type);
     }
 
     /**
@@ -897,7 +897,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aNamedDecl.copyImpl();
+        return this.aDeclarator.copyImpl();
     }
 
     /**
@@ -905,7 +905,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aNamedDecl.deepCopyImpl();
+        return this.aDeclarator.deepCopyImpl();
     }
 
     /**
@@ -915,7 +915,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
+        return this.aDeclarator.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -924,7 +924,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
+        return this.aDeclarator.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -934,7 +934,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aNamedDecl.setValueImpl(key, value);
+        return this.aDeclarator.setValueImpl(key, value);
     }
 
     /**
@@ -943,34 +943,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aNamedDecl.messageToUserImpl(message);
-    }
-
-    /**
-     * Sets the name of this namedDecl
-     * @param name 
-     */
-    @Override
-    public void setNameImpl(String name) {
-        this.aNamedDecl.setNameImpl(name);
-    }
-
-    /**
-     * Sets the qualified prefix of this namedDecl
-     * @param qualifiedPrefix 
-     */
-    @Override
-    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
-        this.aNamedDecl.setQualifiedPrefixImpl(qualifiedPrefix);
-    }
-
-    /**
-     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
-     * @param name 
-     */
-    @Override
-    public void setQualifiedNameImpl(String name) {
-        this.aNamedDecl.setQualifiedNameImpl(name);
+        this.aDeclarator.messageToUserImpl(message);
     }
 
     /**
@@ -980,7 +953,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aNamedDecl.insertImpl(position, code);
+        this.aDeclarator.insertImpl(position, code);
     }
 
     /**
@@ -988,15 +961,15 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     public String toString() {
-        return this.aNamedDecl.toString();
+        return this.aDeclarator.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends ANamedDecl> getSuper() {
-        return Optional.of(this.aNamedDecl);
+    public Optional<? extends ADeclarator> getSuper() {
+        return Optional.of(this.aDeclarator);
     }
 
     /**
@@ -1016,7 +989,7 @@ public abstract class AFunction extends ANamedDecl {
         		joinPointList = selectDecl();
         		break;
         	default:
-        		joinPointList = this.aNamedDecl.select(selectName);
+        		joinPointList = this.aDeclarator.select(selectName);
         		break;
         }
         return joinPointList;
@@ -1083,7 +1056,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     protected void fillWithAttributes(List<String> attributes) {
-        this.aNamedDecl.fillWithAttributes(attributes);
+        this.aDeclarator.fillWithAttributes(attributes);
         attributes.add("hasDefinition");
         attributes.add("functionType");
         attributes.add("declarationJp");
@@ -1108,7 +1081,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     protected void fillWithSelects(List<String> selects) {
-        this.aNamedDecl.fillWithSelects(selects);
+        this.aDeclarator.fillWithSelects(selects);
         selects.add("body");
         selects.add("param");
         selects.add("decl");
@@ -1119,7 +1092,7 @@ public abstract class AFunction extends ANamedDecl {
      */
     @Override
     protected void fillWithActions(List<String> actions) {
-        this.aNamedDecl.fillWithActions(actions);
+        this.aDeclarator.fillWithActions(actions);
         actions.add("function clone(String)");
         actions.add("String cloneOnFile(String)");
         actions.add("String cloneOnFile(String, String)");
@@ -1150,7 +1123,7 @@ public abstract class AFunction extends ANamedDecl {
         if(isInstance) {
         	return true;
         }
-        return this.aNamedDecl.instanceOf(joinpointClass);
+        return this.aDeclarator.instanceOf(joinpointClass);
     }
     /**
      * 

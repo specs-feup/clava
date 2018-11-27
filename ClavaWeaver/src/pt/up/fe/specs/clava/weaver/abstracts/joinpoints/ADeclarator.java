@@ -8,22 +8,22 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AField
+ * Auto-Generated class for join point ADeclarator
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AField extends ADeclarator {
+public abstract class ADeclarator extends ANamedDecl {
 
-    protected ADeclarator aDeclarator;
+    protected ANamedDecl aNamedDecl;
 
     /**
      * 
      */
-    public AField(ADeclarator aDeclarator){
-        super(aDeclarator);
-        this.aDeclarator = aDeclarator;
+    public ADeclarator(ANamedDecl aNamedDecl){
+        super(aNamedDecl);
+        this.aNamedDecl = aNamedDecl;
     }
     /**
      * Get value on attribute name
@@ -31,7 +31,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public String getNameImpl() {
-        return this.aDeclarator.getNameImpl();
+        return this.aNamedDecl.getNameImpl();
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public Boolean getIsPublicImpl() {
-        return this.aDeclarator.getIsPublicImpl();
+        return this.aNamedDecl.getIsPublicImpl();
     }
 
     /**
@@ -49,7 +49,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public String getQualifiedPrefixImpl() {
-        return this.aDeclarator.getQualifiedPrefixImpl();
+        return this.aNamedDecl.getQualifiedPrefixImpl();
     }
 
     /**
@@ -58,28 +58,28 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public String getQualifiedNameImpl() {
-        return this.aDeclarator.getQualifiedNameImpl();
+        return this.aNamedDecl.getQualifiedNameImpl();
     }
 
     /**
      * 
      */
     public void defNameImpl(String value) {
-        this.aDeclarator.defNameImpl(value);
+        this.aNamedDecl.defNameImpl(value);
     }
 
     /**
      * 
      */
     public void defQualifiedPrefixImpl(String value) {
-        this.aDeclarator.defQualifiedPrefixImpl(value);
+        this.aNamedDecl.defQualifiedPrefixImpl(value);
     }
 
     /**
      * 
      */
     public void defQualifiedNameImpl(String value) {
-        this.aDeclarator.defQualifiedNameImpl(value);
+        this.aNamedDecl.defQualifiedNameImpl(value);
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aDeclarator.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -97,7 +97,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aDeclarator.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aDeclarator.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -115,7 +115,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aDeclarator.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aDeclarator.insertAfterImpl(node);
+        return this.aNamedDecl.insertAfterImpl(node);
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aDeclarator.insertAfterImpl(code);
+        return this.aNamedDecl.insertAfterImpl(code);
     }
 
     /**
@@ -141,7 +141,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public void detachImpl() {
-        this.aDeclarator.detachImpl();
+        this.aNamedDecl.detachImpl();
     }
 
     /**
@@ -150,7 +150,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aDeclarator.setTypeImpl(type);
+        this.aNamedDecl.setTypeImpl(type);
     }
 
     /**
@@ -158,7 +158,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aDeclarator.copyImpl();
+        return this.aNamedDecl.copyImpl();
     }
 
     /**
@@ -166,7 +166,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aDeclarator.deepCopyImpl();
+        return this.aNamedDecl.deepCopyImpl();
     }
 
     /**
@@ -176,7 +176,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aDeclarator.setUserFieldImpl(fieldName, value);
+        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -185,7 +185,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aDeclarator.setUserFieldImpl(fieldNameAndValue);
+        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -195,7 +195,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aDeclarator.setValueImpl(key, value);
+        return this.aNamedDecl.setValueImpl(key, value);
     }
 
     /**
@@ -204,7 +204,34 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aDeclarator.messageToUserImpl(message);
+        this.aNamedDecl.messageToUserImpl(message);
+    }
+
+    /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aNamedDecl.setNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aNamedDecl.setQualifiedPrefixImpl(qualifiedPrefix);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aNamedDecl.setQualifiedNameImpl(name);
     }
 
     /**
@@ -214,7 +241,7 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aDeclarator.insertImpl(position, code);
+        this.aNamedDecl.insertImpl(position, code);
     }
 
     /**
@@ -222,26 +249,26 @@ public abstract class AField extends ADeclarator {
      */
     @Override
     public String toString() {
-        return this.aDeclarator.toString();
+        return this.aNamedDecl.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends ADeclarator> getSuper() {
-        return Optional.of(this.aDeclarator);
+    public Optional<? extends ANamedDecl> getSuper() {
+        return Optional.of(this.aNamedDecl);
     }
 
     /**
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
-        		joinPointList = this.aDeclarator.select(selectName);
+        		joinPointList = this.aNamedDecl.select(selectName);
         		break;
         }
         return joinPointList;
@@ -251,7 +278,7 @@ public abstract class AField extends ADeclarator {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -289,24 +316,24 @@ public abstract class AField extends ADeclarator {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aDeclarator.fillWithAttributes(attributes);
+    protected void fillWithAttributes(List<String> attributes) {
+        this.aNamedDecl.fillWithAttributes(attributes);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aDeclarator.fillWithSelects(selects);
+    protected void fillWithSelects(List<String> selects) {
+        this.aNamedDecl.fillWithSelects(selects);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aDeclarator.fillWithActions(actions);
+    protected void fillWithActions(List<String> actions) {
+        this.aNamedDecl.fillWithActions(actions);
     }
 
     /**
@@ -314,8 +341,8 @@ public abstract class AField extends ADeclarator {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
-        return "field";
+    public String get_class() {
+        return "declarator";
     }
 
     /**
@@ -323,17 +350,17 @@ public abstract class AField extends ADeclarator {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
         }
-        return this.aDeclarator.instanceOf(joinpointClass);
+        return this.aNamedDecl.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum FieldAttributes {
+    protected enum DeclaratorAttributes {
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
@@ -390,13 +417,13 @@ public abstract class AField extends ADeclarator {
         /**
          * 
          */
-        private FieldAttributes(String name){
+        private DeclaratorAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<FieldAttributes> fromString(String name) {
+        public static Optional<DeclaratorAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -404,7 +431,7 @@ public abstract class AField extends ADeclarator {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(FieldAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(DeclaratorAttributes::name).collect(Collectors.toList());
         }
 
         /**

@@ -207,6 +207,10 @@
 		</attribute>		
 	</artifact>
 
+	<!-- DECLARATOR DECLARATION -->
+	<artifact class="declarator">
+	</artifact>
+
 
 	<!-- ENUM DECL -->
 	<artifact class="enumDecl" default="name">

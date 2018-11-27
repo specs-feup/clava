@@ -50,7 +50,7 @@
 	</joinpoint>
 	
 	<!-- FIELD -->
-	<joinpoint class="field" extends="namedDecl">
+	<joinpoint class="field" extends="declarator">
 	</joinpoint>
 	
 	<!-- STRUCT -->
@@ -90,9 +90,12 @@
 	<!-- NAMED DECL -->
 	<joinpoint class="namedDecl" extends="decl"/>
 	
+	<!-- DECLARATOR DECL -->
+	<joinpoint class="declarator" extends="namedDecl"/>
+	
 	
 	<!-- VAR DECLARATION -->
- 	<joinpoint class="vardecl" extends="namedDecl">
+ 	<joinpoint class="vardecl" extends="declarator">
  		<select alias="init"			class="expression"/>
  	</joinpoint>  		
 	
@@ -116,7 +119,7 @@
 
 
 	<!-- FUNCTION -->
-	<joinpoint class="function" extends="namedDecl">
+	<joinpoint class="function" extends="declarator">
 		<!--  <select 						class="body"/>   -->
 	 	<select alias="body" 			class="scope"/>
 		<select 						class="param"/>

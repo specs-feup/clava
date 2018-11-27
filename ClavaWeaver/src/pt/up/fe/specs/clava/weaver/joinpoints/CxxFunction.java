@@ -63,7 +63,7 @@ public class CxxFunction extends AFunction {
     private final ACxxWeaverJoinPoint parent;
 
     public CxxFunction(FunctionDecl function, ACxxWeaverJoinPoint parent) {
-        super(new CxxNamedDecl(function, parent));
+        super(new CxxDeclarator(function, parent));
         this.function = function;
         this.parent = parent;
     }

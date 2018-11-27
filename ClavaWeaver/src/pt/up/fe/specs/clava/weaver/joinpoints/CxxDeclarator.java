@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 SPeCS.
+ * Copyright 2017 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -14,18 +14,19 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.FieldDecl;
+import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
 
-public class CxxField extends AField {
+public class CxxDeclarator extends ADeclarator {
 
-    private final FieldDecl field;
+    private final DeclaratorDecl declaratorDecl;
     private final ACxxWeaverJoinPoint parent;
 
-    public CxxField(FieldDecl field, ACxxWeaverJoinPoint parent) {
-        super(new CxxDeclarator(field, parent));
-        this.field = field;
+    public CxxDeclarator(DeclaratorDecl declaratorDecl, ACxxWeaverJoinPoint parent) {
+        super(new CxxNamedDecl(declaratorDecl, parent));
+
+        this.declaratorDecl = declaratorDecl;
         this.parent = parent;
     }
 
@@ -36,7 +37,7 @@ public class CxxField extends AField {
 
     @Override
     public ClavaNode getNode() {
-        return field;
+        return declaratorDecl;
     }
 
 }

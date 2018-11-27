@@ -34,7 +34,7 @@ public class CxxVardecl extends AVardecl {
     private final ACxxWeaverJoinPoint parent;
 
     public CxxVardecl(VarDecl varDecl, ACxxWeaverJoinPoint parent) {
-        super(new CxxNamedDecl(varDecl, parent));
+        super(new CxxDeclarator(varDecl, parent));
 
         this.varDecl = varDecl;
         this.parent = parent;
