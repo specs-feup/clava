@@ -10,6 +10,9 @@ int main() {
 		case 1 ... 3:
 			b = 2;
 			break;
+        case 4:
+			/* empty case with a text element */
+			break;			
 		default:
 			b = 3;
 	}
