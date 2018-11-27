@@ -69,7 +69,12 @@ aspectdef SetVariableAccess
 		if (vardecl !== null)		
 		{
 		
-			var vardeclRegion = vardecl.currentRegion.joinpointType;
+			var vardeclRegion = "";
+			if(vardecl.currentRegion !== undefined) {
+				vardeclRegion = vardecl.currentRegion.joinpointType;
+			}
+			//var vardeclRegion = vardecl.currentRegion.joinpointType;
+			
 
 			if ($ForStmt.contains(vardecl) === true)
 				declpos = 'inside';

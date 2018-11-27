@@ -23,7 +23,18 @@ aspectdef CheckForSafeFunctionCall
 
 	select file.function.body.arrayAccess end
 	apply
+		if($arrayAccess.use.indexOf('write') === -1) {
+			continue;
+		}
 		
+		var currentRegion = $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion;
+		if((currentRegion !== undefined && currentRegion.joinpointType === 'file')
+			|| $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.isParam) {
+			
+			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
+		}
+		
+/*
 		if (
 			$arrayAccess.use.indexOf('write') !== -1 && 
 				(
@@ -33,29 +44,49 @@ aspectdef CheckForSafeFunctionCall
 				)
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
+*/			
 	end
 	condition new_safefunctionCallslist.indexOf($function.name) !== -1 end
 
 	select file.function.body.memberAccess end
 	apply
+		if($memberAccess.use.indexOf('write') === -1) {
+			continue;
+		}
+		
+		var currentRegion = $memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion;
+		if(currentRegion !== undefined && currentRegion.joinpointType === 'file') {
+			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
+		}
+		
+	/*
 		if (
 			$memberAccess.use.indexOf('write') !== -1 &&
 			$memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinpointType === 'file'
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);		
+	*/
 	end
 	condition new_safefunctionCallslist.indexOf($function.name) !== -1 end
 
 
 	select file.function.body.varref end
 	apply
-
+		if($varref.useExpr.use.indexOf('write') === -1){
+			continue;
+		}
+	
+		var currentRegion = $varref.vardecl.currentRegion;
+		if(currentRegion !== undefined && currentRegion.joinpointType === 'file') {
+			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
+		}
+		/*
 		if (
 			$varref.useExpr.use.indexOf('write') !== -1 &&
 			$varref.vardecl.currentRegion.joinpointType === 'file'
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);		
-
+		*/
 	end
 	condition new_safefunctionCallslist.indexOf($function.name) !== -1 end
 
