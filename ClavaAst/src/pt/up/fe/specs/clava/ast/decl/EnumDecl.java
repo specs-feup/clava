@@ -127,7 +127,15 @@ public class EnumDecl extends TagDecl {
         // System.out.println("TYPE:" + getType().toTree());
         // System.out.println("TYPE CODE:" + getType().getCode(this));
         // builder.append(getDeclName());
-        builder.append(getType().getCode(this));
+        String enumTypeCode = getType().getCode(this);
+
+        // Check if anonymous
+        if (enumTypeCode.startsWith("enum (anonymous")) {
+            enumTypeCode = "";
+        }
+        // enumType.get(EnumType.)
+
+        builder.append(enumTypeCode);
 
         // Add integer type
         addType(getIntegerType(), builder);
