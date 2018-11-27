@@ -44245,7 +44245,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "vardecl",
+                              "type": "declarator",
                               "name": "declaration"
                            }]
                },

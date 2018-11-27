@@ -134,7 +134,7 @@ public abstract class AVarref extends AExpression {
      * Get value on attribute declaration
      * @return the attribute's value
      */
-    public abstract AVardecl getDeclarationImpl();
+    public abstract ADeclarator getDeclarationImpl();
 
     /**
      * Get value on attribute declaration
@@ -145,7 +145,7 @@ public abstract class AVarref extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
         	}
-        	AVardecl result = this.getDeclarationImpl();
+        	ADeclarator result = this.getDeclarationImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
         	}

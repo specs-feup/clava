@@ -333,7 +333,7 @@
 			tooltip="expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node" />
 		<attribute name="isFunctionCall" type="Boolean" 
 			tooltip="true if this varref represents a function call" />
-		<attribute name="declaration" type="vardecl" />
+		<attribute name="declaration" type="declarator" />
 	</artifact>
 
 	<!-- FUNCTION -->

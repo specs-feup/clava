@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
@@ -82,14 +83,9 @@ public class CxxVarref extends AVarref {
 
     @Override
     public AVardecl getVardeclImpl() {
+        ADeclarator declarator = getDeclarationImpl();
 
-        Optional<DeclaratorDecl> varDecl = refExpr.getVariableDeclaration();
-
-        if (!varDecl.isPresent()) {
-            return null;
-        }
-
-        return CxxJoinpoints.create(varDecl.get(), null, AVardecl.class);
+        return declarator instanceof AVardecl ? (AVardecl) declarator : null;
     }
 
     @Override
@@ -103,7 +99,13 @@ public class CxxVarref extends AVarref {
     }
 
     @Override
-    public AVardecl getDeclarationImpl() {
-        return getVardeclImpl();
+    public ADeclarator getDeclarationImpl() {
+        Optional<DeclaratorDecl> declarator = refExpr.getVariableDeclaration();
+
+        if (!declarator.isPresent()) {
+            return null;
+        }
+
+        return CxxJoinpoints.create(declarator.get(), null, ADeclarator.class);
     }
 }
