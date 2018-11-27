@@ -98,6 +98,7 @@ public class ParallelCodeParser extends CodeParser {
         // ClavaLog.debug(() -> "[ParallelCodeParser] All source folders: " + allSourceFolders);
 
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
+        // ClavaLog.debug(() -> "[ParallelCodeParser] All sources: " + allSources.values());
         // System.out.println("ALL SOURCES:" + allSources);
         // System.out.println(
         // "All Sources:" + allSources.keySet().stream().map(Object::toString).collect(Collectors.joining(", ")));

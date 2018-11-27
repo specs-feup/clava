@@ -66,6 +66,10 @@ public enum SourceType {
         return PERMITTED_EXTENSIONS.get();
     }
 
+    public static Set<String> getHeaderExtensions() {
+        return HEADER.getExtensions();
+    }
+
     public static Map<String, SourceType> getExtensionsMap() {
         return EXTENSIONS_MAP.get();
     }
