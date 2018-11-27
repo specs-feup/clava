@@ -40,5 +40,7 @@ typedef enum enum_with_typedef {
 // Enum without name in the declaration
 typedef enum { false, true } logical;
 
+// Anonymous enum
+enum{BLACK,RED};
 
 #endif

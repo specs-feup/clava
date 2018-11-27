@@ -45,4 +45,11 @@ enum logical {
 };
 
 typedef enum logical logical;
+
+// Anonymous enum
+enum  {
+	BLACK,
+	RED,
+};
+
 #endif
