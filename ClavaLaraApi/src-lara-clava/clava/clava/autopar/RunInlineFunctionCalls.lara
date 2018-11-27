@@ -73,6 +73,7 @@ aspectdef RunInlineFunctionCalls
 
 	
 	}
+	
 
 
 	select file.function end
@@ -86,14 +87,32 @@ aspectdef RunInlineFunctionCalls
 	end
 
 
-	
+	// Exclude functions that have global variable declarations
 	select file.function.body.vardecl end
 	apply
 		if (excluded_function_list.indexOf($function.name) === -1)
 			excluded_function_list.push($function.name);
 	end
-	condition $vardecl.storageClass === 'static' end
+	//condition $vardecl.storageClass === 'static' end
+	condition $vardecl.isGlobal end
 
+	
+	// Exclude functions that have references to global variables
+	select file.function.body.varref end
+	apply
+		var $vardecl = $varref.declaration;
+		if($vardecl === undefined) {
+			continue;
+		}
+	
+		if(!$vardecl.isGlobal) {
+			continue;
+		}
+	
+		if (excluded_function_list.indexOf($function.name) === -1)
+			excluded_function_list.push($function.name);
+	end
+	
 
 	for (var caller_func in func_name)
 		for(var calling of func_name[caller_func].CallingFunc)
