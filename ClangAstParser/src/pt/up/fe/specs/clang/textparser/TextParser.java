@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -107,6 +108,7 @@ public class TextParser {
     }
 
     private void addElements(TranslationUnit tu) {
+
         // TranslationUnit path
         String tuFilepath = tu.getFile().getPath();
 
@@ -138,9 +140,9 @@ public class TextParser {
         // System.out.println("Current node end line:" + currentNode.getLocation().getEndLine());
 
         boolean hasNodes = true;
+
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
-
             int textStartLine = textElement.getLocation().getStartLine();
             // System.out.println("TEXT START LINE:" + textStartLine);
             // Get node that has a line number greater than the text element
@@ -185,6 +187,15 @@ public class TextParser {
             }
             */
             ClavaNode insertionPoint = statement.isPresent() ? statement.get() : currentNode;
+
+            // If insertion point is the child of a CaseStmt, replace insertion point with text element,
+            // and move insertion point to after the CaseStmt
+            if (insertionPoint.getParent() instanceof CaseStmt) {
+                CaseStmt caseStmt = (CaseStmt) insertionPoint.getParent();
+                queue.replace(insertionPoint, textElement);
+                queue.moveAfter(caseStmt, insertionPoint);
+                continue;
+            }
 
             // If current node is an empty CompoundStmt, add as child
             if (currentNode instanceof CompoundStmt && !currentNode.hasChildren()) {
