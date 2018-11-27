@@ -1035,12 +1035,16 @@ public class CxxWeaver extends ACxxWeaver {
         List<File> newIncludeDirs = new ArrayList<>();
         // Add folders for generated files
         newIncludeDirs.addAll(getAllIncludeFolders(getWeavingFolder(), generatedFiles));
+
+        // Add original includes at the end, in case there are "out-of-source" files (e.g., .inc files) that are needed
+        newIncludeDirs.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
+
         // If we are skipping the parsing of include folders, we should include the original include folders as includes
-        if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
-            List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
-            newIncludeDirs.addAll(originalHeaderIncludes);
-            ClavaLog.debug(() -> "Skip headers is enabled, adding original headers: " + originalHeaderIncludes);
-        }
+        // if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
+        // List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
+        // newIncludeDirs.addAll(originalHeaderIncludes);
+        // ClavaLog.debug(() -> "Skip headers is enabled, adding original headers: " + originalHeaderIncludes);
+        // }
 
         // String includeFoldersContent = getIncludePaths(getWeavingFolder()).stream().collect(Collectors.joining(";"));
         String includeFoldersContent = newIncludeDirs.stream()
