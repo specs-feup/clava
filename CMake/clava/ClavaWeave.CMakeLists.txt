@@ -9,6 +9,7 @@ cmake_minimum_required(VERSION 3.0)
 		WORKING_DIRECTORY ${BUILD_DIR} 
 		DEPENDS ${WEAVER_DEPENDENCIES}
 		COMMENT "Applying LARA strategy '${ASPECT}' to target '${ORIG_TARGET}'"
+		VERBATIM
 	)
 	
 	add_custom_target("${ORIG_TARGET}_weaving" ALL
