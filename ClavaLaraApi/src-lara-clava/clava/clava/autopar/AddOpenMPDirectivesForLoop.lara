@@ -67,8 +67,12 @@ aspectdef AddOpenMPDirectivesForLoop
 		InsertBeforeStr = OpenMPDirectivesStr;
 	}
 
+	// Insert pragma
 	$ForStmt.insert before InsertBeforeStr;
 
+	// Add include
+	$ForStmt.ancestor('file').addInclude("omp", true);
+	
 	select $ForStmt.body end
 	apply
 
