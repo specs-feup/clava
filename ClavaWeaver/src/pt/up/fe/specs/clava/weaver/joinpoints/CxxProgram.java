@@ -120,10 +120,10 @@ public class CxxProgram extends AProgram {
         return weaver.getUserFlags().toArray(new String[0]);
     }
 
-    @Override
-    public void messageToUserImpl(String message) {
-        weaver.addMessageToUser(message);
-    }
+    // @Override
+    // public void messageToUserImpl(String message) {
+    // weaver.addMessageToUser(message);
+    // }
 
     /**
      * @deprecated

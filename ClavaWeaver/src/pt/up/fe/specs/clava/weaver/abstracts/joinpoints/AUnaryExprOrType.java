@@ -231,7 +231,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Replaces this join point with the given join
      * @param node 
      */
     @Override
@@ -240,7 +240,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -249,7 +249,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Inserts the given join point before this join point
      * @param node 
      */
     @Override
@@ -258,7 +258,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -267,7 +267,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Inserts the given join point after this join point
      * @param node 
      */
     @Override
@@ -276,7 +276,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param code 
      */
     @Override
@@ -285,7 +285,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Removes the node associated to this joinpoint from the AST
      */
     @Override
     public void detachImpl() {
@@ -293,7 +293,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Sets the type of a node, if it has a type
      * @param type 
      */
     @Override
@@ -318,7 +318,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Associates arbitrary values to nodes of the AST
      * @param fieldName 
      * @param value 
      */
@@ -328,7 +328,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a map
      * @param fieldNameAndValue 
      */
     @Override
@@ -347,7 +347,7 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * 
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      * @param message 
      */
     @Override

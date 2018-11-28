@@ -1045,4 +1045,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public Boolean getIsMacroImpl() {
         return getNode().get(ClavaNode.IS_MACRO);
     }
+
+    @Override
+    public void messageToUserImpl(String message) {
+        getWeaverEngine().addMessageToUser(message);
+    }
 }

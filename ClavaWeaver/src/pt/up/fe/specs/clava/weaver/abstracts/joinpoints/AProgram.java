@@ -342,14 +342,14 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     public abstract List<? extends AFile> selectFile();
 
     /**
-     * 
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes
      */
     public void rebuildImpl() {
         throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
     }
 
     /**
-     * 
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes
      */
     public final void rebuild() {
         try {
@@ -366,7 +366,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Adds a file join point to the current program
      * @param file 
      */
     public void addFileImpl(AFile file) {
@@ -374,7 +374,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Adds a file join point to the current program
      * @param file 
      */
     public final void addFile(AFile file) {
@@ -392,14 +392,14 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Creates a copy of the current AST and pushes it to the top of the AST stack
      */
     public void pushImpl() {
         throw new UnsupportedOperationException(get_class()+": Action push not implemented ");
     }
 
     /**
-     * 
+     * Creates a copy of the current AST and pushes it to the top of the AST stack
      */
     public final void push() {
         try {
@@ -416,14 +416,14 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Discards the AST at the top of the ASt stack
      */
     public void popImpl() {
         throw new UnsupportedOperationException(get_class()+": Action pop not implemented ");
     }
 
     /**
-     * 
+     * Discards the AST at the top of the ASt stack
      */
     public final void pop() {
         try {
@@ -440,7 +440,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path to an include that the current program depends on
+     * Adds a path to an include that the current program depends on
      * @param path 
      */
     public void addExtraIncludeImpl(String path) {
@@ -448,7 +448,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path to an include that the current program depends on
+     * Adds a path to an include that the current program depends on
      * @param path 
      */
     public final void addExtraInclude(String path) {
@@ -466,7 +466,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path based on a git repository to an include that the current program depends on
+     * Adds a path based on a git repository to an include that the current program depends on
      * @param gitRepo 
      * @param path 
      */
@@ -475,7 +475,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path based on a git repository to an include that the current program depends on
+     * Adds a path based on a git repository to an include that the current program depends on
      * @param gitRepo 
      * @param path 
      */
@@ -494,7 +494,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path to a source that the current program depends on
+     * Adds a path to a source that the current program depends on
      * @param path 
      */
     public void addExtraSourceImpl(String path) {
@@ -502,7 +502,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path to a source that the current program depends on
+     * Adds a path to a source that the current program depends on
      * @param path 
      */
     public final void addExtraSource(String path) {
@@ -520,7 +520,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path based on a git repository to a source that the current program depends on
+     * Adds a path based on a git repository to a source that the current program depends on
      * @param gitRepo 
      * @param path 
      */
@@ -529,7 +529,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * adds a path based on a git repository to a source that the current program depends on
+     * Adds a path based on a git repository to a source that the current program depends on
      * @param gitRepo 
      * @param path 
      */

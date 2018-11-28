@@ -85,7 +85,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Replaces this join point with the given join
      * @param node 
      */
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
@@ -93,7 +93,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Replaces this join point with the given join
      * @param node 
      */
     public final AJoinPoint replaceWith(AJoinPoint node) {
@@ -112,7 +112,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     public AJoinPoint replaceWithImpl(String node) {
@@ -120,7 +120,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     public final AJoinPoint replaceWith(String node) {
@@ -139,7 +139,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Inserts the given join point before this join point
      * @param node 
      */
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
@@ -147,7 +147,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Inserts the given join point before this join point
      * @param node 
      */
     public final AJoinPoint insertBefore(AJoinPoint node) {
@@ -166,7 +166,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     public AJoinPoint insertBeforeImpl(String node) {
@@ -174,7 +174,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     public final AJoinPoint insertBefore(String node) {
@@ -193,7 +193,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Inserts the given join point after this join point
      * @param node 
      */
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
@@ -201,7 +201,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Inserts the given join point after this join point
      * @param node 
      */
     public final AJoinPoint insertAfter(AJoinPoint node) {
@@ -220,7 +220,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param code 
      */
     public AJoinPoint insertAfterImpl(String code) {
@@ -228,7 +228,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param code 
      */
     public final AJoinPoint insertAfter(String code) {
@@ -247,14 +247,14 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Removes the node associated to this joinpoint from the AST
      */
     public void detachImpl() {
         throw new UnsupportedOperationException(get_class()+": Action detach not implemented ");
     }
 
     /**
-     * 
+     * Removes the node associated to this joinpoint from the AST
      */
     public final void detach() {
         try {
@@ -271,7 +271,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Sets the type of a node, if it has a type
      * @param type 
      */
     public void setTypeImpl(AJoinPoint type) {
@@ -279,7 +279,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Sets the type of a node, if it has a type
      * @param type 
      */
     public final void setType(AJoinPoint type) {
@@ -347,7 +347,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Associates arbitrary values to nodes of the AST
      * @param fieldName 
      * @param value 
      */
@@ -356,7 +356,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Associates arbitrary values to nodes of the AST
      * @param fieldName 
      * @param value 
      */
@@ -376,7 +376,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a map
      * @param fieldNameAndValue 
      */
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
@@ -384,7 +384,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Overload which accepts a map
      * @param fieldNameAndValue 
      */
     public final Object setUserField(Map<?, ?> fieldNameAndValue) {
@@ -432,7 +432,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      * @param message 
      */
     public void messageToUserImpl(String message) {
@@ -440,7 +440,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * 
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      * @param message 
      */
     public final void messageToUser(String message) {

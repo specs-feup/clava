@@ -6,40 +6,40 @@
 	<!-- GENERIC ACTIONS FOR ALL JOINPOINTS -->
 
 	<!-- Replaces the current node with the given node -->
-	<action name="replaceWith" return="joinpoint">
+	<action name="replaceWith" return="joinpoint" tooltip="Replaces this join point with the given join">
 		<parameter name="node" type="joinpoint" />
 	</action>
 	
-	<action name="replaceWith" return="joinpoint">
+	<action name="replaceWith" return="joinpoint" tooltip="Overload which accepts a string">
 		<parameter name="node" type="String" />
 	</action>
 
 	<!-- Inserts node before the given node -->
-	<action name="insertBefore" return="joinpoint">
+	<action name="insertBefore" return="joinpoint" tooltip="Inserts the given join point before this join point">
 		<parameter name="node" type="joinpoint" />
 	</action>
 
 	<!-- Overload which accepts String -->
-	<action name="insertBefore" return="joinpoint">
+	<action name="insertBefore" return="joinpoint" tooltip="Overload which accepts a string">
 		<parameter name="node" type="String" />
 	</action>
 
 	<!-- Inserts node after the given node -->
-	<action name="insertAfter" return="joinpoint">
-		<parameter name="node" type="joinpoint" />
+	<action name="insertAfter" return="joinpoint" tooltip="Inserts the given join point after this join point">
+		<parameter name="node" type="joinpoint"/>
 	</action>
 
 	<!-- Overload which accepts String -->
-	<action name="insertAfter" return="joinpoint">
+	<action name="insertAfter" return="joinpoint" tooltip="Overload which accepts a string">
 		<parameter name="code" type="String" />
 	</action>
 
 
 	<!-- Removes node associated to the joinpoint from the AST -->
-	<action name="detach" />
+	<action name="detach" tooltip="Removes the node associated to this joinpoint from the AST"/>
 
 	<!-- Sets the type of a node, if it has a type -->
-	<action name="setType">
+	<action name="setType" tooltip="Sets the type of a node, if it has a type">
 		<parameter name="type" type="joinpoint" />
 	</action>
 
@@ -48,12 +48,12 @@
 	
 	<action name="deepCopy" return="joinpoint" tooltip="Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)"/>
 
-	<action name="setUserField" return="Object">
+	<action name="setUserField" return="Object" tooltip="Associates arbitrary values to nodes of the AST">
 		<parameter name="fieldName" type="String" />
 		<parameter name="value" type="Object" />	
 	</action>
 	
-	<action name="setUserField" return="Object">
+	<action name="setUserField" return="Object" tooltip="Overload which accepts a map">
 		<parameter name="fieldNameAndValue" type="Map" />
 		<!--  <parameter name="value" type="Object" /> -->	
 	</action>
@@ -62,35 +62,41 @@
 		<parameter name="key" type="String" />	
 		<parameter name="value" type="Object" />				
 	</action>
+	
+	<!-- Adds a message that will be communicated to the user after weaving ends -->
+	<action name="messageToUser" tooltip="Adds a message that will be printed to the user after weaving finishes. Identical messages are removed">
+		<parameter name="message" type="String" />
+	</action>
+	
 
 	<!-- PROGRAM -->
 
 	<!-- Internally generates the code for the current program and rebuilds 
 		the AST -->
-	<action name="rebuild" class="program" />
+	<action name="rebuild" class="program" tooltip="Recompiles the program currently represented by the AST, transforming literal code into AST nodes"/>
 
-	<action name="addFile" class="program">
+	<action name="addFile" class="program" tooltip="Adds a file join point to the current program">
 		<parameter name="file" type="file" />
 	</action>
 	
-	<action name="push" class="program" />
+	<action name="push" class="program" tooltip="Creates a copy of the current AST and pushes it to the top of the AST stack"/>
 	
-	<action name="pop" class="program" />
+	<action name="pop" class="program" tooltip="Discards the AST at the top of the ASt stack"/>
 	
-	<action name="addExtraInclude" class="program" tooltip="adds a path to an include that the current program depends on">
+	<action name="addExtraInclude" class="program" tooltip="Adds a path to an include that the current program depends on">
 		<parameter name="path" type="String" />
 	</action>
 	
-	<action name="addExtraIncludeFromGit" class="program" tooltip="adds a path based on a git repository to an include that the current program depends on">
+	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
 		<parameter name="gitRepo" type="String" />
 		<parameter name="path" type="String" />
 	</action>
 
-	<action name="addExtraSource" class="program" tooltip="adds a path to a source that the current program depends on">
+	<action name="addExtraSource" class="program" tooltip="Adds a path to a source that the current program depends on">
 		<parameter name="path" type="String" />
 	</action>
 	
-	<action name="addExtraSourceFromGit" class="program" tooltip="adds a path based on a git repository to a source that the current program depends on">
+	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
 		<parameter name="gitRepo" type="String" />
 		<parameter name="path" type="String" />
 	</action>
@@ -98,72 +104,35 @@
 	<!-- FILE -->
 
 	<!-- Adds an include to the file -->
-	<action name="addInclude" class="file">
+	<action name="addInclude" class="file" tooltip="Adds an include to the current file. If the file already has the include, it does nothing">
 		<parameter name="name" type="string" />
 		<parameter name="isAngled" type="boolean" />
 	</action>
 
 	<!-- Overload which sets 'isAngled' to false -->
-	<action name="addInclude" class="file">
+	<action name="addInclude" class="file" tooltip="Overload which sets 'isAngled' to false">
 		<parameter name="name" type="string" />
 	</action>
 
-	<!-- Overload which acepts a joinpoint -->
-	<action name="addIncludeJp" class="file">
+	<!-- Overload which accepts a join point -->
+	<action name="addIncludeJp" class="file" tooltip="Overload of addInclude which accepts a join point">
 		<parameter name="jp" type="joinpoint" />
 	</action>
 
-	<action name="addGlobal" class="file" return="vardecl">
+	<action name="addGlobal" class="file" return="vardecl" tooltip="Adds a global variable to this file">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
 		<parameter name="initValue" type="String" />
 	</action>
 
-	<action name="write" class="file" return="String">
+	<action name="write" class="file" return="String" tooltip="Writes the code of this file to a given folder">
 		<parameter name="destinationFoldername" type="String" />
 	</action>
 
-	<!-- Adds a message that will be communicated to the user after weaving 
-		ends -->
-	<action name="messageToUser">
-		<parameter name="message" type="String" />
-	</action>
 
-	<action name="rebuild" class="file" return="file"/>
+	<action name="rebuild" class="file" return="file" tooltip="Recompiles only this file, returns a join point to the new recompiled file"/>
 
 
-	<!-- RECORD -->
-
-	<!-- Adds an include to the file -->
-	<!--  
-	<action name="setName" class="record">
-		<parameter name="name" type="string" />
-	</action>
- 	-->
-
-	<!-- CALL -->
-	<!-- Changes the name of the call -->
-	<action name="setName" class="call">
-		<parameter name="name" type="string" />
-	</action>
-	
-	<action name="wrap" class="call" tooltip="Wraps this call with a possibly new wrapping function">
-		<parameter name="name" type="string" />
-	</action>
-	
-	<action name="inline" class="call" tooltip="Inlines this call, if possible"/>
-	
-	<action name="setArgFromString" class="call">
-		<parameter name="index" type="int" />
-		<parameter name="expr" type="string" />
-	</action>
-	
-	<action name="setArg" class="call">
-		<parameter name="index" type="Integer" />
-		<parameter name="expr" type="expression" />
-	</action>
-	
-	
 	<action name="insertBegin" class="file" tooltip="Adds the node in the join point to the start of the file">
 		<parameter name="node" type="joinpoint" />
 	</action>
@@ -184,6 +153,39 @@
 		<parameter name="parameters" type="joinpoint[]" />  -->
 	</action>
 
+	<!-- RECORD -->
+
+	<!-- Adds an include to the file -->
+	<!--  
+	<action name="setName" class="record">
+		<parameter name="name" type="string" />
+	</action>
+ 	-->
+
+	<!-- CALL -->
+	<!-- Changes the name of the call -->
+	<action name="setName" class="call" tooltip="Changes the name of the call">
+		<parameter name="name" type="string" />
+	</action>
+	
+	<action name="wrap" class="call" tooltip="Wraps this call with a possibly new wrapping function">
+		<parameter name="name" type="string" />
+	</action>
+	
+	<action name="inline" class="call" tooltip="Tries to inline this call"/>
+	
+	<action name="setArgFromString" class="call">
+		<parameter name="index" type="int" />
+		<parameter name="expr" type="string" />
+	</action>
+	
+	<action name="setArg" class="call">
+		<parameter name="index" type="Integer" />
+		<parameter name="expr" type="expression" />
+	</action>
+	
+
+
 	<!-- SCOPE -->
 
 	<action name="insertBegin" class="scope" return="joinpoint">
@@ -201,13 +203,13 @@
 		<parameter name="code" type="string" />
 	</action>
 
-	<action name="addLocal" class="scope" return="joinpoint">
+	<action name="addLocal" class="scope" return="joinpoint" tooltip="Adds a new local variable to this scope">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
 		<parameter name="initValue" type="String" />
 	</action>
 	
-		<action name="addLocal" class="scope" return="joinpoint">
+	<action name="addLocal" class="scope" return="joinpoint" tooltip="Overload which does not initialize the local variable">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
 	</action>
@@ -215,10 +217,12 @@
 	<action name="setNaked" class="scope" tooltip="Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)">
 		<parameter name="isNaked" type="Boolean" />
 	</action>	
+
+	<action name="clear" class="scope"	tooltip="Clears the contents of this scope (untested)" />
 	
 
 	<!-- FUNCTION -->
-	<action name="clone" class="function" return="function">
+	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function">
 		<parameter name="newName" type="String" />
 	</action>
 
@@ -231,9 +235,12 @@
 		<parameter name="fileName" type="String" />
 	</action>
 
-	<action name="clear" class="scope"
-		tooltip="Clears the contents of this scope (untested)" />
-
+	<!-- 
+	<action name="setName" class="function">
+		<parameter name="name" type="String" />
+	</action>
+	 -->
+	
 	<action name="insertReturn" class="function" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)">
 		<parameter name="code" type="joinpoint" />
 	</action>
@@ -253,6 +260,10 @@
 	<action name="setBody" class="function" tooltip="Sets the body of the function">
 		<parameter name="body" type="scope" />
 	</action>	
+	
+	<action name="newCall" class="function" return="call" tooltip="Creates a new call to this function">
+		<parameter name="args" type="joinpoint[]" />
+	</action>
 
 
 	<!-- NAMED DECL -->
@@ -279,40 +290,40 @@
 		<parameter name="kind" type="String" />
 	</action>
 	
-	<action name="setInit" class="loop" tooltip="Sets the init statement of the loop.">
+	<action name="setInit" class="loop" tooltip="Sets the init statement of the loop">
 		<parameter name="initCode" type="String"/>
 	</action>
 	
-	<action name="setInitValue" class="loop" tooltip="Sets the init value of the loop. Works with loops of kind 'for'.">
+	<action name="setInitValue" class="loop" tooltip="Sets the init value of the loop. Works with loops of kind 'for'">
 		<parameter name="initCode" type="String"/>
 	</action>
 
-	<action name="setEndValue" class="loop" tooltip="Sets the end value of the loop. Works with loops of kind 'for'.">
+	<action name="setEndValue" class="loop" tooltip="Sets the end value of the loop. Works with loops of kind 'for'">
 		<parameter name="initCode" type="String"/>
 	</action>
 	
-	<action name="setCond" class="loop" tooltip="Sets the conditional statement of the loop. Works with loops of kind 'for'.">
+	<action name="setCond" class="loop" tooltip="Sets the conditional statement of the loop. Works with loops of kind 'for'">
 		<parameter name="condCode" type="String"/>
 	</action>
 	
-	<action name="setStep" class="loop" tooltip="Sets the step statement of the loop. Works with loops of kind 'for'.">
+	<action name="setStep" class="loop" tooltip="Sets the step statement of the loop. Works with loops of kind 'for'">
 		<parameter name="stepCode" type="String"/>
 	</action>
 
-	<action name="setIsParallel" class="loop" tooltip="Sets the attribute 'isParallel' of the loop.">
+	<action name="setIsParallel" class="loop" tooltip="Sets the attribute 'isParallel' of the loop">
 		<parameter name="isParallel" type="Boolean"/>
 	</action>
 
-	<action name="interchange" class="loop" tooltip="Interchanges two for loops, if possible.">
+	<action name="interchange" class="loop" tooltip="Interchanges two for loops, if possible">
 		<parameter name="otherLoop" type="loop" />
 	</action>
 	
-	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to target loop.">
+	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop">
 		<parameter name="blockSize" type="String" />
 		<parameter name="reference" type="statement" />
 	</action>
 	
-	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to target loop.">
+	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop.">
 		<parameter name="blockSize" type="String" />
 		<parameter name="reference" type="statement" />
 		<parameter name="useTernary" type="Boolean"/>
@@ -325,6 +336,7 @@
 	<action name="setCondRelation" class="loop" tooltip="Changes the operator of a canonical condition, if possible. Supported operators: &lt;, &lt;=, >, >=">
 		<parameter name="operator" type="String" />
 	</action>
+	
 	
 	<!-- OMP -->
 	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">
@@ -403,28 +415,7 @@
 	</action>
 	
 	
-	<!-- FUNCTION -->
-	<!-- 
-	<action name="setName" class="function">
-		<parameter name="name" type="String" />
-	</action>
-	 -->
-	
-	<action name="newCall" class="function" return="call">
-		<parameter name="args" type="joinpoint[]" />
-	</action>
-	
-	
-	<!-- FUNCTION TYPE -->
-	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">
-		<parameter name="newType" type="type" />
-	</action>
-	<!-- 
-	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
-		<parameter name="index" type="Integer" />
-		<parameter name="newType" type="type" />
-	</action>	
-	 -->
+
 	 
 	<!-- TYPE -->
 	<action name="setTemplateArgsTypes" class="type" tooltip="Sets the template argument types of a template type">
@@ -439,6 +430,18 @@
 	<action name="setDesugar" class="type" tooltip="Sets the desugared type of this type">
 		<parameter name="desugaredType" type="type" />
 	</action>
+
+	
+	<!-- FUNCTION TYPE -->
+	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">
+		<parameter name="newType" type="type" />
+	</action>
+	<!-- 
+	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
+		<parameter name="index" type="Integer" />
+		<parameter name="newType" type="type" />
+	</action>	
+	 -->
 
 	
 	<!-- UnaryExprOrType -->

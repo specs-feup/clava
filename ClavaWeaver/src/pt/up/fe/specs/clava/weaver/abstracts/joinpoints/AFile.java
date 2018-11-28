@@ -390,7 +390,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     public abstract List<? extends ADecl> selectDecl();
 
     /**
-     * 
+     * Adds an include to the current file. If the file already has the include, it does nothing
      * @param name 
      * @param isAngled 
      */
@@ -399,7 +399,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Adds an include to the current file. If the file already has the include, it does nothing
      * @param name 
      * @param isAngled 
      */
@@ -418,7 +418,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Overload which sets 'isAngled' to false
      * @param name 
      */
     public void addIncludeImpl(String name) {
@@ -426,7 +426,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Overload which sets 'isAngled' to false
      * @param name 
      */
     public final void addInclude(String name) {
@@ -444,7 +444,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Overload of addInclude which accepts a join point
      * @param jp 
      */
     public void addIncludeJpImpl(AJoinPoint jp) {
@@ -452,7 +452,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Overload of addInclude which accepts a join point
      * @param jp 
      */
     public final void addIncludeJp(AJoinPoint jp) {
@@ -470,7 +470,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Adds a global variable to this file
      * @param name 
      * @param type 
      * @param initValue 
@@ -480,7 +480,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Adds a global variable to this file
      * @param name 
      * @param type 
      * @param initValue 
@@ -501,7 +501,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Writes the code of this file to a given folder
      * @param destinationFoldername 
      */
     public String writeImpl(String destinationFoldername) {
@@ -509,7 +509,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Writes the code of this file to a given folder
      * @param destinationFoldername 
      */
     public final String write(String destinationFoldername) {
@@ -528,14 +528,14 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
+     * Recompiles only this file, returns a join point to the new recompiled file
      */
     public AFile rebuildImpl() {
         throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
     }
 
     /**
-     * 
+     * Recompiles only this file, returns a join point to the new recompiled file
      */
     public final AFile rebuild() {
         try {

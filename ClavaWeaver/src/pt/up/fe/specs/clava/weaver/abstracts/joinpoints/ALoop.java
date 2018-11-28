@@ -573,7 +573,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop.
+     * Sets the init statement of the loop
      * @param initCode 
      */
     public void setInitImpl(String initCode) {
@@ -581,7 +581,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init statement of the loop.
+     * Sets the init statement of the loop
      * @param initCode 
      */
     public final void setInit(String initCode) {
@@ -599,7 +599,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init value of the loop. Works with loops of kind 'for'.
+     * Sets the init value of the loop. Works with loops of kind 'for'
      * @param initCode 
      */
     public void setInitValueImpl(String initCode) {
@@ -607,7 +607,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the init value of the loop. Works with loops of kind 'for'.
+     * Sets the init value of the loop. Works with loops of kind 'for'
      * @param initCode 
      */
     public final void setInitValue(String initCode) {
@@ -625,7 +625,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the end value of the loop. Works with loops of kind 'for'.
+     * Sets the end value of the loop. Works with loops of kind 'for'
      * @param initCode 
      */
     public void setEndValueImpl(String initCode) {
@@ -633,7 +633,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the end value of the loop. Works with loops of kind 'for'.
+     * Sets the end value of the loop. Works with loops of kind 'for'
      * @param initCode 
      */
     public final void setEndValue(String initCode) {
@@ -651,7 +651,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the conditional statement of the loop. Works with loops of kind 'for'.
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'
      * @param condCode 
      */
     public void setCondImpl(String condCode) {
@@ -659,7 +659,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the conditional statement of the loop. Works with loops of kind 'for'.
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'
      * @param condCode 
      */
     public final void setCond(String condCode) {
@@ -677,7 +677,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the step statement of the loop. Works with loops of kind 'for'.
+     * Sets the step statement of the loop. Works with loops of kind 'for'
      * @param stepCode 
      */
     public void setStepImpl(String stepCode) {
@@ -685,7 +685,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the step statement of the loop. Works with loops of kind 'for'.
+     * Sets the step statement of the loop. Works with loops of kind 'for'
      * @param stepCode 
      */
     public final void setStep(String stepCode) {
@@ -703,7 +703,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the attribute 'isParallel' of the loop.
+     * Sets the attribute 'isParallel' of the loop
      * @param isParallel 
      */
     public void setIsParallelImpl(Boolean isParallel) {
@@ -711,7 +711,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Sets the attribute 'isParallel' of the loop.
+     * Sets the attribute 'isParallel' of the loop
      * @param isParallel 
      */
     public final void setIsParallel(Boolean isParallel) {
@@ -729,7 +729,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Interchanges two for loops, if possible.
+     * Interchanges two for loops, if possible
      * @param otherLoop 
      */
     public void interchangeImpl(ALoop otherLoop) {
@@ -737,7 +737,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Interchanges two for loops, if possible.
+     * Interchanges two for loops, if possible
      * @param otherLoop 
      */
     public final void interchange(ALoop otherLoop) {
@@ -755,7 +755,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Applies loop tiling to target loop.
+     * Applies loop tiling to this loop
      * @param blockSize 
      * @param reference 
      */
@@ -764,7 +764,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Applies loop tiling to target loop.
+     * Applies loop tiling to this loop
      * @param blockSize 
      * @param reference 
      */
@@ -784,7 +784,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Applies loop tiling to target loop.
+     * Applies loop tiling to this loop.
      * @param blockSize 
      * @param reference 
      * @param useTernary 
@@ -794,7 +794,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Applies loop tiling to target loop.
+     * Applies loop tiling to this loop.
      * @param blockSize 
      * @param reference 
      * @param useTernary 
@@ -1002,7 +1002,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Replaces this join point with the given join
      * @param node 
      */
     @Override
@@ -1011,7 +1011,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -1020,7 +1020,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Inserts the given join point before this join point
      * @param node 
      */
     @Override
@@ -1029,7 +1029,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -1038,7 +1038,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Inserts the given join point after this join point
      * @param node 
      */
     @Override
@@ -1047,7 +1047,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param code 
      */
     @Override
@@ -1056,7 +1056,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Removes the node associated to this joinpoint from the AST
      */
     @Override
     public void detachImpl() {
@@ -1064,7 +1064,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Sets the type of a node, if it has a type
      * @param type 
      */
     @Override
@@ -1089,7 +1089,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Associates arbitrary values to nodes of the AST
      * @param fieldName 
      * @param value 
      */
@@ -1099,7 +1099,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Overload which accepts a map
      * @param fieldNameAndValue 
      */
     @Override
@@ -1118,7 +1118,7 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      * @param message 
      */
     @Override

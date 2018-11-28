@@ -89,10 +89,10 @@
 			<parameter name="value" type="Object" />	
 		</attribute> 
 		  -->
-		<attribute name="getUserField" type="Object">
+		<attribute name="getUserField" type="Object" tooltip="Deprecated version of 'userField'">
 			<parameter name="fieldName" type="String" />	
 		</attribute>
-		<attribute name="userField" type="Object">
+		<attribute name="userField" type="Object" tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
 			<parameter name="fieldName" type="String" />	
 		</attribute>
 		<attribute name="parentRegion" type="joinpoint" />

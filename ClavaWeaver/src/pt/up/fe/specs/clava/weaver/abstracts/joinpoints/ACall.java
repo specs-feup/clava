@@ -462,7 +462,7 @@ public abstract class ACall extends AExpression {
     public abstract List<? extends AExpression> selectArg();
 
     /**
-     * 
+     * Changes the name of the call
      * @param name 
      */
     public void setNameImpl(String name) {
@@ -470,7 +470,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Changes the name of the call
      * @param name 
      */
     public final void setName(String name) {
@@ -514,14 +514,14 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Inlines this call, if possible
+     * Tries to inline this call
      */
     public void inlineImpl() {
         throw new UnsupportedOperationException(get_class()+": Action inline not implemented ");
     }
 
     /**
-     * Inlines this call, if possible
+     * Tries to inline this call
      */
     public final void inline() {
         try {
@@ -639,7 +639,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Replaces this join point with the given join
      * @param node 
      */
     @Override
@@ -648,7 +648,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -657,7 +657,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Inserts the given join point before this join point
      * @param node 
      */
     @Override
@@ -666,7 +666,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -675,7 +675,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Inserts the given join point after this join point
      * @param node 
      */
     @Override
@@ -684,7 +684,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param code 
      */
     @Override
@@ -693,7 +693,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Removes the node associated to this joinpoint from the AST
      */
     @Override
     public void detachImpl() {
@@ -701,7 +701,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Sets the type of a node, if it has a type
      * @param type 
      */
     @Override
@@ -726,7 +726,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Associates arbitrary values to nodes of the AST
      * @param fieldName 
      * @param value 
      */
@@ -736,7 +736,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Overload which accepts a map
      * @param fieldNameAndValue 
      */
     @Override
@@ -755,7 +755,7 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      * @param message 
      */
     @Override

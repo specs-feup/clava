@@ -292,7 +292,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Replaces this join point with the given join
      * @param node 
      */
     @Override
@@ -301,7 +301,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -310,7 +310,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Inserts the given join point before this join point
      * @param node 
      */
     @Override
@@ -319,7 +319,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param node 
      */
     @Override
@@ -328,7 +328,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Inserts the given join point after this join point
      * @param node 
      */
     @Override
@@ -337,7 +337,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Overload which accepts a string
      * @param code 
      */
     @Override
@@ -346,7 +346,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Removes the node associated to this joinpoint from the AST
      */
     @Override
     public void detachImpl() {
@@ -354,7 +354,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Sets the type of a node, if it has a type
      * @param type 
      */
     @Override
@@ -379,7 +379,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Associates arbitrary values to nodes of the AST
      * @param fieldName 
      * @param value 
      */
@@ -389,7 +389,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Overload which accepts a map
      * @param fieldNameAndValue 
      */
     @Override
@@ -408,7 +408,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      * @param message 
      */
     @Override
@@ -417,7 +417,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Changes the name of the call
      * @param name 
      */
     @Override
@@ -435,7 +435,7 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Inlines this call, if possible
+     * Tries to inline this call
      */
     @Override
     public void inlineImpl() {
