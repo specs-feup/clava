@@ -41,6 +41,7 @@ public enum Standard implements StringProvider {
     GNUXX98("gnu++98", true),
     GNUXX11("gnu++11", true),
     GNUXX14("gnu++14", true);
+    // CL20;
 
     private static final Set<String> C_EXTENSIONS = new HashSet<>(Arrays.asList("c"));
     private static final Set<String> CPP_EXTENSIONS = new HashSet<>(Arrays.asList("cpp, cc, hpp"));

@@ -600,7 +600,7 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> includeFolders = sources;
 
         // addFlagsFromFiles(includeFolders, filenames, parserOptions);
-        addFlagsFromFiles(allFiles, parserOptions);
+        // addFlagsFromFiles(allFiles, parserOptions);
 
         // Sort filenames so that select order of files is consistent between OSes
         Collections.sort(allFiles);
@@ -741,24 +741,26 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     // private void addFlagsFromFiles(List<File> includeFolders, List<String> filenames, List<String> parserOptions) {
+    /*
     private void addFlagsFromFiles(List<String> filenames, List<String> parserOptions) {
         // If all files are .cl files, add flags -x cl
         long numberOfOpenCLFiles = filenames.stream()
                 .filter(filename -> filename.endsWith(".cl"))
                 .count();
-
+    
         if (numberOfOpenCLFiles == filenames.size()) {
             parserOptions.add("-x");
             parserOptions.add("cl");
         }
-
+    
         // // Adds sources as include folders
         // for (File includeFolder : includeFolders) {
         // // parserOptions.add("-I\"" + source.getAbsolutePath() + "\"");
         // parserOptions.add("\"-I" + includeFolder.getAbsolutePath() + "\"");
         // }
-
+    
     }
+    */
 
     /*
     private List<String> processSources(List<File> sources) {

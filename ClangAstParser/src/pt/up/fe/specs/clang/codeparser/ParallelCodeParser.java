@@ -332,7 +332,7 @@ public class ParallelCodeParser extends CodeParser {
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
         // Adapt compiler options according to the file
-        adaptOptions(options, sourceFile);
+        // adaptOptions(options, sourceFile);
 
         // Disable streaming of console output if parsing is to be done in parallel
         // Only show output of console after parsing is done, when using parallel parsing
@@ -369,7 +369,19 @@ public class ParallelCodeParser extends CodeParser {
         return clangParserData;
     }
 
+    /*
     private void adaptOptions(DataStore options, File source) {
+        // If OpenCL file, remove standard flag and add '-x cl'
+        if (SpecsIo.getExtension(source).toLowerCase().equals("cl")) {
+            if (options.hasValue(ClavaOptions.STANDARD)) {
+                options.remove(ClavaOptions.STANDARD);
+            }
+    
+            String currentFlags = options.get(ClavaOptions.FLAGS);
+            String adaptedFlags = currentFlags + " -x cl";
+            options.set(ClavaOptions.FLAGS, adaptedFlags);
+        }
+    
         // Check if the standard is compatible with the file type
         // Standard standard = options.getTry(ClavaOptions.STANDARD).orElse(null);
         // System.out.println("OPTIONS BEFORE:" + options);
@@ -382,8 +394,9 @@ public class ParallelCodeParser extends CodeParser {
         // }
         // }
         // System.out.println("OPTIONS AFTER:" + options);
-
+    
     }
+    */
 
     /**
      * Collects all source folders, taking into account given sources to compile, and include folders in flags.
