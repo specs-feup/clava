@@ -68,6 +68,7 @@ aspectdef RunInlineFunctionCalls
 			excluded_function_list.indexOf(caller_func) === -1 // not exist
 			)
 			{
+				debug("Excluding from inlining '" + caller_func + "', because it is recursive");
 				excluded_function_list.push(caller_func);
 			}
 
@@ -75,28 +76,45 @@ aspectdef RunInlineFunctionCalls
 	}
 	
 
-
 	select file.function end
 	apply
 		var innerCalls = $function.descendants('call');
 
 		for(var obj of innerCalls)
 			if (safefunctionCallslist.indexOf(obj.name) === -1 && func_name[obj.name] === undefined  )
-				if (excluded_function_list.indexOf($function.name) === -1) // not exist
+				if (excluded_function_list.indexOf($function.name) === -1) { // not exist
+					debug("Excluding from inlining '" + caller_func + "', because is not considered safe (func_name[obj.name]: " + func_name[obj.name] + ")");
 					excluded_function_list.push($function.name);
+				}
 	end
 
 
 	// Exclude functions that have global variable declarations
 	select file.function.body.vardecl end
 	apply
-		if (excluded_function_list.indexOf($function.name) === -1)
+		/*
+		if($vardecl.isGlobal !== ($vardecl.storageClass === 'static')) {
+			println("DIFF!!!");
+			println("isGlobal: " + $vardecl.isGlobal);
+			println("Storage class: " + $vardecl.storageClass);
+		}
+		*/
+
+		
+		if(!$vardecl.isGlobal) {
+		//if($vardecl.storageClass !== 'static') {		
+			continue;
+		}
+		
+		if (excluded_function_list.indexOf($function.name) === -1) {
+			debug("Excluding from inlining '" + $function.name + "', because it declares at least one global variable ("+$vardecl.name+"@"+$vardecl.location+")");
 			excluded_function_list.push($function.name);
+		}
 	end
 	//condition $vardecl.storageClass === 'static' end
-	condition $vardecl.isGlobal end
+	//condition $vardecl.isGlobal end
 
-	
+	/*
 	// Exclude functions that have references to global variables
 	select file.function.body.varref end
 	apply
@@ -109,10 +127,12 @@ aspectdef RunInlineFunctionCalls
 			continue;
 		}
 	
-		if (excluded_function_list.indexOf($function.name) === -1)
+		if (excluded_function_list.indexOf($function.name) === -1) {
+			debug("Excluding from inlining '" + $function.name + "', because it has references to global variables");		
 			excluded_function_list.push($function.name);
+		}
 	end
-	
+	*/
 
 	for (var caller_func in func_name)
 		for(var calling of func_name[caller_func].CallingFunc)
@@ -121,10 +141,13 @@ aspectdef RunInlineFunctionCalls
 				excluded_function_list.indexOf(caller_func) === -1
 				)
 				{
+					debug("Excluding from inlining '" +caller_func + "', because it calls excluded function '"+calling+"'");		
 					excluded_function_list.push(caller_func);
 				}
-
-
+				
+				
+				
+	debug("Functions excluded from inlining: " + excluded_function_list);
 
 	var sorted = [];
 	for (var key in func_name)

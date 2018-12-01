@@ -140,7 +140,6 @@ Parallelize.getForLoopsPragmas = function($loops) {
 	call AddPragmaLoopIndex;
 	call RunInlineFunctionCalls;
 
-
 	// Rebuild tree	
 	Clava.rebuild();
 	/*
