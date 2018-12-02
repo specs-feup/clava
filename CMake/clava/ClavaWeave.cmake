@@ -8,16 +8,18 @@ cmake_minimum_required(VERSION 3.5)
 # Parameter 2: A LARA file
 # Parameter ARGS (one value): A string with the aspect arguments e.g., "inputFile:'data.json', execute:true, iterations:10"
 # Parameter FLAGS (multi-value): A list of flags that will be passed to Clava during execution
+# Parameter JAVA_FLAGS (multi-value): A list of flags that will be passed to the JVM during Clava execution
 function(clava_weave ORIG_TARGET ASPECT)
 
     set(options)
     set(oneValueArgs ARGS)
-    set(multiValueArgs FLAGS)
+    set(multiValueArgs FLAGS JAVA_FLAGS)
 
     cmake_parse_arguments(PARSE_ARGV 2 CLAVA_WEAVE "${options}" "${oneValueArgs}" "${multiValueArgs}")
 
 	#message(STATUS "ASPECT_ARGS: " ${CLAVA_WEAVE_ASPECT_ARGS})
-	#message(STATUS "WEAVER_ARGS: " ${CLAVA_WEAVE_WEAVER_ARGS})
+	#message(STATUS "WEAVER_ARGS: " ${CLAVA_WEAVE_FLAGS})
+	#message(STATUS "JAVA_ARGS: " ${CLAVA_WEAVE_JAVA_FLAGS})
 
 	# Create aspect arguments
 	if(NOT ("${CLAVA_WEAVE_ARGS}" STREQUAL ""))
