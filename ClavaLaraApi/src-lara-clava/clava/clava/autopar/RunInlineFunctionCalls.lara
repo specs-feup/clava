@@ -442,6 +442,10 @@ aspectdef inlinePreparation
 		
 		for(retJP of retJPs)
 		{
+			//println("ret_str_repl: " + ret_str_replacement);
+			//println("retJP original: " + retJP.code);
+			//println("retJP after: " + ret_str_replacement + retJP.children[0].code + ';');
+			//println("retJp child: " + retJP.children[0]);
 			retJP.insert replace ret_str_replacement + retJP.children[0].code + ';';
 		}
 
