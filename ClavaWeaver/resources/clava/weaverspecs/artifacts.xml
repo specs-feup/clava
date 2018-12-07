@@ -494,6 +494,7 @@
 		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />
 		<attribute name="normalize" type="type" tooltip="Ignores certain types (e.g., DecayedType)" />
 		<attribute name="typeFields" type="Map" tooltip="Maps names of join point fields that represent type join points, to their respective values"/>		
+		<attribute name="fieldTree" type="String" tooltip="A tree representation of the fields of this type"/>
 	</artifact>
 
 
@@ -561,6 +562,12 @@
 		<attribute name="isSigned" type="Boolean" tooltip="true, if it is a signed integer type" />
 		<attribute name="isUnsigned" type="Boolean" tooltip="true, if it is an unsigned integer type" />
 	</artifact>	
+	
+	<!-- ADJUSTED TYPE -->
+	<artifact class="adjustedType">
+		<attribute name="originalType" type="type" tooltip="the type that is being adjusted"/>
+	</artifact>
+	
 
 
 	<!-- OPENMP -->

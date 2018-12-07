@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -74,7 +75,14 @@ public class CxxUnaryExprOrType extends AUnaryExprOrType {
 
     @Override
     public void defArgTypeImpl(AType value) {
-        SpecsLogs.msgInfo("Setting the argument type of an UnaryExprOrType is currently disabled");
+        if (!expr.hasTypeExpression()) {
+            SpecsLogs.msgInfo("UnaryExprOrType '" + expr.getUettKind() + "' does not have a type argument");
+            return;
+        }
+
+        expr.setArgType((Type) value.getNode());
+
+        // SpecsLogs.msgInfo("Setting the argument type of an UnaryExprOrType is currently disabled");
         return;
         // if (!expr.hasTypeExpression()) {
         // SpecsLogs.msgInfo("UnaryExprOrType '" + expr.getUettKind() + "' does not have a type argument");

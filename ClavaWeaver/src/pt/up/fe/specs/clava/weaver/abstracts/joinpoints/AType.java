@@ -450,6 +450,29 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * A tree representation of the fields of this type
+     */
+    public abstract String getFieldTreeImpl();
+
+    /**
+     * A tree representation of the fields of this type
+     */
+    public final Object getFieldTree() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fieldTree", Optional.empty());
+        	}
+        	String result = this.getFieldTreeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "fieldTree", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "fieldTree", e);
+        }
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -559,6 +582,35 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
+     * @param oldValue 
+     * @param newValue 
+     */
+    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
+        throw new UnsupportedOperationException(get_class()+": Action setUnderlyingType not implemented ");
+    }
+
+    /**
+     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
+     * @param oldValue 
+     * @param newValue 
+     */
+    public final AType setUnderlyingType(AType oldValue, AType newValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setUnderlyingType", this, Optional.empty(), oldValue, newValue);
+        	}
+        	AType result = this.setUnderlyingTypeImpl(oldValue, newValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setUnderlyingType", this, Optional.ofNullable(result), oldValue, newValue);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setUnderlyingType", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -625,6 +677,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("unwrap");
         attributes.add("normalize");
         attributes.add("typeFields");
+        attributes.add("fieldTree");
     }
 
     /**
@@ -645,6 +698,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         actions.add("void setTemplateArgsTypes(Integer, type)");
         actions.add("void setDesugar(type)");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
+        actions.add("type setUnderlyingType(type, type)");
     }
 
     /**
@@ -675,6 +729,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         UNWRAP("unwrap"),
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
+        FIELDTREE("fieldTree"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

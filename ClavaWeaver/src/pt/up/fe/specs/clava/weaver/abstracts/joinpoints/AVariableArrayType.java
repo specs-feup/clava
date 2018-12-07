@@ -240,6 +240,15 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute fieldTree
+     * @return the attribute's value
+     */
+    @Override
+    public String getFieldTreeImpl() {
+        return this.aArrayType.getFieldTreeImpl();
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -525,6 +534,7 @@ public abstract class AVariableArrayType extends AArrayType {
         UNWRAP("unwrap"),
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
+        FIELDTREE("fieldTree"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

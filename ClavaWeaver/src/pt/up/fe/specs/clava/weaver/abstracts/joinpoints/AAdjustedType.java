@@ -10,44 +10,42 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AArrayType
+ * Auto-Generated class for join point AAdjustedType
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AArrayType extends AType {
+public abstract class AAdjustedType extends AType {
 
     protected AType aType;
 
     /**
      * 
      */
-    public AArrayType(AType aType){
+    public AAdjustedType(AType aType){
         this.aType = aType;
     }
     /**
-     * Get value on attribute elementType
-     * @return the attribute's value
+     * the type that is being adjusted
      */
-    public abstract AType getElementTypeImpl();
+    public abstract AType getOriginalTypeImpl();
 
     /**
-     * Get value on attribute elementType
-     * @return the attribute's value
+     * the type that is being adjusted
      */
-    public final Object getElementType() {
+    public final Object getOriginalType() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "elementType", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "originalType", Optional.empty());
         	}
-        	AType result = this.getElementTypeImpl();
+        	AType result = this.getOriginalTypeImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "elementType", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "originalType", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "elementType", e);
+        	throw new AttributeException(get_class(), "originalType", e);
         }
     }
 
@@ -421,7 +419,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    public List<? extends JoinPoint> select(String selectName) {
+    public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
@@ -435,7 +433,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    public void defImpl(String attribute, Object value) {
+    public final void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -466,16 +464,16 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    protected void fillWithAttributes(List<String> attributes) {
+    protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("elementType");
+        attributes.add("originalType");
     }
 
     /**
      * 
      */
     @Override
-    protected void fillWithSelects(List<String> selects) {
+    protected final void fillWithSelects(List<String> selects) {
         this.aType.fillWithSelects(selects);
     }
 
@@ -483,7 +481,7 @@ public abstract class AArrayType extends AType {
      * 
      */
     @Override
-    protected void fillWithActions(List<String> actions) {
+    protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
     }
 
@@ -492,8 +490,8 @@ public abstract class AArrayType extends AType {
      * @return The join point type
      */
     @Override
-    public String get_class() {
-        return "arrayType";
+    public final String get_class() {
+        return "adjustedType";
     }
 
     /**
@@ -501,7 +499,7 @@ public abstract class AArrayType extends AType {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public boolean instanceOf(String joinpointClass) {
+    public final boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
@@ -511,8 +509,8 @@ public abstract class AArrayType extends AType {
     /**
      * 
      */
-    protected enum ArrayTypeAttributes {
-        ELEMENTTYPE("elementType"),
+    protected enum AdjustedTypeAttributes {
+        ORIGINALTYPE("originalType"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
@@ -582,13 +580,13 @@ public abstract class AArrayType extends AType {
         /**
          * 
          */
-        private ArrayTypeAttributes(String name){
+        private AdjustedTypeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<ArrayTypeAttributes> fromString(String name) {
+        public static Optional<AdjustedTypeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -596,7 +594,7 @@ public abstract class AArrayType extends AType {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(ArrayTypeAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(AdjustedTypeAttributes::name).collect(Collectors.toList());
         }
 
         /**

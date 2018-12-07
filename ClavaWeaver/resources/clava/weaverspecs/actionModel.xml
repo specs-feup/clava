@@ -435,6 +435,11 @@
 		<parameter name="currentValue" type="Object" />
 		<parameter name="newValue" type="Object" />
 	</action>
+	
+	<action name="setUnderlyingType" return="type" class="type" tooltip="Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes">
+		<parameter name="oldValue" type="type" />
+		<parameter name="newValue" type="type" />
+	</action>
 
 	
 	<!-- FUNCTION TYPE -->

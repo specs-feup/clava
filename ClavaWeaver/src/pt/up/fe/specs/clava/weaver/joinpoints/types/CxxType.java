@@ -246,6 +246,10 @@ public class CxxType extends AType {
             // Found value to change, change it and return
             if (entry.getValue().equals(currentValue)) {
                 // System.out.println("SETTING " + newValue.getClass() + " to " + entry);
+                // System.out.println(
+                // "1.Replacing " + entry.getKey() + " with value " + entry.getValue().getNode().toTree()
+                // + " with "
+                // + ((AType) newValue).getNode().toTree());
                 type.setValueImpl(entry.getKey(), newValue);
                 return true;
             }
@@ -253,14 +257,33 @@ public class CxxType extends AType {
             visitedTypes.add(entry.getValue());
         }
 
-        // Did not find a key in the current node, call the function recursively for the just visited fields
-        for (AType fieldType : visitedTypes) {
-            boolean changedField = setTypeFieldByValueRecursiveImpl(fieldType, currentValue, newValue, checkedNodes);
+        // Did not find a key in the current node, call the function recursively on a copy of the visited fields
+        // If a field is changed, update it
+        for (Entry<String, AType> entry : typeFields.entrySet()) {
+            AType fieldTypeCopy = (AType) entry.getValue().copy();
+            boolean changedField = setTypeFieldByValueRecursiveImpl(fieldTypeCopy, currentValue, newValue,
+                    checkedNodes);
+
+            // Update field
             if (changedField) {
+                // System.out.println(
+                // "2.Replacing " + entry.getKey() + " with value " + entry.getValue().getNode().toTree()
+                // + " with " + fieldTypeCopy.getNode().toTree());
+                type.setValue(entry.getKey(), fieldTypeCopy);
                 return true;
             }
         }
         return false;
     }
 
+    @Override
+    public String getFieldTreeImpl() {
+        return type.toFieldTree();
+    }
+
+    @Override
+    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
+        return CxxJoinpoints.create(type.setUnderlyingType((Type) oldValue.getNode(), (Type) newValue.getNode()), null,
+                AType.class);
+    }
 }

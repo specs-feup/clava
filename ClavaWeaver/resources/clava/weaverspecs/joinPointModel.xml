@@ -264,6 +264,10 @@
 	<!--  ARRAY TYPE -->
 	<joinpoint class="arrayType" extends="type">
 	</joinpoint>
+
+	<!--  ADJUSTED TYPE -->
+	<joinpoint class="adjustedType" extends="type">
+	</joinpoint>
 			
 	<!--  VARIABLE ARRAY TYPE -->
 	<joinpoint class="variableArrayType" extends="arrayType">

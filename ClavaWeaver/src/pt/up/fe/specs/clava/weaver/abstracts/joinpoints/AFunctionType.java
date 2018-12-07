@@ -266,6 +266,15 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
+     * Get value on attribute fieldTree
+     * @return the attribute's value
+     */
+    @Override
+    public String getFieldTreeImpl() {
+        return this.aType.getFieldTreeImpl();
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -443,6 +452,16 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
+     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
+     * @param oldValue 
+     * @param newValue 
+     */
+    @Override
+    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
+        return this.aType.setUnderlyingTypeImpl(oldValue, newValue);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -590,6 +609,7 @@ public abstract class AFunctionType extends AType {
         UNWRAP("unwrap"),
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
+        FIELDTREE("fieldTree"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),
