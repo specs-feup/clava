@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -97,5 +99,27 @@ public class PointerType extends Type {
 
         return 1 + ((PointerType) pointee).getPointerLevels();
     }
+
+    @Override
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        return Arrays.asList(POINTEE_TYPE);
+    }
+    // @Override
+    // protected Type setUnderlyingTypeProtected(Type oldType, Type newType) {
+    // // Set pointee type
+    // Type currentPointeeType = get(POINTEE_TYPE);
+    // Type newPointeeType = get(POINTEE_TYPE).setUnderlyingType(oldType, newType);
+    //
+    // // If pointee type is the same, no changes were made
+    // if (currentPointeeType == newPointeeType) {
+    // return this;
+    // }
+    //
+    // // Create a copy, and set the pointee type
+    // Type pointerTypeCopy = copy();
+    // pointerTypeCopy.set(POINTEE_TYPE, newPointeeType);
+    //
+    // return pointerTypeCopy;
+    // }
 
 }

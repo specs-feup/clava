@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -266,6 +267,11 @@ public class QualType extends Type {
                 .collect(Collectors.toList()));
 
         return qualifiers;
+    }
+
+    @Override
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        return Arrays.asList(UNQUALIFIED_TYPE);
     }
 
 }

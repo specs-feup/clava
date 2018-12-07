@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.type;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -62,6 +64,11 @@ public abstract class AdjustedType extends Type {
     public Type getAdjustedType() {
         return get(ADJUSTED_TYPE);
         // return getChild(Type.class, 1);
+    }
+
+    @Override
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        return Arrays.asList(ORIGINAL_TYPE);
     }
 
 }

@@ -173,6 +173,15 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         throw new RuntimeException("Expression code not implemented yet for this node: " + this);
     }
 
+    public void setArgType(Type node) {
+        if (!hasTypeExpression()) {
+            ClavaLog.info("UnaryExprOrType '" + getUettKind() + "' does not have a type argument");
+            return;
+        }
+
+        set(ARG_TYPE, Optional.ofNullable(node));
+    }
+
     // @Override
     // public String toContentString() {
     // String argTypeString = argType == null ? null : argType.getBareType();

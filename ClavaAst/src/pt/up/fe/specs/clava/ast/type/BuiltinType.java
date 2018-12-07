@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -80,6 +82,16 @@ public class BuiltinType extends Type {
         getData().put(KIND_LITERAL, literalKind);
         return this;
     }
+
+    @Override
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        return Collections.emptyList();
+    }
+    // @Override
+    // protected Type setUnderlyingTypeProtected(Type oldType, Type newType) {
+    // // No underlying type to set
+    // return this;
+    // }
 
     // public BuiltinKind getKind() {
     // public BuiltinKindV2 getKind() {

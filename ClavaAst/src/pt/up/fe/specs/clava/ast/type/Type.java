@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 /**
  * The base class of the type hierarchy.
@@ -844,25 +845,134 @@ public abstract class Type extends ClavaNode {
 
         builder.append("\n");
 
+        List<DataKey<?>> keys = getAllKeysWithNodes();
+        for (DataKey<?> key : keys) {
+            if (!hasValue(key)) {
+                continue;
+            }
+
+            List<ClavaNode> values = getClavaNode(key);
+            if (values.isEmpty()) {
+                continue;
+            }
+
+            Class<? extends ClavaNode> classToTest = onlyTypes ? Type.class : ClavaNode.class;
+            long numberOfTypes = values.stream().filter(value -> classToTest.isInstance(value)).count();
+            if (numberOfTypes != values.size()) {
+                continue;
+            }
+
+            for (ClavaNode field : values) {
+                // Check if repeated node
+                String nodeString = seenNodes.contains(field.get(ID))
+                        ? key.getName() + " -> Repeated: " + field.getClass().getSimpleName() + "(" + field.get(ID)
+                                + ")\n"
+                        : ((Type) field).toFieldTree(prefix + "  " + key.getName() + " -> ", onlyTypes, seenNodes);
+
+                builder.append(nodeString);
+
+            }
+        }
+        /*
         List<ClavaNode> fields = getNodeFields();
         // System.out.println("SOURCE:" + getClass());
         // System.out.println("FIELDS:" + fields);
-
+        
         for (ClavaNode field : fields) {
             if (onlyTypes && !(field instanceof Type)) {
                 continue;
             }
-
+        
             // Check if repeated node
             String nodeString = seenNodes.contains(field.get(ID))
-                    ? "Repeated: " + field.getClass() + "(" + field.get(ID) + ")"
+                    ? "Repeated: " + field.getClass().getSimpleName() + "(" + field.get(ID) + ")"
                     : ((Type) field).toFieldTree(prefix + "  ", onlyTypes, seenNodes);
-
+        
             builder.append(nodeString);
         }
-
+        */
         return builder.toString();
     }
+
+    /**
+     * Replaces an underlying type of this instance with new type, if it matches the old type.
+     * 
+     * <p>
+     * Returns a copy of this type with the underlying type changed, or the type itself if no changes were made
+     * 
+     * @param oldType
+     * @param newType
+     * @return
+     */
+    public Type setUnderlyingType(Type oldType, Type newType) {
+
+        // If current node is the one that is to be replaced, just return new type
+        if (this.equals(oldType)) {
+            return newType;
+        }
+
+        // if (hasSugar()) {
+        // Type desugaredType = desugar();
+        // Type changedDesugaredType = desugaredType.setUnderlyingType(oldType, newType);
+        //
+        // if (desugaredType == changedDesugaredType) {
+        // return this;
+        // } else {
+        // Type typeCopy = copy();
+        //
+        // typeCopy.setDesugar(changedDesugaredType);
+        //
+        // return typeCopy;
+        // }
+        // }
+
+        List<DataKey<Type>> underlyingTypeKeys = getUnderlyingTypeKeys();
+
+        List<Type> previousTypes = new ArrayList<>();
+        List<Type> newTypes = new ArrayList<>();
+        for (DataKey<Type> underlyingTypeKey : underlyingTypeKeys) {
+            // Set underlying types
+            Type underlyingType = get(underlyingTypeKey);
+            previousTypes.add(underlyingType);
+            newTypes.add(underlyingType.setUnderlyingType(oldType, newType));
+        }
+
+        // If add newTypes are the same as the previous types, no changes were made
+        boolean noChanges = true;
+        for (int i = 0; i < previousTypes.size(); i++) {
+            if (previousTypes.get(i) != newTypes.get(i)) {
+                noChanges = false;
+                break;
+            }
+        }
+
+        if (noChanges) {
+            return this;
+        }
+
+        // Create a copy, and set the underlying types
+        Type typeCopy = copy();
+        for (int i = 0; i < underlyingTypeKeys.size(); i++) {
+            typeCopy.set(underlyingTypeKeys.get(i), newTypes.get(i));
+        }
+
+        return typeCopy;
+        // Type pointerTypeCopy = copy();
+        // pointerTypeCopy.set(POINTEE_TYPE, newPointeeType);
+        //
+        // return pointerTypeCopy;
+
+        // Otherwise, continue searching
+        // return setUnderlyingTypeProtected(oldType, newType);
+    }
+
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        throw new NotImplementedException(getClass());
+    }
+
+    // protected Type setUnderlyingTypeProtected(Type oldType, Type newType) {
+    // throw new NotImplementedException(getClass());
+    // }
 
     /**
      * Used for instance, to provide signatures of the Type node.

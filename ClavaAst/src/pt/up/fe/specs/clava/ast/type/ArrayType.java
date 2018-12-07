@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,6 +116,11 @@ public abstract class ArrayType extends Type {
     @Override
     public boolean isArray() {
         return true;
+    }
+
+    @Override
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        return Arrays.asList(ELEMENT_TYPE);
     }
 
 }

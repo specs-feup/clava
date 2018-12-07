@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -108,4 +109,8 @@ public class FunctionProtoType extends FunctionType {
         return get(PARAMETERS_TYPES);
     }
 
+    @Override
+    protected List<DataKey<Type>> getUnderlyingTypeKeys() {
+        return Collections.emptyList();
+    }
 }
