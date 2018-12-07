@@ -839,7 +839,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * 
      * @return
      */
-    protected List<DataKey<?>> getAllKeysWithNodes() {
+    public List<DataKey<?>> getAllKeysWithNodes() {
         List<DataKey<?>> keys = KEYS_WITH_NODES.get(getClass());
         if (keys == null) {
             keys = addKeysWithNodes(this);
@@ -891,7 +891,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return descendants;
     }
 
-    private List<ClavaNode> getClavaNode(DataKey<?> key) {
+    public List<ClavaNode> getClavaNode(DataKey<?> key) {
         // ClavaNode keys
         if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
             return Arrays.asList((ClavaNode) get(key));
