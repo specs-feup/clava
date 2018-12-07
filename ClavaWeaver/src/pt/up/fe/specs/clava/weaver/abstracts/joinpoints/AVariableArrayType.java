@@ -231,6 +231,15 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute typeFields
+     * @return the attribute's value
+     */
+    @Override
+    public Map<?, ?> getTypeFieldsImpl() {
+        return this.aArrayType.getTypeFieldsImpl();
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -515,6 +524,7 @@ public abstract class AVariableArrayType extends AArrayType {
         CONSTANT("constant"),
         UNWRAP("unwrap"),
         NORMALIZE("normalize"),
+        TYPEFIELDS("typeFields"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

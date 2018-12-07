@@ -1671,6 +1671,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -2225,6 +2234,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -3437,6 +3465,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -3991,6 +4028,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -11625,6 +11681,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -12179,6 +12244,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -17125,6 +17209,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -17693,6 +17786,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -28296,6 +28408,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -28855,6 +28976,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "void",
@@ -29214,6 +29354,15 @@
                            {
                               "type": "type[]",
                               "name": "templateArgsTypes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
                            }]
                },
                {
@@ -29786,6 +29935,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -31885,6 +32053,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -32439,6 +32616,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -37113,6 +37309,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -37667,6 +37872,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -38050,6 +38274,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -38604,6 +38837,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -38955,6 +39207,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -39509,6 +39770,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -42302,6 +42582,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -42856,6 +43145,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },
@@ -44117,6 +44425,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Maps names of join point fields that represent type join points, to their respective values",
+                  "children": [
+                           {
+                              "type": "Map",
+                              "name": "typeFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "If the type encapsulates another type, returns the encapsulated type",
                   "children": [
                            {
@@ -44685,6 +45002,25 @@
                            {
                               "type": "type",
                               "name": "templateArgType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "setTypeFieldByValueRecursive"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "currentValue",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "newValue",
                               "defaultValue": ""
                            }]
                },

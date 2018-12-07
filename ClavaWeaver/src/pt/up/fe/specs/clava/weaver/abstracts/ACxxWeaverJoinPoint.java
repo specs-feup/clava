@@ -1002,6 +1002,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             value = ((AJoinPoint) value).getNode();
         }
 
+        // Adapt to optional, if needed
+        if (Optional.class.isAssignableFrom(datakey.getValueClass()) &&
+                !(value instanceof Optional)) {
+            value = Optional.ofNullable(value);
+        }
+
         // Returns new join point of the node, using the same parent
         return CxxJoinpoints.create(getNode().set(datakey, value), getParentImpl());
     }

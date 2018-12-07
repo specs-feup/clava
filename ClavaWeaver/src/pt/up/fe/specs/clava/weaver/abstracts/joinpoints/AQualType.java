@@ -223,6 +223,15 @@ public abstract class AQualType extends AType {
     }
 
     /**
+     * Get value on attribute typeFields
+     * @return the attribute's value
+     */
+    @Override
+    public Map<?, ?> getTypeFieldsImpl() {
+        return this.aType.getTypeFieldsImpl();
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -390,6 +399,16 @@ public abstract class AQualType extends AType {
     }
 
     /**
+     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
+     * @param currentValue 
+     * @param newValue 
+     */
+    @Override
+    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
+        return this.aType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -528,6 +547,7 @@ public abstract class AQualType extends AType {
         CONSTANT("constant"),
         UNWRAP("unwrap"),
         NORMALIZE("normalize"),
+        TYPEFIELDS("typeFields"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

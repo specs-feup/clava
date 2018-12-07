@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
@@ -508,9 +509,11 @@ public class CxxFunction extends AFunction {
 
     @Override
     public List<? extends ADecl> selectDecl() {
-        return function.getDescendants(Decl.class).stream()
-                .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
-                .collect(Collectors.toList());
+        return CxxSelects.select(ADecl.class, function.getChildren(), true, this, Decl.class);
+
+        // return function.getDescendants(Decl.class).stream()
+        // .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
+        // .collect(Collectors.toList());
     }
 
     @Override

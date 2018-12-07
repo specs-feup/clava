@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
+import java.util.Map;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import java.util.List;
@@ -426,6 +427,29 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Maps names of join point fields that represent type join points, to their respective values
+     */
+    public abstract Map<?, ?> getTypeFieldsImpl();
+
+    /**
+     * Maps names of join point fields that represent type join points, to their respective values
+     */
+    public final Object getTypeFields() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "typeFields", Optional.empty());
+        	}
+        	Map<?, ?> result = this.getTypeFieldsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "typeFields", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "typeFields", e);
+        }
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -506,6 +530,35 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
+     * @param currentValue 
+     * @param newValue 
+     */
+    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
+        throw new UnsupportedOperationException(get_class()+": Action setTypeFieldByValueRecursive not implemented ");
+    }
+
+    /**
+     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
+     * @param currentValue 
+     * @param newValue 
+     */
+    public final boolean setTypeFieldByValueRecursive(Object currentValue, Object newValue) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTypeFieldByValueRecursive", this, Optional.empty(), currentValue, newValue);
+        	}
+        	boolean result = this.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setTypeFieldByValueRecursive", this, Optional.ofNullable(result), currentValue, newValue);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setTypeFieldByValueRecursive", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -571,6 +624,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("constant");
         attributes.add("unwrap");
         attributes.add("normalize");
+        attributes.add("typeFields");
     }
 
     /**
@@ -590,6 +644,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         actions.add("void setTemplateArgsTypes(type[])");
         actions.add("void setTemplateArgsTypes(Integer, type)");
         actions.add("void setDesugar(type)");
+        actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
     }
 
     /**
@@ -619,6 +674,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         CONSTANT("constant"),
         UNWRAP("unwrap"),
         NORMALIZE("normalize"),
+        TYPEFIELDS("typeFields"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

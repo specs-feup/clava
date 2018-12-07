@@ -13,10 +13,19 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
@@ -177,6 +186,81 @@ public class CxxType extends AType {
     @Override
     public AType getNormalizeImpl() {
         return CxxJoinpoints.create(type.normalize(), this, AType.class);
+    }
+
+    @Override
+    public Map<String, AType> getTypeFieldsImpl() {
+        Map<String, AType> typeFields = new HashMap<>();
+
+        List<DataKey<?>> keys = type.getAllKeysWithNodes();
+
+        for (DataKey<?> key : keys) {
+            if (!type.hasValue(key)) {
+                continue;
+            }
+
+            List<ClavaNode> values = type.getClavaNode(key);
+
+            // Skip fields that contain more than one node
+            if (values.size() != 1) {
+                continue;
+            }
+
+            // Ignore nodes that are not types
+            if (!(values.get(0) instanceof Type)) {
+                continue;
+            }
+
+            typeFields.put(key.getName(), CxxJoinpoints.create(values.get(0), null, AType.class));
+        }
+
+        return typeFields;
+    }
+
+    @Override
+    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
+        return setTypeFieldByValueRecursiveImpl(this, currentValue, newValue, new HashSet<>());
+    }
+
+    private static boolean setTypeFieldByValueRecursiveImpl(AType type, Object currentValue, Object newValue,
+            Set<Type> checkedNodes) {
+
+        // If already visited this node, return false
+        if (checkedNodes.contains(type.getNode())) {
+            return false;
+        }
+        // Otherwise, add current node
+        else {
+            checkedNodes.add((Type) type.getNode());
+        }
+
+        // Get keys with type fields
+        @SuppressWarnings("unchecked")
+        Map<String, AType> typeFields = (Map<String, AType>) type.getTypeFieldsImpl();
+
+        List<AType> visitedTypes = new ArrayList<>();
+
+        // Iterate over each type field
+        for (Entry<String, AType> entry : typeFields.entrySet()) {
+
+            // Found value to change, change it and return
+            if (entry.getValue().equals(currentValue)) {
+                // System.out.println("SETTING " + newValue.getClass() + " to " + entry);
+                type.setValueImpl(entry.getKey(), newValue);
+                return true;
+            }
+
+            visitedTypes.add(entry.getValue());
+        }
+
+        // Did not find a key in the current node, call the function recursively for the just visited fields
+        for (AType fieldType : visitedTypes) {
+            boolean changedField = setTypeFieldByValueRecursiveImpl(fieldType, currentValue, newValue, checkedNodes);
+            if (changedField) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
