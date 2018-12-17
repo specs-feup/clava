@@ -57,6 +57,12 @@ aspectdef InsertsLiteral
 }}%;
 	end
 	
+	select function{"callsInsideFor"}.call end
+	apply
+		$call.insert after "// After call";
+		$call.insertAfter("// After call");
+	end
+	
 	
 	
 	// Output code

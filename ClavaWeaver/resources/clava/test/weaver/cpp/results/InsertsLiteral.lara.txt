@@ -56,6 +56,15 @@ void fooReplaced() {
 	int a = 0;
 }
 
+void callsInsideFor() {
+	int a = 0;
+	for(int i = sqrt(4); i < sqrt(20); i++) {
+		a += sqrt(i);
+			// After call
+			// After call
+	}
+}
+
 int main() {
    
    return 0;

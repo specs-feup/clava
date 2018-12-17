@@ -17,10 +17,14 @@ import java.util.Optional;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SnippetParser;
+import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DoStmt;
+import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -50,18 +54,34 @@ public class CxxActions {
      * @param from
      */
     public static AJoinPoint insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
+
+        // Check: if inserting before or after, check if target is valid
+        if (!isTargetValid(target, insert)) {
+            ClavaLog.info("Could not insert code " + insert.getString() + " location " + target.getLocation());
+            return null;
+        }
+
         SnippetParser snippetParser = CxxWeaver.getSnippetParser();
+        ClavaNode realTarget = null;
         switch (insert) {
         case BEFORE:
             // NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
             Stmt beforeNode = snippetParser.parseStmt(code);
-            NodeInsertUtils.insertBefore(getValidStatement(target), beforeNode);
+            realTarget = getValidStatement(target, insert);
+            if (realTarget == null) {
+                return null;
+            }
+            NodeInsertUtils.insertBefore(realTarget, beforeNode);
             return CxxJoinpoints.create(beforeNode, null);
 
         case AFTER:
             // NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
             Stmt afterNode = snippetParser.parseStmt(code);
-            NodeInsertUtils.insertAfter(getValidStatement(target), afterNode);
+            realTarget = getValidStatement(target, insert);
+            if (realTarget == null) {
+                return null;
+            }
+            NodeInsertUtils.insertAfter(realTarget, afterNode);
             return CxxJoinpoints.create(afterNode, null);
 
         case AROUND:
@@ -74,6 +94,32 @@ public class CxxActions {
         default:
             throw new RuntimeException("Case not defined:" + insert);
         }
+    }
+
+    private static boolean isTargetValid(ClavaNode target, Insert insert) {
+        // If before or after, check if invalid child of a For/ForRange/Do
+        if (insert == Insert.AFTER || insert == Insert.BEFORE) {
+            int indexOfTarget = target.indexOfSelf();
+            ClavaNode targetParent = target.getParent();
+            // System.out.println("INDEX OF TARGET: " + indexOfTarget);
+            // System.out.println("CLASS: " + targetParent.getClass());
+            // For
+            if (targetParent instanceof ForStmt) {
+                return indexOfTarget > 2 ? true : false;
+            }
+
+            // ForRange
+            if (targetParent instanceof CXXForRangeStmt) {
+                return indexOfTarget > 4 ? true : false;
+            }
+
+            // ForRange
+            if (targetParent instanceof DoStmt) {
+                return indexOfTarget == 0 ? true : false;
+            }
+        }
+
+        return true;
     }
 
     public static void insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
@@ -115,7 +161,10 @@ public class CxxActions {
 
     public static AJoinPoint insertBefore(AJoinPoint baseJp, AJoinPoint newJp) {
         Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
-        Stmt baseStmt = getValidStatement(baseJp.getNode());
+        Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.BEFORE);
+        if (baseStmt == null) {
+            return null;
+        }
         NodeInsertUtils.insertBefore(baseStmt, newStmt);
 
         // return new CxxStatement(newStmt, null);
@@ -124,7 +173,10 @@ public class CxxActions {
 
     public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp) {
         Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
-        Stmt baseStmt = getValidStatement(baseJp.getNode());
+        Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.AFTER);
+        if (baseStmt == null) {
+            return null;
+        }
         NodeInsertUtils.insertAfter(baseStmt, newStmt);
 
         return CxxJoinpoints.create(newStmt, baseJp);
@@ -137,6 +189,21 @@ public class CxxActions {
      * @param node
      * @return
      */
+    // public static Optional<Stmt> getValidStatement(ClavaNode node, Insert position) {
+    public static Stmt getValidStatement(ClavaNode node, Insert position) {
+        Stmt target = getValidStatement(node);
+
+        // Check: if inserting before or after, check if target is valid
+        if (!isTargetValid(target, position)) {
+            ClavaLog.info("Could not insert code " + position.getString() + " location " + target.getLocation());
+            return null;
+            // return Optional.empty();
+        }
+
+        // return Optional.of(target);
+        return target;
+    }
+
     public static Stmt getValidStatement(ClavaNode node) {
         Optional<Stmt> stmt = ClavaNodes.getStatement(node);
 

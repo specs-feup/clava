@@ -38,6 +38,13 @@ void fooBeforeAfter() {
 void fooReplace() {
 }
 
+void callsInsideFor() {
+	int a = 0;
+	for(int i=sqrt(4); i<sqrt(20); i++) {
+		a += sqrt(i);
+	}
+}
+
 
 int main() {
 	return 0;

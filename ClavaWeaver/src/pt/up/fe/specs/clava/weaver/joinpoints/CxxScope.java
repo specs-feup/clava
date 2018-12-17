@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
+import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
@@ -139,7 +140,10 @@ public class CxxScope extends AScope {
     }
 
     private AJoinPoint insertBodyImplJp(String position, ClavaNode newNode) {
-        Stmt newStmt = CxxActions.getValidStatement(newNode);
+        Stmt newStmt = CxxActions.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()));
+        if (newStmt == null) {
+            return null;
+        }
 
         CxxActions.insertStmt(position, scope, newStmt, getWeaverEngine());
 
