@@ -60,7 +60,7 @@ public class SnippetParser {
 
         String currentCode = code.trim();
         String lowerCurrentCode = code.toLowerCase();
-        ClavaNodeInfo undefinedInfo = ClavaNodeInfo.undefinedInfo();
+        // ClavaNodeInfo undefinedInfo = ClavaNodeInfo.undefinedInfo();
 
         // Inline Comment
         if (lowerCurrentCode.startsWith("//")) {

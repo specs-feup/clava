@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class WhileStmt extends LoopStmt {
 
@@ -45,8 +46,12 @@ public class WhileStmt extends LoopStmt {
         return getOptionalChild(VarDecl.class, 0);
     }
 
-    public Stmt getCondition() {
-        return getChild(Stmt.class, 1);
+    // public Stmt getCondition() {
+    // return getChild(Stmt.class, 1);
+    // // return ClavaNodes.getChild(this, 1);
+    // }
+    public Expr getCondition() {
+        return getChild(Expr.class, 1);
         // return ClavaNodes.getChild(this, 1);
     }
 
