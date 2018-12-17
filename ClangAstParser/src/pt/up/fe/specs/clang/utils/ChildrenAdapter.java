@@ -149,7 +149,8 @@ public class ChildrenAdapter {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
         adaptedChildren.add(children.get(0));
-        adaptedChildren.add(toStmt(children.get(1), false, context));
+        // adaptedChildren.add(toStmt(children.get(1), false, context));
+        adaptedChildren.add(children.get(1));
         adaptedChildren.add(toCompoundStmt(children.get(2), false, context));
 
         return adaptedChildren;
