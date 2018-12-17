@@ -54,6 +54,13 @@ void fooBeforeAfter() {
 int c = 20;
 int d = 30;
 
+void callsInsideFor() {
+	int a = 0;
+	for(int i = sqrt(4); i < sqrt(20); i++) {
+		a += sqrt(i);
+	}
+}
+
 int main() {
    
    return 0;
