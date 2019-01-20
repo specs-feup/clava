@@ -82,6 +82,8 @@ public class SourceRange {
             return start.getFilepath();
         }
 
+        // Filepaths are different, probably this means that one of them points to a macro definition
+
         // Filepaths are different, get source types
 
         SourceType startType = SourceType.getType(start.getFilepath());
@@ -470,4 +472,11 @@ public class SourceRange {
         return -1;
     }
 
+    /**
+     * 
+     * @return true if either one of the start or end location is from a macro definition
+     */
+    public boolean isMacro() {
+        return getStart().isMacro() || getEnd().isMacro();
+    }
 }

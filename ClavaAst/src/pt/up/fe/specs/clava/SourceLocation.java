@@ -20,14 +20,15 @@ import pt.up.fe.specs.util.SpecsIo;
 public class SourceLocation {
 
     private static final int INVALID_POSITION = -1;
-    private static final SourceLocation INVALID_LOCATION = new SourceLocation(null, INVALID_POSITION, INVALID_POSITION);
+    private static final SourceLocation INVALID_LOCATION = new SourceLocation(null, INVALID_POSITION, INVALID_POSITION,
+            false);
 
     public static int getInvalidLoc() {
         return INVALID_POSITION;
     }
 
     public static SourceLocation newUndefined(String filepath) {
-        return new SourceLocation(filepath, INVALID_POSITION, INVALID_POSITION);
+        return new SourceLocation(filepath, INVALID_POSITION, INVALID_POSITION, false);
     }
 
     public static SourceLocation invalidLocation() {
@@ -37,13 +38,23 @@ public class SourceLocation {
     private final String filepath;
     private final int line;
     private final int column;
+    private final boolean isMacro;
 
     public SourceLocation(String filepath, int line, int col) {
+        this(filepath, line, col, false);
+    }
+
+    public SourceLocation(String filepath, int line, int col, boolean isMacro) {
         // Normalize filepath
         // this.filepath = filepath != null ? new File(filepath).getAbsolutePath() : null;
         this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
         this.line = line;
         this.column = col;
+        this.isMacro = isMacro;
+    }
+
+    public boolean isMacro() {
+        return isMacro;
     }
 
     public String getFilepath() {
@@ -91,7 +102,8 @@ public class SourceLocation {
 
     @Override
     public String toString() {
-        return new File(filepath).getName() + ":" + line + ":" + column;
+        String isMacroString = isMacro ? " (macro)" : "";
+        return new File(filepath).getName() + ":" + line + ":" + column + isMacroString;
     }
 
     public boolean isValid() {

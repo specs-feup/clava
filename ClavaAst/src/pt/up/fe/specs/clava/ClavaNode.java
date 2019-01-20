@@ -94,9 +94,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      */
     public final static DataKey<Boolean> IS_MACRO = KeyFactory.bool("isMacro");
 
-    public final static DataKey<SourceRange> SPELLING_LOCATION = KeyFactory
-            .object("spellingLocation", SourceRange.class)
-            .setDefault(() -> SourceRange.invalidRange());
+    // public final static DataKey<SourceRange> SPELLING_LOCATION = KeyFactory
+    // .object("spellingLocation", SourceRange.class)
+    // .setDefault(() -> SourceRange.invalidRange());
 
     public final static DataKey<List<InlineComment>> INLINE_COMMENTS = KeyFactory
             .generic("inlineComments", (List<InlineComment>) new ArrayList<InlineComment>())
