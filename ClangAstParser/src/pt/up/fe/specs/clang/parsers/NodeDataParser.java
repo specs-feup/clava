@@ -271,9 +271,12 @@ public class NodeDataParser {
 
         SourceRange location = hasLocation ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
+
+        // TODO: Consider removing
         boolean isMacro = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
         SourceRange spellingLocation = isMacro ? ClavaDataParsers.parseLocation(lines, dataStore)
                 : SourceRange.invalidRange();
+
         boolean isInSystemHeader = hasLocation ? LineStreamParsers.oneOrZero(lines) : false;
 
         // DataStore data = DataStore.newInstance("Data from Parser");
@@ -290,10 +293,14 @@ public class NodeDataParser {
         if (location.isValid()) {
             data.add(ClavaNode.LOCATION, location);
         }
+
+        // TODO: Consider switching when dumper is updated
         data.add(ClavaNode.IS_MACRO, isMacro);
-        if (spellingLocation.isValid()) {
-            data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
-        }
+        // data.add(ClavaNode.IS_MACRO, location.isMacro());
+
+        // if (spellingLocation.isValid()) {
+        // data.add(ClavaNode.SPELLING_LOCATION, spellingLocation);
+        // }
 
         data.add(ClavaNode.IS_IN_SYSTEM_HEADER, isInSystemHeader);
 

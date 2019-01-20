@@ -668,18 +668,20 @@ public class StreamParser {
         // String startFilepath = firstPart;
         int startLine = Integer.parseInt(lines.nextLine());
         int startColumn = Integer.parseInt(lines.nextLine());
+        // boolean startIsMacro = LineStreamParsers.oneOrZero(lines);
+        boolean startIsMacro = false;
 
-        SourceLocation startLocation = new SourceLocation(startFilepath, startLine, startColumn);
+        SourceLocation startLocation = new SourceLocation(startFilepath, startLine, startColumn, startIsMacro);
 
         // Check if start is the same as the end
         String secondPart = lines.nextLine();
 
-//        if (startFilepath.equals("<built-in>")) {
-//            Preconditions.checkArgument(secondPart.equals("<end>"));
-//            SourceRange previousValue = sourceRanges.put(nodeId, SourceRange.invalidRange());
-//            Preconditions.checkArgument(previousValue == null);
-//            return;
-//        }
+        // if (startFilepath.equals("<built-in>")) {
+        // Preconditions.checkArgument(secondPart.equals("<end>"));
+        // SourceRange previousValue = sourceRanges.put(nodeId, SourceRange.invalidRange());
+        // Preconditions.checkArgument(previousValue == null);
+        // return;
+        // }
 
         if (secondPart.equals("<end>")) {
             SourceRange previousValue = sourceRanges.put(nodeId, new SourceRange(startLocation));
@@ -693,8 +695,10 @@ public class StreamParser {
 
         int endLine = Integer.parseInt(lines.nextLine());
         int endColumn = Integer.parseInt(lines.nextLine());
+        // boolean endIsMacro = LineStreamParsers.oneOrZero(lines);
+        boolean endIsMacro = false;
 
-        SourceLocation endLocation = new SourceLocation(endFilepath, endLine, endColumn);
+        SourceLocation endLocation = new SourceLocation(endFilepath, endLine, endColumn, endIsMacro);
         SourceRange previousValue = sourceRanges.put(nodeId, new SourceRange(startLocation, endLocation));
         Preconditions.checkArgument(previousValue == null);
     }
