@@ -58,7 +58,7 @@ Energy.prototype.measure = function($start, prefix, $end){
 	var codeAfter = _energy_rapl_measure(energyVarEnd);
 	$start.insert("before", codeBefore);
 	
-	logger.append(prefix).appendLong(energyVarEnd + " - " + energyVarStart);
+	logger.append(prefix).appendLongLong(energyVarEnd + " - " + energyVarStart);
 	if (this.printUnit) {
         logger.append(this.getPrintUnit());
     }
