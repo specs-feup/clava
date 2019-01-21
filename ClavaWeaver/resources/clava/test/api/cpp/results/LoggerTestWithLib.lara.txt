@@ -22,6 +22,12 @@ double foo() {
    return a;
 }
 
+void testAppend() {
+	long aLong;
+	long long aLongLong;
+	int a;
+}
+
 
 int main() {
    FileLogger clava_logger_3("log.txt");
