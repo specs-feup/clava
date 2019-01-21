@@ -12,6 +12,13 @@ double foo() {
     return a;
 }
 
+void testAppend() {
+	long int aLong;
+	long long aLongLong;
+	
+	int a;
+}
+
 int main() {
     
     foo();

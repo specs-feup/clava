@@ -27,6 +27,13 @@ double foo() {
    fclose(log_file_0);
 }
 
+void testAppend() {
+	long aLong;
+	long long aLongLong;
+	int a;
+	printf("%ld%lld", aLong, aLongLong);
+}
+
 
 int main() {
    FILE *log_file_1 = fopen("log.txt", "a+");

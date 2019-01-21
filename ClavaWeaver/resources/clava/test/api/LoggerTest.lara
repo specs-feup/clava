@@ -23,6 +23,16 @@ aspectdef LoggerTest
 		loggerFile.log($call);
     end
 
+	
+	var appendLogger = (new Logger())
+		.appendLong("aLong")
+		.appendLongLong("aLongLong");
+	
+	select function{"testAppend"}.vardecl{"a"} end
+	apply
+		appendLogger.log($vardecl);
+	end	
+	
 	select file end
 	apply
 		println($file.code);
