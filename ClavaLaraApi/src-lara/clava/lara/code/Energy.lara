@@ -50,14 +50,15 @@ Energy.prototype.measure = function($start, prefix, $end){
 	}
 	$file.addInclude("rapl.h", false);
 	var energyVar = IdGenerator.next("clava_energy_output_");
+	var energyVarStart = energyVar + "_start";
+	var energyVarEnd = energyVar + "_end";
 
 
-
-	var codeBefore = _energy_rapl_start();
-	var codeAfter = _energy_rapl_end(energyVar);
+	var codeBefore = _energy_rapl_measure(energyVarStart);
+	var codeAfter = _energy_rapl_measure(energyVarEnd);
 	$start.insert("before", codeBefore);
 	
-	logger.append(prefix).appendDouble(energyVar);
+	logger.append(prefix).appendLong(energyVarEnd + " - " + energyVarStart);
 	if (this.printUnit) {
         logger.append(this.getPrintUnit());
     }
@@ -68,10 +69,6 @@ Energy.prototype.measure = function($start, prefix, $end){
 }
 
 
-codedef _energy_rapl_start()%{
-rapl_monitor_start();
-}%end
-
-codedef _energy_rapl_end(energyVar)%{
-double [[energyVar]] = rapl_monitor_report();
+codedef _energy_rapl_measure(energyVar)%{
+long long [[energyVar]] = rapl_energy();
 }%end
