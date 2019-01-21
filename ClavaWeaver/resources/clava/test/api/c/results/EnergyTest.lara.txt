@@ -11,10 +11,10 @@ double bar() {
 double foo() {
    double a = 0;
    for(int i = 0; i < 1000; i++) {
-      rapl_monitor_start();
+      long long clava_energy_output_0_start = rapl_energy();
       a += bar();
-      double clava_energy_output_0 = rapl_monitor_report();
-      printf("Energy:%fuJ\n", clava_energy_output_0);
+      long long clava_energy_output_0_end = rapl_energy();
+      printf("Energy:%llduJ\n", clava_energy_output_0_end - clava_energy_output_0_start);
    }
    
    return a;
@@ -22,8 +22,8 @@ double foo() {
 
 
 int main() {
-   rapl_monitor_start();
+   long long clava_energy_output_1_start = rapl_energy();
    foo();
-   double clava_energy_output_1 = rapl_monitor_report();
-   printf("Energy:%fuJ\n", clava_energy_output_1);
+   long long clava_energy_output_1_end = rapl_energy();
+   printf("Energy:%llduJ\n", clava_energy_output_1_end - clava_energy_output_1_start);
 }
