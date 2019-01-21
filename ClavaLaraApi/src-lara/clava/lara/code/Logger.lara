@@ -4,6 +4,11 @@ import lara.util.PrintOnce;
 import clava.Clava;
 
 
+// Adds C/C++ specific types
+Logger.prototype.Type.LONGLONG = 100;
+
+Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%lld";
+
 
 /**
  * If enabled, uses the SpecsLogger library for the C++ code.
@@ -63,6 +68,13 @@ Logger.prototype.log = function($jp, insertBefore) {
     this.currentElements = [];
 	*/
     return this;
+}
+
+/**
+ * Appends an expression that represents a long long.
+ */
+Logger.prototype.appendLongLong = function(expr) {
+    return this._append_private(expr, this.Type.LONGLONG);
 }
 
 
