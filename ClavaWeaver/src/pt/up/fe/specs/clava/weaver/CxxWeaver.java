@@ -822,8 +822,11 @@ public class CxxWeaver extends ACxxWeaver {
         if (!args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
             // Use parser options instead of weaver options, it can be a rebuild with other folders
             List<File> headerIncludes = parserOptions.stream()
-                    .filter(option -> option.startsWith("-I"))
-                    .map(option -> new File(option.substring("-I".length())))
+                    .map(CxxWeaver::headerFlagToFile)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    // .FILTER(OPTION -> OPTION.STARTSWITH("-I"))
+                    // .MAP(OPTION -> NEW FILE(OPTION.SUBSTRING("-I".LENGTH())))
                     .collect(Collectors.toList());
 
             // Gather header files
@@ -848,6 +851,23 @@ public class CxxWeaver extends ACxxWeaver {
         return adaptedSources;
         // return sourceFiles.keySet().stream()
         // .collect(Collectors.toList());
+    }
+
+    private static Optional<File> headerFlagToFile(String headerFlag) {
+        if (!headerFlag.startsWith("-I")) {
+            return Optional.empty();
+        }
+
+        String filepath = headerFlag.substring("-I".length());
+
+        if (filepath.startsWith("\"")) {
+            SpecsCheck.checkArgument(filepath.endsWith("\""),
+                    () -> "Expected header flag to end with '\"', if it starts with '\"'");
+            filepath = filepath.substring(1, filepath.length() - 1);
+        }
+
+        return Optional.of(new File(filepath));
+
     }
 
     /*
