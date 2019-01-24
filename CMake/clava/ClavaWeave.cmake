@@ -42,7 +42,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	# Woven dir
 	set(WOVEN_DIR "${WORKING_DIR}/${WOVEN_DIR_NAME}")
 
-	file(MAKE_DIRECTORY ${WOVEN_DIR})
+	file(MAKE_DIRECTORY "${WOVEN_DIR}")
 	#message(STATUS "Woven dir: ${WOVEN_DIR}")
 	
 
