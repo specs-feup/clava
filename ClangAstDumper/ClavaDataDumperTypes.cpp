@@ -301,10 +301,10 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
 
 
     // Num parameters
-    clava::dump(T->getParamTypes().size());
+    clava::dumpSize(T->getParamTypes().size());
 
     // Parameters types
-    clava::dump(T->getParamTypes().size());
+    clava::dumpSize(T->getParamTypes().size());
     for (QualType paramType : T->getParamTypes()) {
         clava::dump(clava::getId(paramType, id));
     }
@@ -321,7 +321,7 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
 
     clava::dump(clava::EXCEPTION_SPECIFICATION_TYPE[info.ExceptionSpec.Type]);
     // Dump types array
-    clava::dump(info.ExceptionSpec.Exceptions.size());
+    clava::dumpSize(info.ExceptionSpec.Exceptions.size());
     for(auto& exceptType : info.ExceptionSpec.Exceptions) {
         clava::dump(clava::getId(exceptType, id));
     }
@@ -456,6 +456,10 @@ void clava::ClavaDataDumper::DumpTemplateTypeParmTypeData(const TemplateTypeParm
 void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSpecializationType *T) {
     // Hierarchy
     DumpTypeData(T);
+
+//    llvm::errs() << "DUMP BEGIN\n";
+//    T->getTemplateName().dump();
+//    llvm::errs() << "DUMP END\n";
 
     clava::dump(T->isTypeAlias());
     if(T->isTypeAlias()) {

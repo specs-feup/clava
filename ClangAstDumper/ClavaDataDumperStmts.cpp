@@ -636,7 +636,7 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
 
     if(E->isPartiallySubstituted()) {
         // Template args
-        clava::dump(E->getPartialArguments().size());
+        clava::dumpSize(E->getPartialArguments().size());
         for(auto partialArg : E->getPartialArguments()) {
             clava::dump(partialArg, id);
         }

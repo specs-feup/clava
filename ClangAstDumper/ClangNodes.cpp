@@ -54,6 +54,9 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
     llvm::errs() << startPLoc.getFilename() << "\n";
     llvm::errs() << startPLoc.getLine() << "\n";
     llvm::errs() << startPLoc.getColumn() << "\n";
+    // ISMACRO: Temporarily disabled
+	//llvm::errs() << startLoc.isMacroID() << "\n";
+
 
     if(startLoc == endLoc) {
         llvm::errs() << "<end>\n";
@@ -87,6 +90,9 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
     llvm::errs() << endFilename << "\n";
     llvm::errs() << endLine << "\n";
     llvm::errs() << endCol << "\n";
+	
+	// ISMACRO: Temporarily disabled
+    //llvm::errs() << endLoc.isMacroID() << "\n";
 }
 
 void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLocation end) {
@@ -94,10 +100,17 @@ void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLoca
     // Original source range
     clava::dumpSourceRange(Context, begin, end);
 
+	// ISMACRO: Disable this when updating
     // If it is a macro
     bool isMacro = begin.isMacroID() || end.isMacroID();
     clava::dump(isMacro);
 
+//    bool beginIsMacro = begin.isMacroID();
+//    bool endIsMacro = end.isMacroID();
+//    clava::dump(beginIsMacro);
+//    clava::dump(endIsMacro);
+
+	// ISMACRO: Disable this when updating
     // Spelling location, if macro
     if(isMacro) {
         clava::dumpSourceRange(Context, Context->getSourceManager().getSpellingLoc(begin), Context->getSourceManager().getSpellingLoc(end));
@@ -198,7 +211,7 @@ void clava::dump(unsigned int integer) {
     llvm::errs() << integer << "\n";
 }
 
-void clava::dump(size_t integer) {
+void clava::dumpSize(size_t integer) {
     llvm::errs() << integer << "\n";
 }
 
@@ -496,6 +509,7 @@ static bool startsWith(const std::string& str, const std::string& prefix)
 const std::string clava::getQualifiedPrefix(const NamedDecl *D) {
     const std::string qualifiedName = D->getQualifiedNameAsString();
     const std::string declName = D->getDeclName().getAsString();
+
     //llvm::errs() << "QUALIFIED NAME: " << qualifiedName << "\n";
     //llvm::errs() << "DECL NAME: " << declName << "\n";
 
