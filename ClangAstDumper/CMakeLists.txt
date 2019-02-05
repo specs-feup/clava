@@ -2,14 +2,21 @@ cmake_minimum_required(VERSION 3.2)
 project(ClangAstDumper)
 
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+#message(STATUS HELLO)
+
+
+#SET(CMAKE_C_COMPILER "clang")
+#SET(CMAKE_CXX_COMPILER "clang++")
 
 # Initialize Deps
 include("../deps.cmake")
 
 # Add Modules
 deps_find_package(llvm3.8 REQUIRED) # LLVM
+#deps_find_package(llvm7 REQUIRED) # LLVM
 
 set(COMMON_CXX_FLAGS "-std=c++11 -O3")
+#-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 
 #add_definitions(-DOLD_OUTPUT)
 
