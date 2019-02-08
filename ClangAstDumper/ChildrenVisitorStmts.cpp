@@ -238,7 +238,9 @@ void ClangAstDumper::VisitCXXForRangeStmtChildren(const CXXForRangeStmt *S, std:
     //VisitStmtChildren(S, children);
 
     addChild(S->getRangeStmt(), children);
-    addChild(S->getBeginEndStmt(), children);
+    //addChild(S->getBeginEndStmt(), children); LLVM3.8
+    addChild(S->getBeginStmt(), children);
+    addChild(S->getEndStmt(), children);
     addChild(S->getCond(), children);
     addChild(S->getInc(), children);
     addChild(S->getLoopVarStmt(), children);

@@ -300,7 +300,8 @@ void clava::dump(const Qualifiers& qualifiers, ASTContext* Context) {
     clava::dump((int) numSetBits);
     if(qualifiers.hasConst()) {clava::dump("CONST");}
     if(qualifiers.hasRestrict()) {
-        if(Context->getPrintingPolicy().LangOpts.C99)
+        //if(Context->getPrintingPolicy().LangOpts.C99) // LLVM 3.8
+        if(Context->getPrintingPolicy().Restrict)
             clava::dump("RESTRICT_C99");
         else
             clava::dump("RESTRICT");

@@ -441,7 +441,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus);
         clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus11);
         clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus14);
-        clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus1z);
+        clava::dump(CI.getInvocation().getLangOpts()->CPlusPlus17);
         clava::dump(CI.getInvocation().getLangOpts()->Digraphs);
         clava::dump(CI.getInvocation().getLangOpts()->GNUMode);
         clava::dump(CI.getInvocation().getLangOpts()->HexFloats);

@@ -145,7 +145,7 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     // typeAsString
     //SplitQualType T_split = T.split();
     //clava::dump(QualType::getAsString(T_split));
-    clava::dump(QualType::getAsString(T, qualifiers));
+    clava::dump(QualType::getAsString(T, qualifiers, Context->getPrintingPolicy()));
 
     // sugar
     //QualType SingleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
@@ -226,6 +226,7 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
     if(qualifiers.hasVolatile()) {clava::dump("VOLATILE");}
 */
     // Dumps address space
+    /*
     unsigned addrspace = T.getAddressSpace();
     if(addrspace) {
         switch(addrspace) {
@@ -236,9 +237,34 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
             default: clava::dump("DEFAULT");
         }
     } else {
-        clava::dump("NONE");
+       clava::dump("NONE");
     }
-    clava::dump(addrspace);
+    clava::dump((unsigned)addrspace);
+    */
+    LangAS addrspace = T.getAddressSpace();
+    switch(addrspace) {
+        case LangAS::Default: clava::dump("NONE"); break;
+        case LangAS::opencl_global: clava::dump("GLOBAL"); break;
+        case LangAS::opencl_local: clava::dump("LOCAL"); break;
+        case LangAS::opencl_constant: clava::dump("CONSTANT"); break;
+        case LangAS::opencl_generic: clava::dump("GENERIC"); break;
+        case LangAS::opencl_private: clava::dump("PRIVATE"); break;
+
+        case LangAS::cuda_constant: clava::dump("CUDA_CONSTANT"); break;
+        case LangAS::cuda_device: clava::dump("CUDA_DEVICE"); break;
+        case LangAS::cuda_shared: clava::dump("CUDA_SHARED"); break;
+
+        default: clava::dump("DEFAULT");
+    }
+
+    if(isTargetAddressSpace(addrspace)) {
+        clava::dump(toTargetAddressSpace(addrspace));
+    } else {
+        clava::dump((unsigned) 0);
+    }
+
+
+
 
     // Unqualified type
     clava::dump(clava::getId(T.getTypePtr(), id));
@@ -327,7 +353,8 @@ void clava::ClavaDataDumper::DumpFunctionProtoTypeData(const FunctionProtoType *
     }
 
     switch(info.ExceptionSpec.Type) {
-        case EST_ComputedNoexcept:
+        //case EST_ComputedNoexcept: // LLVM3.8
+        case EST_DependentNoexcept:
             clava::dump(clava::getId(info.ExceptionSpec.NoexceptExpr, id));
             break;
         case EST_Unevaluated:
