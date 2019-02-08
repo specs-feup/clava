@@ -170,7 +170,8 @@ public class ClavaDataParsers {
 
         switch (exceptionSpecificationType) {
 
-        case ComputedNoexcept:
+        // case ComputedNoexcept:
+        case DependentNoexcept:
             clavaNodes.queueSetNode(exceptionSpecification, ComputedNoexcept.NOEXCEPT_EXPR, lines.nextLine());
 
             return exceptionSpecification;

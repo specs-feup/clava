@@ -47,26 +47,31 @@ public class CXXForRangeStmt extends LoopStmt {
         return getChild(DeclStmt.class, 0);
     }
 
-    public Optional<DeclStmt> getBeginEnd() {
+    public Optional<DeclStmt> getBegin() {
         // It can be a NullStmt
         return getChildTry(DeclStmt.class, 1);
     }
 
-    public Expr getCond() {
-        return getChild(Expr.class, 2);
+    public Optional<DeclStmt> getEnd() {
+        // It can be a NullStmt
+        return getChildTry(DeclStmt.class, 2);
     }
 
-    public Expr getInc() {
+    public Expr getCond() {
         return getChild(Expr.class, 3);
     }
 
+    public Expr getInc() {
+        return getChild(Expr.class, 4);
+    }
+
     public DeclStmt getLoopVar() {
-        return getChild(DeclStmt.class, 4);
+        return getChild(DeclStmt.class, 5);
     }
 
     @Override
     public CompoundStmt getBody() {
-        return getChild(CompoundStmt.class, 5);
+        return getChild(CompoundStmt.class, 6);
     }
 
     @Override

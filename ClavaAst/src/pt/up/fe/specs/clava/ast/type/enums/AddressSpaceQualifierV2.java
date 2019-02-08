@@ -24,8 +24,12 @@ public enum AddressSpaceQualifierV2 implements StringProvider {
     LOCAL,
     CONSTANT,
     GENERIC,
-    DEFAULT;
-    // PRIVATE;
+    DEFAULT,
+    PRIVATE,
+
+    CUDA_CONSTANT,
+    CUDA_DEVICE,
+    CUDA_SHARED;
 
     private static final Lazy<EnumHelperWithValue<AddressSpaceQualifierV2>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(AddressSpaceQualifierV2.class, NONE);

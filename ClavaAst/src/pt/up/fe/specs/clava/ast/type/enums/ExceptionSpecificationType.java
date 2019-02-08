@@ -27,7 +27,10 @@ public enum ExceptionSpecificationType {
     Dynamic, /// < throw(T1, T2)
     MSAny, /// < Microsoft throw(...) extension
     BasicNoexcept, /// < noexcept
-    ComputedNoexcept, /// < noexcept(expression)
+    // ComputedNoexcept, /// < noexcept(expression)
+    DependentNoexcept, /// < noexcept(expression), value-dependent
+    NoexceptFalse, /// < noexcept(expression), evals to 'false'
+    NoexceptTrue, /// < noexcept(expression), evals to 'true'
     Unevaluated, /// < not evaluated yet, for special member function
     Uninstantiated, /// < not instantiated yet
     Unparsed; /// < not parsed yet
@@ -42,7 +45,7 @@ public enum ExceptionSpecificationType {
             return " throw()";
         case BasicNoexcept:
             return " noexcept";
-        case ComputedNoexcept:
+        case DependentNoexcept:
             return " noexcept(" + expr.getCode() + ")";
         case Unevaluated:
             // Appears to be used in cases like
@@ -68,7 +71,7 @@ public enum ExceptionSpecificationType {
 
     private ExceptionSpecification newInstanceBase() {
         switch (this) {
-        case ComputedNoexcept:
+        case DependentNoexcept:
             return new ComputedNoexcept();
         case Unevaluated:
             return new UnevaluatedExceptionSpecification();
