@@ -580,7 +580,7 @@ void clava::ClavaDataDumper::DumpOffsetOfExprData(const OffsetOfExpr *E) {
 
     clava::dump(clava::getId(E->getTypeSourceInfo()->getType(), id));
     clava::dump(E->getNumComponents());
-    for(int i = 0; i < E->getNumComponents(); i++) {
+    for(unsigned i = 0; i < E->getNumComponents(); i++) {
         // Dump each component
         OffsetOfNode node = E->getComponent(i);
         clava::dump(clava::OFFSET_OF_NODE_KIND[node.getKind()]);

@@ -260,7 +260,7 @@ void ClangAstDumper::VisitCXXTryStmtChildren(const CXXTryStmt *S, std::vector<st
     //VisitStmtChildren(S, children);
 
     addChild(S->getTryBlock(), children);
-    for(int i=0; i<S->getNumHandlers();i++) {
+    for(unsigned i=0; i<S->getNumHandlers();i++) {
         addChild(S->getHandler(i), children);
     }
 
@@ -357,7 +357,7 @@ void ClangAstDumper::VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vecto
     // Visit type
     VisitTypeTop(E->getTypeSourceInfo()->getType().getTypePtr());
 
-    for(int i = 0; i < E->getNumComponents(); i++) {
+    for(unsigned i = 0; i < E->getNumComponents(); i++) {
         // Dump each component
         OffsetOfNode node = E->getComponent(i);
         switch (node.getKind()) {

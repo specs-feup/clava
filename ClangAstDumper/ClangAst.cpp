@@ -120,7 +120,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
             // Get OMP Directive
             DumpResources::omp << D << "_" << id << "->" << stmt2str(D, &Context->getSourceManager(), Context->getLangOpts()) << "\n";
             DumpResources::omp << "NUM_CLAUSES" << "->" << D->getNumClauses() << "\n";
-            for(int i=0; i<D->getNumClauses(); i++) {
+            for(unsigned i=0; i<D->getNumClauses(); i++) {
                 OMPClause* clause = D->getClause(i);
                 DumpResources::omp << clause->getClauseKind() << "->" << loc2str(clause->getLocStart(), clause->getLocEnd(), Context) << "\n";
             }
@@ -274,8 +274,9 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     }
 
     bool PrintNodesTypesRelationsVisitor::VisitLambdaExpr(LambdaExpr *D) {
+
+        #ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-#ifdef OLD_OUTPUT
         if (!fullLocation.isInSystemHeader()) {
             // Dump self
             dumpNodeToType(DumpResources::nodetypes,D, D->getType());
@@ -285,7 +286,8 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
             //TraverseDecl(D->getLambdaClass());
             //VisitTypeDecl(D->getLambdaClass());
         }
-#endif
+        #endif
+
         return true;
     }
 
@@ -484,8 +486,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     void IncludeDumper::InclusionDirective(SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
                                         bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
-                                        StringRef SearchPath, StringRef RelativePath, const Module *Imported) {
-
+                                        StringRef SearchPath, StringRef RelativePath, const Module *Imported, SrcMgr::CharacteristicKind FileType) {
 
         clang::SourceManager &sm = compilerInstance.getSourceManager();
 
@@ -568,9 +569,9 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     void CallbacksProxy::InclusionDirective(SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName,
                                             bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
-                                            StringRef SearchPath, StringRef RelativePath, const Module *Imported) {
-												
-        original.InclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported);
+                                            StringRef SearchPath, StringRef RelativePath, const Module *Imported, SrcMgr::CharacteristicKind FileType) {
+
+        original.InclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported, FileType);
     }
 
     void CallbacksProxy::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {

@@ -335,7 +335,7 @@ void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpeci
     VisitTypeChildren(T, visitedChildren);
 
     // Visit each argument
-    for(int i=0; i<T->getNumArgs(); i++) {
+    for(unsigned i=0; i<T->getNumArgs(); i++) {
         VisitTemplateArgChildren(T->getArg(i));
     }
 
