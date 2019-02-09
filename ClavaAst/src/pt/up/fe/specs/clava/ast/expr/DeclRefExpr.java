@@ -459,11 +459,11 @@ public class DeclRefExpr extends Expr implements Nameable {
         UnaryOperator op = (UnaryOperator) parent;
 
         // Check if deref op
-        if (op.getOp() == UnaryOperatorKind.DEREF) {
+        if (op.getOp() == UnaryOperatorKind.Deref) {
             return DeclRefKind.POINTER_ACCESS;
         }
 
-        if (op.getOp() == UnaryOperatorKind.ADDR_OF) {
+        if (op.getOp() == UnaryOperatorKind.AddrOf) {
             return DeclRefKind.ADDRESS_OF;
         }
 

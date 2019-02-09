@@ -77,6 +77,6 @@ public class CxxBinaryOp extends ABinaryOp {
 
     @Override
     public Boolean getIsAssignmentImpl() {
-        return op.getOp() == BinaryOperatorKind.ASSIGN || op instanceof CompoundAssignOperator;
+        return op.getOp() == BinaryOperatorKind.Assign || op instanceof CompoundAssignOperator;
     }
 }

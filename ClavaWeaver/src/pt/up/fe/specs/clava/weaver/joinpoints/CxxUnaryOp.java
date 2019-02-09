@@ -59,7 +59,7 @@ public class CxxUnaryOp extends AUnaryOp {
 
     @Override
     public Boolean getIsPointerDerefImpl() {
-        return unaryOp.getOp() == UnaryOperatorKind.DEREF;
+        return unaryOp.getOp() == UnaryOperatorKind.Deref;
     }
 
     @Override

@@ -182,7 +182,7 @@ public class ForStmt extends LoopStmt {
         if (initExpr instanceof BinaryOperator) {
 
             BinaryOperator binOp = (BinaryOperator) initExpr;
-            if (binOp.getOp() != BinaryOperatorKind.ASSIGN) {
+            if (binOp.getOp() != BinaryOperatorKind.Assign) {
                 return Optional.empty();
             }
 
@@ -213,13 +213,13 @@ public class ForStmt extends LoopStmt {
             BinaryOperator binaryOp = (BinaryOperator) incExpr;
             BinaryOperatorKind kind = binaryOp.getOp();
 
-            if (kind == BinaryOperatorKind.ADD_ASSIGN) {
+            if (kind == BinaryOperatorKind.AddAssign) {
                 return Optional.of(binaryOp.getRhs());
             }
 
-            if (kind == BinaryOperatorKind.SUB_ASSIGN) {
+            if (kind == BinaryOperatorKind.SubAssign) {
                 Expr rhs = binaryOp.getRhs();
-                return Optional.of(getFactory().unaryOperator(UnaryOperatorKind.MINUS, rhs.getExprType(), rhs));
+                return Optional.of(getFactory().unaryOperator(UnaryOperatorKind.Minus, rhs.getExprType(), rhs));
             }
 
             ClavaLog.warning("Not yet implemented for binary operator of kind " + kind);
@@ -234,11 +234,11 @@ public class ForStmt extends LoopStmt {
             UnaryOperator unaryOp = (UnaryOperator) incExpr;
             UnaryOperatorKind kind = unaryOp.getOp();
 
-            if (kind == UnaryOperatorKind.PRE_INC || kind == UnaryOperatorKind.POST_INC) {
+            if (kind == UnaryOperatorKind.PreInc || kind == UnaryOperatorKind.PostInc) {
                 return Optional.of(getFactory().integerLiteral(1));
             }
 
-            if (kind == UnaryOperatorKind.PRE_DEC || kind == UnaryOperatorKind.POST_DEC) {
+            if (kind == UnaryOperatorKind.PreDec || kind == UnaryOperatorKind.PostDec) {
                 return Optional.of(getFactory().integerLiteral(-1));
             }
 
@@ -271,7 +271,7 @@ public class ForStmt extends LoopStmt {
         }
 
         return Optional
-                .of(getFactory().binaryOperator(BinaryOperatorKind.DIV, beginEndDiff.get(Expr.TYPE).get(), beginEndDiff,
+                .of(getFactory().binaryOperator(BinaryOperatorKind.Div, beginEndDiff.get(Expr.TYPE).get(), beginEndDiff,
                         stepValue));
 
         // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
@@ -306,7 +306,7 @@ public class ForStmt extends LoopStmt {
         }
 
         return Optional
-                .of(getFactory().binaryOperator(BinaryOperatorKind.SUB, initExpr.get(Expr.TYPE).get(), endExpr,
+                .of(getFactory().binaryOperator(BinaryOperatorKind.Sub, initExpr.get(Expr.TYPE).get(), endExpr,
                         initExpr));
 
         // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));

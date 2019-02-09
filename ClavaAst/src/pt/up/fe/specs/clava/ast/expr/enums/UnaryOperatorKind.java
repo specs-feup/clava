@@ -17,45 +17,75 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum UnaryOperatorKind implements StringProvider {
-    POST_INC("++"),
-    POST_DEC("--"),
-    PRE_INC("++"),
-    PRE_DEC("--"),
-    // &
-    ADDR_OF("&"),
-    // *
-    DEREF("*"),
-    PLUS("+"),
-    MINUS("-"),
-    NOT("~"),
-    // Logical not
-    L_NOT("!"),
-    REAL("__real__"),
-    IMAG("__imag__ "),
-    EXTENSION("__extension__"),
-    COAWAIT("co_await");
+    PostInc,
+    PostDec,
+    PreInc,
+    PreDec,
+    AddrOf,
+    Deref,
+    Plus,
+    Minus,
+    Not,
+    LNot,
+    Real,
+    Imag,
+    Extension,
+    Coawait;
 
     private static final Lazy<EnumHelperWithValue<UnaryOperatorKind>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(UnaryOperatorKind.class);
 
-    private static final Set<UnaryOperatorKind> OPS_WITH_SPACE = EnumSet.of(REAL, IMAG, EXTENSION, COAWAIT);
+    private static final Set<UnaryOperatorKind> OPS_WITH_SPACE = EnumSet.of(Real, Imag, Extension, Coawait);
 
     public static EnumHelperWithValue<UnaryOperatorKind> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 
-    final String op;
-
-    private UnaryOperatorKind(String op) {
-        this.op = op;
-    }
+    // final String op;
+    //
+    // private UnaryOperatorKind(String op) {
+    // this.op = op;
+    // }
 
     public String getCode() {
-        return op;
+        switch (this) {
+        case PostInc:
+            return "++";
+        case PostDec:
+            return "--";
+        case PreInc:
+            return "++";
+        case PreDec:
+            return "--";
+        case AddrOf:
+            return "&";
+        case Deref:
+            return "*";
+        case Plus:
+            return "+";
+        case Minus:
+            return "-";
+        case Not:
+            return "~";
+        case LNot:
+            return "!";
+        case Real:
+            return "__real__";
+        case Imag:
+            return "__imag__ ";
+        case Extension:
+            return "__extension__";
+        case Coawait:
+            return "co_await";
+        default:
+            throw new NotImplementedException(this);
+        }
+        // return op;
     }
 
     public boolean requiresSpace() {
@@ -68,7 +98,8 @@ public enum UnaryOperatorKind implements StringProvider {
 
     @Override
     public String getString() {
-        return op;
+        return getCode();
+        // return op;
     }
 
 }

@@ -19,24 +19,39 @@ import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum AttributeKind implements StringProvider {
 
+    FallThrough,
+    Suppress,
+    SwiftContext,
+    SwiftErrorResult,
+    SwiftIndirectResult,
     Annotate,
     CFConsumed,
     CarriesDependency,
     NSConsumed,
+    NonNull,
     PassObjectSize,
-
+    AMDGPUFlatWorkGroupSize,
     AMDGPUNumSGPR,
     AMDGPUNumVGPR,
+    AMDGPUWavesPerEU,
     ARMInterrupt,
+    AVRInterrupt,
+    AVRSignal,
     AcquireCapability,
     AcquiredAfter,
     AcquiredBefore,
     AlignMac68k,
     Aligned,
+    AllocAlign,
+    AllocSize,
     AlwaysInline,
     AnalyzerNoReturn,
+    AnyX86Interrupt,
+    AnyX86NoCallerSavedRegisters,
+    AnyX86NoCfCheck,
     ArcWeakrefUnavailable,
     ArgumentWithTypeTag,
+    Artificial,
     AsmLabel,
     AssertCapability,
     AssertExclusiveLock,
@@ -50,6 +65,8 @@ public enum AttributeKind implements StringProvider {
     CFReturnsNotRetained,
     CFReturnsRetained,
     CFUnknownTransfer,
+    CPUDispatch,
+    CPUSpecific,
     CUDAConstant,
     CUDADevice,
     CUDAGlobal,
@@ -62,6 +79,7 @@ public enum AttributeKind implements StringProvider {
     Capability,
     CapturedRecord,
     Cleanup,
+    CodeSeg,
     Cold,
     Common,
     Const,
@@ -69,15 +87,20 @@ public enum AttributeKind implements StringProvider {
     Consumable,
     ConsumableAutoCast,
     ConsumableSetOnRead,
+    Convergent,
     DLLExport,
     DLLImport,
     Deprecated,
     Destructor,
+    DiagnoseIf,
     DisableTailCalls,
+    EmptyBases,
     EnableIf,
+    EnumExtensibility,
     ExclusiveTrylockFunction,
+    ExternalSourceSymbol,
     FastCall,
-    Final("final"),
+    Final,
     FlagEnum,
     Flatten,
     Format,
@@ -92,6 +115,9 @@ public enum AttributeKind implements StringProvider {
     InitPriority,
     IntelOclBicc,
     InternalLinkage,
+    LTOVisibilityPublic,
+    LayoutVersion,
+    LifetimeBound,
     LockReturned,
     LocksExcluded,
     MSABI,
@@ -102,9 +128,13 @@ public enum AttributeKind implements StringProvider {
     MSVtorDisp,
     MaxFieldAlignment,
     MayAlias,
+    MicroMips,
     MinSize,
+    MinVectorWidth,
     Mips16,
     MipsInterrupt,
+    MipsLongCall,
+    MipsShortCall,
     NSConsumesSelf,
     NSReturnsAutoreleased,
     NSReturnsNotRetained,
@@ -116,14 +146,17 @@ public enum AttributeKind implements StringProvider {
     NoDuplicate,
     NoInline,
     NoInstrumentFunction,
+    NoMicroMips,
     NoMips16,
     NoReturn,
     NoSanitize,
     NoSplitStack,
+    NoStackProtector,
     NoThreadSafetyAnalysis,
     NoThrow,
-    NonNull,
     NotTailCalled,
+    OMPCaptureNoInit,
+    OMPDeclareTargetDecl,
     OMPThreadPrivateDecl,
     ObjCBridge,
     ObjCBridgeMutable,
@@ -138,7 +171,10 @@ public enum AttributeKind implements StringProvider {
     ObjCRequiresSuper,
     ObjCReturnsInnerPointer,
     ObjCRootClass,
-    OpenCLKernel("__kernel"),
+    ObjCSubclassingRestricted,
+    OpenCLIntelReqdSubGroupSize,
+    OpenCLKernel,
+    OpenCLUnrollHint,
     OptimizeNone,
     Override,
     Ownership,
@@ -146,11 +182,20 @@ public enum AttributeKind implements StringProvider {
     ParamTypestate,
     Pascal,
     Pcs,
+    PragmaClangBSSSection,
+    PragmaClangDataSection,
+    PragmaClangRodataSection,
+    PragmaClangTextSection,
+    PreserveAll,
+    PreserveMost,
     PtGuardedBy,
     PtGuardedVar,
     Pure,
+    RISCVInterrupt,
+    RegCall,
     ReleaseCapability,
     ReqdWorkGroupSize,
+    RequireConstantInit,
     RequiresCapability,
     Restrict,
     ReturnTypestate,
@@ -163,12 +208,14 @@ public enum AttributeKind implements StringProvider {
     SetTypestate,
     SharedTrylockFunction,
     StdCall,
+    SwiftCall,
     SysVABI,
     TLSModel,
     Target,
     TestTypestate,
     ThisCall,
     TransparentUnion,
+    TrivialABI,
     TryAcquireCapability,
     TypeTagForDatatype,
     TypeVisibility,
@@ -187,35 +234,44 @@ public enum AttributeKind implements StringProvider {
     WeakRef,
     WorkGroupSizeHint,
     X86ForceAlignArgPointer,
-
+    XRayInstrument,
+    XRayLogArgs,
+    AbiTag,
     Alias,
     AlignValue,
-    FallThrough,
+    IFunc,
     InitSeg,
     LoopHint,
     Mode,
+    NoEscape,
+    OMPCaptureKind,
+    OMPDeclareSimdDecl,
+    OMPReferencedVar,
     ObjCBoxable,
     ObjCDesignatedInitializer,
     ObjCRuntimeName,
-    OpenCLImageAccess,
+    ObjCRuntimeVisible,
+    OpenCLAccess,
     Overloadable,
+    RenderScriptKernel,
     Thread;
 
-    private static final Lazy<EnumHelperWithValue<AttributeKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(AttributeKind.class);
+    private static final Lazy<EnumHelperWithValue<AttributeKind>> ENUM_HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(AttributeKind.class);
 
     public static EnumHelperWithValue<AttributeKind> getHelper() {
         return ENUM_HELPER.get();
     }
 
-    private final String code;
+    // private final String code;
 
-    private AttributeKind() {
-        code = null;
-    }
-
-    private AttributeKind(String code) {
-        this.code = code;
-    }
+    // private AttributeKind() {
+    // code = null;
+    // }
+    //
+    // private AttributeKind(String code) {
+    // this.code = code;
+    // }
 
     @Override
     public String getString() {
@@ -224,11 +280,18 @@ public enum AttributeKind implements StringProvider {
     }
 
     public String getCode() {
-        if (code == null) {
-            throw new RuntimeException("Code not defined for attribute '" + this + "'");
+        switch (this) {
+        case OpenCLKernel:
+            return "__kernel";
+        default:
+            return name().toLowerCase();
         }
 
-        return code;
+        // if (code == null) {
+        // throw new RuntimeException("Code not defined for attribute '" + this + "'");
+        // }
+        //
+        // return code;
     }
 
 }

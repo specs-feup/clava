@@ -38,12 +38,12 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
     static {
         BASE_OPCODES = new HashMap<>();
 
-        UnaryOperatorParser.BASE_OPCODES.put("&", UnaryOperatorKind.ADDR_OF);
-        UnaryOperatorParser.BASE_OPCODES.put("*", UnaryOperatorKind.DEREF);
-        UnaryOperatorParser.BASE_OPCODES.put("~", UnaryOperatorKind.NOT);
-        UnaryOperatorParser.BASE_OPCODES.put("!", UnaryOperatorKind.L_NOT);
-        UnaryOperatorParser.BASE_OPCODES.put("+", UnaryOperatorKind.PLUS);
-        UnaryOperatorParser.BASE_OPCODES.put("-", UnaryOperatorKind.MINUS);
+        UnaryOperatorParser.BASE_OPCODES.put("&", UnaryOperatorKind.AddrOf);
+        UnaryOperatorParser.BASE_OPCODES.put("*", UnaryOperatorKind.Deref);
+        UnaryOperatorParser.BASE_OPCODES.put("~", UnaryOperatorKind.Not);
+        UnaryOperatorParser.BASE_OPCODES.put("!", UnaryOperatorKind.LNot);
+        UnaryOperatorParser.BASE_OPCODES.put("+", UnaryOperatorKind.Plus);
+        UnaryOperatorParser.BASE_OPCODES.put("-", UnaryOperatorKind.Minus);
 
     }
 
@@ -51,16 +51,16 @@ public class UnaryOperatorParser extends AClangNodeParser<UnaryOperator> {
     static {
         PREFIX_OPCODES = new HashMap<>();
 
-        UnaryOperatorParser.PREFIX_OPCODES.put("++", UnaryOperatorKind.PRE_INC);
-        UnaryOperatorParser.PREFIX_OPCODES.put("--", UnaryOperatorKind.PRE_DEC);
+        UnaryOperatorParser.PREFIX_OPCODES.put("++", UnaryOperatorKind.PreInc);
+        UnaryOperatorParser.PREFIX_OPCODES.put("--", UnaryOperatorKind.PreDec);
     }
 
     private static final Map<String, UnaryOperatorKind> POSTFIX_OPCODES;
     static {
         POSTFIX_OPCODES = new HashMap<>();
 
-        UnaryOperatorParser.POSTFIX_OPCODES.put("++", UnaryOperatorKind.POST_INC);
-        UnaryOperatorParser.POSTFIX_OPCODES.put("--", UnaryOperatorKind.POST_DEC);
+        UnaryOperatorParser.POSTFIX_OPCODES.put("++", UnaryOperatorKind.PostInc);
+        UnaryOperatorParser.POSTFIX_OPCODES.put("--", UnaryOperatorKind.PostDec);
     }
 
     public UnaryOperatorParser(ClangConverterTable converter) {

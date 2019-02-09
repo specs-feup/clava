@@ -154,7 +154,6 @@ public class TypeDataParser {
 
         data.add(FunctionProtoType.REFERENCE_QUALIFIER,
                 LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
-
         data.add(FunctionProtoType.EXCEPTION_SPECIFICATION, ClavaDataParsers.exceptionSpecification(lines, parserData));
 
         /*

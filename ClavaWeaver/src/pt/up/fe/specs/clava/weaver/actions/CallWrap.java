@@ -449,7 +449,7 @@ public class CallWrap {
         } else {
             // DeclRefExpr varAssigned = ClavaNodeFactory.declRefExpr(varName, returnType);
             DeclRefExpr varAssigned = factory.declRefExpr(varName, returnType);
-            BinaryOperator op = factory.binaryOperator(BinaryOperatorKind.ASSIGN, returnType, varAssigned, callExpr);
+            BinaryOperator op = factory.binaryOperator(BinaryOperatorKind.Assign, returnType, varAssigned, callExpr);
             ExprStmt assignment = factory.exprStmt(op);
             // ExprStmt assignment = ClavaNodeFactory.exprStmtAssign(varAssigned, callExpr, returnType);
             wrapperStmts.add(assignment);

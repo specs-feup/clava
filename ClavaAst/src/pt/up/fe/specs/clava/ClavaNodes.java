@@ -241,9 +241,9 @@ public class ClavaNodes {
         return currentNode;
     }
 
-    private final static Set<UnaryOperatorKind> READ_WRITE_UNARY_OPS = EnumSet.of(UnaryOperatorKind.PRE_INC,
-            UnaryOperatorKind.PRE_DEC,
-            UnaryOperatorKind.POST_INC, UnaryOperatorKind.POST_DEC);
+    private final static Set<UnaryOperatorKind> READ_WRITE_UNARY_OPS = EnumSet.of(UnaryOperatorKind.PreInc,
+            UnaryOperatorKind.PreDec,
+            UnaryOperatorKind.PostInc, UnaryOperatorKind.PostDec);
 
     /**
      * 
@@ -269,7 +269,7 @@ public class ClavaNodes {
 
         BinaryOperator op = (BinaryOperator) parent;
 
-        boolean isAssign = op.getOp() == BinaryOperatorKind.ASSIGN;
+        boolean isAssign = op.getOp() == BinaryOperatorKind.Assign;
         boolean isCompoundAssign = op instanceof CompoundAssignOperator;
         // if (!op.getOp().isAssign()) {
         if (!(isAssign || isCompoundAssign)) {

@@ -441,7 +441,7 @@ public class ClavaFactory {
                 .put(Expr.TYPE, Optional.of(type))
                 .put(UnaryOperator.OP, op);
 
-        if (op.equals(UnaryOperatorKind.POST_INC) || op.equals(UnaryOperatorKind.POST_DEC))
+        if (op.equals(UnaryOperatorKind.PostInc) || op.equals(UnaryOperatorKind.PostDec))
             data.put(UnaryOperator.POSITION, UnaryOperatorPosition.POSTFIX);
 
         return new UnaryOperator(data, Arrays.asList(subExpr));
@@ -451,7 +451,7 @@ public class ClavaFactory {
         DataStore data = newDataStore(CStyleCastExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
 
-        data.set(CastExpr.CAST_KIND, CastKind.NO_OP);
+        data.set(CastExpr.CAST_KIND, CastKind.NoOp);
 
         return new CStyleCastExpr(data, Arrays.asList(expr));
     }
@@ -666,7 +666,7 @@ public class ClavaFactory {
 
     public ExprStmt exprStmtAssignment(Expr lhs, Expr rhs) {
         // Create assignment
-        BinaryOperator assign = binaryOperator(BinaryOperatorKind.ASSIGN, rhs.getExprType(), lhs,
+        BinaryOperator assign = binaryOperator(BinaryOperatorKind.Assign, rhs.getExprType(), lhs,
                 rhs);
 
         return exprStmt(assign);

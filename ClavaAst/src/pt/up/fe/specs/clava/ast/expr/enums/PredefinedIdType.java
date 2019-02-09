@@ -14,17 +14,19 @@
 package pt.up.fe.specs.clava.ast.expr.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum PredefinedIdType implements StringProvider {
-    FUNC("__func__"),
-    FUNCTION("__FUNCTION__"),
-    L_FUNCTION("L__FUNCTION__"),
-    FUND_D_NAME("__FUNCDNAME__"),
-    FUNC_SIG("__FUNCSIG__"),
-    PRETTY_FUNCTION("__PRETTY_FUNCTION__"),
-    PRETTY_FUNCTION_NO_VIRTUAL("<not implemented for PRETTY_FUNCTION_NO_VIRTUAL>");
+    Func,
+    Function,
+    LFunction, // Same as Function, but as wide string.
+    FuncDName,
+    FuncSig,
+    LFuncSig, // Same as FuncSig, but as as wide string
+    PrettyFunction,
+    PrettyFunctionNoVirtual;
 
     private static final Lazy<EnumHelperWithValue<PredefinedIdType>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(PredefinedIdType.class);
@@ -33,15 +35,33 @@ public enum PredefinedIdType implements StringProvider {
         return ENUM_HELPER.get();
     }
 
-    private PredefinedIdType(String identTypeName) {
-        this.identTypeName = identTypeName;
-    }
+    // private PredefinedIdType(String identTypeName) {
+    // this.identTypeName = identTypeName;
+    // }
 
-    private final String identTypeName;
+    // private final String identTypeName;
 
     @Override
     public String getString() {
-        return identTypeName;
+        switch (this) {
+        case Func:
+            return "__func__";
+        case Function:
+            return "__FUNCTION__";
+        case LFunction:
+            return "L__FUNCTION__";
+        case FuncDName:
+            return "__FUNCDNAME__";
+        case FuncSig:
+            return "__FUNCSIG__";
+        case LFuncSig:
+            return "L__FUNCSIG__";
+        case PrettyFunction:
+            return "__PRETTY_FUNCTION__";
+        default:
+            throw new NotImplementedException(this);
+        }
+        // return identTypeName;
     }
 
 }

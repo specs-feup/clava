@@ -18,38 +18,39 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum BinaryOperatorKind implements StringProvider {
-    PTR_MEM_D,
-    PTR_MEM_I,
-    MUL("*"),
-    DIV("/"),
-    REM("%"),
-    ADD("+"),
-    SUB("-"),
-    SHL("<<"),
-    SHR(">>"),
-    LT("<"),
-    GT(">"),
-    LE("<="),
-    GE(">="),
-    EQ("=="),
-    NE("!="),
-    AND("&"),
-    XOR("^"),
-    OR("|"),
-    L_AND("&&"),
-    L_OR("||"),
-    ASSIGN("=", true),
-    MUL_ASSIGN("*=", true),
-    DIV_ASSIGN("/=", true),
-    REM_ASSIGN("%=", true),
-    ADD_ASSIGN("+=", true),
-    SUB_ASSIGN("-=", true),
-    SHL_ASSIGN("<<=", true),
-    SHR_ASSIGN(">>=", true),
-    AND_ASSIGN("&=", true),
-    XOR_ASSIGN("^=", true),
-    OR_ASSIGN("|=", true),
-    COMMA(",");
+    PtrMemD,
+    PtrMemI,
+    Mul,
+    Div,
+    Rem,
+    Add,
+    Sub,
+    Shl,
+    Shr,
+    Cmp,
+    LT,
+    GT,
+    LE,
+    GE,
+    EQ,
+    NE,
+    And,
+    Xor,
+    Or,
+    LAnd,
+    LOr,
+    Assign,
+    MulAssign,
+    DivAssign,
+    RemAssign,
+    AddAssign,
+    SubAssign,
+    ShlAssign,
+    ShrAssign,
+    AndAssign,
+    XorAssign,
+    OrAssign,
+    Comma;
 
     private static final Lazy<EnumHelperWithValue<BinaryOperatorKind>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(BinaryOperatorKind.class);
@@ -58,24 +59,93 @@ public enum BinaryOperatorKind implements StringProvider {
         return HELPER.get();
     }
 
-    private final String opString;
-    private final boolean isAssign;
+    // private static final Set<BinaryOperatorKind> IS_ASSIGN = EnumSet.of(ASSIGN, MUL_ASSIGN, DIV_ASSIGN, REM_ASSIGN,
+    // ADD_ASSIGN, SUB_ASSIGN, SHL_ASSIGN, SHR_ASSIGN, AND_ASSIGN, XOR_ASSIGN, OR_ASSIGN);
 
-    private BinaryOperatorKind(String opString, boolean isAssign) {
-        this.opString = opString;
-        this.isAssign = isAssign;
-    }
+    // private final String opString;
+    // private final boolean isAssign;
 
-    private BinaryOperatorKind(String opString) {
-        this(opString, false);
-    }
+    // private BinaryOperatorKind(String opString, boolean isAssign) {
+    // this.opString = opString;
+    // this.isAssign = isAssign;
+    // }
 
-    private BinaryOperatorKind() {
-        this("<UNDEFINED>");
-    }
+    // private BinaryOperatorKind(String opString) {
+    // this(opString, false);
+    // }
+
+    // private BinaryOperatorKind() {
+    // this("<UNDEFINED>");
+    // }
 
     public String getOpString() {
-        return opString;
+        switch (this) {
+        case Mul:
+            return "*";
+        case Div:
+            return "/";
+        case Rem:
+            return "%";
+        case Add:
+            return "+";
+        case Sub:
+            return "-";
+        case Shl:
+            return "<<";
+        case Shr:
+            return ">>";
+        case Cmp:
+            return "<==>";
+        case LT:
+            return "<";
+        case GT:
+            return ">";
+        case LE:
+            return "<=";
+        case GE:
+            return ">=";
+        case EQ:
+            return "==";
+        case NE:
+            return "!=";
+        case And:
+            return "&";
+        case Xor:
+            return "^";
+        case Or:
+            return "|";
+        case LAnd:
+            return "&&";
+        case LOr:
+            return "||";
+        case Assign:
+            return "=";
+        case MulAssign:
+            return "*=";
+        case DivAssign:
+            return "/=";
+        case RemAssign:
+            return "%=";
+        case AddAssign:
+            return "+=";
+        case SubAssign:
+            return "-=";
+        case ShlAssign:
+            return "<<=";
+        case ShrAssign:
+            return ">>=";
+        case AndAssign:
+            return "&=";
+        case XorAssign:
+            return "^=";
+        case OrAssign:
+            return "|=";
+        case Comma:
+            return ",";
+        default:
+            return "<UNDEFINED>";
+        }
+        // return opString;
     }
 
     @Override

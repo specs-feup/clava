@@ -14,15 +14,17 @@
 package pt.up.fe.specs.clava.ast.expr.enums;
 
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum LambdaCaptureKind implements StringProvider {
 
-    THIS,
-    BY_COPY,
-    BY_REF,
-    VLA_TYPE;
+    This, // Capturing the this object by reference
+    StarThis, // Capturing the this object by copy
+    ByCopy, // Capturing by copy (a.k.a., by value)
+    ByRef, // Capturing by reference
+    VLAType; // Capturing variable-length array type
 
     private static final Lazy<EnumHelperWithValue<LambdaCaptureKind>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(LambdaCaptureKind.class);
@@ -38,18 +40,18 @@ public enum LambdaCaptureKind implements StringProvider {
 
     public String getCode(String exprCode) {
         switch (this) {
-        case THIS:
+        case This:
             if (exprCode.equals("this")) {
                 return "this";
             }
             // Does this happen?
             return "this." + exprCode;
-        case BY_COPY:
+        case ByCopy:
             return exprCode;
-        case BY_REF:
+        case ByRef:
             return "&" + exprCode;
         default:
-            throw new RuntimeException("Not implemented for case " + this);
+            throw new NotImplementedException(this);
         }
     }
 }

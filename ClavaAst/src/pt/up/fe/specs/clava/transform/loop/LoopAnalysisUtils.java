@@ -108,7 +108,7 @@ public class LoopAnalysisUtils {
 
             BinaryOperator binOp = ((BinaryOperator) expr);
 
-            if (binOp.getOp() != BinaryOperatorKind.ASSIGN) {
+            if (binOp.getOp() != BinaryOperatorKind.Assign) {
 
                 return false;
             }
@@ -199,7 +199,7 @@ public class LoopAnalysisUtils {
         if (expr instanceof UnaryOperator) {
 
             UnaryOperatorKind op = ((UnaryOperator) expr).getOp();
-            if (!(op == UnaryOperatorKind.POST_INC || op == UnaryOperatorKind.PRE_INC)) {
+            if (!(op == UnaryOperatorKind.PostInc || op == UnaryOperatorKind.PreInc)) {
 
                 return false;
             }
@@ -209,7 +209,7 @@ public class LoopAnalysisUtils {
         if (expr instanceof BinaryOperator) {
 
             BinaryOperatorKind op = ((BinaryOperator) expr).getOp();
-            if (!(op == BinaryOperatorKind.ADD_ASSIGN || op == BinaryOperatorKind.ASSIGN)) {
+            if (!(op == BinaryOperatorKind.AddAssign || op == BinaryOperatorKind.Assign)) {
 
                 return false;
             }

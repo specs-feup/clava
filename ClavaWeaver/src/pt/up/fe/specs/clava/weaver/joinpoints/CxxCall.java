@@ -124,7 +124,7 @@ public class CxxCall extends ACall {
         // ExprStmt -> BinaryOperator -> DeclRefExpr, Call
         else {
             Expr varExpr = CxxWeaver.getFactory().literalExpr(variableName, returnType);
-            BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.ASSIGN, returnType,
+            BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, returnType,
                     varExpr, call);
             // BinaryOperator assign = ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new
             // ExprData(returnType),

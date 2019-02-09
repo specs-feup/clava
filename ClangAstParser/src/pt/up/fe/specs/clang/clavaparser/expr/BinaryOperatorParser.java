@@ -64,26 +64,26 @@ public class BinaryOperatorParser extends AClangNodeParser<BinaryOperator> {
     static {
         BINARY_OPERATOR_PARSER = new HashMap<>();
 
-        BINARY_OPERATOR_PARSER.put("*", MUL);
-        BINARY_OPERATOR_PARSER.put("/", DIV);
-        BINARY_OPERATOR_PARSER.put("%", REM);
-        BINARY_OPERATOR_PARSER.put("+", ADD);
-        BINARY_OPERATOR_PARSER.put("-", SUB);
-        BINARY_OPERATOR_PARSER.put("<<", SHL);
-        BINARY_OPERATOR_PARSER.put(">>", SHR);
+        BINARY_OPERATOR_PARSER.put("*", Mul);
+        BINARY_OPERATOR_PARSER.put("/", Div);
+        BINARY_OPERATOR_PARSER.put("%", Rem);
+        BINARY_OPERATOR_PARSER.put("+", Add);
+        BINARY_OPERATOR_PARSER.put("-", Sub);
+        BINARY_OPERATOR_PARSER.put("<<", Shl);
+        BINARY_OPERATOR_PARSER.put(">>", Shr);
         BINARY_OPERATOR_PARSER.put("<", LT);
         BINARY_OPERATOR_PARSER.put(">", GT);
         BINARY_OPERATOR_PARSER.put("<=", LE);
         BINARY_OPERATOR_PARSER.put(">=", GE);
         BINARY_OPERATOR_PARSER.put("==", EQ);
         BINARY_OPERATOR_PARSER.put("!=", NE);
-        BINARY_OPERATOR_PARSER.put("&", AND);
-        BINARY_OPERATOR_PARSER.put("|", OR);
-        BINARY_OPERATOR_PARSER.put("^", XOR);
-        BINARY_OPERATOR_PARSER.put("&&", L_AND);
-        BINARY_OPERATOR_PARSER.put("||", L_OR);
-        BINARY_OPERATOR_PARSER.put("=", ASSIGN);
-        BINARY_OPERATOR_PARSER.put(",", COMMA);
+        BINARY_OPERATOR_PARSER.put("&", And);
+        BINARY_OPERATOR_PARSER.put("|", Or);
+        BINARY_OPERATOR_PARSER.put("^", Xor);
+        BINARY_OPERATOR_PARSER.put("&&", LAnd);
+        BINARY_OPERATOR_PARSER.put("||", LOr);
+        BINARY_OPERATOR_PARSER.put("=", Assign);
+        BINARY_OPERATOR_PARSER.put(",", Comma);
         // PTR_MEM_D,
         // PTR_MEM_I,
 
