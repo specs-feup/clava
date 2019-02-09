@@ -15,7 +15,7 @@ include("../deps.cmake")
 #deps_find_package(llvm3.8 REQUIRED) # LLVM
 deps_find_package(llvm7 REQUIRED) # LLVM
 
-set(COMMON_CXX_FLAGS "-std=c++11 -O3")
+set(COMMON_CXX_FLAGS "-std=c++11 -O3 -Wall -Wunused-function")
 #-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 
 #add_definitions(-DOLD_OUTPUT)
@@ -61,13 +61,13 @@ set(SOURCE_FILES
         ClavaDataDumper.cpp
         ClavaDataDumperDecls.cpp
     ChildrenVisitorDecls.cpp 
-    ClangNodes.cpp ClavaDataDumperStmts.cpp ClavaDataDumperTypes.cpp ClangAstDumperExprs.cpp ChildrenVisitorStmts.cpp ClavaConstants.cpp ChildrenVisitorTypes.cpp ClangEnums_3_8_1.cpp ClangastDumperAttr.cpp ChildrenVisitorAttrs.cpp ClavaDataDumperAttrs.cpp ChildrenVisitorExtras.cpp ClavaDecl.cpp ClavaDecl.h)
+    ClangNodes.cpp ClavaDataDumperStmts.cpp ClavaDataDumperTypes.cpp ClangAstDumperExprs.cpp ChildrenVisitorStmts.cpp ClavaConstants.cpp ChildrenVisitorTypes.cpp ClangEnums.cpp ClangastDumperAttr.cpp ChildrenVisitorAttrs.cpp ClavaDataDumperAttrs.cpp ChildrenVisitorExtras.cpp ClavaDecl.cpp ClavaDecl.h)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
 
 # Add includes
 target_include_directories(ClangAstDumper
-       PUBLIC ${DEPS_INCLUDES}
+       SYSTEM PUBLIC ${DEPS_INCLUDES}
 )
 
 # Add enums helper
