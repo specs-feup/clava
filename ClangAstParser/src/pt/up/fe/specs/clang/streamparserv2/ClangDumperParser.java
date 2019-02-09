@@ -285,7 +285,7 @@ public class ClangDumperParser {
 
         // Download includes zips, check if any of them is new
         List<FileResourceProvider> includesZips = Arrays.asList(
-                clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8),
+                clangAstResources.get(ClangAstFileResource.BUILTIN_INCLUDES),
                 getLibCResource(SupportedPlatform.getCurrentPlatform()));
 
         List<ResourceWriteData> zipFiles = includesZips.stream()

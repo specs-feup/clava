@@ -150,7 +150,7 @@ public class ClangResources {
 
         // Create list of include zips
         List<FileResourceProvider> includesZips = new ArrayList<>();
-        includesZips.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES_3_8));
+        includesZips.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES));
 
         // Check if built-in libc/c++ needs to be included
         if (useBuiltinLibc(clangExecutable, usePlatformIncludes)) {

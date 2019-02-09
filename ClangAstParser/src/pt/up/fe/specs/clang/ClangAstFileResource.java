@@ -19,7 +19,7 @@ import pt.up.fe.specs.util.providers.FileResourceProvider;
 
 public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
 
-    BUILTIN_INCLUDES_3_8(ClangAstWebResource.BUILTIN_INCLUDES_3_8),
+    BUILTIN_INCLUDES(ClangAstWebResource.BUILTIN_INCLUDES),
     LIBC_CXX_WINDOWS(ClangAstWebResource.LIBC_CXX_WINDOWS),
     LIBC_CXX_MAC_OS(ClangAstWebResource.LIBC_CXX_MAC_OS),
     LIBC_CXX_LINUX(ClangAstWebResource.LIBC_CXX_LINUX),
@@ -36,7 +36,12 @@ public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
 
     private ClangAstFileResource(FileResourceProvider provider) {
         this.provider = provider;
+        // this(provider, false);
     }
+
+    // private ClangAstFileResource(FileResourceProvider provider, boolean withVersion) {
+    // this.provider = provider.createResourceVersion("_" + provider.getVersion());
+    // }
 
     @Override
     public FileResourceProvider get() {
