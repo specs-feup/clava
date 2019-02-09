@@ -176,8 +176,8 @@ if(UNIX AND NOT APPLE)
   # Generic UNIX dependencies
 	list(APPEND llvm7_LIBRARIES 
 		rt
-    tinfo
-    z
+		tinfo
+		z
 		m
 		dl
 	)
@@ -187,7 +187,13 @@ elseif(APPLE)
 		z
 		m
 		dl
-    ncurses	
+		ncurses	
 	)
+elseif(WIN32)
+  # Windows dependencies
+  list(APPEND llvm7_LIBRARIES 
+		version
+		z
+	)	
 endif()
 
