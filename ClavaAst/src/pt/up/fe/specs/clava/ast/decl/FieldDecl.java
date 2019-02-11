@@ -78,12 +78,13 @@ public class FieldDecl extends DeclaratorDecl {
     }
 
     public Optional<Expr> getInitialization() {
-        // if (getNumChildren() < 2) {
-        // return Optional.empty();
-        // }
+        if (getNumChildren() < 2) {
+            return Optional.empty();
+        }
 
         Expr init = getChild(Expr.class, 1);
         return init instanceof NullExpr ? Optional.empty() : Optional.of(init);
+
     }
 
     /*

@@ -523,7 +523,7 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         if (firstSource.isFile()) {
-            return firstSource.getParentFile();
+            return firstSource.getAbsoluteFile().getParentFile();
         }
 
         throw new RuntimeException("Could not process source '" + firstSource + "'");
@@ -531,7 +531,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static String parseIncludePath(File path) {
         // If file, get parent folder
-        File folderPath = path.isFile() ? path.getParentFile() : path;
+        File folderPath = path.isFile() ? path.getAbsoluteFile().getParentFile() : path;
 
         String folderAbsPath = folderPath.getAbsolutePath();
 
