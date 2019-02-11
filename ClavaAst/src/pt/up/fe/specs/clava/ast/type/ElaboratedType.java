@@ -94,13 +94,15 @@ public class ElaboratedType extends TypeWithKeyword {
         }
 
         String qualifier = getQualifier();
-
         code += qualifier + getNamedType().getCode(sourceNode, name);
 
-        if (getNamedType().getCode(sourceNode, name).startsWith("%Dummy")) {
-            System.out.println("NAMED TYPE:" + getNamedType().toTree());
-        }
+        // code += getNamedType().getCode(sourceNode, name);
 
+        // if (getNamedType().getCode(sourceNode, name).startsWith("%Dummy")) {
+        // System.out.println("NAMED TYPE:" + getNamedType().toTree());
+        // }
+        // System.out.println("NAMED TYPE:" + getNamedType().getClass());
+        // System.out.println("NAMED TYPE CODE:" + getNamedType().getCode(sourceNode, name));
         // System.out.println("ELABORATED CODE:" + code);
         // System.out.println("QUALIFIER:" + get(QUALIFIER));
         // System.out.println("TEMPLATE ARGS:" + getTemplateArgumentStrings(this));

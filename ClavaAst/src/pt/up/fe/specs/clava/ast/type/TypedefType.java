@@ -21,13 +21,14 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 
 public class TypedefType extends Type {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Decl> DECL = KeyFactory.object("decl", Decl.class);
+    public final static DataKey<TypedefNameDecl> DECL = KeyFactory.object("decl", TypedefNameDecl.class);
 
     /// DATAKEYS END
 
@@ -84,8 +85,18 @@ public class TypedefType extends Type {
         // System.out.println("ELABORATED:" + desugar().getCode(sourceNode, name));
         // return desugar().getCode(sourceNode, name);
         // }
+        /*
+        System.out.println("TYPE AS STRING:" + get(TYPE_AS_STRING));
+        System.out.println("TYPEDEF TYPE:" + this);
+        System.out.println("TYPE CLASS:" + getTypeClass());
+        // System.out.println("DECL:" + get(DECL));
+        // System.out.println("DECL CODE:" + get(DECL).getCode());
+        System.out.println("UNDERLYING TYPE: " + get(DECL).get(TypedefNameDecl.UNDERLYING_TYPE).getCode());
+          */
 
-        String type = get(TYPE_AS_STRING);
+        // String type = get(TYPE_AS_STRING);
+        // String type = get(DECL).get(TypedefNameDecl.UNDERLYING_TYPE).getCode();
+        String type = get(DECL).getTypelessCode();
 
         return name == null ? type : type + " " + name;
         /*

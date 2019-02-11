@@ -278,7 +278,6 @@ public class FunctionDecl extends DeclaratorDecl {
         // code.append(ln());
 
         code.append(getDeclarationId(true));
-
         // if (code.toString().contains("%Dummy")) {
         // System.out.println("F DECLARATION:" + code);
         // System.out.println("F TYPE:" + getType());
