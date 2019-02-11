@@ -117,6 +117,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
         case clava::StmtNode::OFFSET_OF_EXPR:
             VisitOffsetOfExprChildren(static_cast<const OffsetOfExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::MEMBER_EXPR:
+            VisitMemberExprChildren(static_cast<const MemberExpr *>(S), visitedChildren); break;
         case clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR:
             VisitMaterializeTemporaryExprChildren(static_cast<const MaterializeTemporaryExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::UNRESOLVED_LOOKUP_EXPR:
@@ -370,6 +372,15 @@ void ClangAstDumper::VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vecto
                                             clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
         }
     }
+}
+
+void ClangAstDumper::VisitMemberExprChildren(const MemberExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    // Visit decls
+    //VisitDeclTop(E->getMemberDecl());
+    //VisitDeclTop(E->getFoundDecl().getDecl());
 }
 
 void ClangAstDumper::VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children) {

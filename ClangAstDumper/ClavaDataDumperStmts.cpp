@@ -457,6 +457,14 @@ void clava::ClavaDataDumper::DumpMemberExprData(const MemberExpr *E) {
 
     clava::dump(E->isArrow());
     clava::dump(E->getMemberNameInfo().getAsString());
+//    clava::dump(clava::getId(E->getMemberDecl(), id));
+
+    // Found decl
+//    clava::dump(clava::getId(E->getFoundDecl().getDecl(), id));
+//    clava::dump(ACCESS_SPECIFIER[E->getFoundDecl().getAccess()]);
+
+    //clava::dump(clava::getId(E->getMemberDecl(), id));
+
     //clava::dump(clava::getId(E->getMemberDecl(), id));
 }
 

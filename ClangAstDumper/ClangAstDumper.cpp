@@ -134,16 +134,21 @@ void ClangAstDumper::VisitTypeTop(const QualType& T) {
 }
 
 void ClangAstDumper::VisitTypeTop(const Type *T) {
+    //std::cout << "HELLO\n";
+
     if(T == nullptr) {
         return;
     }
+    //llvm::errs() << "TYPE TOP:" << T << "\n";
+    //llvm::errs() << "TYPE TOP CLASS:" << T->getTypeClass() << "\n";
+    //llvm::errs() << "TYPE TOP 2\n";
 #ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_START);
     clava::dump(clava::getId(T, id));
 #endif
 
     TypeVisitor::Visit(T);
-
+    //llvm::errs() << "TYPE TOP 3\n";
 #ifdef VISIT_CHECK
     clava::dump(TOP_VISIT_END);
     clava::dump(clava::getId(T, id));
