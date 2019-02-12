@@ -95,6 +95,7 @@ public class TypedefType extends Type {
           */
 
         // String type = get(TYPE_AS_STRING);
+        // System.out.println("TYPE AS STRING:" + get(TYPE_AS_STRING));
         // String type = get(DECL).get(TypedefNameDecl.UNDERLYING_TYPE).getCode();
         String type = get(DECL).getTypelessCode();
 

@@ -201,7 +201,8 @@ public abstract class NamedDecl extends Decl {
      * @return
      */
     public String getTypelessCode() {
-        throw new RuntimeException("Not implemented for class '" + getClass().getSimpleName() + "'");
+        return getDeclName();
+        // throw new RuntimeException("Not implemented for class '" + getClass().getSimpleName() + "'");
     }
 
     /*
