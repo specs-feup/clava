@@ -139,7 +139,8 @@ public class ChildrenAdapter {
         adaptedChildren.add(toStmt(children.get(2), context));
         adaptedChildren.add(toStmt(children.get(3), context));
         adaptedChildren.add(toStmt(children.get(4), context));
-        adaptedChildren.add(toCompoundStmt(children.get(5), false, context));
+        adaptedChildren.add(toStmt(children.get(5), context));
+        adaptedChildren.add(toCompoundStmt(children.get(6), false, context));
 
         return adaptedChildren;
     }

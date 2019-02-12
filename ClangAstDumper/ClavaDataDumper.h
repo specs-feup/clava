@@ -126,7 +126,7 @@ namespace clava {
         void DumpStmtData(const Stmt *S);
         void DumpLabelStmtData(const LabelStmt *S);
         void DumpGotoStmtData(const GotoStmt *S);
-
+        void DumpCxxForRangeStmtData(const CXXForRangeStmt *S);
 
         // EXPRS
         void DumpExprData(const Expr *E);
