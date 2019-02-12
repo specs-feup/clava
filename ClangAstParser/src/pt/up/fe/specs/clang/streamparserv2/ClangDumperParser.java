@@ -415,7 +415,7 @@ public class ClangDumperParser {
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-        return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
         /*
         switch (platform) {
         case WINDOWS:

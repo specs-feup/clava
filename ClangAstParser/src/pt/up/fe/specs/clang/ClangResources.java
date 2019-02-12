@@ -332,7 +332,7 @@ public class ClangResources {
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-        return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
     }
 
 }
