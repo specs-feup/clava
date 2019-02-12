@@ -18,7 +18,7 @@ int main() {
    // allocates and constructs five objects:
    double * p1 = new double[5];
    // allocates and constructs five objects (nothrow):
-   std::vector<int> * p2 = new (std::nothrow) std::vector<int>[5];
+   std::vector<int> * p2 = new (std::nothrow) std::vector<int> [5];
    // primitive with constructor
    double * dc = new double(34.56);
 

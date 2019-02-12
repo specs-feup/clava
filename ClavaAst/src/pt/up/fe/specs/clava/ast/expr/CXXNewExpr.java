@@ -181,9 +181,12 @@ public class CXXNewExpr extends Expr {
             default:
                 throw new NotImplementedException(get(INIT_STYLE));
             }
+
+            getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));
+
         }
 
-        getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));
+        // getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));
         /*
         if (code.toString().equals("new *graph")) {
             System.out.println("CONST:" + getConstructorExpr());

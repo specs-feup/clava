@@ -137,6 +137,9 @@ public class CXXConstructExpr extends Expr {
         String typeCode = getExprType() instanceof NullType ? null : getExprType().getCode(this);
 
         String code = getCode(typeCode);
+        // System.out.println("EXPR TYPE:" + getExprType().getClass());
+        // System.out.println("TYPE CODE:" + typeCode);
+
         //
         // System.out.println("CONST KIND:" + get(CONSTRUCTION_KIND));
         // System.out.println("IS LIST:" + get(IS_LIST_INITIALIZATION));
