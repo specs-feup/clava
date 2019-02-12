@@ -55,6 +55,10 @@ public class ExceptionSpecification extends ADataClass<ExceptionSpecification> {
             return " throw()";
         case BasicNoexcept:
             return " noexcept";
+        case NoexceptTrue:
+            return " noexcept(true)";
+        case NoexceptFalse:
+            return " noexcept(false)";
         default:
             throw new RuntimeException("Not implemented yet for " + get(EXCEPTION_SPECIFICATION_TYPE));
         }
