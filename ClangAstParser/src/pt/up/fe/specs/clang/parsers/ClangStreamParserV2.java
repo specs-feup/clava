@@ -27,7 +27,7 @@ import pt.up.fe.specs.util.SpecsCheck;
 public class ClangStreamParserV2 {
 
     private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
-    private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
+    private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C'";
 
     private static final Map<String, LineStreamWorker<ClangParserData>> WORKERS;
     static {
