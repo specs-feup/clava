@@ -42,6 +42,8 @@ public enum AddressSpaceQualifierV2 implements StringProvider {
         switch (this) {
         case NONE:
             return "";
+        case PRIVATE:
+            return "";
         case DEFAULT:
             return "__attribute__((address_space(" + addressSpace + ")))";
         default:
