@@ -417,7 +417,7 @@ public class ParallelCodeParser extends CodeParser {
             }
 
             if (source.isFile()) {
-                sourceFolders.add(SpecsIo.getCanonicalFile(source.getParentFile()));
+                sourceFolders.add(SpecsIo.getParent(source));
                 continue;
             }
 
