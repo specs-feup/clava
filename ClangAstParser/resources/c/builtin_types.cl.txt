@@ -2,9 +2,15 @@
 
 __kernel void builtin_types() {
    half anHalf;
-   __local half  armHalf;
+   __local half armHalf;
    sampler_t sampler;
    event_t event;
+   __local float * local_float;
+	typedef __local float * pointer_to_private_float;
+	__generic pointer_to_private_float * private_float;
+	typedef __local float * pointer_to_private_float2;
+	__global pointer_to_private_float2 * global_float;
+	//__private (__local float)* x3;
    //clk_event_t clockEvent;
    //queue_t queue;
    //reserve_id_t reserveId;
