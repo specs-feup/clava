@@ -91,7 +91,7 @@ public class QualType extends Type {
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         String type = getUnqualifiedType().getCode(sourceNode, name);
-
+        // System.out.println("TYPE: " + type);
         // System.out.println("QUAL:" + getExtendedId());
         // If not a top-level qualifier, has to be put after the type, but before the name
         if (hasParent()) {
@@ -163,6 +163,11 @@ public class QualType extends Type {
             qualifiersCode = qualifiersCode.replace("const", "constexpr");
         }
 
+        // Prefix space, so that it can be concatenated
+        if (!qualifiersCode.isEmpty()) {
+            qualifiersCode = " " + qualifiersCode;
+        }
+
         if (name != null) {
             // if (hasParent()) {
             // SpecsLogs.msgWarn("Qualtype has parent, check if this case is ok");
@@ -171,10 +176,26 @@ public class QualType extends Type {
             // return qualifiersCode + " " + type;
             int index = type.lastIndexOf(name);
             Preconditions.checkArgument(index != -1);
-            return addressQualifier + type.substring(0, index) + qualifiersCode + " " + type.substring(index);
-        }
+            // System.out.println("ADDR QUAL: " + addressQualifier);
+            // System.out.println("TYPE: " + type);
+            // System.out.println("TYPE Sub: " + type.substring(0, index));
+            // System.out.println("QUALIFIERS CODE:" + qualifiersCode);
+            // System.out.println("CODE:'" + addressQualifier + type.substring(0, index) + qualifiersCode + " "
+            // + type.substring(index) + "'");
 
-        return addressQualifier + type + " " + qualifiersCode;
+            String prefix = addressQualifier + type.substring(0, index).trim() + qualifiersCode;
+            if (!prefix.isEmpty()) {
+                prefix = prefix + " ";
+            }
+
+            // System.out.println("CODE:" + prefix + type.substring(index));
+
+            return prefix + type.substring(index);
+        }
+        // System.out.println("QUALIFIERS:'" + qualifiersCode + "'");
+        // System.out.println("CODE: " + addressQualifier + type + " " + qualifiersCode);
+        // return addressQualifier + type + " " + qualifiersCode;
+        return addressQualifier + type + qualifiersCode;
 
     }
 

@@ -161,6 +161,7 @@ public class VarDecl extends DeclaratorDecl {
 
         // System.out.println("VARDECL CODE:" + code);
         // System.out.println("VARDECL TYPE:" + get(TYPE).toTree());
+        // System.out.println("AST: " + getType().toFieldTree());
         return code.toString();
     }
 
