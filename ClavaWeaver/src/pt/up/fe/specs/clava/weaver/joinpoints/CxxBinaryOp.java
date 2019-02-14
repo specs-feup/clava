@@ -14,7 +14,9 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
@@ -25,9 +27,49 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
-import pt.up.fe.specs.util.SpecsStrings;
 
 public class CxxBinaryOp extends ABinaryOp {
+
+    // Hardcoding kind names, in order to avoid breaking LARA code that depends on these names when changing Clang
+    // version
+    private static final Map<BinaryOperatorKind, String> KIND_NAMES;
+    static {
+        KIND_NAMES = new HashMap<>();
+        KIND_NAMES.put(BinaryOperatorKind.PtrMemD, "ptr_mem_d");
+        KIND_NAMES.put(BinaryOperatorKind.PtrMemI, "ptr_mem_i");
+        KIND_NAMES.put(BinaryOperatorKind.Mul, "mul");
+        KIND_NAMES.put(BinaryOperatorKind.Div, "div");
+        KIND_NAMES.put(BinaryOperatorKind.Rem, "rem");
+        KIND_NAMES.put(BinaryOperatorKind.Add, "add");
+        KIND_NAMES.put(BinaryOperatorKind.Sub, "sub");
+        KIND_NAMES.put(BinaryOperatorKind.Shl, "shl");
+        KIND_NAMES.put(BinaryOperatorKind.Shr, "shr");
+        KIND_NAMES.put(BinaryOperatorKind.Cmp, "cmp");
+        KIND_NAMES.put(BinaryOperatorKind.LT, "lt");
+        KIND_NAMES.put(BinaryOperatorKind.GT, "gt");
+        KIND_NAMES.put(BinaryOperatorKind.LE, "le");
+        KIND_NAMES.put(BinaryOperatorKind.GE, "ge");
+        KIND_NAMES.put(BinaryOperatorKind.EQ, "eq");
+        KIND_NAMES.put(BinaryOperatorKind.NE, "ne");
+        KIND_NAMES.put(BinaryOperatorKind.And, "and");
+        KIND_NAMES.put(BinaryOperatorKind.Xor, "xor");
+        KIND_NAMES.put(BinaryOperatorKind.Or, "or");
+        KIND_NAMES.put(BinaryOperatorKind.LAnd, "l_and");
+        KIND_NAMES.put(BinaryOperatorKind.LOr, "l_or");
+        KIND_NAMES.put(BinaryOperatorKind.Assign, "assign");
+        KIND_NAMES.put(BinaryOperatorKind.MulAssign, "mul_assign");
+        KIND_NAMES.put(BinaryOperatorKind.DivAssign, "div_assign");
+        KIND_NAMES.put(BinaryOperatorKind.RemAssign, "rem_assign");
+        KIND_NAMES.put(BinaryOperatorKind.AddAssign, "add_assign");
+        KIND_NAMES.put(BinaryOperatorKind.SubAssign, "sub_assign");
+        KIND_NAMES.put(BinaryOperatorKind.ShlAssign, "shl_assign");
+        KIND_NAMES.put(BinaryOperatorKind.ShrAssign, "shr_assign");
+        KIND_NAMES.put(BinaryOperatorKind.AndAssign, "and_assign");
+        KIND_NAMES.put(BinaryOperatorKind.XorAssign, "xor_assign");
+        KIND_NAMES.put(BinaryOperatorKind.OrAssign, "or_assign");
+        KIND_NAMES.put(BinaryOperatorKind.Comma, "comma");
+
+    }
 
     private final BinaryOperator op;
     private final ACxxWeaverJoinPoint parent;
@@ -51,9 +93,12 @@ public class CxxBinaryOp extends ABinaryOp {
 
     @Override
     public String getKindImpl() {
-        // TODO: This name depends on the enum name that is used by Clang, this can break between Clang versions
-        return SpecsStrings.camelCaseSeparate(op.getOp().name(), "_").toLowerCase();
-        // return op.getOp().name().toLowerCase();
+        String kindName = KIND_NAMES.get(op.getOp());
+        if (kindName == null) {
+            throw new RuntimeException("Not implemented for " + op);
+        }
+
+        return kindName;
     }
 
     @Override
