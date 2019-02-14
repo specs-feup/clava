@@ -27,7 +27,13 @@ On Fedora >28 systems this can be solved by installing the package `ncurses-comp
 # Running Clava
 
 
-Clava has two modes, command-line and GUI.
+Clava can be run from CMake, using a GUI, or as a command-line tool.
+
+
+## CMake
+
+Instructions for the Clava CMake plugin can be found [here](https://github.com/specs-feup/clava/tree/master/CMake).
+
 
 
 ## GUI
