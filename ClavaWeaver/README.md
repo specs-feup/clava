@@ -44,6 +44,7 @@ Run the JAR with passing parameters, e.g.:
 	java -jar Clava.jar
 
 
+A video demonstrating the GUI can be found [here](https://www.youtube.com/watch?v=IFvNWYCivFA).
 
 ## Command Line
 
