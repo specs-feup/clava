@@ -41,7 +41,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v4.0");
 
-    WebResourceProvider CENTOS6_EXE = create("centos6/clang_ast", "v3.7.3");
+    WebResourceProvider CENTOS_EXE = create("centos7/clang_ast", "v4.0");
 
     WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v3.7.3");
 

@@ -30,7 +30,7 @@ public enum ClangAstFileResource implements Supplier<FileResourceProvider> {
     WIN_DLL2(ClangAstWebResource.WIN_DLL2),
     WIN_DLL3(ClangAstWebResource.WIN_DLL3),
     LINUX_EXE(ClangAstWebResource.LINUX_EXE),
-    CENTOS6_EXE(ClangAstWebResource.CENTOS6_EXE),
+    CENTOS_EXE(ClangAstWebResource.CENTOS_EXE),
     MAC_OS_EXE(ClangAstWebResource.MAC_OS_EXE);
 
     private final FileResourceProvider provider;

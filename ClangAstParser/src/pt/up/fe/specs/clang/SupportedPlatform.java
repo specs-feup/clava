@@ -30,7 +30,7 @@ import pt.up.fe.specs.util.providers.StringProvider;
 public enum SupportedPlatform implements StringProvider {
 
     WINDOWS,
-    CENTOS6,
+    CENTOS,
     LINUX,
     MAC_OS;
 
@@ -51,7 +51,7 @@ public enum SupportedPlatform implements StringProvider {
         // CentOS 6
         // if (System.getProperty("os.version").contains(".el6.")) {
         if (System.getProperty("os.version").contains(".el") || System.getProperty("os.version").contains(".fc")) {
-            return CENTOS6;
+            return CENTOS;
         }
 
         // Generic Mac
@@ -77,7 +77,7 @@ public enum SupportedPlatform implements StringProvider {
     }
 
     public boolean isLinux() {
-        return this == SupportedPlatform.CENTOS6 || this == MAC_OS || this == LINUX;
+        return this == SupportedPlatform.CENTOS || this == MAC_OS || this == LINUX;
     }
 
     public String getName() {

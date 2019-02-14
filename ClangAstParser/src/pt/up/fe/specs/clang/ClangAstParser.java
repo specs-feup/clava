@@ -958,8 +958,8 @@ public class ClangAstParser {
         switch (platform) {
         case WINDOWS:
             return clangAstResources.get(ClangAstFileResource.WIN_EXE);
-        case CENTOS6:
-            return clangAstResources.get(ClangAstFileResource.CENTOS6_EXE);
+        case CENTOS:
+            return clangAstResources.get(ClangAstFileResource.CENTOS_EXE);
         case LINUX:
             return clangAstResources.get(ClangAstFileResource.LINUX_EXE);
         case MAC_OS:

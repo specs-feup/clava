@@ -113,8 +113,8 @@ public class ClangResources {
         switch (platform) {
         case WINDOWS:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
-        case CENTOS6:
-            return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS6_EXE);
+        case CENTOS:
+            return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
         case LINUX:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
         case MAC_OS:
