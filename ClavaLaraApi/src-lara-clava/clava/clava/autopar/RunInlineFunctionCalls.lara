@@ -252,7 +252,7 @@ aspectdef inlinePreparation
 		funcJPOrginal = $function;
 
 		funcJP = $function.clone(func_name + '_clone');
-		
+
 		funcJP_backup = $function.copy();
 		funcJP_backupCode = $function.code;
 		funcAst_backup = $function.ast;
@@ -319,7 +319,7 @@ aspectdef inlinePreparation
 		$vardecl.name =  newDeclName;
 
 	end
-	
+
 	select funcJP.body.varref end
 	apply
 		if (param_table[$varref.name] !== undefined)
@@ -437,6 +437,8 @@ aspectdef inlinePreparation
 			ret_str_replacement += ' -= ';
 		else if (exprStmt.children[0].kind === 'mul_assign')
 			ret_str_replacement += ' *= ';
+//		else	
+//			throw "Not implemented for kind " + exprStmt.children[0].kind;
 
 		retJPs = funcJP.body.stmts.filter(function(obj){if (obj.astName === 'ReturnStmt') {return obj;}});
 		

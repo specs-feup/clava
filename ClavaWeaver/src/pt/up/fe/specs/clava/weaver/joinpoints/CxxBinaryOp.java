@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class CxxBinaryOp extends ABinaryOp {
 
@@ -50,7 +51,9 @@ public class CxxBinaryOp extends ABinaryOp {
 
     @Override
     public String getKindImpl() {
-        return op.getOp().name().toLowerCase();
+        // TODO: This name depends on the enum name that is used by Clang, this can break between Clang versions
+        return SpecsStrings.camelCaseSeparate(op.getOp().name(), "_").toLowerCase();
+        // return op.getOp().name().toLowerCase();
     }
 
     @Override
