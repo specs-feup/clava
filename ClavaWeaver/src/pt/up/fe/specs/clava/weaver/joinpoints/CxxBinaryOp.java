@@ -95,7 +95,7 @@ public class CxxBinaryOp extends ABinaryOp {
     public String getKindImpl() {
         String kindName = KIND_NAMES.get(op.getOp());
         if (kindName == null) {
-            throw new RuntimeException("Not implemented for " + op);
+            throw new RuntimeException("Not implemented for " + op.getOp());
         }
 
         return kindName;
