@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.language;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -31,20 +32,32 @@ public enum Standard implements StringProvider {
     C90,
     C99,
     C11,
+    C17,
     GNU90,
     GNU99,
     GNU11,
+    GNU17,
     CXX98("c++98", true),
     CXX03("c++03", true),
     CXX11("c++11", true),
     CXX14("c++14", true),
+    CXX17("c++17", true),
+    CXX2A("c++2a", true),
     GNUXX98("gnu++98", true),
     GNUXX11("gnu++11", true),
-    GNUXX14("gnu++14", true);
+    GNUXX14("gnu++14", true),
+    GNUXX17("gnu++17", true),
+    GNUXX2A("gnu++2a", true),
+    OPENCL10("cl1.0"),
+    OPENCL12("cl1.2"),
+    OPENCL20("cl2.0"),
+    OPENCLCXX("c++", true);
     // CL20;
 
     private static final Set<String> C_EXTENSIONS = new HashSet<>(Arrays.asList("c"));
     private static final Set<String> CPP_EXTENSIONS = new HashSet<>(Arrays.asList("cpp, cc, hpp"));
+
+    private static final Set<Standard> OPENCL_STANDARDS = EnumSet.of(OPENCL10, OPENCL12, OPENCL20, OPENCLCXX);
 
     private static final Lazy<EnumHelperWithValue<Standard>> ENUM_HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(Standard.class);
@@ -103,6 +116,10 @@ public enum Standard implements StringProvider {
 
     public boolean isGnu() {
         return GNU_STANDARDS.contains(this);
+    }
+
+    public boolean isOpenCL() {
+        return OPENCL_STANDARDS.contains(this);
     }
 
     /**
