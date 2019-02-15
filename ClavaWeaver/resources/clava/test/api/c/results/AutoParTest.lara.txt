@@ -1,0 +1,5 @@
+Parallelizing 4 for loops...
+Parallelization finished
+Inserted OpenMP pragma: #pragma omp parallel for default(shared) firstprivate(numIter) reduction(+ : a)
+Inserted OpenMP pragma: #pragma omp parallel for default(shared) reduction(+ : a)
+Inserted OpenMP pragma: #pragma omp parallel for default(shared)
