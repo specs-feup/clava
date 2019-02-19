@@ -180,12 +180,19 @@ public class AstDumpParser implements ClangParser {
         boolean isOpenCL = SpecsIo.getExtension(sourceFile).equals("cl");
 
         // Compilation of header files always need a standard, but OpenCL compilation fails if there is a standard
-        // specified
-        if (!isOpenCL) {
-            arguments.add(standard.getFlag());
+        // specified that is not an OpenCL standard.
+        if (isOpenCL && !standard.isOpenCL()) {
+            // Using OpenCL 2.0 as default
+            arguments.add("-std=cl2.0");
         } else {
-            arguments.add("-std=CL2.0");
+            arguments.add(standard.getFlag());
         }
+
+        // if (!isOpenCL) {
+        // arguments.add(standard.getFlag());
+        // } else {
+        // arguments.add("-std=CL2.0");
+        // }
 
         // config.getTry(ClavaOptions.STANDARD).ifPresent(standard -> arguments.add(standard.getFlag()));
         // arguments.add(config.get(ClavaOptions.STANDARD).getFlag());
@@ -193,8 +200,8 @@ public class AstDumpParser implements ClangParser {
         // If OpenCL file, add necessary flags
         if (isOpenCL) {
             // OpenCL parsing
-            arguments.add("-x");
-            arguments.add("cl");
+            // arguments.add("-x");
+            // arguments.add("cl");
 
             // OpenCL header file
             arguments.add("-include");
