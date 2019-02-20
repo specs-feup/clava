@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.attr.OpenCLUnrollHintAttr;
 import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -80,6 +81,14 @@ public class AttrDataParser {
         // Type type = isExpr ? null : (Type) node;
 
         // return new AlignedAttrData(spelling, isExpr, expr, type, data);
+    }
+
+    public static DataStore parseOpenCLUnrollHintAttrData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseAttributeData(lines, dataStore);
+
+        data.add(OpenCLUnrollHintAttr.UNROLL_HINT, LineStreamParsers.integer(lines));
+
+        return data;
     }
 
 }

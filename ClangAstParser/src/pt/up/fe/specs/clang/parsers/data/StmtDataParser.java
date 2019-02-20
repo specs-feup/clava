@@ -14,9 +14,11 @@
 package pt.up.fe.specs.clang.parsers.data;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
+import pt.up.fe.specs.clava.ast.stmt.AttributedStmt;
 import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -46,6 +48,15 @@ public class StmtDataParser {
         DataStore data = parseStmtData(lines, dataStore);
 
         dataStore.getClavaNodes().queueSetNode(data, GotoStmt.LABEL, lines.nextLine());
+
+        return data;
+    }
+
+    public static DataStore parseAttributedStmtData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseStmtData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNodeList(data, AttributedStmt.STMT_ATTRIBUTES,
+                LineStreamParsers.stringList(lines));
 
         return data;
     }
