@@ -10,7 +10,8 @@
 #include <map>
 
 const std::map<const std::string, clava::AttrNode > clava::ATTR_DATA_MAP = {
-        {"AlignedAttr", clava::AttrNode::ALIGNED}
+        {"AlignedAttr", clava::AttrNode::ALIGNED},
+        {"OpenCLUnrollHintAttr", clava::AttrNode::OPENCL_UNROLL_HINT},
 };
 
 
@@ -40,6 +41,8 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
             DumpAttrData(A); break;
         case clava::AttrNode::ALIGNED:
             DumpAlignedAttrData(static_cast<const AlignedAttr*>(A)); break;
+        case clava::AttrNode::OPENCL_UNROLL_HINT:
+            DumpOpenCLUnrollHintAttrData(static_cast<const OpenCLUnrollHintAttr*>(A)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(attrNode) + "'");
     }
@@ -69,4 +72,11 @@ void clava::ClavaDataDumper::DumpAlignedAttrData(const AlignedAttr *A) {
     } else {
         clava::dump(A->getAlignmentType()->getType(), id);
     }
+}
+
+void clava::ClavaDataDumper::DumpOpenCLUnrollHintAttrData(const OpenCLUnrollHintAttr *A) {
+    // Common
+    DumpAttrData(A);
+
+    clava::dump(A->getUnrollHint());
 }

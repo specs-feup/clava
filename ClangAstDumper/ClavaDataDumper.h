@@ -126,6 +126,7 @@ namespace clava {
         void DumpStmtData(const Stmt *S);
         void DumpLabelStmtData(const LabelStmt *S);
         void DumpGotoStmtData(const GotoStmt *S);
+        void DumpAttributedStmtData(const AttributedStmt *S);
         void DumpCxxForRangeStmtData(const CXXForRangeStmt *S);
 
         // EXPRS
@@ -202,6 +203,7 @@ namespace clava {
 
         void DumpAttrData(const Attr *A);
         void DumpAlignedAttrData(const AlignedAttr *A);
+        void DumpOpenCLUnrollHintAttrData(const OpenCLUnrollHintAttr *A);
 
         const std::string getDataName(DeclNode node);
         const std::string getDataName(StmtNode node);

@@ -26,6 +26,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::DEFAULT_STMT: return "CaseStmt";
         case clava::StmtNode::LABEL_STMT: return "LabelStmt";
         case clava::StmtNode::GOTO_STMT: return "GotoStmt";
+        case clava::StmtNode::ATTRIBUTED_STMT: return "AttributedStmt";
 
 
         // EXPRS
@@ -121,6 +122,7 @@ const std::string clava::getName(const AttrNode attrNode) {
     switch(attrNode) {
         case clava::AttrNode::ATTR: return "Attribute";
         case clava::AttrNode::ALIGNED: return "AlignedAttr";
+        case clava::AttrNode::OPENCL_UNROLL_HINT: return "OpenCLUnrollHintAttr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<AttrNode>::type>(attrNode));

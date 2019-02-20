@@ -39,6 +39,7 @@ namespace clava {
         DEFAULT_STMT,
         LABEL_STMT,
         GOTO_STMT,
+        ATTRIBUTED_STMT,
 
         // Expr nodes
         EXPR,
@@ -134,7 +135,8 @@ namespace clava {
     */
     enum class AttrNode {
         ATTR,
-        ALIGNED
+        ALIGNED,
+        OPENCL_UNROLL_HINT,
     };
 
 

@@ -29,12 +29,15 @@ void ClangAstDumper::visitChildren(clava::AttrNode attrNode, const Attr* A) {
     std::vector<std::string> visitedChildren;
 
     switch(attrNode) {
-        case clava::AttrNode::ATTR:
+        //case clava::AttrNode::ATTR:
             // By default, do nothing
-            break;
+          //  break;
         case clava::AttrNode::ALIGNED:
             VisitAlignedAttrChildren(static_cast<const AlignedAttr *>(A), visitedChildren); break;
 //        default: throw std::invalid_argument("ChildrenVisitorAttrs::visitChildren: Case not implemented, '"+clava::getName(attrNode)+"'");
+        default:
+            // By default, do nothing
+            break;
     }
 
     dumpVisitedChildren(A, visitedChildren);

@@ -22,6 +22,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
         {"CaseStmt", clava::StmtNode::CASE_STMT},
         {"DefaultStmt", clava::StmtNode::DEFAULT_STMT},
         {"GotoStmt", clava::StmtNode::GOTO_STMT},
+        {"AttributedStmt", clava::StmtNode::ATTRIBUTED_STMT},
 };
 
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
@@ -103,6 +104,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitDefaultStmtChildren(static_cast<const DefaultStmt *>(S), visitedChildren); break;
        case clava::StmtNode::GOTO_STMT:
             VisitGotoStmtChildren(static_cast<const GotoStmt *>(S), visitedChildren); break;
+       case clava::StmtNode::ATTRIBUTED_STMT:
+            VisitAttributedStmtChildren(static_cast<const AttributedStmt *>(S), visitedChildren); break;
 
 
 
@@ -292,6 +295,20 @@ void ClangAstDumper::VisitGotoStmtChildren(const GotoStmt *S, std::vector<std::s
     //VisitStmtChildren(S, children);
 
     VisitDeclTop(S->getLabel());
+}
+
+
+void ClangAstDumper::VisitAttributedStmtChildren(const AttributedStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    // Visit attributes
+    for (auto attr : S->getAttrs()) {
+        VisitAttrTop(attr);
+        dumpTopLevelAttr(attr);
+    }
+
+    addChild(S->getSubStmt(), children);
 }
 
 
