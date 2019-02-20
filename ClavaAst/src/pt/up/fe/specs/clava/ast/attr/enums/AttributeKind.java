@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.attr.enums;
 
+import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -284,7 +286,8 @@ public enum AttributeKind implements StringProvider {
         case OpenCLKernel:
             return "__kernel";
         default:
-            return name().toLowerCase();
+            return Attribute.getAttributeCode(getAttributeName());
+        // return name().toLowerCase();
         }
 
         // if (code == null) {
@@ -292,6 +295,17 @@ public enum AttributeKind implements StringProvider {
         // }
         //
         // return code;
+    }
+
+    public String getAttributeName() {
+        String name = name();
+
+        // Make certain expressions lower-case
+        if (name.contains("OpenCL")) {
+            name = name.replace("OpenCL", "Opencl");
+        }
+
+        return SpecsStrings.camelCaseSeparate(name, "_").toLowerCase();
     }
 
 }

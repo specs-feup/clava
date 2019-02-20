@@ -77,8 +77,8 @@ public class Attribute extends ClavaNode {
         return get(Attribute.KIND);
     }
 
-    protected String getAttributeCode(String attrValue) {
-        return "__attribute__ ((" + attrValue + "))";
+    public static String getAttributeCode(String attrValue) {
+        return "__attribute__((" + attrValue + "))";
     }
 
     /**
