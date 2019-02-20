@@ -5,6 +5,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -64,10 +65,12 @@ public abstract class AEnumDecl extends ANamedDecl {
     }
 
     /**
-     * Method used by the lara interpreter to select enumerators
+     * Default implementation of the method used by the lara interpreter to select enumerators
      * @return 
      */
-    public abstract List<? extends AEnumeratorDecl> selectEnumerator();
+    public List<? extends AEnumeratorDecl> selectEnumerator() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumeratorDecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Get value on attribute name

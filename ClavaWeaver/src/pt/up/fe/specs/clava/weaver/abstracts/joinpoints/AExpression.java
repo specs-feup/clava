@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -115,10 +116,12 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Method used by the lara interpreter to select vardecls
+     * Default implementation of the method used by the lara interpreter to select vardecls
      * @return 
      */
-    public abstract List<? extends AVardecl> selectVardecl();
+    public List<? extends AVardecl> selectVardecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * 

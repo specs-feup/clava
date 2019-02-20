@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -69,82 +70,108 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Method used by the lara interpreter to select exprs
+     * Default implementation of the method used by the lara interpreter to select exprs
      * @return 
      */
-    public abstract List<? extends AExpression> selectExpr();
+    public List<? extends AExpression> selectExpr() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select childExprs
+     * Default implementation of the method used by the lara interpreter to select childExprs
      * @return 
      */
-    public abstract List<? extends AExpression> selectChildExpr();
+    public List<? extends AExpression> selectChildExpr() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select calls
+     * Default implementation of the method used by the lara interpreter to select calls
      * @return 
      */
-    public abstract List<? extends ACall> selectCall();
+    public List<? extends ACall> selectCall() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select stmtCalls
+     * Default implementation of the method used by the lara interpreter to select stmtCalls
      * @return 
      */
-    public abstract List<? extends ACall> selectStmtCall();
+    public List<? extends ACall> selectStmtCall() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select memberCalls
+     * Default implementation of the method used by the lara interpreter to select memberCalls
      * @return 
      */
-    public abstract List<? extends AMemberCall> selectMemberCall();
+    public List<? extends AMemberCall> selectMemberCall() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberCall.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select memberAccesss
+     * Default implementation of the method used by the lara interpreter to select memberAccesss
      * @return 
      */
-    public abstract List<? extends AMemberAccess> selectMemberAccess();
+    public List<? extends AMemberAccess> selectMemberAccess() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select arrayAccesss
+     * Default implementation of the method used by the lara interpreter to select arrayAccesss
      * @return 
      */
-    public abstract List<? extends AArrayAccess> selectArrayAccess();
+    public List<? extends AArrayAccess> selectArrayAccess() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select vardecls
+     * Default implementation of the method used by the lara interpreter to select vardecls
      * @return 
      */
-    public abstract List<? extends AVardecl> selectVardecl();
+    public List<? extends AVardecl> selectVardecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select varrefs
+     * Default implementation of the method used by the lara interpreter to select varrefs
      * @return 
      */
-    public abstract List<? extends AVarref> selectVarref();
+    public List<? extends AVarref> selectVarref() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select binaryOps
+     * Default implementation of the method used by the lara interpreter to select binaryOps
      * @return 
      */
-    public abstract List<? extends ABinaryOp> selectBinaryOp();
+    public List<? extends ABinaryOp> selectBinaryOp() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select unaryOps
+     * Default implementation of the method used by the lara interpreter to select unaryOps
      * @return 
      */
-    public abstract List<? extends AUnaryOp> selectUnaryOp();
+    public List<? extends AUnaryOp> selectUnaryOp() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select newExprs
+     * Default implementation of the method used by the lara interpreter to select newExprs
      * @return 
      */
-    public abstract List<? extends ANewExpr> selectNewExpr();
+    public List<? extends ANewExpr> selectNewExpr() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANewExpr.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select deleteExprs
+     * Default implementation of the method used by the lara interpreter to select deleteExprs
      * @return 
      */
-    public abstract List<? extends ADeleteExpr> selectDeleteExpr();
+    public List<? extends ADeleteExpr> selectDeleteExpr() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeleteExpr.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * 

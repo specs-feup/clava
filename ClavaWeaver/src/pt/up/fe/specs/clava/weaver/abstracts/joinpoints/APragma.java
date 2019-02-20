@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -95,10 +96,12 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Method used by the lara interpreter to select targets
+     * Default implementation of the method used by the lara interpreter to select targets
      * @return 
      */
-    public abstract List<? extends AJoinPoint> selectTarget();
+    public List<? extends AJoinPoint> selectTarget() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * 

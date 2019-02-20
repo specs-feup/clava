@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -300,94 +301,124 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Method used by the lara interpreter to select stmts
+     * Default implementation of the method used by the lara interpreter to select stmts
      * @return 
      */
-    public abstract List<? extends AStatement> selectStmt();
+    public List<? extends AStatement> selectStmt() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select childStmts
+     * Default implementation of the method used by the lara interpreter to select childStmts
      * @return 
      */
-    public abstract List<? extends AStatement> selectChildStmt();
+    public List<? extends AStatement> selectChildStmt() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select functions
+     * Default implementation of the method used by the lara interpreter to select functions
      * @return 
      */
-    public abstract List<? extends AFunction> selectFunction();
+    public List<? extends AFunction> selectFunction() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select methods
+     * Default implementation of the method used by the lara interpreter to select methods
      * @return 
      */
-    public abstract List<? extends AMethod> selectMethod();
+    public List<? extends AMethod> selectMethod() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select records
+     * Default implementation of the method used by the lara interpreter to select records
      * @return 
      */
-    public abstract List<? extends ARecord> selectRecord();
+    public List<? extends ARecord> selectRecord() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select structs
+     * Default implementation of the method used by the lara interpreter to select structs
      * @return 
      */
-    public abstract List<? extends AStruct> selectStruct();
+    public List<? extends AStruct> selectStruct() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select classs
+     * Default implementation of the method used by the lara interpreter to select classs
      * @return 
      */
-    public abstract List<? extends AClass> selectClass();
+    public List<? extends AClass> selectClass() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select pragmas
+     * Default implementation of the method used by the lara interpreter to select pragmas
      * @return 
      */
-    public abstract List<? extends APragma> selectPragma();
+    public List<? extends APragma> selectPragma() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select markers
+     * Default implementation of the method used by the lara interpreter to select markers
      * @return 
      */
-    public abstract List<? extends AMarker> selectMarker();
+    public List<? extends AMarker> selectMarker() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select tags
+     * Default implementation of the method used by the lara interpreter to select tags
      * @return 
      */
-    public abstract List<? extends ATag> selectTag();
+    public List<? extends ATag> selectTag() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select vardecls
+     * Default implementation of the method used by the lara interpreter to select vardecls
      * @return 
      */
-    public abstract List<? extends AVardecl> selectVardecl();
+    public List<? extends AVardecl> selectVardecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select comments
+     * Default implementation of the method used by the lara interpreter to select comments
      * @return 
      */
-    public abstract List<? extends AComment> selectComment();
+    public List<? extends AComment> selectComment() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select includes
+     * Default implementation of the method used by the lara interpreter to select includes
      * @return 
      */
-    public abstract List<? extends AInclude> selectInclude();
+    public List<? extends AInclude> selectInclude() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AInclude.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select typedefDecls
+     * Default implementation of the method used by the lara interpreter to select typedefDecls
      * @return 
      */
-    public abstract List<? extends ATypedefDecl> selectTypedefDecl();
+    public List<? extends ATypedefDecl> selectTypedefDecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select decls
+     * Default implementation of the method used by the lara interpreter to select decls
      * @return 
      */
-    public abstract List<? extends ADecl> selectDecl();
+    public List<? extends ADecl> selectDecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Adds an include to the current file. If the file already has the include, it does nothing

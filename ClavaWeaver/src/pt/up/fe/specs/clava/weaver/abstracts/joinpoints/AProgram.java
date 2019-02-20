@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -336,10 +337,12 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Method used by the lara interpreter to select files
+     * Default implementation of the method used by the lara interpreter to select files
      * @return 
      */
-    public abstract List<? extends AFile> selectFile();
+    public List<? extends AFile> selectFile() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Recompiles the program currently represented by the AST, transforming literal code into AST nodes

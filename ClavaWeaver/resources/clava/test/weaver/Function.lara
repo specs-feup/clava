@@ -1,6 +1,5 @@
 aspectdef FunctionTest
 	
-	
 	select function end
 	apply
 		var fName = $function.name;

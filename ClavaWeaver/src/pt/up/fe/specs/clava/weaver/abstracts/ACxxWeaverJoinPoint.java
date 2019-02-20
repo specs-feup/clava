@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.utils.DefMap;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
@@ -1056,4 +1057,30 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public void messageToUserImpl(String message) {
         getWeaverEngine().addMessageToUser(message);
     }
+
+    /**
+     * Generic select function, used by the default select implementations.
+     */
+    @Override
+    public <T extends AJoinPoint> List<? extends T> select(Class<T> joinPointClass, SelectOp op) {
+        throw new RuntimeException(
+                "Generic select function not implemented yet. Implement it in order to use the default implementations of select");
+    }
+    /**
+     * Generic select function, used by the default select implementations.
+     * 
+     * @param joinPointClass
+     * @param op
+     * @return
+     */
+    // public <T extends ACxxWeaverJoinPoint> List<? extends T> select(Class<T> joinPointClass, SelectOp op) {
+    // // throw new RuntimeException(
+    // // "Generic select function not implemented yet. Implement it in order to use the default implementations of
+    // // select");
+    //
+    // Predicate<? super ClavaNode> filter = node -> joinPointClass.isInstance(CxxJoinpoints.create(node, null));
+    //
+    // return CxxSelects.select(joinPointClass, getNode().getChildren(), true, this, filter);
+    // }
+
 }

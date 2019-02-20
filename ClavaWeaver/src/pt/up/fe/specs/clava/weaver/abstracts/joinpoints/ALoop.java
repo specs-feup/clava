@@ -6,6 +6,7 @@ import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -497,28 +498,36 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Method used by the lara interpreter to select inits
+     * Default implementation of the method used by the lara interpreter to select inits
      * @return 
      */
-    public abstract List<? extends AStatement> selectInit();
+    public List<? extends AStatement> selectInit() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select conds
+     * Default implementation of the method used by the lara interpreter to select conds
      * @return 
      */
-    public abstract List<? extends AStatement> selectCond();
+    public List<? extends AStatement> selectCond() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select steps
+     * Default implementation of the method used by the lara interpreter to select steps
      * @return 
      */
-    public abstract List<? extends AStatement> selectStep();
+    public List<? extends AStatement> selectStep() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select bodys
+     * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
-    public abstract List<? extends AScope> selectBody();
+    public List<? extends AScope> selectBody() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * DEPRECATED: use 'setKind' instead

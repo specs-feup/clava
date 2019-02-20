@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -102,10 +103,12 @@ public abstract class AUnaryOp extends AExpression {
     }
 
     /**
-     * Method used by the lara interpreter to select operands
+     * Default implementation of the method used by the lara interpreter to select operands
      * @return 
      */
-    public abstract List<? extends AExpression> selectOperand();
+    public List<? extends AExpression> selectOperand() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Get value on attribute vardecl

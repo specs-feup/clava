@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -127,34 +128,44 @@ public abstract class AIf extends AStatement {
     }
 
     /**
-     * Method used by the lara interpreter to select conds
+     * Default implementation of the method used by the lara interpreter to select conds
      * @return 
      */
-    public abstract List<? extends AExpression> selectCond();
+    public List<? extends AExpression> selectCond() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select condDecls
+     * Default implementation of the method used by the lara interpreter to select condDecls
      * @return 
      */
-    public abstract List<? extends AVardecl> selectCondDecl();
+    public List<? extends AVardecl> selectCondDecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select thens
+     * Default implementation of the method used by the lara interpreter to select thens
      * @return 
      */
-    public abstract List<? extends AScope> selectThen();
+    public List<? extends AScope> selectThen() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select elses
+     * Default implementation of the method used by the lara interpreter to select elses
      * @return 
      */
-    public abstract List<? extends AScope> selectElse();
+    public List<? extends AScope> selectElse() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select bodys
+     * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
-    public abstract List<? extends AScope> selectBody();
+    public List<? extends AScope> selectBody() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Get value on attribute isFirst

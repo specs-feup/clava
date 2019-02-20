@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -450,16 +451,20 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * Method used by the lara interpreter to select callees
+     * Default implementation of the method used by the lara interpreter to select callees
      * @return 
      */
-    public abstract List<? extends AExpression> selectCallee();
+    public List<? extends AExpression> selectCallee() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select args
+     * Default implementation of the method used by the lara interpreter to select args
      * @return 
      */
-    public abstract List<? extends AExpression> selectArg();
+    public List<? extends AExpression> selectArg() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Changes the name of the call

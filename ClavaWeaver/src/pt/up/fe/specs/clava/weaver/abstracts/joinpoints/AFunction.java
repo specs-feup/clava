@@ -6,6 +6,7 @@ import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -507,22 +508,28 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Method used by the lara interpreter to select bodys
+     * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
-    public abstract List<? extends AScope> selectBody();
+    public List<? extends AScope> selectBody() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select params
+     * Default implementation of the method used by the lara interpreter to select params
      * @return 
      */
-    public abstract List<? extends AParam> selectParam();
+    public List<? extends AParam> selectParam() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam.class, SelectOp.DESCENDANTS);
+    }
 
     /**
-     * Method used by the lara interpreter to select decls
+     * Default implementation of the method used by the lara interpreter to select decls
      * @return 
      */
-    public abstract List<? extends ADecl> selectDecl();
+    public List<? extends ADecl> selectDecl() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function

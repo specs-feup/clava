@@ -4,6 +4,7 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -75,10 +76,12 @@ public abstract class AMarker extends APragma {
     }
 
     /**
-     * Method used by the lara interpreter to select contentss
+     * Default implementation of the method used by the lara interpreter to select contentss
      * @return 
      */
-    public abstract List<? extends AScope> selectContents();
+    public List<? extends AScope> selectContents() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Get value on attribute name

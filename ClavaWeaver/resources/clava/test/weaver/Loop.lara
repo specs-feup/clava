@@ -9,6 +9,7 @@ aspectdef Loop
 		println("rank: " + $loop.rank + "\n");
 		//println("Loop inc:" + $loop.incrementValue);
 	end
+
 /*	
 	// interchange all pairs of innermost loops and their parent loop
 	select ($l1=loop).($l2=loop) end

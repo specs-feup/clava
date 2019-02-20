@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -170,10 +171,12 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * Method used by the lara interpreter to select inits
+     * Default implementation of the method used by the lara interpreter to select inits
      * @return 
      */
-    public abstract List<? extends AExpression> selectInit();
+    public List<? extends AExpression> selectInit() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * 

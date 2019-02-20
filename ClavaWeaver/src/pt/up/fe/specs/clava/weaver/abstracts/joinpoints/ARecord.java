@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -89,10 +90,12 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
-     * Method used by the lara interpreter to select fields
+     * Default implementation of the method used by the lara interpreter to select fields
      * @return 
      */
-    public abstract List<? extends AField> selectField();
+    public List<? extends AField> selectField() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Get value on attribute name

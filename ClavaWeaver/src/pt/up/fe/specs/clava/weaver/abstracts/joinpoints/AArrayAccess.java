@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -87,13 +88,17 @@ public abstract class AArrayAccess extends AExpression {
      * varref to the variable of the array access
      * @return 
      */
-    public abstract List<? extends AExpression> selectArrayVar();
+    public List<? extends AExpression> selectArrayVar() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * expression of the array access subscript
      * @return 
      */
-    public abstract List<? extends AExpression> selectSubscript();
+    public List<? extends AExpression> selectSubscript() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
 
     /**
      * Get value on attribute vardecl

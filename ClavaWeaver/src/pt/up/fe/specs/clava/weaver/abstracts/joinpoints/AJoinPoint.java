@@ -10,6 +10,7 @@ import java.util.Map;
 import org.lara.interpreter.exception.AttributeException;
 import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
+import org.lara.interpreter.weaver.interf.SelectOp;
 
 /**
  * Abstract class containing the global attributes and default action exception.
@@ -1838,4 +1839,9 @@ public abstract class AJoinPoint extends JoinPoint {
     public CxxWeaver getWeaverEngine() {
         return CxxWeaver.getCxxWeaver();
     }
+
+    /**
+     * Generic select function, used by the default select implementations.
+     */
+    public abstract <T extends AJoinPoint> List<? extends T> select(Class<T> joinPointClass, SelectOp op);
 }
