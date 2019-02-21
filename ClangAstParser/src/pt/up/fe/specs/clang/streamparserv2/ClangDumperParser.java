@@ -126,6 +126,7 @@ public class ClangDumperParser {
 
         // If there still are arguments left using, pass them after '--'
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
+        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
         SpecsLogs.msgInfo("Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 

@@ -15,7 +15,6 @@ package pt.up.fe.specs.clang;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -77,7 +76,8 @@ public interface ClangAstKeys {
             parsedFlags.add(flag);
         }
 
-        config.add(ClavaOptions.FLAGS, parsedFlags.stream().collect(Collectors.joining(" ")));
+        // config.add(ClavaOptions.FLAGS, parsedFlags.stream().collect(Collectors.joining(" ")));
+        config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
 
         return config;
     }
