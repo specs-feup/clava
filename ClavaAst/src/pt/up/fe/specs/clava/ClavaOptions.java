@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava;
 
+import java.util.List;
+
+import org.suikasoft.GsonPlus.JsonStringList;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -28,6 +31,8 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     DataKey<String> FLAGS = KeyFactory.string("Compiler Flags", "");
 
+    DataKey<List<String>> FLAGS_LIST = JsonStringList.newKey("Compiler Flags in list format");
+
     DataKey<Boolean> CUSTOM_RESOURCES = KeyFactory.bool("Clava Custom Resources")
             .setLabel("Enable custom resource files");
 
@@ -39,7 +44,7 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
             // .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES, DISABLE_CLAVA_DATA_NODES)
-            .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES)
+            .addKeys(STANDARD, FLAGS, FLAGS_LIST, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES)
             .build();
 
     @Override

@@ -349,7 +349,6 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add all source folders as include folders
         Set<String> sourceIncludeFolders = getIncludeFlags(sources);
-
         parserOptions.addAll(sourceIncludeFolders);
 
         // Add normal include folders
@@ -414,10 +413,15 @@ public class CxxWeaver extends ACxxWeaver {
 
     private List<String> extractUserFlags(DataStore args) {
         String flagsString = args.get(ClavaOptions.FLAGS);
+
+        // Add string argument flags
         List<String> flags = Arrays.stream(flagsString.split(" "))
                 // Only consider non-empty strings
                 .filter(string -> !string.isEmpty())
                 .collect(Collectors.toList());
+
+        // Add JSON argument flags
+        flags.addAll(args.get(ClavaOptions.FLAGS_LIST));
 
         return flags;
     }
@@ -564,8 +568,6 @@ public class CxxWeaver extends ACxxWeaver {
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
-        // System.out.println("SOURCES:" + sources);
-
         // List<File> adaptedSources = adaptSources(sources, parserOptions);
         // ClavaLog.debug(() -> "Adapted sources: " + adaptedSources);
 
@@ -681,6 +683,7 @@ public class CxxWeaver extends ACxxWeaver {
             throw new RuntimeException(e);
         }
         */
+
     }
 
     private boolean isCutoffFolder(File path) {

@@ -42,6 +42,10 @@ public class CxxWeaverOptions {
         addOneArgOption(ClavaOptions.FLAGS, "fs", "flags", "flags string",
                 "String with C/C++ compiler flags");
 
+        addOneArgOption(ClavaOptions.FLAGS_LIST, "fsl", "flags-list", "flags string list",
+                "String list with C/C++ compiler flags");
+
+        
         addBooleanOption(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES, "drd", "disable-remote",
                 "Disables remote dependencies (e.g., git repos)");
 
