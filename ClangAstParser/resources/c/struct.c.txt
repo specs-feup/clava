@@ -58,7 +58,7 @@ typedef struct anon_struct_c_40 loic_struct;
 
 struct aligned_struct {
 	short f[3];
-} __attribute__ ((aligned (8)));
+} __attribute__((aligned (8)));
 
 int main() {
 }
