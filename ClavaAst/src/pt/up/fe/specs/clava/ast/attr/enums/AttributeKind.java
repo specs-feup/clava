@@ -13,6 +13,10 @@
 
 package pt.up.fe.specs.clava.ast.attr.enums;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
@@ -265,6 +269,8 @@ public enum AttributeKind implements StringProvider {
         return ENUM_HELPER.get();
     }
 
+    private static final Set<AttributeKind> IS_INLINE = new HashSet<>(Arrays.asList(OpenCLKernel));
+
     // private final String code;
 
     // private AttributeKind() {
@@ -306,6 +312,14 @@ public enum AttributeKind implements StringProvider {
         }
 
         return SpecsStrings.camelCaseSeparate(name, "_").toLowerCase();
+    }
+
+    /**
+     * 
+     * @return true if this attribute kind should be written inlined in the code (e.g., kernel)
+     */
+    public boolean isInline() {
+        return IS_INLINE.contains(this);
     }
 
 }

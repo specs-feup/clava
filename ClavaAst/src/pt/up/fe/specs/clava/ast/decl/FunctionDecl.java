@@ -27,7 +27,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
-import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
@@ -277,7 +276,14 @@ public class FunctionDecl extends DeclaratorDecl {
         StringBuilder code = new StringBuilder();
 
         for (Attribute attr : get(ATTRIBUTES)) {
-            code.append(attr.getCode()).append("\n");
+            code.append(attr.getCode());
+
+            if (attr.getKind().isInline()) {
+                code.append(" ");
+            } else {
+                code.append("\n");
+            }
+
         }
 
         code.append(getDeclarationId(true));
@@ -388,9 +394,9 @@ public class FunctionDecl extends DeclaratorDecl {
     public String getDeclarationId(boolean useReturnType) {
         StringBuilder code = new StringBuilder();
 
-        if (hasAttribute(AttributeKind.OpenCLKernel)) {
-            code.append("__kernel ");
-        }
+        // if (hasAttribute(AttributeKind.OpenCLKernel)) {
+        // code.append("__kernel ");
+        // }
         // get(ATTRIBUTES).stream()
         // .filter(attr -> attr instanceof OpenCLKernelAttr)
         // .findFirst()
