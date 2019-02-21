@@ -26,6 +26,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
@@ -275,7 +276,9 @@ public class FunctionDecl extends DeclaratorDecl {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        // code.append(ln());
+        for (Attribute attr : get(ATTRIBUTES)) {
+            code.append(attr.getCode()).append("\n");
+        }
 
         code.append(getDeclarationId(true));
         // if (code.toString().contains("%Dummy")) {
