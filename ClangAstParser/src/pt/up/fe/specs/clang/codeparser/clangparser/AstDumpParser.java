@@ -233,6 +233,45 @@ public class AstDumpParser implements ClangParser {
         }
 
         // If there still are arguments left using, pass them after '--'
+        /*
+        List<String> firstFlags = ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS));
+        
+        List<String> processedFlags = new ArrayList<>();
+        for (String flag : firstFlags) {
+            if (!flag.startsWith("-I")) {
+                processedFlags.add(flag);
+                continue;
+            }
+        
+            processedFlags.add("-I");
+            processedFlags.add(flag.substring("-I".length()));
+        }
+        
+        List<String> secondFlags = config.get(ClavaOptions.FLAGS_LIST);
+        
+        List<String> processedFlags2 = new ArrayList<>();
+        for (String flag : secondFlags) {
+            if (!flag.startsWith("-I")) {
+                processedFlags2.add(flag);
+                continue;
+            }
+        
+            processedFlags2.add("-I");
+        
+            String include = flag.substring("-I".length());
+            if (include.startsWith("\"")) {
+                include = include.substring(1);
+            }
+            if (include.endsWith("\"")) {
+                include = include.substring(0, include.length() - 1);
+            }
+            System.out.println("INCLUDE:" + include);
+            processedFlags2.add(include);
+        }
+        
+        arguments.addAll(processedFlags);
+        arguments.addAll(processedFlags2);
+        */
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 

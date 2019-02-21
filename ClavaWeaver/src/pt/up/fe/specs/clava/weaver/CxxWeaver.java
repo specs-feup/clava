@@ -1219,12 +1219,14 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add include folders
         for (File includeFolder : includeFolders) {
-            rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            // rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + includeFolder.getAbsolutePath());
         }
 
         // Add extra includes
         for (File extraInclude : getExternalIncludeFolders()) {
-            rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            // rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + extraInclude.getAbsolutePath());
         }
 
         // Write the other translation units and add folder as includes, in case they are needed
@@ -1232,7 +1234,7 @@ public class CxxWeaver extends ACxxWeaver {
         File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
 
         // Add include
-        rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");
+        rebuildOptions.add(0, "-I" + currentCodeFolder.getAbsolutePath());
 
         for (TranslationUnit otherTUnit : tUnit.getApp().getTranslationUnits()) {
 
@@ -1314,13 +1316,13 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add include folders
         for (File includeFolder : includeFolders) {
-            rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + includeFolder.getAbsolutePath());
         }
 
         // Add extra includes
         // for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
         for (File extraInclude : getExternalIncludeFolders()) {
-            rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + extraInclude.getAbsolutePath());
         }
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
