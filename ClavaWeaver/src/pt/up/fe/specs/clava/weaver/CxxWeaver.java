@@ -743,74 +743,6 @@ public class CxxWeaver extends ACxxWeaver {
         return adaptedSources;
     }
 
-    // private void addFlagsFromFiles(List<File> includeFolders, List<String> filenames, List<String> parserOptions) {
-    /*
-    private void addFlagsFromFiles(List<String> filenames, List<String> parserOptions) {
-        // If all files are .cl files, add flags -x cl
-        long numberOfOpenCLFiles = filenames.stream()
-                .filter(filename -> filename.endsWith(".cl"))
-                .count();
-    
-        if (numberOfOpenCLFiles == filenames.size()) {
-            parserOptions.add("-x");
-            parserOptions.add("cl");
-        }
-    
-        // // Adds sources as include folders
-        // for (File includeFolder : includeFolders) {
-        // // parserOptions.add("-I\"" + source.getAbsolutePath() + "\"");
-        // parserOptions.add("\"-I" + includeFolder.getAbsolutePath() + "\"");
-        // }
-    
-    }
-    */
-
-    /*
-    private List<String> processSources(List<File> sources) {
-        // private Map<String, File> processSources(List<File> sources) {
-        List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
-        // Map<String, File> sourceFiles = SpecsIo.getFileMap(sources, SourceType.IMPLEMENTATION.getExtensions());
-    
-        if (!sourceFiles.isEmpty()) {
-            return sourceFiles;
-        }
-    
-        // No implementation files found. Create temporary file with only the includes
-    
-        StringBuilder code = new StringBuilder();
-        for (File sourceFolder : sources) {
-            // List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, App.getExtensionsHeaders());
-            List<File> headerFiles = SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions());
-    
-            // Create source code to call header
-            String includeCode = headerFiles.stream()
-                    .map(file -> SpecsIo.getRelativePath(file, sourceFolder))
-                    .map(include -> "#include \"" + include + "\"")
-                    .collect(Collectors.joining("\n"));
-    
-            if (includeCode.length() != 0) {
-                code.append(includeCode).append("\n");
-            }
-    
-        }
-    
-        // If there is code, write and return file
-        if (code.length() != 0) {
-            File tempFolder = SpecsIo.mkdir(TEMP_SRC_FOLDER);
-            SpecsIo.deleteFolderContents(tempFolder, true);
-    
-            String extension = args.get(ClavaOptions.STANDARD).getImplementionExtension();
-    
-            File implementationFile = new File(tempFolder, "implementation." + extension);
-            SpecsIo.write(implementationFile, code.toString());
-    
-            return Arrays.asList(implementationFile.getAbsolutePath());
-        }
-    
-        throw new RuntimeException("Could not find C/C++ files in the given source folders (" + sources + ")");
-    }
-    */
-
     private List<String> processSources(Map<String, File> sourceFiles, List<String> parserOptions) {
 
         SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
@@ -873,50 +805,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     }
 
-    /*
-    private List<String> processSourcesOld(Map<String, File> sourceFiles) {
-        SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
-                () -> "No C/C++ files found in the given source folders:" + getSources());
-    
-        List<String> implementationFiles = sourceFiles.keySet().stream()
-                .filter(SourceType.IMPLEMENTATION::hasExtension)
-                .collect(Collectors.toList());
-    
-        // List<String> sourceFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
-    
-        if (!implementationFiles.isEmpty()) {
-            return implementationFiles;
-        }
-    
-        // No implementation files found. Create temporary file with only the includes
-    
-        StringBuilder code = new StringBuilder();
-        for (Entry<String, File> sourceFile : sourceFiles.entrySet()) {
-            // If not an header file, ignore
-            if (!SourceType.HEADER.hasExtension(sourceFile.getKey())) {
-                continue;
-            }
-    
-            String includePath = SpecsIo.getRelativePath(new File(sourceFile.getKey()), sourceFile.getValue());
-            String includeCode = "#include \"" + includePath + "\"";
-            code.append(includeCode).append("\n");
-        }
-    
-        Preconditions.checkArgument(code.length() != 0, "Expected to find at least one header file:" + sourceFiles);
-    
-        // Write and return file
-        File tempFolder = SpecsIo.mkdir(TEMP_SRC_FOLDER);
-        SpecsIo.deleteFolderContents(tempFolder, true);
-    
-        String extension = args.get(ClavaOptions.STANDARD).getImplementionExtension();
-    
-        File implementationFile = new File(tempFolder, "implementation." + extension);
-        SpecsIo.write(implementationFile, code.toString());
-    
-        return Arrays.asList(implementationFile.getAbsolutePath());
-    
-    }
-    */
     /**
      * Return a JoinPoint instance of the language root, i.e., an instance of AProgram
      *
@@ -1219,12 +1107,14 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add include folders
         for (File includeFolder : includeFolders) {
-            rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            // rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + includeFolder.getAbsolutePath());
         }
 
         // Add extra includes
         for (File extraInclude : getExternalIncludeFolders()) {
-            rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            // rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + extraInclude.getAbsolutePath());
         }
 
         // Write the other translation units and add folder as includes, in case they are needed
@@ -1232,7 +1122,8 @@ public class CxxWeaver extends ACxxWeaver {
         File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
 
         // Add include
-        rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");
+        // rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");
+        rebuildOptions.add(0, "-I" + currentCodeFolder.getAbsolutePath());
 
         for (TranslationUnit otherTUnit : tUnit.getApp().getTranslationUnits()) {
 
@@ -1314,13 +1205,15 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add include folders
         for (File includeFolder : includeFolders) {
-            rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            // rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + includeFolder.getAbsolutePath());
         }
 
         // Add extra includes
         // for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
         for (File extraInclude : getExternalIncludeFolders()) {
-            rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            // rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
+            rebuildOptions.add(0, "-I" + extraInclude.getAbsolutePath());
         }
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
