@@ -213,6 +213,31 @@ public class CxxTest {
     }
 
     // @Test
+    public void testArrayInitLoopExpr() {
+        new CxxTester("ArrayInitLoopExpr.cpp").test();
+    }
+
+    // @Test
+    public void testComplexType() {
+        new CxxTester("ComplexType.cpp").test();
+    }
+
+    // @Test
+    public void testOMPParallelForDirective() {
+        new CxxTester("OMPParallelForDirective.cpp").test();
+    }
+
+    // @Test
+    public void testTemplateTemplateParmDecl() {
+        new CxxTester("TemplateTemplateParmDecl.cpp").test();
+    }
+
+    // @Test
+    public void testVectorType() {
+        new CxxTester("VectorType.cpp").test();
+    }
+
+    // @Test
     // public void testBoost() {
     // new CxxTester("boost.cpp").test();
     // }
