@@ -748,7 +748,7 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
                 () -> "No C/C++ files found in the given source folders:" + getSources());
 
-        List<String> adaptedSources = new ArrayList<>();
+        Set<String> adaptedSources = new HashSet<>();
 
         sourceFiles.keySet().stream()
                 .forEach(adaptedSources::add);
@@ -783,7 +783,7 @@ public class CxxWeaver extends ACxxWeaver {
             // }
         }
 
-        return adaptedSources;
+        return new ArrayList<>(adaptedSources);
         // return sourceFiles.keySet().stream()
         // .collect(Collectors.toList());
     }
@@ -1136,6 +1136,7 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
+
         App rebuiltApp = createApp(Arrays.asList(destinationFile), rebuildOptions);
 
         // Remove app from context stack
@@ -1144,14 +1145,25 @@ public class CxxWeaver extends ACxxWeaver {
         // Delete current code folder
         SpecsIo.deleteFolder(currentCodeFolder);
 
-        SpecsCheck.checkArgument(rebuiltApp.getTranslationUnits().size() == 1,
-                () -> "Expected number of translation units to be 1, got " + rebuiltApp.getTranslationUnits().size()
-                        + ":\n" + rebuiltApp);
+        // SpecsCheck.checkArgument(rebuiltApp.getTranslationUnits().size() == 1,
+        // () -> "Expected number of translation units to be 1, got " + rebuiltApp.getTranslationUnits().size()
+        // + ":\n" + rebuiltApp.getTranslationUnits());
 
         // After rebuilding, clear current app cache
         getApp().clearCache();
 
-        return rebuiltApp.getTranslationUnits().get(0);
+        // Return correct TranslationUnit
+        for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {
+            if (destinationFile.equals(tu.getFile())) {
+                return tu;
+            }
+            // System.out.println("TU: " + tu.getFile());
+            // System.out.println("IS SAME: " + destinationFile.equals(tu.getFile()));
+        }
+
+        throw new RuntimeException("Could not find TranslationUnit that corresponds to the rebuilt file '"
+                + destinationFile + "':\n" + rebuiltApp.getTranslationUnits());
+        // return rebuiltApp.getTranslationUnits().get(0);
     }
 
     /**
