@@ -34,6 +34,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"TypeOfExprType", clava::TypeNode::TYPE_OF_EXPR_TYPE},
         {"AttributedType", clava::TypeNode::ATTRIBUTED_TYPE},
         {"UnaryTransformType", clava::TypeNode::UNARY_TRANSFORM_TYPE},
+        {"ComplexType", clava::TypeNode::COMPLEX_TYPE},
 };
 
 void ClangAstDumper::visitChildren(const Type* T) {
@@ -98,6 +99,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitAttributedTypeChildren(static_cast<const AttributedType *>(T), visitedChildren); break;
         case clava::TypeNode::UNARY_TRANSFORM_TYPE:
             VisitUnaryTransformTypeChildren(static_cast<const UnaryTransformType *>(T), visitedChildren); break;
+        case clava::TypeNode::COMPLEX_TYPE:
+            VisitComplexTypeChildren(static_cast<const ComplexType *>(T), visitedChildren); break;
 
         default: throw std::invalid_argument("ChildrenVisitorTypes::visitChildren(TypeNode): Case not implemented, '"+clava::getName(typeNode)+"'");
 
@@ -428,6 +431,13 @@ void ClangAstDumper::VisitUnaryTransformTypeChildren(const UnaryTransformType *T
 
     VisitTypeTop(T->getUnderlyingType());
     VisitTypeTop(T->getBaseType());
+};
+
+void ClangAstDumper::VisitComplexTypeChildren(const ComplexType *T, std::vector<std::string> &visitedChildren){
+    // Hierarchy
+    VisitTypeChildren(T, visitedChildren);
+
+    VisitTypeTop(T->getElementType());
 };
 
 

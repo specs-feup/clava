@@ -34,6 +34,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"UnaryTransformType", clava::TypeNode::UNARY_TRANSFORM_TYPE},
         {"AttributedType", clava::TypeNode::ATTRIBUTED_TYPE},
         {"SubstTemplateTypeParmType", clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE},
+        {"ComplexType", clava::TypeNode::COMPLEX_TYPE},
 };
 
 void clava::ClavaDataDumper::dump(const Type* T) {
@@ -108,9 +109,11 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
         case clava::TypeNode::ATTRIBUTED_TYPE:
             DumpAttributedTypeData(static_cast<const AttributedType *>(T)); break;
         case clava::TypeNode::UNARY_TRANSFORM_TYPE:
-            DumpUnaryTransformTypeData(static_cast<const UnaryTransformType  *>(T)); break;
+            DumpUnaryTransformTypeData(static_cast<const UnaryTransformType *>(T)); break;
         case clava::TypeNode::SUBST_TEMPLATE_TYPE_PARM_TYPE:
-            DumpSubstTemplateTypeParmTypeData(static_cast<const SubstTemplateTypeParmType  *>(T)); break;
+            DumpSubstTemplateTypeParmTypeData(static_cast<const SubstTemplateTypeParmType *>(T)); break;
+        case clava::TypeNode::COMPLEX_TYPE:
+            DumpComplexTypeData(static_cast<const ComplexType *>(T)); break;
 
 //         case clava::TypeNode::RECORD_TYPE:
 //            DumpRecordTypeData(static_cast<const RecordType *>(T)); break;
@@ -610,5 +613,12 @@ void clava::ClavaDataDumper::DumpSubstTemplateTypeParmTypeData(const SubstTempla
 
     clava::dump(clava::getId(T->getReplacedParameter(), id));
     clava::dump(clava::getId(T->getReplacementType(), id));
+}
+
+void clava::ClavaDataDumper::DumpComplexTypeData(const ComplexType *T) {
+    // Hierarchy
+    DumpTypeData(T);
+
+    clava::dump(clava::getId(T->getElementType(), id));
 }
 

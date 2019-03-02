@@ -79,6 +79,7 @@ namespace clava {
         LAMBDA_EXPR,
         PREDEFINED_EXPR,
         SIZE_OF_PACK_EXPR,
+        ARRAY_INIT_LOOP_EXPR,
     };
 
     /**
@@ -126,7 +127,7 @@ namespace clava {
         TYPE_OF_EXPR_TYPE,
         ATTRIBUTED_TYPE,
         UNARY_TRANSFORM_TYPE,
-
+        COMPLEX_TYPE,
     };
 
 

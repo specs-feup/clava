@@ -56,6 +56,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
         {"PredefinedExpr", clava::StmtNode::PREDEFINED_EXPR},
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
+        {"ArrayInitLoopExpr", clava::StmtNode::ARRAY_INIT_LOOP_EXPR},
 
 };
 
@@ -171,6 +172,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpPredefinedExprData(static_cast<const PredefinedExpr *>(S)); break;
         case clava::StmtNode ::SIZE_OF_PACK_EXPR:
             DumpSizeOfPackExprData(static_cast<const SizeOfPackExpr *>(S)); break;
+        case clava::StmtNode ::ARRAY_INIT_LOOP_EXPR:
+            DumpArrayInitLoopExprData(static_cast<const ArrayInitLoopExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -678,4 +681,11 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
     }
 
 
+ }
+
+
+ void clava::ClavaDataDumper::DumpArrayInitLoopExprData(const ArrayInitLoopExpr *E) {
+    DumpExprData(E);
+
+     //clava::dump(E->getArraySize().toString(10, false));
  }

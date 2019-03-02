@@ -67,6 +67,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::LAMBDA_EXPR: return "LambdaExpr";
         case clava::StmtNode::PREDEFINED_EXPR: return "PredefinedExpr";
         case clava::StmtNode::SIZE_OF_PACK_EXPR: return "SizeOfPackExpr";
+        case clava::StmtNode::ARRAY_INIT_LOOP_EXPR: return "ArrayInitLoopExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));
@@ -110,6 +111,7 @@ const std::string clava::getName(const TypeNode typeNode) {
         case clava::TypeNode::TYPE_OF_EXPR_TYPE: return "TypeOfExprType";
         case clava::TypeNode::ATTRIBUTED_TYPE: return "AttributedType";
         case clava::TypeNode::UNARY_TRANSFORM_TYPE: return "UnaryTransformType ";
+        case clava::TypeNode::COMPLEX_TYPE: return "ComplexType";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<TypeNode>::type>(typeNode));

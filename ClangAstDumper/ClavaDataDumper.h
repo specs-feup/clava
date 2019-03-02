@@ -163,6 +163,7 @@ namespace clava {
         void DumpLambdaExprData(const LambdaExpr *E);
         void DumpPredefinedExprData(const PredefinedExpr *E);
         void DumpSizeOfPackExprData(const SizeOfPackExpr *E);
+        void DumpArrayInitLoopExprData(const ArrayInitLoopExpr *E);
 
 
 
@@ -196,8 +197,8 @@ namespace clava {
         void DumpTypeOfExprTypeData(const TypeOfExprType *T);
         void DumpAttributedTypeData(const AttributedType *T);
         void DumpUnaryTransformTypeData(const UnaryTransformType  *T);
-        void DumpSubstTemplateTypeParmTypeData(const SubstTemplateTypeParmType  *T);
-
+        void DumpSubstTemplateTypeParmTypeData(const SubstTemplateTypeParmType *T);
+        void DumpComplexTypeData(const ComplexType *T);
 
             // ATTRS
 
