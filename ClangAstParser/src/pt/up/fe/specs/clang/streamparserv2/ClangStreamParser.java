@@ -30,6 +30,7 @@ import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
+import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -56,6 +57,8 @@ import pt.up.fe.specs.util.collections.MultiMap;
  */
 public class ClangStreamParser {
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
+            new RemoveClangOmpNodes(),
+
             new DenanonymizeDecls(),
 
             new DeleteTemplateSpecializations(),

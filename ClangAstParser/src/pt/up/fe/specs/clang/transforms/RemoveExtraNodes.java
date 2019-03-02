@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXBindTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.ExprWithCleanups;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.OpaqueValueExpr;
+import pt.up.fe.specs.clava.ast.stmt.CapturedStmt;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
@@ -44,6 +45,7 @@ public class RemoveExtraNodes implements SimplePreClavaRule {
         RemoveExtraNodes.CLEANUP_NODES.add(MaterializeTemporaryExpr.class);
         RemoveExtraNodes.CLEANUP_NODES.add(CXXBindTemporaryExpr.class);
         RemoveExtraNodes.CLEANUP_NODES.add(OpaqueValueExpr.class);
+        RemoveExtraNodes.CLEANUP_NODES.add(CapturedStmt.class);
 
         // RemoveExtraNodes.CLEANUP_NODES.add(ImplicitCastExpr.class);
     }

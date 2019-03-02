@@ -160,6 +160,7 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 public class ClavaParser implements AutoCloseable {
 
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
+            // new RemoveClangOmpNodes(),
             new DenanonymizeDecls(),
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
