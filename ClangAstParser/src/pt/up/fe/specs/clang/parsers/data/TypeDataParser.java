@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
 import pt.up.fe.specs.clava.ast.type.AutoType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.ComplexType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.DecltypeType;
@@ -367,6 +368,16 @@ public class TypeDataParser {
         parserData.getClavaNodes().queueSetNode(data, SubstTemplateTypeParmType.REPLACEMENT_TYPE, lines.nextLine());
 
         return data;
+    }
+
+    public static DataStore parseComplexTypeData(LineStream lines, ClangParserData parserData) {
+
+        DataStore data = parseTypeData(lines, parserData);
+
+        parserData.getClavaNodes().queueSetNode(data, ComplexType.ELEMENT_TYPE, lines.nextLine());
+
+        return data;
+
     }
 
 }

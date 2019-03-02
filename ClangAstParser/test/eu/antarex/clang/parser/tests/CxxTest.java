@@ -212,12 +212,12 @@ public class CxxTest {
         new CxxTester("default.h").test();
     }
 
-    // @Test
+    @Test
     public void testArrayInitLoopExpr() {
         new CxxTester("ArrayInitLoopExpr.cpp").test();
     }
 
-    // @Test
+    @Test
     public void testComplexType() {
         new CxxTester("ComplexType.cpp").test();
     }
