@@ -222,9 +222,9 @@ public class CxxTest {
         new CxxTester("ComplexType.cpp").test();
     }
 
-    // @Test
+    @Test
     public void testOMPParallelForDirective() {
-        new CxxTester("OMPParallelForDirective.cpp").test();
+        new CxxTester("OMPParallelForDirective.cpp").addFlags("-fopenmp").showClavaAst().showCode().test();
     }
 
     // @Test
