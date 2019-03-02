@@ -13,14 +13,14 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.util.utilities.StringLines;
+import pt.up.fe.specs.util.SpecsCheck;
 
 public class CapturedStmt extends Stmt {
 
@@ -37,33 +37,38 @@ public class CapturedStmt extends Stmt {
     // return new CapturedStmt(getInfo(), Collections.emptyList());
     // }
 
-    public List<Stmt> getStatements() {
-        return getChildren(Stmt.class);
+    public Stmt getCapturedStatement() {
+        SpecsCheck.checkArgument(getNumChildren() == 1, () -> "Expected one child, found " + getNumChildren());
+        return getChild(Stmt.class, 0);
     }
 
     @Override
     public List<Stmt> toStatements() {
-        return getStatements();
+        return Arrays.asList(getCapturedStatement());
     }
 
     @Override
     public String getCode() {
+
+        return getCapturedStatement().getCode();
+        /*        
         StringBuilder code = new StringBuilder();
-
+        
         code.append("{" + ln());
-
+        
         for (Stmt stmt : getStatements()) {
-
+        
             String stmtCode = StringLines.getLines(stmt.getCode()).stream()
                     // Add tab
                     .map(line -> getTab() + line)
                     .collect(Collectors.joining(ln(), "", ln()));
             code.append(stmtCode);
         }
-
+        
         code.append("}" + ln());
-
+        
         return code.toString();
+        */
     }
 
     @Override

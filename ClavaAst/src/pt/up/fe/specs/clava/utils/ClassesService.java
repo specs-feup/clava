@@ -135,6 +135,10 @@ public class ClassesService {
             return CLAVA_AST_PACKAGE + ".attr." + nodeClassname;
         }
 
+        if (nodeClassname.startsWith("OMP")) {
+            return CLAVA_AST_PACKAGE + ".omp.clang." + nodeClassname;
+        }
+
         // By default, if none of the above, try expression
         return CLAVA_AST_PACKAGE + ".expr." + nodeClassname;
     }
