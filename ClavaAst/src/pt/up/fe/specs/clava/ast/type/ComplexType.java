@@ -11,35 +11,29 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-/**
- * Represents the index of the current element of an array being initialized by an ArrayInitLoopExpr.
- * 
- * This can only appear within the subexpression of an ArrayInitLoopExpr.
- * 
- * @author JoaoBispo
- *
- */
-public class ArrayInitIndexExpr extends Expr {
+public class ComplexType extends Type {
 
-    public ArrayInitIndexExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    /// DATAKEYS BEGIN
+
+    /**
+     * The element type.
+     */
+    public final static DataKey<Type> ELEMENT_TYPE = KeyFactory.object("elementType", Type.class);
+
+    /// DATAKEYS END
+
+    public ComplexType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    @Override
-    public String getCode() {
-        if (!hasChildren()) {
-            return "";
-        }
-        System.out.println("CHILDREN: " + getChildren());
-        return super.getCode();
     }
 
 }

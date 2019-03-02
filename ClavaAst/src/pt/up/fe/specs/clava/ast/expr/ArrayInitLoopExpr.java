@@ -19,27 +19,30 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-/**
- * Represents the index of the current element of an array being initialized by an ArrayInitLoopExpr.
- * 
- * This can only appear within the subexpression of an ArrayInitLoopExpr.
- * 
- * @author JoaoBispo
- *
- */
-public class ArrayInitIndexExpr extends Expr {
+public class ArrayInitLoopExpr extends Expr {
 
-    public ArrayInitIndexExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    /// DATAKEYS BEGIN
+
+    // public final static DataKey<BigInteger> ARRAY_SIZE = KeyFactory
+    // .object("arraySize", BigInteger.class);
+
+    /// DATAKEYS END
+
+    public ArrayInitLoopExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    public DeclRefExpr getDeclRef() {
+        return getChild(DeclRefExpr.class, 0);
     }
 
     @Override
     public String getCode() {
-        if (!hasChildren()) {
-            return "";
-        }
-        System.out.println("CHILDREN: " + getChildren());
-        return super.getCode();
+        return getDeclRef().getCode();
+        // for (ClavaNode node : getChildren()) {
+        // System.out.println("CODE: " + node.getCode());
+        // }
+        // // TODO Auto-generated method stub
+        // return super.getCode();
     }
-
 }
