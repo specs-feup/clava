@@ -40,6 +40,7 @@ namespace clava {
         LABEL_STMT,
         GOTO_STMT,
         ATTRIBUTED_STMT,
+        CAPTURED_STMT,
 
         // Expr nodes
         EXPR,

@@ -256,6 +256,7 @@ private:
     void VisitDefaultStmtChildren(const DefaultStmt *S, std::vector<std::string> &children);
     void VisitGotoStmtChildren(const GotoStmt *S, std::vector<std::string> &children);
     void VisitAttributedStmtChildren(const AttributedStmt *S, std::vector<std::string> &children);
+    void VisitCapturedStmtChildren(const CapturedStmt *S, std::vector<std::string> &children);
 
     // Children visitors for Exprs
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
