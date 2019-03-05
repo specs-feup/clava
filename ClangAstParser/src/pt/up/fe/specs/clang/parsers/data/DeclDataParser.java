@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parsers.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
@@ -35,10 +36,12 @@ import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
+import pt.up.fe.specs.clava.ast.decl.NonTypeTemplateParmDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.StaticAssertDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.TemplateTemplateParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
@@ -47,6 +50,7 @@ import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
@@ -404,10 +408,40 @@ public class DeclDataParser {
         return data;
     }
 
-    // public final static DataKey<Expr> ASSERT_EXPR = KeyFactory.object("assertExpr", Expr.class);
-    //
-    // public final static DataKey<String> MESSAGE = KeyFactory.string("message");
-    //
-    // public final static DataKey<Boolean> IS_FAILED = KeyFactory.bool("isFailed");
+    public static DataStore parseTemplateTemplateParmDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        boolean hasDefaultArgument = LineStreamParsers.oneOrZero(lines);
+        if (hasDefaultArgument) {
+            Optional<TemplateArgument> templateArg = Optional.of(ClavaDataParsers.templateArgument(lines, dataStore));
+            data.add(TemplateTemplateParmDecl.DEFAULT_ARGUMENT, templateArg);
+        } else {
+            data.add(TemplateTemplateParmDecl.DEFAULT_ARGUMENT, Optional.empty());
+        }
+
+        data.add(TemplateTemplateParmDecl.IS_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
+        data.add(TemplateTemplateParmDecl.IS_PACK_EXPANSION, LineStreamParsers.oneOrZero(lines));
+        data.add(TemplateTemplateParmDecl.IS_EXPANDED_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseNonTypeTemplateParmDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseValueDeclData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetOptionalNode(data, NonTypeTemplateParmDecl.DEFAULT_ARGUMENT,
+                lines.nextLine());
+
+        data.add(NonTypeTemplateParmDecl.DEFAULT_ARGUMENT_WAS_INHERITED, LineStreamParsers.oneOrZero(lines));
+        data.add(NonTypeTemplateParmDecl.IS_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
+        data.add(NonTypeTemplateParmDecl.IS_PACK_EXPANSION, LineStreamParsers.oneOrZero(lines));
+        data.add(NonTypeTemplateParmDecl.IS_EXPANDED_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
+        dataStore.getClavaNodes().queueSetNodeList(data, NonTypeTemplateParmDecl.EXPANSION_TYPES,
+                LineStreamParsers.stringList(lines));
+
+        return data;
+    }
 
 }

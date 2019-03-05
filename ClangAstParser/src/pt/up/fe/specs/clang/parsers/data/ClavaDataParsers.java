@@ -260,8 +260,18 @@ public class ClavaDataParsers {
             return integral;
         case Template:
             TemplateArgumentTemplate template = new TemplateArgumentTemplate();
-            template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND,
-                    LineStreamParsers.enumFromName(TemplateNameKind.class, lines));
+            TemplateNameKind nameKind = LineStreamParsers.enumFromName(TemplateNameKind.class, lines);
+            template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND, nameKind);
+
+            switch (nameKind) {
+            case Template:
+                parserData.getClavaNodes().queueSetOptionalNode(template, TemplateArgumentTemplate.TEMPLATE_DECL,
+                        lines.nextLine());
+                break;
+            default:
+                throw new RuntimeException("Case not implemented: " + nameKind);
+            }
+
             return template;
 
         default:

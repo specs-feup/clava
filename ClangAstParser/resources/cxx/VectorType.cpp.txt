@@ -1,0 +1,1 @@
+typedef __attribute__((__vector_size__(4 * sizeof(int)))) int v4si;

@@ -227,12 +227,12 @@ public class CxxTest {
         new CxxTester("OMPParallelForDirective.cpp").addFlags("-fopenmp").showClavaAst().showCode().test();
     }
 
-    // @Test
+    @Test
     public void testTemplateTemplateParmDecl() {
         new CxxTester("TemplateTemplateParmDecl.cpp").test();
     }
 
-    // @Test
+    @Test
     public void testVectorType() {
         new CxxTester("VectorType.cpp").test();
     }
