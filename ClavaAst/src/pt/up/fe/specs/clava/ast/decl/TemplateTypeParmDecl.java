@@ -23,6 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.TemplateParameter;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
 
@@ -32,7 +33,7 @@ import pt.up.fe.specs.clava.language.TemplateTypeParmKind;
  * @author JoaoBispo
  *
  */
-public class TemplateTypeParmDecl extends TypeDecl {
+public class TemplateTypeParmDecl extends TypeDecl implements TemplateParameter {
 
     /// DATAKEYS BEGIN
 

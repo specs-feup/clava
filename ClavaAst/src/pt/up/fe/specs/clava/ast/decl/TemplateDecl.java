@@ -13,12 +13,15 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.TemplateParameter;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 
 /**
@@ -61,8 +64,27 @@ public abstract class TemplateDecl extends NamedDecl {
     // return declName;
     // }
 
-    public List<TemplateTypeParmDecl> getTemplateParameters() {
-        return SpecsCollections.peek(getChildren(), TemplateTypeParmDecl.class);
+    public List<NamedDecl> getTemplateParameters() {
+        // return SpecsCollections.peek(getChildren(), TemplateTypeParmDecl.class);
+        List<NamedDecl> templateParameters = new ArrayList<>();
+
+        // Number of template parameters
+        int numTemplateParameters = 0;
+        for (ClavaNode child : getChildren()) {
+            if (child instanceof TemplateParameter) {
+                numTemplateParameters++;
+            }
+        }
+
+        // Verify they are in sequence, and NamedDecls
+        for (int i = 0; i < numTemplateParameters; i++) {
+            NamedDecl templateParam = getChild(NamedDecl.class, i);
+            SpecsCheck.checkArgument(templateParam instanceof TemplateParameter,
+                    () -> "Expected node to be a " + TemplateParameter.class + ": " + templateParam.getClass());
+            templateParameters.add(templateParam);
+        }
+
+        return templateParameters;
     }
 
     public int getNumTemplateParameters() {

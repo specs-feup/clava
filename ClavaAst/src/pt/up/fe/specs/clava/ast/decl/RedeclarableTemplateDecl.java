@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.TemplateParameter;
 
 /**
  * Declaration of a redeclarable template.
@@ -26,7 +27,7 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-public class RedeclarableTemplateDecl extends TemplateDecl {
+public class RedeclarableTemplateDecl extends TemplateDecl implements TemplateParameter {
 
     public RedeclarableTemplateDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -53,6 +54,7 @@ public class RedeclarableTemplateDecl extends TemplateDecl {
 
     @Override
     public String getCode() {
+
         StringBuilder code = new StringBuilder();
 
         code.append("template <");
