@@ -31,7 +31,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
         {"VarDecl",                                clava::DeclNode::VAR_DECL},
         {"EnumConstantDecl",                       clava::DeclNode::VALUE_DECL},
-        {"NonTypeTemplateParmDecl",                clava::DeclNode::VALUE_DECL},
+        {"NonTypeTemplateParmDecl",                clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL},
         {"UsingShadowDecl",                        clava::DeclNode::NAMED_DECL},
         {"TypeAliasDecl",                          clava::DeclNode::TYPEDEF_NAME_DECL},
         {"TypedefDecl",                            clava::DeclNode::TYPEDEF_NAME_DECL},
@@ -42,6 +42,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"LinkageSpecDecl",                        clava::DeclNode::LINKAGE_SPEC_DECL},
         {"LabelDecl",                              clava::DeclNode::NAMED_DECL},
         {"StaticAssertDecl",                       clava::DeclNode::STATIC_ASSERT_DECL},
+        {"TemplateTemplateParmDecl",               clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL},
 
 };
 
@@ -137,6 +138,12 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             break;
         case clava::DeclNode::STATIC_ASSERT_DECL:
             DumpStaticAssertDeclData(static_cast<const StaticAssertDecl *>(D));
+            break;
+        case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL:
+            DumpTemplateTemplateParmDeclData(static_cast<const TemplateTemplateParmDecl *>(D));
+            break;
+        case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL:
+            DumpNonTypeTemplateParmDeclData(static_cast<const NonTypeTemplateParmDecl *>(D));
             break;
         default:
             throw std::invalid_argument(
@@ -590,5 +597,65 @@ void clava::ClavaDataDumper::DumpStaticAssertDeclData(const StaticAssertDecl *D)
 
     //clava::dump([&D](llvm::raw_string_ostream& stream){D->getMessage()->dump(stream);});
     clava::dump(D->isFailed());
+}
+
+void clava::ClavaDataDumper::DumpTemplateTemplateParmDeclData(const TemplateTemplateParmDecl *D) {
+
+    // Hierarchy
+    DumpNamedDeclData(D);
+
+    clava::dump(D->hasDefaultArgument());
+    if (D->hasDefaultArgument()) {
+        clava::dump(D->getDefaultArgument().getArgument(), id);
+    }
+
+
+    clava::dump(D->isParameterPack());
+    clava::dump(D->isPackExpansion());
+    clava::dump(D->isExpandedParameterPack());
+
+    /*
+    if(D->isExpandedParameterPack()) {
+        // Dump number of expansion types
+        clava::dump(D->getNumExpansionTemplateParameters());
+        for(unsigned i=0; i<D->getNumExpansionTemplateParameters(); i++) {
+            clava::dump(clava::getId(D->getExpansionTemplateParameters(i), id));
+        }
+    } else {
+        // So that is always has a number
+        clava::dump(0);
+    }
+     */
+
+}
+
+void clava::ClavaDataDumper::DumpNonTypeTemplateParmDeclData(const NonTypeTemplateParmDecl *D) {
+
+    // Hierarchy
+    DumpDeclaratorDeclData(D);
+
+    if (D->hasDefaultArgument()) {
+        clava::dump(clava::getId(D->getDefaultArgument(), id));
+    } else {
+        clava::dump(clava::getId((const Expr *) nullptr, id));
+    }
+
+    clava::dump(D->defaultArgumentWasInherited());
+    clava::dump(D->isParameterPack());
+    clava::dump(D->isPackExpansion());
+    clava::dump(D->isExpandedParameterPack());
+
+    if(D->isExpandedParameterPack()) {
+        // Dump number of expansion types
+        clava::dump(D->getNumExpansionTypes());
+        for(unsigned i=0; i<D->getNumExpansionTypes(); i++) {
+            clava::dump(clava::getId(D->getExpansionType(i), id));
+        }
+    } else {
+        // So that is always has a number
+        clava::dump(0);
+    }
+
+
 }
 

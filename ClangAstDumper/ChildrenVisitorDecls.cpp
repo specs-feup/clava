@@ -29,6 +29,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"FunctionTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
         {"TypeAliasTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
         {"VarTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
+        {"TemplateTemplateParmDecl", clava::DeclNode::TEMPLATE_DECL},
         {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         {"EnumConstantDecl", clava::DeclNode::ENUM_CONSTANT_DECL},
         {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
@@ -40,8 +41,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"NamespaceAliasDecl", clava::DeclNode::NAMESPACE_ALIAS_DECL},
         {"LinkageSpecDecl", clava::DeclNode::LINKAGE_SPEC_DECL},
         {"StaticAssertDecl", clava::DeclNode::STATIC_ASSERT_DECL},
-
-
+        {"NonTypeTemplateParmDecl", clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL},
 
 
 
@@ -111,6 +111,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitLinkageSpecDeclChildren(static_cast<const LinkageSpecDecl *>(D), visitedChildren); break;
         case clava::DeclNode::STATIC_ASSERT_DECL:
             VisitStaticAssertDeclChildren(static_cast<const StaticAssertDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL:
+            VisitNonTypeTemplateParmDeclChildren(static_cast<const NonTypeTemplateParmDecl *>(D), visitedChildren); break;
 
 
 
@@ -594,4 +596,17 @@ void ClangAstDumper::VisitStaticAssertDeclChildren(const StaticAssertDecl *D, st
     addChild(D->getAssertExpr(), children);
     addChild(D->getMessage(), children);
     //VisitStmtTop(D->getAssertExpr());
+}
+
+void ClangAstDumper::VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateParmDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitValueDeclChildren(D, children);
+
+    if (D->hasDefaultArgument()) {
+        VisitStmtTop(D->getDefaultArgument());
+    }
+
+    for(int i=0; i<D->getNumExpansionTypes(); i++) {
+        VisitTypeTop(D->getExpansionType(i));
+    }
 }

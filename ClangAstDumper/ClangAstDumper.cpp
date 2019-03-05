@@ -628,6 +628,20 @@ void ClangAstDumper::VisitTemplateArgument(const TemplateArgument& templateArg) 
         case TemplateArgument::ArgKind::Integral:
             // Do nothing
             break;
+        case TemplateArgument::ArgKind::Template:
+        {
+            TemplateName templateName = templateArg.getAsTemplate();
+            switch(templateName.getKind()) {
+                case TemplateName::NameKind::Template:
+                    VisitDeclTop(templateName.getAsTemplateDecl());
+                    break;
+                default:
+                    throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): TemplateName case not implemented, '" +
+                                                clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
+            }
+            break;
+        }
+
         default: throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
     }
 };

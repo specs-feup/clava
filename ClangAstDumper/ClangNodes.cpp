@@ -407,8 +407,21 @@ void clava::dump(const TemplateArgument &templateArg, int id) {
 //    clava::dump(source);
             break;
         case TemplateArgument::ArgKind::Template:
-            clava::dump(clava::TEMPLATE_NAME_KIND[templateArg.getAsTemplate().getKind()]);
+        {
+            TemplateName templateName = templateArg.getAsTemplate();
+
+            clava::dump(clava::TEMPLATE_NAME_KIND[templateName.getKind()]);
+
+            switch(templateName.getKind()) {
+                case TemplateName::NameKind::Template:
+                    clava::dump(clava::getId(templateName.getAsTemplateDecl(), id));
+                    break;
+                default:
+                    throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): TemplateName case not implemented, '" +
+                                                clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
+            }
             break;
+        }
         default:
             throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '" +
                                         clava::TEMPLATE_ARG_KIND[templateArg.getKind()] + "'");

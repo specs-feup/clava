@@ -39,6 +39,8 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::LINKAGE_SPEC_DECL: return "LinkageSpecDecl";
         case clava::DeclNode::LABEL_DECL: return "LabelDecl";
         case clava::DeclNode::STATIC_ASSERT_DECL: return "StaticAssertDecl";
+        case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL: return "TemplateTemplateParmDecl";
+        case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL: return "NonTypeTemplateParmDecl";
 
 
         default: {

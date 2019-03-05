@@ -120,6 +120,8 @@ namespace clava {
         void DumpNamespaceAliasDeclData(const NamespaceAliasDecl *D);
         void DumpLinkageSpecDeclData(const LinkageSpecDecl *D);
         void DumpStaticAssertDeclData(const StaticAssertDecl *D);
+        void DumpTemplateTemplateParmDeclData(const TemplateTemplateParmDecl *D);
+        void DumpNonTypeTemplateParmDeclData(const NonTypeTemplateParmDecl *D);
 
 
         // STMTS

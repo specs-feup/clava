@@ -239,6 +239,7 @@ private:
     void VisitNamespaceAliasDeclChildren(const NamespaceAliasDecl *D, std::vector<std::string> &children);
     void VisitLinkageSpecDeclChildren(const LinkageSpecDecl *D, std::vector<std::string> &children);
     void VisitStaticAssertDeclChildren(const StaticAssertDecl *D, std::vector<std::string> &children);
+    void VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateParmDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts
