@@ -403,11 +403,10 @@ public class ExprDataParser {
         return data;
     }
 
-    // public final static DataKey<Boolean> IS_PARTIALLY_SUBSTITUTED = KeyFactory.bool("isPartiallySubstituted");
-    //
-    // public final static DataKey<NamedDecl> PACK = KeyFactory.object("pack", NamedDecl.class);
-    //
-    // public final static DataKey<List<TemplateArgument>> PARTIAL_ARGUMENTS = KeyFactory.generic("partialArguments",
-    // new ArrayList<TemplateArgument>());
+    public static DataStore parseArrayInitLoopExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        return data;
+    }
 
 }
