@@ -34,16 +34,16 @@ public interface ClangAstWebResource {
     // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
     // WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v4.0.1");
+    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v4.1");
     WebResourceProvider WIN_DLL1 = create("windows/libgcc_s_seh-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/libstdc++-6.dll");
     WebResourceProvider WIN_DLL3 = create("windows/libwinpthread-1.dll");
 
-    WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v4.0.1");
+    WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v4.1");
 
-    WebResourceProvider CENTOS_EXE = create("centos7/clang_ast", "v4.0.1");
+    WebResourceProvider CENTOS_EXE = create("centos7/clang_ast", "v4.1");
 
-    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v4.0.1");
+    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v4.1");
 
     // private static final String BASE_URL = "http://specs.fe.up.pt/resources/clangast/";
     // private static final String BASE_URL = "http://192.168.55.89/resources/clangast/";
