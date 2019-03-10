@@ -22,6 +22,9 @@ aspectdef JpFilterTest
 	var filter4 = new JpFilter({name: /A/});
 	println(convert(filter4.filter($records)));
 	
+	var filter5 = new JpFilter({name: /A/, line: function(line){return line > 7;}});
+	println(convert(filter5.filter($records)));
+	
 	var $jps = WeaverJps.search("record", {rx_name: 'A'}).search("field", {name: 'x'}).get();
 	
 	for(var $selected of $jps) {
