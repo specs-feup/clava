@@ -8,7 +8,7 @@ aspectdef JpFilterTest
 	apply
 		$records.push($record);
 	end
-	
+
 	
 	var filter1 = new JpFilter({name: 'A'});
 	println(convert(filter1.filter($records)));
@@ -18,6 +18,9 @@ aspectdef JpFilterTest
 	
 	var filter3 = new JpFilter({rx_name: 'A', kind: 'class'});
 	println(convert(filter3.filter($records)));
+
+	var filter4 = new JpFilter({name: /A/});
+	println(convert(filter4.filter($records)));
 	
 	var $jps = WeaverJps.search("record", {rx_name: 'A'}).search("field", {name: 'x'}).get();
 	

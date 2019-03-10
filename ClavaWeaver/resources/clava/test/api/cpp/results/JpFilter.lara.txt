@@ -1,5 +1,9 @@
 A
+JpFilter: using prefix 'rx_' to identify regexes is deprecated, just use a regex as value (e.g., /a/)
 A, A2, A3
+JpFilter: using prefix 'rx_' to identify regexes is deprecated, just use a regex as value (e.g., /a/)
 A, A2
+A, A2, A3
+JpFilter: using prefix 'rx_' to identify regexes is deprecated, just use a regex as value (e.g., /a/)
 Select function: float x;
 Select function: float x;
