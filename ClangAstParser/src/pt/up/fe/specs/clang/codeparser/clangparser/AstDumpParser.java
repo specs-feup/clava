@@ -313,6 +313,7 @@ public class AstDumpParser implements ClangParser {
                     inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
 
             // parsedData = lineStreamParser.getData();
+            // parsedData = output.getStdErr() == null ? new ClangParserData() : output.getStdErr();
             parsedData = output.getStdErr();
             parsedData.set(ClangParserData.HAS_ERRORS, output.isError());
 
