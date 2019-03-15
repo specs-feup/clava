@@ -169,6 +169,9 @@ public class ParallelCodeParser extends CodeParser {
                 .map(SpecsSystem::get)
                 .collect(Collectors.toList());
 
+        // Delete temporary folder
+        SpecsIo.deleteFolder(parsingFolder);
+
         // List<TranslationUnit> tUnits = SpecsCollections.getStream(allSources.keySet(), get(PARALLEL_PARSING))
         // .map(sourceFile -> parseSource(new File(sourceFile), standard, options, clangDump,
         // counter, parsingFolder))
@@ -212,9 +215,6 @@ public class ParallelCodeParser extends CodeParser {
 
             throw new RuntimeException("There are errors in the source code:\n" + errors);
         }
-
-        // Delete temporary folder
-        SpecsIo.deleteFolder(parsingFolder);
 
         tic = System.nanoTime();
 
