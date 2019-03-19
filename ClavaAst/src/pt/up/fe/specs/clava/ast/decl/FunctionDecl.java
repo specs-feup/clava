@@ -423,12 +423,6 @@ public class FunctionDecl extends DeclaratorDecl {
         code.append(" ");
 
         getCurrentNamespace().ifPresent(namespace -> code.append(namespace).append("::"));
-        // String qualifiedPrefix = get(QUALIFIED_PREFIX);
-        // // TODO: instead of isDefinition, probably shoud test if it is inside the corresponding namespace
-        // // Method that returns the current prefix, taking into account the namespace
-        // if (!qualifiedPrefix.isEmpty() && isDefinition()) {
-        // code.append(qualifiedPrefix).append("::");
-        // }
 
         code.append(getTypelessCode());
 

@@ -270,31 +270,6 @@ public abstract class NamedDecl extends Decl {
         // Remove prefix elements
         namespaceElements = SpecsCollections.subList(namespaceElements, prefixElementsToRemove);
 
-        /*
-        ClavaNode currentNode = this;
-        
-        // Find namespace ancestors, looking for the same namespace as the last in elements
-        while (currentNode != null) {
-            Optional<NamespaceDecl> namespaceDecl = currentNode.getAncestorTry(NamespaceDecl.class);
-        
-            // If no namespace, break
-            if (!namespaceDecl.isPresent()) {
-                break;
-            }
-        
-            // If namespace name is not the same as the last element, break
-            if (!namespaceDecl.get().getDeclName().equals(SpecsCollections.last(namespaceElements))) {
-                break;
-            }
-        
-            // Last element is the same as a namespace this node is in, remove it from the elements
-            SpecsCollections.removeLast(namespaceElements);
-        
-            // Update
-            currentNode = namespaceDecl.get();
-        }
-        */
-
         // No more namespaces, return current namespace elements
         if (namespaceElements.isEmpty()) {
             return Optional.empty();
