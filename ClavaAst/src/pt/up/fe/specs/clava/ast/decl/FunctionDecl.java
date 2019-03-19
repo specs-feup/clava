@@ -420,16 +420,39 @@ public class FunctionDecl extends DeclaratorDecl {
             code.append(returnType);
         }
 
-        code.append(" ").append(getTypelessCode());
+        code.append(" ");
+
+        getCurrentNamespace().ifPresent(namespace -> code.append(namespace).append("::"));
+        // String qualifiedPrefix = get(QUALIFIED_PREFIX);
+        // // TODO: instead of isDefinition, probably shoud test if it is inside the corresponding namespace
+        // // Method that returns the current prefix, taking into account the namespace
+        // if (!qualifiedPrefix.isEmpty() && isDefinition()) {
+        // code.append(qualifiedPrefix).append("::");
+        // }
+
+        code.append(getTypelessCode());
 
         return code.toString().trim();
     }
 
     @Override
     public String getTypelessCode() {
+        // return getTypelessCode(true);
+        // }
+        //
+        // protected String getTypelessCode(boolean useQualifiedName) {
         StringBuilder code = new StringBuilder();
 
+        // boolean useQualifiedName = useQualifiedName();
+        // boolean useQualifiedName = false;
+
         code.append(getDeclName());
+        // if (useQualifiedName) {
+        // code.append(getQualifiedName());
+        // } else {
+        // code.append(getDeclName());
+        // }
+
         String parameters = getParametersCode();
 
         // if (!getFunctionTypeTry().isPresent()) {
@@ -448,6 +471,21 @@ public class FunctionDecl extends DeclaratorDecl {
 
         return code.toString();
     }
+
+    public boolean isDefinition() {
+        return getDefinition().map(def -> def == this).orElse(false);
+    }
+
+    // private boolean useQualifiedName() {
+    // // True if this is a function declaration outside a record
+    // if (getDefinition().map(def -> def == this).orElse(false)) {
+    // boolean isInsideRecord = getAncestorTry(RecordDecl.class).isPresent();
+    // // System.out.println("FUNC DECL IS INSIDE RECORD? " + isInsideRecord + " (" + getLocation() + ")");
+    // return !isInsideRecord;
+    // }
+    //
+    // return false;
+    // }
 
     private String getCodeAfterParams() {
         FunctionType functionType = getFunctionType();
