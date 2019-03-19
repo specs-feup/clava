@@ -244,11 +244,16 @@ public class ClangDumperParser {
     }
 
     public static File getClangResourceFolder() {
+        return SpecsIo.getTempFolder("clang_ast_exe");
+
+        /*
         String tempDir = System.getProperty("java.io.tmpdir");
+        
         // String baseFilename = new JarPath(ClangAstLauncher.class, "clangjar").buildJarPath();
         // File resourceFolder = new File(baseFilename, "clang_ast_exe");
         File resourceFolder = new File(tempDir, "clang_ast_exe");
         return resourceFolder;
+        */
     }
 
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
