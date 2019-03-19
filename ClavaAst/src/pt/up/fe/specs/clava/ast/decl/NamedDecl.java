@@ -13,8 +13,12 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -27,6 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
@@ -227,6 +232,79 @@ public abstract class NamedDecl extends Decl {
     // public String toContentString() {
     // return super.toContentString() + "declName:" + declName + ", type:" + getTypeCode();
     // }
+
+    public Optional<String> getCurrentNamespace() {
+        return getCurrentNamespace("");
+    }
+
+    public Optional<String> getCurrentNamespace(String recordName) {
+        // Get namespace
+        String namespace = getNamespace(recordName).orElse(null);
+        if (namespace == null) {
+            return Optional.empty();
+        }
+
+        // Split namespace
+        List<String> namespaceElements = new ArrayList<>(Arrays.asList(namespace.split("::")));
+
+        // Get namespace chain for this node
+        ClavaNode currentNode = this;
+        List<NamespaceDecl> nodeNamespace = new ArrayList<>();
+        while (currentNode != null) {
+            Optional<NamespaceDecl> namespaceDecl = currentNode.getAncestorTry(NamespaceDecl.class);
+
+            namespaceDecl.ifPresent(node -> nodeNamespace.add(0, node));
+            currentNode = namespaceDecl.orElse(null);
+        }
+
+        // Remove elements that correspond to the same prefix in current node namespace
+        int prefixElementsToRemove = 0;
+        for (int i = 0; i < nodeNamespace.size(); i++) {
+            if (namespaceElements.get(i).equals(nodeNamespace.get(i).getDeclName())) {
+                prefixElementsToRemove++;
+            } else {
+                break;
+            }
+        }
+
+        // Remove prefix elements
+        namespaceElements = SpecsCollections.subList(namespaceElements, prefixElementsToRemove);
+
+        /*
+        ClavaNode currentNode = this;
+        
+        // Find namespace ancestors, looking for the same namespace as the last in elements
+        while (currentNode != null) {
+            Optional<NamespaceDecl> namespaceDecl = currentNode.getAncestorTry(NamespaceDecl.class);
+        
+            // If no namespace, break
+            if (!namespaceDecl.isPresent()) {
+                break;
+            }
+        
+            // If namespace name is not the same as the last element, break
+            if (!namespaceDecl.get().getDeclName().equals(SpecsCollections.last(namespaceElements))) {
+                break;
+            }
+        
+            // Last element is the same as a namespace this node is in, remove it from the elements
+            SpecsCollections.removeLast(namespaceElements);
+        
+            // Update
+            currentNode = namespaceDecl.get();
+        }
+        */
+
+        // No more namespaces, return current namespace elements
+        if (namespaceElements.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(namespaceElements.stream().collect(Collectors.joining("::")));
+    }
+
+    public Optional<String> getNamespace() {
+        return getNamespace("");
+    }
 
     public Optional<String> getNamespace(String recordName) {
 
