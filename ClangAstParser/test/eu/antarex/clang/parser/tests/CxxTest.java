@@ -237,6 +237,11 @@ public class CxxTest {
         new CxxTester("VectorType.cpp").test();
     }
 
+    @Test
+    public void testNamespace() {
+        new CxxTester("namespace.cpp", "namespace.h").test();
+    }
+
     // @Test
     // public void testBoost() {
     // new CxxTester("boost.cpp").test();
