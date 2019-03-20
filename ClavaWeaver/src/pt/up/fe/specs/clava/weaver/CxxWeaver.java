@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
+import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
@@ -100,7 +101,8 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String TEMP_SRC_FOLDER = "__clava_src";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
 
-    private static final Set<String> LANGUAGES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx")));
+    private static final Set<String> LANGUAGES = Collections
+            .unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx", "opencl")));
 
     private static final String CMAKE_GENERATED_FILES_FILENAME = "clava_generated_files.txt";
     private static final String CMAKE_IMPLEMENTATION_FILES_FILENAME = "clava_implementation_files.txt";
@@ -208,6 +210,8 @@ public class CxxWeaver extends ACxxWeaver {
 
     private ClavaWeaverData weaverData;
 
+    private final ClavaMetrics metrics;
+
     public CxxWeaver() {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
@@ -236,7 +240,12 @@ public class CxxWeaver extends ACxxWeaver {
 
         weaverData = null;
 
-        this.setWeaverProfiler(new ClavaMetrics());
+        metrics = new ClavaMetrics();
+        this.setWeaverProfiler(metrics);
+    }
+
+    public WeavingReport getWeavingReport() {
+        return metrics.getReport();
     }
 
     public ClavaWeaverData getWeaverData() {

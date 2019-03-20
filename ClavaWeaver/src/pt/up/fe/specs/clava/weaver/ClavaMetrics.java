@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.lara.interpreter.profile.BasicWeaverProfiler;
 import org.lara.interpreter.profile.ReportWriter;
+import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.interf.events.data.ActionEvent;
 
@@ -26,6 +27,11 @@ public class ClavaMetrics extends BasicWeaverProfiler {
 
     private static final Set<String> ADDITIONAL_INSERT_ACTIONS = SpecsCollections.newHashSet("insertBefore",
             "insertAfter", "replaceWith", "insertBegin", "insertEnd");
+
+    @Override
+    public WeavingReport getReport() {
+        return super.getReport();
+    }
 
     @Override
     protected void buildReport(ReportWriter writer) {
