@@ -42,6 +42,7 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.stringsplitter.StringSplitter;
 import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
+import pt.up.fe.specs.util.utilities.Incrementer;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -168,31 +169,71 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint[] descendantsArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
-        return getNode().getDescendantsStream()
+        Incrementer nullJoinpoints = new Incrementer();
+        Incrementer excludedJoinpoints = new Incrementer();
+        AJoinPoint[] descendants = getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
-                .filter(jp -> jp != null && jp.instanceOf(type))
+                .filter(jp -> {
+                    // Count null join points separately
+                    if (jp == null) {
+                        nullJoinpoints.increment();
+                        return false;
+                    }
+
+                    boolean accepted = jp.instanceOf(type);
+                    if (!accepted) {
+                        excludedJoinpoints.increment();
+                    }
+                    return accepted;
+                })
                 // .filter(jp -> jp.getJoinpointType().equals(type))
                 .toArray(AJoinPoint[]::new);
 
+        // Count as selected nodes
+        getWeaverEngine().getWeavingReport().incJoinPoints(descendants.length + excludedJoinpoints.getCurrent());
+        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(descendants.length);
+
+        // Count as a select
+        getWeaverEngine().getWeavingReport().incSelects();
+
+        return descendants;
     }
 
     @Override
     public AJoinPoint[] getDescendantsArrayImpl() {
-        return getNode().getDescendantsStream()
+        AJoinPoint[] descendants = getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
                 .filter(jp -> jp != null)
                 .toArray(AJoinPoint[]::new);
+
+        // Count as selected nodes
+        getWeaverEngine().getWeavingReport().incJoinPoints(descendants.length);
+        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(descendants.length);
+
+        // Count as a select
+        getWeaverEngine().getWeavingReport().incSelects();
+
+        return descendants;
     }
 
     @Override
     public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
-        return getNode().getDescendantsAndSelfStream()
+        AJoinPoint[] descendants = getNode().getDescendantsAndSelfStream()
                 .map(descendant -> CxxJoinpoints.create(descendant, this))
                 .filter(jp -> jp.instanceOf(type))
                 // .filter(jp -> jp.getJoinpointType().equals(type))
                 .toArray(AJoinPoint[]::new);
+
+        // Count as selected nodes
+        getWeaverEngine().getWeavingReport().incJoinPoints(descendants.length);
+        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(descendants.length);
+
+        // Count as a select
+        getWeaverEngine().getWeavingReport().incSelects();
+
+        return descendants;
     }
 
     @Override
@@ -658,11 +699,20 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
-        return getNode().getChildren().stream()
+        AJoinPoint[] children = getNode().getChildren().stream()
                 .filter(node -> !(node instanceof NullNode))
                 .map(node -> CxxJoinpoints.create(node, this))
                 .collect(Collectors.toList())
                 .toArray(new AJoinPoint[0]);
+
+        // Count as selected nodes
+        getWeaverEngine().getWeavingReport().incJoinPoints(children.length);
+        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(children.length);
+
+        // Count as a select
+        getWeaverEngine().getWeavingReport().incSelects();
+
+        return children;
     }
 
     @Override
