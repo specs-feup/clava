@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver;
 import java.util.Set;
 
 import org.lara.interpreter.profile.BasicWeaverProfiler;
+import org.lara.interpreter.profile.ReportField;
 import org.lara.interpreter.profile.ReportWriter;
 import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.interf.events.Stage;
@@ -52,7 +53,7 @@ public class ClavaMetrics extends BasicWeaverProfiler {
 
             // Update stats for additional inserts
             if (isAdditionalInsert) {
-                getReport().incInserts();
+                getReport().inc(ReportField.INSERTS);
                 reportNativeLoc(data.getArguments().get(0), true);
             }
         }

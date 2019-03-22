@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.lara.interpreter.profile.ReportField;
 import org.lara.interpreter.utils.DefMap;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -190,11 +191,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .toArray(AJoinPoint[]::new);
 
         // Count as selected nodes
-        getWeaverEngine().getWeavingReport().incJoinPoints(descendants.length + excludedJoinpoints.getCurrent());
-        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(descendants.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS,
+                descendants.length + excludedJoinpoints.getCurrent());
+        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
 
         // Count as a select
-        getWeaverEngine().getWeavingReport().incSelects();
+        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
 
         return descendants;
     }
@@ -207,11 +209,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .toArray(AJoinPoint[]::new);
 
         // Count as selected nodes
-        getWeaverEngine().getWeavingReport().incJoinPoints(descendants.length);
-        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(descendants.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, descendants.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
 
         // Count as a select
-        getWeaverEngine().getWeavingReport().incSelects();
+        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
 
         return descendants;
     }
@@ -227,11 +229,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .toArray(AJoinPoint[]::new);
 
         // Count as selected nodes
-        getWeaverEngine().getWeavingReport().incJoinPoints(descendants.length);
-        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(descendants.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, descendants.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
 
         // Count as a select
-        getWeaverEngine().getWeavingReport().incSelects();
+        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
 
         return descendants;
     }
@@ -706,11 +708,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .toArray(new AJoinPoint[0]);
 
         // Count as selected nodes
-        getWeaverEngine().getWeavingReport().incJoinPoints(children.length);
-        getWeaverEngine().getWeavingReport().incFilteredJoinPoints(children.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, children.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, children.length);
 
         // Count as a select
-        getWeaverEngine().getWeavingReport().incSelects();
+        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
 
         return children;
     }
