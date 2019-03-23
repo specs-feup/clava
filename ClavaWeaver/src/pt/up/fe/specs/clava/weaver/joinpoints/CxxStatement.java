@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
+import pt.up.fe.specs.clava.ast.expr.Operator;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -47,6 +48,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberCall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANewExpr;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
@@ -242,6 +244,11 @@ public class CxxStatement extends AStatement {
         // Since it is direct, normalize children
 
         return CxxSelects.select(AExpression.class, stmt.getChildrenNormalized(), false, this, Expr.class);
+    }
+
+    @Override
+    public List<? extends AOp> selectOp() {
+        return CxxSelects.select(AOp.class, stmt.getChildrenNormalized(), true, this, Operator.class);
     }
 
     @Override

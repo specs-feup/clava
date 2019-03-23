@@ -410,18 +410,22 @@
 		<attribute name="id" type="String" tooltip="The ID of the pragma"/>
 	</artifact>
 
+	<artifact class="op">
+		<attribute name="kind" type="String" />
+		<attribute name="isBitwise" type="Boolean" />
+	</artifact>
+	
 	<!-- BINARY OPERATOR -->
 	<artifact class="binaryOp">
-		<attribute name="kind" type="String" />
 		<attribute name="left" type="joinpoint" />
 		<attribute name="right" type="joinpoint" />
 		<attribute name="isAssignment" type="Boolean" />
+		
 	</artifact>
 
 
 	<!-- UNARY OPERATOR -->
 	<artifact class="unaryOp">
-		<attribute name="kind" type="String" />
 		<attribute name="operand" type="joinpoint" />
 		<attribute name="isPointerDeref" type="Boolean" />
 	</artifact>

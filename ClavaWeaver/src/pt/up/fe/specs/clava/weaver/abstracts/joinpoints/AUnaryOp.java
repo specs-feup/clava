@@ -17,41 +17,17 @@ import java.util.Arrays;
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AUnaryOp extends AExpression {
+public abstract class AUnaryOp extends AOp {
 
-    protected AExpression aExpression;
+    protected AOp aOp;
 
     /**
      * 
      */
-    public AUnaryOp(AExpression aExpression){
-        this.aExpression = aExpression;
+    public AUnaryOp(AOp aOp){
+        super(aOp);
+        this.aOp = aOp;
     }
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
     /**
      * Get value on attribute operand
      * @return the attribute's value
@@ -111,12 +87,30 @@ public abstract class AUnaryOp extends AExpression {
     }
 
     /**
+     * Get value on attribute kind
+     * @return the attribute's value
+     */
+    @Override
+    public String getKindImpl() {
+        return this.aOp.getKindImpl();
+    }
+
+    /**
+     * Get value on attribute isBitwise
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsBitwiseImpl() {
+        return this.aOp.getIsBitwiseImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
     @Override
     public AVardecl getVardeclImpl() {
-        return this.aExpression.getVardeclImpl();
+        return this.aOp.getVardeclImpl();
     }
 
     /**
@@ -125,7 +119,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public String getUseImpl() {
-        return this.aExpression.getUseImpl();
+        return this.aOp.getUseImpl();
     }
 
     /**
@@ -134,7 +128,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public Boolean getIsFunctionArgumentImpl() {
-        return this.aExpression.getIsFunctionArgumentImpl();
+        return this.aOp.getIsFunctionArgumentImpl();
     }
 
     /**
@@ -143,7 +137,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public ACast getImplicitCastImpl() {
-        return this.aExpression.getImplicitCastImpl();
+        return this.aOp.getImplicitCastImpl();
     }
 
     /**
@@ -152,7 +146,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
+        return this.aOp.selectVardecl();
     }
 
     /**
@@ -161,7 +155,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aOp.replaceWithImpl(node);
     }
 
     /**
@@ -170,7 +164,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aOp.replaceWithImpl(node);
     }
 
     /**
@@ -179,7 +173,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aOp.insertBeforeImpl(node);
     }
 
     /**
@@ -188,7 +182,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aOp.insertBeforeImpl(node);
     }
 
     /**
@@ -197,7 +191,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aExpression.insertAfterImpl(node);
+        return this.aOp.insertAfterImpl(node);
     }
 
     /**
@@ -206,7 +200,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aExpression.insertAfterImpl(code);
+        return this.aOp.insertAfterImpl(code);
     }
 
     /**
@@ -214,7 +208,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public void detachImpl() {
-        this.aExpression.detachImpl();
+        this.aOp.detachImpl();
     }
 
     /**
@@ -223,7 +217,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aExpression.setTypeImpl(type);
+        this.aOp.setTypeImpl(type);
     }
 
     /**
@@ -231,7 +225,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aExpression.copyImpl();
+        return this.aOp.copyImpl();
     }
 
     /**
@@ -239,7 +233,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aExpression.deepCopyImpl();
+        return this.aOp.deepCopyImpl();
     }
 
     /**
@@ -249,7 +243,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aExpression.setUserFieldImpl(fieldName, value);
+        return this.aOp.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -258,7 +252,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
+        return this.aOp.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -268,7 +262,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aExpression.setValueImpl(key, value);
+        return this.aOp.setValueImpl(key, value);
     }
 
     /**
@@ -277,7 +271,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aExpression.messageToUserImpl(message);
+        this.aOp.messageToUserImpl(message);
     }
 
     /**
@@ -287,7 +281,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aExpression.insertImpl(position, code);
+        this.aOp.insertImpl(position, code);
     }
 
     /**
@@ -295,15 +289,15 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     public String toString() {
-        return this.aExpression.toString();
+        return this.aOp.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AExpression> getSuper() {
-        return Optional.of(this.aExpression);
+    public Optional<? extends AOp> getSuper() {
+        return Optional.of(this.aOp);
     }
 
     /**
@@ -320,7 +314,7 @@ public abstract class AUnaryOp extends AExpression {
         		joinPointList = selectVardecl();
         		break;
         	default:
-        		joinPointList = this.aExpression.select(selectName);
+        		joinPointList = this.aOp.select(selectName);
         		break;
         }
         return joinPointList;
@@ -348,8 +342,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
-        attributes.add("kind");
+        this.aOp.fillWithAttributes(attributes);
         attributes.add("operand");
         attributes.add("isPointerDeref");
     }
@@ -359,7 +352,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
+        this.aOp.fillWithSelects(selects);
         selects.add("operand");
     }
 
@@ -368,7 +361,7 @@ public abstract class AUnaryOp extends AExpression {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
+        this.aOp.fillWithActions(actions);
     }
 
     /**
@@ -390,15 +383,16 @@ public abstract class AUnaryOp extends AExpression {
         if(isInstance) {
         	return true;
         }
-        return this.aExpression.instanceOf(joinpointClass);
+        return this.aOp.instanceOf(joinpointClass);
     }
     /**
      * 
      */
     protected enum UnaryOpAttributes {
-        KIND("kind"),
         OPERAND("operand"),
         ISPOINTERDEREF("isPointerDeref"),
+        KIND("kind"),
+        ISBITWISE("isBitwise"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

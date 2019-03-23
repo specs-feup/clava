@@ -142,6 +142,14 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Default implementation of the method used by the lara interpreter to select ops
+     * @return 
+     */
+    public List<? extends AOp> selectOp() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOp.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select binaryOps
      * @return 
      */
@@ -207,6 +215,9 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         	case "varref": 
         		joinPointList = selectVarref();
         		break;
+        	case "op": 
+        		joinPointList = selectOp();
+        		break;
         	case "binaryOp": 
         		joinPointList = selectBinaryOp();
         		break;
@@ -268,6 +279,7 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         selects.add("arrayAccess");
         selects.add("vardecl");
         selects.add("varref");
+        selects.add("op");
         selects.add("binaryOp");
         selects.add("unaryOp");
         selects.add("newExpr");

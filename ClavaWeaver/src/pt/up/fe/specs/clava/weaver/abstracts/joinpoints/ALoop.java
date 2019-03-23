@@ -975,6 +975,15 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select ops
+     * @return 
+     */
+    @Override
+    public List<? extends AOp> selectOp() {
+        return this.aStatement.selectOp();
+    }
+
+    /**
      * Method used by the lara interpreter to select binaryOps
      * @return 
      */
@@ -1206,6 +1215,9 @@ public abstract class ALoop extends AStatement {
         		break;
         	case "varref": 
         		joinPointList = selectVarref();
+        		break;
+        	case "op": 
+        		joinPointList = selectOp();
         		break;
         	case "binaryOp": 
         		joinPointList = selectBinaryOp();

@@ -163,6 +163,7 @@
  		<select							class="arrayAccess"/>
  		<select 						class="vardecl"/>
 		<select 						class="varref"/>
+		<select							class="op"/>		
 		<select							class="binaryOp"/>
 		<select							class="unaryOp"/>
 		<select							class="newExpr"/>
@@ -206,13 +207,17 @@
 	<joinpoint class="memberCall" 	extends="call">
 	</joinpoint>
 
+	<!-- OPERATOR -->	
+	<joinpoint class="op" 	extends="expression">
+	</joinpoint>
+	
 	<!-- BINARY OPERATOR -->	
-	<joinpoint class="binaryOp" 	extends="expression">
+	<joinpoint class="binaryOp" 	extends="op">
 		<select alias="left"			class="expression"/>
 		<select alias="right"			class="expression"/>
 	</joinpoint>
 	
-	<joinpoint class="unaryOp" 	extends="expression">
+	<joinpoint class="unaryOp" 	extends="op">
 		<select alias="operand"			class="expression"/>
 	</joinpoint>	
 	

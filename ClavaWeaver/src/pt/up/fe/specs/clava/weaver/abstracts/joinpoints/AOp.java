@@ -4,137 +4,76 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ABinaryOp
+ * Auto-Generated class for join point AOp
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ABinaryOp extends AOp {
+public abstract class AOp extends AExpression {
 
-    protected AOp aOp;
+    protected AExpression aExpression;
 
     /**
      * 
      */
-    public ABinaryOp(AOp aOp){
-        super(aOp);
-        this.aOp = aOp;
+    public AOp(AExpression aExpression){
+        this.aExpression = aExpression;
     }
     /**
-     * Get value on attribute left
+     * Get value on attribute kind
      * @return the attribute's value
      */
-    public abstract AJoinPoint getLeftImpl();
-
-    /**
-     * Get value on attribute left
-     * @return the attribute's value
-     */
-    public final Object getLeft() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "left", Optional.empty());
-        	}
-        	AJoinPoint result = this.getLeftImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "left", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "left", e);
-        }
-    }
-
-    /**
-     * Get value on attribute right
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getRightImpl();
-
-    /**
-     * Get value on attribute right
-     * @return the attribute's value
-     */
-    public final Object getRight() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "right", Optional.empty());
-        	}
-        	AJoinPoint result = this.getRightImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "right", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "right", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isAssignment
-     * @return the attribute's value
-     */
-    public abstract Boolean getIsAssignmentImpl();
-
-    /**
-     * Get value on attribute isAssignment
-     * @return the attribute's value
-     */
-    public final Object getIsAssignment() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAssignment", Optional.empty());
-        	}
-        	Boolean result = this.getIsAssignmentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isAssignment", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isAssignment", e);
-        }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select lefts
-     * @return 
-     */
-    public List<? extends AExpression> selectLeft() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select rights
-     * @return 
-     */
-    public List<? extends AExpression> selectRight() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
+    public abstract String getKindImpl();
 
     /**
      * Get value on attribute kind
      * @return the attribute's value
      */
-    @Override
-    public String getKindImpl() {
-        return this.aOp.getKindImpl();
+    public final Object getKind() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
+        	}
+        	String result = this.getKindImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "kind", e);
+        }
     }
 
     /**
      * Get value on attribute isBitwise
      * @return the attribute's value
      */
-    @Override
-    public Boolean getIsBitwiseImpl() {
-        return this.aOp.getIsBitwiseImpl();
+    public abstract Boolean getIsBitwiseImpl();
+
+    /**
+     * Get value on attribute isBitwise
+     * @return the attribute's value
+     */
+    public final Object getIsBitwise() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isBitwise", Optional.empty());
+        	}
+        	Boolean result = this.getIsBitwiseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isBitwise", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isBitwise", e);
+        }
     }
 
     /**
@@ -143,7 +82,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AVardecl getVardeclImpl() {
-        return this.aOp.getVardeclImpl();
+        return this.aExpression.getVardeclImpl();
     }
 
     /**
@@ -152,7 +91,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public String getUseImpl() {
-        return this.aOp.getUseImpl();
+        return this.aExpression.getUseImpl();
     }
 
     /**
@@ -161,7 +100,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public Boolean getIsFunctionArgumentImpl() {
-        return this.aOp.getIsFunctionArgumentImpl();
+        return this.aExpression.getIsFunctionArgumentImpl();
     }
 
     /**
@@ -170,7 +109,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public ACast getImplicitCastImpl() {
-        return this.aOp.getImplicitCastImpl();
+        return this.aExpression.getImplicitCastImpl();
     }
 
     /**
@@ -179,7 +118,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aOp.selectVardecl();
+        return this.aExpression.selectVardecl();
     }
 
     /**
@@ -188,7 +127,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aOp.replaceWithImpl(node);
+        return this.aExpression.replaceWithImpl(node);
     }
 
     /**
@@ -197,7 +136,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aOp.replaceWithImpl(node);
+        return this.aExpression.replaceWithImpl(node);
     }
 
     /**
@@ -206,7 +145,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aOp.insertBeforeImpl(node);
+        return this.aExpression.insertBeforeImpl(node);
     }
 
     /**
@@ -215,7 +154,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aOp.insertBeforeImpl(node);
+        return this.aExpression.insertBeforeImpl(node);
     }
 
     /**
@@ -224,7 +163,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aOp.insertAfterImpl(node);
+        return this.aExpression.insertAfterImpl(node);
     }
 
     /**
@@ -233,7 +172,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aOp.insertAfterImpl(code);
+        return this.aExpression.insertAfterImpl(code);
     }
 
     /**
@@ -241,7 +180,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public void detachImpl() {
-        this.aOp.detachImpl();
+        this.aExpression.detachImpl();
     }
 
     /**
@@ -250,7 +189,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aOp.setTypeImpl(type);
+        this.aExpression.setTypeImpl(type);
     }
 
     /**
@@ -258,7 +197,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aOp.copyImpl();
+        return this.aExpression.copyImpl();
     }
 
     /**
@@ -266,7 +205,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aOp.deepCopyImpl();
+        return this.aExpression.deepCopyImpl();
     }
 
     /**
@@ -276,7 +215,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aOp.setUserFieldImpl(fieldName, value);
+        return this.aExpression.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -285,7 +224,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aOp.setUserFieldImpl(fieldNameAndValue);
+        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -295,7 +234,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aOp.setValueImpl(key, value);
+        return this.aExpression.setValueImpl(key, value);
     }
 
     /**
@@ -304,7 +243,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aOp.messageToUserImpl(message);
+        this.aExpression.messageToUserImpl(message);
     }
 
     /**
@@ -314,7 +253,7 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public void insertImpl(String position, String code) {
-        this.aOp.insertImpl(position, code);
+        this.aExpression.insertImpl(position, code);
     }
 
     /**
@@ -322,35 +261,29 @@ public abstract class ABinaryOp extends AOp {
      */
     @Override
     public String toString() {
-        return this.aOp.toString();
+        return this.aExpression.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AOp> getSuper() {
-        return Optional.of(this.aOp);
+    public Optional<? extends AExpression> getSuper() {
+        return Optional.of(this.aExpression);
     }
 
     /**
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
-        	case "left": 
-        		joinPointList = selectLeft();
-        		break;
-        	case "right": 
-        		joinPointList = selectRight();
-        		break;
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
         	default:
-        		joinPointList = this.aOp.select(selectName);
+        		joinPointList = this.aExpression.select(selectName);
         		break;
         }
         return joinPointList;
@@ -360,7 +293,7 @@ public abstract class ABinaryOp extends AOp {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -377,29 +310,26 @@ public abstract class ABinaryOp extends AOp {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aOp.fillWithAttributes(attributes);
-        attributes.add("left");
-        attributes.add("right");
-        attributes.add("isAssignment");
+    protected void fillWithAttributes(List<String> attributes) {
+        this.aExpression.fillWithAttributes(attributes);
+        attributes.add("kind");
+        attributes.add("isBitwise");
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aOp.fillWithSelects(selects);
-        selects.add("left");
-        selects.add("right");
+    protected void fillWithSelects(List<String> selects) {
+        this.aExpression.fillWithSelects(selects);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aOp.fillWithActions(actions);
+    protected void fillWithActions(List<String> actions) {
+        this.aExpression.fillWithActions(actions);
     }
 
     /**
@@ -407,8 +337,8 @@ public abstract class ABinaryOp extends AOp {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
-        return "binaryOp";
+    public String get_class() {
+        return "op";
     }
 
     /**
@@ -416,20 +346,17 @@ public abstract class ABinaryOp extends AOp {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
         }
-        return this.aOp.instanceOf(joinpointClass);
+        return this.aExpression.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum BinaryOpAttributes {
-        LEFT("left"),
-        RIGHT("right"),
-        ISASSIGNMENT("isAssignment"),
+    protected enum OpAttributes {
         KIND("kind"),
         ISBITWISE("isBitwise"),
         VARDECL("vardecl"),
@@ -488,13 +415,13 @@ public abstract class ABinaryOp extends AOp {
         /**
          * 
          */
-        private BinaryOpAttributes(String name){
+        private OpAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<BinaryOpAttributes> fromString(String name) {
+        public static Optional<OpAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -502,7 +429,7 @@ public abstract class ABinaryOp extends AOp {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(BinaryOpAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(OpAttributes::name).collect(Collectors.toList());
         }
 
         /**
