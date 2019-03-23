@@ -46,6 +46,9 @@ public enum UnaryOperatorKind implements StringProvider {
         return ENUM_HELPER.get();
     }
 
+    public boolean isBitwise() {
+        return this == Not;
+    }
     // final String op;
     //
     // private UnaryOperatorKind(String op) {

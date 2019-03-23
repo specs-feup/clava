@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.expr.enums;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -52,11 +55,18 @@ public enum BinaryOperatorKind implements StringProvider {
     OrAssign,
     Comma;
 
+    private static final Set<BinaryOperatorKind> BITWISE = EnumSet.of(And, Or, Xor, Shl, Shr, AndAssign, OrAssign,
+            XorAssign, ShlAssign, ShrAssign);
+
     private static final Lazy<EnumHelperWithValue<BinaryOperatorKind>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(BinaryOperatorKind.class);
 
     public static EnumHelperWithValue<BinaryOperatorKind> getHelper() {
         return HELPER.get();
+    }
+
+    public boolean isBitwise() {
+        return BITWISE.contains(this);
     }
 
     // private static final Set<BinaryOperatorKind> IS_ASSIGN = EnumSet.of(ASSIGN, MUL_ASSIGN, DIV_ASSIGN, REM_ASSIGN,

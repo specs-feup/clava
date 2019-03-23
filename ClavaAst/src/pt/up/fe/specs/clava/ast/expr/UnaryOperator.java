@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -29,7 +31,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
  * @author JoaoBispo
  *
  */
-public class UnaryOperator extends Expr {
+public class UnaryOperator extends Operator {
 
     /// DATAKEYS BEGIN
 
@@ -39,6 +41,27 @@ public class UnaryOperator extends Expr {
             UnaryOperatorPosition.class);
 
     /// DATAKEYS END
+
+    // Hardcoding kind names, in order to avoid breaking code that depends on these names when changing Clang
+    // version
+    private static final Map<UnaryOperatorKind, String> KIND_NAMES;
+    static {
+        KIND_NAMES = new HashMap<>();
+        KIND_NAMES.put(UnaryOperatorKind.PostInc, "post_inc");
+        KIND_NAMES.put(UnaryOperatorKind.PostDec, "post_dec");
+        KIND_NAMES.put(UnaryOperatorKind.PreInc, "pre_inc");
+        KIND_NAMES.put(UnaryOperatorKind.PreDec, "pre_dec");
+        KIND_NAMES.put(UnaryOperatorKind.AddrOf, "addr_of");
+        KIND_NAMES.put(UnaryOperatorKind.Deref, "deref");
+        KIND_NAMES.put(UnaryOperatorKind.Plus, "plus");
+        KIND_NAMES.put(UnaryOperatorKind.Minus, "minus");
+        KIND_NAMES.put(UnaryOperatorKind.Not, "not");
+        KIND_NAMES.put(UnaryOperatorKind.LNot, "l_not");
+        KIND_NAMES.put(UnaryOperatorKind.Real, "real");
+        KIND_NAMES.put(UnaryOperatorKind.Imag, "imag");
+        KIND_NAMES.put(UnaryOperatorKind.Extension, "extension");
+        KIND_NAMES.put(UnaryOperatorKind.Coawait, "cowait");
+    }
 
     public UnaryOperator(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -112,6 +135,21 @@ public class UnaryOperator extends Expr {
 
     public Expr getSubExpr() {
         return getChild(Expr.class, 0);
+    }
+
+    @Override
+    public boolean isBitwise() {
+        return getOp().isBitwise();
+    }
+
+    @Override
+    public String getKindName() {
+        String kindName = KIND_NAMES.get(getOp());
+        if (kindName == null) {
+            throw new RuntimeException("Not implemented for " + getOp());
+        }
+
+        return kindName;
     }
 
     // @Override
