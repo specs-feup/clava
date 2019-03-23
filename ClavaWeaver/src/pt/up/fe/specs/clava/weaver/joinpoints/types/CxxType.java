@@ -29,7 +29,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
-import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -135,7 +134,8 @@ public class CxxType extends AType {
 
     @Override
     public Boolean getIsPointerImpl() {
-        return type instanceof PointerType;
+        return type.isPointer();
+        // return type instanceof PointerType;
     }
 
     @Override
