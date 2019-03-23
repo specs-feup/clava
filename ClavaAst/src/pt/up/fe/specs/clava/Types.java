@@ -99,21 +99,25 @@ public class Types {
         */
     }
 
-    public static boolean isPointer(Type type) {
-        if (type instanceof PointerType) {
-            return true;
-        }
+    // public static boolean isPointer(Type type) {
+    // if (type instanceof PointerType) {
+    // return true;
+    // }
+    //
+    // if (type instanceof QualType) {
+    // return isPointer(type.get(QualType.UNQUALIFIED_TYPE));
+    // }
+    //
+    // return false;
+    // }
 
-        return false;
-    }
-
-    public static Type getPointeeType(Type type) {
-        if (type instanceof PointerType) {
-            return ((PointerType) type).getPointeeType();
-        }
-
-        throw new RuntimeException("Not implemented for type '" + type.getClass().getSimpleName() + "'");
-    }
+    // public static Type getPointeeType(Type type) {
+    // if (type instanceof PointerType) {
+    // return ((PointerType) type).getPointeeType();
+    // }
+    //
+    // throw new RuntimeException("Not implemented for type '" + type.getClass().getSimpleName() + "'");
+    // }
 
     // public static Type normalize(Type type) {
     // if (type instanceof AdjustedType) {

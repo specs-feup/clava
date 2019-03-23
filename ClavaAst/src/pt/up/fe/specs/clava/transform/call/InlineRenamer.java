@@ -555,7 +555,8 @@ public class InlineRenamer {
     private void argumentRename(DeclRefExpr expr, ParmVarDecl varDecl) {
         // If not a pointer or an array, apply generic rename (adds copy before inline)
         Type exprType = expr.getType();
-        if (!exprType.isArray() && !Types.isPointer(exprType)) {
+        // if (!exprType.isArray() && !Types.isPointer(exprType)) {
+        if (!exprType.isArray() && !exprType.isPointer()) {
             argumentRenameGeneric(expr, varDecl);
             return;
         }

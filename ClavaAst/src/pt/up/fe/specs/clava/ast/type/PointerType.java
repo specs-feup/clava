@@ -72,6 +72,7 @@ public class PointerType extends Type {
         // return getPointeeType().getCode() + space + "*";
     }
 
+    @Override
     public Type getPointeeType() {
         return get(POINTEE_TYPE);
         // return getChild(Type.class, 0);
@@ -122,4 +123,8 @@ public class PointerType extends Type {
     // return pointerTypeCopy;
     // }
 
+    @Override
+    public boolean isPointer() {
+        return true;
+    }
 }

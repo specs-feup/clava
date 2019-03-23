@@ -295,4 +295,18 @@ public class QualType extends Type {
         return Arrays.asList(UNQUALIFIED_TYPE);
     }
 
+    @Override
+    public boolean isPointer() {
+        return getUnqualifiedType().isPointer();
+    }
+
+    @Override
+    public Type getPointeeType() {
+        return getUnqualifiedType().getPointeeType();
+    }
+
+    @Override
+    public boolean isArray() {
+        return getUnqualifiedType().isArray();
+    }
 }

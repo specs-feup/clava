@@ -21,7 +21,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.enums.NewInitStyle;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -155,8 +154,11 @@ public class CXXNewExpr extends Expr {
             Expr expr = constructorExpr.get();
             if (expr instanceof Literal) {
                 Type exprType = getExprType();
-                if (Types.isPointer(exprType)) {
-                    exprType = Types.getPointeeType(exprType);
+                // if (Types.isPointer(exprType)) {
+                if (exprType.isPointer()) {
+                    // if (exprType instanceof PointerType) {
+                    // exprType = Types.getPointeeType(exprType);
+                    exprType = exprType.getPointeeType();
                 }
 
                 code.append(exprType.getCode(this)).append("(").append(expr.getCode()).append(")");
@@ -166,8 +168,10 @@ public class CXXNewExpr extends Expr {
 
         } else {
             Type exprType = getExprType();
-            if (Types.isPointer(exprType)) {
-                exprType = Types.getPointeeType(exprType);
+            // if (Types.isPointer(exprType)) {
+            if (exprType.isPointer()) {
+                // exprType = Types.getPointeeType(exprType);
+                exprType = exprType.getPointeeType();
             }
             code.append(exprType.getCode(this));
 

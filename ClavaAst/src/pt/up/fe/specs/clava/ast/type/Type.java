@@ -981,4 +981,13 @@ public abstract class Type extends ClavaNode {
     // public String getString() {
     // return getCode();
     // }
+
+    public boolean isPointer() {
+        return false;
+    }
+
+    public Type getPointeeType() {
+        throw new RuntimeException("Not implemented for " + getClass());
+    }
+
 }
