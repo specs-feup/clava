@@ -20,7 +20,7 @@ import java.io.File;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.lara.loc.LaracLoc;
+import pt.up.fe.specs.lara.loc.LaraStats;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 
@@ -42,13 +42,13 @@ public class LaraLocTest {
         // System.out.println("Num comment lines:" + laraLoc.getCommentLines());
         // System.out.println("Num functions:" + laraLoc.getNumAspects());
 
-        LaracLoc laracLoc = new LaracLoc(CxxWeaver.buildLanguageSpecification());
+        LaraStats laracLoc = new LaraStats(CxxWeaver.buildLanguageSpecification());
         laracLoc.addFileStats(tempFile);
 
-        assertTrue(laracLoc.get(LaracLoc.LARA_STMTS) == 47);
-        assertTrue(laracLoc.get(LaracLoc.ASPECTS) == 9);
-        assertTrue(laracLoc.get(LaracLoc.COMMENTS) == 3);
-        assertTrue(laracLoc.get(LaracLoc.FUNCTIONS) == 1);
+        assertEquals(Integer.valueOf(50), laracLoc.get(LaraStats.LARA_STMTS));
+        assertEquals(Integer.valueOf(9), laracLoc.get(LaraStats.ASPECTS));
+        assertEquals(Integer.valueOf(3), laracLoc.get(LaraStats.COMMENTS));
+        assertEquals(Integer.valueOf(2), laracLoc.get(LaraStats.FUNCTIONS));
 
         // Clean
         SpecsIo.delete(tempFile);

@@ -85,3 +85,9 @@ end
 
 function testFunction() {
 }
+
+var UtilityFunctions = {};
+
+UtilityFunctions.util = function() {
+	return "this is useful";
+}
