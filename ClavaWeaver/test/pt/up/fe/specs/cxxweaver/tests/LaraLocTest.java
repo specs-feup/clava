@@ -34,14 +34,6 @@ public class LaraLocTest {
         File tempFile = new File(SpecsIo.getTempFolder("laraloc"), "laraloc-test.lara");
         SpecsIo.write(tempFile, SpecsIo.read(SpecsIo.resourceToStream(laraResource)));
 
-        // LaraLoc laraLoc = new LaraLoc(false);
-        // laraLoc.processLaraFile(tempFile);
-
-        // System.out.println("Num lines:" + laraLoc.getLoc());
-        // System.out.println("Num aspects:" + laraLoc.getNumAspects());
-        // System.out.println("Num comment lines:" + laraLoc.getCommentLines());
-        // System.out.println("Num functions:" + laraLoc.getNumAspects());
-
         LaraStats laracLoc = new LaraStats(CxxWeaver.buildLanguageSpecification());
         laracLoc.addFileStats(tempFile);
 
