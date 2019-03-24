@@ -1,0 +1,87 @@
+/**
+ * ASPECTS 
+ */
+aspectdef Rebuild
+	select program end
+	apply
+		$program.exec rebuild();
+	end
+end
+
+aspectdef ClavaStandard
+	output standard end
+	
+	select program end
+	apply
+		standard = $program.standard;
+		return;
+	end
+end
+
+aspectdef ClavaIsCxx
+	output isCxx end
+	
+	select program end
+	apply
+		isCxx = $program.isCxx;
+		return;
+	end
+end
+
+
+aspectdef ClavaBaseFolder
+	output baseFolder end
+	
+	select program end
+	apply
+		baseFolder = $program.baseFolder;
+		return;
+	end
+end
+
+aspectdef ClavaAddFile
+	input $file end
+
+	select program end
+	apply
+		$program.exec addFile($file);
+	end
+
+end
+
+aspectdef PushAst
+	select program end
+	apply
+		$program.exec push();
+	end
+end
+
+aspectdef PopAst
+	select program end
+	apply
+		$program.exec pop();
+	end
+end
+
+aspectdef ClavaWeavingFolder
+	output weavingFolder end
+	
+	select program end
+	apply
+		weavingFolder = $program.weavingFolder;
+		return;
+	end
+end
+
+aspectdef GetProgram
+	output programJp end
+	
+	select program end
+	apply
+		programJp = $program;
+	end
+end
+
+
+function testFunction() {
+}

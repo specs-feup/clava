@@ -25,5 +25,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraUnit"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GsonPlus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WeaverGenerator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LaraLoc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
