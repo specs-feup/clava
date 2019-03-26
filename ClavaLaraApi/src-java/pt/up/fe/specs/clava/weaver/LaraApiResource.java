@@ -72,6 +72,11 @@ public enum LaraApiResource implements LaraResourceProvider {
     OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
     OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
 
+    // Memoization
+    MEMOI_PROF("memoi/MemoiProf.lara"),
+    MEMOI_PROF_ASP("memoi/_MemoiProfAspects.lara"),
+    MEMOI_GEN("memoi/MemoiGen.lara"),
+
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
     SINGLE_FILE("util/SingleFile.lara"),

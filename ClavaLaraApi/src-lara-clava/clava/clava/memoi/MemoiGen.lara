@@ -1,0 +1,186 @@
+import lara.Io;
+
+/**
+ * 		Library to generate memoization tables based on the results from
+ * 	the memoiprof profiling library.
+ * 
+ * @constructor
+ * 
+ * @param {string[]|...string} reports - the paths of the report files
+ * */
+function MemoiGen(reports) {
+	
+	this._reportsPaths = arrayFromArgs(arguments);
+	this._reports = MemoiGen._readReports(this._reportsPaths);
+	
+	this._combineReports();
+}
+
+/**
+ * @constructor
+ * 
+ * @param {string} dir - the path of the directory containing the report files
+ * */
+MemoiGen.fromDir = function(dir) {
+
+	checkString(dir);
+	
+	var files = Io.getFiles(dir, "*.json", false);
+
+	return new MemoiGen(files);
+};
+
+/**
+ * 		Reads memoization profiling reports and sorts the counts.
+ * */
+MemoiGen._readReports = function(reportsPaths) {
+
+	var reports = [];
+	
+	for (var reportPath of reportsPaths) {
+		
+		var report = fileToJSON(reportPath);
+		
+		// add the path to uniquely identify this report
+		report.path = reportPath;
+	
+		// convert counters to integers and sort
+		for(var i in report.counts)
+			report.counts[i].counter = parseInt(report.counts[i].counter);
+	
+		report.counts.sort(function(a, b){
+	
+			if(a.counter < b.counter)
+				return 1;
+			else if(a.counter > b.counter)
+				return -1;
+			else
+				return 0;
+		});
+		
+		reports.push(report);
+	}
+	
+	return reports;
+}
+
+/**
+ * 		Combines reports of the same function and same call site.
+ * */
+MemoiGen._combineReports = function() {
+	throw "not implemented";
+};
+
+MemoiGen.prototype.printMetrics = function() {
+	
+	for(var report of this._reports) {
+		
+		println(' === metrics for ' + report.path + ' === ');
+		
+		var total = report.calls;
+		
+		var repetitionRate = (total - report.elements) / total;
+		
+		var averageRepetition = total / report.elements;
+		
+		// function
+		function totalTopN(report, n) {
+		
+			var result = 0;
+		
+			for(var i = 0; i < Math.min(n, report.counts.length); i++){
+		
+				result += report.counts[i].counter;
+			}
+		
+			return result;
+		};
+		
+		// function
+		function elementsForRatio(report, total, ratio) {
+		
+			var sum = 0;
+					
+			for(var elements = 0; elements < report.counts.length; elements++){
+		
+				sum += report.counts[elements].counter;
+				if(sum / total > ratio) {
+					return elements + 1;
+				}
+			}
+		
+			return report.elements; // ?
+		};
+		
+		// function
+		function getQuartVal(counts, idx) {
+			
+			var floor = Math.floor(idx);
+			
+			if(idx == floor) {
+				var val = (counts[idx].counter + counts[idx-1].counter) / 2;
+			} else {
+				var val = counts[floor].counter;
+			}
+			
+			return val;
+		};
+		
+		// function
+		function bwp(report) {
+			
+			var s = {};
+			
+			var length = report.counts.length;
+			
+			s.min = report.counts[length-1].counter;
+			s.q1 = getQuartVal(report.counts, 1/4 * length); 
+			s.q2 = getQuartVal(report.counts, 2/4 * length); 
+			s.q3 = getQuartVal(report.counts, 3/4 * length); 
+			s.max = report.counts[0].counter;
+			s.iqr = s.q3 - s.q1;
+			
+			return s;
+		};
+		
+		// function
+		function printBwp(report) {
+			
+			var b = bwp(report);
+			var s = '{ ';
+			
+			s += b.min += ', ';
+			s += b.q1 += ', ';
+			s += b.q2 += ', ';
+			s += b.q3 += ', ';
+			s += b.max;
+						
+			s += ' } iqr: ' + b.iqr;
+			
+			println(s);
+		};
+		
+		var top3total = totalTopN(report, 3);
+		var top3percentage = top3total / total * 100;
+		
+		var top5total = totalTopN(report, 5);
+		var top5percentage = top5total / total * 100;
+		
+		var top10total = totalTopN(report, 10);
+		var top10percentage = top10total / total * 100;
+		
+		// print metrics
+		println('  > unique inputs: ' + report.elements);
+		println('  > total calls: ' + total);
+		println('  > repetition rate: ' + repetitionRate.toFixed(4));
+		println('  > average repetition: ' + averageRepetition.toFixed(4));
+		println('  > top 3: ' + top3percentage.toFixed(2) + '%');
+		println('  > top 5: ' + top5percentage.toFixed(2) + '%');
+		println('  > top 10: ' + top10percentage.toFixed(2) + '%');
+		println('  > elements for 5%: ' + elementsForRatio(report, total, 0.05));
+		println('  > elements for 10%: ' + elementsForRatio(report, total, 0.1));
+		println('  > elements for 25%: ' + elementsForRatio(report, total, 0.25));
+		println('  > elements for 50%: ' + elementsForRatio(report, total, 0.5));
+		print('  > bwp:  '); printBwp(report);
+	}
+}
