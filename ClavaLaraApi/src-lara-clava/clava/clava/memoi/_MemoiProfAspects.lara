@@ -1,0 +1,185 @@
+/**
+ * 		Finds the target function and gets its return type.
+ * 
+ * @aspect
+ * @private
+ * */
+aspectdef _Memoi_FindType
+	input
+		targetName
+	end
+	output
+		foundType = ''
+	end
+
+	var $functionType = undefined;
+
+	// TODO: get function directly
+	select stmt.call{targetName} end
+	apply
+		$functionType = $call.decl.functionType;
+	end
+
+	if(_isValidMemoi($functionType)) {
+		foundType = $functionType.returnType.code;
+	}
+end
+
+/**
+ * 		Checks if the target function is valid.
+ *
+ *	The constraints are:
+ *	1) it has only a single parameter;
+ *	2) the parameter and return type are both T;
+ *	3) T is one of {int, float, double};.
+ **/
+function _isValidMemoi($functionType) {
+
+	var $returnType = $functionType.returnType;
+	var paramTypes = $functionType.paramTypes;
+
+	if(paramTypes.length != 1) {
+		return false;
+	}
+
+	if(paramTypes[0].code != $returnType.code) {
+		return false;
+	}
+	
+	return true;
+}
+
+/**
+ * 		Makes a wrapper for all calls of a function with the provided name.
+ * 
+ * @aspect
+ * @private
+ * */
+aspectdef _Memoi_MakeWrapper
+	input
+		targetName,
+		wrapperName
+	end
+	
+	select stmt.call{targetName} end
+	apply
+		exec wrap(wrapperName);
+	end
+end
+
+/**
+ * 		Instruments a single wrapper with the calls to the memoization profiling
+ * library. Adds declaration to the monitor. Also adds the needed header include
+ * to the file.
+ * 
+ * @aspect
+ * @private
+ * */
+aspectdef _Memoi_InstrumentWrapper
+	input
+		wrapperName,
+		monitorName,
+		monitorType
+	end
+	
+	select file.function{wrapperName}.stmt.call end
+	apply
+		var firstParam = $function.params[0].name;
+		insert after 'mp_inc([[monitorName]], &[[firstParam]], &result);';
+
+		$file.exec addGlobal(monitorName, monitorType, 'NULL');
+		
+		$file.exec addInclude("MemoiProfiler.h", false);
+		$file.exec addInclude('stdlib.h', true);
+	end
+end
+
+/**
+ * 		Performs the setup needed for the instrumentation with the memoization
+ * profiling library in the main file. This includes declaring and initializing
+ * the monitor, printing the report, and destroying the monitor.
+ * 
+ * @aspect
+ * @private
+ * */
+aspectdef _Memoi_Setup
+
+	input
+		monitorName,
+		monitorType,
+		funcName,
+		id,
+		dir,
+		type
+	end
+
+	select file.function{'main'}.body end
+	apply
+		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[funcName]]", "[[id]]", [[type]]);}%);
+
+		/* add functions to print and clean up at every return on main */
+		$function.exec insertReturn(%{mp_to_json([[monitorName]], make_report_path("[[dir]]", "[[id]]"));}%);
+		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
+
+		$file.exec addGlobal(monitorName, monitorType, 'NULL');
+
+		$file.exec addInclude('MemoiProfiler.h', false);
+		$file.exec addInclude('stdlib.h', true);
+
+		// insert the functions needed to make the report file path
+		$function.insert before _Memoi_ReportPath();
+	end	
+end
+
+/**
+ * 		Template with the code needed to make the path of the report file with a
+ * timestamp.
+ * 
+ * @codedef
+ * @private
+ * */
+codedef _Memoi_ReportPath %{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+static const char* timestamp() {
+    
+    size_t length = 16;
+    char* stamp = malloc(length);
+    
+    time_t current_time = time(NULL);
+    struct tm * tm = localtime(&current_time);
+    
+    snprintf(stamp, length, "%d%02d%02d_%02d%02d%02d", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+    
+    return stamp;
+}
+
+static const char* make_report_path(const char* dir, const char* id) {
+    
+    const char * stamp = timestamp();
+    const char * ext = ".json";
+    const char * sep = "/";
+    const char * under = "_";
+    
+    size_t stamp_len = strlen(stamp);
+    size_t ext_len = strlen(ext);
+    size_t sep_len = strlen(sep);
+    size_t under_len = strlen(under);
+    size_t dir_len = strlen(dir);
+    size_t id_len = strlen(id);
+    
+    size_t total_len = stamp_len + ext_len + sep_len + under_len + dir_len + id_len + 1; // 1 is for the \0
+    
+    char * path = malloc(total_len);
+    
+    snprintf(path, total_len, "%s%s%s%s%s%s", dir, sep, stamp, under, id, ext);
+    
+    free((void*)stamp);
+    
+    return path;
+}
+}%
+end
