@@ -1,0 +1,7 @@
+import lara._JavaTypes;
+
+// Redefine getLaraSystemTools
+_JavaTypes.getLaraSystemTools = function() {
+	println("[Clava] Redefining _JavaTypes.getLaraSystemTools()");
+	return _JavaTypes.getType("pt.up.fe.specs.clava.weaver.system.ClavaLaraSystemTools");
+}

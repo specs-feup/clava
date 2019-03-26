@@ -27,6 +27,7 @@ public enum LaraCoreApiResource implements LaraResourceProvider {
     TIMER("code/Timer.lara"),
 
     // Lara
+    JAVA_TYPES("_JavaTypesClavaUpdate.lara"),
     COMPILATION("Compilation.lara");
 
     private final String resource;
