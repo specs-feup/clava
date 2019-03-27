@@ -22,8 +22,8 @@ function MemoiProf(targetName, id, reportDir) {
 	this._monitorName = 'mp_' + this._id;
 	this._monitorType = ClavaJoinPoints.typeLiteral('MemoiProf*');
 	this._dataType = this._findDataType();
-
-	var asp1 = new _Memoi_Setup(this._monitorName, this._monitorType, this._targetName, this._id, this._reportDir, this._dataType);
+	
+	var asp1 = new _Memoi_AddReportCode();
 	asp1.call();
 }
 
@@ -66,8 +66,19 @@ MemoiProf.prototype._findDataType = function() {
  * */
 MemoiProf.prototype.profAll = function() {
 	
-	var asp1 = new _Memoi_MakeWrapper(this._targetName, this._wrapperName);
+	var asp1 = new _Memoi_GlobalWrapper(this._targetName, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
 	asp1.call();
-	var asp2 = new _Memoi_InstrumentWrapper(this._wrapperName, this._monitorName, this._monitorType);
-	asp2.call();
 }
+
+
+/**
+ * 		Profiles each call to the target function separately. This includes
+ * 	making a wrapper for each call and adding the memoization profiling code
+ * 	inside the wrapper.
+ * */
+MemoiProf.prototype.profEach = function() {
+	
+	var asp1 = new _Memoi_IndividualWrapper(this._targetName, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
+	asp1.call();
+}
+
