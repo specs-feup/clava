@@ -1,0 +1,134 @@
+// function
+function totalTopN(report, n, reportCount) {
+
+	var result = 0;
+
+	var averageCounts = [];
+	
+	for(var count of report.counts) {
+		averageCounts.push(mean(count.counter, reportCount));
+	}
+
+	sortDescending(averageCounts);
+
+	for(var i = 0; i < Math.min(n, averageCounts.length); i++){
+
+		result += averageCounts[i];
+	}
+
+	return result;
+}
+
+// function
+function elementsForRatio(report, total, ratio, reportCount) {
+
+	var sum = 0;
+	
+	var averageCounts = [];
+	
+	for(var count of report.counts) {
+		averageCounts.push(mean(count.counter, reportCount));
+	}
+
+	sortDescending(averageCounts);
+	
+	for(var elements = 0; elements < averageCounts.length; elements++){
+
+		sum += averageCounts[elements];
+		if(sum / total > ratio) {
+			return elements + 1;
+		}
+	}
+
+	return report.elements; // ?
+}
+
+// function
+function getQuartVal(counts, idx) {
+	
+	var floor = Math.floor(idx);
+	
+	if(idx == floor) {
+		var val = (counts[idx] + counts[idx-1]) / 2;
+	} else {
+		var val = counts[floor];
+	}
+	
+	return val;
+}
+
+// function
+function bwp(report, reportCount) {
+	
+	var s = {};
+	
+	var averageCounts = [];
+	
+	for(var count of report.counts) {
+		averageCounts.push(mean(count.counter, reportCount));
+	}
+
+	sortDescending(averageCounts);
+	
+	var length = averageCounts.length;
+	
+	s.min = averageCounts[length-1];
+	s.q1 = getQuartVal(averageCounts, 1/4 * length); 
+	s.q2 = getQuartVal(averageCounts, 2/4 * length); 
+	s.q3 = getQuartVal(averageCounts, 3/4 * length); 
+	s.max = averageCounts[0];
+	s.iqr = s.q3 - s.q1;
+	
+	return s;
+}
+
+// function
+function printBwp(report, reportCount) {
+	
+	var b = bwp(report, reportCount);
+	var s = '{ ';
+	
+	s += b.min += ', ';
+	s += b.q1 += ', ';
+	s += b.q2 += ', ';
+	s += b.q3 += ', ';
+	s += b.max;
+				
+	s += ' } iqr: ' + b.iqr;
+	
+	println(s);
+}
+
+function mean(values, count) {
+	
+	var sum = 0;
+	
+	for(var value of values) {
+		
+		sum += value;
+	}
+	
+	if(count === undefined) {
+		return sum / values.length;
+	} else {
+		return sum / count;
+	}
+}
+
+function sortDescending(array) {
+
+	return array.sort(function(a, b){
+
+		if(a < b)
+			return 1;
+		else if(a > b)
+			return -1;
+		else
+			return 0;
+	});
+}
+
+function sortAscending(array) {
+
+	return sortDescending(array).reverse();
+}
