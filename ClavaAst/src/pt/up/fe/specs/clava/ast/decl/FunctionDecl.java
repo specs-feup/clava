@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -408,7 +409,12 @@ public class FunctionDecl extends DeclaratorDecl {
 
         // if (getFunctionDeclData().isInline()) {
         if (get(IS_INLINE)) {
-            code.append("inline ");
+            if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
+                code.append("__inline__ ");
+            } else {
+                code.append("inline ");
+            }
+
         }
 
         if (get(STORAGE_CLASS) != StorageClass.NONE) {

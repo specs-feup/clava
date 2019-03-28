@@ -25,9 +25,9 @@ public class Language extends ADataClass<Language> {
     public static final DataKey<Boolean> LINE_COMMENT = KeyFactory.bool("lineComment");
 
     /**
-     * True if is a superset of C89.
+     * True if should use the GNU inline (i.e., __inline__). Usually this means this is a superset of C89.
      */
-    public static final DataKey<Boolean> C89 = KeyFactory.bool("c89");
+    public static final DataKey<Boolean> GNU_INLINE = KeyFactory.bool("gnuInline");
 
     /**
      * True if is a superset of C99.

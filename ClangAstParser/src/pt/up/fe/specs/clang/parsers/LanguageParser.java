@@ -45,7 +45,7 @@ public class LanguageParser implements LineStreamWorker<ClangParserData> {
         File file = new File(lineStream.nextLine());
         Language language = new Language()
                 .set(Language.LINE_COMMENT, LineStreamParsers.oneOrZero(lineStream))
-                .set(Language.C89, LineStreamParsers.oneOrZero(lineStream))
+                .set(Language.GNU_INLINE, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.C99, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.C11, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.C_PLUS_PLUS, LineStreamParsers.oneOrZero(lineStream))

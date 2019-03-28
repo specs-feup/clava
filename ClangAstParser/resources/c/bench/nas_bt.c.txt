@@ -2635,20 +2635,14 @@ if(verified) printf(" Verification    =             %12s\n", "SUCCESSFUL");
 else printf(" Verification    =             %12s\n", "UNSUCCESSFUL");
 printf(" Version         =             %12s\n", npbversion);
 printf(" Compile date    =             %12s\n", compiletime);
-printf("\n Compile options:\n"
-"    CC           = %s\n", cs1);
+printf("\n Compile options:\n    CC           = %s\n", cs1);
 printf("    CLINK        = %s\n", cs2);
 printf("    C_LIB        = %s\n", cs3);
 printf("    C_INC        = %s\n", cs4);
 printf("    CFLAGS       = %s\n", cs5);
 printf("    CLINKFLAGS   = %s\n", cs6);
 printf("    RAND         = %s\n", cs7);
-printf("\n--------------------------------------\n"
-" Please send all errors/feedbacks to:\n"
-" Center for Manycore Programming\n"
-" cmp@aces.snu.ac.kr\n"
-" http://aces.snu.ac.kr\n"
-"--------------------------------------\n\n"); //aces.snu.ac.kr\n" //aces.snu.ac.kr\n"
+printf("\n--------------------------------------\n Please send all errors/feedbacks to:\n Center for Manycore Programming\n cmp@aces.snu.ac.kr\n http://aces.snu.ac.kr\n--------------------------------------\n\n"); //aces.snu.ac.kr\n--------------------------------------\n\n"); //aces.snu.ac.kr\n"
 }
 double randlc(double * x, double a) {
 //--------------------------------------------------------------------
