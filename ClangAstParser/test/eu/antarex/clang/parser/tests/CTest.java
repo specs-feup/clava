@@ -126,4 +126,9 @@ public class CTest {
     public void testClAttribute() {
         new CTester("cl_attribute.cl").addFlags("-std=cl2.0").test();
     }
+
+    @Test
+    public void testC89() {
+        new CTester("c89.c").addFlags("-std=c89").test();
+    }
 }
