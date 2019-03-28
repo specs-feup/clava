@@ -49,21 +49,76 @@ function _isValidMemoi($functionType) {
 	return true;
 }
 
+
 /**
- * 		Makes a wrapper for all calls of a function with the provided name.
+ * 		Makes a single global wrapper for all calls of the target
+ * 	function.
  * 
  * @aspect
  * @private
  * */
-aspectdef _Memoi_MakeWrapper
+aspectdef _Memoi_GlobalWrapper
 	input
 		targetName,
-		wrapperName
+		wrapperName,
+		monitorType,
+		monitorName,
+		id,
+		reportDir,
+		dataType
 	end
 	
+	// make the wrapper
 	select stmt.call{targetName} end
 	apply
 		exec wrap(wrapperName);
+	end
+	
+	// instrument the wrapper
+	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
+	
+	// setup
+	call _Memoi_Setup(monitorName, monitorType, targetName, id, reportDir, dataType, ['global']);
+end
+
+/**
+ * 		Makes an individual wrapper for each call of the target
+ * 	function.
+ * 
+ * @aspect
+ * @private
+ * */
+aspectdef _Memoi_IndividualWrapper
+	input
+		targetName,
+		wrapperNameBase,
+		monitorType,
+		monitorNameBase,
+		idBase,
+		reportDir,
+		dataType
+	end
+	
+	var counter = 0;
+	select file.stmt.call{targetName} end
+	apply
+		
+		// make the wrapper
+		var wrapperName = wrapperNameBase + '_' + counter;
+		exec wrap(wrapperName);
+					
+		// instrument the wrapper
+		var monitorName = monitorNameBase + '_' + counter;
+		call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
+		
+		// make call site info
+		var callSiteInfo = $file.name + ':' + $call.line + ':' + $call.column;
+		
+		// setup
+		var id = idBase + '_' + counter;
+		call _Memoi_Setup(monitorName, monitorType, targetName, id, reportDir, dataType, [callSiteInfo]);
+		
+		counter++;
 	end
 end
 
@@ -84,8 +139,13 @@ aspectdef _Memoi_InstrumentWrapper
 	
 	select file.function{wrapperName}.stmt.call end
 	apply
+		var code = 'mp_inc(' + monitorName;
 		var firstParam = $function.params[0].name;
-		insert after 'mp_inc([[monitorName]], &[[firstParam]], &result);';
+		for (var $param of $function.params) {
+			code += ', &' + $param.name;
+		}
+		code += ', &result);';
+		insert after code;
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
 		
@@ -110,11 +170,13 @@ aspectdef _Memoi_Setup
 		funcName,
 		id,
 		dir,
-		type
+		type,
+		callSiteInfo
 	end
 
 	select file.function{'main'}.body end
 	apply
+		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[funcName]]", "[[id]]", [[type]]);}%);
 
 		/* add functions to print and clean up at every return on main */
@@ -125,8 +187,37 @@ aspectdef _Memoi_Setup
 
 		$file.exec addInclude('MemoiProfiler.h', false);
 		$file.exec addInclude('stdlib.h', true);
+	end
+end
 
-		// insert the functions needed to make the report file path
+aspectdef _Memoi_AddCallSiteInfo
+	input $mainBody, callSiteInfo, monitorName end
+	
+	// call site info
+	if(callSiteInfo === undefined) {
+		callSiteInfo = ['global'];
+	}
+	
+	checkArray(callSiteInfo);
+	
+	var length = callSiteInfo.length;
+	var code = 'mp_add_call_sites(' + monitorName + ', ' + length ;
+	for(var i of callSiteInfo) {
+		code += ', "' + i + '"';
+	}
+	code += ');';
+	
+	$mainBody.exec insertBegin(code);
+end
+
+/**
+ * 		Inserts the functions needed to make the report file path.
+ * 	@aspect
+ *	@private
+ * */
+aspectdef _Memoi_AddReportCode
+	select file.function{'main'}.body end
+	apply
 		$function.insert before _Memoi_ReportPath();
 	end	
 end
