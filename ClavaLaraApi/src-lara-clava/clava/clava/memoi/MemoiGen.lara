@@ -12,8 +12,6 @@ function MemoiGen(reports) {
 	
 	this._reportsPaths = arrayFromArgs(arguments);
 	this._reports = MemoiGen._readReports(this._reportsPaths);
-	
-	this._combineReports();
 }
 
 /**
@@ -35,7 +33,8 @@ MemoiGen.fromDir = function(dir) {
  * */
 MemoiGen._readReports = function(reportsPaths) {
 
-	var reports = [];
+	var reports = {};
+	var counter = 0;
 	
 	for (var reportPath of reportsPaths) {
 		
@@ -44,9 +43,11 @@ MemoiGen._readReports = function(reportsPaths) {
 		// add the path to uniquely identify this report
 		report.path = reportPath;
 	
+	/*
 		// convert counters to integers and sort
-		for(var i in report.counts)
+		for(var i in report.counts) {
 			report.counts[i].counter = parseInt(report.counts[i].counter);
+		}
 	
 		report.counts.sort(function(a, b){
 	
@@ -58,19 +59,124 @@ MemoiGen._readReports = function(reportsPaths) {
 				return 0;
 		});
 		
-		reports.push(report);
+		/**/
+		
+		// add report to map
+		MemoiGen._mapReport(reports, report);
+		
+		counter++;
 	}
 	
-	return reports;
+	println('Read ' + counter + ' reports.');
+	
+	return MemoiGen._combineReports(reports);;
 }
 
 /**
- * 		Combines reports of the same function and same call site.
+ * 		Maps reports into a double map.
+ * 		target function -> call site -> list of reports
  * */
-MemoiGen._combineReports = function() {
-	throw "not implemented";
+MemoiGen._mapReport = function(reportsMap, report) {
+	
+	if (reportsMap[report.func_name] === undefined) {
+		
+		reportsMap[report.func_name] = {};
+	}
+	
+	if (reportsMap[report.func_name][report.call_sites] === undefined) {
+		
+		reportsMap[report.func_name][report.call_sites] = [];
+	}
+	
+	reportsMap[report.func_name][report.call_sites].push(report);
+	
+}
+
+/**
+ * 		Prints summarized information about all reports read.
+ * */
+MemoiGen.prototype.printReportSummary = function() {
+	
+	println('=== report summary ===');
+	
+	for(var func in this._reports) {
+		
+		println('\ttarget function -- ' + func);
+		
+		for(var callSite in this._reports[func]) {
+			
+			println('\t\tcall site -- ' + callSite);
+			
+			println('\t\t\t' + this._reports[func][callSite].length + ' reports');
+		}
+	}
+}
+
+/**
+ * 		Combines reports of the same function and same call site from
+ * 	different profiling runs.
+ * */
+MemoiGen._combineReports = function(originalReports) {
+	
+	var finalReports = [];
+	
+	for(var func in originalReports) {
+		
+		for(var callSite in originalReports[func]) {
+
+			// get old reports for the current <func, call>
+			var reports = originalReports[func][callSite];
+	
+			// new report stores every run info in arrays
+			var newReport = {
+				func_name : func,
+				call_sites : callSite,
+				reportCount : reports.length,
+				elements : [],
+				calls : [],
+				hits : [],
+				misses : [],			
+				counts : {} // counts is now a map to easy the combination
+			};
+			
+			// iterate all old reports
+			for(var oldReport of reports) {
+				
+				// add all info to the corresponding arrays
+				newReport.elements.push(oldReport.elements);
+				newReport.calls.push(oldReport.calls);
+				newReport.hits.push(oldReport.hits);
+				newReport.misses.push(oldReport.misses);
+				
+				// iterate all counts of the old report
+				for(var count of oldReport.counts) {
+					
+					var key = count.key;
+					
+					// build new counts using the key attribute as a key
+					if(newReport.counts[key] === undefined) {
+						
+						newReport.counts[key] = {
+							key : key,
+							output : count.output,
+							counter : [count.counter]
+						};
+					} else {
+						
+						newReport.counts[key].counter.push(count.counter);
+					}
+				}
+			}
+			finalReports.push(newReport);
+		}
+	}
+	return finalReports;
 };
 
+/**
+ * 		Prints detailed metrics for a single report.
+ * 		TODO: fix this to work on a single report.
+ * */
 MemoiGen.prototype.printMetrics = function() {
 	
 	for(var report of this._reports) {
