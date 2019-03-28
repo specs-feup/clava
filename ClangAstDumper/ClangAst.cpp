@@ -388,6 +388,29 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         return true;
     }
 
+    void MyASTConsumer::HandleTranslationUnit(ASTContext &Ctx) {
+    /*
+        for (auto b = Ctx.getTranslationUnitDecl()->decls().begin(), e = Ctx.getTranslationUnitDecl()->decls().end(); b != e; ++b) {
+            //counter++;
+            //llvm::errs() << "Decl kind: " << (*b)->getKind() << " decls\n";
+            topLevelDeclVisitor.TraverseDecl(*b);
+        }
+
+        for (auto b = Ctx.getTranslationUnitDecl()->decls().begin(), e = Ctx.getTranslationUnitDecl()->decls().end(); b != e; ++b) {
+            printRelationsVisitor.TraverseDecl(*b);
+        }
+
+        //llvm::errs() << "Found " << counter << " decls\n";
+
+        int counter = 0;
+        llvm::errs() << "After translation unit\n";
+        for (auto b = Ctx.getTranslationUnitDecl()->decls().begin(), e = Ctx.getTranslationUnitDecl()->decls().end(); b != e; ++b) {
+            counter++;
+            llvm::errs() << "Decl kind: " << (*b)->getKind() << " decls\n";
+        }
+        */
+    }
+
 
 
 

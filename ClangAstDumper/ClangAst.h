@@ -172,5 +172,9 @@ private:
 
 
     bool HandleTopLevelDecl(DeclGroupRef DR) override;
+
+    /// HandleTranslationUnit - This method is called when the ASTs for entire
+    /// translation unit have been parsed.
+    void HandleTranslationUnit(ASTContext &Ctx) override;
 };
 #endif // CLANGASTDUMPER_CLANGAST_H

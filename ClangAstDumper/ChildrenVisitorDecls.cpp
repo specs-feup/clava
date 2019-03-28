@@ -606,7 +606,7 @@ void ClangAstDumper::VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateP
         VisitStmtTop(D->getDefaultArgument());
     }
 
-    for(int i=0; i<D->getNumExpansionTypes(); i++) {
+    for(auto i=0; i<D->getNumExpansionTypes(); i++) {
         VisitTypeTop(D->getExpansionType(i));
     }
 }
