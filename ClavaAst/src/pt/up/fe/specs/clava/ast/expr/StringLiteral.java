@@ -89,10 +89,14 @@ public class StringLiteral extends Literal {
 
     @Override
     public String getLiteral() {
+        // Update: Unfortunately it is not possible to blindly use the source code literal
+        // For instance, if directives and macros appear in the middle of the literal, they will also appear in the
+        // generated source code
+        // Update End
         // Optimization: if not a raw string and is ASCII (most common case) can use stored literal
-        if (get(STRING_KIND) == StringKind.ASCII && !isRawStringLiteral()) {
-            return super.getLiteral();
-        }
+        // if (get(STRING_KIND) == StringKind.ASCII && !isRawStringLiteral()) {
+        // return super.getLiteral();
+        // }
 
         return get(STRING_KIND).getPrefix() + "\"" + SpecsStrings.escapeJson(getStringFromBytes()) + "\"";
         // // If raw string literal, build the string from the bytes
