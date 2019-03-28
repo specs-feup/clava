@@ -295,6 +295,7 @@ public class ClangStreamParser {
         // Parse top-level decls
 
         List<ClavaNode> topLevelDeclNodes = new ArrayList<>();
+
         // for (String topLevelDeclId : topLevelDecls.flatValues()) {
         for (String topLevelDeclId : topLevelDecls) {
             ClavaNode parsedNode = data.get(ClangParserData.CLAVA_NODES).get(topLevelDeclId);
@@ -339,9 +340,9 @@ public class ClangStreamParser {
         // To solve this, use the location of the node to remove repetitions,
         // and create a map between repeated ids and normalized ids
 
-        NormalizedNodes normalizedNodes = NormalizedNodes.newInstance(topLevelDecls);
-
-        for (ClavaNode clavaNode : normalizedNodes.getUniqueNodes()) {
+        // NormalizedNodes normalizedNodes = NormalizedNodes.newInstance(topLevelDecls);
+        // for (ClavaNode clavaNode : normalizedNodes.getUniqueNodes()) {
+        for (ClavaNode clavaNode : topLevelDecls) {
 
             // Normalize node source path
             String filepath = clavaNode.getLocation().getFilepath();
