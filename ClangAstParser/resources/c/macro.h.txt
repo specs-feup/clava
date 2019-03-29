@@ -7,8 +7,8 @@ extern int extern_a[];
 extern int extern_b[];
 extern int extern_c[];
 extern int extern_d[];
-/*comment after extern_a*/
 // These declarations will all have the same source location,
 // comments will not be aligned with declarations
-
+/*comment after extern_a*/
+typedef void (*new_type) (int);
 #endif

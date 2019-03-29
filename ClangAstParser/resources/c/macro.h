@@ -17,3 +17,9 @@ EXTERN_DECL(int, extern_b); // comment after extern_b
 EXTERN_DECL(int, extern_c);          
 EXTERN_DECL(int, extern_d);   
 
+#ifndef MACRO_TYPE
+#  define MACRO_TYPE void
+#endif
+
+typedef MACRO_TYPE (*new_type) (int);
+
