@@ -47,9 +47,16 @@ enum logical {
 typedef enum logical logical;
 
 // Anonymous enum
-enum  {
+enum anon_enum_1 {
 	BLACK,
 	RED,
 };
+// Anonymous enum with declaration
+enum anon_enum_2 {
+	REQUIRE_ORDER,
+	PERMUTE,
+	RETURN_IN_ORDER,
+};
+static enum anon_enum_2 ordering;
 
 #endif

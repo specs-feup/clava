@@ -43,4 +43,10 @@ typedef enum { false, true } logical;
 // Anonymous enum
 enum{BLACK,RED};
 
+// Anonymous enum with declaration
+static enum
+{
+  REQUIRE_ORDER, PERMUTE, RETURN_IN_ORDER
+} ordering;
+
 #endif
