@@ -14,12 +14,15 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.type.PointerType;
+import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 
 /**
  * Declaration of a typedef-name via the 'typedef' type specifier.
@@ -78,30 +81,55 @@ public class TypedefDecl extends TypedefNameDecl {
     public String getCode() {
         Type type = getType();
 
-        // if (getDeclName().equals("IT")) {
-        // System.out.println("LOCATION:" + getLocation());
-        // System.out.println("TYPEDEF DECL TYPE:\n" + type);
-        // }
-
-        // If pointer to ParenType, there can be complicated situations such
-        // as having function pointer with VLAs that need the name of parameters,
-        // which are not available for function types in Clang
-        if (PointerType.isPointerToParenType(type)) {
+        // There can be complicated situations such as having function pointer with VLAs
+        // that need the name of parameters, which are not available for function types in Clang
+        // For those cases, directly use the source code of the typedef
+        // However, this can be problematic if typedef uses macros and they are not re-inserted in the code.
+        List<FunctionProtoType> functionTypes = type.getNodeFieldsRecursive().stream()
+                .filter(FunctionProtoType.class::isInstance)
+                .map(FunctionProtoType.class::cast)
+                .collect(Collectors.toList());
+        if (functionTypes.stream().flatMap(ftype -> ftype.getNodeFieldsRecursive().stream())
+                .anyMatch(VariableArrayType.class::isInstance)) {
             return getLocation().getSource()
                     .orElseThrow(() -> new RuntimeException("Could not find source for location " + getLocation()));
         }
 
+        // if (PointerType.isPointerToParenType(type)) {
+        // return getLocation().getSource()
+        // .orElseThrow(() -> new RuntimeException("Could not find source for location " + getLocation()));
+        // }
+
+        // System.out.println("TYPEDEFDECL:" + this);
+        // System.out.println("TYPE:" + getType());
+
+        // if (getType() instanceof PointerType) {
+        // System.out.println("Pointer:" + getType().toFieldTree());
+        // }
+
+        return "typedef " + type.getCode(this, getDeclName());
+        /*
+        
+        
+        // If pointer to ParenType, there can be complicated situations such
+        // as having function pointer with VLAs that need the name of parameters,
+        // which are not available for function types in Clang
+        if (PointerType.isPointerToParenType(type)) {
+            // TODO: Should code always be calculated like this?
+            return type.getCode(this, getDeclName());
+        }
+        
         String typeCode = type.getCode(this);
         // System.out.println("TYPE TREE:" + type.toTree());
         // System.out.println("TYPE CODE:" + typeCode);
         String code = "typedef " + typeCode + " " + getTypelessCode();
-
+        
         // if (typeCode.equals("std::set<double>::const_iterator")) {
         // System.out.println("TYPEDEF TYPE:" + type);
         // System.out.println("TYPEDEF TYPE ARGS:" + type.getTemplateArgumentTypes());
         // System.out.println("TYPEDEF TYPE ARGS STRINGS:" + type.getTemplateArgumentStrings());
         // }
-
+        
         // type.setTemplateArgumentTypes(Arrays.asList(ClavaNodeFactory.builtinType("float")));
         // System.out.println("TYPEDEF TYPE 2:" + type);
         // System.out.println("TYPEDEF TYPE 2 code:" + type.getCode());
@@ -110,6 +138,7 @@ public class TypedefDecl extends TypedefNameDecl {
         // }
         // ClavaLog.debug("TypedeDEcl CODE:" + code);
         return code;
+        */
     }
 
     /*
