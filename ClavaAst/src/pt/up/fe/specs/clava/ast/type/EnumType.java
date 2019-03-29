@@ -21,6 +21,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 /**
  * Represents an enum.
@@ -30,8 +32,17 @@ import pt.up.fe.specs.clava.ast.extra.App;
  */
 public class EnumType extends TagType {
 
+    private static final String ANON_ENUM_PREFIX = "anon_enum_";
+    // private final String anonName;
+
+    private final Lazy<String> anonymousId = Lazy
+            .newInstance(() -> getContext().get(ClavaContext.ID_GENERATOR).next(ANON_ENUM_PREFIX));
+
     public EnumType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+
+        // SpecsStrings.
+        // UUID.randomUUIDcs()
     }
 
     /*
@@ -78,6 +89,12 @@ public class EnumType extends TagType {
             baseType = getBareType();
         }
 
+        if (isAnonymous()) {
+            // baseType = "anon_" + getId();
+            baseType = anonymousId.get();
+
+        }
+
         // String enumType = getTagKind().getCode() + " " + baseType;
         String enumType = baseType;
 
@@ -88,6 +105,9 @@ public class EnumType extends TagType {
         return enumType + " " + name;
     }
 
+    public boolean isAnonymous() {
+        return getBareType().startsWith("enum (anonymous");
+    }
     /*
     @Override
     public String getCode(ClavaNode sourceNode, String name) {

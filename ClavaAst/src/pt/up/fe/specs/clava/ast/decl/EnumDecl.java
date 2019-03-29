@@ -128,11 +128,13 @@ public class EnumDecl extends TagDecl {
         // System.out.println("TYPE CODE:" + getType().getCode(this));
         // builder.append(getDeclName());
         String enumTypeCode = getType().getCode(this);
-
+        // System.out.println("ENUM TYPE CODE: " + enumTypeCode);
         // Check if anonymous
-        if (enumTypeCode.startsWith("enum (anonymous")) {
-            enumTypeCode = "";
-        }
+        // if (enumTypeCode.startsWith("enum (anonymous")) {
+        // enumTypeCode = "";
+        // System.out.println("ENUM TYPE: " + getType());
+        // }
+
         // enumType.get(EnumType.)
 
         builder.append(enumTypeCode);
@@ -153,6 +155,7 @@ public class EnumDecl extends TagDecl {
         }
 
         builder.append("};" + ln());
+
         return builder.toString();
     }
 
