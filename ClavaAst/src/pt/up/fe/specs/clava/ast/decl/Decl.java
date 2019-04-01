@@ -73,6 +73,19 @@ public abstract class Decl extends ClavaNode {
             .generic("attributes", (List<Attribute>) new ArrayList<Attribute>())
             .setDefault(() -> new ArrayList<>());
 
+    // public final static DataKey<Optional<Decl>> DECL_CONTEXT = KeyFactory.optional("declContext");
+
+    // public final static DataKey<List<Decl>> DECL_CONTEXT = KeyFactory
+    // .generic("declContext", (List<Decl>) new ArrayList<Decl>())
+    // .setDefault(() -> new ArrayList<>());
+
+    /**
+     * A list of Decl ids, associated with this Decl.
+     */
+    // public final static DataKey<List<String>> DECL_CONTEXT_IDS = KeyFactory
+    // .generic("declContext", (List<String>) new ArrayList<String>())
+    // .setDefault(() -> new ArrayList<>());
+
     /// DATAKEYS END
 
     public Decl(DataStore data, Collection<? extends ClavaNode> children) {
