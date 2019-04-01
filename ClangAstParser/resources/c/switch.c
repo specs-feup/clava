@@ -13,7 +13,7 @@ int main() {
         case 4:
 			/* empty case with a text element */
 			break;			
-		default:
+		default: /* text element */
 			b = 3;
 	}
 	
