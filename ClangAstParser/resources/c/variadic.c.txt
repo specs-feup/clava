@@ -6,6 +6,8 @@ void test_print(char * fmt, ...) {
    __builtin_va_start(argptr, fmt);
    __builtin_va_end(argptr);
    printf("%s", fmt);
+   va_list argp;
+   int gain = va_arg(argptr, int);
 }
 
 
