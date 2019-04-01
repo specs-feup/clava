@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -188,12 +189,12 @@ public class TextParser {
             */
             ClavaNode insertionPoint = statement.isPresent() ? statement.get() : currentNode;
 
-            // If insertion point is the child of a CaseStmt, replace insertion point with text element,
+            // If insertion point is the child of a CaseStmt or DefaultStmt, replace insertion point with text element,
             // and move insertion point to after the CaseStmt
-            if (insertionPoint.getParent() instanceof CaseStmt) {
-                CaseStmt caseStmt = (CaseStmt) insertionPoint.getParent();
+            if (insertionPoint.getParent() instanceof CaseStmt || insertionPoint.getParent() instanceof DefaultStmt) {
+                ClavaNode stmt = insertionPoint.getParent();
                 queue.replace(insertionPoint, textElement);
-                queue.moveAfter(caseStmt, insertionPoint);
+                queue.moveAfter(stmt, insertionPoint);
                 continue;
             }
 
