@@ -76,6 +76,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     MEMOI_PROF("memoi/MemoiProf.lara"),
     MEMOI_PROF_ASP("memoi/_MemoiProfAspects.lara"),
     MEMOI_GEN("memoi/MemoiGen.lara"),
+    MEMOI_GEN_HELPER("memoi/_MemoiGenHelper.lara"),
 
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),

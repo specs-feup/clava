@@ -1,3 +1,5 @@
+import clava.memoi._MemoiGenHelper;
+
 import lara.Io;
 
 /**
@@ -67,9 +69,8 @@ MemoiGen._readReports = function(reportsPaths) {
 		counter++;
 	}
 	
-	println('Read ' + counter + ' reports.');
-	
-	return MemoiGen._combineReports(reports);;
+	println('# read reports: ' + counter);
+	return MemoiGen._combineReports(reports);
 }
 
 /**
@@ -93,31 +94,11 @@ MemoiGen._mapReport = function(reportsMap, report) {
 }
 
 /**
- * 		Prints summarized information about all reports read.
- * */
-MemoiGen.prototype.printReportSummary = function() {
-	
-	println('=== report summary ===');
-	
-	for(var func in this._reports) {
-		
-		println('\ttarget function -- ' + func);
-		
-		for(var callSite in this._reports[func]) {
-			
-			println('\t\tcall site -- ' + callSite);
-			
-			println('\t\t\t' + this._reports[func][callSite].length + ' reports');
-		}
-	}
-}
-
-/**
  * 		Combines reports of the same function and same call site from
  * 	different profiling runs.
  * */
 MemoiGen._combineReports = function(originalReports) {
-	
+			
 	var finalReports = [];
 	
 	for(var func in originalReports) {
@@ -170,123 +151,55 @@ MemoiGen._combineReports = function(originalReports) {
 			finalReports.push(newReport);
 		}
 	}
+	
+	println('# combined reports: ' + finalReports.length);
+	
 	return finalReports;
 };
 
 /**
- * 		Prints detailed metrics for a single report.
- * 		TODO: fix this to work on a single report.
+ * 		Prints detailed metrics for each <target function, call site>.
+ * 		The data is the average of all reports read.
  * */
-MemoiGen.prototype.printMetrics = function() {
+MemoiGen.prototype.printAverageMetrics = function() {
 	
 	for(var report of this._reports) {
 		
-		println(' === metrics for ' + report.path + ' === ');
+		println('=== profile metrics ===');
 		
-		var total = report.calls;
+		println('  > target function: ' + report.func_name);
+		println('  > call sites: ' + report.call_sites);
+		println('  > report count: ' + report.reportCount);
 		
-		var repetitionRate = (total - report.elements) / total;
+		var unique = mean(report.elements);
+		var total = mean(report.calls);
 		
-		var averageRepetition = total / report.elements;
+		var repetition = 100 * (total - unique) / total;
 		
-		// function
-		function totalTopN(report, n) {
+		var averageRepetition = total / unique;
 		
-			var result = 0;
-		
-			for(var i = 0; i < Math.min(n, report.counts.length); i++){
-		
-				result += report.counts[i].counter;
-			}
-		
-			return result;
-		};
-		
-		// function
-		function elementsForRatio(report, total, ratio) {
-		
-			var sum = 0;
-					
-			for(var elements = 0; elements < report.counts.length; elements++){
-		
-				sum += report.counts[elements].counter;
-				if(sum / total > ratio) {
-					return elements + 1;
-				}
-			}
-		
-			return report.elements; // ?
-		};
-		
-		// function
-		function getQuartVal(counts, idx) {
-			
-			var floor = Math.floor(idx);
-			
-			if(idx == floor) {
-				var val = (counts[idx].counter + counts[idx-1].counter) / 2;
-			} else {
-				var val = counts[floor].counter;
-			}
-			
-			return val;
-		};
-		
-		// function
-		function bwp(report) {
-			
-			var s = {};
-			
-			var length = report.counts.length;
-			
-			s.min = report.counts[length-1].counter;
-			s.q1 = getQuartVal(report.counts, 1/4 * length); 
-			s.q2 = getQuartVal(report.counts, 2/4 * length); 
-			s.q3 = getQuartVal(report.counts, 3/4 * length); 
-			s.max = report.counts[0].counter;
-			s.iqr = s.q3 - s.q1;
-			
-			return s;
-		};
-		
-		// function
-		function printBwp(report) {
-			
-			var b = bwp(report);
-			var s = '{ ';
-			
-			s += b.min += ', ';
-			s += b.q1 += ', ';
-			s += b.q2 += ', ';
-			s += b.q3 += ', ';
-			s += b.max;
-						
-			s += ' } iqr: ' + b.iqr;
-			
-			println(s);
-		};
-		
-		var top3total = totalTopN(report, 3);
+		var top3total = totalTopN(report, 3, report.reportCount);
 		var top3percentage = top3total / total * 100;
 		
-		var top5total = totalTopN(report, 5);
+		var top5total = totalTopN(report, 5, report.reportCount);
 		var top5percentage = top5total / total * 100;
 		
-		var top10total = totalTopN(report, 10);
+		var top10total = totalTopN(report, 10, report.reportCount);
 		var top10percentage = top10total / total * 100;
 		
 		// print metrics
-		println('  > unique inputs: ' + report.elements);
+		println('  > unique inputs: ' + unique);
 		println('  > total calls: ' + total);
-		println('  > repetition rate: ' + repetitionRate.toFixed(4));
+		println('  > repetition: ' + repetition.toFixed(2) + '%');
 		println('  > average repetition: ' + averageRepetition.toFixed(4));
 		println('  > top 3: ' + top3percentage.toFixed(2) + '%');
 		println('  > top 5: ' + top5percentage.toFixed(2) + '%');
 		println('  > top 10: ' + top10percentage.toFixed(2) + '%');
-		println('  > elements for 5%: ' + elementsForRatio(report, total, 0.05));
-		println('  > elements for 10%: ' + elementsForRatio(report, total, 0.1));
-		println('  > elements for 25%: ' + elementsForRatio(report, total, 0.25));
-		println('  > elements for 50%: ' + elementsForRatio(report, total, 0.5));
-		print('  > bwp:  '); printBwp(report);
+		println('  > elements for 5%: ' + elementsForRatio(report, total, 0.05, report.reportCount));
+		println('  > elements for 10%: ' + elementsForRatio(report, total, 0.1, report.reportCount));
+		println('  > elements for 25%: ' + elementsForRatio(report, total, 0.25,report.reportCount));
+		println('  > elements for 50%: ' + elementsForRatio(report, total, 0.5, report.reportCount));
+		print('  > bwp:  '); printBwp(report, report.reportCount);
+		println('\n');
 	}
 }
