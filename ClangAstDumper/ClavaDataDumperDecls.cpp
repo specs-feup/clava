@@ -173,6 +173,25 @@ void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     }
     clava::dump(attributesIds);
 
+    // Decls inside DeclContext
+    /*
+    std::vector<std::string> declsInContext;
+    for (auto I = D->getDeclContext()->decls().begin(), E = D->getDeclContext()->decls().end(); I != E;
+         ++I) {
+        declsInContext.push_back(clava::getId(*I, id));
+    }
+    clava::dump(declsInContext);
+    */
+    /*
+    if(D->getDeclContext() != nullptr) {
+        clava::dump(clava::getId(cast<Decl>(D->getDeclContext()), id));
+    } else {
+        clava::dump(clava::getId((const Decl *)nullptr, id));
+    }
+     */
+
+
+
     // Attributes
     /*
     std::vector<Attr*> attributes;

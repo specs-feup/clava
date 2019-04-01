@@ -135,6 +135,25 @@ void ClangAstDumper::VisitDeclChildren(const Decl *D, std::vector<std::string> &
     }
 
     /*
+    if(D->getDeclContext() != nullptr) {
+        VisitDeclTop(cast<Decl>(D->getDeclContext()));
+    }
+     */
+
+
+    // Visit decls in DeclContext
+    /*
+    for (auto I = D->getDeclContext()->decls().begin(), E = D->getDeclContext()->decls().end(); I != E;
+         ++I) {
+        Decl* decl = *I;
+        VisitDeclTop(decl);
+        //dumpTopLevelDecl(decl);
+    }
+     */
+
+
+
+    /*
     // Visit decls
     //DeclContext::decl_range
     if (auto decls = dyn_cast<DeclContext::decl_range>(D)) {
@@ -606,7 +625,7 @@ void ClangAstDumper::VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateP
         VisitStmtTop(D->getDefaultArgument());
     }
 
-    for(auto i=0; i<D->getNumExpansionTypes(); i++) {
+    for(unsigned int i=0; i<D->getNumExpansionTypes(); i++) {
         VisitTypeTop(D->getExpansionType(i));
     }
 }
