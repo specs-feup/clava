@@ -263,9 +263,6 @@ public class NodeDataParser {
         String id = lines.nextLine();
         String className = lines.nextLine();
 
-        Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(className);
-        StoreDefinition nodeKeys = StoreDefinitions.fromInterface(nodeClass);
-
         // Get ClavaNode class of this id
         // dataStore.get(ClangParserData.CL)
 
@@ -284,6 +281,15 @@ public class NodeDataParser {
         // Due to the number of Attributes, not every attribute that appears in the code
         // has a corresponding node yet.
         // boolean isClosed = nodeClass.equals(Attribute.class) ? false : true;
+
+        Class<? extends ClavaNode> nodeClass = null;
+        try {
+            nodeClass = ClassesService.getClavaClass(className);
+        } catch (Exception e) {
+            throw new RuntimeException("Problems while parsing code at location '" + location + "'", e);
+        }
+
+        StoreDefinition nodeKeys = StoreDefinitions.fromInterface(nodeClass);
 
         DataStore data = DataStore.newInstance(nodeKeys, true);
 

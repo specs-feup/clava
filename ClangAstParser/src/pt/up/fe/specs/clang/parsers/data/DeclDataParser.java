@@ -84,6 +84,12 @@ public class DeclDataParser {
         data.add(Decl.IS_MODULE_PRIVATE, LineStreamParsers.oneOrZero(lines));
 
         dataStore.getClavaNodes().queueSetNodeList(data, Decl.ATTRIBUTES, LineStreamParsers.stringList(lines));
+        // dataStore.getClavaNodes().queueSetOptionalNode(data, Decl.DECL_CONTEXT, lines.nextLine());
+        // dataStore.getClavaNodes().queueSetNodeList(data, Decl.DECL_CONTEXT, LineStreamParsers.stringList(lines));
+        // data.add(Decl.DECL_CONTEXT_IDS, LineStreamParsers.stringList(lines));
+        // if (!data.get(Decl.DECL_CONTEXT_IDS).isEmpty()) {
+        // System.out.println("DECL IDS: " + data.get(Decl.DECL_CONTEXT_IDS));
+        // }
 
         /*
         List<Attribute> attributes = LineStreamParsers.stringList(lines).stream()
