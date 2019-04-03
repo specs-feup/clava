@@ -41,12 +41,22 @@ public class InitListExpr extends Expr {
      * list, specifies an expression to be used for value initialization of the rest of the elements.
      */
     public final static DataKey<Optional<Expr>> ARRAY_FILLER = KeyFactory.optional("arrayFiller");
+
     public final static DataKey<FieldDecl> INITIALIZED_FIELD_IN_UNION = KeyFactory.object("initializedFieldInUnion",
             FieldDecl.class);
 
     public final static DataKey<Boolean> IS_EXPLICIT = KeyFactory.bool("isExplicit");
 
     public final static DataKey<Boolean> IS_STRING_LITERAL_INIT = KeyFactory.bool("isStringLiteralInit");
+
+    /**
+     * Represents the initializer list as written by the user, which may contain C99 designated initializers
+     * (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on.
+     * If the syntactic and semantic forms are the same for this initializer, it returns empty.
+     */
+    public final static DataKey<Optional<InitListExpr>> SYNTACTIC_FORM = KeyFactory.optional("syntacticForm");
+
+    public final static DataKey<Optional<InitListExpr>> SEMANTIC_FORM = KeyFactory.optional("semanticForm");
 
     /// DATAKEY END
 
@@ -121,6 +131,23 @@ public class InitListExpr extends Expr {
 
     @Override
     public String getCode() {
+        // System.out.println("ID:" + getId());
+        // System.out.println("SYNTATIC FORM: " + get(SYNTACTIC_FORM));
+        // System.out.println("SEMANTIC FORM: " + get(SEMANTIC_FORM));
+
+        InitListExpr syntaticForm = get(SYNTACTIC_FORM).orElse(null);
+        if (syntaticForm != null) {
+            if (!syntaticForm.getId().equals(getId())) {
+                // System.out.println("SYNTATIC FORM: " + syntaticForm);
+                // System.out.println("SEMANTIC FORM: " + this);
+                return syntaticForm.getCode();
+            } else {
+                // System.out.println("SAME ID!");
+                // System.out.println("SYNTATIC FORM: " + syntaticForm);
+                // System.out.println("SEMANTIC FORM: " + this);
+            }
+        }
+
         // System.out.println("INIT LIST EXPR TYPE:" + getType());
         // if (getChild(0) instanceof InitListExpr) {
         // System.out.println("HAS INIT LIST EXPR CHILD WITH TYPE:" + ((Typable) getChild(0)).getType());
