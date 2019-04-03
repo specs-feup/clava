@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.DesignatedInitExpr;
 import pt.up.fe.specs.clava.ast.expr.ExplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -173,6 +174,14 @@ public class ExprDataParser {
         // lines.nextLine()));
         data.add(InitListExpr.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
         data.add(InitListExpr.IS_STRING_LITERAL_INIT, LineStreamParsers.oneOrZero(lines));
+        String syntaticForm = lines.nextLine();
+        // System.out.println("PARSING - ID: " + data.get(ClavaNode.ID));
+        // System.out.println("PARSING - Syntatic form: " + syntaticForm);
+
+        dataStore.getClavaNodes().queueSetOptionalNode(data, InitListExpr.SYNTACTIC_FORM, syntaticForm);
+        String semanticForm = lines.nextLine();
+        // System.out.println("PARSING - Semantic form: " + semanticForm);
+        dataStore.getClavaNodes().queueSetOptionalNode(data, InitListExpr.SEMANTIC_FORM, semanticForm);
 
         return data;
     }
@@ -405,6 +414,15 @@ public class ExprDataParser {
 
     public static DataStore parseArrayInitLoopExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
+
+        return data;
+    }
+
+    public static DataStore parseDesignatedInitExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.set(DesignatedInitExpr.USES_GNU_SYNTAX, LineStreamParsers.oneOrZero(lines));
+        data.set(DesignatedInitExpr.DESIGNATORS, LineStreamParsers.list(lines, ClavaDataParsers::designator));
 
         return data;
     }

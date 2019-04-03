@@ -346,12 +346,17 @@ public class ClavaNodes {
 
         Runnable nodeToAdd = () -> {
 
+            // System.out.println("SETTING OPTIONAL KEY " + key.getName() + " in node " + data.get(ClavaNode.ID));
+            // System.out.println("ID OF OPTIONAL VALUE " + nodeId);
+
             // if (get(nodeId) instanceof NullNode) {
             // System.out.println("NULL NODE:" + get(nodeId));
             // }
             Optional<T> value = isNullId(nodeId) ? Optional.empty()
                     // Optional<T> value = isNullId(nodeId) ? Optional.empty()
                     : key.getValueClass().cast(Optional.of(get(nodeId)));
+
+            // System.out.println("VALUE: " + value);
 
             // if (value.isPresent() && value.get() instanceof NullNode) {
             // value = Optional.empty();
@@ -381,6 +386,14 @@ public class ClavaNodes {
                 // value = Optional.of(valueClass.cast(node));
             }
              */
+            // if (!isNullId(nodeId)) {
+            // System.out.println("SETTING OPTIONAL KEY " + key + " in node " + data.get(ClavaNode.ID));
+            // System.out.println("Given id " + nodeId);
+            // System.out.println("VALUE: " + value.get());
+            // // System.out.println("SETTING OPTIONAL: " + nodeId);
+            // // System.out.println("RETRIEVED NODE: " + get(nodeId));
+            // }
+
             data.set(key, value);
         };
 

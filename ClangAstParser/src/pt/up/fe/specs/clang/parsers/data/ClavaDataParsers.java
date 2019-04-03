@@ -36,10 +36,15 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
+import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayDesignator;
+import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayRangeDesignator;
+import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;
+import pt.up.fe.specs.clava.ast.expr.data.designator.FieldDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfArray;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponentKind;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfField;
+import pt.up.fe.specs.clava.ast.expr.enums.DesignatorKind;
 import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
@@ -368,6 +373,26 @@ public class ClavaDataParsers {
         }
 
         return component;
+    }
+
+    public static Designator designator(LineStream lines) {
+        // Kind
+        DesignatorKind kind = LineStreamParsers.enumFromName(DesignatorKind.class, lines);
+
+        switch (kind) {
+        case Field:
+            String fieldName = lines.nextLine();
+            return new FieldDesignator(fieldName);
+        case Array:
+            Integer startIndex = LineStreamParsers.integer(lines);
+            return new ArrayDesignator(startIndex);
+        case ArrayRange:
+            Integer startRangeIndex = LineStreamParsers.integer(lines);
+            return new ArrayRangeDesignator(startRangeIndex);
+        default:
+            throw new NotImplementedException(kind);
+        }
+
     }
 
     // OffsetOfExpr
