@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 
 public class TUnitProcessor {
@@ -220,6 +221,11 @@ public class TUnitProcessor {
 
         // If node is a macro, cannot be normalized
         if (node.get(ClavaNode.IS_MACRO)) {
+            return Optional.empty();
+        }
+
+        // Do not normalize InitListExpr, to avoid conflicts with semantic/syntactic forms
+        if (node instanceof InitListExpr) {
             return Optional.empty();
         }
 
