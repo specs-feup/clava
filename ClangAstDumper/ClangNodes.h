@@ -9,6 +9,7 @@
 #include "clang/AST/Decl.h"
 #include "clang/AST/Stmt.h"
 #include "clang/AST/Type.h"
+#include "clang/AST/Expr.h"
 #include "clang/AST/NestedNameSpecifier.h"
 #include "clang/AST/TemplateName.h"
 
@@ -119,6 +120,9 @@ namespace clava {
     void dump(const CXXBaseSpecifier& base, int id);
     //void dump(const TemplateName& templateName);
     void dump(std::function<void(llvm::raw_string_ostream&)> dumper);
+    void dump(const clang::DesignatedInitExpr::Designator* designator);
+
+
 
     bool isSystemHeader(const Stmt* S, ASTContext* context);
     bool isSystemHeader(const Decl* S, ASTContext* context);

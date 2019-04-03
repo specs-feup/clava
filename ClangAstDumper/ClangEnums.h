@@ -47,6 +47,7 @@ namespace clava {
     extern const std::string PREDEFINED_ID_TYPE[];
     extern const std::string STRING_KIND[];
     extern const std::string TEMPLATE_NAME_KIND[];
+    extern const std::string DESIGNATOR_KIND[];
 
 
 }

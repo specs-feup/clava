@@ -278,6 +278,7 @@ private:
     void VisitCXXDeleteExprChildren(const CXXDeleteExpr *E, std::vector<std::string> &children);
     void VisitLambdaExprChildren(const LambdaExpr *E, std::vector<std::string> &children);
     void VisitSizeOfPackExprChildren(const SizeOfPackExpr *E, std::vector<std::string> &children);
+    void VisitDesignatedInitExprChildren(const DesignatedInitExpr *E, std::vector<std::string> &children);
 
 
 

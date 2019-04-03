@@ -701,6 +701,12 @@ extern const std::string clava::TEMPLATE_NAME_KIND[]{
         "SubstTemplateTemplateParmPack"
 };
 
+extern const std::string clava::DESIGNATOR_KIND[] {
+    "Field",
+    "Array",
+    "ArrayRange"
+};
+
 
 
 //const std::string BUILTIN_KIND[] {};

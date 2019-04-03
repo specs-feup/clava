@@ -60,6 +60,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"PredefinedExpr", clava::StmtNode::PREDEFINED_EXPR},
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
         {"ArrayInitLoopExpr", clava::StmtNode::ARRAY_INIT_LOOP_EXPR},
+        {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
 
 };
 
@@ -181,6 +182,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpSizeOfPackExprData(static_cast<const SizeOfPackExpr *>(S)); break;
         case clava::StmtNode ::ARRAY_INIT_LOOP_EXPR:
             DumpArrayInitLoopExprData(static_cast<const ArrayInitLoopExpr *>(S)); break;
+        case clava::StmtNode ::DESIGNATED_INIT_EXPR:
+            DumpDesignatedInitExprData(static_cast<const DesignatedInitExpr *>(S)); break;
 
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
@@ -390,6 +393,12 @@ void clava::ClavaDataDumper::DumpInitListExprData(const InitListExpr *E) {
     //clava::dump(clava::getId(E->getInitializedFieldInUnion(), id)); // Apparently not supported in old parser
     clava::dump(const_cast<InitListExpr*>(E)->isExplicit()); // isExplicit() could be const
     clava::dump(E->isStringLiteralInit()); // isExplicit() could be const
+    clava::dump(clava::getId(E->getSyntacticForm(), id));
+    clava::dump(clava::getId(E->getSemanticForm(), id));
+    //llvm::errs() << "InitListExpr Original: " << clava::getId(E, id) << "\n";
+    //llvm::errs() << "InitListExpr Syntatic: " << clava::getId(E->getSyntacticForm(), id) << "\n";
+    //llvm::errs() << "InitListExpr Semantic: " << clava::getId(E->getSemanticForm(), id) << "\n";
+
 }
 
 void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
@@ -706,4 +715,17 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
     DumpExprData(E);
 
      //clava::dump(E->getArraySize().toString(10, false));
+ }
+
+ void clava::ClavaDataDumper::DumpDesignatedInitExprData(const DesignatedInitExpr *E) {
+    DumpExprData(E);
+
+     clava::dump(E->usesGNUSyntax ());
+
+    // Dump designators
+    clava::dump(E->size());
+    for(unsigned int i=0; i<E->size(); i++) {
+        clava::dump(E->getDesignator(i));
+    }
+
  }

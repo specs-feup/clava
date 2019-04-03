@@ -69,6 +69,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::PREDEFINED_EXPR: return "PredefinedExpr";
         case clava::StmtNode::SIZE_OF_PACK_EXPR: return "SizeOfPackExpr";
         case clava::StmtNode::ARRAY_INIT_LOOP_EXPR: return "ArrayInitLoopExpr";
+        case clava::StmtNode::DESIGNATED_INIT_EXPR: return "DesignatedInitExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));

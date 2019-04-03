@@ -542,11 +542,35 @@ const std::string clava::getQualifiedPrefix(const NamedDecl *D) {
     // Remove decl name and :: from qualified name
     const std::string expectedSuffix = "::" + declName;
     if(!endsWith(qualifiedName, expectedSuffix)) {
-        throw std::invalid_argument("ClangNodes::getQualifiedPrefix(const NamedDecl *): Expected string '"+qualifiedName+"' to have the suffix '" +
-                                            expectedSuffix + "'");
+        std::string message = "ClangNodes::getQualifiedPrefix(const NamedDecl *): Expected string '" + qualifiedName +
+                "' to have the suffix '" + expectedSuffix + "'";
+        throw std::invalid_argument(message);
+        //throw std::invalid_argument("ClangNodes::getQualifiedPrefix(const NamedDecl *): Expected string '"+qualifiedName+"' to have the suffix '" +
+         //                                   expectedSuffix + "'");
     }
 
     int endIndex = qualifiedName.length() - declName.length() - 2;
 
     return qualifiedName.substr(0, endIndex);
 }
+
+void clava::dump(const clang::DesignatedInitExpr::Designator* designator) {
+
+    if(designator->isFieldDesignator()) {
+        // Dump kind
+        clava::dump(clava::DESIGNATOR_KIND[0]);
+        clava::dump(designator->getFieldName()->getName());
+    } else if(designator->isArrayDesignator()) {
+        // Dump kind
+        clava::dump(clava::DESIGNATOR_KIND[1]);
+        clava::dump(designator->getFirstExprIndex());
+    } else if(designator->isArrayRangeDesignator()) {
+        // Dump kind
+        clava::dump(clava::DESIGNATOR_KIND[2]);
+        clava::dump(designator->getFirstExprIndex());
+    } else {
+
+        throw  std::invalid_argument("ClangNodes::dump(const clang::DesignatedInitExpr::Designator*): Case not implemented");
+    }
+}
+

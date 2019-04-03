@@ -47,6 +47,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"LambdaExpr", clava::StmtNode::LAMBDA_EXPR},
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
         {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
+        {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
 
 
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
@@ -151,6 +152,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitLambdaExprChildren(static_cast<const LambdaExpr *>(S), visitedChildren); break;
         case clava::StmtNode::SIZE_OF_PACK_EXPR:
             VisitSizeOfPackExprChildren(static_cast<const SizeOfPackExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::DESIGNATED_INIT_EXPR:
+            VisitDesignatedInitExprChildren(static_cast<const DesignatedInitExpr *>(S), visitedChildren); break;
 
 
 
@@ -344,6 +347,10 @@ void ClangAstDumper::VisitInitListExprChildren(const InitListExpr *E, std::vecto
 
     // Visit field
     //VisitDeclTop(E->getInitializedFieldInUnion());
+
+    // Visit syntatic form
+    VisitStmtTop(E->getSyntacticForm());
+    VisitStmtTop(E->getSemanticForm());
 }
 
 
@@ -523,6 +530,16 @@ void ClangAstDumper::VisitSizeOfPackExprChildren(const SizeOfPackExpr *E, std::v
             VisitTemplateArgument(templateArg);
         }
     }
+}
+
+void ClangAstDumper::VisitDesignatedInitExprChildren(const DesignatedInitExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    //for(unsigned int i=0; i<E->getNumSubExprs(); i++) {
+    //    addChild(E->getSubExpr(i), children);
+    //}
+
 }
 
 /*
