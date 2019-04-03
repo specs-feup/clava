@@ -31,6 +31,13 @@ public class ImplicitValueInitExpr extends Expr {
         super(data, children);
     }
 
+    // @Override
+    // public String getCode() {
+    // // Return a default value initialization, based on the type
+    // System.out.println("TYPE: " + getType());
+    // return "/*implicit*/";
+    // // return super.getCode();
+    // }
     // public ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
     // this(exprData, info, Collections.emptyList());
     // }
