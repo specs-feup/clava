@@ -60,5 +60,15 @@ struct aligned_struct {
 	short f[3];
 } __attribute__((aligned (8)));
 
+struct point {
+  double x;
+  double y;
+};
+struct point ptarray[10] = {[2].y = 1.0, [2].x = 2.0, [0].x = 1.0, [4 ... 6].x = 3.0};
+
+int int_array[10][10] = {[2][3] = 1, [4][5] = 2};
+
+struct point pt = {.x = 1.0, .y = 2.0};
+
 int main() {
 }
