@@ -1,5 +1,8 @@
 #include "macro.h"
 
+int ENTRY = 0;
+int EXIT = 10;
+
 // Macro that instantiates a declaration
 int a = 0;
 
@@ -11,6 +14,14 @@ int main() {
    
    // Macro in size_of
 	int size = sizeof(double);
+
+	int i;
+	/**
+	* A comment
+	**/
+	for(i = ENTRY; i != EXIT; i = i + 1) {
+		;
+	}
    
    return 0;
 }
