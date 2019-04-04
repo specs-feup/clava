@@ -198,6 +198,13 @@ public class TextParser {
                 continue;
             }
 
+            // If node is inside a StmtWithCondition, insert TextElement before StmtWithCondition
+            Stmt parentConditionStmt = insertionPoint.getStmtWithConditionAncestor().orElse(null);
+            if (parentConditionStmt != null) {
+                queue.moveBefore(parentConditionStmt, textElement);
+                continue;
+            }
+
             // If current node is an empty CompoundStmt, add as child
             if (currentNode instanceof CompoundStmt && !currentNode.hasChildren()) {
                 queue.addChild(insertionPoint, textElement);

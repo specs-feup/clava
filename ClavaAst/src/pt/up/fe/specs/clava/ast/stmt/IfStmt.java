@@ -71,12 +71,31 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     public Optional<CompoundStmt> getThen() {
         return getOptionalChild(CompoundStmt.class, 2);
-        // return (CompoundStmt) ClavaNodes.getChild(this, getConditionIndex() + 1);
+
+        // Optional<Stmt> stmt = getOptionalChild(Stmt.class, 2);
+        // if (!stmt.isPresent()) {
+        // return Optional.empty();
+        // }
+        //
+        // if (stmt.get() instanceof CompoundStmt) {
+        // return Optional.of((CompoundStmt) stmt.get());
+        // }
+        // System.out.println("IfStmt: Then not being normalized as a CompoundStmt: " + stmt.get());
+        // return stmt.map(ClavaNodes::toCompoundStmt);
     }
 
     public Optional<CompoundStmt> getElse() {
         return getOptionalChild(CompoundStmt.class, 3);
-        // return ClavaNodes.getChildTry(this, getConditionIndex() + 2).map(child -> (CompoundStmt) child);
+        // Optional<Stmt> stmt = getOptionalChild(Stmt.class, 3);
+        // if (!stmt.isPresent()) {
+        // return Optional.empty();
+        // }
+        //
+        // if (stmt.get() instanceof CompoundStmt) {
+        // return Optional.of((CompoundStmt) stmt.get());
+        // }
+        // System.out.println("IfStmt: Else not being normalized as a CompoundStmt: " + stmt.get());
+        // return stmt.map(ClavaNodes::toCompoundStmt);
     }
 
     @Override

@@ -83,6 +83,13 @@ public class ForStmt extends LoopStmt {
     @Override
     public CompoundStmt getBody() {
         return getChild(CompoundStmt.class, 3);
+
+        // ClavaNode body = getChild(3);
+        // if (body instanceof CompoundStmt) {
+        // return (CompoundStmt) body;
+        // }
+        //
+        // throw new RuntimeException("ForStmt: Not being normalized as a CompoundStmt\n" + toTree());
     }
 
     @Override
