@@ -11,9 +11,9 @@ class A {
    void constFoo() const;
    static int constexpr number_of_sizes = 3;
    static std::array<int, number_of_sizes> constexpr SPACE{{512, 256, 128}};
-   static std::array<int, number_of_sizes> constexpr SPACE2 = {{512, 256, 128}};
+   static std::array<int, number_of_sizes> constexpr SPACE2 = {512, 256, 128};
    static std::array<std::array<int, 2>, 1> constexpr ARRAY_IN_ARRAY{{{{1, 2}}}};
-   static std::array<std::array<int, 2>, 1> constexpr ARRAY_IN_ARRAY2 = {{{{1, 2}}}};
+   static std::array<std::array<int, 2>, 1> constexpr ARRAY_IN_ARRAY2 = {{1, 2}};
 };
 
 inline void A::constFoo() const {

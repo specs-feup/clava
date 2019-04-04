@@ -69,7 +69,7 @@ int main() {
    auto typeId2 = typeid(1).name();
 
    // List Initialization
-   std::array<int, 3> listInitialized1 = {{512, 256, 128}};
+   std::array<int, 3> listInitialized1 = {512, 256, 128};
    std::array<int, 3> listInitialized2{{512, 256, 128}};
 
 	// Static assert
