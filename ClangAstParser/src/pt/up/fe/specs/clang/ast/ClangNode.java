@@ -20,7 +20,6 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
-import pt.up.fe.specs.clang.clavaparser.utils.ClangGenericParsers;
 import pt.up.fe.specs.clava.ClavaId;
 import pt.up.fe.specs.clava.ClavaId.RelationType;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
@@ -449,7 +448,7 @@ public abstract class ClangNode extends ATreeNode<ClangNode> {
         }
 
         // Parse relationship
-        RelationType type = parser.apply(string -> ClangGenericParsers.parseEnum(string, RelationType.class));
+        RelationType type = parser.apply(string -> StringParsers.parseEnum(string, RelationType.class));
 
         ClavaId next = parseAddress(parser);
 
