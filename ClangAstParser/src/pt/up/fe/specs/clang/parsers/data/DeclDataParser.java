@@ -152,7 +152,7 @@ public class DeclDataParser {
         DataStore data = parseTagDeclData(lines, dataStore);
 
         data.add(EnumDecl.ENUM_SCOPE_KIND, LineStreamParsers.enumFromName(EnumScopeType.class, lines));
-        dataStore.getClavaNodes().queueSetNode(data, EnumDecl.INTEGER_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, EnumDecl.INTEGER_TYPE, lines.nextLine());
 
         return data;
     }

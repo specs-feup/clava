@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -44,7 +45,8 @@ public class EnumDecl extends TagDecl {
     public final static DataKey<EnumScopeType> ENUM_SCOPE_KIND = KeyFactory.enumeration("enumScopeKind",
             EnumScopeType.class);
 
-    public final static DataKey<Type> INTEGER_TYPE = KeyFactory.object("integerType", Type.class);
+    // public final static DataKey<Type> INTEGER_TYPE = KeyFactory.object("integerType", Type.class);
+    public final static DataKey<Optional<Type>> INTEGER_TYPE = KeyFactory.optional("integerType");
 
     /// DATAKEYS END
 
@@ -91,7 +93,7 @@ public class EnumDecl extends TagDecl {
     }
 
     public Type getIntegerType() {
-        return get(INTEGER_TYPE);
+        return get(INTEGER_TYPE).orElse(getContext().getFactory().builtinType("int"));
         // return integerType;
     }
 
