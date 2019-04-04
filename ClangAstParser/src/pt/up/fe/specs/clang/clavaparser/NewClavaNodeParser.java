@@ -50,10 +50,8 @@ import pt.up.fe.specs.clava.ast.extra.Undefined;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
-import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.ast.type.DependentSizedArrayType;
 import pt.up.fe.specs.clava.ast.type.QualType;
@@ -210,29 +208,29 @@ public class NewClavaNodeParser<T extends ClavaNode> extends AClangNodeParser<T>
         */
     }
 
-    private T withoutCopy(ClavaNode clavaNode, List<ClavaNode> children) {
-
-        // Check if children need a Stmt wrapper
-        if (clavaNode instanceof CompoundStmt) {
-            for (int i = 0; i < children.size(); i++) {
-                ClavaNode child = children.get(i);
-                if (child instanceof Stmt) {
-                    continue;
-                }
-
-                if (child instanceof Expr) {
-                    children.set(i, LegacyToDataStore.getFactory().exprStmt((Expr) child));
-                    continue;
-                }
-
-                throw new RuntimeException("Case not defined: " + child.getClass());
-            }
-        }
-
-        clavaNode.setChildren(children);
-
-        return (T) clavaNode;
-    }
+    // private T withoutCopy(ClavaNode clavaNode, List<ClavaNode> children) {
+    //
+    // // Check if children need a Stmt wrapper
+    // if (clavaNode instanceof CompoundStmt) {
+    // for (int i = 0; i < children.size(); i++) {
+    // ClavaNode child = children.get(i);
+    // if (child instanceof Stmt) {
+    // continue;
+    // }
+    //
+    // if (child instanceof Expr) {
+    // children.set(i, LegacyToDataStore.getFactory().exprStmt((Expr) child));
+    // continue;
+    // }
+    //
+    // throw new RuntimeException("Case not defined: " + child.getClass());
+    // }
+    // }
+    //
+    // clavaNode.setChildren(children);
+    //
+    // return (T) clavaNode;
+    // }
 
     public void processNodeCopy(ClavaNode clavaNodeCopy) {
 
