@@ -217,8 +217,8 @@ public class ParallelCodeParser extends CodeParser {
         }
 
         tic = System.nanoTime();
-
-        List<TranslationUnit> tUnits = new TUnitProcessor(clangParserResults, true).getTranslationUnits();
+        boolean normalizeNodes = true;
+        List<TranslationUnit> tUnits = new TUnitProcessor(clangParserResults, normalizeNodes).getTranslationUnits();
 
         App app = context.get(ClavaContext.FACTORY).app(tUnits);
 
