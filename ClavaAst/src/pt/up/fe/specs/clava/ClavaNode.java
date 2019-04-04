@@ -43,9 +43,11 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
+import pt.up.fe.specs.clava.utils.StmtWithCondition;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -1441,6 +1443,20 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     @Override
     public String getString() {
         return getClass().getSimpleName() + " (" + getId() + ")";
+    }
+
+    /**
+     * If node is inside a StmtWithConditin, returns the statement.
+     * 
+     * @return
+     */
+    public Optional<Stmt> getStmtWithConditionAncestor() {
+        // Check if inside condition of while, for or if
+        return getAscendantsStream()
+                .filter(ascendant -> ascendant instanceof StmtWithCondition)
+                .map(ascendant -> (StmtWithCondition) ascendant)
+                .findFirst()
+                .map(Stmt.class::cast);
     }
 
     // public <T> copyField(DataKey<T> key) {
