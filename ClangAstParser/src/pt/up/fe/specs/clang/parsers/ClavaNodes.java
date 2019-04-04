@@ -274,7 +274,7 @@ public class ClavaNodes {
                 // return;
                 throw new RuntimeException(
                         "Null id for key '" + key + "' of node '" + data.get(ClavaNode.ID)
-                                + "', if node can be null, use queueOptional instead");
+                                + "', if node can be null, use queueOptional instead. Node data:\n" + data);
             }
 
             // Get node
