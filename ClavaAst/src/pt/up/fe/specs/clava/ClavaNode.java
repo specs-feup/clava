@@ -1446,17 +1446,22 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * If node is inside a StmtWithConditin, returns the statement.
+     * If node is inside a StmtWithConditin (but not in a CompoundStmt), returns the statement.
      * 
      * @return
      */
     public Optional<Stmt> getStmtWithConditionAncestor() {
         // Check if inside condition of while, for or if
-        return getAscendantsStream()
-                .filter(ascendant -> ascendant instanceof StmtWithCondition)
-                .map(ascendant -> (StmtWithCondition) ascendant)
+        ClavaNode node = getAscendantsStream()
+                .filter(ascendant -> ascendant instanceof StmtWithCondition || ascendant instanceof CompoundStmt)
                 .findFirst()
-                .map(Stmt.class::cast);
+                .orElse(null);
+
+        if (node == null || node instanceof CompoundStmt) {
+            return Optional.empty();
+        }
+
+        return Optional.of((Stmt) node);
     }
 
     // public <T> copyField(DataKey<T> key) {
