@@ -184,6 +184,8 @@ if(UNIX AND NOT APPLE)
 elseif(APPLE)
   # macOS dependencies
   list(APPEND llvm7_LIBRARIES 
+		c++abi
+		#stdc++
 		z
 		m
 		dl
