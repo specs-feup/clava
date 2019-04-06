@@ -51,6 +51,7 @@ import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecific
 import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
+import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CXXCtorInitializerKind;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -83,9 +84,9 @@ public class ClavaDataParsers {
             return SourceRange.invalidRange();
         }
 
-        // Filepaths will be shared between most nodes, intern them
-
-        String startFilepath = firstPart.intern();
+        // Filepaths will be shared between most nodes, cache them
+        String startFilepath = dataStore.get(ClangParserData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(firstPart);
+        // String startFilepath = firstPart.intern();
         // String startFilepath = firstPart;
         int startLine = Integer.parseInt(lines.nextLine());
         int startColumn = Integer.parseInt(lines.nextLine());
@@ -107,7 +108,8 @@ public class ClavaDataParsers {
         }
 
         // Parser end location
-        String endFilepath = secondPart.intern();
+        String endFilepath = dataStore.get(ClangParserData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(secondPart);
+        // String endFilepath = secondPart.intern();
         // String endFilepath = secondPart;
 
         int endLine = Integer.parseInt(lines.nextLine());

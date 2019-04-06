@@ -243,6 +243,10 @@ public class ParallelCodeParser extends CodeParser {
             ClavaLog.metrics("Current memory used (Java):" + usedSize);
         }
 
+        // Cached filepaths metrics
+        // ClavaLog.metrics(
+        // "Cached filepaths analytics:\n" + app.getContext().get(ClavaContext.CACHED_FILEPATHS).getAnalytics());
+
         // Perform second pass over types
         // processTypesSecondPass();
 
