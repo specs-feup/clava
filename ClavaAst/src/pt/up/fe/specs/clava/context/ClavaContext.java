@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.utilities.CachedItems;
 
 public class ClavaContext extends ADataClass<ClavaContext> {
 
@@ -56,6 +57,9 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
     public final static DataKey<ClavaMetrics> METRICS = KeyFactory
             .object("metrics", ClavaMetrics.class);
+
+    public final static DataKey<CachedItems<String, String>> CACHED_FILEPATHS = KeyFactory
+            .generic("cachedFilepaths", () -> new CachedItems<String, String>(string -> string, true));
 
     /**
      * If set, represents the root folder where we are working on.
@@ -93,6 +97,8 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         LegacyToDataStore.CLAVA_CONTEXT.set(this);
 
         set(METRICS, new ClavaMetrics());
+
+        set(CACHED_FILEPATHS, new CachedItems<>(string -> string, true));
 
         appStack = new ArrayList<>();
     }
