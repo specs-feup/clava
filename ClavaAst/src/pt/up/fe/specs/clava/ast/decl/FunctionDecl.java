@@ -861,4 +861,14 @@ public class FunctionDecl extends DeclaratorDecl {
         // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
         // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
     }
+
+    /**
+     * Makes sure the type changes in both the declaration and definition.
+     * 
+     * @param type
+     */
+    public void setFunctionType(FunctionType type) {
+        getDeclaration().ifPresent(decl -> decl.setType(type));
+        getDefinition().ifPresent(decl -> decl.setType(type));
+    }
 }
