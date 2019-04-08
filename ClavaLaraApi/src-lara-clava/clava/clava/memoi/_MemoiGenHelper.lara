@@ -1,3 +1,17 @@
+/**
+ * 		Converts counts from a map to an array.
+ * */
+function _convertCounts(newReport) {
+
+	var a = [];
+	
+	for(var count of newReport.counts) {
+		a.push(count);
+	}
+	
+	newReport.counts = a;
+}
+
 // function
 function totalTopN(report, n, reportCount) {
 
