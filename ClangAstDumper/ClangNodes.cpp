@@ -97,10 +97,12 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
 
 void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLocation end) {
 
-    // Original source range
-    clava::dumpSourceRange(Context, begin, end);
 
-	// ISMACRO: Disable this when updating
+    // Original source range
+    //clava::dumpSourceRange(Context, begin, end);
+    clava::dumpSourceRange(Context, Context->getSourceManager().getExpansionLoc(begin), Context->getSourceManager().getExpansionLoc(end));
+
+    // ISMACRO: Disable this when updating
     // If it is a macro
     bool isMacro = begin.isMacroID() || end.isMacroID();
     clava::dump(isMacro);
@@ -118,14 +120,21 @@ void clava::dumpSourceInfo(ASTContext *Context, SourceLocation begin, SourceLoca
 
     // If is in system header
     FullSourceLoc fullLocation = Context->getFullLoc(begin);
+
+
     if (fullLocation.isValid() && fullLocation.isInSystemHeader()) {
         clava::dump(true);
     } else {
         clava::dump(false);
     }
 
+    //clava::dumpSourceRange(Context, Context->getFullLoc(begin).getExpansionLoc(), Context->getFullLoc(end).getExpansionLoc());
+    //clava::dumpSourceRange(Context, Context->getSourceManager().getImmediateMacroCallerLoc(begin), Context->getSourceManager().getImmediateMacroCallerLoc(end));
+    //clava::dumpSourceRange(Context, Context->getSourceManager().getExpansionLoc(begin), Context->getSourceManager().getExpansionLoc(end));
+
     //Context->getSourceManager().getCharacterData(begin)
     //const char *getCharacterData(SourceLocation SL, bool *Invalid = nullptr) const;
+    // Original source range
 
 }
 

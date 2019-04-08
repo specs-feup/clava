@@ -156,6 +156,11 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
 
 void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
     clava::dumpSourceInfo(Context, D->getLocStart(), D->getLocEnd());
+    //clava::dumpSourceInfo(Context, D->getSourceRange().getBegin(), D->getSourceRange().getEnd());
+
+    //clava::dumpSourceRange(Context,     D->getSourceRange().getBegin(),     D->getSourceRange().getEnd());
+
+
 
     // Print information about Decl
     clava::dump(D->isImplicit());
