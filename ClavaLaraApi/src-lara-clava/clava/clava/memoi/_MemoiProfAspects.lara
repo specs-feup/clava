@@ -38,7 +38,7 @@ end
  * */
 aspectdef _Memoi_FindType
 	input
-		targetName
+		targetSig
 	end
 	output
 		foundType = ''
@@ -46,7 +46,7 @@ aspectdef _Memoi_FindType
 
 	var $functionType = undefined;
 	// TODO: this is not safe, func names are not unique in C++
-	select stmt.call{targetName} end
+	select stmt.call{signature === targetSig} end
 	apply
 		var $func = $call.function;
 		if(_isValidMemoi($func)) {
@@ -104,7 +104,7 @@ function _isValidMemoi($func, seen) {
  * */
 aspectdef _Memoi_GlobalWrapper
 	input
-		targetName,
+		targetSig,
 		wrapperName,
 		monitorType,
 		monitorName,
@@ -114,7 +114,7 @@ aspectdef _Memoi_GlobalWrapper
 	end
 	
 	// make the wrapper
-	select stmt.call{targetName} end
+	select stmt.call{signature === targetSig} end
 	apply
 		exec wrap(wrapperName);
 	end
@@ -123,7 +123,7 @@ aspectdef _Memoi_GlobalWrapper
 	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, targetName, id, reportDir, dataType, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, ['global']);
 end
 
 /**
@@ -135,7 +135,7 @@ end
  * */
 aspectdef _Memoi_IndividualWrapper
 	input
-		targetName,
+		targetSig,
 		wrapperNameBase,
 		monitorType,
 		monitorNameBase,
@@ -145,7 +145,7 @@ aspectdef _Memoi_IndividualWrapper
 	end
 	
 	var counter = 0;
-	select file.stmt.call{targetName} end
+	select file.stmt.call{signature === targetSig} end
 	apply
 		
 		// make the wrapper
@@ -161,7 +161,7 @@ aspectdef _Memoi_IndividualWrapper
 		
 		// setup
 		var id = idBase + '_' + counter;
-		call _Memoi_Setup(monitorName, monitorType, targetName, id, reportDir, dataType, [callSiteInfo]);
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, [callSiteInfo]);
 		
 		counter++;
 	end
@@ -212,7 +212,7 @@ aspectdef _Memoi_Setup
 	input
 		monitorName,
 		monitorType,
-		funcName,
+		targetSig,
 		id,
 		dir,
 		type,
@@ -222,7 +222,7 @@ aspectdef _Memoi_Setup
 	select file.function{'main'}.body end
 	apply
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
-		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[funcName]]", "[[id]]", [[type]]);}%);
+		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[type]]);}%);
 
 		/* add functions to print and clean up at every return on main */
 		$function.exec insertReturn(%{mp_to_json([[monitorName]], make_report_path("[[dir]]", "[[id]]"));}%);
