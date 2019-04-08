@@ -1,4 +1,36 @@
 /**
+ * 		Finds possible targets for memoization. Filters results based
+ * 	on the given predicate function (or uses default).
+ * */
+aspectdef _Memoi_FindTargets
+
+	input filter end
+	output targets = [] end
+	
+	// use default predicate if user doesn't provide one
+	if(filter === undefined) {
+		filter = _isValidMemoi;
+	}
+	
+	var seen = {};
+	
+	select stmt.call end
+	apply
+		var $func = $call.function;
+		var sig = $func.signature;
+		
+		if(seen[sig] !== undefined) {
+			continue;
+		}
+					
+		var valid = filter($func, seen);
+		if(valid) {
+			targets.push(sig);
+		}
+	end
+end
+
+/**
  * 		Finds the target function and gets its return type.
  * 
  * @aspect
@@ -13,16 +45,16 @@ aspectdef _Memoi_FindType
 	end
 
 	var $functionType = undefined;
-
-	// TODO: get function directly
+	// TODO: this is not safe, func names are not unique in C++
 	select stmt.call{targetName} end
 	apply
-		$functionType = $call.decl.functionType;
+		var $func = $call.function;
+		if(_isValidMemoi($func)) {
+			$functionType = $func.functionType;
+			foundType = $functionType.returnType.code;
+			return;
+		}
 	end
-
-	if(_isValidMemoi($functionType)) {
-		foundType = $functionType.returnType.code;
-	}
 end
 
 /**
@@ -33,19 +65,32 @@ end
  *	2) the parameter and return type are both T;
  *	3) T is one of {int, float, double};.
  **/
-function _isValidMemoi($functionType) {
-
+function _isValidMemoi($func, seen) {
+	
+	var $functionType = $func.functionType;
 	var $returnType = $functionType.returnType;
 	var paramTypes = $functionType.paramTypes;
+	var sig = $func.signature;
 
 	if(paramTypes.length != 1) {
+		
+		if(seen !== undefined) {
+			seen[sig] = false;
+		}
 		return false;
 	}
 
 	if(paramTypes[0].code != $returnType.code) {
+		
+		if(seen !== undefined) {
+			seen[sig] = false;
+		}
 		return false;
 	}
-	
+		
+	if(seen !== undefined) {
+		seen[sig] = true;
+	}
 	return true;
 }
 

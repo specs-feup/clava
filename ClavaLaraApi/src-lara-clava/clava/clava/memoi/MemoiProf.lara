@@ -82,3 +82,12 @@ MemoiProf.prototype.profEach = function() {
 	asp1.call();
 }
 
+MemoiProf.findTargets = function(pred) {
+	
+	var asp1 = new _Memoi_FindTargets(pred);
+	asp1.call();
+	
+	return asp1.targets;
+}
+
+
