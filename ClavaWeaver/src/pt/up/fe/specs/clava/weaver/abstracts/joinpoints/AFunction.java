@@ -57,14 +57,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute functionType
-     * @return the attribute's value
+     * the type of the call, which includes the return type and the types of the parameters
      */
     public abstract AFunctionType getFunctionTypeImpl();
 
     /**
-     * Get value on attribute functionType
-     * @return the attribute's value
+     * the type of the call, which includes the return type and the types of the parameters
      */
     public final Object getFunctionType() {
         try {
@@ -79,6 +77,13 @@ public abstract class AFunction extends ADeclarator {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defFunctionTypeImpl(AFunctionType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def functionType with type AFunctionType not implemented ");
     }
 
     /**
@@ -772,6 +777,32 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    public void setFunctionTypeImpl(AFunctionType functionType) {
+        throw new UnsupportedOperationException(get_class()+": Action setFunctionType not implemented ");
+    }
+
+    /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    public final void setFunctionType(AFunctionType functionType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFunctionType", this, Optional.empty(), functionType);
+        	}
+        	this.setFunctionTypeImpl(functionType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setFunctionType", this, Optional.empty(), functionType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setFunctionType", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -1015,6 +1046,13 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "functionType": {
+        	if(value instanceof AFunctionType){
+        		this.defFunctionTypeImpl((AFunctionType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "body": {
         	if(value instanceof AScope){
         		this.defBodyImpl((AScope)value);
@@ -1109,6 +1147,7 @@ public abstract class AFunction extends ADeclarator {
         actions.add("void setParamsFromStrings(String[])");
         actions.add("void setBody(scope)");
         actions.add("call newCall(joinpoint[])");
+        actions.add("void setFunctionType(functionType)");
     }
 
     /**

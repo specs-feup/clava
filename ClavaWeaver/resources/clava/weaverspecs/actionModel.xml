@@ -265,6 +265,10 @@
 		<parameter name="args" type="joinpoint[]" />
 	</action>
 
+	<action name="setFunctionType" class="function" tooltip="Sets the type of the function">
+		<parameter name="functionType" type="functionType" />
+	</action>	
+
 
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
@@ -446,6 +450,8 @@
 	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">
 		<parameter name="newType" type="type" />
 	</action>
+
+		
 	<!-- 
 	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
 		<parameter name="index" type="Integer" />

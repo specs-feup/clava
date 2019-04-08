@@ -293,6 +293,13 @@ public abstract class AMethod extends AFunction {
     /**
      * 
      */
+    public void defFunctionTypeImpl(AFunctionType value) {
+        this.aFunction.defFunctionTypeImpl(value);
+    }
+
+    /**
+     * 
+     */
     public void defBodyImpl(AScope value) {
         this.aFunction.defBodyImpl(value);
     }
@@ -519,6 +526,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the type of the function
+     * @param functionType 
+     */
+    @Override
+    public void setFunctionTypeImpl(AFunctionType functionType) {
+        this.aFunction.setFunctionTypeImpl(functionType);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -576,6 +592,13 @@ public abstract class AMethod extends AFunction {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "functionType": {
+        	if(value instanceof AFunctionType){
+        		this.defFunctionTypeImpl((AFunctionType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

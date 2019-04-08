@@ -340,7 +340,9 @@
 	<artifact class="function" default="name">
 		<!--  <attribute name="name" type="String" />  -->
 		<attribute name="hasDefinition" type="Boolean" />
-		<attribute name="functionType" type="functionType" />
+		<attribute name="functionType" type="functionType" tooltip="the type of the call, which includes the return type and the types of the parameters">
+			<def/>			
+		</attribute>	
 		<attribute name="declarationJp" type="joinpoint" />
 		<attribute name="definitionJp" type="joinpoint" />		
 		<attribute name="declaration" type="String">

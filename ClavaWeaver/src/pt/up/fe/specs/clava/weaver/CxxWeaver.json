@@ -17089,6 +17089,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the type of the call, which includes the return type and the types of the parameters",
                   "children": [
                            {
                               "type": "functionType",
@@ -17834,6 +17835,20 @@
                            {
                               "type": "scope",
                               "name": "body",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the type of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setFunctionType"
+                           },
+                           {
+                              "type": "functionType",
+                              "name": "functionType",
                               "defaultValue": ""
                            }]
                },
@@ -24651,6 +24666,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the type of the call, which includes the return type and the types of the parameters",
                   "children": [
                            {
                               "type": "functionType",
@@ -25396,6 +25412,20 @@
                            {
                               "type": "scope",
                               "name": "body",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the type of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setFunctionType"
+                           },
+                           {
+                              "type": "functionType",
+                              "name": "functionType",
                               "defaultValue": ""
                            }]
                },

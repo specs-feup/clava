@@ -581,4 +581,14 @@ public class CxxFunction extends AFunction {
     public void setBodyImpl(AScope body) {
         defBodyImpl(body);
     }
+
+    @Override
+    public void defFunctionTypeImpl(AFunctionType value) {
+        function.setFunctionType((FunctionType) value.getNode());
+    }
+
+    @Override
+    public void setFunctionTypeImpl(AFunctionType functionType) {
+        defFunctionTypeImpl(functionType);
+    }
 }
