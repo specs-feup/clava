@@ -32,6 +32,7 @@ import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
+import pt.up.fe.specs.clang.transforms.RemovePoison;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -65,8 +66,8 @@ public class ClangStreamParser {
             new RemoveExtraNodes(),
             // new RemoveClangComments(),
             new CreateDeclStmts(),
-            new MoveImplicitCasts()
-
+            new MoveImplicitCasts(),
+            new RemovePoison()
     // new AdaptBoolTypes(),
     // new AdaptBoolCasts(),
     // new RemoveBoolOperatorCalls(),
