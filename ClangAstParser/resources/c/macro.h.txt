@@ -25,4 +25,6 @@ int global2 = 20;
 int global3 = 30;
 // Comment 3 After
 
+void poisoned_foo();
+
 #endif

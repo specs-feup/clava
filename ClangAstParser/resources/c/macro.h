@@ -44,3 +44,7 @@ A2
 int global3 = 30;
 // Comment 3 After
 
+
+#define FOO poisoned_foo
+#pragma GCC poison poisoned_foo
+void FOO();
