@@ -1,3 +1,4 @@
+#include <string>
 
 int foo(int a) { // Comment between function name and arguments
    
@@ -36,6 +37,9 @@ int main() {
    }
    catch (...) { // Comment in front of catch
    }
+   
+	std::string charArray1 = "Comment start /* inside string";
+	std::string charArray2 = "a string";   
    
    return 0;
    // Comment at the end of function
