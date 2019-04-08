@@ -10,8 +10,7 @@
 
 #define EXTERN_DECL(type, array)  extern type array[]
 
-// These declarations will all have the same source location, 
-// comments will not be aligned with declarations
+// comment before extern_a
 EXTERN_DECL(int, extern_a); /* comment after extern_a */
 EXTERN_DECL(int, extern_b); // comment after extern_b
 EXTERN_DECL(int, extern_c);          
@@ -22,4 +21,26 @@ EXTERN_DECL(int, extern_d);
 #endif
 
 typedef MACRO_TYPE (*new_type) (int);
+
+
+
+#define DECL(A, VALUE) int A = VALUE;
+
+// Comment before
+DECL(global_a, 10)
+// Comment After
+
+
+#define A1 int global2 = 20;
+#define A2 A1
+
+
+// Comment 2 before
+A2
+// Comment 2 After
+
+
+// Comment 3 before
+int global3 = 30;
+// Comment 3 After
 

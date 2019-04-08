@@ -3,12 +3,26 @@
 
 //#define type_decl(var, type)	\
 //  type var;
+
+// comment before extern_a
 extern int extern_a[];
-extern int extern_b[];
+/*comment after extern_a*/
+extern int extern_b[]; // comment after extern_b
 extern int extern_c[];
 extern int extern_d[];
-// These declarations will all have the same source location,
-// comments will not be aligned with declarations
-/*comment after extern_a*/
+
 typedef void (*new_type) (int);
+
+// Comment before
+int global_a = 10;
+// Comment After
+
+// Comment 2 before
+int global2 = 20;
+// Comment 2 After
+
+// Comment 3 before
+int global3 = 30;
+// Comment 3 After
+
 #endif
