@@ -32,10 +32,21 @@ public class MultiLineCommentRule implements TextParserRule {
     public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
             ClavaContext context) {
 
-        // Check if line contains '//'
+        // Check if line contains '/*'
         int startIndex = line.indexOf("/*");
         if (startIndex == -1) {
             return Optional.empty();
+        }
+
+        // Check if inside a string
+        // This will detect false positives, hack until text elements are obtained from Clang
+        int currentIndex = startIndex - 1;
+        while (currentIndex >= 0) {
+            if (line.charAt(currentIndex) == '"') {
+                return Optional.empty();
+            }
+
+            currentIndex--;
         }
 
         // Found start of a multi-line comment. Try to find the end
