@@ -1,3 +1,5 @@
+import clava.memoi._MemoiProfHelper;
+
 /**
  * 		Finds possible targets for memoization. Filters results based
  * 	on the given predicate function (or uses default).
@@ -16,14 +18,13 @@ aspectdef _Memoi_FindTargets
 	
 	select stmt.call end
 	apply
-		var $func = $call.function;
-		var sig = $func.signature;
+		var sig = $call.function.signature;
 		
 		if(seen[sig] !== undefined) {
 			continue;
 		}
 					
-		var valid = filter($func, seen);
+		var valid = filter($call, seen);
 		if(valid) {
 			targets.push(sig);
 		}
@@ -44,16 +45,22 @@ aspectdef _Memoi_FindType
 		foundType = ''
 	end
 
-	var $functionType = undefined;
-	// TODO: this is not safe, func names are not unique in C++
 	select stmt.call{signature === targetSig} end
 	apply
-		var $func = $call.function;
-		if(_isValidMemoi($func)) {
-			$functionType = $func.functionType;
+		if(_isValidMemoi($call)) {
+			var $functionType = $call.function.functionType;
 			foundType = $functionType.returnType.code;
 			return;
 		}
+	end
+end
+
+aspectdef _Memoi_CheckGlobalAccess
+	input $def end
+	
+	select $def.varref end
+	apply
+		println($varref.code);
 	end
 end
 
@@ -63,37 +70,97 @@ end
  *	The constraints are:
  *	1) it has only a single parameter;
  *	2) the parameter and return type are both T;
- *	3) T is one of {int, float, double};.
+ *	3) T is one of {int, float, double};
+ * 	4) It doesn't access global state;
+ *	5) It doesn't call non-valid functions. TODO
  **/
-function _isValidMemoi($func, seen) {
+function _isValidMemoi($call, seen) {
 	
+	var $func = $call.function;
 	var $functionType = $func.functionType;
 	var $returnType = $functionType.returnType;
 	var paramTypes = $functionType.paramTypes;
 	var sig = $func.signature;
 
+	// 1) it has only a single parameter
 	if(paramTypes.length != 1) {
 		
+		debug(sig + ' - has more than 1 parameter');
+		
 		if(seen !== undefined) {
 			seen[sig] = false;
 		}
 		return false;
 	}
-
+	
+	// 2) the parameter and return type are both T
 	if(paramTypes[0].code != $returnType.code) {
+
+		debug(sig + ' - parameter and return type are different');
 		
 		if(seen !== undefined) {
 			seen[sig] = false;
 		}
 		return false;
 	}
+	
+	// 3) T is one of {int, float, double}
+	if(!_testType($returnType, ['int', 'float', 'double'])) {
 		
+		debug(sig + ' - type is not supported: ' + $returnType.code);
+		
+		if(seen !== undefined) {
+			seen[sig] = false;
+		}
+		return false;
+	}
+	
+	// Try to get the definition
+	var $def = $call.definition;
+	if($def === undefined) {
+		
+		if(!_isWhiteListed(sig)) {
+			
+			debug(sig + ' - definition not found, not whitelisted');
+			
+			if(seen !== undefined) {
+				seen[sig] = false;
+			}
+			return false;
+		} else {
+
+			if(seen !== undefined) {
+				seen[sig] = true;
+			}
+			return true;
+		}
+	}
+	
+	// 4) It doesn't access global state (unless constants)
+	var varRefs = $def.descendants('varref');
+	for(var $ref of varRefs) {
+	
+		var $varDecl = $ref.declaration;
+		
+		if($varDecl.isGlobal && (!$ref.type.constant || $ref.type.isPointer)) {
+			
+			debug(sig + ' - accesses non-const global variable ' + $ref.code);
+	
+			if(seen !== undefined) {
+				seen[sig] = false;
+			}
+			return false;
+		}
+	}
+	
+	// 5) It doesn't call non-valid functions
+	
+	// Everything checked OK
 	if(seen !== undefined) {
 		seen[sig] = true;
 	}
 	return true;
 }
-
 
 /**
  * 		Makes a single global wrapper for all calls of the target
