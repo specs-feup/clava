@@ -106,7 +106,8 @@ public class EnumType extends TagType {
     }
 
     public boolean isAnonymous() {
-        return getBareType().startsWith("enum (anonymous");
+        // HACK: Is it possible to obtain this info from Clang?
+        return getBareType().contains("(anonymous at");
     }
     /*
     @Override
