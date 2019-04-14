@@ -46,3 +46,12 @@ int main() {
 	int ** matrix1, **matrix2, *simplePointer, noPointer;
 	int a, b;
 }
+/*
+static void parenType1(struct s1 *s, void (fname) (struct s1 *, struct s2 *));
+
+typedef int *intdef;
+static void function_type_2(void *a) {
+  // Case where ParenType is not just sugar, as described by the Clang documentation
+  void (*fname) (intdef) = *(void (**) (intdef)) a;
+}
+*/

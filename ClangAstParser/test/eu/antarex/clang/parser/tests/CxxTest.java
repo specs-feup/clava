@@ -189,7 +189,7 @@ public class CxxTest {
 
     @Test
     public void testAttribute() {
-        new CxxTester("attribute.cpp").showClavaAst().test();
+        new CxxTester("attribute.cpp").test();
     }
 
     @Test

@@ -70,5 +70,11 @@ int int_array[10][10] = {[2][3] = 1, [4][5] = 2};
 
 struct point pt = {.x = 1.0, .y = 2.0};
 
+struct node {
+ struct node * next;
+ int idx;
+ void (*dummy[32]) ();
+};
+
 int main() {
 }

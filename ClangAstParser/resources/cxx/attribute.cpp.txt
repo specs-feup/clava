@@ -1,6 +1,7 @@
+#include <stdlib.h>
 struct aligned_struct {
    short f[3];
-} __attribute__((aligned (8)));
+} __attribute__((aligned(8)));
 
 struct S {
    short f[3];
@@ -10,3 +11,14 @@ __attribute__((always_inline))
 void myk(float * A) {
 	int i = 1;
 }
+// Format
+__attribute__((format(printf, 3, 4)))
+__attribute__((nonnull(4)))
+extern void print_like_1(int *, int, char const * text, ...);
+__attribute__((format(printf, 2, 3)))
+extern void print_like_2(int *, char const * text, ...);
+// NonNull
+__attribute__((nonnull(1, 2)))
+extern void * my_memcpy1(void * dest, void const * src, size_t len);
+__attribute__((nonnull))
+extern void * my_memcpy2(void * dest, void const * src, size_t len);
