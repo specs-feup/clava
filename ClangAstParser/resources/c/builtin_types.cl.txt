@@ -6,9 +6,9 @@ __kernel void builtin_types() {
    sampler_t sampler;
    event_t event;
    __local float * local_float;
-	typedef __local float * pointer_to_private_float;
+	typedef __local float *pointer_to_private_float;
 	__generic pointer_to_private_float * private_float;
-	typedef __local float * pointer_to_private_float2;
+	typedef __local float *pointer_to_private_float2;
 	__global pointer_to_private_float2 * global_float;
 	//__private (__local float)* x3;
    //clk_event_t clockEvent;

@@ -6,9 +6,9 @@ int main() {
    /*Plain old int variable.*/
    typeof (x1) y;
    /*Same type as x. Plain old int variable.*/
-   int * px;
+   int *px;
    typeof (*px) py;
-   int * x2;
+   int *x2;
    typeof (*x2 + *x2) y2;
    
    return 0;

@@ -1,6 +1,6 @@
 
 int main() {
-   void * aVoidPointer;
+   void *aVoidPointer;
    bool aBoolean; // _Bool in C99
    char aChar;
    unsigned char unsignedChar;

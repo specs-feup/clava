@@ -58,7 +58,7 @@ typedef struct anon_struct_c_40 loic_struct;
 
 struct aligned_struct {
 	short f[3];
-} __attribute__((aligned (8)));
+} __attribute__((aligned(8)));
 
 struct point {
   double x;
@@ -71,7 +71,7 @@ int int_array[10][10] = {[2][3] = 1, [4][5] = 2};
 struct point pt = {.x = 1.0, .y = 2.0};
 
 struct node {
- struct node * next;
+ struct node *next;
  int idx;
  void (*dummy[32]) ();
 };

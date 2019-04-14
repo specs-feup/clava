@@ -23,7 +23,7 @@ int wrap_fooNoDecl(int a) {
    return result;
 }
 
-void voidFoo(int * a) {
+void voidFoo(int *a) {
    (*a)++;
 }
 
@@ -45,7 +45,7 @@ int main() {
 
 int foo(int a);
 
-void voidFoo(int * a);
+void voidFoo(int *a);
 #endif
 
 /**** End File ****/
@@ -59,9 +59,9 @@ void voidFoo(int * a);
 
 int wrap_foo(int a);
 
-void wrap_voidFoo(int * a);
+void wrap_voidFoo(int *a);
 
-int wrap_printf(char const * A, ...);
+int wrap_printf(char const *A, ...);
 #endif
 
 /**** End File ****/
@@ -80,12 +80,12 @@ int wrap_foo(int a) {
 }
 
 
-void wrap_voidFoo(int * a) {
+void wrap_voidFoo(int *a) {
    voidFoo(a);
 }
 
 
-int wrap_printf(char const * A, ...) {
+int wrap_printf(char const *A, ...) {
    int result;
    // Before call
    result = printf(A);

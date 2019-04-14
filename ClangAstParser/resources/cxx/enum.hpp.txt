@@ -10,7 +10,7 @@ typedef unsigned int footype;
 // Typedef with other typedef
 typedef footype footype2;
 // Wide string
-wchar_t const * wideString = L"a_wide_string";
+wchar_t const *wideString = L"a_wide_string";
 /*
 * Enums
 */

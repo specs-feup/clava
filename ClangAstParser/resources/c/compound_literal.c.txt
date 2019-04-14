@@ -2,7 +2,7 @@
 
 int main() {
    char const c1[4] = (char const[4]){"abc"};
-   int * p1 = (int[2]){2, 4}; // creates an unnamed static array of type int[2]
+   int *p1 = (int[2]){2, 4}; // creates an unnamed static array of type int[2]
    // initializes the array to the values {2, 4}
    // creates pointer p to point at the first element of the array
 }

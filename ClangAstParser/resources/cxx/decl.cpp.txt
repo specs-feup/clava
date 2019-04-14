@@ -8,18 +8,18 @@ int nullGlobal2 = 0 + 1;
 
 class A {
    static int constexpr constexprInt = 3;
-   void defaultInitDecl(int * a = nullptr);
-   void defaultInitImpl(int * a);
-   void defaultInitImpl(int * a, int * b = nullptr);
+   void defaultInitDecl(int *a = nullptr);
+   void defaultInitImpl(int *a);
+   void defaultInitImpl(int *a, int *b = nullptr);
 };
 
-void A::defaultInitDecl(int * a) {
+void A::defaultInitDecl(int *a) {
 }
 
-void A::defaultInitImpl(int * a = nullptr) {
+void A::defaultInitImpl(int *a = nullptr) {
 }
 
-void A::defaultInitImpl(int * a = nullptr, int * b) {
+void A::defaultInitImpl(int *a = nullptr, int *b) {
 }
 
 

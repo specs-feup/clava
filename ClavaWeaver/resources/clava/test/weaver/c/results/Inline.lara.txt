@@ -1,5 +1,5 @@
 int main() {
-   int * a;
+   int *a;
    *a = 3;
    // foo_no_return
    int foo_no_return_a = 0;
@@ -14,7 +14,7 @@ int main() {
    }
    *a = foo_no_return_a_0;
    int i;
-   double * j;
+   double *j;
    int k[3][2][2];
    // foo_with_args
    int foo_with_args_a = i;
@@ -40,7 +40,7 @@ int main() {
    int foo_with_var_shadowing_return = foo_with_var_shadowing_i;
    int shadowingResult = foo_with_var_shadowing_return;
    // call function with array parameter using pointer argument
-   int * foo_with_1darray_input_array = (int *) k[0][0];
+   int *foo_with_1darray_input_array = (int *) k[0][0];
    foo_with_1darray_input_array[0] = 1;
    int (*foo_with_2darray_input_array)[2] = (int (*)[2]) k[0];
    foo_with_2darray_input_array[0][0] = 1;

@@ -6,7 +6,7 @@ using namespace std;
 
 class Atom {
    double r[3];
-   basic_string<char> const * name;
+   basic_string<char> const *name;
    basic_string<char> stype;
    
    
@@ -19,7 +19,7 @@ class Atom {
       this->r[2] = r[2];
    }
    
-   Atom(double r[3], basic_string<char> const * name) : stype("") {
+   Atom(double r[3], basic_string<char> const *name) : stype("") {
       this->clear();
       this->r[0] = r[0];
       this->r[1] = r[1];
@@ -33,9 +33,9 @@ class Atom {
    
 };
 
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
    double YY[3] = {23.20, 25.06, 1.009};
-   Atom * ErrObj = new Atom(YY);
+   Atom *ErrObj = new Atom(YY);
    return 0;
 } 
 

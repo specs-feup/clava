@@ -50,8 +50,8 @@ int main() {
    //  const_cast<int&>(r2) = 2; // undefined behavior: attempt to modify const object n2
    // Taken from http://duramecho.com/ComputerInformation/WhyHowCppConst.html
    // variable pointer to a constant integer
-   int const * constant1;
-   int const * constant2;
+   int const *constant1;
+   int const *constant2;
    // constant pointer to a variable integer
    int * const constant3 = nullptr;
    // constant pointer to a constant integer

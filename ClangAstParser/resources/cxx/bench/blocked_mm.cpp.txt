@@ -4,12 +4,12 @@
 using namespace std;
 typedef double FLOAT;
 
-static void NaiveMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, int const n) {
+static void NaiveMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) {
    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) for(int k = 0; k < n; k++) C[i * n + j] += A[i * n + k] * B[k * n + j];
 }
 
 
-static void BlockedMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, int const n) { // add "search(dependent)" at the end of this pragma if you want to search the variables dependently
+static void BlockedMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) { // add "search(dependent)" at the end of this pragma if you want to search the variables dependently
    #pragma isat marker M1_begin
    int const blk_i = 64;
    int const blk_j = 64;
@@ -19,12 +19,12 @@ static void BlockedMatrixMultiply(FLOAT * A, FLOAT * B, FLOAT * C, int const n) 
 }
 
 
-static void Initialize(FLOAT * X, int const n, FLOAT const v) {
+static void Initialize(FLOAT *X, int const n, FLOAT const v) {
    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) X[i * n + j] = v;
 }
 
 
-static FLOAT Sum(FLOAT * X, int const n) {
+static FLOAT Sum(FLOAT *X, int const n) {
    FLOAT s = 0;
    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) s += X[i * n + j];
    
@@ -32,12 +32,12 @@ static FLOAT Sum(FLOAT * X, int const n) {
 }
 
 
-int main(int argc, char ** argv) {
-   FLOAT * A = new FLOAT[1000 * 1000];
-   FLOAT * B = new FLOAT[1000 * 1000];
+int main(int argc, char **argv) {
+   FLOAT *A = new FLOAT[1000 * 1000];
+   FLOAT *B = new FLOAT[1000 * 1000];
    //FLOAT* C_naive = new FLOAT[N * N];
    //assert(C_naive);
-   FLOAT * C_blocked = new FLOAT[1000 * 1000];
+   FLOAT *C_blocked = new FLOAT[1000 * 1000];
    Initialize(A, 1000, 1);
    Initialize(B, 1000, 2);
    //Initialize(C_naive, N, 0);
