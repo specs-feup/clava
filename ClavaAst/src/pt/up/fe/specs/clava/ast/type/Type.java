@@ -265,22 +265,23 @@ public abstract class Type extends ClavaNode {
     }
 
     /**
-     * Type instances getCode() method receive a String (e.g., with the name of a variable), in case this is code to
-     * declare something.
+     * Type instances getCode() method receive a String with intermediate inner code (e.g., with the name of a
+     * variable), in case this is code to declare something.
      *
      * <p>
-     * Accepts null in case there is no name to use.
+     * Accepts null in case there is no intermediate code to use.
      * 
      * @param sourceNode
-     *            TODO
+     * @param intermediateCode
+     * @return
      */
-    public String getCode(ClavaNode sourceNode, String name) {
+    public String getCode(ClavaNode sourceNode, String intermediateCode) {
         // throw new NotImplementedException(getClass());
-        if (name == null) {
+        if (intermediateCode == null) {
             return getBareType();
         }
 
-        return getBareType() + " " + name;
+        return getBareType() + " " + intermediateCode;
         // String nameString = name == null ? "" : name;
         // return getType() + " " + nameString;
     }

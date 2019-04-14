@@ -49,7 +49,14 @@ public class ParenType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-        return "(" + getInnerType().getCode(sourceNode, name) + ")";
+        // System.out.println("PAREN TYPE INNER:" + getInnerType());
+
+        // return "(" + getInnerType().getCode(sourceNode, name) + ")";
+        if (name == null) {
+            return "(" + getInnerType().getCode(sourceNode) + ")";
+        }
+
+        return getInnerType().getCode(sourceNode, "(" + name + ")");
     }
 
 }
