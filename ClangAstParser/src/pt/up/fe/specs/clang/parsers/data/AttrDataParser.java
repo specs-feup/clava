@@ -22,9 +22,12 @@ import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedTypeAttr;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.attr.FormatAttr;
+import pt.up.fe.specs.clava.ast.attr.NonNullAttr;
 import pt.up.fe.specs.clava.ast.attr.OpenCLUnrollHintAttr;
 import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
+import pt.up.fe.specs.clava.ast.attr.enums.FormatAttrKind;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class AttrDataParser {
@@ -87,6 +90,24 @@ public class AttrDataParser {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(OpenCLUnrollHintAttr.UNROLL_HINT, LineStreamParsers.integer(lines));
+
+        return data;
+    }
+
+    public static DataStore parseFormatAttrData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseAttributeData(lines, dataStore);
+
+        data.add(FormatAttr.TYPE, LineStreamParsers.enumFromName(FormatAttrKind.class, lines));
+        data.add(FormatAttr.FORMAT_INDEX, LineStreamParsers.integer(lines));
+        data.add(FormatAttr.FIRST_ARG, LineStreamParsers.integer(lines));
+
+        return data;
+    }
+
+    public static DataStore parseNonNullAttrData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseAttributeData(lines, dataStore);
+
+        data.add(NonNullAttr.ARGUMENTS, LineStreamParsers.list(lines, l -> Integer.valueOf(l.nextLine())));
 
         return data;
     }
