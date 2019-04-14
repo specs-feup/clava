@@ -110,11 +110,25 @@ public abstract class ArrayType extends Type {
             return elementType.getCode(sourceNode, nameCode + "[" + arrayContentCode + "]");
         }
 
-        if (!nameCode.isEmpty()) {
-            nameCode = " " + nameCode;
+        // if (!nameCode.isEmpty()) {
+        // nameCode = " " + nameCode;
+        // }
+        // System.out.println(
+        // "ARRAY CODE: " + getElementType().getCode(sourceNode) + nameCode + "[" + arrayContentCode + "]");
+        // System.out.println("ELEMENT TYPE:" + getElementType());
+        // System.out.println("ELEMENT TYPE CODE:" + getElementType().getCode(sourceNode));
+        // System.out.println("ELEMENT TYPE CODE WITH NAME:" + getElementType().getCode(sourceNode, nameCode));
+
+        String constantArray = "[" + arrayContentCode + "]";
+
+        // String nameAndArray = nameCode + "[" + arrayContentCode + "]";
+        // System.out.println("NAME CODE: '" + nameCode + "'");
+        if (nameCode.isEmpty()) {
+            return getElementType().getCode(sourceNode) + constantArray;
         }
 
-        return getElementType().getCode(sourceNode) + nameCode + "[" + arrayContentCode + "]";
+        return getElementType().getCode(sourceNode, nameCode + constantArray);
+        // return getElementType().getCode(sourceNode) + nameCode + "[" + arrayContentCode + "]";
     }
 
     @Override
