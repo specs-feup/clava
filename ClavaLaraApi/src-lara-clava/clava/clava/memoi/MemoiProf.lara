@@ -9,16 +9,18 @@ import lara.Strings;
  * 
  * @constructor
  * 
- * @param {string} targetName - the name of the target funtion
+ * @param {string} targetSig - the signature of the target funtion
  * @param {string} id - unique ID representing this function
  * @param {string} reportDir - path to the directory where the report will be saved (does not need trailing /)
  * */
-function MemoiProf(targetName, id, reportDir) {
+function MemoiProf(targetSig, id, reportDir) {
 	
-	this._targetName = targetName;
+	this._targetSig = targetSig;
 	this._id = Strings.replacer(id, ' ', '_');
 	this._reportDir = reportDir;
-	this._wrapperName = targetName + '_memoi_prof';
+	var normalizedSig = Strings.replacer(targetSig, '\\(', '_');
+	normalizedSig = Strings.replacer(normalizedSig, '\\)', '_');
+	this._wrapperName =  normalizedSig + 'memoi_prof';
 	this._monitorName = 'mp_' + this._id;
 	this._monitorType = ClavaJoinPoints.typeLiteral('MemoiProf*');
 	this._dataType = this._findDataType();
@@ -43,7 +45,7 @@ var MemoiDataType = new Enumeration({INT: 'INT', DOUBLE: 'DOUBLE', FLOAT: 'FLOAT
  * */
 MemoiProf.prototype._findDataType = function() {
 
-	var asp1 = new _Memoi_FindType(this._targetName);
+	var asp1 = new _Memoi_FindType(this._targetSig);
 	asp1.call();
 	var foundType = asp1.foundType;
 
@@ -55,7 +57,7 @@ MemoiProf.prototype._findDataType = function() {
 		case 'int':
 			return MemoiDataType.INT;
 		default:
-			throw 'Target function "' + this._targetName + '" is not supported yet.';
+			throw 'Target function "' + this._targetSig + '" is not supported yet.';
 	}
 }
 
@@ -66,7 +68,7 @@ MemoiProf.prototype._findDataType = function() {
  * */
 MemoiProf.prototype.profAll = function() {
 	
-	var asp1 = new _Memoi_GlobalWrapper(this._targetName, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
+	var asp1 = new _Memoi_GlobalWrapper(this._targetSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
 	asp1.call();
 }
 
@@ -78,7 +80,16 @@ MemoiProf.prototype.profAll = function() {
  * */
 MemoiProf.prototype.profEach = function() {
 	
-	var asp1 = new _Memoi_IndividualWrapper(this._targetName, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
+	var asp1 = new _Memoi_IndividualWrapper(this._targetSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
 	asp1.call();
 }
+
+MemoiProf.findTargets = function(pred) {
+	
+	var asp1 = new _Memoi_FindTargets(pred);
+	asp1.call();
+	
+	return asp1.targets;
+}
+
 

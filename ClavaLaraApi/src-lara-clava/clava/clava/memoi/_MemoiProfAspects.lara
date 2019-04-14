@@ -1,3 +1,36 @@
+import clava.memoi._MemoiProfHelper;
+
+/**
+ * 		Finds possible targets for memoization. Filters results based
+ * 	on the given predicate function (or uses default).
+ * */
+aspectdef _Memoi_FindTargets
+
+	input filter end
+	output targets = [] end
+	
+	// use default predicate if user doesn't provide one
+	if(filter === undefined) {
+		filter = _isValidMemoi;
+	}
+	
+	var seen = {};
+	
+	select stmt.call end
+	apply
+		var sig = $call.function.signature;
+		
+		if(seen[sig] !== undefined) {
+			continue;
+		}
+					
+		var valid = filter($call, seen);
+		if(valid) {
+			targets.push(sig);
+		}
+	end
+end
+
 /**
  * 		Finds the target function and gets its return type.
  * 
@@ -6,23 +39,29 @@
  * */
 aspectdef _Memoi_FindType
 	input
-		targetName
+		targetSig
 	end
 	output
 		foundType = ''
 	end
 
-	var $functionType = undefined;
-
-	// TODO: get function directly
-	select stmt.call{targetName} end
+	select stmt.call{signature === targetSig} end
 	apply
-		$functionType = $call.decl.functionType;
+		if(_isValidMemoi($call)) {
+			var $functionType = $call.function.functionType;
+			foundType = $functionType.returnType.code;
+			return;
+		}
 	end
+end
 
-	if(_isValidMemoi($functionType)) {
-		foundType = $functionType.returnType.code;
-	}
+aspectdef _Memoi_CheckGlobalAccess
+	input $def end
+	
+	select $def.varref end
+	apply
+		println($varref.code);
+	end
 end
 
 /**
@@ -31,24 +70,97 @@ end
  *	The constraints are:
  *	1) it has only a single parameter;
  *	2) the parameter and return type are both T;
- *	3) T is one of {int, float, double};.
+ *	3) T is one of {int, float, double};
+ * 	4) It doesn't access global state;
+ *	5) It doesn't call non-valid functions. TODO
  **/
-function _isValidMemoi($functionType) {
-
+function _isValidMemoi($call, seen) {
+	
+	var $func = $call.function;
+	var $functionType = $func.functionType;
 	var $returnType = $functionType.returnType;
 	var paramTypes = $functionType.paramTypes;
+	var sig = $func.signature;
 
+	// 1) it has only a single parameter
 	if(paramTypes.length != 1) {
-		return false;
-	}
-
-	if(paramTypes[0].code != $returnType.code) {
+		
+		debug(sig + ' - has more than 1 parameter');
+		
+		if(seen !== undefined) {
+			seen[sig] = false;
+		}
 		return false;
 	}
 	
+	// 2) the parameter and return type are both T
+	if(paramTypes[0].code != $returnType.code) {
+
+		debug(sig + ' - parameter and return type are different');
+		
+		if(seen !== undefined) {
+			seen[sig] = false;
+		}
+		return false;
+	}
+	
+	// 3) T is one of {int, float, double}
+	if(!_testType($returnType, ['int', 'float', 'double'])) {
+		
+		debug(sig + ' - type is not supported: ' + $returnType.code);
+		
+		if(seen !== undefined) {
+			seen[sig] = false;
+		}
+		return false;
+	}
+	
+	// Try to get the definition
+	var $def = $call.definition;
+	if($def === undefined) {
+		
+		if(!_isWhiteListed(sig)) {
+			
+			debug(sig + ' - definition not found, not whitelisted');
+			
+			if(seen !== undefined) {
+				seen[sig] = false;
+			}
+			return false;
+		} else {
+
+			if(seen !== undefined) {
+				seen[sig] = true;
+			}
+			return true;
+		}
+	}
+	
+	// 4) It doesn't access global state (unless constants)
+	var varRefs = $def.descendants('varref');
+	for(var $ref of varRefs) {
+	
+		var $varDecl = $ref.declaration;
+		
+		if($varDecl.isGlobal && (!$ref.type.constant || $ref.type.isPointer)) {
+			
+			debug(sig + ' - accesses non-const global variable ' + $ref.code);
+	
+			if(seen !== undefined) {
+				seen[sig] = false;
+			}
+			return false;
+		}
+	}
+	
+	// 5) It doesn't call non-valid functions
+	
+	// Everything checked OK
+	if(seen !== undefined) {
+		seen[sig] = true;
+	}
 	return true;
 }
-
 
 /**
  * 		Makes a single global wrapper for all calls of the target
@@ -59,7 +171,7 @@ function _isValidMemoi($functionType) {
  * */
 aspectdef _Memoi_GlobalWrapper
 	input
-		targetName,
+		targetSig,
 		wrapperName,
 		monitorType,
 		monitorName,
@@ -69,7 +181,7 @@ aspectdef _Memoi_GlobalWrapper
 	end
 	
 	// make the wrapper
-	select stmt.call{targetName} end
+	select stmt.call{signature === targetSig} end
 	apply
 		exec wrap(wrapperName);
 	end
@@ -78,7 +190,7 @@ aspectdef _Memoi_GlobalWrapper
 	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, targetName, id, reportDir, dataType, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, ['global']);
 end
 
 /**
@@ -90,7 +202,7 @@ end
  * */
 aspectdef _Memoi_IndividualWrapper
 	input
-		targetName,
+		targetSig,
 		wrapperNameBase,
 		monitorType,
 		monitorNameBase,
@@ -100,7 +212,7 @@ aspectdef _Memoi_IndividualWrapper
 	end
 	
 	var counter = 0;
-	select file.stmt.call{targetName} end
+	select file.stmt.call{signature === targetSig} end
 	apply
 		
 		// make the wrapper
@@ -116,7 +228,7 @@ aspectdef _Memoi_IndividualWrapper
 		
 		// setup
 		var id = idBase + '_' + counter;
-		call _Memoi_Setup(monitorName, monitorType, targetName, id, reportDir, dataType, [callSiteInfo]);
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, [callSiteInfo]);
 		
 		counter++;
 	end
@@ -167,7 +279,7 @@ aspectdef _Memoi_Setup
 	input
 		monitorName,
 		monitorType,
-		funcName,
+		targetSig,
 		id,
 		dir,
 		type,
@@ -177,7 +289,7 @@ aspectdef _Memoi_Setup
 	select file.function{'main'}.body end
 	apply
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
-		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[funcName]]", "[[id]]", [[type]]);}%);
+		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[type]]);}%);
 
 		/* add functions to print and clean up at every return on main */
 		$function.exec insertReturn(%{mp_to_json([[monitorName]], make_report_path("[[dir]]", "[[id]]"));}%);

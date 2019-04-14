@@ -141,4 +141,9 @@ public abstract class ArrayType extends Type {
         return Arrays.asList(ELEMENT_TYPE);
     }
 
+    @Override
+    public boolean isConst() {
+
+        return get(ELEMENT_TYPE).isConst();
+    }
 }
