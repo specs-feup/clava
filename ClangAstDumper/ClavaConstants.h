@@ -140,6 +140,8 @@ namespace clava {
         ATTR,
         ALIGNED,
         OPENCL_UNROLL_HINT,
+        FORMAT,
+        NON_NULL,
     };
 
 

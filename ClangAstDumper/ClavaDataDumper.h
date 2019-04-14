@@ -210,6 +210,8 @@ namespace clava {
         void DumpAttrData(const Attr *A);
         void DumpAlignedAttrData(const AlignedAttr *A);
         void DumpOpenCLUnrollHintAttrData(const OpenCLUnrollHintAttr *A);
+        void DumpFormatAttrData(const FormatAttr *A);
+        void DumpNonNullAttrData(const NonNullAttr *A);
 
         const std::string getDataName(DeclNode node);
         const std::string getDataName(StmtNode node);

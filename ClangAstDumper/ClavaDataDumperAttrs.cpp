@@ -12,6 +12,8 @@
 const std::map<const std::string, clava::AttrNode > clava::ATTR_DATA_MAP = {
         {"AlignedAttr", clava::AttrNode::ALIGNED},
         {"OpenCLUnrollHintAttr", clava::AttrNode::OPENCL_UNROLL_HINT},
+        {"FormatAttr", clava::AttrNode::FORMAT},
+        {"NonNullAttr", clava::AttrNode::NON_NULL},
 };
 
 
@@ -43,6 +45,10 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
             DumpAlignedAttrData(static_cast<const AlignedAttr*>(A)); break;
         case clava::AttrNode::OPENCL_UNROLL_HINT:
             DumpOpenCLUnrollHintAttrData(static_cast<const OpenCLUnrollHintAttr*>(A)); break;
+        case clava::AttrNode::FORMAT:
+            DumpFormatAttrData(static_cast<const FormatAttr*>(A)); break;
+        case clava::AttrNode::NON_NULL:
+            DumpNonNullAttrData(static_cast<const NonNullAttr*>(A)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(attrNode) + "'");
     }
@@ -79,4 +85,30 @@ void clava::ClavaDataDumper::DumpOpenCLUnrollHintAttrData(const OpenCLUnrollHint
     DumpAttrData(A);
 
     clava::dump(A->getUnrollHint());
+}
+
+void clava::ClavaDataDumper::DumpFormatAttrData(const FormatAttr *A) {
+    // Common
+    DumpAttrData(A);
+
+    clava::dump(A->getType()->getName());
+    clava::dump(A->getFormatIdx());
+    clava::dump(A->getFirstArg());
+
+//    llvm::errs() << "NAME START: " << A->getType()->getNameStart() << "\n";
+//    llvm::errs() << "IS EXTENSION: " << A->getType()->isExtensionToken() << "\n";
+//    llvm::errs() <<  "Spellig: " << A->getSpelling() << "\n";
+}
+
+
+void clava::ClavaDataDumper::DumpNonNullAttrData(const NonNullAttr *A) {
+    // Common
+    DumpAttrData(A);
+
+    // Dump args
+    clava::dump(A->args_size());
+    for (auto I = A->args_begin(), E = A->args_end(); I != E;
+         ++I) {
+        clava::dump((*I).getSourceIndex());
+    }
 }
