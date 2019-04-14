@@ -50,26 +50,46 @@ public class PointerType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-        Type pointeeType = getPointeeType();
 
+        // To maintain compatibility with current tests output formatting
+        // String pointeeSuffix = "";
+        // if (name != null && name.startsWith("*") && !PointerType.isPointerToParenType(this)) {
+        // pointeeSuffix = " ";
+        // }
+
+        // String nameWithPointer = name == null ? "*" : "*" + pointeeSuffix + name;
+        String nameWithPointer = name == null ? "*" : "*" + name;
+
+        return getPointeeType().getCode(sourceNode, nameWithPointer);
+        /*
+        
+        Type pointeeType = getPointeeType();
+        // System.out.println("NAME: " + name);
+        // System.out.println("POINTEE TYPE:" + pointeeType.toFieldTree());
+        // // System.out.println("POINTEE TYPE:" + pointeeType);
         // Special case for pointers to arrays
         // http://eli.thegreenplace.net/2010/01/11/pointers-to-arrays-in-c
         if (PointerType.isPointerToParenType(this)) {
-            // if (pointeeType instanceof ParenType) {
             String parsedName = name != null ? name : "";
             return ((ParenType) pointeeType).getInnerType().getCode(sourceNode, "(*" + parsedName + ")");
-            // return pointeeType.getCode("*" + name);
         }
-
+        
         String nameString = name == null ? "" : " " + name;
+        
         String pointeeCode = pointeeType.getCode(sourceNode);
+        // String pointeeCode2 = pointeeType.getCode(sourceNode, name2);
         String pointeeSuffix = pointeeCode.endsWith("*") ? "" : " ";
-
+        // System.out.println("COMPLETE CODE: " + pointeeCode + pointeeSuffix + "*" + nameString);
+        // System.out.println("COMPLETE CODE2: " + pointeeCode2);
+        
         return pointeeCode + pointeeSuffix + "*" + nameString;
+        // return pointeeCode2;
+        
         // return getPointeeType().getCode(name) + "*";
         // If pointee type is not a pointer, add a space
         // String space = getPointeeType() instanceof PointerType ? "" : " ";
         // return getPointeeType().getCode() + space + "*";
+        */
     }
 
     @Override
