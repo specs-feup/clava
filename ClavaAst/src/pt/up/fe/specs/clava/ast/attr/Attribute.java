@@ -42,44 +42,9 @@ public class Attribute extends ClavaNode {
         super(data, children);
     }
 
-    /**
-     * Legacy support.
-     * 
-     * @param kind
-     * @param attrData
-     * @param nodeInfo
-     * @param children
-     */
-    // public Attribute(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
-    // Collection<? extends ClavaNode> children) {
-    // this(new LegacyToDataStore()
-    // .setAttribute(attrData)
-    // .setNodeInfo(nodeInfo)
-    // .getData(), children);
-    //
-    // getData().set(KIND, kind);
-    // }
-
-    // /**
-    // * @deprecated
-    // * @return
-    // */
-    // @Deprecated
-    // public AttrData getAttrData() {
-    // return DataStoreToLegacy.getAttribute(getData());
-    // // if (hasDataI()) {
-    // // throw new RuntimeException("Not implemented for ClavaData and DataStore nodes");
-    // // }
-    // // return attrData;
-    // }
-
     public AttributeKind getKind() {
         return get(Attribute.KIND);
     }
-
-    // public static String getAttributeCode(String attrValue) {
-    // return "__attribute__((" + attrValue + "))";
-    // }
 
     public String getAttributeCode(String arguments) {
         String argsCode = arguments == null || arguments.isEmpty() ? "" : "(" + arguments + ")";

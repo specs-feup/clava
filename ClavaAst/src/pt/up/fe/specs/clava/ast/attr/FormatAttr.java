@@ -20,22 +20,31 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.attr.enums.FormatAttrKind;
 
-public class OpenCLUnrollHintAttr extends InheritableAttr {
-
+public class FormatAttr extends InheritableAttr {
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Integer> UNROLL_HINT = KeyFactory.integer("unrollHint");
+    public final static DataKey<FormatAttrKind> TYPE = KeyFactory.enumeration("type", FormatAttrKind.class);
+    public final static DataKey<Integer> FORMAT_INDEX = KeyFactory.integer("formatIndex");
+    public final static DataKey<Integer> FIRST_ARG = KeyFactory.integer("firstArg");
 
     /// DATAKEYS END
 
-    public OpenCLUnrollHintAttr(DataStore data, Collection<? extends ClavaNode> children) {
+    public FormatAttr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     @Override
     public String getArgumentsCode() {
-        return get(UNROLL_HINT).toString();
+        return get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG);
     }
 
+    // @Override
+    // public String getCode() {
+    // // System.out.println("TYPE:" + get(TYPE));
+    // // return getAttributeCode("__format__(__" + get(TYPE) + "__, " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG) +
+    // // ")");
+    // return getAttributeCode("__format__(" + get(TYPE) + ", " + get(FORMAT_INDEX) + ", " + get(FIRST_ARG) + ")");
+    // }
 }

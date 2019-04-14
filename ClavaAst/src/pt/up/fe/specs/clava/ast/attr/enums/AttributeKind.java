@@ -275,53 +275,13 @@ public enum AttributeKind implements StringProvider {
     private static final CachedItems<AttributeKind, String> ATTRIBUTE_NAMES = new CachedItems<>(
             AttributeKind::toAttributeName);
 
-    // private final String code;
-
-    // private AttributeKind() {
-    // code = null;
-    // }
-    //
-    // private AttributeKind(String code) {
-    // this.code = code;
-    // }
-
     @Override
     public String getString() {
-        // return name().toLowerCase();
         return name();
     }
 
-    /*
-    public String getCode() {
-        switch (this) {
-        case OpenCLKernel:
-            return "__kernel";
-        default:
-            return Attribute.getAttributeCode(getAttributeName());
-        // return name().toLowerCase();
-        }
-    
-        // if (code == null) {
-        // throw new RuntimeException("Code not defined for attribute '" + this + "'");
-        // }
-        //
-        // return code;
-    }
-    */
-
     public String getAttributeName() {
         return ATTRIBUTE_NAMES.get(this);
-        // String name = name();
-        //
-        // // Make certain expressions lower-case
-        // if (name.contains("OpenCL")) {
-        // name = name.replace("OpenCL", "Opencl");
-        // }
-        // if (IS_LOWERCASE.contains(this)) {
-        // return name.toLowerCase();
-        // }
-        //
-        // return SpecsStrings.camelCaseSeparate(name, "_").toLowerCase();
     }
 
     private static String toAttributeName(AttributeKind kind) {

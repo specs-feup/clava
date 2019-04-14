@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 SPeCS.
+ * Copyright 2019 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,23 +11,18 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.attr;
+package pt.up.fe.specs.clava.ast.attr.enums;
 
-import java.util.Collection;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
-
-import pt.up.fe.specs.clava.ClavaNode;
-
-public class OpenCLKernelAttr extends InheritableAttr {
-
-    public OpenCLKernelAttr(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    }
-
-    @Override
-    public String getCode() {
-        return "__kernel";
-    }
-
+public enum FormatAttrKind {
+    printf,
+    scanf,
+    strftime,
+    gnu_printf,
+    gnu_scanf,
+    gnu_strftime,
+    strfmon,
+    ms_printf,
+    ms_scanf,
+    ms_strftime,
+    NSString;
 }
