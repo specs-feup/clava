@@ -17,11 +17,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
+import pt.up.fe.specs.util.utilities.CachedItems;
 
 public enum AttributeKind implements StringProvider {
 
@@ -270,6 +270,10 @@ public enum AttributeKind implements StringProvider {
     }
 
     private static final Set<AttributeKind> IS_INLINE = new HashSet<>(Arrays.asList(OpenCLKernel));
+    private static final Set<AttributeKind> IS_LOWERCASE = new HashSet<>(Arrays.asList(NonNull));
+
+    private static final CachedItems<AttributeKind, String> ATTRIBUTE_NAMES = new CachedItems<>(
+            AttributeKind::toAttributeName);
 
     // private final String code;
 
@@ -287,6 +291,7 @@ public enum AttributeKind implements StringProvider {
         return name();
     }
 
+    /*
     public String getCode() {
         switch (this) {
         case OpenCLKernel:
@@ -295,20 +300,39 @@ public enum AttributeKind implements StringProvider {
             return Attribute.getAttributeCode(getAttributeName());
         // return name().toLowerCase();
         }
-
+    
         // if (code == null) {
         // throw new RuntimeException("Code not defined for attribute '" + this + "'");
         // }
         //
         // return code;
     }
+    */
 
     public String getAttributeName() {
-        String name = name();
+        return ATTRIBUTE_NAMES.get(this);
+        // String name = name();
+        //
+        // // Make certain expressions lower-case
+        // if (name.contains("OpenCL")) {
+        // name = name.replace("OpenCL", "Opencl");
+        // }
+        // if (IS_LOWERCASE.contains(this)) {
+        // return name.toLowerCase();
+        // }
+        //
+        // return SpecsStrings.camelCaseSeparate(name, "_").toLowerCase();
+    }
+
+    private static String toAttributeName(AttributeKind kind) {
+        String name = kind.name();
 
         // Make certain expressions lower-case
         if (name.contains("OpenCL")) {
             name = name.replace("OpenCL", "Opencl");
+        }
+        if (IS_LOWERCASE.contains(kind)) {
+            return name.toLowerCase();
         }
 
         return SpecsStrings.camelCaseSeparate(name, "_").toLowerCase();

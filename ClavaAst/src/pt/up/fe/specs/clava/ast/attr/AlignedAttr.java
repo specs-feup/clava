@@ -55,14 +55,20 @@ public abstract class AlignedAttr extends InheritableAttr {
     protected abstract Optional<String> getValueCode();
 
     @Override
+    public String getArgumentsCode() {
+        return getValueCode().orElse(null);
+    }
+    /*
+    @Override
     public String getCode() {
-
+    
         String value = getValueCode()
                 .map(code -> " (" + code + ")")
                 .orElse("");
-
+    
         String alignedCode = "aligned" + value;
-
+    
         return getAttributeCode(alignedCode);
     }
+    */
 }

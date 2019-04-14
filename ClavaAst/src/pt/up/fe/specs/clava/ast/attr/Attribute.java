@@ -77,8 +77,13 @@ public class Attribute extends ClavaNode {
         return get(Attribute.KIND);
     }
 
-    public static String getAttributeCode(String attrValue) {
-        return "__attribute__((" + attrValue + "))";
+    // public static String getAttributeCode(String attrValue) {
+    // return "__attribute__((" + attrValue + "))";
+    // }
+
+    public String getAttributeCode(String arguments) {
+        String argsCode = arguments == null || arguments.isEmpty() ? "" : "(" + arguments + ")";
+        return "__attribute__((" + get(KIND).getAttributeName() + argsCode + "))";
     }
 
     /**
@@ -94,6 +99,15 @@ public class Attribute extends ClavaNode {
      */
     @Override
     public String getCode() {
-        return get(KIND).getCode();
+        return getAttributeCode(getArgumentsCode());
+    }
+
+    /**
+     * A string representing the code of the arguments, or null if it has no arguments. By default returns null.
+     * 
+     * @return
+     */
+    public String getArgumentsCode() {
+        return null;
     }
 }

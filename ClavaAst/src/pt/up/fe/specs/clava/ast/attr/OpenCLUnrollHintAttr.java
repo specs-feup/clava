@@ -34,8 +34,13 @@ public class OpenCLUnrollHintAttr extends InheritableAttr {
     }
 
     @Override
-    public String getCode() {
-        return getAttributeCode(get(KIND).getAttributeName() + "(" + get(UNROLL_HINT) + ")");
+    public String getArgumentsCode() {
+        return get(UNROLL_HINT).toString();
     }
+
+    // @Override
+    // public String getCode() {
+    // return getAttributeCode(get(KIND).getAttributeName() + "(" + get(UNROLL_HINT) + ")");
+    // }
 
 }
