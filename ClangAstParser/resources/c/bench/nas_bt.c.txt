@@ -182,7 +182,7 @@ double buf[25][5];
 /*The following works on SGI Power Challenge systems*/
 typedef unsigned long iotimer_t;
 unsigned int cycleval;
-iotimer_t volatile * iotimer_addr;
+iotimer_t volatile *iotimer_addr;
 iotimer_t volatile base_counter;
 double resolution;
 /*address_t is an integer type big enough to hold an address*/
@@ -204,8 +204,8 @@ void z_solve();
 void add();
 void error_norm(double rms[5]);
 void rhs_norm(double rms[5]);
-void verify(int no_time_steps, char * class, logical * verified);
-void print_results(char * name, char class, int n1, int n2, int n3, int niter, double t, double mops, char * optype, logical verified, char * npbversion, char * compiletime, char * cs1, char * cs2, char * cs3, char * cs4, char * cs5, char * cs6, char * cs7);
+void verify(int no_time_steps, char *class, logical *verified);
+void print_results(char *name, char class, int n1, int n2, int n3, int niter, double t, double mops, char *optype, logical verified, char *npbversion, char *compiletime, char *cs1, char *cs2, char *cs3, char *cs4, char *cs5, char *cs6, char *cs7);
 void timer_clear(int n);
 void timer_start(int n);
 void timer_stop(int n);
@@ -215,9 +215,9 @@ double real;
 double imag;
 };
 typedef struct anon_nas_bt_c_212 dcomplex;
-double randlc(double * x, double a);
-void vranlc(int n, double * x, double a, double y[]);
-void wtime(double * t) {
+double randlc(double *x, double a);
+void vranlc(int n, double *x, double a, double y[]);
+void wtime(double *t) {
 static int sec = -1;
 struct timeval tv;
 gettimeofday(&tv, (void *) 0);
@@ -261,7 +261,7 @@ elapsed[n] += t;
 double timer_read(int n) {
 return (elapsed[n]);
 }
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
 int i, niter, step;
 double navg, mflops, n3;
 double tmax;
@@ -269,12 +269,12 @@ double t;
 double trecs[12];
 logical verified;
 char Class;
-char * t_names[12];
+char *t_names[12];
 //---------------------------------------------------------------------
 // Root node reads input file (if it exists) else takes
 // defaults from parameters
 //---------------------------------------------------------------------
-FILE * fp;
+FILE *fp;
 if((fp = fopen("timer.flag", "r")) != ((void *) 0)) {
 timeron = true;
 t_names[1] = "total";
@@ -1587,7 +1587,7 @@ r[3] = r[3] - coeff * r[4];
 //---------------------------------------------------------------------
 // verification routine
 //---------------------------------------------------------------------
-void verify(int no_time_steps, char * Class, logical * verified) {
+void verify(int no_time_steps, char *Class, logical *verified) {
 double xcrref[5];
 double xceref[5];
 double xcrdif[5];
@@ -2567,7 +2567,7 @@ rhs[k][j][i][m] = rhs[k][j][i][m] - lhs[k][2][n][m] * rhs[k + 1][j][i][n];
 }
 if(timeron) timer_stop(8);
 }
-void c_print_results(char * name, char class, int n1, int n2, int n3, int niter, double t, double mops, char * optype, int passed_verification, char * npbversion, char * compiletime, char * cc, char * clink, char * c_lib, char * c_inc, char * cflags, char * clinkflags) {
+void c_print_results(char *name, char class, int n1, int n2, int n3, int niter, double t, double mops, char *optype, int passed_verification, char *npbversion, char *compiletime, char *cc, char *clink, char *c_lib, char *c_inc, char *cflags, char *clinkflags) {
 printf("\n\n %s Benchmark Completed\n", name);
 printf(" Class           =                        %c\n", class);
 if(n3 == 0) {
@@ -2599,7 +2599,7 @@ printf(" cmp@aces.snu.ac.kr\n");
 printf(" http://aces.snu.ac.kr\n"); //aces.snu.ac.kr\n"); //aces.snu.ac.kr\n");
 printf("--------------------------------------\n");
 }
-void print_results(char * name, char class, int n1, int n2, int n3, int niter, double t, double mops, char * optype, logical verified, char * npbversion, char * compiletime, char * cs1, char * cs2, char * cs3, char * cs4, char * cs5, char * cs6, char * cs7) {
+void print_results(char *name, char class, int n1, int n2, int n3, int niter, double t, double mops, char *optype, logical verified, char *npbversion, char *compiletime, char *cs1, char *cs2, char *cs3, char *cs4, char *cs5, char *cs6, char *cs7) {
 char size[16];
 int j;
 printf("\n\n %s Benchmark Completed.\n", name);
@@ -2643,7 +2643,7 @@ printf("    CLINKFLAGS   = %s\n", cs6);
 printf("    RAND         = %s\n", cs7);
 printf("\n--------------------------------------\n Please send all errors/feedbacks to:\n Center for Manycore Programming\n cmp@aces.snu.ac.kr\n http://aces.snu.ac.kr\n--------------------------------------\n\n"); //aces.snu.ac.kr\n--------------------------------------\n\n"); //aces.snu.ac.kr\n"
 }
-double randlc(double * x, double a) {
+double randlc(double *x, double a) {
 //--------------------------------------------------------------------
 //
 //  This routine returns a uniform pseudorandom double precision number in the
@@ -2701,7 +2701,7 @@ t4 = (int) (r46 * t3);
 r = r46 * (*x);
 return r;
 }
-void vranlc(int n, double * x, double a, double y[]) {
+void vranlc(int n, double *x, double a, double y[]) {
 //--------------------------------------------------------------------
 //
 //  This routine generates N uniform pseudorandom double precision numbers in
