@@ -20,7 +20,11 @@ aspectdef _Memoi_FindTargets
 	apply
 		var sig = $call.function.signature;
 		
-		if(seen[sig] !== undefined) {
+		var res = seen[sig];
+		if(res !== undefined) {
+			if(!res) {
+				debug(sig + ' - was seen before');
+			}
 			continue;
 		}
 					
@@ -77,10 +81,20 @@ end
 function _isValidMemoi($call, seen) {
 	
 	var $func = $call.function;
+	var sig = $func.signature;
+	
+	// 0) check if this function was seen before
+	var res = seen[sig];
+	if(res !== undefined) {
+		if(!res) {
+			debug(sig + ' - was seen before');
+		}
+		return res;
+	}
+		
 	var $functionType = $func.functionType;
 	var $returnType = $functionType.returnType;
 	var paramTypes = $functionType.paramTypes;
-	var sig = $func.signature;
 
 	// 1) it has only a single parameter
 	if(paramTypes.length != 1) {
@@ -154,6 +168,18 @@ function _isValidMemoi($call, seen) {
 	}
 	
 	// 5) It doesn't call non-valid functions
+	var $calls = $func.descendants('call');
+	for(var $newCall of $calls) {
+		if(!_isValidMemoi($newCall, seen)) {
+			
+			debug(sig + ' - calls non-valid function ' + $newCall.signature);
+			
+			if(seen !== undefined) {
+				seen[sig] = false;
+			}
+			return false;
+		}
+	}
 	
 	// Everything checked OK
 	if(seen !== undefined) {
