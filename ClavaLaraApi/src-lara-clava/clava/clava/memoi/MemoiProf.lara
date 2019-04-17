@@ -1,4 +1,4 @@
-import clava.memoi._MemoiProfAspects;
+import clava.memoi._MemoiProfHelper;
 
 import clava.ClavaJoinPoints;
 import lara.Strings;
@@ -16,18 +16,21 @@ import lara.Strings;
 function MemoiProf(targetSig, id, reportDir) {
 	
 	this._targetSig = targetSig;
+	this._normalizedSig = _normalizeSig(targetSig);
 	this._id = Strings.replacer(id, ' ', '_');
 	this._reportDir = reportDir;
-	var normalizedSig = Strings.replacer(targetSig, '\\(', '_');
-	normalizedSig = Strings.replacer(normalizedSig, '\\)', '_');
-	this._wrapperName =  normalizedSig + 'memoi_prof';
-	this._monitorName = 'mp_' + this._id;
+	this._wrapperName =  'mw_' + this._normalizedSig;
+	this._monitorName = 'mp_' + this._normalizedSig;
 	this._monitorType = ClavaJoinPoints.typeLiteral('MemoiProf*');
 	this._dataType = this._findDataType();
 	
-	var asp1 = new _Memoi_AddReportCode();
-	asp1.call();
+	if(!MemoiProf._reportCodeDone) {
+		call _Memoi_AddReportCode();
+		MemoiProf._reportCodeDone = true;
+	}
 }
+
+MemoiProf._reportCodeDone = false;
 
 /**
  * 		The C data types the memoization instrumentation library can handle.
@@ -45,11 +48,9 @@ var MemoiDataType = new Enumeration({INT: 'INT', DOUBLE: 'DOUBLE', FLOAT: 'FLOAT
  * */
 MemoiProf.prototype._findDataType = function() {
 
-	var asp1 = new _Memoi_FindType(this._targetSig);
-	asp1.call();
-	var foundType = asp1.foundType;
+	var ret = call _Memoi_FindType(this._targetSig);
 
-	switch(foundType) {
+	switch(ret.foundType) {
 		case 'double':
 			return MemoiDataType.DOUBLE;
 		case 'float':
@@ -68,8 +69,7 @@ MemoiProf.prototype._findDataType = function() {
  * */
 MemoiProf.prototype.profAll = function() {
 	
-	var asp1 = new _Memoi_GlobalWrapper(this._targetSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
-	asp1.call();
+	call _Memoi_GlobalWrapper(this._targetSig, this._normalizedSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
 }
 
 
@@ -80,16 +80,20 @@ MemoiProf.prototype.profAll = function() {
  * */
 MemoiProf.prototype.profEach = function() {
 	
-	var asp1 = new _Memoi_IndividualWrapper(this._targetSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
-	asp1.call();
+	call _Memoi_IndividualWrapper(this._targetSig, this._normalizedSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
 }
 
+/**
+ * 		Finds valid targets for memoization according to the constraints
+ * 	of the predicate passed or the default one.
+ * 
+ * @return A list with the signatures of the valid targets
+ * */
 MemoiProf.findTargets = function(pred) {
 	
-	var asp1 = new _Memoi_FindTargets(pred);
-	asp1.call();
-	
-	return asp1.targets;
+	var ret = call _Memoi_FindTargets(pred);
+		
+	return ret.targets;
 }
 
 
