@@ -58,7 +58,7 @@ MemoiProf.prototype._findDataType = function() {
 		case 'int':
 			return MemoiDataType.INT;
 		default:
-			throw 'Target function "' + this._targetSig + '" is not supported yet.';
+			throw 'Target function "' + this._targetSig + '" is not supported yet (type: ' + ret.foundType + ').';
 	}
 }
 

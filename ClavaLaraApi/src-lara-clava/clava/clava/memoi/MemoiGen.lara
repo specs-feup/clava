@@ -1,5 +1,6 @@
 import clava.memoi._MemoiGenHelper;
 
+import lara.util.IdGenerator;
 import lara.Io;
 
 /**
@@ -14,6 +15,7 @@ function MemoiGen(reports) {
 	
 	this._reportsPaths = arrayFromArgs(arguments);
 	this._reports = MemoiGen._readReports(this._reportsPaths);
+	this._isDebug = false;
 }
 
 /**
@@ -186,5 +188,203 @@ MemoiGen.prototype.printAverageMetrics = function() {
 		println('  > elements for 50%: ' + elementsForRatio(report, total, 0.5, report.reportCount));
 		print('  > bwp:  '); printBwp(report, report.reportCount);
 		println('\n');
+	}
+}
+
+var MemoiApply = {
+	ALWAYS : function(report) {
+		if(mean(report.elements, report.reportCount) === 0) {
+			debug('skipping ' + report.func_name + ' at ' + report.call_sites + ' - no calls');
+			return false;
+		}
+		
+		return true;
+	}
+};
+
+var MemoiInsert = {
+	ALL : function(count, report) {
+		return true;
+	}
+};
+
+var MemoiComparator = {
+	MEAN: function(count1, count2, total) {
+			
+		var mean1 = mean(count1.counter, total);
+		var mean2 = mean(count2.counter, total);
+		
+		if(mean1 > mean2) {
+			return 1;
+		} else if (mean1 < mean2) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+};
+
+
+/**
+ * 		Sets whether to generate debug code in the final application.
+ * */
+MemoiGen.prototype.setDebug = function(isDebug) {
+	
+	isDebug = isDebug === undefined ? false : isDebug;
+	
+	this._isDebug = isDebug;
+}
+
+/**
+ * 		Makes a table for each <target function, call site> pair. The
+ * 	table will have 2^16 elements and will be indexed by 16-bit keys.
+ * 
+ * 		Decides whether to apply memoization to that specific call site
+ * 	based on the result of the predicate applyPred, which receives the 
+ *  entire report. The default predicate is MemoiApply.ALWAYS.
+ * 
+ * 		Decides whether to include any single element based on the
+ * 	result of the predicate insertPred, which receives the count for
+ *  that specific element and the entire report. The default predicate
+ *  is MemoiInsert.ALL.
+ * 
+ * 		In case of a collision, decides which element to use based on
+ * 	the order of the counts array, which is ordered from the least
+ * 	important element to the most important element. The function
+ * 	countComparator will be used as the comparator of each pair of
+ * 	elements in the array. The default comparison function will sort
+ * 	based on the mean and can be found at MemoiComparator.MEAN.
+ * */
+MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator) {
+	
+	for(var report of this._reports) {
+		
+		if(!applyPred(report)) {
+			continue;
+		}
+		
+		// define the comparator based on this report
+		var comparatorToUse = function(count1, count2){
+			return countComparator(count1, count2, report.reportCounter);
+		};
+
+		MemoiGen._generate(insertPred, comparatorToUse, report);
+	}
+}
+
+/**
+ * 		Generates the table and supporting code for this report.
+ * 		
+ * 		Inserts elements in the table based on the predicate insertPred.
+ * */
+MemoiGen._generate = function(insertPred, countComparator, report) {
+
+	// check isDebug
+	
+	var callSite = report.call_sites;
+	var signature = report.func_name;
+	
+	if(callSite === 'global') {
+		throw "global call site generate is not supported yet";
+	} else {
+
+		var wst = call _Memoi_WrapSingleTarget(signature, callSite);
+		call _Memoi_InsertTableCode(insertPred, countComparator, report, wst.wrapperName);
+	}
+}
+
+aspectdef _Memoi_InsertTableCode
+	input insertPred, countComparator, report, wrapperName end
+	
+	select file.function{wrapperName}.call end
+	apply
+		var table = _makeTableCode(insertPred, countComparator, report, $function);
+		insert before table;
+		$file.exec addInclude('stdint.h', true);
+	end
+end
+
+function _makeTableCode(insertPred, countComparator, report, $function) {
+	
+	
+	var numBits = 16; // no. of bits
+	var s = Math.pow(2, numBits); // table size
+	var firstParam = $function.params[0]; // to be changed!
+	
+	var collisions = 0;
+	var collisionPercentage;
+	var maxCollision = 0;
+	var hashMaxCollision;
+	var coverage;
+	var code = "";
+	var table = [];
+	
+	var counts = report.counts;
+	counts.sort(countComparator);
+	var totalElements = counts.length;
+	
+	for(var i = 0; i < totalElements; i++) {
+		
+		var count = counts[i];
+		
+		if(!insertPred(count, report)) {
+			continue;
+		}
+		
+		var hash = _hashFunction(count.key, numBits);
+		debug(count.key + ' ' + count.counter + 'x');
+		if(table[hash] === undefined) {
+
+			table[hash] = {'key' : count.key,
+						'output' : count.output,
+						'collisions' : 0,
+						'counter' : count.counter};
+		} else {
+
+			table[hash].key = count.key;
+			table[hash].output = count.output;
+			table[hash].counter = count.counter;
+
+			// collisions on this specific position
+			table[hash].collisions++;
+			if(table[hash].collisions > maxCollision) {maxCollision = table[hash].collisions; hashMaxCollision = hash;}
+			
+			// total collisions
+			collisions++;
+		}
+	}
+	
+	return code;
+}
+
+_hashFunctionHalf = function(bits64){
+	
+	var len = bits64.length;
+	var hashString = '';
+	
+	for(var i = 0; i < len / 2; i++) {
+
+		var number = parseInt(bits64.charAt(i), 16) ^ parseInt(bits64.charAt(i+len/2), 16);
+		hashString +=  number.toString(16);
+	}
+
+	return hashString;
+}
+
+_hashFunction = function(bits64, numBits) {
+	switch(numBits) {
+
+		case 8:
+			var bits32 = _hashFunctionHalf(bits64);
+			var bits16 = _hashFunctionHalf(bits32);
+			var bits8 = _hashFunctionHalf(bits16);
+			return parseInt(bits8, 16);
+		case 16:
+			var bits32 = _hashFunctionHalf(bits64);
+			var bits16 = _hashFunctionHalf(bits32);
+			return parseInt(bits16, 16);
+		default:
+			return bits64;
+			break;				
 	}
 }

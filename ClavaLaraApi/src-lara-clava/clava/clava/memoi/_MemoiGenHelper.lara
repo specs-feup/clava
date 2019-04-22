@@ -1,3 +1,23 @@
+aspectdef _Memoi_WrapSingleTarget
+	input signature, location end
+	output wrapperName end
+	
+	debug('wrapping ' + signature + ' at ' + location);
+	select stmt.call end
+	apply
+		debug('found');
+		
+		var normalizedSig = _normalizeSig(signature);
+		
+		wrapperName = IdGenerator.next("mw_" + normalizedSig);
+		exec wrap(wrapperName);
+	end
+	condition
+		$call.signature === signature &&
+		$call.location === location
+	end
+end
+
 /**
  * 		Converts counts from a map to an array.
  * */

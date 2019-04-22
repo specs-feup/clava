@@ -1,3 +1,5 @@
+import lara.util.IdGenerator;
+
 function _normalizeSig(sig) {
 	var tmp = Strings.replacer(sig, '\\(', '_');
 	return Strings.replacer(tmp, '\\)', '_');
@@ -77,6 +79,7 @@ aspectdef _Memoi_FindType
 			return;
 		}
 	end
+	throw 'Target function "' + targetSig + '" not found.';
 end
 
 function _isValidMemoi($call, processed) {
@@ -239,7 +242,7 @@ aspectdef _Memoi_GlobalWrapper
 	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, normalizedSig, id, reportDir, dataType, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, ['global']);
 end
 
 /**
@@ -255,26 +258,24 @@ aspectdef _Memoi_IndividualWrapper
 		monitorNameBase, idBase, reportDir, dataType
 	end
 	
-	var counter = 0;
 	select file.stmt.call{signature === targetSig} end
 	apply
 		
 		// make the wrapper
-		var wrapperName = wrapperNameBase + '_' + counter;
+		var wrapperName = IdGenerator.next(wrapperNameBase);
 		exec wrap(wrapperName);
 					
 		// instrument the wrapper
-		var monitorName = monitorNameBase + '_' + counter;
+		var monitorName = IdGenerator.next(monitorNameBase);
 		call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
 		
 		// make call site info
-		var callSiteInfo = $file.name + ':' + $call.line + ':' + $call.column;
+		//~ var callSiteInfo = $file.name + ':' + $call.line + ':' + $call.column;
+		var callSiteInfo = $call.location;
 		
 		// setup
-		var id = idBase + '_' + counter;
-		call _Memoi_Setup(monitorName, monitorType, normalizedSig, id, reportDir, dataType, [callSiteInfo]);
-		
-		counter++;
+		var id = IdGenerator.next(idBase + '_');
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, [callSiteInfo]);
 	end
 end
 
@@ -337,7 +338,7 @@ aspectdef _Memoi_Setup
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[type]]);}%);
 
 		/* add functions to print and clean up at every return on main */
-		$function.exec insertReturn(%{mp_to_json([[monitorName]], make_report_path("[[dir]]", "[[targetSig]]"));}%);
+		$function.exec insertReturn(%{mp_to_json([[monitorName]], make_report_path("[[dir]]", "[[monitorName]]"));}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
