@@ -1,3 +1,10 @@
+function _isPowerOf2(num) {
+	
+	var log = _baseLog(num, 2);
+	
+	return log === parseInt(log, 10);
+}
+
 /**
  * 		Reads memoization profiling reports and sorts the counts.
  * */
@@ -219,6 +226,7 @@ function _baseLog(num, base) {
 function _makeTableCode(insertPred, countComparator, report, $function) {
 	
 	var tableSize = 65536;
+	var tableSize = 256;
 	var indexBits = _baseLog(tableSize, 2);
 	var varBits = 64;
 
