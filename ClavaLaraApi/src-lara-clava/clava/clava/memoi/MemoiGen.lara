@@ -14,7 +14,7 @@ import lara.Io;
 function MemoiGen(reports) {
 	
 	this._reportsPaths = arrayFromArgs(arguments);
-	this._reports = MemoiGen._readReports(this._reportsPaths);
+	this._reports = _readReports(this._reportsPaths);
 	this._isDebug = false;
 }
 
@@ -32,117 +32,6 @@ MemoiGen.fromDir = function(dir) {
 	return new MemoiGen(files);
 };
 
-/**
- * 		Reads memoization profiling reports and sorts the counts.
- * */
-MemoiGen._readReports = function(reportsPaths) {
-
-	var reports = {};
-	var counter = 0;
-	
-	for (var reportPath of reportsPaths) {
-		
-		var report = fileToJSON(reportPath);
-		
-		// add the path to uniquely identify this report
-		report.path = reportPath;
-		
-		// add report to map
-		MemoiGen._mapReport(reports, report);
-		
-		counter++;
-	}
-	
-	println('# read reports: ' + counter);
-	return MemoiGen._combineReports(reports);
-}
-
-/**
- * 		Maps reports into a double map.
- * 		target function -> call site -> list of reports
- * */
-MemoiGen._mapReport = function(reportsMap, report) {
-	
-	if (reportsMap[report.func_name] === undefined) {
-		
-		reportsMap[report.func_name] = {};
-	}
-	
-	if (reportsMap[report.func_name][report.call_sites] === undefined) {
-		
-		reportsMap[report.func_name][report.call_sites] = [];
-	}
-	
-	reportsMap[report.func_name][report.call_sites].push(report);
-	
-}
-
-/**
- * 		Combines reports of the same function and same call site from
- * 	different profiling runs.
- * */
-MemoiGen._combineReports = function(originalReports) {
-			
-	var finalReports = [];
-	
-	for(var func in originalReports) {
-		
-		for(var callSite in originalReports[func]) {
-
-			// get old reports for the current <func, call>
-			var reports = originalReports[func][callSite];
-	
-			// new report stores every run info in arrays
-			var newReport = {
-				func_name : func,
-				call_sites : callSite,
-				reportCount : reports.length,
-				elements : [],
-				calls : [],
-				hits : [],
-				misses : [],			
-				counts : {} // counts is temporarily a map to ease the combination
-			};
-			
-			// iterate all old reports
-			for(var oldReport of reports) {
-				
-				// add all info to the corresponding arrays
-				newReport.elements.push(oldReport.elements);
-				newReport.calls.push(oldReport.calls);
-				newReport.hits.push(oldReport.hits);
-				newReport.misses.push(oldReport.misses);
-				
-				// iterate all counts of the old report
-				for(var count of oldReport.counts) {
-					
-					var key = count.key;
-					
-					// build new counts using the key attribute as a key
-					if(newReport.counts[key] === undefined) {
-						
-						newReport.counts[key] = {
-							key : key,
-							output : count.output,
-							counter : [count.counter]
-						};
-					} else {
-						
-						newReport.counts[key].counter.push(count.counter);
-					}
-				}
-			}
-			// convert counts from a map to an array
-			_convertCounts(newReport);
-	
-			finalReports.push(newReport);
-		}
-	}
-	
-	println('# combined reports: ' + finalReports.length);
-	
-	return finalReports;
-};
 
 /**
  * 		Prints detailed metrics for each <target function, call site>.
@@ -194,7 +83,7 @@ MemoiGen.prototype.printAverageMetrics = function() {
 var MemoiApply = {
 	ALWAYS : function(report) {
 		if(mean(report.elements, report.reportCount) === 0) {
-			debug('skipping ' + report.func_name + ' at ' + report.call_sites + ' - no calls');
+			debug('skipped - no calls');
 			return false;
 		}
 		
@@ -230,7 +119,7 @@ var MemoiComparator = {
  * */
 MemoiGen.prototype.setDebug = function(isDebug) {
 	
-	isDebug = isDebug === undefined ? false : isDebug;
+	isDebug = isDebug === undefined ? true : isDebug;
 	
 	this._isDebug = isDebug;
 }
@@ -259,6 +148,9 @@ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator) {
 	
 	for(var report of this._reports) {
 		
+		debug('----------------------------------------------------------------------');
+		debug('analysing ' + report.func_name + ' at ' + report.call_sites);
+		
 		if(!applyPred(report)) {
 			continue;
 		}
@@ -268,123 +160,8 @@ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator) {
 			return countComparator(count1, count2, report.reportCounter);
 		};
 
-		MemoiGen._generate(insertPred, comparatorToUse, report);
+		_generate(insertPred, comparatorToUse, report, this._isDebug);
 	}
 }
 
-/**
- * 		Generates the table and supporting code for this report.
- * 		
- * 		Inserts elements in the table based on the predicate insertPred.
- * */
-MemoiGen._generate = function(insertPred, countComparator, report) {
 
-	// check isDebug
-	
-	var callSite = report.call_sites;
-	var signature = report.func_name;
-	
-	if(callSite === 'global') {
-		throw "global call site generate is not supported yet";
-	} else {
-
-		var wst = call _Memoi_WrapSingleTarget(signature, callSite);
-		call _Memoi_InsertTableCode(insertPred, countComparator, report, wst.wrapperName);
-	}
-}
-
-aspectdef _Memoi_InsertTableCode
-	input insertPred, countComparator, report, wrapperName end
-	
-	select file.function{wrapperName}.call end
-	apply
-		var table = _makeTableCode(insertPred, countComparator, report, $function);
-		insert before table;
-		$file.exec addInclude('stdint.h', true);
-	end
-end
-
-function _makeTableCode(insertPred, countComparator, report, $function) {
-	
-	
-	var numBits = 16; // no. of bits
-	var s = Math.pow(2, numBits); // table size
-	var firstParam = $function.params[0]; // to be changed!
-	
-	var collisions = 0;
-	var collisionPercentage;
-	var maxCollision = 0;
-	var hashMaxCollision;
-	var coverage;
-	var code = "";
-	var table = [];
-	
-	var counts = report.counts;
-	counts.sort(countComparator);
-	var totalElements = counts.length;
-	
-	for(var i = 0; i < totalElements; i++) {
-		
-		var count = counts[i];
-		
-		if(!insertPred(count, report)) {
-			continue;
-		}
-		
-		var hash = _hashFunction(count.key, numBits);
-		debug(count.key + ' ' + count.counter + 'x');
-		if(table[hash] === undefined) {
-
-			table[hash] = {'key' : count.key,
-						'output' : count.output,
-						'collisions' : 0,
-						'counter' : count.counter};
-		} else {
-
-			table[hash].key = count.key;
-			table[hash].output = count.output;
-			table[hash].counter = count.counter;
-
-			// collisions on this specific position
-			table[hash].collisions++;
-			if(table[hash].collisions > maxCollision) {maxCollision = table[hash].collisions; hashMaxCollision = hash;}
-			
-			// total collisions
-			collisions++;
-		}
-	}
-	
-	return code;
-}
-
-_hashFunctionHalf = function(bits64){
-	
-	var len = bits64.length;
-	var hashString = '';
-	
-	for(var i = 0; i < len / 2; i++) {
-
-		var number = parseInt(bits64.charAt(i), 16) ^ parseInt(bits64.charAt(i+len/2), 16);
-		hashString +=  number.toString(16);
-	}
-
-	return hashString;
-}
-
-_hashFunction = function(bits64, numBits) {
-	switch(numBits) {
-
-		case 8:
-			var bits32 = _hashFunctionHalf(bits64);
-			var bits16 = _hashFunctionHalf(bits32);
-			var bits8 = _hashFunctionHalf(bits16);
-			return parseInt(bits8, 16);
-		case 16:
-			var bits32 = _hashFunctionHalf(bits64);
-			var bits16 = _hashFunctionHalf(bits32);
-			return parseInt(bits16, 16);
-		default:
-			return bits64;
-			break;				
-	}
-}

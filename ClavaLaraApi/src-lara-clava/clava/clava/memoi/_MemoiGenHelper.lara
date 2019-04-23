@@ -1,22 +1,379 @@
+/**
+ * 		Reads memoization profiling reports and sorts the counts.
+ * */
+function _readReports(reportsPaths) {
+
+	var reports = {};
+	var counter = 0;
+	
+	for (var reportPath of reportsPaths) {
+		
+		var report = fileToJSON(reportPath);
+		
+		// add the path to uniquely identify this report
+		report.path = reportPath;
+		
+		// add report to map
+		_mapReport(reports, report);
+		
+		counter++;
+	}
+	
+	println('# read reports: ' + counter);
+	return _combineReports(reports);
+}
+
+/**
+ * 		Maps reports into a double map.
+ * 		target function -> call site -> list of reports
+ * */
+function _mapReport(reportsMap, report) {
+	
+	if (reportsMap[report.func_name] === undefined) {
+		
+		reportsMap[report.func_name] = {};
+	}
+	
+	if (reportsMap[report.func_name][report.call_sites] === undefined) {
+		
+		reportsMap[report.func_name][report.call_sites] = [];
+	}
+	
+	reportsMap[report.func_name][report.call_sites].push(report);
+	
+}
+
+/**
+ * 		Combines reports of the same function and same call site from
+ * 	different profiling runs.
+ * */
+function _combineReports(originalReports) {
+			
+	var finalReports = [];
+	
+	for(var func in originalReports) {
+		
+		for(var callSite in originalReports[func]) {
+
+			// get old reports for the current <func, call>
+			var reports = originalReports[func][callSite];
+	
+			// new report stores every run info in arrays
+			var newReport = {
+				func_name : func,
+				call_sites : callSite,
+				reportCount : reports.length,
+				elements : [],
+				calls : [],
+				hits : [],
+				misses : [],			
+				counts : {} // counts is temporarily a map to ease the combination
+			};
+			
+			// iterate all old reports
+			for(var oldReport of reports) {
+				
+				// add all info to the corresponding arrays
+				newReport.elements.push(oldReport.elements);
+				newReport.calls.push(oldReport.calls);
+				newReport.hits.push(oldReport.hits);
+				newReport.misses.push(oldReport.misses);
+				
+				// iterate all counts of the old report
+				for(var count of oldReport.counts) {
+					
+					var key = count.key;
+					
+					// build new counts using the key attribute as a key
+					if(newReport.counts[key] === undefined) {
+						
+						newReport.counts[key] = {
+							key : key,
+							output : count.output,
+							counter : [count.counter]
+						};
+					} else {
+						
+						newReport.counts[key].counter.push(count.counter);
+					}
+				}
+			}
+			// convert counts from a map to an array
+			_convertCounts(newReport);
+	
+			finalReports.push(newReport);
+		}
+	}
+	
+	println('# combined reports: ' + finalReports.length);
+	
+	return finalReports;
+}
+
+/**
+ * 		Generates the table and supporting code for this report.
+ * 		
+ * 		Inserts elements in the table based on the predicate insertPred.
+ * */
+function _generate(insertPred, countComparator, report, isMemoiDebug) {
+
+	var callSite = report.call_sites;
+	var signature = report.func_name;
+	
+	var wt;
+	
+	if(callSite === 'global') {
+		wt = call _Memoi_WrapGlobalTarget(signature);
+	} else {
+		wt = call _Memoi_WrapSingleTarget(signature, callSite);
+	}
+	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug);
+}
+
+aspectdef _Memoi_WrapGlobalTarget
+	input signature end
+	output wrapperName end
+	
+	select stmt.call end
+	apply
+
+		var normalizedSig = _normalizeSig(signature);
+		
+		wrapperName = "mw_" + normalizedSig;
+		exec wrap(wrapperName);
+		
+		debug('wrapped');
+	end
+	condition
+		$call.signature === signature
+	end
+end
+
 aspectdef _Memoi_WrapSingleTarget
 	input signature, location end
 	output wrapperName end
 	
-	debug('wrapping ' + signature + ' at ' + location);
 	select stmt.call end
 	apply
-		debug('found');
-		
+
 		var normalizedSig = _normalizeSig(signature);
 		
 		wrapperName = IdGenerator.next("mw_" + normalizedSig);
 		exec wrap(wrapperName);
+		
+		debug('wrapped');
+		return;
 	end
 	condition
 		$call.signature === signature &&
 		$call.location === location
 	end
+	
+	throw "Did not find call to " + signature + " at " + location;
 end
+
+aspectdef _Memoi_InsertTableCode
+	input insertPred, countComparator, report, wrapperName, isMemoiDebug end
+	
+	select file.function{wrapperName}.call end
+	apply
+		if(isMemoiDebug) {
+			var totalName = wrapperName + '_total_calls';
+			var missesName = wrapperName + '_total_misses';
+			$file.exec addGlobal(totalName, ClavaJoinPoints.builtinType("int"), 0);
+			$file.exec addGlobal(missesName, ClavaJoinPoints.builtinType("int"), 0);
+			insert before '[[totalName]]++;';
+			insert after '[[missesName]]++;';
+			
+			call _Memoi_AddMainDebug(totalName, missesName, wrapperName);
+		}
+		var tableCode = _makeTableCode(insertPred, countComparator, report, $function);
+		insert before tableCode;
+		$file.exec addInclude('stdint.h', true);
+	end
+end
+
+aspectdef _Memoi_AddMainDebug
+	input totalName, missesName, wrapperName end
+	
+	select file.function{'main'} end
+	apply
+		$file.exec addGlobal(totalName, ClavaJoinPoints.builtinType("int"), 0);
+		$file.exec addGlobal(missesName, ClavaJoinPoints.builtinType("int"), 0);
+		$file.addInclude('stdio.h', true);
+		
+			$function.exec insertReturn(%{
+				printf("[[wrapperName]]\t%d / %d (%.2f%%)\n",
+					[[totalName]] - [[missesName]],
+					[[totalName]],
+					([[totalName]] - [[missesName]]) * 100.0 / [[totalName]]);
+			}%);
+	end
+end
+
+function _baseLog(num, base) {
+	
+	return Math.log(num) / Math.log(base);
+}
+
+function _makeTableCode(insertPred, countComparator, report, $function) {
+	
+	var tableSize = 65536;
+	var indexBits = _baseLog(tableSize, 2);
+	var varBits = 64;
+
+	var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
+	var code = _makeCode(table, indexBits, tableSize, $function, varBits);
+
+	return code;
+}
+
+function _makeCode(table, indexBits, tableSize, $function, varBits) {
+	
+	// table code
+	var nanBits = 'fff8000000000000';
+	
+	var tableCode = 'static const uint64_t table[' + tableSize + '][2] = {\n';
+	for(var i = 0; i < tableSize; i++) {
+
+		if(table[i] === undefined) {
+
+			tableCode += '\t{0x' + nanBits + ', 0},\n';
+		} else {
+
+			tableCode += '\t{0x' + table[i].key + ', 0x' + table[i].output + '},\n';
+		}
+	}
+	tableCode += '};';
+
+	// logic code
+	var firstParam = $function.params[0];
+	var iters = _baseLog(varBits / indexBits, 2);
+
+	var large = varBits;
+	var logicCode = 'uint' + large + '_t hash_' + large +'_bits = *(uint' + large + '_t*)&' + firstParam.name + ';\n';
+
+	for(var i = 0; i < iters; i++) {
+
+		var small = large / 2;
+		logicCode += 'uint' + small + '_t hash_' + small +'_bits = (hash_' + large +'_bits ^ (hash_' + large +'_bits >> ' + small + '));\n';
+		large = large / 2;
+	}
+	
+	logicCode += '\nif(table[hash_' + indexBits + '_bits][0] == hash_' + varBits + '_bits){\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][1];\n}';
+
+	// concat
+	return tableCode + '\n\n' + logicCode;
+}
+
+function _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize) {
+	
+	var firstParam = $function.params[0]; // to be changed!
+	
+	var collisions = 0;
+	var collisionPercentage;
+	var maxCollision = 0;
+	var hashMaxCollision;
+	var coverage;
+	var code = "";
+	var table = [];
+	
+	var counts = report.counts;
+	counts.sort(countComparator);
+	var totalElements = counts.length;
+	
+	for(var i = 0; i < totalElements; i++) {
+		
+		var count = counts[i];
+		
+		if(!insertPred(count, report)) {
+			continue;
+		}
+		
+		var hash = _hashFunction(count.key, indexBits);
+		
+		if(table[hash] === undefined) {
+
+			table[hash] = {'key' : count.key,
+						'output' : count.output,
+						'collisions' : 0,
+						'counter' : count.counter};
+		} else {
+
+			table[hash].key = count.key;
+			table[hash].output = count.output;
+			table[hash].counter = count.counter;
+
+			// collisions on this specific position
+			table[hash].collisions++;
+			if(table[hash].collisions > maxCollision) {maxCollision = table[hash].collisions; hashMaxCollision = hash;}
+			
+			// total collisions
+			collisions++;
+		}
+	}
+	
+	if(isDebug()) {
+		_printTableReport(collisions, totalElements, maxCollision, report, tableSize, table);
+	}
+	
+	return table;
+}
+
+function _printTableReport(collisions, totalElements, maxCollision, report, tableSize, table) {
+
+	var tableCalls = 0;
+	var tableElements = 0;
+	for(var i = 0; i < tableSize; i++) {
+
+		if(table[i] != undefined) {
+
+			tableCalls += mean(table[i].counter, report.reportCount);
+			tableElements++;
+		}
+	}
+	var totalCalls = mean(report.calls, report.reportCount);
+	var collisionPercentage = collisions / totalElements * 100;
+	var elementsCoverage = tableElements / totalElements * 100;
+	var callCoverage = tableCalls / totalCalls * 100;
+	
+	debug('collisions: ' + collisions + ' (' + (collisionPercentage.toFixed(2)) + '%)');
+	debug('largest collision: ' + maxCollision);
+	debug('element coverage: ' + tableElements + '/' + totalElements + ' (' + (elementsCoverage.toFixed(2)) + ')%');
+	debug('call coverage: ' + tableCalls + '/' + totalCalls + ' (' + (callCoverage.toFixed(2)) + ')%');
+}
+
+function _hashFunctionHalf(bits64){
+	
+	var len = bits64.length;
+	var hashString = '';
+	
+	for(var i = 0; i < len / 2; i++) {
+
+		var number = parseInt(bits64.charAt(i), 16) ^ parseInt(bits64.charAt(i+len/2), 16);
+		hashString +=  number.toString(16);
+	}
+
+	return hashString;
+}
+
+function _hashFunction(bits64, indexBits) {
+	switch(indexBits) {
+
+		case 8:
+			var bits32 = _hashFunctionHalf(bits64);
+			var bits16 = _hashFunctionHalf(bits32);
+			var bits8 = _hashFunctionHalf(bits16);
+			return parseInt(bits8, 16);
+		case 16:
+			var bits32 = _hashFunctionHalf(bits64);
+			var bits16 = _hashFunctionHalf(bits32);
+			return parseInt(bits16, 16);
+		default:
+			return bits64;
+			break;				
+	}
+}
 
 /**
  * 		Converts counts from a map to an array.
@@ -166,3 +523,4 @@ function sortAscending(array) {
 
 	return sortDescending(array).reverse();
 }
+
