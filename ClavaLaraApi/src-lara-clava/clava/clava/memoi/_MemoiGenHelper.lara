@@ -122,7 +122,7 @@ function _combineReports(originalReports) {
  * 		
  * 		Inserts elements in the table based on the predicate insertPred.
  * */
-function _generate(insertPred, countComparator, report, isMemoiDebug) {
+function _generate(insertPred, countComparator, report, isMemoiDebug, tableSize) {
 
 	var callSite = report.call_sites;
 	var signature = report.func_name;
@@ -134,7 +134,7 @@ function _generate(insertPred, countComparator, report, isMemoiDebug) {
 	} else {
 		wt = call _Memoi_WrapSingleTarget(signature, callSite);
 	}
-	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug);
+	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug, tableSize);
 }
 
 aspectdef _Memoi_WrapGlobalTarget
@@ -180,7 +180,7 @@ aspectdef _Memoi_WrapSingleTarget
 end
 
 aspectdef _Memoi_InsertTableCode
-	input insertPred, countComparator, report, wrapperName, isMemoiDebug end
+	input insertPred, countComparator, report, wrapperName, isMemoiDebug, tableSize end
 	
 	select file.function{wrapperName}.call end
 	apply
@@ -194,7 +194,8 @@ aspectdef _Memoi_InsertTableCode
 			
 			call _Memoi_AddMainDebug(totalName, missesName, wrapperName);
 		}
-		var tableCode = _makeTableCode(insertPred, countComparator, report, $function);
+		
+		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize);
 		insert before tableCode;
 		$file.exec addInclude('stdint.h', true);
 	end
@@ -223,12 +224,13 @@ function _baseLog(num, base) {
 	return Math.log(num) / Math.log(base);
 }
 
-function _makeTableCode(insertPred, countComparator, report, $function) {
+function _makeTableCode(insertPred, countComparator, report, $function, tableSize) {
 	
-	var tableSize = 65536;
-	var tableSize = 256;
 	var indexBits = _baseLog(tableSize, 2);
 	var varBits = 64;
+
+	debug('table size: ' + tableSize);
+	debug('index bits: ' + indexBits);
 
 	var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
 	var code = _makeCode(table, indexBits, tableSize, $function, varBits);
@@ -257,16 +259,25 @@ function _makeCode(table, indexBits, tableSize, $function, varBits) {
 	// logic code
 	var firstParam = $function.params[0];
 	var iters = _baseLog(varBits / indexBits, 2);
+	var intIters = parseInt(iters, 10);
 
 	var large = varBits;
 	var logicCode = 'uint' + large + '_t hash_' + large +'_bits = *(uint' + large + '_t*)&' + firstParam.name + ';\n';
 
-	for(var i = 0; i < iters; i++) {
+	for(var i = 0; i < intIters; i++) {
 
 		var small = large / 2;
-		logicCode += 'uint' + small + '_t hash_' + small +'_bits = (hash_' + large +'_bits ^ (hash_' + large +'_bits >> ' + small + '));\n';
+		logicCode += 'uint' + small + '_t hash_' + small + '_bits = (hash_' + large +'_bits ^ (hash_' + large +'_bits >> ' + small + '));\n';
 		large = large / 2;
 	}
+	
+	// if not integer, we need to mask bits at the end
+	if(iters !== intIters) {
+		var numMaskBits = small - indexBits;
+		logicCode += 'uint' + small + '_t mask = 0xffff >> (16 - ' + indexBits + ');\n';
+		logicCode += 'uint' + small + '_t hash_' + indexBits + '_bits = hash_' + small +'_bits & mask;\n';			
+	}
+	
 	
 	logicCode += '\nif(table[hash_' + indexBits + '_bits][0] == hash_' + varBits + '_bits){\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][1];\n}';
 
@@ -297,7 +308,7 @@ function _makeTable(insertPred, countComparator, report, $function, indexBits, t
 		if(!insertPred(count, report)) {
 			continue;
 		}
-		
+
 		var hash = _hashFunction(count.key, indexBits);
 		
 		if(table[hash] === undefined) {
@@ -307,7 +318,6 @@ function _makeTable(insertPred, countComparator, report, $function, indexBits, t
 						'collisions' : 0,
 						'counter' : count.counter};
 		} else {
-
 			table[hash].key = count.key;
 			table[hash].output = count.output;
 			table[hash].counter = count.counter;
@@ -365,7 +375,8 @@ function _hashFunctionHalf(bits64){
 	return hashString;
 }
 
-function _hashFunction(bits64, indexBits) {
+function _hashFunctionOld(bits64, indexBits) {
+	
 	switch(indexBits) {
 
 		case 8:
@@ -381,6 +392,37 @@ function _hashFunction(bits64, indexBits) {
 			return bits64;
 			break;				
 	}
+}
+
+function _hashFunction(bits64, indexBits) {
+	
+	var varBits = 64;
+	var lastPower = varBits;
+	var iters = _baseLog(varBits / indexBits, 2);
+	var intIters = parseInt(iters, 10);
+	
+	var hash = bits64;
+	for(var i = 0; i < intIters; i++) {
+		hash = _hashFunctionHalf(hash);
+		lastPower = lastPower / 2;
+	}
+	
+	// if not integer, we need to mask bits at the end
+	if(iters !== intIters) {
+		
+		// mask starts with 16 bits
+		var mask = parseInt('0xffff', 16);
+		var shift = 16 - indexBits;
+		mask = mask >> (shift);
+				
+		hash = parseInt(hash, 16);
+		
+		hash = hash & mask;
+		return hash;
+	}
+	
+	hash = parseInt(hash, 16);
+	return hash;
 }
 
 /**

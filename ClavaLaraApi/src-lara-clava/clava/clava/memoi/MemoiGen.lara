@@ -126,8 +126,8 @@ MemoiGen.prototype.setDebug = function(isDebug) {
 
 /**
  * 		Makes a table for each <target function, call site> pair. The
- * 	table will have 512 or 65536 elements and will be indexed by 8-bit
- * 	or 16-bit keys.
+ * 	table will have a number of elements equal to the provided number, 
+ * 	which should be 2^b, with b in [8, 16].
  * 
  * 		Decides whether to apply memoization to that specific call site
  * 	based on the result of the predicate applyPred, which receives the 
@@ -147,8 +147,9 @@ MemoiGen.prototype.setDebug = function(isDebug) {
  * */
 MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, tableSize) {
 	
-	if(!(tableSize === 256 || tableSize === 65536)) {
-		throw "The possible table sizes are 256 and 65536.";
+	var allowedSizes = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
+	if(allowedSizes.indexOf(tableSize) === -1) {
+		throw "The possible table sizes are 2^b, with b in [8, 16].";
 	}
 	
 	for(var report of this._reports) {
@@ -165,7 +166,7 @@ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, t
 			return countComparator(count1, count2, report.reportCounter);
 		};
 
-		_generate(insertPred, comparatorToUse, report, this._isDebug);
+		_generate(insertPred, comparatorToUse, report, this._isDebug, tableSize);
 	}
 }
 
