@@ -227,18 +227,23 @@ function _baseLog(num, base) {
 function _makeTableCode(insertPred, countComparator, report, $function, tableSize) {
 	
 	var indexBits = _baseLog(tableSize, 2);
-	var varBits = 64;
 
 	debug('table size: ' + tableSize);
 	debug('index bits: ' + indexBits);
 
 	var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
-	var code = _makeCode(table, indexBits, tableSize, $function, varBits);
+	var code = _makeCode(table, indexBits, tableSize, $function);
 
 	return code;
 }
 
-function _makeCode(table, indexBits, tableSize, $function, varBits) {
+var sizeMap = {
+	'float': 32,
+	'int': 32,
+	'double': 64
+	};
+
+function _makeCode(table, indexBits, tableSize, $function) {
 	
 	// table code
 	var nanBits = 'fff8000000000000';
@@ -258,6 +263,8 @@ function _makeCode(table, indexBits, tableSize, $function, varBits) {
 
 	// logic code
 	var firstParam = $function.params[0];
+	var varBits = sizeMap[firstParam.type.code];
+	debug('var bits: ' + varBits);
 	var iters = _baseLog(varBits / indexBits, 2);
 	var intIters = parseInt(iters, 10);
 
