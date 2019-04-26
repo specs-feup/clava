@@ -1,5 +1,6 @@
 import clava.memoi._MemoiGenHelper;
 
+import lara.util.IdGenerator;
 import lara.Io;
 
 /**
@@ -13,7 +14,8 @@ import lara.Io;
 function MemoiGen(reports) {
 	
 	this._reportsPaths = arrayFromArgs(arguments);
-	this._reports = MemoiGen._readReports(this._reportsPaths);
+	this._reports = _readReports(this._reportsPaths);
+	this._isDebug = false;
 }
 
 /**
@@ -30,117 +32,6 @@ MemoiGen.fromDir = function(dir) {
 	return new MemoiGen(files);
 };
 
-/**
- * 		Reads memoization profiling reports and sorts the counts.
- * */
-MemoiGen._readReports = function(reportsPaths) {
-
-	var reports = {};
-	var counter = 0;
-	
-	for (var reportPath of reportsPaths) {
-		
-		var report = fileToJSON(reportPath);
-		
-		// add the path to uniquely identify this report
-		report.path = reportPath;
-		
-		// add report to map
-		MemoiGen._mapReport(reports, report);
-		
-		counter++;
-	}
-	
-	println('# read reports: ' + counter);
-	return MemoiGen._combineReports(reports);
-}
-
-/**
- * 		Maps reports into a double map.
- * 		target function -> call site -> list of reports
- * */
-MemoiGen._mapReport = function(reportsMap, report) {
-	
-	if (reportsMap[report.func_name] === undefined) {
-		
-		reportsMap[report.func_name] = {};
-	}
-	
-	if (reportsMap[report.func_name][report.call_sites] === undefined) {
-		
-		reportsMap[report.func_name][report.call_sites] = [];
-	}
-	
-	reportsMap[report.func_name][report.call_sites].push(report);
-	
-}
-
-/**
- * 		Combines reports of the same function and same call site from
- * 	different profiling runs.
- * */
-MemoiGen._combineReports = function(originalReports) {
-			
-	var finalReports = [];
-	
-	for(var func in originalReports) {
-		
-		for(var callSite in originalReports[func]) {
-
-			// get old reports for the current <func, call>
-			var reports = originalReports[func][callSite];
-	
-			// new report stores every run info in arrays
-			var newReport = {
-				func_name : func,
-				call_sites : callSite,
-				reportCount : reports.length,
-				elements : [],
-				calls : [],
-				hits : [],
-				misses : [],			
-				counts : {} // counts is temporarily a map to ease the combination
-			};
-			
-			// iterate all old reports
-			for(var oldReport of reports) {
-				
-				// add all info to the corresponding arrays
-				newReport.elements.push(oldReport.elements);
-				newReport.calls.push(oldReport.calls);
-				newReport.hits.push(oldReport.hits);
-				newReport.misses.push(oldReport.misses);
-				
-				// iterate all counts of the old report
-				for(var count of oldReport.counts) {
-					
-					var key = count.key;
-					
-					// build new counts using the key attribute as a key
-					if(newReport.counts[key] === undefined) {
-						
-						newReport.counts[key] = {
-							key : key,
-							output : count.output,
-							counter : [count.counter]
-						};
-					} else {
-						
-						newReport.counts[key].counter.push(count.counter);
-					}
-				}
-			}
-			// convert counts from a map to an array
-			_convertCounts(newReport);
-	
-			finalReports.push(newReport);
-		}
-	}
-	
-	println('# combined reports: ' + finalReports.length);
-	
-	return finalReports;
-};
 
 /**
  * 		Prints detailed metrics for each <target function, call site>.
@@ -188,3 +79,95 @@ MemoiGen.prototype.printAverageMetrics = function() {
 		println('\n');
 	}
 }
+
+var MemoiApply = {
+	ALWAYS : function(report) {
+		if(mean(report.elements, report.reportCount) === 0) {
+			debug('skipped - no calls');
+			return false;
+		}
+		
+		return true;
+	}
+};
+
+var MemoiInsert = {
+	ALL : function(count, report) {
+		return true;
+	}
+};
+
+var MemoiComparator = {
+	MEAN: function(count1, count2, total) {
+			
+		var mean1 = mean(count1.counter, total);
+		var mean2 = mean(count2.counter, total);
+		
+		if(mean1 > mean2) {
+			return 1;
+		} else if (mean1 < mean2) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+};
+
+
+/**
+ * 		Sets whether to generate debug code in the final application.
+ * */
+MemoiGen.prototype.setDebug = function(isDebug) {
+	
+	isDebug = isDebug === undefined ? true : isDebug;
+	
+	this._isDebug = isDebug;
+}
+
+/**
+ * 		Makes a table for each <target function, call site> pair. The
+ * 	table will have a number of elements equal to the provided number, 
+ * 	which should be 2^b, with b in [8, 16].
+ * 
+ * 		Decides whether to apply memoization to that specific call site
+ * 	based on the result of the predicate applyPred, which receives the 
+ *  entire report. The default predicate is MemoiApply.ALWAYS.
+ * 
+ * 		Decides whether to include any single element based on the
+ * 	result of the predicate insertPred, which receives the count for
+ *  that specific element and the entire report. The default predicate
+ *  is MemoiInsert.ALL.
+ * 
+ * 		In case of a collision, decides which element to use based on
+ * 	the order of the counts array, which is ordered from the least
+ * 	important element to the most important element. The function
+ * 	countComparator will be used as the comparator of each pair of
+ * 	elements in the array. The default comparison function will sort
+ * 	based on the mean and can be found at MemoiComparator.MEAN.
+ * */
+MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, tableSize) {
+	
+	var allowedSizes = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
+	if(allowedSizes.indexOf(tableSize) === -1) {
+		throw "The possible table sizes are 2^b, with b in [8, 16].";
+	}
+	
+	for(var report of this._reports) {
+		
+		debug('----------------------------------------------------------------------');
+		debug('analysing ' + report.func_name + ' at ' + report.call_sites);
+		
+		if(!applyPred(report)) {
+			continue;
+		}
+		
+		// define the comparator based on this report
+		var comparatorToUse = function(count1, count2){
+			return countComparator(count1, count2, report.reportCounter);
+		};
+
+		_generate(insertPred, comparatorToUse, report, this._isDebug, tableSize);
+	}
+}
+
+

@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -51,6 +52,8 @@ public class GlobalManager {
         varDecl.set(VarDecl.IS_USED, true);
         if (initExpr != null) {
             varDecl.setInit(initExpr);
+        } else {
+            varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.EXTERN);
         }
         // varDecl.set(VarDecl.INIT_STYLE, initStyle);
 
