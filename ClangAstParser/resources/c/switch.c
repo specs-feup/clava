@@ -6,6 +6,7 @@ int main() {
 	switch(a) {
 		case 0:
 			b = 1;
+			b = 2;
 			break;
 		case 1 ... 3:
 			b = 2;
@@ -17,4 +18,17 @@ int main() {
 			b = 3;
 	}
 	
+	
+	switch(b) {
+		case 5:
+		case 6:
+		case 7:
+		    /* Comment */
+			b = 7;
+			break;		
+		case 8:
+		case 9:
+			b = 9;
+			break;
+	}
 }

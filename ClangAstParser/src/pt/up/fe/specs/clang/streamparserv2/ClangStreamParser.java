@@ -30,6 +30,7 @@ import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
+import pt.up.fe.specs.clang.transforms.NormalizeCases;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemovePoison;
@@ -67,7 +68,10 @@ public class ClangStreamParser {
             // new RemoveClangComments(),
             new CreateDeclStmts(),
             new MoveImplicitCasts(),
-            new RemovePoison()
+            // new RemovePoison(),
+            new NormalizeCases()
+    // new NormalizeCases()
+
     // new AdaptBoolTypes(),
     // new AdaptBoolCasts(),
     // new RemoveBoolOperatorCalls(),
@@ -76,6 +80,9 @@ public class ClangStreamParser {
     // new RemoveImplicitConstructors(),
     // new RecoverStdMacros(),
     );
+
+    private final static Collection<ClavaRule> TEXT_PARSING_RULES = Arrays.asList(
+            new RemovePoison());
 
     private final ClangParserData data;
 
@@ -89,6 +96,10 @@ public class ClangStreamParser {
 
     public static Collection<ClavaRule> getPostParsingRules() {
         return POST_PARSING_RULES;
+    }
+
+    public static Collection<ClavaRule> getTextParsingRules() {
+        return TEXT_PARSING_RULES;
     }
 
     public App parse() {

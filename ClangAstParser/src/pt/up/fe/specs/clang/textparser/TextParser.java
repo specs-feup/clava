@@ -45,9 +45,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
-import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -191,12 +189,14 @@ public class TextParser {
 
             // If insertion point is the child of a CaseStmt or DefaultStmt, replace insertion point with text element,
             // and move insertion point to after the CaseStmt
-            if (insertionPoint.getParent() instanceof CaseStmt || insertionPoint.getParent() instanceof DefaultStmt) {
-                ClavaNode stmt = insertionPoint.getParent();
-                queue.replace(insertionPoint, textElement);
-                queue.moveAfter(stmt, insertionPoint);
-                continue;
-            }
+            // if (insertionPoint.getParent() instanceof CaseStmt || insertionPoint.getParent() instanceof DefaultStmt)
+            // {
+            // System.out.println("CASE PARENT: " + insertionPoint.getLocation());
+            // ClavaNode stmt = insertionPoint.getParent();
+            // queue.replace(insertionPoint, textElement);
+            // queue.moveAfter(stmt, insertionPoint);
+            // continue;
+            // }
 
             // If node is inside a StmtWithCondition, insert TextElement before StmtWithCondition
             Stmt parentConditionStmt = insertionPoint.getStmtWithConditionAncestor().orElse(null);
