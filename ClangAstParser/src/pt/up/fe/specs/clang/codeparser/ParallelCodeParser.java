@@ -229,13 +229,16 @@ public class ParallelCodeParser extends CodeParser {
         app.setSourcesFromStrings(allSources);
         app.addConfig(ClangAstKeys.toDataStore(compilerOptions));
 
-        // Add text elements (comments, pragmas) to the tree
-        new TextParser(app.getContext()).addElements(app);
-
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
         new TreeTransformer(ClangStreamParser.getPostParsingRules()).transform(app);
+
+        // Add text elements (comments, pragmas) to the tree
+        new TextParser(app.getContext()).addElements(app);
+
+        // Applies passes related with text elements
+        new TreeTransformer(ClangStreamParser.getTextParsingRules()).transform(app);
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
