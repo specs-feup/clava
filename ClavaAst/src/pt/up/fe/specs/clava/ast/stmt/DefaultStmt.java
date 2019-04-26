@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -39,8 +40,8 @@ public class DefaultStmt extends SwitchCase {
     // }
 
     @Override
-    public Stmt getSubStmt() {
-        return getChild(Stmt.class, 0);
+    public List<Stmt> getSubStmts() {
+        return getChildren(Stmt.class, 0);
     }
 
     @Override
@@ -48,7 +49,8 @@ public class DefaultStmt extends SwitchCase {
         StringBuilder builder = new StringBuilder();
 
         builder.append("default:" + ln())
-                .append(indentCode(getSubStmt().getCode()));
+                .append(getSubStmtsCode());
+        // .append(indentCode(getSubStmt().getCode()));
 
         return builder.toString();
     }
