@@ -50,21 +50,19 @@ public class NormalizeCases implements SimplePreClavaRule {
 
         // If statement is a CaseStmt/DefaultStmt, move instruction to after Case
         if (subStmt instanceof SwitchCase) {
-            // System.out.println("SWITCH CASE SUB IS CASE");
-            // queue.replace(subStmt, node.getFactory().compoundStmt().set(CompoundStmt.IS_NAKED));
             queue.moveAfter(node, subStmt);
             return;
         }
 
         // Build list of instruction next to the case that are not a SwitchCase
         List<ClavaNode> switchCaseSiblings = switchCase.getAncestor(CompoundStmt.class).getChildren();
+
         // If parent is a SwitchCase, needs to get the siblings of the corresponding ancestor case that
         // is closest to the CompountStmt
         int caseIndex = getCaseIndex(switchCase);
 
         List<ClavaNode> switchCaseSubStmts = new ArrayList<>();
-        // System.out.println("CASE INDEX:" + caseIndex);
-        // System.out.println("CASE SIBLINGS:" + switchCaseSiblings.size());
+
         for (int i = caseIndex + 1; i < switchCaseSiblings.size(); i++) {
             ClavaNode sibling = switchCaseSiblings.get(i);
             // If a switch case is found, stop
@@ -75,19 +73,10 @@ public class NormalizeCases implements SimplePreClavaRule {
             // Otherwise, add sibling
             switchCaseSubStmts.add(sibling);
         }
-        // System.out.println("SWITCH CASE SUB:" + switchCaseSubStmts);
+
         // Move instructions to be children of the case
         SpecsCollections.reverseStream(switchCaseSubStmts)
                 .forEach(newSubStmt -> queue.moveAfter(subStmt, newSubStmt));
-
-        // // Move instructions to be children of the case
-        // for (ClavaNode newSubStmt : switchCaseSubStmts) {
-        // queue.addChild(switchCase, newSubStmt);
-        // }
-
-        // Build list of instructions for CompoundStmt
-
-        // System.out.println("CASE:" + node.toTree());
 
     }
 
@@ -105,7 +94,4 @@ public class NormalizeCases implements SimplePreClavaRule {
         return currentSwitchCase.indexOfSelf();
     }
 
-    // private boolean isCaseStmt(ClavaNode node) {
-    // return node instanceof CaseStmt || node instanceof DefaultStmt;
-    // }
 }
