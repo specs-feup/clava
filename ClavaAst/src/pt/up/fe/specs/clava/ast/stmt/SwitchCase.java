@@ -14,12 +14,12 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 
 /**
  * Represents a switch case.
@@ -37,11 +37,15 @@ public abstract class SwitchCase extends Stmt {
     // super(info, children);
     // }
 
-    public abstract List<Stmt> getSubStmts();
-
-    protected String getSubStmtsCode() {
-        return getSubStmts().stream()
-                .map(stmt -> indentCode(stmt.getCode()))
-                .collect(Collectors.joining());
+    public Optional<Stmt> getSubStmt() {
+        return ClavaNodes.nextStatement(this);
     }
+
+    // public abstract List<Stmt> getSubStmts();
+
+    // protected String getSubStmtsCode() {
+    // return getSubStmts().stream()
+    // .map(stmt -> indentCode(stmt.getCode()))
+    // .collect(Collectors.joining());
+    // }
 }

@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -75,15 +74,15 @@ public class CaseStmt extends SwitchCase {
         return !(getRhs() instanceof NullNode);
     }
 
-    @Override
-    public List<Stmt> getSubStmts() {
-        return getChildren(Stmt.class, 2);
-        // if (hasRhs) {
-        // return getChild(Stmt.class, 2);
-        // }
-        //
-        // return getChild(Stmt.class, 1);
-    }
+    // @Override
+    // public List<Stmt> getSubStmts() {
+    // return getChildren(Stmt.class, 2);
+    // // if (hasRhs) {
+    // // return getChild(Stmt.class, 2);
+    // // }
+    // //
+    // // return getChild(Stmt.class, 1);
+    // }
 
     @Override
     public String getCode() {
@@ -97,7 +96,8 @@ public class CaseStmt extends SwitchCase {
         }
 
         // builder.append(":" + ln()).append(indentCode(getSubStmt().getCode()));
-        builder.append(":" + ln()).append(getSubStmtsCode());
+        builder.append(":" + ln());
+        // .append(getSubStmtsCode());
 
         return builder.toString();
     }
