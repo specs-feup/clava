@@ -34,41 +34,17 @@ public class LabelStmt extends Stmt {
         super(data, children);
     }
 
-    // private final String label;
-    //
-    // public LabelStmt(String label, ClavaNodeInfo info) {
-    // this(label, info, Collections.emptyList());
-    // }
-    //
-    // private LabelStmt(String label, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // this.label = label;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LabelStmt(label, getInfo());
-    // }
-
     public String getLabel() {
         return get(LABEL);
     }
 
     public Optional<Stmt> getSubStmt() {
         return ClavaNodes.nextStatement(this);
-        // if (!hasChildren()) {
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of(getChild(Stmt.class, 0));
     }
 
     @Override
     public String getCode() {
         String code = getLabel() + ":";
-
-        // code += getSubStmt().map(stmt -> " " + stmt.getCode()).orElse("");
 
         return code;
     }

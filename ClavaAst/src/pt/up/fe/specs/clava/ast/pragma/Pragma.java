@@ -26,21 +26,11 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
-// public abstract class Pragma extends Stmt {
 public abstract class Pragma extends ClavaNode {
 
     public Pragma(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // /**
-    // * @param info
-    // * @param children
-    // */
-    // @Deprecated
-    // public Pragma(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
 
     /**
      * By default, returns the next sibling that is not a comment or a pragma.
@@ -49,74 +39,7 @@ public abstract class Pragma extends ClavaNode {
      */
     public Optional<Stmt> getTarget() {
         return ClavaNodes.nextStatement(this);
-        /*
-        if (!hasParent()) {
-            SpecsLogs.msgLib("[Clava] Tried to access target of pragma without parent. Pragma: '" + getCode() + "'");
-            return Optional.empty();
-        }
-        
-        ClavaNode currentNode = this;
-        ClavaNode parent = getParent();
-        
-        // While parent is a wrapper, replace nodes
-        while (parent.isWrapper()) {
-            currentNode = parent;
-            parent = parent.getParent();
-        
-            // In case this node is detached
-            if (parent == null) {
-                return Optional.empty();
-            }
-        }
-        
-        int indexOfPragma = currentNode.indexOfSelf();
-        
-        for (int i = indexOfPragma + 1; i < parent.getNumChildren(); i++) {
-            ClavaNode sibling = parent.getChild(i);
-        
-            // Ignore comments and pragmas
-            if (sibling instanceof Comment || sibling instanceof Pragma || sibling instanceof WrapperStmt) {
-                continue;
-            }
-        
-            // Treat literal statements manually
-            if (sibling instanceof LiteralStmt) {
-                if (isCommentOrPragma(sibling.getCode())) {
-                    continue;
-                }
-            }
-        
-            return Optional.of(sibling);
-        
-            // if (!(sibling instanceof Comment) && !(sibling instanceof Pragma)) {
-            // return Optional.of(sibling);
-            // }
-        }
-        
-        return Optional.empty();
-        */
     }
-
-    // private boolean isCommentOrPragma(String code) {
-    // // Trim
-    // String currentCode = code.trim();
-    //
-    // // Check inline comment
-    // if (currentCode.startsWith("//")) {
-    // return true;
-    // }
-    //
-    // // TODO: Multiline not implemented (yet?)
-    // if (currentCode.startsWith("/*")) {
-    // throw new RuntimeException("Testing of literal code for multiline comments not finished yet");
-    // }
-    //
-    // if (currentCode.startsWith("#pragma")) {
-    // return true;
-    // }
-    //
-    // return false;
-    // }
 
     /**
      * The full content of the pragma, e.g., for '#pragma omp parallel' would return 'omp parallel'.

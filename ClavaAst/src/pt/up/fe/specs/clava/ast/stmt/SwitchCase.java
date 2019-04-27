@@ -33,19 +33,7 @@ public abstract class SwitchCase extends Stmt {
         super(data, children);
     }
 
-    // public SwitchCase(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-
     public Optional<Stmt> getSubStmt() {
         return ClavaNodes.nextStatement(this);
     }
-
-    // public abstract List<Stmt> getSubStmts();
-
-    // protected String getSubStmtsCode() {
-    // return getSubStmts().stream()
-    // .map(stmt -> indentCode(stmt.getCode()))
-    // .collect(Collectors.joining());
-    // }
 }

@@ -25,31 +25,11 @@ public class DefaultStmt extends SwitchCase {
         super(data, children);
     }
 
-    // public DefaultStmt(ClavaNodeInfo info, Stmt subStmt) {
-    // this(info, Arrays.asList(subStmt));
-    // }
-    //
-    // private DefaultStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new DefaultStmt(getInfo(), Collections.emptyList());
-    // }
-    //
-    // @Override
-    // public List<Stmt> getSubStmts() {
-    // return getChildren(Stmt.class, 0);
-    // }
-
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
 
         builder.append("default:" + ln());
-        // .append(getSubStmtsCode());
-        // .append(indentCode(getSubStmt().getCode()));
 
         return builder.toString();
     }
