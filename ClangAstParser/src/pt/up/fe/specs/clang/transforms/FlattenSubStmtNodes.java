@@ -15,32 +15,35 @@ package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
+import pt.up.fe.specs.clava.ast.stmt.SwitchCase;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
-import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.classmap.ClassSet;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
- * Moves the sub-statement of a Label to be directly under it (as a sibling).
+ * Moves the sub-statement of a certain nodes to be directly under it (as a sibling).
  * 
  * @author JoaoBispo
  *
  */
-public class NormalizeLabels implements SimplePreClavaRule {
+public class FlattenSubStmtNodes implements SimplePreClavaRule {
+
+    private static final ClassSet<ClavaNode> SUB_STMT_NODES = ClassSet.newInstance(LabelStmt.class, SwitchCase.class);
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
-        if (!(node instanceof LabelStmt)) {
+        if (!SUB_STMT_NODES.contains(node)) {
             return;
         }
 
-        // If it has a children, move to after the node
+        // If it has no children, continue
         if (!node.hasChildren()) {
             return;
         }
 
-        SpecsCheck.checkSize(node.getChildren(), 1);
-
-        queue.moveAfter(node, node.getChild(0));
+        // Last child becomes a sibling
+        int lastChildIndex = node.getNumChildren() - 1;
+        queue.moveAfter(node, node.getChild(lastChildIndex));
     }
 
 }
