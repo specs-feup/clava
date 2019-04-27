@@ -19,9 +19,9 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.util.stringparser.StringParser;
@@ -50,7 +50,7 @@ public class ClavaPragmas {
 
         Optional<ClavaDirective> clavaDirective = getDirective(clavaPragma);
         if (clavaDirective.isPresent()) {
-            Optional<ClavaNode> targetNode = clavaPragma.getTarget();
+            Optional<Stmt> targetNode = clavaPragma.getTarget();
             if (!targetNode.isPresent()) {
                 ClavaLog.warning(clavaPragma,
                         "No target statement found for Clava pragma '" + clavaPragma.getContent() + "'");
@@ -80,7 +80,7 @@ public class ClavaPragmas {
             joinpointName = parser.apply(StringParsers::parseWord);
         }
 
-        Optional<ClavaNode> target = clavaPragma.getTarget();
+        Optional<Stmt> target = clavaPragma.getTarget();
         if (!target.isPresent()) {
             ClavaLog.warning(clavaPragma, "Clava pragma could not be associated with a joinpoint");
             return;
