@@ -34,8 +34,9 @@ int main() {
 			goto label_a;
 			}
 			break;					
+		case 11:
 		label_a:
-		case 11:	
+		case 12:	
 			break;		
 		
 	}
