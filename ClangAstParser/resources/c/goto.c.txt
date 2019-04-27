@@ -12,5 +12,6 @@ int main() {
    }
    /*This message does not print:*/
    printf_s("Loop exited. i = %d\n", i);
-   stop: printf_s("Jumped to stop. i = %d\n", i);
+   stop: 
+   printf_s("Jumped to stop. i = %d\n", i);
 }
