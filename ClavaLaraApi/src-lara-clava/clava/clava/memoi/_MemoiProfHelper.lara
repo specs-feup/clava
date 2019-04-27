@@ -338,8 +338,10 @@ aspectdef _Memoi_Setup
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[type]]);}%);
 
 		/* add functions to print and clean up at every return on main */
-		$function.exec insertReturn(%{mp_to_json([[monitorName]], make_report_path("[[dir]]", "[[monitorName]]"));}%);
+		$function.exec insertReturn(%{const char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
+		$function.exec insertReturn(%{mp_to_json([[monitorName]], path_[[monitorName]]);}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
+		$function.exec insertReturn(%{free(path_[[monitorName]]);}%);
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
 
@@ -472,7 +474,7 @@ static const char* make_report_path(const char* dir, const char* id) {
     
     snprintf(path, total_len, "%s%s%s%s%s%s", dir, sep, stamp, under, id, ext);
     
-    free((void*)stamp);
+    free(stamp);
     
     return path;
 }

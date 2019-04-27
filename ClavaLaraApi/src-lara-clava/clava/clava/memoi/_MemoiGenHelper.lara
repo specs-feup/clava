@@ -59,9 +59,9 @@ function _combineReports(originalReports) {
 	var finalReports = [];
 	
 	for(var func in originalReports) {
-		
+		debug('combining reports for function ' + func);
 		for(var callSite in originalReports[func]) {
-
+			debug('combining reports for call site ' + callSite);
 			// get old reports for the current <func, call>
 			var reports = originalReports[func][callSite];
 	
@@ -92,17 +92,18 @@ function _combineReports(originalReports) {
 					var key = count.key;
 					
 					// build new counts using the key attribute as a key
-					if(newReport.counts[key] === undefined) {
+					if(newReport.counts[key] === undefined || newReport.counts[key] === null) {
+					//~ if(!(key in newReport.counts)) {
 						
 						newReport.counts[key] = {
 							key : key,
 							output : count.output,
-							counter : [count.counter]
+							counter : []
 						};
-					} else {
-						
-						newReport.counts[key].counter.push(count.counter);
 					}
+
+					var oldCounter = count.counter;
+					newReport.counts[key].counter.push(oldCounter);		
 				}
 			}
 			// convert counts from a map to an array
