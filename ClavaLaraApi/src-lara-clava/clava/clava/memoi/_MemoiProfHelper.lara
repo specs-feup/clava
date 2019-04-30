@@ -2,6 +2,9 @@ import lara.util.IdGenerator;
 
 function _normalizeSig(sig) {
 	var tmp = Strings.replacer(sig, '\\(', '_');
+	tmp = Strings.replacer(tmp, ', ', '_');
+	tmp = Strings.replacer(tmp, ' ', '_');
+	tmp = Strings.replacer(tmp, ',', '_');
 	return Strings.replacer(tmp, '\\)', '_');
 }
 
@@ -61,12 +64,13 @@ end
  * @aspect
  * @private
  * */
-aspectdef _Memoi_FindType
+aspectdef _Memoi_FindTypes
 	input
 		targetSig
 	end
 	output
-		foundType = ''
+		outputType = '',
+		inputTypes = []
 	end
 
 	select stmt.call{signature === targetSig} end
@@ -75,7 +79,8 @@ aspectdef _Memoi_FindType
 		var valid = _isValidMemoi($call, {});
 		if(valid === _Res.VALID) {
 			var $functionType = $call.function.functionType;
-			foundType = $functionType.returnType.code;
+			outputType = $functionType.returnType.code;
+			inputTypes = $functionType.paramTypes.map(function(e){return e.code;});
 			return;
 		}
 	end
@@ -101,11 +106,10 @@ function _isValidMemoi($call, processed) {
  * 		Checks if the target function is valid.
  *
  *	The constraints are:
- *	1) it has only a single parameter;
- *	2) the parameter and return type are both T;
- *	3) T is one of {int, float, double};
- * 	4) It doesn't access global state;
- *	5) It doesn't call non-valid functions.
+ *	1) has between 1 and 3 parameters
+ *	2) type of return and params is one of {int, float, double}
+ * 	3) It doesn't access global state;
+ *	4) It doesn't call non-valid functions.
  **/
 function _isValidMemoiRecursive($call, processed) {
 
@@ -125,31 +129,33 @@ function _isValidMemoiRecursive($call, processed) {
 	var $returnType = $functionType.returnType;
 	var paramTypes = $functionType.paramTypes;
 
-	// 1) it has only a single parameter
-	if(paramTypes.length != 1) {
+	// 1) has between 1 and 3 parameters
+	if(paramTypes.length < 1 || paramTypes.length > 3) {
 		
-		debug(sig + ' - has more than 1 parameter');
-		
-		processed[sig] = _Res.INVALID;
-		return _Res.INVALID;
-	}
-	
-	// 2) the parameter and return type are both T
-	if(paramTypes[0].code != $returnType.code) {
-
-		debug(sig + ' - parameter and return type are different');
+		debug(sig + ' - wrong number of parameters: ' + paramTypes.length);
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
 	}
 	
-	// 3) T is one of {int, float, double}
+	
+	// 2) type of return and params is one of {int, float, double}
 	if(!_testType($returnType, ['int', 'float', 'double'])) {
 		
-		debug(sig + ' - type is not supported: ' + $returnType.code);
+		debug(sig + ' - return type is not supported: ' + $returnType.code);
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
+	}
+	
+	for(var $type of paramTypes) {
+		if(!_testType($type, ['int', 'float', 'double'])) {
+		
+		debug(sig + ' - param type is not supported: ' + $type.code);
+		
+		processed[sig] = _Res.INVALID;
+		return _Res.INVALID;
+	}	
 	}
 	
 	// Try to get the definition
@@ -169,7 +175,7 @@ function _isValidMemoiRecursive($call, processed) {
 		}
 	}
 	
-	// 4) It doesn't access global state (unless constants)
+	// 3) It doesn't access global state (unless constants)
 	var varRefs = $def.descendants('varref');
 	for(var $ref of varRefs) {
 	
@@ -184,7 +190,7 @@ function _isValidMemoiRecursive($call, processed) {
 		}
 	}
 
-	// 5) It doesn't call non-valid functions
+	// 4) It doesn't call non-valid functions
 	var isChildWaiting = false;
 	var $calls = $def.descendants('call');
 	for(var $childCall of $calls) {
@@ -229,7 +235,7 @@ function _isValidMemoiRecursive($call, processed) {
 aspectdef _Memoi_GlobalWrapper
 	input
 		targetSig, normalizedSig, wrapperName, monitorType, monitorName,
-		id, reportDir, dataType
+		id, reportDir, outputType, inputTypes
 	end
 	
 	// make the wrapper
@@ -242,7 +248,7 @@ aspectdef _Memoi_GlobalWrapper
 	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputType, inputTypes, ['global']);
 end
 
 /**
@@ -255,7 +261,7 @@ end
 aspectdef _Memoi_IndividualWrapper
 	input
 		targetSig, normalizedSig, wrapperNameBase, monitorType,
-		monitorNameBase, idBase, reportDir, dataType
+		monitorNameBase, idBase, reportDir, outputType, inputTypes
 	end
 	
 	select file.stmt.call{signature === targetSig} end
@@ -275,7 +281,7 @@ aspectdef _Memoi_IndividualWrapper
 		
 		// setup
 		var id = IdGenerator.next(idBase + '_');
-		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, [callSiteInfo]);
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputType, inputTypes, [callSiteInfo]);
 	end
 end
 
@@ -328,14 +334,16 @@ aspectdef _Memoi_Setup
 		targetSig,
 		id,
 		dir,
-		type,
+		outputType, inputTypes,
 		callSiteInfo
 	end
+
+	var inputsCode = inputTypes.join(',').toUpperCase();
 
 	select file.function{'main'}.body end
 	apply
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
-		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[type]]);}%);
+		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[outputType.toUpperCase()]], [[inputTypes.length]], [[inputsCode]]);}%);
 
 		/* add functions to print and clean up at every return on main */
 		$function.exec insertReturn(%{const char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
@@ -361,7 +369,7 @@ aspectdef _Memoi_AddCallSiteInfo
 	checkArray(callSiteInfo);
 	
 	var length = callSiteInfo.length;
-	var code = 'mp_add_call_sites(' + monitorName + ', ' + length ;
+	var code = 'mp_set_call_sites(' + monitorName + ', ' + length ;
 	for(var i of callSiteInfo) {
 		code += ', "' + i + '"';
 	}
