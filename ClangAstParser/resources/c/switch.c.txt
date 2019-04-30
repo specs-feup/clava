@@ -31,5 +31,14 @@ int main() {
 		case 9:
 			b = 9;
 			break;
+		case 10:
+		{
+		goto label_a;
+		}
+		break;
+		case 11:
+		label_a:
+		case 12:
+		break;			
 	}
 }

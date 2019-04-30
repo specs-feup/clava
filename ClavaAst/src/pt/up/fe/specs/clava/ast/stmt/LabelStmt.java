@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 
 public class LabelStmt extends Stmt {
     /// DATAKEYS BEGIN
@@ -33,40 +34,17 @@ public class LabelStmt extends Stmt {
         super(data, children);
     }
 
-    // private final String label;
-    //
-    // public LabelStmt(String label, ClavaNodeInfo info) {
-    // this(label, info, Collections.emptyList());
-    // }
-    //
-    // private LabelStmt(String label, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // this.label = label;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LabelStmt(label, getInfo());
-    // }
-
     public String getLabel() {
         return get(LABEL);
     }
 
     public Optional<Stmt> getSubStmt() {
-        if (!hasChildren()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(getChild(Stmt.class, 0));
+        return ClavaNodes.nextStatement(this);
     }
 
     @Override
     public String getCode() {
         String code = getLabel() + ":";
-
-        code += getSubStmt().map(stmt -> " " + stmt.getCode()).orElse("");
 
         return code;
     }

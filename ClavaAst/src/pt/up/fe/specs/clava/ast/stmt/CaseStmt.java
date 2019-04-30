@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -34,55 +33,16 @@ public class CaseStmt extends SwitchCase {
         super(data, children);
     }
 
-    // Right-hand side is used in the GNU extension "case 1 ... 4"
-    // private final boolean hasRhs;
-
-    // public CaseStmt(ClavaNodeInfo info, Expr lhs, Stmt subStmt) {
-    // this(false, info, Arrays.asList(lhs, subStmt));
-    // }
-    //
-    // public CaseStmt(ClavaNodeInfo info, Expr lhs, Expr rhs, Stmt subStmt) {
-    // this(true, info, Arrays.asList(lhs, rhs, subStmt));
-    // }
-    //
-    // private CaseStmt(boolean hasRhs, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // this.hasRhs = hasRhs;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CaseStmt(hasRhs, getInfo(), Collections.emptyList());
-    // }
-
     public Expr getLhs() {
         return getChild(Expr.class, 0);
     }
 
     public Expr getRhs() {
         return getChild(Expr.class, 1);
-        // return getChild(Expr.class, 1);
-        //
-        // if (!hasRhs) {
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of(getChild(Expr.class, 1));
     }
 
     public boolean hasRhs() {
         return !(getRhs() instanceof NullNode);
-    }
-
-    @Override
-    public List<Stmt> getSubStmts() {
-        return getChildren(Stmt.class, 2);
-        // if (hasRhs) {
-        // return getChild(Stmt.class, 2);
-        // }
-        //
-        // return getChild(Stmt.class, 1);
     }
 
     @Override
@@ -96,8 +56,7 @@ public class CaseStmt extends SwitchCase {
             builder.append(" ... ").append(getRhs().getCode());
         }
 
-        // builder.append(":" + ln()).append(indentCode(getSubStmt().getCode()));
-        builder.append(":" + ln()).append(getSubStmtsCode());
+        builder.append(":" + ln());
 
         return builder.toString();
     }

@@ -29,8 +29,8 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
+import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
-import pt.up.fe.specs.clang.transforms.NormalizeCases;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemovePoison;
@@ -69,8 +69,7 @@ public class ClangStreamParser {
             new CreateDeclStmts(),
             new MoveImplicitCasts(),
             // new RemovePoison(),
-            new NormalizeCases()
-    // new NormalizeCases()
+            new FlattenSubStmtNodes()
 
     // new AdaptBoolTypes(),
     // new AdaptBoolCasts(),
