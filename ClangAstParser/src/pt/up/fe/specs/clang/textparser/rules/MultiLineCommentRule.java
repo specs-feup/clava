@@ -40,14 +40,17 @@ public class MultiLineCommentRule implements TextParserRule {
 
         // Check if inside a string
         // This will detect false positives, hack until text elements are obtained from Clang
-        int currentIndex = startIndex - 1;
-        while (currentIndex >= 0) {
-            if (line.charAt(currentIndex) == '"') {
-                return Optional.empty();
-            }
-
-            currentIndex--;
+        if (isInsideString(line, startIndex)) {
+            return Optional.empty();
         }
+        // int currentIndex = startIndex - 1;
+        // while (currentIndex >= 0) {
+        // if (line.charAt(currentIndex) == '"') {
+        // return Optional.empty();
+        // }
+        //
+        // currentIndex--;
+        // }
 
         // Found start of a multi-line comment. Try to find the end
         List<String> lines = new ArrayList<>();
