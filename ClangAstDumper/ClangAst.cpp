@@ -500,7 +500,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     /*** IncludeDumper ***/
 
-    IncludeDumper::IncludeDumper(CompilerInstance &compilerInstance) : compilerInstance(compilerInstance) {};
+    IncludeDumper::IncludeDumper(CompilerInstance &compilerInstance) : compilerInstance(compilerInstance), sm(compilerInstance.getSourceManager()) {};
 
 
     std::unique_ptr<PPCallbacks> IncludeDumper::createPreprocessorCallbacks() {
@@ -511,7 +511,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
                                         bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
                                         StringRef SearchPath, StringRef RelativePath, const Module *Imported, SrcMgr::CharacteristicKind FileType) {
 
-        clang::SourceManager &sm = compilerInstance.getSourceManager();
+        //clang::SourceManager &sm = compilerInstance.getSourceManager();
 
         if (!sm.isInSystemHeader(HashLoc)) {
 #ifdef OLD_OUTPUT
@@ -534,14 +534,24 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     void IncludeDumper::PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer) {
 
-        clang::SourceManager &sm = compilerInstance.getSourceManager();
+        //clang::SourceManager &sm = compilerInstance.getSourceManager();
+
+        // Ignore system headers
+        if(sm.isInSystemHeader(Loc)) {
+            return;
+        }
 
         // Pragma location
         clava::dump(PRAGMA);
+        clava::dump(sm.getFilename(Loc));
         clava::dump(sm.getSpellingLineNumber(Loc));
         clava::dump(sm.getSpellingColumnNumber(Loc));
     }
 
+    void IncludeDumper::FileChanged(SourceLocation Loc, FileChangeReason Reason, SrcMgr::CharacteristicKind FileType, FileID PrevFID) {
+//llvm::errs() << "File changed: " << sm.getFilename(Loc) << "\n";
+//llvm::errs() << "Reason: " << Reason << "\n";
+    }
 
     void IncludeDumper::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {
 /*
@@ -612,6 +622,10 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     void CallbacksProxy::PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer) {
         original.PragmaDirective(Loc, Introducer);
+    }
+
+    void CallbacksProxy::FileChanged(SourceLocation Loc, FileChangeReason Reason, SrcMgr::CharacteristicKind FileType, FileID PrevFID) {
+        original.FileChanged(Loc, Reason, FileType, PrevFID);
     }
 
 
