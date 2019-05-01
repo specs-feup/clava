@@ -93,6 +93,18 @@ public class SnippetParser {
             return ClavaNodes.toStmt(pragma);
         }
 
+        if (lowerCurrentCode.startsWith("_pragma")) {
+            String pragmaContent = currentCode.substring("_pragma".length());
+
+            StringParser parser = new StringParser(pragmaContent.strip());
+
+            parser.apply(StringParsers::parseString, "(");
+            String pragmaFullContent = parser.apply(StringParsers::parseDoubleQuotedString);
+            parser.apply(StringParsers::parseString, ")");
+
+            return parseStmt("#pragma " + pragmaFullContent);
+        }
+
         // Case not supported
         return context.getFactory().literalStmt(code);
     }
