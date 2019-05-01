@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
@@ -44,6 +45,11 @@ public class RemovePoison implements SimplePreClavaRule {
 
         if (!new StringParser(pragma.getContent()).apply(StringParsers::hasWord, "poison")) {
             return;
+        }
+
+        // If pragma is inside a WrapperStmt, remove the stmt
+        if (pragma.getParent() instanceof WrapperStmt) {
+            node = pragma.getParent();
         }
 
         queue.delete(node);
