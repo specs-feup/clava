@@ -383,13 +383,14 @@ public class ClangStreamParser {
 
                 // Find pragma end
                 while (pragma.endsWith("\\")) {
-                    int backSlashIndex = pragma.lastIndexOf('\\');
-                    String currentPragma = pragma;
-                    SpecsCheck.checkArgument(backSlashIndex != -1,
-                            () -> "Expected a backslash at the end of the string: " + currentPragma);
+                    // int backSlashIndex = pragma.lastIndexOf('\\');
+                    // String currentPragma = pragma;
+                    // SpecsCheck.checkArgument(backSlashIndex != -1,
+                    // () -> "Expected a backslash at the end of the string: " + currentPragma);
 
                     currentLine = sourceFile.nextLine();
-                    pragma = pragma.substring(0, backSlashIndex) + currentLine.strip();
+                    // pragma = pragma.substring(0, backSlashIndex) + currentLine.strip();
+                    pragma = pragma + "\n" + currentLine.strip();
 
                     // Update end location
                     endLine++;
