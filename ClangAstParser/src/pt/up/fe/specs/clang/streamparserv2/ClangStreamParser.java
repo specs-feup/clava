@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
+import pt.up.fe.specs.clang.textparser.SnippetParser;
 import pt.up.fe.specs.clang.textparser.TextElements;
 import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
@@ -43,7 +44,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.SnippetParser;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
