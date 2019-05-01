@@ -9,7 +9,8 @@ static void NaiveMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) {
 }
 
 
-static void BlockedMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) { // add "search(dependent)" at the end of this pragma if you want to search the variables dependently
+static void BlockedMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) {
+   #pragma isat tuning name(tune_mm) scope(M1_begin, M1_end) measure(M2_begin, M2_end) variable(blk_k, range($L1_CACHE_LINESIZE, 16*$L1_CACHE_LINESIZE, $L1_CACHE_LINESIZE/2)) variable(blk_j, range($L1_CACHE_LINESIZE, 16*$L1_CACHE_LINESIZE, $L1_CACHE_LINESIZE/2)) variable(blk_i, range($L1_CACHE_LINESIZE, 16*$L1_CACHE_LINESIZE, $L1_CACHE_LINESIZE/2)) // add "search(dependent)" at the end of this pragma if you want to search the variables dependently // add "search(dependent)" at the end of this pragma if you want to search the variables dependently // add "search(dependent)" at the end of this pragma if you want to search the variables dependently // add "search(dependent)" at the end of this pragma if you want to search the variables dependently
    #pragma isat marker M1_begin
    int const blk_i = 64;
    int const blk_j = 64;
