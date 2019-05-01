@@ -36,6 +36,7 @@ public class ClangStreamParserV2 {
         addWorker(VisitedChildrenParser::new);
         addWorker(IdToFilenameParser::new);
         addWorker(IncludesParser::new);
+        addWorker(PragmasLocationsParser::new);
         addWorker(LanguageParser::new);
         TopLevelNodesParser.getWorkers().forEach(ClangStreamParserV2::addWorker);
         NodeDataParser.getWorkers().forEach(ClangStreamParserV2::addWorker);

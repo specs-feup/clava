@@ -97,6 +97,9 @@ public class ClangParserData extends ADataClass<ClangParserData> {
             "skippedNodesMap",
             new HashMap<>());
 
+    public final static DataKey<Map<Integer, Integer>> PRAGMAS_LOCATIONS = KeyFactory.generic("pragmasLocations",
+            new HashMap<>());
+
     /**
      * Parsed translation unit.
      */

@@ -34,8 +34,6 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.textparser.rules.InlineCommentRule;
 import pt.up.fe.specs.clang.textparser.rules.MultiLineCommentRule;
-import pt.up.fe.specs.clang.textparser.rules.PragmaMacroRule;
-import pt.up.fe.specs.clang.textparser.rules.PragmaRule;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
@@ -78,7 +76,8 @@ public class TextParser {
     // .setDefault(() -> new HashSet<String>());
 
     private static final List<TextParserRule> RULES = Arrays.asList(
-            new InlineCommentRule(), new MultiLineCommentRule(), new PragmaRule(), new PragmaMacroRule());
+            new InlineCommentRule(), new MultiLineCommentRule());
+    // , new PragmaRule(), new PragmaMacroRule());
 
     private final ClavaContext context;
 
@@ -106,13 +105,17 @@ public class TextParser {
         }
     }
 
-    private void addElements(TranslationUnit tu) {
+    public void addElements(TranslationUnit tu) {
+        // Collect elements from the tree
+        TextElements textElements = parseElements(tu.getFile());
+
+        addElements(tu, textElements);
+    }
+
+    public void addElements(TranslationUnit tu, TextElements textElements) {
 
         // TranslationUnit path
         String tuFilepath = tu.getFile().getPath();
-
-        // Collect elements from the tree
-        TextElements textElements = parseElements(tu.getFile());
 
         // Add associated inline comments before adding guards
         addAssociatedInlineComments(tu, textElements.associatedInlineComments);
