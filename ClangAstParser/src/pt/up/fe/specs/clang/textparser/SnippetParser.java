@@ -83,7 +83,9 @@ public class SnippetParser {
             String pragmaContent = currentCode.substring("#pragma ".length());
 
             // Split pragmaContent into lines, in case it is multiline
-            List<String> pragmaLines = pragmaContent.lines().collect(Collectors.toList());
+            List<String> pragmaLines = pragmaContent.lines()
+                    .map(SnippetParser::removeTrailingBackslash)
+                    .collect(Collectors.toList());
             Pragma parsedPragma = PragmaParsers.parse(pragmaLines, context)
                     .orElse(context.getFactory().genericPragma(pragmaLines));
             return ClavaNodes.toStmt(parsedPragma);
@@ -122,4 +124,13 @@ public class SnippetParser {
     // // TODO Auto-generated method stub
     // return null;
     // }
+
+    private static String removeTrailingBackslash(String line) {
+        if (!line.stripTrailing().endsWith("\\")) {
+            return line;
+        }
+
+        int backslashIndex = line.lastIndexOf('\\');
+        return line.substring(0, backslashIndex);
+    }
 }
