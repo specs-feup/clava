@@ -48,3 +48,6 @@ int global3 = 30;
 #define FOO poisoned_foo
 #pragma GCC poison poisoned_foo
 void FOO();
+
+#line 11 "macro_defined_location.txt"
+int global4 = 40;

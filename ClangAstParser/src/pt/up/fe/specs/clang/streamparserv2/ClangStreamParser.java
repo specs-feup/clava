@@ -394,7 +394,12 @@ public class ClangStreamParser {
         // System.out.println("DECLARATIONS KEYS:" + declarations.keySet());
 
         String path = sourceFile.getAbsolutePath();
+
+        ClavaLog.debug(() -> "File '" + path + "' has top-level declarations with the following paths: "
+                + declarations.keySet());
+
         if (declarations.size() > 0 && !declarations.containsKey(path)) {
+
             // Just to check, for now
             ClavaLog.debug(() -> "ClangStreamParser.createTu(): expeted declarations to have key '" + path + ": "
                     + declarations.keySet());
