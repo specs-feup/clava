@@ -13,27 +13,28 @@
 
 package pt.up.fe.specs.clang.parsers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class PragmasLocationsParser implements LineStreamWorker<ClangParserData> {
 
     private static final String PARSER_ID = "<Pragma>";
 
-    private static void parsePragmasLocations(LineStream lineStream, Map<Integer, Integer> locations) {
+    private static void parsePragmasLocations(LineStream lineStream, PragmasLocations locations) {
+        File sourceFile = new File(lineStream.nextLine());
         int line = LineStreamParsers.integer(lineStream);
         int column = LineStreamParsers.integer(lineStream);
 
-        Integer previousColumn = locations.put(line, column);
-        if (previousColumn != null) {
-            ClavaLog.warning("Found multiple pragmas in the same line " + line);
-        }
+        locations.addPragmaLocation(sourceFile, line, column);
+        // Integer previousColumn = locations.put(line, column);
+        // if (previousColumn != null) {
+        // ClavaLog.warning("Found multiple pragmas in the same line " + line);
+        // }
     }
 
     @Override
@@ -43,12 +44,12 @@ public class PragmasLocationsParser implements LineStreamWorker<ClangParserData>
 
     @Override
     public void init(ClangParserData data) {
-        data.set(ClangParserData.PRAGMAS_LOCATIONS, new HashMap<>());
+        data.set(ClangParserData.PRAGMAS_LOCATIONS, new PragmasLocations());
     }
 
     @Override
     public void apply(LineStream lineStream, ClangParserData data) {
-        Map<Integer, Integer> locations = data.get(ClangParserData.PRAGMAS_LOCATIONS);
+        PragmasLocations locations = data.get(ClangParserData.PRAGMAS_LOCATIONS);
         parsePragmasLocations(lineStream, locations);
     }
 }
