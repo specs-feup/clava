@@ -15,12 +15,13 @@ package pt.up.fe.specs.clang.textparser;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clang.pragma.PragmaParsers;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.pragma.GenericPragma;
+import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.StringLines;
@@ -81,17 +82,24 @@ public class SnippetParser {
         if (lowerCurrentCode.startsWith("#pragma ")) {
             String pragmaContent = currentCode.substring("#pragma ".length());
 
+            // Split pragmaContent into lines, in case it is multiline
+            List<String> pragmaLines = pragmaContent.lines().collect(Collectors.toList());
+            Pragma parsedPragma = PragmaParsers.parse(pragmaLines, context)
+                    .orElse(context.getFactory().genericPragma(pragmaLines));
+            return ClavaNodes.toStmt(parsedPragma);
+            /*
             // Get pragma kind
             StringParser parser = new StringParser(pragmaContent);
             String pragmaKind = parser.apply(StringParsers::parseWord);
-
+            
             // Check if OpenMP pragma
             if (pragmaKind.equals("omp")) {
                 return ClavaNodes.toStmt(new OmpParser().parse(parser, context));
             }
-
+            
             GenericPragma pragma = context.getFactory().genericPragma(Arrays.asList(pragmaContent));
             return ClavaNodes.toStmt(pragma);
+            */
         }
 
         if (lowerCurrentCode.startsWith("_pragma")) {
