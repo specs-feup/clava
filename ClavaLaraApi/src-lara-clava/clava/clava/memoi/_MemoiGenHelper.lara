@@ -36,17 +36,17 @@ function _readReports(reportsPaths) {
  * */
 function _mapReport(reportsMap, report) {
 	
-	if (reportsMap[report.func_name] === undefined) {
+	if (reportsMap[report.funcSig] === undefined) {
 		
-		reportsMap[report.func_name] = {};
+		reportsMap[report.funcSig] = {};
 	}
 	
-	if (reportsMap[report.func_name][report.call_sites] === undefined) {
+	if (reportsMap[report.funcSig][report.call_sites] === undefined) {
 		
-		reportsMap[report.func_name][report.call_sites] = [];
+		reportsMap[report.funcSig][report.call_sites] = [];
 	}
 	
-	reportsMap[report.func_name][report.call_sites].push(report);
+	reportsMap[report.funcSig][report.call_sites].push(report);
 	
 }
 
@@ -67,7 +67,7 @@ function _combineReports(originalReports) {
 	
 			// new report stores every run info in arrays
 			var newReport = {
-				func_name : func,
+				funcSig : func,
 				call_sites : callSite,
 				reportCount : reports.length,
 				elements : [],
@@ -126,7 +126,7 @@ function _combineReports(originalReports) {
 function _generate(insertPred, countComparator, report, isMemoiDebug, tableSize) {
 
 	var callSite = report.call_sites;
-	var signature = report.func_name;
+	var signature = report.funcSig;
 	
 	var wt;
 	
