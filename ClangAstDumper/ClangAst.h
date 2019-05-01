@@ -63,6 +63,8 @@ public:
 
     virtual void InclusionDirective(SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName, bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File, StringRef SearchPath, StringRef RelativePath, const Module *Imported, SrcMgr::CharacteristicKind FileType);
     virtual void MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args);
+    virtual void PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer);
+
 private:
 
     const CompilerInstance &compilerInstance;
@@ -75,7 +77,7 @@ public:
 
     virtual void InclusionDirective(SourceLocation HashLoc, const Token &IncludeTok, StringRef FileName, bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File, StringRef SearchPath, StringRef RelativePath, const Module *Imported, SrcMgr::CharacteristicKind FileType);
     virtual void MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args);
-
+    virtual void PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer);
 private:
 
     IncludeDumper original;

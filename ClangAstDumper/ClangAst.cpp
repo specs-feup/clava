@@ -532,6 +532,15 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
     }
 
 
+    void IncludeDumper::PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer) {
+
+        clang::SourceManager &sm = compilerInstance.getSourceManager();
+
+        // Pragma location
+        clava::dump(PRAGMA);
+        clava::dump(sm.getSpellingLineNumber(Loc));
+        clava::dump(sm.getSpellingColumnNumber(Loc));
+    }
 
 
     void IncludeDumper::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {
@@ -599,6 +608,10 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     void CallbacksProxy::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {
         original.MacroExpands(MacroNameTok, MD, Range, Args);
+    }
+
+    void CallbacksProxy::PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer) {
+        original.PragmaDirective(Loc, Introducer);
     }
 
 
