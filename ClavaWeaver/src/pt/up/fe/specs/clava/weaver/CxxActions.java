@@ -17,10 +17,10 @@ import java.util.Optional;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.textparser.SnippetParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.SnippetParser;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;

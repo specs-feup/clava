@@ -33,4 +33,19 @@ public interface TextParserRule {
      */
     Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
             ClavaContext context);
+
+    default boolean isInsideString(String line, int startIndex) {
+        // Check if inside a string
+        // This will detect false positives, hack until text elements are obtained from Clang
+        int currentIndex = startIndex - 1;
+        while (currentIndex >= 0) {
+            if (line.charAt(currentIndex) == '"') {
+                return true;
+            }
+
+            currentIndex--;
+        }
+
+        return false;
+    }
 }

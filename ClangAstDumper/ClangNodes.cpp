@@ -42,18 +42,23 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
     const SourceManager& SM = Context->getSourceManager();
 
     SourceLocation startSpellingLoc = SM.getSpellingLoc(startLoc);
-    PresumedLoc startPLoc = SM.getPresumedLoc(startSpellingLoc);
+    //PresumedLoc startPLoc = SM.getPresumedLoc(startSpellingLoc);
 
-    if (startPLoc.isInvalid()) {
+    if(startSpellingLoc.isInvalid()) {
+    //if (startPLoc.isInvalid()) {
         llvm::errs() << "<invalid>\n";
         return;
     }
 
 
     // Dump start location
-    llvm::errs() << startPLoc.getFilename() << "\n";
-    llvm::errs() << startPLoc.getLine() << "\n";
-    llvm::errs() << startPLoc.getColumn() << "\n";
+    llvm::errs() << SM.getFilename(startSpellingLoc) << "\n";
+    llvm::errs() << SM.getSpellingLineNumber(startSpellingLoc) << "\n";
+    llvm::errs() << SM.getSpellingColumnNumber(startSpellingLoc) << "\n";
+
+//    llvm::errs() << startPLoc.getFilename() << "\n";
+//    llvm::errs() << startPLoc.getLine() << "\n";
+//    llvm::errs() << startPLoc.getColumn() << "\n";
     // ISMACRO: Temporarily disabled
 	//llvm::errs() << startLoc.isMacroID() << "\n";
 
@@ -64,26 +69,34 @@ void clava::dumpSourceRange(ASTContext *Context, SourceLocation startLoc, Source
     }
 
     SourceLocation endSpellingLoc = SM.getSpellingLoc(endLoc);
-    PresumedLoc endPLoc = SM.getPresumedLoc(endSpellingLoc);
+    //PresumedLoc endPLoc = SM.getPresumedLoc(endSpellingLoc);
 
-    if(endPLoc.isInvalid()) {
+    if(endSpellingLoc.isInvalid()) {
+    //if(endPLoc.isInvalid()) {
         llvm::errs() << "<end>\n";
         return;
     }
 
-    const char* endFilename = endPLoc.getFilename();
-    if(!endFilename) {
-        endFilename = startPLoc.getFilename();
+    //const char* endFilename = endPLoc.getFilename();
+    StringRef endFilename = SM.getFilename(endSpellingLoc);
+    //if(!endFilename) {
+    if(endFilename.size() == 0) {
+        endFilename = SM.getFilename(startSpellingLoc);
+        //endFilename = startPLoc.getFilename();
     }
 
-    unsigned int endLine = endPLoc.getLine();
+    //unsigned int endLine = endPLoc.getLine();
+    unsigned int endLine = SM.getSpellingLineNumber(endSpellingLoc);
     if(!endLine) {
-        endLine = startPLoc.getLine();
+        //endLine = startPLoc.getLine();
+        endLine = SM.getSpellingLineNumber(startSpellingLoc);
     }
 
-    unsigned int endCol = endPLoc.getColumn();
+    //unsigned int endCol = endPLoc.getColumn();
+    unsigned int endCol = SM.getSpellingColumnNumber(endSpellingLoc);
     if(!endCol) {
-        endCol = startPLoc.getColumn();
+        //endCol = startPLoc.getColumn();
+        endCol = SM.getSpellingColumnNumber(startSpellingLoc);
     }
 
     // Dump end location

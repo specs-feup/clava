@@ -4,5 +4,6 @@ int main() {
    #pragma Macro pragma
    #pragma Macro pragma with spaces
    #pragma Macro pragma with inline comment
-   #pragma Macro pragma multiline
+   #pragma Macro pragma \
+   multiline
 }

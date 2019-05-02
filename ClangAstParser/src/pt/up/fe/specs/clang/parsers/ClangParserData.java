@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ast.ClangNode;
+import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
@@ -96,6 +97,9 @@ public class ClangParserData extends ADataClass<ClangParserData> {
     public final static DataKey<Map<String, String>> SKIPPED_NODES_MAP = KeyFactory.generic(
             "skippedNodesMap",
             new HashMap<>());
+
+    public final static DataKey<PragmasLocations> PRAGMAS_LOCATIONS = KeyFactory.object("pragmasLocations",
+            PragmasLocations.class);
 
     /**
      * Parsed translation unit.

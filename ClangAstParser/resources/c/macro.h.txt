@@ -27,4 +27,6 @@ int global3 = 30;
 
 void poisoned_foo();
 
+int global4 = 40;
+
 #endif

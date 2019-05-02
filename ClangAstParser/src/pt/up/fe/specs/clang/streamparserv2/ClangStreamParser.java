@@ -17,8 +17,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,9 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
+import pt.up.fe.specs.clang.textparser.SnippetParser;
+import pt.up.fe.specs.clang.textparser.TextElements;
+import pt.up.fe.specs.clang.textparser.TextParser;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
@@ -39,17 +44,23 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaRule;
 import pt.up.fe.specs.clava.Include;
+import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
+import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
+import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
  * Creates a Clava tree from information dumper by ClangAstDumper.
@@ -332,8 +343,83 @@ public class ClangStreamParser {
         }
 
         // Create TU node
-        return createTu(sourceFile, topLevelDeclNodes, data.get(ClangParserData.INCLUDES));
+        TranslationUnit tUnit = createTu(sourceFile, topLevelDeclNodes, data.get(ClangParserData.INCLUDES));
 
+        // Add pragma nodes
+        addPragmas(tUnit);
+
+        return tUnit;
+    }
+
+    private void addPragmas(TranslationUnit tUnit) {
+        // System.out.println("PRAGMA LOCATIONS: " + data.get(ClangParserData.PRAGMAS_LOCATIONS));
+        Map<Integer, Integer> pragmasLocations = data.get(ClangParserData.PRAGMAS_LOCATIONS)
+                .getPragmaLocations(tUnit.getFile());
+
+        // Sort lines
+        List<Integer> lines = new ArrayList<>(pragmasLocations.keySet());
+        Collections.sort(lines);
+
+        // List of pragma nodes
+        List<ClavaNode> pragmaNodes = new ArrayList<>();
+
+        // Obtain pragmas from source file
+        try (LineStream sourceFile = LineStream.newInstance(tUnit.getFile())) {
+
+            SnippetParser snippetParser = new SnippetParser(data.get(ClavaNode.CONTEXT));
+
+            for (Integer line : lines) {
+                // System.out.println("LOOKING FOR LINE: " + line);
+                int previousIndex = line - 1;
+                while (previousIndex != sourceFile.getLastLineIndex()) {
+                    sourceFile.nextLine();
+                }
+
+                // Found pragma start
+                String currentLine = sourceFile.nextLine();
+                String pragma = currentLine.strip();
+                int endLine = line;
+                int endCol = currentLine.stripTrailing().length();
+
+                // Find pragma end
+                while (pragma.endsWith("\\")) {
+                    // int backSlashIndex = pragma.lastIndexOf('\\');
+                    // String currentPragma = pragma;
+                    // SpecsCheck.checkArgument(backSlashIndex != -1,
+                    // () -> "Expected a backslash at the end of the string: " + currentPragma);
+
+                    currentLine = sourceFile.nextLine();
+                    // pragma = pragma.substring(0, backSlashIndex) + currentLine.strip();
+                    pragma = pragma + "\n" + currentLine.strip();
+
+                    // Update end location
+                    endLine++;
+                    endCol = currentLine.stripTrailing().length();
+
+                }
+
+                SourceRange location = new SourceRange(tUnit.getFile().getAbsolutePath(), line,
+                        pragmasLocations.get(line), endLine, endCol);
+
+                Stmt pragmaNode = snippetParser.parseStmt(pragma);
+                pragmaNode.set(ClavaNode.LOCATION, location);
+
+                String finalPragma = pragma;
+                SpecsCheck.checkArgument(pragmaNode instanceof WrapperStmt && pragmaNode.getChild(0) instanceof Pragma,
+                        () -> "Expected node created from '" + finalPragma + "' to be a WrapperStmt: " + pragmaNode);
+
+                pragmaNodes.add(pragmaNode);
+
+                // System.out.println("PRAGMA: " + pragmaNode.getCode());
+                // System.out.println("END LINE: " + endLine);
+                // System.out.println("END COL: " + endCol);
+            }
+
+        }
+
+        // Add pragmas to the translation unit
+        var textParser = new TextParser(data.get(ClavaNode.CONTEXT));
+        textParser.addElements(tUnit, new TextElements(pragmaNodes, Collections.emptyList()));
     }
 
     private TranslationUnit createTu(File sourceFile, Collection<? extends ClavaNode> topLevelDecls,
@@ -394,7 +480,12 @@ public class ClangStreamParser {
         // System.out.println("DECLARATIONS KEYS:" + declarations.keySet());
 
         String path = sourceFile.getAbsolutePath();
+
+        ClavaLog.debug(() -> "File '" + path + "' has top-level declarations with the following paths: "
+                + declarations.keySet());
+
         if (declarations.size() > 0 && !declarations.containsKey(path)) {
+
             // Just to check, for now
             ClavaLog.debug(() -> "ClangStreamParser.createTu(): expeted declarations to have key '" + path + ": "
                     + declarations.keySet());
