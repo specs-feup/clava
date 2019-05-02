@@ -406,7 +406,8 @@ public class TextParser {
         // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
         // Get last end line
-        int endLine = SpecsCollections.last(tu.getChildren()).getLocation().getEndLine();
+        int endLine = SpecsCollections.lastTry(tu.getChildren()).map(lastNode -> lastNode.getLocation().getEndLine())
+                .orElse(0);
 
         SourceRange dummyEndLoc = new SourceRange(tu.getLocation().getFilepath(), endLine + 1, 0, endLine + 1, 0);
         // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
