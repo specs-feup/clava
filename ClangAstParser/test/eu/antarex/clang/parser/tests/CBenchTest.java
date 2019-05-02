@@ -57,4 +57,9 @@ public class CBenchTest {
         new CTester("bench/nas_ft.c").test();
     }
 
+    @Test
+    public void test2mm() {
+        new CTester("bench/2mm.c", "bench/2mm.h", "bench/polybench.h").test();
+    }
+
 }
