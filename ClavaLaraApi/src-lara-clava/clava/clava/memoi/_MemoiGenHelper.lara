@@ -73,7 +73,9 @@ function _combineReports(originalReports) {
 				elements : [],
 				calls : [],
 				hits : [],
-				misses : [],			
+				misses : [],
+				inputCount : reports[0].inputCount,
+				inputTypes : reports[0].inputTypes,
 				counts : {} // counts is temporarily a map to ease the combination
 			};
 			
@@ -233,7 +235,7 @@ function _makeTableCode(insertPred, countComparator, report, $function, tableSiz
 	debug('index bits: ' + indexBits);
 
 	var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
-	var code = _makeCode(table, indexBits, tableSize, $function);
+	var code = _makeCode(table, indexBits, tableSize, $function, report);
 
 	return code;
 }
@@ -244,34 +246,63 @@ var sizeMap = {
 	'double': 64
 	};
 
-function _makeCode(table, indexBits, tableSize, $function) {
+function _makeCode(table, indexBits, tableSize, $function, report) {
 	
 	// table code
 	var nanBits = 'fff8000000000000';
+	var inputCount = report.inputCount;
 	
-	var tableCode = 'static const uint64_t table[' + tableSize + '][2] = {\n';
+	var tableCode = 'static const uint64_t table[' + tableSize + '][' + (inputCount + 1)  + '] = {\n';
 	for(var i = 0; i < tableSize; i++) {
 
+		tableCode += '\t{';
 		if(table[i] === undefined) {
 
-			tableCode += '\t{0x' + nanBits + ', 0},\n';
+			for(var ic = 0; ic < inputCount; ic++) {
+				tableCode += '0x' + nanBits + ', ';
+			}
+			tableCode += '0';
 		} else {
-
-			tableCode += '\t{0x' + table[i].key + ', 0x' + table[i].output + '},\n';
+			
+			var fullKey = table[i].fullKey;
+			var keys = fullKey.split('#');
+			for(var k = 0; k < keys.length; k++) {
+				tableCode += '0x' + keys[k] + ', ';
+			}
+			tableCode += '0x' + table[i].output;
 		}
+		tableCode += '},\n';
 	}
 	tableCode += '};';
 
 	// logic code
-	var firstParam = $function.params[0];
-	var varBits = sizeMap[firstParam.type.code];
-	debug('var bits: ' + varBits);
-	var iters = _baseLog(varBits / indexBits, 2);
+	var logicCode = '';
+	var maxVarBits = 0;
+	var varNames = [];
+	
+	// get the bits of all parameters
+	for(var $param of $function.params) {
+	
+		var name = $param.name;
+		var varBits = sizeMap[$param.type.code];
+		
+		if(varBits > maxVarBits) {maxVarBits = varBits;}
+		
+		var varName = name +'_bits';
+		varNames.push(varName);
+		logicCode += 'uint' + varBits + '_t ' + varName + ' = *(uint' + varBits + '_t*)&' + name + ';\n';
+	}
+	debug('max var bits: ' + maxVarBits);
+	
+	// merge all bits
+	logicCode += '\nuint' + maxVarBits + '_t hash_' + maxVarBits +'_bits = ';
+	logicCode += varNames.join(' ^ ');
+	logicCode += ';\n';
+	
+	var iters = _baseLog(maxVarBits / indexBits, 2);
 	var intIters = parseInt(iters, 10);
 
-	var large = varBits;
-	var logicCode = 'uint' + large + '_t hash_' + large +'_bits = *(uint' + large + '_t*)&' + firstParam.name + ';\n';
-
+	var large = maxVarBits;
 	for(var i = 0; i < intIters; i++) {
 
 		var small = large / 2;
@@ -286,16 +317,51 @@ function _makeCode(table, indexBits, tableSize, $function) {
 		logicCode += 'uint' + small + '_t hash_' + indexBits + '_bits = hash_' + small +'_bits & mask;\n';			
 	}
 	
+	// lookup code
+	logicCode += '\nif(';
 	
-	logicCode += '\nif(table[hash_' + indexBits + '_bits][0] == hash_' + varBits + '_bits){\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][1];\n}';
+	var access = 'table[hash_' + indexBits + '_bits]';
+	var testClauses = [];
+	for(var v = 0; v < varNames.length; v++) {
+		
+		testClauses.push(access + '[' + v + '] == ' + varNames[v]);
+	}
+	logicCode += testClauses.join(' && ');
+	
+	logicCode += ') {';
+	logicCode += '\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][' + inputCount + '];\n}';
+	logicCode += '\n}\n';
+	
+	
 
 	// concat
 	return tableCode + '\n\n' + logicCode;
 }
 
-function _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize) {
+function _combineKeys(keys) {
 	
-	var firstParam = $function.params[0]; // to be changed!
+	var numKeys = keys.length;
+	var key = '';
+
+	var keyLength = 16;
+	var base = 16;
+	for(var i = 0; i < keyLength; i++) {
+		
+		var currentNumber = parseInt(keys[0].charAt(i), base);
+		
+		for(var n = 1; n < numKeys; n++) {
+			
+			var newNumber = parseInt(keys[n].charAt(i), base);
+			currentNumber = currentNumber ^ newNumber;
+		}
+		
+		key += currentNumber.toString(16);
+	}
+	
+	return key;
+}
+
+function _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize) {
 	
 	var collisions = 0;
 	var collisionPercentage;
@@ -317,18 +383,29 @@ function _makeTable(insertPred, countComparator, report, $function, indexBits, t
 			continue;
 		}
 
-		var hash = _hashFunction(count.key, indexBits);
+		var keys = count.key.split('#');
+		
+		if(keys.length > 1) {
+			var key = _combineKeys(keys);
+		} else {
+			var key = count.key;
+		}
+		
+		
+		var hash = _hashFunction(key, indexBits);
 		
 		if(table[hash] === undefined) {
 
-			table[hash] = {'key' : count.key,
+			table[hash] = {'key' : key,
 						'output' : count.output,
 						'collisions' : 0,
-						'counter' : count.counter};
+						'counter' : count.counter,
+						'fullKey' : count.key};
 		} else {
-			table[hash].key = count.key;
+			table[hash].key = key;
 			table[hash].output = count.output;
 			table[hash].counter = count.counter;
+			table[hash].fullKey = count.key;
 
 			// collisions on this specific position
 			table[hash].collisions++;

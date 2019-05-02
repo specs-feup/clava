@@ -43,7 +43,7 @@ MemoiGen.prototype.printAverageMetrics = function() {
 		
 		println('=== profile metrics ===');
 		
-		println('  > target function: ' + report.func_name);
+		println('  > target function: ' + report.funcSig);
 		println('  > call sites: ' + report.call_sites);
 		println('  > report count: ' + report.reportCount);
 		
@@ -155,7 +155,7 @@ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, t
 	for(var report of this._reports) {
 		
 		debug('----------------------------------------------------------------------');
-		debug('analysing ' + report.func_name + ' at ' + report.call_sites);
+		debug('analysing ' + report.funcSig + ' at ' + report.call_sites);
 		
 		if(!applyPred(report)) {
 			continue;

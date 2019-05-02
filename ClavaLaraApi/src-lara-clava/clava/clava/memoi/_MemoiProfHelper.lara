@@ -303,11 +303,14 @@ aspectdef _Memoi_InstrumentWrapper
 	select file.function{wrapperName}.stmt.call end
 	apply
 		var code = 'mp_inc(' + monitorName;
-		var firstParam = $function.params[0].name;
+		code += ', &result';
+		
 		for (var $param of $function.params) {
 			code += ', &' + $param.name;
 		}
-		code += ', &result);';
+		
+		code += ');';
+		
 		insert after code;
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
@@ -346,7 +349,7 @@ aspectdef _Memoi_Setup
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[outputType.toUpperCase()]], [[inputTypes.length]], [[inputsCode]]);}%);
 
 		/* add functions to print and clean up at every return on main */
-		$function.exec insertReturn(%{const char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
+		$function.exec insertReturn(%{char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
 		$function.exec insertReturn(%{mp_to_json([[monitorName]], path_[[monitorName]]);}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
 		$function.exec insertReturn(%{free(path_[[monitorName]]);}%);
@@ -449,7 +452,7 @@ codedef _Memoi_ReportPath %{
 #include <string.h>
 #include <time.h>
 
-static const char* timestamp() {
+static char* timestamp() {
     
     size_t length = 16;
     char* stamp = malloc(length);
@@ -462,12 +465,12 @@ static const char* timestamp() {
     return stamp;
 }
 
-static const char* make_report_path(const char* dir, const char* id) {
+static char* make_report_path(const char* dir, const char* id) {
     
-    const char * stamp = timestamp();
-    const char * ext = ".json";
-    const char * sep = "/";
-    const char * under = "_";
+    char * stamp = timestamp();
+    char * ext = ".json";
+    char * sep = "/";
+    char * under = "_";
     
     size_t stamp_len = strlen(stamp);
     size_t ext_len = strlen(ext);
