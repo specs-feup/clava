@@ -329,9 +329,7 @@ function _makeCode(table, indexBits, tableSize, $function, report) {
 	logicCode += testClauses.join(' && ');
 	
 	logicCode += ') {';
-	logicCode += '\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][' + inputCount + '];\n}';
-	logicCode += '\n}\n';
-	
+	logicCode += '\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][' + inputCount + '];\n}\n';	
 	
 
 	// concat
