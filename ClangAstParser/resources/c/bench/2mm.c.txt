@@ -27,19 +27,6 @@ static void init_array(int ni, int nj, int nk, int nl, double *alpha, double *be
    for(i = 0; i < ni; i++) for(j = 0; j < nl; j++) D[i][j] = (double) (i * (j + 2) % nk) / nk;
 }
 
-/*DCE code. Must scan the entire live-out data.
-Can be used also to check the correctness of the output.*/
-static void print_array(int ni, int nl, double D[800][1200]) {
-   int i, j;
-   fprintf((__acrt_iob_func(2)), "==BEGIN DUMP_ARRAYS==\n");
-   fprintf((__acrt_iob_func(2)), "begin dump: %s", "D");
-   for(i = 0; i < ni; i++) for(j = 0; j < nl; j++) {
-      if((i * ni + j) % 20 == 0) fprintf((__acrt_iob_func(2)), "\n");
-      fprintf((__acrt_iob_func(2)), "%0.2lf ", D[i][j]);
-   }
-   fprintf((__acrt_iob_func(2)), "\nend   dump: %s\n", "D");
-   fprintf((__acrt_iob_func(2)), "==END   DUMP_ARRAYS==\n");
-}
 
 /*Main computational kernel. The whole function will be timed,
 including the call and return.*/
@@ -92,9 +79,6 @@ int main(int argc, char **argv) {
    /*Stop and print timer.*/
    ;
    ;
-   /*Prevent dead-code elimination. All live-out data must be printed
-   by the function call in argument.*/
-   if(argc > 42 && !strcmp(argv[0], "")) print_array(ni, nl, *D);
    /*Be clean.*/
    free((void *) tmp);
    ;

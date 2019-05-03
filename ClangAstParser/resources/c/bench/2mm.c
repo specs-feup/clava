@@ -50,26 +50,6 @@ void init_array(int ni, int nj, int nk, int nl,
 }
 
 
-/* DCE code. Must scan the entire live-out data.
-   Can be used also to check the correctness of the output. */
-static
-void print_array(int ni, int nl,
-                 DATA_TYPE POLYBENCH_2D(D, NI, NL, ni, nl))
-{
-    int i, j;
-
-    POLYBENCH_DUMP_START;
-    POLYBENCH_DUMP_BEGIN("D");
-    for (i = 0; i < ni; i++)
-        for (j = 0; j < nl; j++)
-        {
-            if ((i * ni + j) % 20 == 0) fprintf (POLYBENCH_DUMP_TARGET, "\n");
-            fprintf (POLYBENCH_DUMP_TARGET, DATA_PRINTF_MODIFIER, D[i][j]);
-        }
-    POLYBENCH_DUMP_END("D");
-    POLYBENCH_DUMP_FINISH;
-}
-
 
 /* Main computational kernel. The whole function will be timed,
    including the call and return. */
@@ -152,9 +132,6 @@ int main(int argc, char** argv)
     polybench_stop_instruments;
     polybench_print_instruments;
 
-    /* Prevent dead-code elimination. All live-out data must be printed
-       by the function call in argument. */
-    polybench_prevent_dce(print_array(ni, nl,  POLYBENCH_ARRAY(D)));
 
     /* Be clean. */
     POLYBENCH_FREE_ARRAY(tmp);
