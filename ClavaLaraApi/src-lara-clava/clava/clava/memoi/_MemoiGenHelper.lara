@@ -26,7 +26,7 @@ function _readReports(reportsPaths) {
 		counter++;
 	}
 	
-	println('# read reports: ' + counter);
+	debug('read reports: ' + counter);
 	return _combineReports(reports);
 }
 
@@ -115,7 +115,7 @@ function _combineReports(originalReports) {
 		}
 	}
 	
-	println('# combined reports: ' + finalReports.length);
+	debug('combined reports: ' + finalReports.length);
 	
 	return finalReports;
 }
@@ -147,15 +147,18 @@ aspectdef _Memoi_WrapGlobalTarget
 	select stmt.call end
 	apply
 
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != signature) {
+			continue;
+		}
+
 		var normalizedSig = _normalizeSig(signature);
 		
 		wrapperName = "mw_" + normalizedSig;
 		exec wrap(wrapperName);
 		
 		debug('wrapped');
-	end
-	condition
-		$call.signature === signature
 	end
 end
 
@@ -166,6 +169,12 @@ aspectdef _Memoi_WrapSingleTarget
 	select stmt.call end
 	apply
 
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != signature) {
+			continue;
+		}
+
 		var normalizedSig = _normalizeSig(signature);
 		
 		wrapperName = IdGenerator.next("mw_" + normalizedSig);
@@ -175,7 +184,6 @@ aspectdef _Memoi_WrapSingleTarget
 		return;
 	end
 	condition
-		$call.signature === signature &&
 		$call.location === location
 	end
 	

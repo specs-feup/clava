@@ -43,7 +43,8 @@ aspectdef _Memoi_FindTargets
 	select stmt.call end
 	apply
 		var sig = $call.function.signature;
-		
+		sig = Strings.replacer(sig, ' ', '');
+
 		// if we've processed this one before (valid or not), skip
 		if(_isProcessed(sig, processed)) {
 			
@@ -73,9 +74,14 @@ aspectdef _Memoi_FindTypes
 		inputTypes = []
 	end
 
-	select stmt.call{signature === targetSig} end
+	select stmt.call end
 	apply
-	
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != targetSig) {
+			continue;
+		}
+		
 		var valid = _isValidMemoi($call, {});
 		if(valid === _Res.VALID) {
 			var $functionType = $call.function.functionType;
@@ -114,6 +120,7 @@ function _isValidMemoi($call, processed) {
 function _isValidMemoiRecursive($call, processed) {
 
 	var sig = $call.signature;
+	sig = Strings.replacer(sig, ' ', '');
 	
 	// 0) check if this function was processed before
 	if(_isProcessed(sig, processed)) {
@@ -239,8 +246,14 @@ aspectdef _Memoi_GlobalWrapper
 	end
 	
 	// make the wrapper
-	select stmt.call{signature === targetSig} end
+	select stmt.call end
 	apply
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != targetSig) {
+			continue;
+		}
+		
 		exec wrap(wrapperName);
 	end
 	
@@ -264,8 +277,14 @@ aspectdef _Memoi_IndividualWrapper
 		monitorNameBase, idBase, reportDir, outputType, inputTypes
 	end
 	
-	select file.stmt.call{signature === targetSig} end
+	select file.stmt.call end
 	apply
+		
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != targetSig) {
+			continue;
+		}
 		
 		// make the wrapper
 		var wrapperName = IdGenerator.next(wrapperNameBase);

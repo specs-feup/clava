@@ -15,7 +15,7 @@ import lara.Strings;
  * */
 function MemoiProf(targetSig, id, reportDir) {
 	
-	this._targetSig = targetSig;
+	this._targetSig = Strings.replacer(targetSig, ' ', '');
 	this._normalizedSig = _normalizeSig(targetSig);
 	this._id = Strings.replacer(id, ' ', '_');
 	this._reportDir = reportDir;
