@@ -28,19 +28,13 @@ aspectdef ExecPetitDependencyTest
 
 	Io.writeFile(LoopOmpAttributes[loopindex].petitInputFileAddress, petit_input_file.join('\n'));
 
-	var Petitcmd =  AutoParUtils.getPetit().getAbsolutePath() + ' -Fc -g -s -4  ' + LoopOmpAttributes[loopindex].petitInputFileAddress + ' -R' + LoopOmpAttributes[loopindex].petitOutputFileAddress;
+	var petitArgs = ['-Fc', '-g', '-s', '-4', LoopOmpAttributes[loopindex].petitInputFileAddress, '-R' + LoopOmpAttributes[loopindex].petitOutputFileAddress];
 
 	// RUN petit dependency test 
-	var application = new ProcessExecutor();
-	application.setWorkingDir(Clava.getWeavingFolder() + '/')
-				.setTimeout(60)
-				.setTimeUnit("SECONDS")
-				.setPrintToConsole(false);
-
-	application.execute(Petitcmd);
-	consoleOutput = application.getConsoleOutput();
-
-	
+	var printToConsole = false;
+	var timeoutSeconds = 60;
+	var consoleOutput = ClavaPetit.execute(petitArgs, Clava.getWeavingFolder() + '/', printToConsole, timeoutSeconds);
+		
 
 	if (consoleOutput.length === 0)
 	{

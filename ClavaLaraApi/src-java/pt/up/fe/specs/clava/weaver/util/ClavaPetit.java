@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 SPeCS.
+ * Copyright 2019 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,30 +11,46 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.weaver;
+package pt.up.fe.specs.clava.weaver.util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import pt.up.fe.specs.clava.weaver.ClavaApiWebResource;
 import pt.up.fe.specs.lang.SpecsPlatforms;
+import pt.up.fe.specs.lara.LaraSystemTools;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.providers.WebResourceProvider;
 
 /**
- * Utility methods that support Clava APIs.
+ * Utility class for launching the Petit executable.
  * 
  * @author JoaoBispo
  *
  */
-public class ClavaApiUtils {
+public class ClavaPetit {
 
-    public static File getClavaApiResourceFolder() {
+    public static String execute(List<String> args, String workingDir, boolean printToConsole, long timeoutSeconds) {
+        List<String> command = new ArrayList<>(args.size() + 1);
+        command.add(getPetitExecutable().getAbsolutePath());
+        command.addAll(args);
+
+        var output = LaraSystemTools.runCommand(command, workingDir, printToConsole,
+                TimeUnit.SECONDS.toNanos(timeoutSeconds));
+
+        return output.getOutput();
+    }
+
+    private static File getClavaApiResourceFolder() {
         return new File(SpecsIo.getTempFolder(), "clava_api");
     }
 
-    public static File getPetitExecutable() {
+    private static File getPetitExecutable() {
 
         File resourceFolder = getClavaApiResourceFolder();
 
@@ -44,7 +60,7 @@ public class ClavaApiUtils {
         // ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangAstParser.class);
 
         ResourceWriteData executable = petitExecutable.writeVersioned(resourceFolder,
-                ClavaApiUtils.class);
+                ClavaPetit.class);
 
         // If file is new and we are in a flavor of Linux, make file executable
         if (executable.isNewFile() && SpecsPlatforms.isLinux()) {
