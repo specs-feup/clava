@@ -123,10 +123,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
      * @return the parent joinpoint
      */
     @Override
-    public abstract ACxxWeaverJoinPoint getParentImpl();
-
-    @Override
-    public ACxxWeaverJoinPoint getAstParentImpl() {
+    public ACxxWeaverJoinPoint getParentImpl() {
         ClavaNode node = getNode();
         if (!node.hasParent()) {
             return null;
@@ -138,6 +135,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // }
 
         return CxxJoinpoints.create(currentParent, this);
+    }
+
+    @Override
+    public ACxxWeaverJoinPoint getAstParentImpl() {
+        ClavaLog.deprecated("attribute 'astParent' is deprecated, please use 'parent' instead");
+        return getParentImpl();
+        // ClavaNode node = getNode();
+        // if (!node.hasParent()) {
+        // return null;
+        // }
+        //
+        // ClavaNode currentParent = node.getParent();
+        // // if (currentParent instanceof WrapperStmt) {
+        // // currentParent = currentParent.getParent();
+        // // }
+        //
+        // return CxxJoinpoints.create(currentParent, this);
     }
 
     @Override

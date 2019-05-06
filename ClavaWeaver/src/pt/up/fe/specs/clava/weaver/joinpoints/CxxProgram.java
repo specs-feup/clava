@@ -26,7 +26,6 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -72,10 +71,10 @@ public class CxxProgram extends AProgram {
     /**
      * CxxProgram is the top-level node.
      */
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return null;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return null;
+    // }
 
     public CxxWeaver getWeaver() {
         return weaver;

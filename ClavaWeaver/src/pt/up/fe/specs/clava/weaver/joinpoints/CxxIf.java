@@ -46,10 +46,10 @@ public class CxxIf extends AIf {
         return ifStmt;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public List<? extends AExpression> selectCond() {

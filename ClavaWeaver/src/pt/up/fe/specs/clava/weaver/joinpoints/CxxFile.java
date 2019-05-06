@@ -101,10 +101,10 @@ public class CxxFile extends AFile {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public TranslationUnit getNode() {

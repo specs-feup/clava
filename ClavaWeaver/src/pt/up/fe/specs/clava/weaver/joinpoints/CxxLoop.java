@@ -276,10 +276,10 @@ public class CxxLoop extends ALoop {
         return Arrays.asList(CxxJoinpoints.create(loop.getBody(), this, AScope.class));
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public LoopStmt getNode() {

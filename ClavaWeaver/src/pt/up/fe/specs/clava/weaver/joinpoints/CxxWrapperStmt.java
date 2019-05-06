@@ -39,10 +39,10 @@ public class CxxWrapperStmt extends AWrapperStmt {
         return wrapperStmt;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public String getKindImpl() {
