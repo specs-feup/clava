@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.clava.utils.ClassesService;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
@@ -278,29 +279,19 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint astAncestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'astAncestor'");
 
+        // Obtain ClavaNode class from type
+        Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(type);
+
         ClavaNode currentNode = getNode();
         while (currentNode.hasParent()) {
             ClavaNode parentNode = currentNode.getParent();
 
-            if (parentNode.getNodeName().equals(type)) {
+            if (nodeClass.isInstance(parentNode)) {
                 return CxxJoinpoints.create(parentNode, this);
             }
 
             currentNode = parentNode;
         }
-
-        /*
-        ACxxWeaverJoinPoint currentJp = this;
-        while (currentJp.getAstParent() != null) {
-            ACxxWeaverJoinPoint parentJp = currentJp.getAstParent();
-        
-            if (parentJp.getJoinpointType().equals(type)) {
-                return parentJp;
-            }
-        
-            currentJp = parentJp;
-        }
-        */
 
         return null;
     }
