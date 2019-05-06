@@ -170,8 +170,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         ClavaNode currentNode = getNode();
         while (currentNode.hasParent()) {
+            // Create join point for testing type
             ACxxWeaverJoinPoint parentJp = CxxJoinpoints.create(currentNode.getParent(), this);
-            if (parentJp.getJoinpointType().equals(type)) {
+
+            if (parentJp.instanceOf(type)) {
                 return parentJp;
             }
 
