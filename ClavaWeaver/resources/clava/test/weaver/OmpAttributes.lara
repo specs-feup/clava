@@ -28,7 +28,7 @@ aspectdef test
 	apply
 		$omp.insertAfter(AstFactory.omp('master'));
 		$omp.target.insertAfter(AstFactory.omp('barrier'));
-		println($omp.parent.code);
+		println($omp.ancestor('function').body.code);
 	end
 /*
 	select program end
