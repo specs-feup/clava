@@ -28,10 +28,10 @@ public class CxxEmpty extends AEmpty {
         this.parent = parent;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public ClavaNode getNode() {

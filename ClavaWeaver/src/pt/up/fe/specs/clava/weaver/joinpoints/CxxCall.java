@@ -76,10 +76,10 @@ public class CxxCall extends ACall {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public CallExpr getNode() {

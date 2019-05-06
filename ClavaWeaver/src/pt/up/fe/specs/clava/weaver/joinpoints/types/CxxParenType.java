@@ -30,10 +30,10 @@ public class CxxParenType extends AParenType {
         this.parent = parent;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public ClavaNode getNode() {

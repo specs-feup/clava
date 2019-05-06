@@ -40,10 +40,10 @@ public class CxxOp extends AOp {
         return op.isBitwise();
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public ClavaNode getNode() {

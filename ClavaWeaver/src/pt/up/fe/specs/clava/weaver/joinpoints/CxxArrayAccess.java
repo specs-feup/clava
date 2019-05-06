@@ -36,10 +36,10 @@ public class CxxArrayAccess extends AArrayAccess {
         this.parent = parent;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public ClavaNode getNode() {

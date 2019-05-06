@@ -7,7 +7,8 @@ aspectdef AstNodes
         println('astChild(0) = ' + $if.astChild(0));
         println('numChildren  = ' +  $if.numChildren);
         println('children = ' + $if.children);
-        println('child(0) = ' + $if.child(0));        
+        println('child(0) = ' + $if.child(0));
+		println('astAncestor("Decl") = ' + $if.astAncestor('Decl').name);        
     end
 end
 

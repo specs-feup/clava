@@ -34,10 +34,10 @@ public class CxxEnumDecl extends AEnumDecl {
         this.parent = parent;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public ClavaNode getNode() {

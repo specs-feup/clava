@@ -39,10 +39,10 @@ public class CxxClass extends AClass {
         return cxxRecordDecl;
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public AMethod[] getMethodsArrayImpl() {

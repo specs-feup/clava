@@ -82,10 +82,10 @@ public class CxxFunction extends AFunction {
         // return Arrays.asList(new CxxScope(function.getBody().get(), this));
     }
 
-    @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
-        return parent;
-    }
+    // @Override
+    // public ACxxWeaverJoinPoint getParentImpl() {
+    // return parent;
+    // }
 
     @Override
     public FunctionDecl getNode() {
