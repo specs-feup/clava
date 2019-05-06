@@ -15,14 +15,17 @@ import lara.Strings;
  * */
 function MemoiProf(targetSig, id, reportDir) {
 	
-	this._targetSig = targetSig;
+	this._targetSig = Strings.replacer(targetSig, ' ', '');
 	this._normalizedSig = _normalizeSig(targetSig);
 	this._id = Strings.replacer(id, ' ', '_');
 	this._reportDir = reportDir;
 	this._wrapperName =  'mw_' + this._normalizedSig;
 	this._monitorName = 'mp_' + this._normalizedSig;
 	this._monitorType = ClavaJoinPoints.typeLiteral('MemoiProf*');
-	this._dataType = this._findDataType();
+	this._outputType = undefined;
+	this._inputTypes = [];
+	this._findDataTypes();
+	
 	
 	if(!MemoiProf._reportCodeDone) {
 		call _Memoi_AddReportCode();
@@ -46,20 +49,18 @@ var MemoiDataType = new Enumeration({INT: 'INT', DOUBLE: 'DOUBLE', FLOAT: 'FLOAT
  * 
  * @private
  * */
-MemoiProf.prototype._findDataType = function() {
+MemoiProf.prototype._findDataTypes = function() {
 
-	var ret = call _Memoi_FindType(this._targetSig);
+	var ret = call _Memoi_FindTypes(this._targetSig);
 
-	switch(ret.foundType) {
-		case 'double':
-			return MemoiDataType.DOUBLE;
-		case 'float':
-			return MemoiDataType.FLOAT;
-		case 'int':
-			return MemoiDataType.INT;
-		default:
-			throw 'Target function "' + this._targetSig + '" is not supported yet (type: ' + ret.foundType + ').';
+	if(ret.outputType != 'double' &&
+		ret.outputType != 'float' &&
+		ret.outputType != 'int') {
+			throw 'Target function "' + this._targetSig + '" is not supported yet.';
 	}
+	
+	this._outputType = ret.outputType;
+	this._inputTypes = ret.inputTypes;
 }
 
 /**
@@ -69,7 +70,11 @@ MemoiProf.prototype._findDataType = function() {
  * */
 MemoiProf.prototype.profAll = function() {
 	
-	call _Memoi_GlobalWrapper(this._targetSig, this._normalizedSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
+	call _Memoi_GlobalWrapper(
+			this._targetSig, this._normalizedSig, this._wrapperName,
+			this._monitorType, this._monitorName,
+			this._id, this._reportDir,
+			this._outputType, this._inputTypes);
 }
 
 
@@ -80,7 +85,11 @@ MemoiProf.prototype.profAll = function() {
  * */
 MemoiProf.prototype.profEach = function() {
 	
-	call _Memoi_IndividualWrapper(this._targetSig, this._normalizedSig, this._wrapperName, this._monitorType, this._monitorName, this._id, this._reportDir, this._dataType);
+	call _Memoi_IndividualWrapper(
+			this._targetSig, this._normalizedSig, this._wrapperName,
+			this._monitorType, this._monitorName,
+			this._id, this._reportDir,
+			this._outputType, this._inputTypes);
 }
 
 /**

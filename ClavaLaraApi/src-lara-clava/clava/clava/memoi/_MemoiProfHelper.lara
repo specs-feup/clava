@@ -2,6 +2,9 @@ import lara.util.IdGenerator;
 
 function _normalizeSig(sig) {
 	var tmp = Strings.replacer(sig, '\\(', '_');
+	tmp = Strings.replacer(tmp, ', ', '_');
+	tmp = Strings.replacer(tmp, ' ', '_');
+	tmp = Strings.replacer(tmp, ',', '_');
 	return Strings.replacer(tmp, '\\)', '_');
 }
 
@@ -40,7 +43,8 @@ aspectdef _Memoi_FindTargets
 	select stmt.call end
 	apply
 		var sig = $call.function.signature;
-		
+		sig = Strings.replacer(sig, ' ', '');
+
 		// if we've processed this one before (valid or not), skip
 		if(_isProcessed(sig, processed)) {
 			
@@ -61,21 +65,28 @@ end
  * @aspect
  * @private
  * */
-aspectdef _Memoi_FindType
+aspectdef _Memoi_FindTypes
 	input
 		targetSig
 	end
 	output
-		foundType = ''
+		outputType = '',
+		inputTypes = []
 	end
 
-	select stmt.call{signature === targetSig} end
+	select stmt.call end
 	apply
-	
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != targetSig) {
+			continue;
+		}
+		
 		var valid = _isValidMemoi($call, {});
 		if(valid === _Res.VALID) {
 			var $functionType = $call.function.functionType;
-			foundType = $functionType.returnType.code;
+			outputType = $functionType.returnType.code;
+			inputTypes = $functionType.paramTypes.map(function(e){return e.code;});
 			return;
 		}
 	end
@@ -101,15 +112,15 @@ function _isValidMemoi($call, processed) {
  * 		Checks if the target function is valid.
  *
  *	The constraints are:
- *	1) it has only a single parameter;
- *	2) the parameter and return type are both T;
- *	3) T is one of {int, float, double};
- * 	4) It doesn't access global state;
- *	5) It doesn't call non-valid functions.
+ *	1) has between 1 and 3 parameters
+ *	2) type of return and params is one of {int, float, double}
+ * 	3) It doesn't access global state;
+ *	4) It doesn't call non-valid functions.
  **/
 function _isValidMemoiRecursive($call, processed) {
 
 	var sig = $call.signature;
+	sig = Strings.replacer(sig, ' ', '');
 	
 	// 0) check if this function was processed before
 	if(_isProcessed(sig, processed)) {
@@ -125,31 +136,33 @@ function _isValidMemoiRecursive($call, processed) {
 	var $returnType = $functionType.returnType;
 	var paramTypes = $functionType.paramTypes;
 
-	// 1) it has only a single parameter
-	if(paramTypes.length != 1) {
+	// 1) has between 1 and 3 parameters
+	if(paramTypes.length < 1 || paramTypes.length > 3) {
 		
-		debug(sig + ' - has more than 1 parameter');
-		
-		processed[sig] = _Res.INVALID;
-		return _Res.INVALID;
-	}
-	
-	// 2) the parameter and return type are both T
-	if(paramTypes[0].code != $returnType.code) {
-
-		debug(sig + ' - parameter and return type are different');
+		debug(sig + ' - wrong number of parameters: ' + paramTypes.length);
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
 	}
 	
-	// 3) T is one of {int, float, double}
+	
+	// 2) type of return and params is one of {int, float, double}
 	if(!_testType($returnType, ['int', 'float', 'double'])) {
 		
-		debug(sig + ' - type is not supported: ' + $returnType.code);
+		debug(sig + ' - return type is not supported: ' + $returnType.code);
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
+	}
+	
+	for(var $type of paramTypes) {
+		if(!_testType($type, ['int', 'float', 'double'])) {
+		
+		debug(sig + ' - param type is not supported: ' + $type.code);
+		
+		processed[sig] = _Res.INVALID;
+		return _Res.INVALID;
+	}	
 	}
 	
 	// Try to get the definition
@@ -169,7 +182,7 @@ function _isValidMemoiRecursive($call, processed) {
 		}
 	}
 	
-	// 4) It doesn't access global state (unless constants)
+	// 3) It doesn't access global state (unless constants)
 	var varRefs = $def.descendants('varref');
 	for(var $ref of varRefs) {
 	
@@ -184,7 +197,7 @@ function _isValidMemoiRecursive($call, processed) {
 		}
 	}
 
-	// 5) It doesn't call non-valid functions
+	// 4) It doesn't call non-valid functions
 	var isChildWaiting = false;
 	var $calls = $def.descendants('call');
 	for(var $childCall of $calls) {
@@ -229,12 +242,18 @@ function _isValidMemoiRecursive($call, processed) {
 aspectdef _Memoi_GlobalWrapper
 	input
 		targetSig, normalizedSig, wrapperName, monitorType, monitorName,
-		id, reportDir, dataType
+		id, reportDir, outputType, inputTypes
 	end
 	
 	// make the wrapper
-	select stmt.call{signature === targetSig} end
+	select stmt.call end
 	apply
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != targetSig) {
+			continue;
+		}
+		
 		exec wrap(wrapperName);
 	end
 	
@@ -242,7 +261,7 @@ aspectdef _Memoi_GlobalWrapper
 	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputType, inputTypes, ['global']);
 end
 
 /**
@@ -255,11 +274,17 @@ end
 aspectdef _Memoi_IndividualWrapper
 	input
 		targetSig, normalizedSig, wrapperNameBase, monitorType,
-		monitorNameBase, idBase, reportDir, dataType
+		monitorNameBase, idBase, reportDir, outputType, inputTypes
 	end
 	
-	select file.stmt.call{signature === targetSig} end
+	select file.stmt.call end
 	apply
+		
+		var sig = $call.signature;
+		sig = Strings.replacer(sig, ' ', '');
+		if(sig != targetSig) {
+			continue;
+		}
 		
 		// make the wrapper
 		var wrapperName = IdGenerator.next(wrapperNameBase);
@@ -275,7 +300,7 @@ aspectdef _Memoi_IndividualWrapper
 		
 		// setup
 		var id = IdGenerator.next(idBase + '_');
-		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir, dataType, [callSiteInfo]);
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputType, inputTypes, [callSiteInfo]);
 	end
 end
 
@@ -297,11 +322,14 @@ aspectdef _Memoi_InstrumentWrapper
 	select file.function{wrapperName}.stmt.call end
 	apply
 		var code = 'mp_inc(' + monitorName;
-		var firstParam = $function.params[0].name;
+		code += ', &result';
+		
 		for (var $param of $function.params) {
 			code += ', &' + $param.name;
 		}
-		code += ', &result);';
+		
+		code += ');';
+		
 		insert after code;
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
@@ -328,17 +356,19 @@ aspectdef _Memoi_Setup
 		targetSig,
 		id,
 		dir,
-		type,
+		outputType, inputTypes,
 		callSiteInfo
 	end
+
+	var inputsCode = inputTypes.join(',').toUpperCase();
 
 	select file.function{'main'}.body end
 	apply
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
-		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[type]]);}%);
+		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[outputType.toUpperCase()]], [[inputTypes.length]], [[inputsCode]]);}%);
 
 		/* add functions to print and clean up at every return on main */
-		$function.exec insertReturn(%{const char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
+		$function.exec insertReturn(%{char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
 		$function.exec insertReturn(%{mp_to_json([[monitorName]], path_[[monitorName]]);}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
 		$function.exec insertReturn(%{free(path_[[monitorName]]);}%);
@@ -361,7 +391,7 @@ aspectdef _Memoi_AddCallSiteInfo
 	checkArray(callSiteInfo);
 	
 	var length = callSiteInfo.length;
-	var code = 'mp_add_call_sites(' + monitorName + ', ' + length ;
+	var code = 'mp_set_call_sites(' + monitorName + ', ' + length ;
 	for(var i of callSiteInfo) {
 		code += ', "' + i + '"';
 	}
@@ -441,7 +471,7 @@ codedef _Memoi_ReportPath %{
 #include <string.h>
 #include <time.h>
 
-static const char* timestamp() {
+static char* timestamp() {
     
     size_t length = 16;
     char* stamp = malloc(length);
@@ -454,12 +484,12 @@ static const char* timestamp() {
     return stamp;
 }
 
-static const char* make_report_path(const char* dir, const char* id) {
+static char* make_report_path(const char* dir, const char* id) {
     
-    const char * stamp = timestamp();
-    const char * ext = ".json";
-    const char * sep = "/";
-    const char * under = "_";
+    char * stamp = timestamp();
+    char * ext = ".json";
+    char * sep = "/";
+    char * under = "_";
     
     size_t stamp_len = strlen(stamp);
     size_t ext_len = strlen(ext);
