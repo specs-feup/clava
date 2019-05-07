@@ -113,6 +113,14 @@ public class BinaryOperator extends Operator {
         return getChild(Expr.class, 1);
     }
 
+    public Expr setLhs(Expr newLhs) {
+        return (Expr) setChild(0, newLhs);
+    }
+
+    public Expr setRhs(Expr newRhs) {
+        return (Expr) setChild(1, newRhs);
+    }
+
     public BinaryOperatorKind getOp() {
         return get(OP);
         // return op;
