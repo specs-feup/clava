@@ -126,6 +126,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -457,6 +458,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1011,6 +1013,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1342,6 +1345,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1884,6 +1888,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -2215,6 +2220,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -2785,6 +2791,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -3116,6 +3123,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -3499,7 +3507,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "left"
                            }]
                },
@@ -3507,7 +3515,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "right"
                            }]
                },
@@ -3680,6 +3688,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4011,6 +4020,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4078,6 +4088,32 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setLeft"
+                           },
+                           {
+                              "type": "expression",
+                              "name": "left",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setRight"
+                           },
+                           {
+                              "type": "expression",
+                              "name": "right",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",
@@ -4615,6 +4651,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4946,6 +4983,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5611,6 +5649,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5942,6 +5981,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6502,6 +6542,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6833,6 +6874,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7299,6 +7341,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7630,6 +7673,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -8095,6 +8139,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -8426,6 +8471,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -8831,6 +8877,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9162,6 +9209,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9599,6 +9647,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9930,6 +9979,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10411,6 +10461,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10742,6 +10793,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11152,6 +11204,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11483,6 +11536,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11928,6 +11982,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -12259,6 +12314,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -12859,6 +12915,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13190,6 +13247,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -13712,6 +13770,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14043,6 +14102,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14524,6 +14584,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14855,6 +14916,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -15297,6 +15359,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -15628,6 +15691,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16187,6 +16251,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16518,6 +16583,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17336,6 +17402,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17667,6 +17734,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -18430,6 +18498,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -18761,6 +18830,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -19313,6 +19383,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -19644,6 +19715,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -20180,6 +20252,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -20511,6 +20584,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -21079,6 +21153,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -21410,6 +21485,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22143,6 +22219,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22474,6 +22551,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22974,6 +23052,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23305,6 +23384,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23906,6 +23986,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24237,6 +24318,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24913,6 +24995,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -25244,6 +25327,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -25883,6 +25967,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26214,6 +26299,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26695,6 +26781,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27026,6 +27113,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27643,6 +27731,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27974,6 +28063,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28698,6 +28788,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29029,6 +29120,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29524,6 +29616,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29855,6 +29948,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -30473,6 +30567,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -30804,6 +30899,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -31451,6 +31547,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -31782,6 +31879,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32310,6 +32408,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32641,6 +32740,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -33170,6 +33270,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -33501,6 +33602,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34174,6 +34276,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34505,6 +34608,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35043,6 +35147,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35374,6 +35479,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35892,6 +35998,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -36223,6 +36330,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -36882,6 +36990,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37213,6 +37322,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37736,6 +37846,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38067,6 +38178,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38553,6 +38665,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38884,6 +38997,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39468,6 +39582,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39799,6 +39914,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -40461,6 +40577,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -40792,6 +40909,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41422,6 +41540,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41753,6 +41872,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -42275,6 +42395,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -42606,6 +42727,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -43127,6 +43249,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -43458,6 +43581,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -43947,6 +44071,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -44278,6 +44403,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -44833,6 +44959,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -45164,6 +45291,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -45739,6 +45867,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -46070,6 +46199,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -46704,6 +46834,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -47035,6 +47166,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -47616,6 +47748,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -47947,6 +48080,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -48402,6 +48536,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -48733,6 +48868,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
                   "children": [
                            {
                               "type": "joinpoint",

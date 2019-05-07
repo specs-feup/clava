@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public abstract class ABinaryOp extends AOp {
      * Get value on attribute left
      * @return the attribute's value
      */
-    public abstract AJoinPoint getLeftImpl();
+    public abstract AExpression getLeftImpl();
 
     /**
      * Get value on attribute left
@@ -43,7 +44,7 @@ public abstract class ABinaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "left", Optional.empty());
         	}
-        	AJoinPoint result = this.getLeftImpl();
+        	AExpression result = this.getLeftImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "left", Optional.ofNullable(result));
         	}
@@ -54,10 +55,17 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
+     * 
+     */
+    public void defLeftImpl(AExpression value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def left with type AExpression not implemented ");
+    }
+
+    /**
      * Get value on attribute right
      * @return the attribute's value
      */
-    public abstract AJoinPoint getRightImpl();
+    public abstract AExpression getRightImpl();
 
     /**
      * Get value on attribute right
@@ -68,7 +76,7 @@ public abstract class ABinaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "right", Optional.empty());
         	}
-        	AJoinPoint result = this.getRightImpl();
+        	AExpression result = this.getRightImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "right", Optional.ofNullable(result));
         	}
@@ -76,6 +84,13 @@ public abstract class ABinaryOp extends AOp {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "right", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defRightImpl(AExpression value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def right with type AExpression not implemented ");
     }
 
     /**
@@ -117,6 +132,58 @@ public abstract class ABinaryOp extends AOp {
      */
     public List<? extends AExpression> selectRight() {
         return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
+     * 
+     * @param left 
+     */
+    public void setLeftImpl(AExpression left) {
+        throw new UnsupportedOperationException(get_class()+": Action setLeft not implemented ");
+    }
+
+    /**
+     * 
+     * @param left 
+     */
+    public final void setLeft(AExpression left) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLeft", this, Optional.empty(), left);
+        	}
+        	this.setLeftImpl(left);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setLeft", this, Optional.empty(), left);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setLeft", e);
+        }
+    }
+
+    /**
+     * 
+     * @param right 
+     */
+    public void setRightImpl(AExpression right) {
+        throw new UnsupportedOperationException(get_class()+": Action setRight not implemented ");
+    }
+
+    /**
+     * 
+     * @param right 
+     */
+    public final void setRight(AExpression right) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setRight", this, Optional.empty(), right);
+        	}
+        	this.setRightImpl(right);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setRight", this, Optional.empty(), right);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setRight", e);
+        }
     }
 
     /**
@@ -369,6 +436,20 @@ public abstract class ABinaryOp extends AOp {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "left": {
+        	if(value instanceof AExpression){
+        		this.defLeftImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "right": {
+        	if(value instanceof AExpression){
+        		this.defRightImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -400,6 +481,8 @@ public abstract class ABinaryOp extends AOp {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aOp.fillWithActions(actions);
+        actions.add("void setLeft(expression)");
+        actions.add("void setRight(expression)");
     }
 
     /**

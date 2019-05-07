@@ -19,12 +19,12 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 
 public class CxxBinaryOp extends ABinaryOp {
 
@@ -59,13 +59,13 @@ public class CxxBinaryOp extends ABinaryOp {
     }
 
     @Override
-    public AJoinPoint getLeftImpl() {
+    public AExpression getLeftImpl() {
         List<? extends AExpression> left = selectLeft();
         return left.isEmpty() ? null : left.get(0);
     }
 
     @Override
-    public AJoinPoint getRightImpl() {
+    public AExpression getRightImpl() {
         List<? extends AExpression> right = selectRight();
         return right.isEmpty() ? null : right.get(0);
     }
@@ -78,5 +78,25 @@ public class CxxBinaryOp extends ABinaryOp {
     @Override
     public Boolean getIsBitwiseImpl() {
         return op.getOp().isBitwise();
+    }
+
+    @Override
+    public void defLeftImpl(AExpression value) {
+        op.setLhs((Expr) value.getNode());
+    }
+
+    @Override
+    public void defRightImpl(AExpression value) {
+        op.setRhs((Expr) value.getNode());
+    }
+
+    @Override
+    public void setLeftImpl(AExpression left) {
+        defLeftImpl(left);
+    }
+
+    @Override
+    public void setRightImpl(AExpression right) {
+        defRightImpl(right);
     }
 }

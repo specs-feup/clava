@@ -419,6 +419,16 @@
 	</action>
 	
 	
+	<!-- BINARY_OP-->
+	<action name="setLeft" class="binaryOp">
+		<parameter name="left" type="expression" />
+	</action>
+	
+	<action name="setRight" class="binaryOp">
+		<parameter name="right" type="expression" />
+	</action>
+	
+	
 
 	 
 	<!-- TYPE -->
