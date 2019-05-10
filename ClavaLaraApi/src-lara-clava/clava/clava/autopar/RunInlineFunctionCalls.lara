@@ -325,19 +325,6 @@ aspectdef inlinePreparation
 	end
 
 
-/*
-	select funcJP.body.varref end
-	apply
-		if(countCallInlinedFunction === 41) {
-			println("VARREF: " + $varref.name);
-			println("VARDECL DEFINED? " + ($varref.vardecl !== undefined));
-			println("VARDECL IS PARAM? " + ($varref.vardecl !== undefined && $varref.vardecl.isParam));
-			println("VARREF KIND: " + $varref.kind);
-		}	
-	end
-*/
-	var lhsCounter = 0;
-
 	select funcJP.body.varref end
 	apply
 		var varrefName = $varref.name;
@@ -345,69 +332,15 @@ aspectdef inlinePreparation
 		if(varrefName !== newVarrefName) {
 			$varref.setName(newVarrefName);
 		}
-
-
-		//if(newVarrefName !== undefined) {
-		//	$varref.setName(newVarrefName);
-		//}
-		/*
-		var varrefName = $varref.name;
-		var bracketIndex = varrefName.indexOf("[");
-		
-		if (param_table[$varref.name] !== undefined)
-		{
-		
-			//if(countCallInlinedFunction === 41 && $varref.name === "lhs") {
-				//lhsCounter++;
-				//println("VARREF NAME SET: " + $varref.name);
-				//println("NEW NAME: " + param_table[$varref.name]);
-			//}	
-		
-			$varref.setName(param_table[$varref.name]);
-		} 
-		// HACK: when name of varref has subscript mixed inside
-		// Should be inserting subscript nodes, instead of using .code
-		else if(bracketIndex != -1) {
-			var varName = varrefName.substring(0, bracketIndex);
-			var suffix = varrefName.substring(bracketIndex);
-			
-			if (param_table[varName] !== undefined) {
-				$varref.setName(param_table[varName] + suffix);
-				
-				//if(countCallInlinedFunction === 41 && varName === "lhs") {
-				//	lhsCounter++;
-				//}	
-			}
-		}
-		*/
-
 	end
 	
-	if(countCallInlinedFunction === 41) {
-		println("Found lhs varref: " + lhsCounter);
-	}
-
 	select funcJP.body.varref end
 	apply
-		$varref.useExpr.replaceWith($varref);
-		/*
-		if(countCallInlinedFunction === 41) {
-			println("VARREF REPLACED: " + $varref.name);
-		}
-		*/
-		
+		$varref.useExpr.replaceWith($varref);		
 	end
 	condition $varref.vardecl !== undefined && $varref.vardecl.isParam && $varref.kind === 'pointer_access' end
 	
-	/*
-	select funcJP.body end
-	apply
-		if(countCallInlinedFunction === 41) {
-			println("BODY AST:\n" + $body.ast);
-			
-		}
-	end	
-*/
+
 	var param_index = 0;
 	param_table = {};
 	select funcJP.param end
