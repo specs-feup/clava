@@ -15,7 +15,10 @@ package pt.up.fe.specs.clava.utils;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -34,6 +37,8 @@ public class ExternalDependencies {
     // private final Set<File> sources;
     private final Set<Supplier<File>> includes;
     private final Set<Supplier<File>> sources;
+    private final Map<String, Supplier<File>> projects;
+    private final Set<String> libs;
 
     private boolean disableRemoteDependencies;
 
@@ -53,6 +58,9 @@ public class ExternalDependencies {
     public ExternalDependencies(boolean disableRemoteDependencies) {
         this.includes = new LinkedHashSet<>();
         this.sources = new LinkedHashSet<>();
+        this.projects = new LinkedHashMap<>();
+        this.libs = new LinkedHashSet<>();
+
         this.disableRemoteDependencies = disableRemoteDependencies;
         // this.unresolvedRepos = new ArrayList<>();
         // this.unresolvedReposPaths = new ArrayList<>();
@@ -72,6 +80,9 @@ public class ExternalDependencies {
 
         copy.includes.addAll(includes);
         copy.sources.addAll(sources);
+        copy.projects.putAll(projects);
+        copy.libs.addAll(libs);
+
         // this.unresolvedRepos.addAll(unresolvedRepos);
         // this.unresolvedReposPaths.addAll(unresolvedReposPaths);
 
@@ -121,6 +132,40 @@ public class ExternalDependencies {
         // File includePath = path == null ? baseFolder : new File(baseFolder, path);
 
         sources.add(() -> this.getFolderFromGit(gitRepository, path));
+    }
+
+    public void addProjectFromGit(String gitRepository, List<String> libNames, String path) {
+        if (disableRemoteDependencies) {
+            return;
+        }
+        // File baseFolder = gitRepos.getFolder(gitRepository);
+        //
+        // File includePath = path == null ? baseFolder : new File(baseFolder, path);
+
+        for (String libName : libNames) {
+            projects.put(libName, () -> this.getFolderFromGit(gitRepository, path));
+            libs.add(libName);
+        }
+    }
+
+    public void addLib(String libName) {
+        libs.add(libName);
+    }
+
+    public Collection<File> getProjects() {
+        return projects.values().stream().map(Supplier::get).collect(Collectors.toSet());
+    }
+
+    public Collection<String> getProjectsLibs() {
+        return projects.keySet();
+    }
+
+    public File getProject(String libName) {
+        return projects.get(libName).get();
+    }
+
+    public Collection<String> getLibs() {
+        return libs;
     }
 
     public Collection<File> getExtraSources() {
