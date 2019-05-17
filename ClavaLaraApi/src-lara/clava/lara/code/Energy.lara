@@ -34,6 +34,8 @@ Energy.prototype.measure = function($start, prefix, $end){
 	Compilation.addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
 	//Clava.getProgram().addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
 	
+	Compilation.addExtraLib('-pthread');
+	
 	var logger = new Logger(false, this.filename);
 
 	// Build prefix

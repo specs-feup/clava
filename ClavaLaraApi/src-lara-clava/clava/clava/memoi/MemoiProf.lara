@@ -2,6 +2,8 @@ import clava.memoi._MemoiProfHelper;
 
 import clava.ClavaJoinPoints;
 import lara.Strings;
+import lara.util.PrintOnce;
+import lara.Compilation;
 
 /**
  * 		Library to instrument applications with the memoiprof profiling
@@ -31,6 +33,10 @@ function MemoiProf(targetSig, id, reportDir) {
 		call _Memoi_AddReportCode();
 		MemoiProf._reportCodeDone = true;
 	}
+	
+	// Deal with dependecy to memoiprof
+	PrintOnce.message("Woven code has dependency to project memoiprof, which can be found at https://github.com/cc187/memoiprof");
+	Compilation.addProjectFromGit('https://github.com/cc187/memoiprof.git', ['mp']);
 }
 
 MemoiProf._reportCodeDone = false;
