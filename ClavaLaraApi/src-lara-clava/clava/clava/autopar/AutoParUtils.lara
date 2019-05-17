@@ -12,7 +12,9 @@ var AutoParUtils = {};
  *
  * @return {J#File} a file representing the petit executable.
  */
+/*
 AutoParUtils.getPetit = function() {
 	return Clava._getApiUtils().getPetitExecutable();
 }
+*/
 

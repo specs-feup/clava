@@ -3507,7 +3507,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "left"
                            }]
                },
@@ -3515,7 +3515,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "right"
                            }]
                },
@@ -4088,6 +4088,32 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setLeft"
+                           },
+                           {
+                              "type": "expression",
+                              "name": "left",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setRight"
+                           },
+                           {
+                              "type": "expression",
+                              "name": "right",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",

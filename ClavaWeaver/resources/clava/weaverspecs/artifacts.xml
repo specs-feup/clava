@@ -421,8 +421,12 @@
 	
 	<!-- BINARY OPERATOR -->
 	<artifact class="binaryOp">
-		<attribute name="left" type="joinpoint" />
-		<attribute name="right" type="joinpoint" />
+		<attribute name="left" type="expression">
+			<def/>
+		</attribute>
+		<attribute name="right" type="expression">
+			<def/>
+		</attribute>
 		<attribute name="isAssignment" type="Boolean" />
 		
 	</artifact>

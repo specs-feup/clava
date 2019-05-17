@@ -207,12 +207,16 @@ aspectdef callInline
 				if(o.$newStmts.length > 0)
 				{
 					var replacedCallStr = '// ClavaInlineFunction : ' + exprStmt.code + '  countCallInlinedFunction : ' + countCallInlinedFunction;
+					//println("REPLACED CALL STR:\n" + replacedCallStr);
 					exprStmt.insert before replacedCallStr;
 
+					//var insertedCode = "";
 					for(var $newStmt of o.$newStmts)
 					{
+						//insertedCode += $newStmt.code + "\n";
 						exprStmt.insertBefore($newStmt);	
 					}
+					//println("INSERTED CODE:\n" + insertedCode);
 
 					exprStmt.detach();
 				}
@@ -221,7 +225,7 @@ aspectdef callInline
 	end
 	condition $call.name === func_name && $call.astAncestor('ForStmt') !== undefined end
 
-	call aspec_rebuild;
+	//call aspec_rebuild;
 end	
 
 
@@ -320,21 +324,21 @@ aspectdef inlinePreparation
 
 	end
 
+
 	select funcJP.body.varref end
 	apply
-		if (param_table[$varref.name] !== undefined)
-		{
-			$varref.setName(param_table[$varref.name]);
+		var varrefName = $varref.name;
+		var newVarrefName = updateVarrefName(varrefName, param_table);
+		if(varrefName !== newVarrefName) {
+			$varref.setName(newVarrefName);
 		}
-
 	end
-
+	
 	select funcJP.body.varref end
 	apply
-		$varref.useExpr.replaceWith($varref);
+		$varref.useExpr.replaceWith($varref);		
 	end
 	condition $varref.vardecl !== undefined && $varref.vardecl.isParam && $varref.kind === 'pointer_access' end
-	
 	
 
 	var param_index = 0;
@@ -423,8 +427,6 @@ aspectdef inlinePreparation
     
 
 
-
-
 	if (exprStmt.children[0].joinpointType === 'binaryOp')
 	{
 		var ret_str_replacement = exprStmt.children[0].children[0].code;
@@ -448,7 +450,18 @@ aspectdef inlinePreparation
 			//println("retJP original: " + retJP.code);
 			//println("retJP after: " + ret_str_replacement + retJP.children[0].code + ';');
 			//println("retJp child: " + retJP.children[0]);
-			retJP.insert replace ret_str_replacement + retJP.children[0].code + ';';
+			//retJP.insert replace ret_str_replacement + retJP.children[0].code + ';';
+			
+			// Copy binary operation stmt
+			var exprStmtCopy = exprStmt.copy();
+			var binaryOpCopy = exprStmtCopy.children[0];
+			// Replace right hand with return expression
+			binaryOpCopy.right = retJP.children[0];
+
+			//println("PREVIOUS CODE: " + ret_str_replacement + retJP.children[0].code + ';');
+			//println("CURRENT CODE: " + exprStmtCopy.code);
+			// Replace return with copy of expr stmt
+			retJP.replaceWith(exprStmtCopy);
 		}
 
 	}
@@ -458,14 +471,82 @@ aspectdef inlinePreparation
         $comment.detach();
     end
 
-	
+	//var changedReplacedCall = false;
 	select funcJP.body.childStmt end
 	apply
 		$newStmts.push($childStmt.copy());
 		replacedCallStr += $childStmt.code + '\n';
+		//changedReplacedCall = true;
+		//println("ADDING: " + $childStmt.code);
 	end
+	/*
+	if(changedReplacedCall) {
+		println("REPLACE CALL: " + replacedCallStr);
+	}
+	*/
 
 	replacedCallStr = replacedCallStr.allReplace({' const ':' '});
 
 	funcJP.detach();
 end	
+
+
+function updateVarrefName(varrefName, param_table) {
+		
+		// If name is present in the table, return table value
+		if (param_table[varrefName] !== undefined) {
+			return param_table[varrefName];
+		}
+		
+		// If name has a square bracket, it means it is array access
+		// Update the name of the array, and the contents of each subscript
+		
+		var bracketIndex = varrefName.indexOf("[");
+		if(bracketIndex != -1) {
+			var accessName = varrefName.substring(0, bracketIndex);
+			var newAccessName = updateVarrefName(accessName, param_table);
+			var suffix = varrefName.substring(bracketIndex);
+			var updatedSuffix = updateSubscripts(suffix, param_table);
+			
+			return newAccessName + updatedSuffix;
+		}
+
+
+		// Return the current name
+		return varrefName;
+}
+
+function updateSubscripts(subscripts, param_table) {
+	//println("Original subscripts: '" + subscripts + "'");
+
+	var idRegex = /[a-zA-Z_][a-zA-Z_0-9]*/g;
+	var match = idRegex['exec'](subscripts);
+
+	var startIndex = 0;
+	var updatedSubscripts = "";
+	while (match != null) {
+		// matched text: match[0]
+		// match start: match.index
+		// capturing group n: match[n]
+		var matched = match[0];
+		var matchedIndex = match.index;
+		//println(matched);
+		//println(matchedIndex);
+		match = idRegex['exec'](subscripts);
+			
+		var newMatched = updateVarrefName(matched, param_table);
+		
+		updatedSubscripts += subscripts.substring(startIndex, matchedIndex);
+		updatedSubscripts += newMatched;
+		
+		startIndex = matchedIndex + matched.length;
+		
+		//println("Current String: '" + updatedSubscripts + "'");
+	}
+	
+	// Complete string
+	updatedSubscripts += subscripts.substring(startIndex, subscripts.length);
+	//println("Updated subscripts: '" + updatedSubscripts + "'");
+	
+	return updatedSubscripts;
+}
