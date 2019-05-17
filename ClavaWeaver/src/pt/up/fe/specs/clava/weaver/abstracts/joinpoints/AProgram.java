@@ -337,6 +337,72 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute extraProjects
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraProjectsArrayImpl();
+
+    /**
+     * paths to folders of projects that the current program depends on
+     */
+    public Bindings getExtraProjectsImpl() {
+        String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * paths to folders of projects that the current program depends on
+     */
+    public final Object getExtraProjects() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
+        	}
+        	Bindings result = this.getExtraProjectsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraProjects", e);
+        }
+    }
+
+    /**
+     * Get value on attribute extraLibs
+     * @return the attribute's value
+     */
+    public abstract String[] getExtraLibsArrayImpl();
+
+    /**
+     * link libraries of external projects the current program depends on
+     */
+    public Bindings getExtraLibsImpl() {
+        String[] stringArrayImpl0 = getExtraLibsArrayImpl();
+        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * link libraries of external projects the current program depends on
+     */
+    public final Object getExtraLibs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
+        	}
+        	Bindings result = this.getExtraLibsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "extraLibs", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select files
      * @return 
      */
@@ -471,6 +537,32 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * Adds a path based on a git repository to an include that the current program depends on
      * @param gitRepo 
+     */
+    public void addExtraIncludeFromGitImpl(String gitRepo) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraIncludeFromGit not implemented ");
+    }
+
+    /**
+     * Adds a path based on a git repository to an include that the current program depends on
+     * @param gitRepo 
+     */
+    public final void addExtraIncludeFromGit(String gitRepo) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo);
+        	}
+        	this.addExtraIncludeFromGitImpl(gitRepo);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraIncludeFromGit", this, Optional.empty(), gitRepo);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraIncludeFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a path based on a git repository to an include that the current program depends on
+     * @param gitRepo 
      * @param path 
      */
     public void addExtraIncludeFromGitImpl(String gitRepo, String path) {
@@ -525,6 +617,32 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * Adds a path based on a git repository to a source that the current program depends on
      * @param gitRepo 
+     */
+    public void addExtraSourceFromGitImpl(String gitRepo) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraSourceFromGit not implemented ");
+    }
+
+    /**
+     * Adds a path based on a git repository to a source that the current program depends on
+     * @param gitRepo 
+     */
+    public final void addExtraSourceFromGit(String gitRepo) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraSourceFromGit", this, Optional.empty(), gitRepo);
+        	}
+        	this.addExtraSourceFromGitImpl(gitRepo);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraSourceFromGit", this, Optional.empty(), gitRepo);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraSourceFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a path based on a git repository to a source that the current program depends on
+     * @param gitRepo 
      * @param path 
      */
     public void addExtraSourceFromGitImpl(String gitRepo, String path) {
@@ -547,6 +665,90 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addExtraSourceFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a path based on a git repository to a project that the current program depends on
+     * @param gitRepo 
+     * @param libs 
+     */
+    public void addProjectFromGitImpl(String gitRepo, String[] libs) {
+        throw new UnsupportedOperationException(get_class()+": Action addProjectFromGit not implemented ");
+    }
+
+    /**
+     * Adds a path based on a git repository to a project that the current program depends on
+     * @param gitRepo 
+     * @param libs 
+     */
+    public final void addProjectFromGit(String gitRepo, String[] libs) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addProjectFromGit", this, Optional.empty(), gitRepo, libs);
+        	}
+        	this.addProjectFromGitImpl(gitRepo, libs);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addProjectFromGit", this, Optional.empty(), gitRepo, libs);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addProjectFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a path based on a git repository to a project that the current program depends on
+     * @param gitRepo 
+     * @param libs 
+     * @param path 
+     */
+    public void addProjectFromGitImpl(String gitRepo, String[] libs, String path) {
+        throw new UnsupportedOperationException(get_class()+": Action addProjectFromGit not implemented ");
+    }
+
+    /**
+     * Adds a path based on a git repository to a project that the current program depends on
+     * @param gitRepo 
+     * @param libs 
+     * @param path 
+     */
+    public final void addProjectFromGit(String gitRepo, String[] libs, String path) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addProjectFromGit", this, Optional.empty(), gitRepo, libs, path);
+        	}
+        	this.addProjectFromGitImpl(gitRepo, libs, path);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addProjectFromGit", this, Optional.empty(), gitRepo, libs, path);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addProjectFromGit", e);
+        }
+    }
+
+    /**
+     * Adds a library (e.g., -pthreads) that the current program depends on
+     * @param lib 
+     */
+    public void addExtraLibImpl(String lib) {
+        throw new UnsupportedOperationException(get_class()+": Action addExtraLib not implemented ");
+    }
+
+    /**
+     * Adds a library (e.g., -pthreads) that the current program depends on
+     * @param lib 
+     */
+    public final void addExtraLib(String lib) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addExtraLib", this, Optional.empty(), lib);
+        	}
+        	this.addExtraLibImpl(lib);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addExtraLib", this, Optional.empty(), lib);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addExtraLib", e);
         }
     }
 
@@ -601,6 +803,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         attributes.add("weavingFolder");
         attributes.add("extraSources");
         attributes.add("extraIncludes");
+        attributes.add("extraProjects");
+        attributes.add("extraLibs");
     }
 
     /**
@@ -623,9 +827,14 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         actions.add("void push()");
         actions.add("void pop()");
         actions.add("void addExtraInclude(String)");
+        actions.add("void addExtraIncludeFromGit(String)");
         actions.add("void addExtraIncludeFromGit(String, String)");
         actions.add("void addExtraSource(String)");
+        actions.add("void addExtraSourceFromGit(String)");
         actions.add("void addExtraSourceFromGit(String, String)");
+        actions.add("void addProjectFromGit(String, String[])");
+        actions.add("void addProjectFromGit(String, String[], String)");
+        actions.add("void addExtraLib(String)");
     }
 
     /**
@@ -651,6 +860,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         WEAVINGFOLDER("weavingFolder"),
         EXTRASOURCES("extraSources"),
         EXTRAINCLUDES("extraIncludes"),
+        EXTRAPROJECTS("extraProjects"),
+        EXTRALIBS("extraLibs"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

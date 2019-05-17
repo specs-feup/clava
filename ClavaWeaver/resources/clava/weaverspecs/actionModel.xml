@@ -86,6 +86,10 @@
 	<action name="addExtraInclude" class="program" tooltip="Adds a path to an include that the current program depends on">
 		<parameter name="path" type="String" />
 	</action>
+
+	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
+		<parameter name="gitRepo" type="String" />
+	</action>
 	
 	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
 		<parameter name="gitRepo" type="String" />
@@ -98,7 +102,26 @@
 	
 	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
 		<parameter name="gitRepo" type="String" />
+	</action>
+	
+	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
+		<parameter name="gitRepo" type="String" />
 		<parameter name="path" type="String" />
+	</action>	
+
+	<action name="addProjectFromGit" class="program" tooltip="Adds a path based on a git repository to a project that the current program depends on">
+		<parameter name="gitRepo" type="String" />
+		<parameter name="libs" type="String[]" />
+	</action>
+
+	<action name="addProjectFromGit" class="program" tooltip="Adds a path based on a git repository to a project that the current program depends on">
+		<parameter name="gitRepo" type="String" />
+		<parameter name="libs" type="String[]" />
+		<parameter name="path" type="String" />
+	</action>
+
+	<action name="addExtraLib" class="program" tooltip="Adds a library (e.g., -pthreads) that the current program depends on">
+		<parameter name="lib" type="String" />
 	</action>
 
 	<!-- FILE -->

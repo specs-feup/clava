@@ -538,14 +538,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute parent
-     * @return the attribute's value
+     * Returns the parent node in the AST, or undefined if it is the root node
      */
     public abstract AJoinPoint getParentImpl();
 
     /**
-     * Get value on attribute parent
-     * @return the attribute's value
+     * Returns the parent node in the AST, or undefined if it is the root node
      */
     public final Object getParent() {
         try {
@@ -726,14 +724,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
+     * Returns the parent node in the AST, or undefined if it is the root node
      */
     public abstract AJoinPoint getAstParentImpl();
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
+     * Returns the parent node in the AST, or undefined if it is the root node
      */
     public final Object getAstParent() {
         try {

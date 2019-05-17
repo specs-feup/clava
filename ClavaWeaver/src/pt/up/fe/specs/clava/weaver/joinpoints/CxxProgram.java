@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -188,6 +189,21 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
+    public String[] getExtraProjectsArrayImpl() {
+        return app.getExternalDependencies().getProjects().stream()
+                .map(File::getAbsolutePath)
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+    }
+
+    @Override
+    public String[] getExtraLibsArrayImpl() {
+
+        return app.getExternalDependencies().getLibs()
+                .toArray(new String[0]);
+    }
+
+    @Override
     public void addExtraIncludeImpl(String path) {
         app.getExternalDependencies().addInclude(new File(path));
     }
@@ -206,6 +222,30 @@ public class CxxProgram extends AProgram {
     @Override
     public void addExtraSourceFromGitImpl(String gitRepository, String path) {
         app.getExternalDependencies().addSourceFromGit(gitRepository, path);
+    }
 
+    @Override
+    public void addExtraLibImpl(String lib) {
+        app.getExternalDependencies().addLib(lib);
+    }
+
+    @Override
+    public void addProjectFromGitImpl(String gitRepo, String[] libs, String path) {
+        app.getExternalDependencies().addProjectFromGit(gitRepo, Arrays.asList(libs), path);
+    }
+
+    @Override
+    public void addExtraIncludeFromGitImpl(String gitRepo) {
+        addExtraIncludeFromGitImpl(gitRepo, null);
+    }
+
+    @Override
+    public void addExtraSourceFromGitImpl(String gitRepo) {
+        addExtraSourceFromGitImpl(gitRepo, null);
+    }
+
+    @Override
+    public void addProjectFromGitImpl(String gitRepo, String[] libs) {
+        addProjectFromGitImpl(gitRepo, libs, null);
     }
 }
