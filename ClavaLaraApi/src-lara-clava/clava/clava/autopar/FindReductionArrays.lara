@@ -104,8 +104,9 @@ aspectdef retReductionOpArray
 			if (typeof(exprvarrefset[j].ancestor('unaryOp')) !== 'undefined')
 				op = exprvarrefset[j].ancestor('unaryOp').kind;
 			else if (typeof(exprvarrefset[j].ancestor('binaryOp')) !== 'undefined')
-				op = exprvarrefset[j].ancestor('binaryOp').kind + 
-					(( exprvarrefset[j].ancestor('binaryOp').kind !== 'assign' && exprvarrefset[j].ancestor('binaryOp').isAssignment === true) ? '' :'');										
+				op = exprvarrefset[j].ancestor('binaryOp').kind 
+				// TODO: Is this dead code?
+				+ (( exprvarrefset[j].ancestor('binaryOp').kind !== 'assign' && exprvarrefset[j].ancestor('binaryOp').isAssignment === true) ? '' :'');										
 			if (op === 'sub' &&
 				typeof(exprvarrefset[j].ancestor('binaryOp').right.vardecl) !== 'undefined' && 
 				exprvarrefset[j].ancestor('binaryOp').right.vardecl.name === candidateVar.name
@@ -127,6 +128,7 @@ aspectdef retReductionOpArray
 	else if(candidateVarOp.length == 2 && 
 			candidateVarOp[1] == 'assign' &&
 			(
+				// TODO: Remove compound operators (add_assign), since there is an assign?
 				['add_assign', 'sub_assign', 'mul_assign','and_assign', 'or_assign' , 'xor_assign'].indexOf(candidateVarOp[0]) !== -1 ||
 				['add', 'mul', 'sub', 'and', 'or', 'l_and' , 'l_or'].indexOf(candidateVarOp[0]) !== -1
 			)
@@ -154,6 +156,7 @@ aspectdef retReductionOpArray
 	{
 		arraysizeStr = candidateVarUse;
 	}	
+	// TODO: Dead code?
 	else
 	{
 		return;
