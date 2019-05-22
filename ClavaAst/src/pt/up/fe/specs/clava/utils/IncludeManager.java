@@ -15,21 +15,34 @@ package pt.up.fe.specs.clava.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class IncludeManager {
 
+    @Deprecated
     private final List<IncludeDecl> includes;
-    private final Set<String> currentIncludes;
+    @Deprecated
     private final TranslationUnit translationUnit;
 
+    private final Set<String> currentIncludes;
+
+    private IncludeDecl lastInclude;
+
+    /**
+     * @deprecated
+     * @param includes
+     * @param translationUnit
+     */
     public IncludeManager(List<IncludeDecl> includes, TranslationUnit translationUnit) {
         // Use new list, since we will manage the list
         this.includes = new ArrayList<>(includes);
@@ -42,13 +55,28 @@ public class IncludeManager {
         this.translationUnit = translationUnit;
     }
 
-    public IncludeManager copy(TranslationUnit tUnit) {
-        IncludeManager newInstance = new IncludeManager(new ArrayList<>(includes), tUnit);
-        newInstance.currentIncludes.clear();
-        newInstance.currentIncludes.addAll(currentIncludes);
-
-        return newInstance;
+    public IncludeManager() {
+        includes = null;
+        translationUnit = null;
+        currentIncludes = new HashSet<>();
+        lastInclude = null;
     }
+
+    public Set<String> getCurrentIncludes() {
+        return currentIncludes;
+    }
+
+    public IncludeDecl getLastInclude() {
+        return lastInclude;
+    }
+
+    // public IncludeManager copy(TranslationUnit tUnit) {
+    // IncludeManager newInstance = new IncludeManager(new ArrayList<>(includes), tUnit);
+    // newInstance.currentIncludes.clear();
+    // newInstance.currentIncludes.addAll(currentIncludes);
+    //
+    // return newInstance;
+    // }
 
     /**
      * 
@@ -93,5 +121,61 @@ public class IncludeManager {
         // String includeCode = new IncludeDecl(includeName, isAngled).getFormattedInclude();
 
         return currentIncludes.contains(includeCode);
+    }
+
+    public boolean hasInclude(String includeName, boolean isAngled, ClavaFactory factory) {
+        String includeCode = factory.includeDecl(includeName, isAngled).getFormattedInclude();
+
+        return currentIncludes.contains(includeCode);
+    }
+
+    public int addIncludeV2(IncludeDecl include) {
+
+        // Check if include is already added
+        if (currentIncludes.contains(include.getFormattedInclude())) {
+            return -1;
+        }
+
+        // Bookkeeping
+        currentIncludes.add(include.getFormattedInclude());
+
+        // If this is the first include, insert directly as first child of the translation unit
+        // Otherwise, insert after last include
+        int insertIndex = lastInclude == null ? 0 : lastInclude.indexOfSelf() + 1;
+
+        // Update last include
+        lastInclude = include;
+
+        // Find index where to insert include
+        return insertIndex;
+    }
+
+    public void setLastInclude(IncludeDecl lastInclude) {
+        this.lastInclude = lastInclude;
+    }
+
+    public void remove(IncludeDecl include) {
+        // Remove from set
+        currentIncludes.remove(include.getFormattedInclude());
+
+        // Update pointer to last if needed
+        // Using reference comparison on purpose
+        if (lastInclude != include) {
+            return;
+        }
+
+        List<ClavaNode> leftSibligs = lastInclude.getLeftSiblings();
+        System.out.println("PARENT TU: " + include.getParent().toTree());
+        System.out.println("LEFT SIBLINGS: " + leftSibligs);
+        IncludeDecl newLast = null;
+        for (int i = leftSibligs.size() - 1; i >= 0; i--) {
+            if (leftSibligs.get(i) instanceof IncludeDecl) {
+                newLast = (IncludeDecl) leftSibligs.get(i);
+                break;
+            }
+        }
+
+        lastInclude = newLast;
+
     }
 }

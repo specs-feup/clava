@@ -24,9 +24,9 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
@@ -85,6 +85,7 @@ public class TranslationUnit extends ClavaNode {
     // private final String filename;
     // private final String path;
 
+    // Bookkeeping for the includes, will be initialize the first time it is accessed with getIncludes()
     private IncludeManager includes;
 
     private final Lazy<Boolean> isCxxUnit;
@@ -94,24 +95,86 @@ public class TranslationUnit extends ClavaNode {
     public TranslationUnit(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-        List<IncludeDecl> includesList = children.stream()
-                // All children must be Decls
-                .map(Decl.class::cast)
-                .filter(decl -> decl instanceof IncludeDecl)
-                .map(include -> (IncludeDecl) include)
-                .collect(Collectors.toList());
-
-        includes = new IncludeManager(includesList, this);
+        // List<IncludeDecl> includesList = children.stream()
+        // // All children must be Decls
+        // .map(Decl.class::cast)
+        // .filter(decl -> decl instanceof IncludeDecl)
+        // .map(include -> (IncludeDecl) include)
+        // .collect(Collectors.toList());
+        //
+        // includes = new IncludeManager(includesList, this);
 
         isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
     }
 
-    @Override
-    public ClavaNode copy(boolean keepId) {
-        TranslationUnit newTunit = (TranslationUnit) super.copy(keepId);
-        newTunit.includes = includes.copy(newTunit);
+    // @Override
+    // public ClavaNode copy(boolean keepId) {
+    // TranslationUnit newTunit = (TranslationUnit) super.copy(keepId);
+    // newTunit.includes = includes.copy(newTunit);
+    //
+    // return newTunit;
+    // }
 
-        return newTunit;
+    @Override
+    public void addChild(ClavaNode child) {
+        // If IncludeDecl, treat it differently
+        if (child instanceof IncludeDecl) {
+            addIncludePrivate((IncludeDecl) child);
+            return;
+
+        }
+
+        // Add child normally
+        super.addChild(child);
+    }
+
+    @Override
+    public void addChild(int index, ClavaNode child) {
+        // If IncludeDecl, treat it differently
+        if (child instanceof IncludeDecl) {
+            ClavaLog.warning(
+                    "Using .addChild(int index, ClavaNode chilld) with an IncludeDecl node, the index value will be ignored");
+            addIncludePrivate((IncludeDecl) child);
+            return;
+        }
+
+        // Add child normally
+        super.addChild(index, child);
+    }
+
+    @Override
+    public ClavaNode removeChild(int index) {
+        // if (getChild(index) instanceof IncludeDecl) {
+        // System.out.println("REMOVING: " + getChild(index).getCode());
+        // System.out.println("REMOVE BEFORE: " + getIncludes().getCurrentIncludes());
+        // System.out.println("LAST BEFORE: " + getIncludes().getLastInclude());
+        // }
+
+        // If child is an IncludeDecl, update IncludesManager
+        if (getChild(index) instanceof IncludeDecl) {
+            getIncludes().remove((IncludeDecl) getChild(index));
+        }
+
+        // if (getChild(index) instanceof IncludeDecl) {
+        // System.out.println("REMOVE AFTER: " + getIncludes().getCurrentIncludes());
+        // System.out.println("LAST AFTER: " + getIncludes().getLastInclude());
+        // }
+        return super.removeChild(index);
+    }
+
+    /**
+     * Manages adding an include to the translation unit.
+     * 
+     * @param include
+     */
+    private void addIncludePrivate(IncludeDecl include) {
+        int insertIndex = getIncludes().addIncludeV2(include);
+
+        if (insertIndex == -1) {
+            return;
+        }
+
+        super.addChild(insertIndex, include);
     }
 
     /*
@@ -496,6 +559,10 @@ public class TranslationUnit extends ClavaNode {
     // }
 
     public IncludeManager getIncludes() {
+        if (includes == null) {
+            includes = new IncludeManager();
+        }
+
         return includes;
     }
 
@@ -534,7 +601,8 @@ public class TranslationUnit extends ClavaNode {
         // }
         // System.out.println("INCLUDE NAME:" + includeName);
 
-        getIncludes().addInclude(getFactory().includeDecl(includeName, isAngled));
+        // getIncludes().addInclude(getFactory().includeDecl(includeName, isAngled));
+        addIncludePrivate(getFactory().includeDecl(includeName, isAngled));
     }
 
     public void addInclude(IncludeDecl include) {
@@ -731,7 +799,7 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public boolean hasInclude(String includeName, boolean isAngled) {
-        return getIncludes().hasInclude(includeName, isAngled);
+        return getIncludes().hasInclude(includeName, isAngled, getFactory());
     }
 
 }
