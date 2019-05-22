@@ -131,4 +131,10 @@ public class CTest {
         newTester().test("AstNodes.lara", "ast_nodes.c");
     }
 
+    @Test
+    public void testRemoveInclude() {
+        newTester().test("RemoveInclude.lara", "remove_include.c", "remove_include_0.h", "remove_include_1.h",
+                "remove_include_2.h");
+    }
+
 }
