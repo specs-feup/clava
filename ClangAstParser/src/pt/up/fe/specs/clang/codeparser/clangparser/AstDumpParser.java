@@ -35,6 +35,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -315,6 +316,7 @@ public class AstDumpParser implements ClangParser {
             // parsedData = lineStreamParser.getData();
             // parsedData = output.getStdErr() == null ? new ClangParserData() : output.getStdErr();
             parsedData = output.getStdErr();
+            SpecsCheck.checkNotNull(parsedData, () -> "Did not expect error output to be null");
             parsedData.set(ClangParserData.HAS_ERRORS, output.isError());
 
             // If console output streaming is disabled, show output only at the end
@@ -378,6 +380,16 @@ public class AstDumpParser implements ClangParser {
             // Return data
             return data;
         } catch (Exception e) {
+            // SpecsLogs.msgWarn("Error while parsing output of Clang AST dumper", e);
+            //
+            // // Error output
+            // ClangParserData errorData = new ClangParserData();
+            // errorData.set(ClangParserData.HAS_ERRORS, true);
+            // errorData.set(ClangParserData.LINES_NOT_PARSED,
+            // "Error while parsing output of Clang AST dumper:\n" + e.toString());
+            //
+            // return errorData;
+
             throw new RuntimeException("Error while parsing output of Clang AST dumper", e);
         }
 
