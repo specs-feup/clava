@@ -102,8 +102,7 @@ public class IncludeManager {
         }
 
         List<ClavaNode> leftSibligs = lastInclude.getLeftSiblings();
-        System.out.println("PARENT TU: " + include.getParent().toTree());
-        System.out.println("LEFT SIBLINGS: " + leftSibligs);
+
         IncludeDecl newLast = null;
         for (int i = leftSibligs.size() - 1; i >= 0; i--) {
             if (leftSibligs.get(i) instanceof IncludeDecl) {
