@@ -85,7 +85,7 @@ public class TranslationUnit extends ClavaNode {
     // private final String filename;
     // private final String path;
 
-    private final IncludeManager includes;
+    private IncludeManager includes;
 
     private final Lazy<Boolean> isCxxUnit;
 
@@ -104,6 +104,14 @@ public class TranslationUnit extends ClavaNode {
         includes = new IncludeManager(includesList, this);
 
         isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
+    }
+
+    @Override
+    public ClavaNode copy(boolean keepId) {
+        TranslationUnit newTunit = (TranslationUnit) super.copy(keepId);
+        newTunit.includes = includes.copy(newTunit);
+
+        return newTunit;
     }
 
     /*

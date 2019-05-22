@@ -1,5 +1,5 @@
 import clava.memoi._MemoiProfHelper;
-
+import clava.Clava;
 import clava.ClavaJoinPoints;
 import lara.Strings;
 import lara.util.PrintOnce;
@@ -40,6 +40,10 @@ function MemoiProf(targetSig, id, reportDir) {
 }
 
 MemoiProf._reportCodeDone = false;
+
+MemoiProf.resetReportCode = function() {
+	MemoiProf._reportCodeDone = false;
+};
 
 /**
  * 		The C data types the memoization instrumentation library can handle.

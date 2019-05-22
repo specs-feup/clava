@@ -42,6 +42,14 @@ public class IncludeManager {
         this.translationUnit = translationUnit;
     }
 
+    public IncludeManager copy(TranslationUnit tUnit) {
+        IncludeManager newInstance = new IncludeManager(new ArrayList<>(includes), tUnit);
+        newInstance.currentIncludes.clear();
+        newInstance.currentIncludes.addAll(currentIncludes);
+
+        return newInstance;
+    }
+
     /**
      * 
      * @param include
