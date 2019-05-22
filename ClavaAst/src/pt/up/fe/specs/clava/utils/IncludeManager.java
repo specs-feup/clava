@@ -18,46 +18,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaFactory;
-import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class IncludeManager {
 
-    @Deprecated
-    private final List<IncludeDecl> includes;
-    @Deprecated
-    private final TranslationUnit translationUnit;
-
     private final Set<String> currentIncludes;
-
     private IncludeDecl lastInclude;
 
-    /**
-     * @deprecated
-     * @param includes
-     * @param translationUnit
-     */
-    public IncludeManager(List<IncludeDecl> includes, TranslationUnit translationUnit) {
-        // Use new list, since we will manage the list
-        this.includes = new ArrayList<>(includes);
-
-        // Populate includes set
-        currentIncludes = includes.stream()
-                .map(include -> include.getFormattedInclude())
-                .collect(Collectors.toSet());
-
-        this.translationUnit = translationUnit;
-    }
-
     public IncludeManager() {
-        includes = null;
-        translationUnit = null;
         currentIncludes = new HashSet<>();
         lastInclude = null;
     }
@@ -70,57 +41,27 @@ public class IncludeManager {
         return lastInclude;
     }
 
-    // public IncludeManager copy(TranslationUnit tUnit) {
-    // IncludeManager newInstance = new IncludeManager(new ArrayList<>(includes), tUnit);
-    // newInstance.currentIncludes.clear();
-    // newInstance.currentIncludes.addAll(currentIncludes);
-    //
-    // return newInstance;
-    // }
-
-    /**
-     * 
-     * @param include
-     * @return true if include was added, false if include was already added
-     */
-    public boolean addInclude(IncludeDecl include) {
-
-        // Check if include is already added
-        if (currentIncludes.contains(include.getFormattedInclude())) {
-            return false;
-        }
-
-        // If this is the first include, insert directly as first child of the translation unit
-        if (includes.isEmpty()) {
-            translationUnit.addChild(0, include);
-        }
-        // Get last include and add new include to the tree
-        else {
-            IncludeDecl lastInclude = SpecsCollections.last(includes);
-            NodeInsertUtils.insertAfter(lastInclude, include);
-        }
-
-        // Bookkeeping
-        includes.add(include);
-        currentIncludes.add(include.getFormattedInclude());
-
-        return true;
-    }
-
     public List<IncludeDecl> getIncludes() {
-        return Collections.unmodifiableList(includes);
+        if (lastInclude == null) {
+            return Collections.emptyList();
+        }
+
+        List<IncludeDecl> includes = new ArrayList<>();
+
+        lastInclude.getLeftSiblings().stream()
+                .filter(IncludeDecl.class::isInstance)
+                .map(IncludeDecl.class::cast)
+                .forEach(includes::add);
+
+        includes.add(lastInclude);
+
+        return includes;
+
     }
 
     @Override
     public String toString() {
-        return includes.toString();
-    }
-
-    public boolean hasInclude(String includeName, boolean isAngled) {
-        String includeCode = translationUnit.getFactory().includeDecl(includeName, isAngled).getFormattedInclude();
-        // String includeCode = new IncludeDecl(includeName, isAngled).getFormattedInclude();
-
-        return currentIncludes.contains(includeCode);
+        return currentIncludes.toString();
     }
 
     public boolean hasInclude(String includeName, boolean isAngled, ClavaFactory factory) {
@@ -129,7 +70,7 @@ public class IncludeManager {
         return currentIncludes.contains(includeCode);
     }
 
-    public int addIncludeV2(IncludeDecl include) {
+    public int addInclude(IncludeDecl include) {
 
         // Check if include is already added
         if (currentIncludes.contains(include.getFormattedInclude())) {
@@ -148,10 +89,6 @@ public class IncludeManager {
 
         // Find index where to insert include
         return insertIndex;
-    }
-
-    public void setLastInclude(IncludeDecl lastInclude) {
-        this.lastInclude = lastInclude;
     }
 
     public void remove(IncludeDecl include) {

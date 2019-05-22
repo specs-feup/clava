@@ -168,7 +168,7 @@ public class TranslationUnit extends ClavaNode {
      * @param include
      */
     private void addIncludePrivate(IncludeDecl include) {
-        int insertIndex = getIncludes().addIncludeV2(include);
+        int insertIndex = getIncludes().addInclude(include);
 
         if (insertIndex == -1) {
             return;
