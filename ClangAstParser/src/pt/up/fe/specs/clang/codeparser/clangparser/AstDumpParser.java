@@ -319,6 +319,9 @@ public class AstDumpParser implements ClangParser {
             // ClavaLog.debug("Stdout: '" + output.getStdOut() + "'");
             // ClavaLog.debug("Stderr: '" + output.getStdErr() + "'");
             // ClavaLog.debug("Return value: '" + output.getReturnValue() + "'");
+            if (output.isError()) {
+                ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
+            }
             parsedData = output.getStdErr();
             SpecsCheck.checkNotNull(parsedData, () -> "Did not expect error output to be null");
             parsedData.set(ClangParserData.HAS_ERRORS, output.isError());
