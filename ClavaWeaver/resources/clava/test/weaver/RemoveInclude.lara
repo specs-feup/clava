@@ -1,12 +1,10 @@
 aspectdef RemoveInclude
 
-	select file end
+	//select file end
+	select include end
 	apply
-		for(var $include of $file.descendants('include')) {
-			if($include.name === "remove_include_1.h" ) {
-				$include.detach();
-			}
-			
+		if($include.name === "remove_include_1.h" ) {
+			$include.detach();
 		}
 	end
 
