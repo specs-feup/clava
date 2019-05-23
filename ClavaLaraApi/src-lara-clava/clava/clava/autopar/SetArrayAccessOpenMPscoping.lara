@@ -9,13 +9,16 @@ import clava.autopar.FindReductionArrays;
 aspectdef SetArrayAccessOpenMPscoping
 	input $ForStmt end
 
+	// Get id of the loop
 	var loopindex = GetLoopIndex($ForStmt);
+	
+	// If there are errors, return
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
 
 	
 
-
+	// Ignore array uses in the loop whose pattern is 'R'
 	for(var arrayAccessObj of LoopOmpAttributes[loopindex].varAccess)
 		if (
 			arrayAccessObj.varTypeAccess === 'arrayAccess' &&
@@ -34,13 +37,16 @@ aspectdef SetArrayAccessOpenMPscoping
 	
 
 	//var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess', usedInClause : false});
+	// Get list of array uses
 	var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess'});
 
 
 	//print_obj(arrayAccesslist, '\n\n\n\n\n check 1 arrayAccesslist for For#' + $ForStmt.line+ '\taspectdef SetArrayAccessOpenMPscoping');
 
+	// If no array uses, return
 	if (arrayAccesslist.length ===0 )
 		return;
+
 
 	var arrayAccessNamelist = [];
 	for (var obj of arrayAccesslist)
@@ -95,7 +101,7 @@ aspectdef SetArrayAccessOpenMPscoping
 					arrayAccessObj.usedInClause = arrayAccessObj.usedInClause && depObj.canbeignored && (depObj.cannotbesolved === false);
 
 			if (
-				arrayAccessObj.usedInClause === true &&
+				arrayAccessObj.usedInClause === true && // TODO: Unnecessary?
 				arrayAccessObj.use.indexOf('W') === -1 &&				
 				LoopOmpAttributes[loopindex].firstprivateVars.indexOf(arrayAccessObj.name) === -1				
 				)
