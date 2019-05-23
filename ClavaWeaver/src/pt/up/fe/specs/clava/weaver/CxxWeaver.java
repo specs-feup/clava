@@ -979,6 +979,7 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.write(cmakeIncludes, includeFoldersContent);
     }
 
+    @Override
     public void writeCode(File outputFolder) {
         Set<String> modifiedFilenames = getModifiedFilenames();
 
