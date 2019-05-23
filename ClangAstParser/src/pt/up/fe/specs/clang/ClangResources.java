@@ -129,7 +129,6 @@ public class ClangResources {
 
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL1));
         windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL2));
-        windowsResources.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_DLL3));
 
         return windowsResources;
         // clangAstResources.get(resourceEnum)

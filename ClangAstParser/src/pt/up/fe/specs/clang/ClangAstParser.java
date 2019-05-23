@@ -1011,7 +1011,6 @@ public class ClangAstParser {
 
         windowsResources.add(clangAstResources.get(ClangAstFileResource.WIN_DLL1));
         windowsResources.add(clangAstResources.get(ClangAstFileResource.WIN_DLL2));
-        windowsResources.add(clangAstResources.get(ClangAstFileResource.WIN_DLL3));
 
         return windowsResources;
         // clangAstResources.get(resourceEnum)
