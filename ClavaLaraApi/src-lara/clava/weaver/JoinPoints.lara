@@ -2,9 +2,11 @@ import weaver.JoinPointsBase;
 import lara.Check;
 import clava.Clava;
 
+/*
 JoinPoints.prototype.root = function() {
 	return Clava.getProgram();
 }
+*/
 
 JoinPoints.prototype.children = function($jp, jpType) {
 	if($jp === undefined) {
