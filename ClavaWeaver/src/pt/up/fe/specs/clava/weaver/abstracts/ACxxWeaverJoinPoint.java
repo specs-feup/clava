@@ -366,9 +366,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void insertImpl(String position, String code) {
+    public AJoinPoint[] insertImpl(String position, String code) {
         Insert insert = Insert.getHelper().fromValue(position);
-        CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine());
+        return new AJoinPoint[] { CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine()) };
         //
         // if (insert == Insert.AFTER || insert == Insert.BEFORE) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
@@ -930,7 +930,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     /**
-     * 
+     *
      * @return the base ClavaAst class for this kind of nodes.
      */
     private String getBaseClavaNodePackage() {
@@ -1127,7 +1127,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
     /**
      * Generic select function, used by the default select implementations.
-     * 
+     *
      * @param joinPointClass
      * @param op
      * @return

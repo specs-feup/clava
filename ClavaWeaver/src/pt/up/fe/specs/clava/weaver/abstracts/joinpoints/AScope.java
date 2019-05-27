@@ -765,8 +765,8 @@ public abstract class AScope extends AStatement {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aStatement.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aStatement.insertImpl(position, code);
     }
 
     /**

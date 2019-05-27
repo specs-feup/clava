@@ -276,8 +276,8 @@ public abstract class AArrayAccess extends AExpression {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aExpression.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aExpression.insertImpl(position, code);
     }
 
     /**

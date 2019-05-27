@@ -295,8 +295,8 @@ public abstract class AParam extends AVardecl {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aVardecl.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aVardecl.insertImpl(position, code);
     }
 
     /**

@@ -287,8 +287,8 @@ public abstract class AClass extends ARecord {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aRecord.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aRecord.insertImpl(position, code);
     }
 
     /**

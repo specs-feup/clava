@@ -990,8 +990,8 @@ public abstract class AFunction extends ADeclarator {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aDeclarator.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aDeclarator.insertImpl(position, code);
     }
 
     /**

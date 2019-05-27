@@ -17,6 +17,7 @@ import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
 
 public class CxxTag extends ATag {
@@ -46,14 +47,14 @@ public class CxxTag extends ATag {
     }
 
     @Override
-    public void insertImpl(String position, String code) {
+    public AJoinPoint[] insertImpl(String position, String code) {
 
         Insert insert = Insert.getHelper().fromValue(position);
         if (insert == Insert.AFTER) {
 
-            getTargetImpl().insert(position, code);
+            return (AJoinPoint[]) getTargetImpl().insertImpl(position, code);
         } else {
-            super.insertImpl(position, code);
+            return super.insertImpl(position, code);
         }
     }
 }

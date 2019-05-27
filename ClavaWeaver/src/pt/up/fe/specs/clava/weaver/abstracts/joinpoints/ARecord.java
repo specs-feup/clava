@@ -312,8 +312,8 @@ public abstract class ARecord extends ANamedDecl {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aNamedDecl.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aNamedDecl.insertImpl(position, code);
     }
 
     /**

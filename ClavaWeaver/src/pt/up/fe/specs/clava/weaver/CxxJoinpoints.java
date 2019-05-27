@@ -207,22 +207,22 @@ public class CxxJoinpoints {
     private static void setWeaverEngine(ACxxWeaverJoinPoint newJoinPoint) {
         ACxxWeaverJoinPoint currentJoinpoint = newJoinPoint;
         CxxWeaver weaver = getWeaver();
-    
+
         while (currentJoinpoint != null) {
-    
+
             // Set engine
             currentJoinpoint.setWeaverEngine(weaver);
             currentJoinpoint = currentJoinpoint.getSuper()
                     .map(ACxxWeaverJoinPoint.class::cast)
                     .orElse(null);
-    
+
         }
     }
     */
 
     /*
     private final CxxWeaver weaverEngine;
-    
+
     public CxxJoinpoints(CxxWeaver weaverEngine) {
         this.weaverEngine = weaverEngine;
     }
@@ -271,17 +271,17 @@ public class CxxJoinpoints {
     public ACxxWeaverJoinPoint create(ClavaNode node, ACxxWeaverJoinPoint parent) {
         ACxxWeaverJoinPoint newJoinPoint = JOINPOINT_FACTORY.apply(node, parent);
         newJoinPoint.setWeaverEngine(weaverEngine);
-    
+
         return newJoinPoint;
     }
-    
+
     public ACxxWeaverJoinPoint create(ClavaNode node, AJoinPoint parent) {
         return create(node, (ACxxWeaverJoinPoint) parent);
     }
-    
+
     public <T extends AJoinPoint> T create(ClavaNode node, ACxxWeaverJoinPoint parent,
             Class<T> targetClass) {
-    
+
         return targetClass.cast(create(node, parent));
     }
     */
@@ -347,5 +347,9 @@ public class CxxJoinpoints {
     public static CxxWeaver getWeaver(AJoinPoint joinpoint) {
         // Get root joinpoint (program)
         return getProgram(joinpoint).getWeaver();
+    }
+
+    public static AJoinPoint create(Stmt newNode) {
+        return create(newNode, null);
     }
 }

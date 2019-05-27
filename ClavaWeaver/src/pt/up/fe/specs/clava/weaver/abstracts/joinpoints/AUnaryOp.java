@@ -280,8 +280,8 @@ public abstract class AUnaryOp extends AOp {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aOp.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aOp.insertImpl(position, code);
     }
 
     /**

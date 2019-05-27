@@ -91,17 +91,17 @@ public class CxxScope extends AScope {
     }
     */
     @Override
-    public void insertImpl(String position, String code) {
+    public AJoinPoint[] insertImpl(String position, String code) {
         // 'body' behaviour
         if (!scope.isNestedScope()) {
             // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
             Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
             CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
-            return;
+            return new AJoinPoint[] { CxxJoinpoints.create(literalStmt) };
         }
 
         // Default behaviour
-        super.insertImpl(position, code);
+        return super.insertImpl(position, code);
     }
 
     @Override

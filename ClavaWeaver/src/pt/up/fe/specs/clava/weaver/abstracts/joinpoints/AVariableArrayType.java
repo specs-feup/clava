@@ -393,8 +393,8 @@ public abstract class AVariableArrayType extends AArrayType {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aArrayType.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aArrayType.insertImpl(position, code);
     }
 
     /**

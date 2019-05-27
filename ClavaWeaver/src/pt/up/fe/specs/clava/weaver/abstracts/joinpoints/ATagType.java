@@ -397,8 +397,8 @@ public abstract class ATagType extends AType {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aType.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aType.insertImpl(position, code);
     }
 
     /**

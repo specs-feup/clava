@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -33,10 +33,10 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
  * Class with utility methods related with weaver actions.
- * 
+ *
  * TODO: Move methods that require the weaver to a new class that receives the weaver during construction and is
  * available in the weaver.
- * 
+ *
  * @author JoaoBispo
  *
  */
@@ -45,10 +45,10 @@ public class CxxActions {
     /**
      * Insert children from a C/C++ token before/after the reference token, when the token is a statement of is further
      * below in the AST.
-     * 
+     *
      * <p>
      * Minimum granularity level of insert before/after is at the statement level.
-     * 
+     *
      * @param target
      * @param position
      * @param from
@@ -122,17 +122,17 @@ public class CxxActions {
         return true;
     }
 
-    public static void insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
+    public static AJoinPoint[] insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
 
         switch (position) {
         case "before":
             // Insert before all statements in body
             base.addChild(0, node);
-            break;
+            return null;
 
         case "after":
             base.addChild(node);
-            break;
+            return null;
 
         case "around":
         case "replace":
@@ -144,7 +144,7 @@ public class CxxActions {
             // // Remove all children
             // base.removeChildren(0, base.getNumChildren());
             base.addChild(node);
-            break;
+            return new AJoinPoint[] { CxxJoinpoints.create(node, null) };
         default:
             throw new RuntimeException("Case not defined:" + position);
         }
@@ -185,7 +185,7 @@ public class CxxActions {
 
     /**
      * Returns the first valid statement where we can insert another node in the after/before inserts
-     * 
+     *
      * @param node
      * @return
      */
@@ -227,7 +227,7 @@ public class CxxActions {
 
     /**
      * Generic implementation that just directly inserts/replaced the node in the joinpoint.
-     * 
+     *
      * @param baseJp
      * @param newJpS
      * @param position

@@ -150,9 +150,9 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public void insertImpl(String position, String code) {
+    public AJoinPoint[] insertImpl(String position, String code) {
         Decl literalDecl = CxxWeaver.getFactory().literalDecl(code);
-        CxxActions.insertAsChild(position, getNode(), literalDecl, getWeaverEngine());
+        return CxxActions.insertAsChild(position, getNode(), literalDecl, getWeaverEngine());
     }
 
     @Override
@@ -232,7 +232,7 @@ public class CxxFile extends AFile {
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-        
+
         return path;
         */
     }

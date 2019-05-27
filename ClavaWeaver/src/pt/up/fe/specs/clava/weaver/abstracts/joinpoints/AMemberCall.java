@@ -468,8 +468,8 @@ public abstract class AMemberCall extends ACall {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aCall.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aCall.insertImpl(position, code);
     }
 
     /**

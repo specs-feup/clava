@@ -357,8 +357,8 @@ public abstract class ANamedDecl extends ADecl {
      * @param code 
      */
     @Override
-    public void insertImpl(String position, String code) {
-        this.aDecl.insertImpl(position, code);
+    public AJoinPoint[] insertImpl(String position, String code) {
+        return this.aDecl.insertImpl(position, code);
     }
 
     /**

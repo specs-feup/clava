@@ -113,10 +113,10 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void insertImpl(String position, String code) {
+    public AJoinPoint[] insertImpl(String position, String code) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
         Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
-        insertStmt(literalStmt, position);
+        return insertStmt(literalStmt, position);
     }
 
     @Override
@@ -158,20 +158,20 @@ public class CxxFunction extends AFunction {
         return CxxActions.insertJpAsStatement(this, node, "replace", getWeaverEngine());
     }
 
-    private void insertStmt(Stmt newNode, String position) {
+    private AJoinPoint[] insertStmt(Stmt newNode, String position) {
         switch (position) {
         case "before":
             NodeInsertUtils.insertBefore(function, newNode);
-            break;
+            return null;
 
         case "after":
             NodeInsertUtils.insertAfter(function, newNode);
-            break;
+            return null;
 
         case "around":
         case "replace":
             NodeInsertUtils.replace(function, newNode);
-            break;
+            return new AJoinPoint[] { CxxJoinpoints.create(newNode) };
         default:
             throw new RuntimeException("Case not defined:" + position);
         }
