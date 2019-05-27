@@ -68,7 +68,7 @@ public class App extends ClavaNode {
 
     /**
      * Can be used to store arbitrary information that should be accessible through the application
-     * 
+     *
      */
     public final static DataKey<DataStore> APP_DATA = KeyFactory.object("appData", DataStore.class)
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
@@ -101,7 +101,7 @@ public class App extends ClavaNode {
 
     /**
      * Legacy.
-     * 
+     *
      * @deprecated
      * @param children
      */
@@ -132,7 +132,7 @@ public class App extends ClavaNode {
     */
 
     /**
-     * 
+     *
      * @param dataStore
      * @param children
      */
@@ -719,7 +719,7 @@ public class App extends ClavaNode {
 
     /**
      * Helper method that accepts a map that has String instead of File as keys.
-     * 
+     *
      * @param allStringFiles
      */
     public void setSourcesFromStrings(Map<String, File> allStringFiles) {
@@ -797,7 +797,7 @@ public class App extends ClavaNode {
 
     /**
      * Creates a copy of this App, pushes it to the stack of Apps in ClavaContext, returns the new copied App.
-     * 
+     *
      * @return the new App in the top of the stack.
      */
     public App pushAst() {
@@ -812,7 +812,7 @@ public class App extends ClavaNode {
 
     /**
      * Removes the top-most App from the stack
-     * 
+     *
      * @return
      */
     // public App popAst() {
