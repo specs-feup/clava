@@ -25,8 +25,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.antarex.clava.AntarexClavaLaraApis;
 import pt.up.fe.specs.antarex.clava.JsAntarexApiResource;
 import pt.up.fe.specs.clang.ClangAstKeys;
@@ -171,7 +169,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * This is used by a LARA aspect.
-     * 
+     *
      * @return
      */
     public static StoreDefinition getWeaverDefinition() {
@@ -253,9 +251,9 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public App getApp() {
-        if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-            throw new RuntimeException("Tried to access top-level node, but weaving is disabled");
-        }
+        // if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+        // throw new RuntimeException("Tried to access top-level node, but weaving is disabled");
+        // }
 
         return getAppTry()
                 .orElseThrow(() -> new RuntimeException(
@@ -396,10 +394,14 @@ public class CxxWeaver extends ACxxWeaver {
         // Init messages to user
         messagesToUser = new LinkedHashSet<>();
 
-        // If weaving disabled, return now
+        // If weaving disabled, create empty App
         if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-            SpecsLogs.msgInfo("Weaving disabled, ignoring source-code files");
-            // app = null;
+            SpecsLogs.msgInfo("Weaving disabled, creating empty 'program'");
+
+            App emptyApp = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
+            // First app, add it to context
+            context.pushApp(emptyApp);
+            weaverData.pushAst(emptyApp);
             return true;
         }
 
@@ -522,7 +524,11 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private static File getFirstSourceFolder(List<File> sources) {
-        Preconditions.checkArgument(!sources.isEmpty(), "Needs at least one source specified (file or folder)");
+        // Preconditions.checkArgument(!sources.isEmpty(), "Needs at least one source specified (file or folder)");
+
+        if (sources.isEmpty()) {
+            return SpecsIo.getWorkingDir();
+        }
 
         File firstSource = sources.stream()
                 .filter(source -> source.exists())
@@ -565,7 +571,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     /**
-     * 
+     *
      * @param sources
      * @param parserOptions
      * @param extraOptions
@@ -713,10 +719,10 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Adapts initial source files.
-     * 
+     *
      * <p>
      * E.g., if compiling for CMake, adds normal include folders as source folders.
-     * 
+     *
      * @param sources
      * @param parserOptions2
      * @return
@@ -1433,7 +1439,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Helper method which returns include folders of the source files.
-     * 
+     *
      * @param weavingFolder
      * @return
      */
@@ -1471,7 +1477,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         /*
         if(!generatedFiles.isEmpty()) {
-            // Get translation units that correspond to generated files            
+            // Get translation units that correspond to generated files
             getApp().getTranslationUnits();
         }
         */
@@ -1522,4 +1528,13 @@ public class CxxWeaver extends ACxxWeaver {
     }
     
     */
+
+    /**
+     * Creates an empty App.
+     *
+     * @return
+     */
+    // private static App createEmptyApp(ClavaContext context) {
+    // return context.get(ClavaContext.FACTORY).app(Collections.emptyList());
+    // }
 }
