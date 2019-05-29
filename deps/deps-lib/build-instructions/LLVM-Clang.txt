@@ -1,0 +1,36 @@
+CLANG
+=======
+
+Windows
+-------
+
+- Install MSYS2 (http://msys2.github.io/)
+ -> Make sure it has gcc, cmake and ninja (pacman -S mingw-w64-x86_64-<toolname>)
+- Build LLVM and Clang
+ -> Go to the releases page (http://llvm.org/releases/download.html) and download the source code for LLVM, Clang and clang-tools-extra
+ -> Extract LLVM sources to a folder, create folder tools/clang and extract Clang to there, create folder tools/clang/tools/extra and extract clang-tools-extra to there
+ -> Before building, edit the file llvm/CMakeLists.txt and add after the version the following, to avoid errors such as "SemaExpr.cpp.obj: too many sections":
+	SET(GCC_BIG_OBJ    "-Wa,-mbig-obj")
+	add_definitions(${GCC_BIG_OBJ})
+ -> Make sure you have Python installed natively in the Windows system, and that it is in the path. Python from MSYS/MinGW might give error paths during CMake. Additionally, if you use the Python installer to add it to the path, check if it does not put a '/' at the end of the path, or it will not work (e.g. export PATH=/c/Apps/Python3:/c/Apps/Python3/Scripts:$PATH)
+ -> Create a folder for the build (e.g., llvm/../build) and run CMake for Ninja (e.g., cmake -G Ninja ../llvm -DLLVM_BUILD_TESTS=ON)
+ cmake -G "MinGW Makefiles" ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_TOOLS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_BUILD_TESTS=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_ENABLE_EH=ON -DLLVM_ENABLE_RTTI=ON -DCMAKE_C_COMPILER:PATH="<path to clang.exe" -DCMAKE_CXX_COMPILER:PATH="path to clang++.exe" -DLLVM_TARGETS_TO_BUILD="X86" -DCMAKE_INSTALL_PREFIX=%devpath%\llvm
+ -> Build (e.g., mingw32-make). Linking LLVM + Clang in DEBUG mode takes a lot of memory (+3GB). If your computer has a lot of cores for the memory and you are building in DEBUG, run ninja with flag -j N (e.g., 3) to limit the number of parallel runs
+ 
+ 
+
+Artifact
+--------
+
+Folder structure:
+
+- build (files from the build)
+    |- include
+	|- lib
+	|- share
+	|- tools
+- src (files from the source)
+   |-include
+   |-tools
+
+
