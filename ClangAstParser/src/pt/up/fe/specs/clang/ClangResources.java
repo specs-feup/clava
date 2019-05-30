@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -117,6 +117,8 @@ public class ClangResources {
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
         case LINUX:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
+        case LINUX_ARMV7:
+            return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_ARMV7_EXE);
         case MAC_OS:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
         default:
@@ -197,7 +199,7 @@ public class ClangResources {
         if (!usePlatformIncludes) {
             return true;
         }
-        
+
         // If headers of both libc and libc++ are available, do not use built-in libc
         return !hasLibC(clangExecutable);
         */
@@ -205,34 +207,34 @@ public class ClangResources {
 
     /**
      * Detects if the system has libc/licxx installed.
-     * 
+     *
      * @param clangExecutable
      * @return
      */
     /*
     private boolean hasLibC(File clangExecutable) {
         // return false;
-    
+
         // If Windows, return false and always use bundled LIBC++
         // if (SupportedPlatform.getCurrentPlatform().isWindows()) {
         // return false;
         // }
-    
+
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-    
+
         // Write test files
         List<File> testFiles = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
                 .stream()
                 .map(resource -> resource.write(clangTest))
                 .collect(Collectors.toList());
-    
+
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
         }
-    
+
         // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
-    
+
         boolean needsLib = false;
         for (File testFile : testFiles) {
             ProcessOutput<List<ClangNode>, DataStore> output = testFile(clangExecutable, clangTest, testFile);
@@ -240,32 +242,32 @@ public class ClangResources {
             // System.out.println("RETURN VALUE:" + output.getReturnValue());
             // System.out.println("STD OUT:" + output.getStdOut());
             // System.out.println("STD ERR:" + output.getStdErr().get(StreamKeys.WARNINGS));
-    
+
             // boolean foundInclude = !output.getStdOut().isEmpty();
             boolean foundInclude = output.getReturnValue() == 0;
-    
+
             if (foundInclude) {
                 SpecsCheck.checkArgument(output.getStdOut().isEmpty(),
                         () -> "Expected std output to be empty: " + output.getStdOut());
                 SpecsCheck.checkArgument(output.getStdErr().get(StreamKeys.WARNINGS).isEmpty(),
                         () -> "Expected err output to be empty: " + output.getStdErr().get(StreamKeys.WARNINGS));
             }
-    
+
             if (!foundInclude) {
                 needsLib = true;
                 break;
             }
             // return foundInclude;
         }
-    
+
         if (needsLib) {
             ClavaLog.debug("Could not find system libc/licxx");
         } else {
             ClavaLog.debug("Detected system's libc and licxx");
         }
-    
+
         return !needsLib;
-    
+
     }
     */
     // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {

@@ -260,7 +260,7 @@ public class ClangAstParser {
         /*
         ClangStreamParser clangStreamParser = new ClangStreamParser(stderr, SpecsSystem.isDebug());
         App newApp = clangStreamParser.parse();
-        
+
         if (SpecsSystem.isDebug()) {
             // App newApp = new ClangStreamParser(stderr).parse();
             System.out.println("NEW APP CODE:\n" + newApp.getCode());
@@ -609,7 +609,7 @@ public class ClangAstParser {
 
     /**
      * Detects if the system has libc/licxx installed.
-     * 
+     *
      * @param clangExecutable
      * @return
      */
@@ -720,42 +720,42 @@ public class ClangAstParser {
     /*
     private static Map<String, List<Qualifier>> parseTypeQualifiers(String typeQualifiersString) {
         Map<String, List<Qualifier>> typeQualifiers = new HashMap<>();
-    
+
         for (String line : StringLines.getLines(typeQualifiersString)) {
-    
+
             String[] parts = line.split("->");
             Preconditions.checkArgument(parts.length == 2);
             String nodeAddress = parts[0].trim();
             String qualifiersStr = parts[1].trim();
-    
+
             List<Qualifier> qualifiers = new StringParser(qualifiersStr).apply(ClangDataParsers::parseQualifiers);
-    
+
             typeQualifiers.put(nodeAddress, qualifiers);
         }
-    
+
         return typeQualifiers;
     }
     */
     /*
     private static List<ClangNode> cleanup(List<ClangNode> clangDump, Map<Long, Long> nodeToTypes) {
         List<ClangNode> cleanedDump = new ArrayList<>();
-    
+
         Set<String> removedTypes = new HashSet<>();
-    
+
         for (ClangNode node : clangDump) {
             // Check if node has a type
             if (TOP_NODES_WITHOUT_TYPES.contains(node.getName())) {
                 cleanedDump.add(node);
                 continue;
             }
-    
+
             // If node is not in nodeToTypes, ignore it
             Long typeId = nodeToTypes.get(node.getId());
-    
+
             if (typeId == null) {
                 removedTypes.add(node.getName());
                 // cleanedDump.add(node);
-    
+
                 // LoggingUtils.msgInfo("Could not find type for node of type '" + node.getName() + "' - 0x"
                 // + Long.toHexString(node.getId()));
                 continue;
@@ -763,9 +763,9 @@ public class ClangAstParser {
             System.out.println("ADDING:" + node.getName());
             cleanedDump.add(node);
         }
-    
+
         LoggingUtils.msgInfo("Cleaned nodes of types: " + removedTypes);
-    
+
         return cleanedDump;
     }
     */
@@ -963,6 +963,8 @@ public class ClangAstParser {
             return clangAstResources.get(ClangAstFileResource.CENTOS_EXE);
         case LINUX:
             return clangAstResources.get(ClangAstFileResource.LINUX_EXE);
+        case LINUX_ARMV7:
+            return clangAstResources.get(ClangAstFileResource.LINUX_ARMV7_EXE);
         case MAC_OS:
             return clangAstResources.get(ClangAstFileResource.MAC_OS_EXE);
         default:
@@ -972,7 +974,7 @@ public class ClangAstParser {
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
         return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
-        /*        
+        /*
         switch (platform) {
         case WINDOWS:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
@@ -983,7 +985,7 @@ public class ClangAstParser {
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_CENTOS6);
         case LINUX:
             return clangAstResources.get(ClangAstFileResource.LIBC_CXX_LINUX);
-        
+
         // return ClangAstWebResource.LIBC_CXX_MAC_OS;
         // case CENTOS6:
         // return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);

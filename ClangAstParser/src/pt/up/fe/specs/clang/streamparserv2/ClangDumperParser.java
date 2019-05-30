@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -248,7 +248,7 @@ public class ClangDumperParser {
 
         /*
         String tempDir = System.getProperty("java.io.tmpdir");
-        
+
         // String baseFilename = new JarPath(ClangAstLauncher.class, "clangjar").buildJarPath();
         // File resourceFolder = new File(baseFilename, "clang_ast_exe");
         File resourceFolder = new File(tempDir, "clang_ast_exe");
@@ -265,6 +265,8 @@ public class ClangDumperParser {
             return clangAstResources.get(ClangAstFileResource.CENTOS_EXE);
         case LINUX:
             return clangAstResources.get(ClangAstFileResource.LINUX_EXE);
+        case LINUX_ARMV7:
+            return clangAstResources.get(ClangAstFileResource.LINUX_ARMV7_EXE);
         case MAC_OS:
             return clangAstResources.get(ClangAstFileResource.MAC_OS_EXE);
         default:
@@ -318,28 +320,28 @@ public class ClangDumperParser {
                 .writeVersioned(resourceFolder, ClangAstParser.class);
         // ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
         // resourceFolder, ClangAstParser.class);
-        
+
         // boolean hasFolderBeenCleared = false;
-        
+
         zipManager.extract(builtinIncludesZip);
-        
+
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
         // boolean hasLibC = true;
-        
+
         if (!hasLibC) {
             // Obtain correct version of libc/c++
             FileResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
-        
+
             if (libcResource == null) {
                 ClavaLog.info("Could not detect LibC/C++, and currently there is no bundled alternative for platform '"
                         + SupportedPlatform.getCurrentPlatform() + "'. System includes might not work.");
             } else {
-        
+
                 // Write Clang headers
                 ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
                         ClangAstParser.class);
-        
+
                 zipManager.extract(libcZip);
             }
         }
@@ -358,7 +360,7 @@ public class ClangDumperParser {
 
     /**
      * Detects if the system has libc/licxx installed.
-     * 
+     *
      * @param clangExecutable
      * @return
      */
@@ -370,37 +372,37 @@ public class ClangDumperParser {
         if (SupportedPlatform.getCurrentPlatform().isWindows()) {
             return false;
         }
-        
+
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-        
+
         // Test C
         ProcessOutput<String, ClangParserData> outputC = testFile(clangExecutable, clangTest,
                 ClangAstResource.TEST_INCLUDES_C);
         boolean foundCIncludes = !outputC.getStdOut().isEmpty();
-        
+
         if (!foundCIncludes) {
             ClavaLog.debug("Could not find C includes, output of test: " + outputC.getStdOut() + "\n----\n"
                     + outputC.getStdErr());
         }
-        
+
         // Test C++
         ProcessOutput<String, ClangParserData> outputCpp = testFile(clangExecutable, clangTest,
                 ClangAstResource.TEST_INCLUDES_CPP);
         boolean foundCppIncludes = !outputCpp.getStdOut().isEmpty();
-        
+
         if (!foundCppIncludes) {
             ClavaLog.debug("Could not find C++ includes, output of test: " + outputCpp.getStdOut() + "\n----\n"
                     + outputCpp.getStdErr());
         }
-        
+
         boolean hasLibs = foundCIncludes && foundCppIncludes;
-        
+
         return hasLibs;
-        
+
         // boolean needsLib = !foundCIncludes || !foundCppIncludes;
         //
         // return !needsLib;
-        
+
         // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
         // .parallelStream()
         // .map(resource -> testFile(clangExecutable, clangTest, resource))
@@ -414,7 +416,7 @@ public class ClangDumperParser {
         // } else {
         // SpecsLogs.msgLib("Detected libc and licxx installed in the system");
         // }
-        
+
         // return !needsLib;
          */
     }
