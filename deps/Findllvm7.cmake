@@ -38,6 +38,15 @@ if(APPLE)
   unset(LINKER_GROUP_END)
 endif()
 
+#message("SYSTEM PROCESSOR: '${CMAKE_SYSTEM_PROCESSOR}'")
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm") 
+	set(PROCESSOR_PREFIX "ARM")
+else()
+	set(PROCESSOR_PREFIX "X86")
+endif()
+
+
+
 #find_libraries(llvm7_LIBRARIES "${LIB_DIR}/build/lib" 
 list(APPEND llvm7_LIBRARIES 
 	
@@ -52,7 +61,7 @@ list(APPEND llvm7_LIBRARIES
 		clangChangeNamespace
 		clangCodeGen
 		clangCrossTU
-		clangDaemon
+		#clangDaemon
 		clangDoc
 		clangDriver
 		clangDynamicASTMatchers
@@ -62,8 +71,8 @@ list(APPEND llvm7_LIBRARIES
 		clangFrontendTool
 		clangHandleCXX
 		clangHandleLLVM
-		clangIncludeFixer
-		clangIncludeFixerPlugin
+		#clangIncludeFixer
+		#clangIncludeFixerPlugin
 		clangIndex
 		clangLex
 		clangMove
@@ -125,20 +134,20 @@ list(APPEND llvm7_LIBRARIES
 	LLVMObjectYAML
 	LLVMLibDriver
 	LLVMOption
-	gtest_main
-	gtest
+	#gtest_main
+	#gtest
 	LLVMWindowsManifest
-	LLVMX86Disassembler
-	LLVMX86AsmParser
-	LLVMX86CodeGen
+	LLVM${PROCESSOR_PREFIX}Disassembler
+	LLVM${PROCESSOR_PREFIX}AsmParser
+	LLVM${PROCESSOR_PREFIX}CodeGen
 	LLVMGlobalISel
 	LLVMSelectionDAG
 	LLVMAsmPrinter
-	LLVMX86Desc
+	LLVM${PROCESSOR_PREFIX}Desc
 	LLVMMCDisassembler
-	LLVMX86Info
-	LLVMX86AsmPrinter
-	LLVMX86Utils
+	LLVM${PROCESSOR_PREFIX}Info
+	LLVM${PROCESSOR_PREFIX}AsmPrinter
+	LLVM${PROCESSOR_PREFIX}Utils
 	LLVMMCJIT
 	LLVMInterpreter
 	LLVMExecutionEngine
@@ -170,7 +179,9 @@ list(APPEND llvm7_LIBRARIES
 	LLVMSupport
 	LLVMDemangle
 )
-	
+
+
+
 
 if(UNIX AND NOT APPLE)
   # Generic UNIX dependencies
