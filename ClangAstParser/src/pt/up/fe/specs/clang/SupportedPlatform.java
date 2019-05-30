@@ -82,7 +82,7 @@ public enum SupportedPlatform implements StringProvider {
     }
 
     public boolean isLinux() {
-        return this == SupportedPlatform.CENTOS || this == MAC_OS || this == LINUX;
+        return this == SupportedPlatform.CENTOS || this == MAC_OS || this == LINUX || this == LINUX_ARMV7;
     }
 
     public String getName() {
