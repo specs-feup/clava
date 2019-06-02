@@ -15,7 +15,7 @@ var ClavaJoinPoints = {};
 ClavaJoinPoints.create = function(node) {
 	// Check instance
 	checkTrue(Java.type("pt.up.fe.specs.clava.ClavaNode").class.isInstance(node), "ClavaJoinPoints.create::node: Expected input to be a ClavaNode");
-	return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node, null);
+	return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node);
 }
 
 /**
