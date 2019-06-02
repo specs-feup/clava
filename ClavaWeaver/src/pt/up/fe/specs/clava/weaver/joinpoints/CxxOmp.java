@@ -298,7 +298,6 @@ public class CxxOmp extends AOmp {
 
         // Replace previous pragma
         NodeInsertUtils.replace(ompPragma, newOmpPragma);
-        // replaceWithImpl(CxxJoinpoints.create(newOmpPragma, parent));
 
         // Update join point pragma
         this.ompPragma = newOmpPragma;
