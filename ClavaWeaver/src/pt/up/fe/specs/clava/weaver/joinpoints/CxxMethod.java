@@ -1,11 +1,11 @@
 /**
  * Copyright 2018 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -16,20 +16,17 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
 
 public class CxxMethod extends AMethod {
 
     private final CXXMethodDecl method;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxMethod(CXXMethodDecl method, ACxxWeaverJoinPoint parent) {
-        super(new CxxFunction(method, parent));
+    public CxxMethod(CXXMethodDecl method) {
+        super(new CxxFunction(method));
 
         this.method = method;
-        this.parent = parent;
     }
 
     @Override
@@ -37,14 +34,9 @@ public class CxxMethod extends AMethod {
         return method;
     }
 
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
-
     @Override
     public AClass getRecordImpl() {
-        return (AClass) CxxJoinpoints.create(method.getRecordDecl(), parent);
+        return (AClass) CxxJoinpoints.create(method.getRecordDecl());
     }
 
 }

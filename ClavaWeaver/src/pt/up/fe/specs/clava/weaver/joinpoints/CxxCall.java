@@ -32,7 +32,6 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
@@ -47,21 +46,16 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 public class CxxCall extends ACall {
 
     private final CallExpr call;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxCall(CallExpr call, ACxxWeaverJoinPoint parent) {
-        super(new CxxExpression(call, parent));
+    public CxxCall(CallExpr call) {
+        super(new CxxExpression(call));
 
         this.call = call;
-        this.parent = parent;
     }
 
     @Override
     public String getNameImpl() {
-        // System.out.println("CALL NAME:" + call.getCalleeName());
-        // System.out.println("CALL NAME TRY:" + call.getCalleeNameTry());
         return call.getCalleeNameTry().orElse(null);
-        // return call.getCalleeName();
     }
 
     @Override
@@ -72,14 +66,9 @@ public class CxxCall extends ACall {
     @Override
     public List<? extends AExpression> selectArg() {
         return call.getArgs().stream()
-                .map(expr -> CxxJoinpoints.create(expr, this, AExpression.class))
+                .map(expr -> CxxJoinpoints.create(expr, AExpression.class))
                 .collect(Collectors.toList());
     }
-
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
 
     @Override
     public CallExpr getNode() {
@@ -145,7 +134,7 @@ public class CxxCall extends ACall {
     @Override
     public AJoinPoint getTypeImpl() {
         if (call instanceof CXXMemberCallExpr) {
-            return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType(), this);
+            return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType());
         }
 
         // Return the type of the function (return type)
@@ -158,7 +147,7 @@ public class CxxCall extends ACall {
         // }
         // System.out.println("CALLEE TYPE:" + calleeType);
         if (calleeType instanceof FunctionType) {
-            return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType(), this);
+            return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType());
         }
 
         /*
@@ -168,12 +157,12 @@ public class CxxCall extends ACall {
         }
         */
 
-        return CxxJoinpoints.create(calleeType, this);
+        return CxxJoinpoints.create(calleeType);
     }
 
     @Override
     public List<? extends AExpression> selectCallee() {
-        return Arrays.asList(CxxJoinpoints.create(call.getCallee(), this, AExpression.class));
+        return Arrays.asList(CxxJoinpoints.create(call.getCallee(), AExpression.class));
     }
 
     @Override
@@ -193,7 +182,7 @@ public class CxxCall extends ACall {
 
     @Override
     public AFunction getDeclarationImpl() {
-        return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl, this)).orElse(null);
+        return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl)).orElse(null);
         // Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
         //
         // return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
@@ -201,7 +190,7 @@ public class CxxCall extends ACall {
 
     @Override
     public AFunction getDefinitionImpl() {
-        return call.getDefinition().map(decl -> (AFunction) CxxJoinpoints.create(decl, this)).orElse(null);
+        return call.getDefinition().map(decl -> (AFunction) CxxJoinpoints.create(decl)).orElse(null);
     }
 
     @Override
@@ -209,7 +198,7 @@ public class CxxCall extends ACall {
         return call.getArgs()
                 .stream()
                 // .map(Expr::getCode)
-                .map(arg -> (AExpression) CxxJoinpoints.create(arg, this))
+                .map(arg -> (AExpression) CxxJoinpoints.create(arg))
                 .collect(Collectors.toList())
                 .toArray(new AExpression[0]);
     }
@@ -222,7 +211,7 @@ public class CxxCall extends ACall {
     @Override
     public AType getReturnTypeImpl() {
 
-        return (AType) CxxJoinpoints.create(call.getType(), this);
+        return (AType) CxxJoinpoints.create(call.getType());
     }
 
     @Override
@@ -248,7 +237,7 @@ public class CxxCall extends ACall {
         // Get arg of equivalent index, to extract type
         Expr arg = call.getArgs().get(index);
         Expr literalExpr = CxxWeaver.getFactory().literalExpr(expr, arg.getExprType());
-        setArgImpl(index, (AExpression) CxxJoinpoints.create(literalExpr, null));
+        setArgImpl(index, (AExpression) CxxJoinpoints.create(literalExpr));
     }
 
     @Override
@@ -266,7 +255,7 @@ public class CxxCall extends ACall {
 
     /**
      * Method required for Nashorn to disambiguate between String and CxxExpression.
-     * 
+     *
      * @param index
      * @param expr
      */
@@ -278,7 +267,7 @@ public class CxxCall extends ACall {
     public AExpression argImpl(int index) {
         call.checkIndex(index);
         Expr arg = call.getArgs().get(index);
-        return (AExpression) CxxJoinpoints.create(arg, this);
+        return (AExpression) CxxJoinpoints.create(arg);
 
     }
 
@@ -295,14 +284,14 @@ public class CxxCall extends ACall {
 
         MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
 
-        return CxxJoinpoints.create(memberExpr, this, AMemberAccess.class);
+        return CxxJoinpoints.create(memberExpr, AMemberAccess.class);
 
     }
 
     @Override
     public AFunctionType getFunctionTypeImpl() {
         return call.getFunctionType()
-                .map(type -> (AFunctionType) CxxJoinpoints.create(type, this))
+                .map(type -> (AFunctionType) CxxJoinpoints.create(type))
                 .orElse(null);
 
         // return (AType) CxxJoinpoints.create(call.getFunctionType(), this);
@@ -317,7 +306,7 @@ public class CxxCall extends ACall {
     public AFunction getFunctionImpl() {
         // return CxxJoinpoints.create(call.getFunctionDecl(), this, AFunction.class);
         return call.getFunctionDecl()
-                .map(fDecl -> CxxJoinpoints.create(fDecl, this, AFunction.class))
+                .map(fDecl -> CxxJoinpoints.create(fDecl, AFunction.class))
                 .orElse(null);
         // return CxxJoinpoints.create(call.getFunction(), this, AFunction.class);
     }
@@ -342,7 +331,7 @@ public class CxxCall extends ACall {
     @Override
     public AFunction getDeclImpl() {
         return call.getFunctionDecl()
-                .map(fDecl -> CxxJoinpoints.create(fDecl, this, AFunction.class))
+                .map(fDecl -> CxxJoinpoints.create(fDecl, AFunction.class))
                 .orElse(null);
     }
 

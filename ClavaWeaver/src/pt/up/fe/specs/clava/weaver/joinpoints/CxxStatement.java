@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -38,7 +38,6 @@ import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
@@ -58,40 +57,15 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 public class CxxStatement extends AStatement {
 
     private final Stmt stmt;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxStatement(Stmt stmt, ACxxWeaverJoinPoint parent) {
+    public CxxStatement(Stmt stmt) {
         this.stmt = stmt;
-        this.parent = parent;
     }
-
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
 
     @Override
     public ClavaNode getNode() {
         return stmt;
     }
-
-    /*
-    @Override
-    public List<? extends ALoop> selectLoop() {
-    return stmt.getDescendantsAndSelfStream()
-    	.filter(node -> node instanceof LoopStmt)
-    	.map(loop -> new CxxLoop((LoopStmt) loop, this))
-    	.collect(Collectors.toList());
-    }
-    
-    @Override
-    public List<? extends ACall> selectCall() {
-    return stmt.getDescendantsStream()
-    	.filter(node -> node instanceof CallExpr)
-    	.map(loop -> new CxxCall((CallExpr) loop, this))
-    	.collect(Collectors.toList());
-    }
-    */
 
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
@@ -101,7 +75,7 @@ public class CxxStatement extends AStatement {
         NodeInsertUtils.replace(stmt, newStmt);
 
         // Return a statement joinpoint
-        return CxxJoinpoints.create(newStmt, null);
+        return CxxJoinpoints.create(newStmt);
     }
 
     @Override
@@ -124,20 +98,20 @@ public class CxxStatement extends AStatement {
             return Collections.emptyList();
         }
 
-        return Arrays.asList((ACall) CxxJoinpoints.create((CallExpr) expr, this));
+        return Arrays.asList((ACall) CxxJoinpoints.create((CallExpr) expr));
     }
 
     @Override
     public List<? extends ACall> selectCall() {
         return stmt.getDescendantsAndSelfStream()
                 .filter(node -> node instanceof CallExpr)
-                .map(loop -> (ACall) CxxJoinpoints.create(loop, this))
+                .map(loop -> (ACall) CxxJoinpoints.create(loop))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<? extends AMemberCall> selectMemberCall() {
-        return CxxSelects.select(AMemberCall.class, stmt.getChildren(), true, this,
+        return CxxSelects.select(AMemberCall.class, stmt.getChildren(), true,
                 node -> node instanceof CXXMemberCallExpr);
     }
 
@@ -166,7 +140,7 @@ public class CxxStatement extends AStatement {
                 .filter(ArraySubscriptExpr.class::isInstance)
                 .map(ArraySubscriptExpr.class::cast)
                 .filter(CxxStatement::isTopLevelArraySubscript)
-                .map(arraySub -> (AArrayAccess) CxxJoinpoints.create(arraySub, this))
+                .map(arraySub -> (AArrayAccess) CxxJoinpoints.create(arraySub))
                 .collect(Collectors.toList());
 
     }
@@ -185,13 +159,13 @@ public class CxxStatement extends AStatement {
 
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return CxxSelects.select(AVardecl.class, stmt.getChildren(), true, this, VarDecl.class);
+        return CxxSelects.select(AVardecl.class, stmt.getChildren(), true, VarDecl.class);
 
     }
 
     @Override
     public List<? extends AVarref> selectVarref() {
-        return CxxSelects.select(AVarref.class, stmt.getChildren(), true, this,
+        return CxxSelects.select(AVarref.class, stmt.getChildren(), true,
                 // node -> node instanceof DeclRefExpr && !((DeclRefExpr) node).isFunctionCall());
                 CxxStatement::isVarref);
     }
@@ -236,44 +210,44 @@ public class CxxStatement extends AStatement {
 
     @Override
     public List<? extends AExpression> selectExpr() {
-        return CxxSelects.select(AExpression.class, stmt.getChildren(), true, this, Expr.class);
+        return CxxSelects.select(AExpression.class, stmt.getChildren(), true, Expr.class);
     }
 
     @Override
     public List<? extends AExpression> selectChildExpr() {
         // Since it is direct, normalize children
 
-        return CxxSelects.select(AExpression.class, stmt.getChildrenNormalized(), false, this, Expr.class);
+        return CxxSelects.select(AExpression.class, stmt.getChildrenNormalized(), false, Expr.class);
     }
 
     @Override
     public List<? extends AOp> selectOp() {
-        return CxxSelects.select(AOp.class, stmt.getChildrenNormalized(), true, this, Operator.class);
+        return CxxSelects.select(AOp.class, stmt.getChildrenNormalized(), true, Operator.class);
     }
 
     @Override
     public List<? extends ABinaryOp> selectBinaryOp() {
-        return CxxSelects.select(ABinaryOp.class, stmt.getChildrenNormalized(), true, this, BinaryOperator.class);
+        return CxxSelects.select(ABinaryOp.class, stmt.getChildrenNormalized(), true, BinaryOperator.class);
     }
 
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
-        return CxxSelects.select(AUnaryOp.class, stmt.getChildrenNormalized(), true, this, UnaryOperator.class);
+        return CxxSelects.select(AUnaryOp.class, stmt.getChildrenNormalized(), true, UnaryOperator.class);
     }
 
     @Override
     public List<? extends ANewExpr> selectNewExpr() {
-        return CxxSelects.select(ANewExpr.class, stmt.getChildrenNormalized(), true, this, CXXNewExpr.class);
+        return CxxSelects.select(ANewExpr.class, stmt.getChildrenNormalized(), true, CXXNewExpr.class);
     }
 
     @Override
     public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return CxxSelects.select(ADeleteExpr.class, stmt.getChildrenNormalized(), true, this, CXXDeleteExpr.class);
+        return CxxSelects.select(ADeleteExpr.class, stmt.getChildrenNormalized(), true, CXXDeleteExpr.class);
     }
 
     @Override
     public List<? extends AMemberAccess> selectMemberAccess() {
-        return CxxSelects.select(AMemberAccess.class, stmt.getChildrenNormalized(), true, this, MemberExpr.class);
+        return CxxSelects.select(AMemberAccess.class, stmt.getChildrenNormalized(), true, MemberExpr.class);
     }
 
 }

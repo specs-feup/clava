@@ -125,13 +125,13 @@ import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxUndefinedType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxVariableArrayType;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
-import pt.up.fe.specs.util.classmap.BiFunctionClassMap;
+import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
 public class CxxJoinpoints {
 
-    private static final BiFunctionClassMap<ClavaNode, ACxxWeaverJoinPoint, ACxxWeaverJoinPoint> JOINPOINT_FACTORY;
+    private static final FunctionClassMap<ClavaNode, ACxxWeaverJoinPoint> JOINPOINT_FACTORY;
     static {
-        JOINPOINT_FACTORY = new BiFunctionClassMap<>();
+        JOINPOINT_FACTORY = new FunctionClassMap<>();
         JOINPOINT_FACTORY.put(CastExpr.class, CxxCast::new);
         JOINPOINT_FACTORY.put(BinaryOperator.class, CxxBinaryOp::new);
         JOINPOINT_FACTORY.put(UnaryOperator.class, CxxUnaryOp::new);
@@ -192,7 +192,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);
     }
 
-    private static ACxxWeaverJoinPoint nullNode(ClavaNode node, ACxxWeaverJoinPoint parent) {
+    private static ACxxWeaverJoinPoint nullNode(ClavaNode node) {
         SpecsCheck.checkArgument(node instanceof NullNode, () -> "Expected an instance of NullNode, received: " + node);
 
         return null;
@@ -236,74 +236,38 @@ public class CxxJoinpoints {
     // // return new CxxFile(tu, parent == null ? null : parent.getRoot());
     // }
 
-    private static ACxxWeaverJoinPoint programFactory(App app, ACxxWeaverJoinPoint parent) {
-        return programFactory(app);
-    }
-
     public static CxxProgram programFactory(App app) {
         CxxWeaver weaver = CxxWeaver.getCxxWeaver();
         return new CxxProgram(weaver.getProgramName(), app, weaver);
     }
 
-    // private static ACxxWeaverJoinPoint wrapperStmtFactory(WrapperStmt wrapperStmt, ACxxWeaverJoinPoint parent) {
-    // return create(wrapperStmt.getWrappedNode(), parent);
-    // }
-
-    private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record, ACxxWeaverJoinPoint parent) {
+    private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record) {
 
         if (record.getTagKind() == TagKind.STRUCT) {
-            return new CxxStruct(record, parent);
+            return new CxxStruct(record);
         }
 
         if (record.getTagKind() == TagKind.CLASS) {
-            return new CxxClass((CXXRecordDecl) record, parent);
+            return new CxxClass((CXXRecordDecl) record);
         }
 
-        return new CxxRecord(record, parent);
+        return new CxxRecord(record);
     }
 
-    private static ACxxWeaverJoinPoint defaultFactory(ClavaNode node, ACxxWeaverJoinPoint parent) {
+    private static ACxxWeaverJoinPoint defaultFactory(ClavaNode node) {
         SpecsLogs.msgWarn("Factory not defined for nodes of class '" + node.getClass().getSimpleName() + "'");
-        return new GenericJoinpoint(node, parent);
+        return new GenericJoinpoint(node);
     }
 
-    /*
-    public ACxxWeaverJoinPoint create(ClavaNode node, ACxxWeaverJoinPoint parent) {
-        ACxxWeaverJoinPoint newJoinPoint = JOINPOINT_FACTORY.apply(node, parent);
-        newJoinPoint.setWeaverEngine(weaverEngine);
-
-        return newJoinPoint;
+    public static ACxxWeaverJoinPoint create(ClavaNode node) {
+        return JOINPOINT_FACTORY.apply(node);
     }
 
-    public ACxxWeaverJoinPoint create(ClavaNode node, AJoinPoint parent) {
-        return create(node, (ACxxWeaverJoinPoint) parent);
-    }
-
-    public <T extends AJoinPoint> T create(ClavaNode node, ACxxWeaverJoinPoint parent,
-            Class<T> targetClass) {
-
-        return targetClass.cast(create(node, parent));
-    }
-    */
-
-    public static ACxxWeaverJoinPoint create(ClavaNode node, AJoinPoint parent) {
-        return create(node, (ACxxWeaverJoinPoint) parent);
-    }
-
-    public static ACxxWeaverJoinPoint create(ClavaNode node, ACxxWeaverJoinPoint parent) {
-        ACxxWeaverJoinPoint newJoinPoint = JOINPOINT_FACTORY.apply(node, parent);
-        // setWeaverEngine(newJoinPoint);
-        /*
-        if (parent != null) {
-            newJoinPoint.setWeaverEngine(parent);
+    public static <T extends AJoinPoint> T create(ClavaNode node, Class<T> targetClass) {
+        if (targetClass == null) {
+            throw new RuntimeException("Check if you meant to call 'create' with a single argument");
         }
-        */
-        return newJoinPoint;
-    }
-
-    public static <T extends AJoinPoint> T create(ClavaNode node, ACxxWeaverJoinPoint parent,
-            Class<T> targetClass) {
-        return targetClass.cast(create(node, parent));
+        return targetClass.cast(create(node));
     }
 
     public static CxxProgram getProgram(AJoinPoint joinpoint) {
@@ -349,7 +313,7 @@ public class CxxJoinpoints {
         return getProgram(joinpoint).getWeaver();
     }
 
-    public static AJoinPoint create(Stmt newNode) {
-        return create(newNode, null);
-    }
+    // public static AJoinPoint create(Stmt newNode) {
+    // return create(newNode, null);
+    // }
 }

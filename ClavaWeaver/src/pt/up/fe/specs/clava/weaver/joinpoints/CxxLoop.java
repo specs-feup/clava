@@ -45,7 +45,6 @@ import pt.up.fe.specs.clava.transform.loop.LoopInterchange;
 import pt.up.fe.specs.clava.transform.loop.LoopTiling;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
@@ -78,13 +77,11 @@ public class CxxLoop extends ALoop {
             BinaryOperatorKind.GE, BinaryOperatorKind.LT, BinaryOperatorKind.LE);
 
     private final LoopStmt loop;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxLoop(LoopStmt loop, ACxxWeaverJoinPoint parent) {
-        super(new CxxStatement(loop, parent));
+    public CxxLoop(LoopStmt loop) {
+        super(new CxxStatement(loop));
 
         this.loop = loop;
-        this.parent = parent;
     }
 
     @Override
@@ -104,30 +101,22 @@ public class CxxLoop extends ALoop {
 
     /*
     @Override
-    public int getNumIterations() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-    */
-
-    /*
-    @Override
     public int getIncrementValue() {
         // Only supported for loops of type 'for'
         if (!(loop instanceof ForStmt)) {
             return 0;
         }
-    
+
         ForStmt forLoop = (ForStmt) loop;
-    
+
         Stmt inc = forLoop.getInc().orElse(null);
         if (inc == null) {
             return 0;
         }
-    
+
         // TODO: Regular expression for <VAR_NAME>++; / <VAR_NAME>--;
         System.out.println("INC CODE:" + inc);
-    
+
         return 0;
     }
     */
@@ -239,7 +228,7 @@ public class CxxLoop extends ALoop {
 
         }
 
-        return Arrays.asList(CxxJoinpoints.create(init, this, AStatement.class));
+        return Arrays.asList(CxxJoinpoints.create(init, AStatement.class));
     }
 
     @Override
@@ -250,7 +239,7 @@ public class CxxLoop extends ALoop {
             return Collections.emptyList();
         }
 
-        return Arrays.asList(CxxJoinpoints.create(ClavaNodes.toStmt(condition), this, AStatement.class));
+        return Arrays.asList(CxxJoinpoints.create(ClavaNodes.toStmt(condition), AStatement.class));
     }
 
     @Override
@@ -265,7 +254,7 @@ public class CxxLoop extends ALoop {
 
         }
 
-        return Arrays.asList(CxxJoinpoints.create(inc, this, AStatement.class));
+        return Arrays.asList(CxxJoinpoints.create(inc, AStatement.class));
     }
 
     @Override
@@ -273,13 +262,8 @@ public class CxxLoop extends ALoop {
         // return loop.getBody()
         // .map(body -> Arrays.asList(CxxJoinpoints.create(body, this, AScope.class)))
         // .orElse(Collections.emptyList());
-        return Arrays.asList(CxxJoinpoints.create(loop.getBody(), this, AScope.class));
+        return Arrays.asList(CxxJoinpoints.create(loop.getBody(), AScope.class));
     }
-
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
 
     @Override
     public LoopStmt getNode() {
@@ -297,16 +281,16 @@ public class CxxLoop extends ALoop {
         /*
         // Map<String, Consumer<? extends Object>> defMap = new HashMap<>();
         // defMap.put("qq", obj -> consumerString(obj));
-        
+
         // Check if loop is annotated with pragma "parallel"
         List<Pragma> pragmas = ClavaNodes.getPragmas(getNode());
-        
+
         boolean result = pragmas.stream()
                 .filter(pragma -> pragma.getName().equals("clava"))
                 .filter(clavaPragma -> clavaPragma.getContent().equals("parallel"))
                 .findFirst()
                 .isPresent();
-        
+
         return result;
         */
     }
@@ -359,7 +343,7 @@ public class CxxLoop extends ALoop {
             Stmt cond = ((ForStmt) loop).getCond().orElse(CxxWeaver.getFactory().nullStmt());
             WhileStmt whileStmt = CxxWeaver.getFactory().whileStmt(cond, loop.getBody());
 
-            replaceWith(CxxJoinpoints.create(whileStmt, getParentImpl()));
+            replaceWith(CxxJoinpoints.create(whileStmt));
 
             return;
         }
@@ -385,13 +369,13 @@ public class CxxLoop extends ALoop {
         /*
         // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
         // setInitValue(initCode);
-        
+
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
-        
+
         LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
-        
+
         ((ForStmt) loop).setInit(literalStmt);
         */
     }
@@ -408,15 +392,15 @@ public class CxxLoop extends ALoop {
         // ((ForStmt) loop).setInit(literalStmt);
         defInitValueImpl(initCode);
     }
-    
+
     @Override
     public void defInitValueImpl(String value) {
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
-    
+
         LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
-    
+
         ((ForStmt) loop).setInit(literalStmt);
     }
     */
@@ -493,32 +477,32 @@ public class CxxLoop extends ALoop {
         return initValue;
         /*
         Optional<Stmt> initOpt = ((ForStmt) loop).getInit();
-        
+
         if (initOpt.isPresent()) {
-        
+
             Stmt init = initOpt.get();
-        
+
             ClavaNode child = init.getChild(0);
-        
+
             if (child instanceof VarDecl) {
-        
+
                 VarDecl decl = (VarDecl) child;
-        
+
                 Optional<Expr> declInitOpt = decl.getInit();
                 if (declInitOpt.isPresent()) {
-        
+
                     return declInitOpt.get().getCode();
                 }
             } else if (child instanceof BinaryOperator) {
-        
+
                 BinaryOperator binOp = (BinaryOperator) child;
                 if (binOp.getOp() == BinaryOperatorKind.ASSIGN) {
-        
+
                     return binOp.getRhs().getCode();
                 }
             }
         }
-        
+
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
@@ -558,23 +542,23 @@ public class CxxLoop extends ALoop {
         return endValue;
         /*
         Optional<Stmt> condOpt = forLoop.getCond();
-        
+
         if (condOpt.isPresent()) {
-        
+
             Stmt cond = condOpt.get();
-        
+
             ClavaNode child = cond.getChild(0);
-        
+
             if (child instanceof BinaryOperator) {
-        
+
                 BinaryOperator binOp = (BinaryOperator) child;
                 if (ops.contains(binOp.getOp())) {
-        
+
                     return binOp.getRhs().getCode();
                 }
             }
         }
-        
+
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
@@ -741,7 +725,7 @@ public class CxxLoop extends ALoop {
             return reference;
         }
 
-        return CxxJoinpoints.create(loopTiling.getLastReferenceStmt(), null, AStatement.class);
+        return CxxJoinpoints.create(loopTiling.getLastReferenceStmt(), AStatement.class);
 
     }
 
@@ -769,7 +753,7 @@ public class CxxLoop extends ALoop {
         }
 
         return ((ForStmt) loop).getIterationsExpr()
-                .map(expr -> CxxJoinpoints.create(expr, this, AExpression.class))
+                .map(expr -> CxxJoinpoints.create(expr, AExpression.class))
                 .orElse(null);
     }
 
@@ -801,7 +785,7 @@ public class CxxLoop extends ALoop {
             return null;
         }
 
-        return ((ForStmt) loop).getInit().map(init -> CxxJoinpoints.create(init, this, AStatement.class)).orElse(null);
+        return ((ForStmt) loop).getInit().map(init -> CxxJoinpoints.create(init, AStatement.class)).orElse(null);
 
     }
 }

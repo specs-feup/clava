@@ -727,6 +727,7 @@ public class CxxWeaver extends ACxxWeaver {
      * @param parserOptions2
      * @return
      */
+    /*
     private List<File> adaptSources(List<File> sources, List<String> parserOptions) {
         List<File> adaptedSources = new ArrayList<>(sources);
         // if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
@@ -757,7 +758,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         return adaptedSources;
     }
-
+    */
     private List<String> processSources(Map<String, File> sourceFiles, List<String> parserOptions) {
 
         SpecsCheck.checkArgument(!sourceFiles.isEmpty(),
@@ -827,8 +828,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public JoinPoint select() {
-        return CxxJoinpoints.create(getApp(), null);
-        // return new CxxProgram(getProgramName(), app, this);
+        return CxxJoinpoints.create(getApp());
     }
 
     public String getProgramName() {

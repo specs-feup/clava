@@ -36,7 +36,6 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -54,42 +53,17 @@ import pt.up.fe.specs.util.SpecsLogs;
 public class CxxScope extends AScope {
 
     private final CompoundStmt scope;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxScope(CompoundStmt scope, ACxxWeaverJoinPoint parent) {
-        super(new CxxStatement(scope, parent));
-        // public CxxScope(CompoundStmt scope, ACxxWeaverJoinPoint parent) {
+    public CxxScope(CompoundStmt scope) {
+        super(new CxxStatement(scope));
         this.scope = scope;
-        this.parent = parent;
     }
-
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
 
     @Override
     public ClavaNode getNode() {
         return scope;
     }
 
-    /*
-    @Override
-    public void insertImpl(String position, String code) {
-        // Special cases entry/exit
-        String lowerCasePosition = position.toLowerCase();
-        if (lowerCasePosition.equals("entry")) {
-            insertEntryImpl(code);
-            return;
-        }
-    
-        if (lowerCasePosition.equals("exit")) {
-            insertExitImpl(code);
-            return;
-        }
-        super.insertImpl(position, code);
-    }
-    */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
         // 'body' behaviour
@@ -148,12 +122,12 @@ public class CxxScope extends AScope {
         CxxActions.insertStmt(position, scope, newStmt, getWeaverEngine());
 
         // Body becomes the parent of this statement
-        return CxxJoinpoints.create(newStmt, this);
+        return CxxJoinpoints.create(newStmt);
     }
 
     @Override
     public AJoinPoint insertBeginImpl(String code) {
-        return insertBeginImpl(AstFactory.stmtLiteral(code, this));
+        return insertBeginImpl(AstFactory.stmtLiteral(code));
     }
 
     @Override
@@ -167,12 +141,12 @@ public class CxxScope extends AScope {
 
         // return node;
         // TODO: Consider returning newStmt instead
-        return CxxJoinpoints.create(newStmt, null);
+        return CxxJoinpoints.create(newStmt);
     }
 
     @Override
     public AJoinPoint insertEndImpl(String code) {
-        return insertEndImpl(AstFactory.stmtLiteral(code, this));
+        return insertEndImpl(AstFactory.stmtLiteral(code));
     }
 
     @Override
@@ -184,7 +158,7 @@ public class CxxScope extends AScope {
         CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
         // return node;
         // TODO: Consider returning newStmt instead
-        return CxxJoinpoints.create(newStmt, null);
+        return CxxJoinpoints.create(newStmt);
         /*
         List<? extends AStatement> statements = selectStatements();
         if (statements.isEmpty()) {
@@ -211,48 +185,28 @@ public class CxxScope extends AScope {
 
     @Override
     public List<? extends AStatement> selectStmt() {
-        return CxxSelects.select(AStatement.class, getStatements(), true, this, CxxSelects::stmtFilter);
+        return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter);
 
     }
-
-    /*
-    public static boolean stmtFilter(ClavaNode node) {
-        if (!(node instanceof Stmt)) {
-            return false;
-        }
-    
-        Stmt stmt = (Stmt) node;
-    
-        if (stmt.isAggregateStmt()) {
-            return false;
-        }
-    
-        if (stmt instanceof LoopStmt || stmt instanceof IfStmt) {
-            return false;
-        }
-    
-        return true;
-    }
-    */
 
     @Override
     public List<? extends AStatement> selectChildStmt() {
         return getStatements().stream()
-                .map(stmt -> (AStatement) CxxJoinpoints.create(stmt, this))
+                .map(stmt -> (AStatement) CxxJoinpoints.create(stmt))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<? extends AScope> selectScope() {
         // It is a scope if the parent is a compound statement
-        return CxxSelects.select(AScope.class, getStatements(), true, this,
+        return CxxSelects.select(AScope.class, getStatements(), true,
                 node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
 
     }
 
     @Override
     public List<? extends AIf> selectIf() {
-        return CxxSelects.select(AIf.class, getStatements(), true, this, IfStmt.class);
+        return CxxSelects.select(AIf.class, getStatements(), true, IfStmt.class);
         // return getStatements().stream()
         // .filter(stmt -> stmt instanceof IfStmt)
         // .map(stmt -> CxxJoinpoints.create((IfStmt) stmt, this, AIf.class))
@@ -262,7 +216,7 @@ public class CxxScope extends AScope {
 
     @Override
     public List<? extends ALoop> selectLoop() {
-        return CxxSelects.select(ALoop.class, getStatements(), true, this, LoopStmt.class);
+        return CxxSelects.select(ALoop.class, getStatements(), true, LoopStmt.class);
         // return getStatements().stream()
         // .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
         // .filter(node -> node instanceof LoopStmt)
@@ -272,7 +226,7 @@ public class CxxScope extends AScope {
 
     @Override
     public List<? extends APragma> selectPragma() {
-        return CxxSelects.select(APragma.class, getStatements(), true, this, Pragma.class);
+        return CxxSelects.select(APragma.class, getStatements(), true, Pragma.class);
         /*
         return getStatements().stream()
                 .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
@@ -284,12 +238,12 @@ public class CxxScope extends AScope {
 
     @Override
     public List<? extends AMarker> selectMarker() {
-        return CxxSelects.select(AMarker.class, getStatements(), true, this, LaraMarkerPragma.class);
+        return CxxSelects.select(AMarker.class, getStatements(), true, LaraMarkerPragma.class);
     }
 
     @Override
     public List<? extends ATag> selectTag() {
-        return CxxSelects.select(ATag.class, getStatements(), true, this, LaraTagPragma.class);
+        return CxxSelects.select(ATag.class, getStatements(), true, LaraTagPragma.class);
     }
 
     @Override
@@ -299,12 +253,12 @@ public class CxxScope extends AScope {
 
     @Override
     public List<? extends AOmp> selectOmp() {
-        return CxxSelects.select(AOmp.class, getStatements(), true, this, OmpPragma.class);
+        return CxxSelects.select(AOmp.class, getStatements(), true, OmpPragma.class);
     }
 
     @Override
     public List<? extends AComment> selectComment() {
-        return CxxSelects.select(AComment.class, getStatements(), true, this, Comment.class::isInstance);
+        return CxxSelects.select(AComment.class, getStatements(), true, Comment.class::isInstance);
     }
 
     @Override
@@ -367,7 +321,7 @@ public class CxxScope extends AScope {
         }
         varDecl.set(VarDecl.IS_USED);
 
-        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl, this);
+        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl);
 
         insertBegin(varDeclJp);
 

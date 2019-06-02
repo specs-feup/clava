@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -16,7 +16,6 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
@@ -24,18 +23,11 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 public class CxxFunctionType extends AFunctionType {
 
     private final FunctionType type;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxFunctionType(FunctionType type, ACxxWeaverJoinPoint parent) {
-        super(new CxxType(type, parent));
+    public CxxFunctionType(FunctionType type) {
+        super(new CxxType(type));
         this.type = type;
-        this.parent = parent;
     }
-
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
 
     @Override
     public Type getNode() {
@@ -44,14 +36,14 @@ public class CxxFunctionType extends AFunctionType {
 
     @Override
     public AJoinPoint getReturnTypeImpl() {
-        return CxxJoinpoints.create(type.getReturnType(), this);
+        return CxxJoinpoints.create(type.getReturnType());
     }
 
     @Override
     public AJoinPoint[] getParamTypesArrayImpl() {
 
         return type.getParamTypes().stream()
-                .map(paramType -> CxxJoinpoints.create(paramType, this))
+                .map(paramType -> CxxJoinpoints.create(paramType))
                 .toArray(size -> new AJoinPoint[size]);
 
     }
@@ -60,19 +52,11 @@ public class CxxFunctionType extends AFunctionType {
     public void defReturnTypeImpl(AJoinPoint value) {
         Type newClavaType = (Type) value.getNode();
         type.set(FunctionType.RETURN_TYPE, newClavaType);
-        // CxxActions.replace(type.getReturnType(), newClavaType, getWeaverEngine());
     }
 
     @Override
     public void setReturnTypeImpl(AType newType) {
         defReturnTypeImpl(newType);
     }
-
-    /*
-    @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
-        type.setParamType(index, (Type) newType.getNode());
-    }
-    */
 
 }

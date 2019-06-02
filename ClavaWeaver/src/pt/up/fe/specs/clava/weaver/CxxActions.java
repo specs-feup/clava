@@ -26,7 +26,6 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -72,7 +71,7 @@ public class CxxActions {
                 return null;
             }
             NodeInsertUtils.insertBefore(realTarget, beforeNode);
-            return CxxJoinpoints.create(beforeNode, null);
+            return CxxJoinpoints.create(beforeNode);
 
         case AFTER:
             // NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
@@ -82,7 +81,7 @@ public class CxxActions {
                 return null;
             }
             NodeInsertUtils.insertAfter(realTarget, afterNode);
-            return CxxJoinpoints.create(afterNode, null);
+            return CxxJoinpoints.create(afterNode);
 
         case AROUND:
         case REPLACE:
@@ -90,7 +89,7 @@ public class CxxActions {
             ClavaNode replaceNode = ClavaNodes.toLiteral(code, CxxWeaver.getFactory().nullType(), target);
             weaver.clearUserField(target);
             NodeInsertUtils.replace(target, replaceNode);
-            return CxxJoinpoints.create(replaceNode, null);
+            return CxxJoinpoints.create(replaceNode);
         default:
             throw new RuntimeException("Case not defined:" + insert);
         }
@@ -144,7 +143,7 @@ public class CxxActions {
             // // Remove all children
             // base.removeChildren(0, base.getNumChildren());
             base.addChild(node);
-            return new AJoinPoint[] { CxxJoinpoints.create(node, null) };
+            return new AJoinPoint[] { CxxJoinpoints.create(node) };
         default:
             throw new RuntimeException("Case not defined:" + position);
         }
@@ -167,8 +166,7 @@ public class CxxActions {
         }
         NodeInsertUtils.insertBefore(baseStmt, newStmt);
 
-        // return new CxxStatement(newStmt, null);
-        return CxxJoinpoints.create(newStmt, baseJp);
+        return CxxJoinpoints.create(newStmt);
     }
 
     public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp) {
@@ -179,8 +177,7 @@ public class CxxActions {
         }
         NodeInsertUtils.insertAfter(baseStmt, newStmt);
 
-        return CxxJoinpoints.create(newStmt, baseJp);
-        // return new CxxStatement(newStmt, null);
+        return CxxJoinpoints.create(newStmt);
     }
 
     /**
@@ -217,10 +214,7 @@ public class CxxActions {
     public static AJoinPoint insertJpAsStatement(AJoinPoint baseJp, AJoinPoint newJp, String position,
             CxxWeaver weaver) {
 
-        ACxxWeaverJoinPoint parent = newJp.getHasParentImpl() ? (ACxxWeaverJoinPoint) newJp.getParentImpl() : null;
-        AStatement stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNode()), parent,
-                AStatement.class);
-        // CxxStatement stmtJp = new CxxStatement(ClavaNodes.toStmt(newJp.getNode()), parent);
+        AStatement stmtJp = CxxJoinpoints.create(ClavaNodes.toStmt(newJp.getNode()), AStatement.class);
 
         return insertJp(baseJp, stmtJp, position, weaver);
     }

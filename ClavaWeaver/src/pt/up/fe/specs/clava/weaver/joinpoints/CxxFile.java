@@ -40,7 +40,6 @@ import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
@@ -66,10 +65,8 @@ import pt.up.fe.specs.util.SpecsLogs;
 public class CxxFile extends AFile {
 
     private final TranslationUnit tunit;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxFile(TranslationUnit tunit, ACxxWeaverJoinPoint parent) {
-        this.parent = parent;
+    public CxxFile(TranslationUnit tunit) {
         this.tunit = tunit;
     }
 
@@ -81,7 +78,7 @@ public class CxxFile extends AFile {
     @Override
     public List<? extends AFunction> selectFunction() {
         return getFunctions().stream()
-                .map(function -> CxxJoinpoints.create(function, this, AFunction.class))
+                .map(function -> CxxJoinpoints.create(function, AFunction.class))
                 .collect(Collectors.toList());
 
         /*
@@ -97,14 +94,9 @@ public class CxxFile extends AFile {
     @Override
     public List<? extends AMethod> selectMethod() {
         return getMethods().stream()
-                .map(function -> CxxJoinpoints.create(function, this, AMethod.class))
+                .map(function -> CxxJoinpoints.create(function, AMethod.class))
                 .collect(Collectors.toList());
     }
-
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
 
     @Override
     public TranslationUnit getNode() {
@@ -185,34 +177,34 @@ public class CxxFile extends AFile {
 
     @Override
     public List<? extends APragma> selectPragma() {
-        return CxxSelects.select(APragma.class, tunit.getChildren(), true, this, Pragma.class);
+        return CxxSelects.select(APragma.class, tunit.getChildren(), true, Pragma.class);
 
     }
 
     @Override
     public List<? extends AMarker> selectMarker() {
-        return CxxSelects.select(AMarker.class, tunit.getChildren(), true, this, LaraMarkerPragma.class);
+        return CxxSelects.select(AMarker.class, tunit.getChildren(), true, LaraMarkerPragma.class);
     }
 
     @Override
     public List<? extends ATag> selectTag() {
-        return CxxSelects.select(ATag.class, tunit.getChildren(), true, this, LaraTagPragma.class);
+        return CxxSelects.select(ATag.class, tunit.getChildren(), true, LaraTagPragma.class);
     }
 
     @Override
     public List<? extends ARecord> selectRecord() {
-        return CxxSelects.select(ARecord.class, tunit.getChildren(), true, this, RecordDecl.class);
+        return CxxSelects.select(ARecord.class, tunit.getChildren(), true, RecordDecl.class);
     }
 
     @Override
     public List<? extends AStruct> selectStruct() {
-        return CxxSelects.select(AStruct.class, tunit.getChildren(), true, this,
+        return CxxSelects.select(AStruct.class, tunit.getChildren(), true,
                 node -> node instanceof RecordDecl && ((RecordDecl) node).getTagKind() == TagKind.STRUCT);
     }
 
     @Override
     public List<? extends AClass> selectClass() {
-        return CxxSelects.select(AClass.class, tunit.getChildren(), true, this,
+        return CxxSelects.select(AClass.class, tunit.getChildren(), true,
                 node -> node instanceof CXXRecordDecl && ((CXXRecordDecl) node).getTagKind() == TagKind.CLASS);
     }
 
@@ -280,7 +272,7 @@ public class CxxFile extends AFile {
     public List<? extends AVardecl> selectVardecl() {
         return tunit.getDescendantsStream()
                 .filter(node -> node instanceof VarDecl)
-                .map(varDecl -> CxxJoinpoints.create((VarDecl) varDecl, this, AVardecl.class))
+                .map(varDecl -> CxxJoinpoints.create((VarDecl) varDecl, AVardecl.class))
                 .collect(Collectors.toList());
     }
 
@@ -300,19 +292,19 @@ public class CxxFile extends AFile {
 
         VarDecl global = tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
 
-        return CxxJoinpoints.create(global, this, AVardecl.class);
+        return CxxJoinpoints.create(global, AVardecl.class);
     }
 
     @Override
     public List<? extends AStatement> selectStmt() {
-        return CxxSelects.select(AStatement.class, tunit.getChildren(), true, this, CxxSelects::stmtFilter);
+        return CxxSelects.select(AStatement.class, tunit.getChildren(), true, CxxSelects::stmtFilter);
 
     }
 
     @Override
     public List<? extends AStatement> selectChildStmt() {
         return tunit.getChildren().stream()
-                .map(stmt -> (AStatement) CxxJoinpoints.create(stmt, this))
+                .map(stmt -> (AStatement) CxxJoinpoints.create(stmt))
                 .collect(Collectors.toList());
     }
 
@@ -346,7 +338,7 @@ public class CxxFile extends AFile {
 
     @Override
     public List<? extends AComment> selectComment() {
-        return CxxSelects.select(AComment.class, tunit.getChildren(), true, this, Comment.class::isInstance);
+        return CxxSelects.select(AComment.class, tunit.getChildren(), true, Comment.class::isInstance);
     }
 
     @Override
@@ -388,7 +380,7 @@ public class CxxFile extends AFile {
 
     @Override
     public List<? extends AInclude> selectInclude() {
-        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, this, IncludeDecl.class);
+        return CxxSelects.select(AInclude.class, tunit.getChildren(), false, IncludeDecl.class);
     }
 
     @Override
@@ -402,7 +394,7 @@ public class CxxFile extends AFile {
     public List<? extends ADecl> selectDecl() {
         return tunit.getDescendantsStream()
                 .filter(node -> node instanceof Decl)
-                .map(varDecl -> CxxJoinpoints.create((Decl) varDecl, this, ADecl.class))
+                .map(varDecl -> CxxJoinpoints.create((Decl) varDecl, ADecl.class))
                 .collect(Collectors.toList());
     }
 
@@ -410,7 +402,7 @@ public class CxxFile extends AFile {
     public List<? extends ATypedefDecl> selectTypedefDecl() {
         return tunit.getDescendantsStream()
                 .filter(node -> node instanceof TypedefDecl)
-                .map(varDecl -> CxxJoinpoints.create((TypedefDecl) varDecl, this, ATypedefDecl.class))
+                .map(varDecl -> CxxJoinpoints.create((TypedefDecl) varDecl, ATypedefDecl.class))
                 .collect(Collectors.toList());
     }
 
@@ -429,7 +421,7 @@ public class CxxFile extends AFile {
     public AFile rebuildImpl() {
         TranslationUnit rebuiltTunit = getWeaverEngine().rebuildFile(tunit);
 
-        AFile rebuiltFile = CxxJoinpoints.create(rebuiltTunit, getParentImpl(), AFile.class);
+        AFile rebuiltFile = CxxJoinpoints.create(rebuiltTunit, AFile.class);
         replaceWith(rebuiltFile);
         return rebuiltFile;
     }

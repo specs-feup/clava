@@ -55,7 +55,7 @@ public class CxxProgram extends AProgram {
     @Override
     public List<? extends AFile> selectFile() {
         return app.getTranslationUnits().stream()
-                .map(tunit -> CxxJoinpoints.create(tunit, this, AFile.class))
+                .map(tunit -> CxxJoinpoints.create(tunit, AFile.class))
                 .collect(Collectors.toList());
     }
 
@@ -68,14 +68,6 @@ public class CxxProgram extends AProgram {
     public String getNameImpl() {
         return name;
     }
-
-    /**
-     * CxxProgram is the top-level node.
-     */
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return null;
-    // }
 
     public CxxWeaver getWeaver() {
         return weaver;

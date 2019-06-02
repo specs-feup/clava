@@ -1,11 +1,11 @@
 /**
  * Copyright 2017 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -74,7 +74,7 @@ public class CxxWeaverApi {
         App topAst = CxxWeaver.getCxxWeaver().getApp();
 
         return topAst.find(filepath, astId)
-                .map(node -> CxxJoinpoints.create(node, null))
+                .map(node -> CxxJoinpoints.create(node))
                 .orElse(null);
     }
 
@@ -85,7 +85,7 @@ public class CxxWeaverApi {
     public static List<AInclude> getAvailableUserIncludes() {
         return CxxWeaver.getCxxWeaver().getAvailableIncludes().stream()
                 .map(CxxWeaver.getFactory()::includeDecl)
-                .map(includeDecl -> (AInclude) CxxJoinpoints.create(includeDecl, null))
+                .map(includeDecl -> (AInclude) CxxJoinpoints.create(includeDecl))
                 .collect(Collectors.toList());
     }
 

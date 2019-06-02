@@ -135,7 +135,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // currentParent = currentParent.getParent();
         // }
 
-        return CxxJoinpoints.create(currentParent, this);
+        return CxxJoinpoints.create(currentParent);
     }
 
     @Override
@@ -171,7 +171,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         ClavaNode currentNode = getNode();
         while (currentNode.hasParent()) {
             // Create join point for testing type
-            ACxxWeaverJoinPoint parentJp = CxxJoinpoints.create(currentNode.getParent(), this);
+            ACxxWeaverJoinPoint parentJp = CxxJoinpoints.create(currentNode.getParent());
 
             if (parentJp.instanceOf(type)) {
                 return parentJp;
@@ -190,7 +190,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         Incrementer nullJoinpoints = new Incrementer();
         Incrementer excludedJoinpoints = new Incrementer();
         AJoinPoint[] descendants = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .map(descendant -> CxxJoinpoints.create(descendant))
                 .filter(jp -> {
                     // Count null join points separately
                     if (jp == null) {
@@ -221,7 +221,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint[] getDescendantsArrayImpl() {
         AJoinPoint[] descendants = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .map(descendant -> CxxJoinpoints.create(descendant))
                 .filter(jp -> jp != null)
                 .toArray(AJoinPoint[]::new);
 
@@ -240,7 +240,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         AJoinPoint[] descendants = getNode().getDescendantsAndSelfStream()
-                .map(descendant -> CxxJoinpoints.create(descendant, this))
+                .map(descendant -> CxxJoinpoints.create(descendant))
                 .filter(jp -> jp.instanceOf(type))
                 // .filter(jp -> jp.getJoinpointType().equals(type))
                 .toArray(AJoinPoint[]::new);
@@ -289,7 +289,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             ClavaNode parentNode = currentNode.getParent();
 
             if (nodeClass.isInstance(parentNode)) {
-                return CxxJoinpoints.create(parentNode, this);
+                return CxxJoinpoints.create(parentNode);
             }
 
             currentNode = parentNode;
@@ -474,7 +474,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint insertBeforeImpl(String code) {
         // return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
-        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), this));
+        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
     }
 
     @Override
@@ -491,7 +491,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint insertAfterImpl(String code) {
         // return insertAfterImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
-        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), this));
+        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
     }
 
     @Override
@@ -539,7 +539,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         // return new CxxType(((Typable) node).getType(), this);
-        return CxxJoinpoints.create(((Typable) node).getType(), this);
+        return CxxJoinpoints.create(((Typable) node).getType());
     }
 
     @Override
@@ -676,7 +676,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return getNode().getChildren().stream()
-                .map(node -> CxxJoinpoints.create(node, this))
+                .map(node -> CxxJoinpoints.create(node))
                 // .filter(jp -> jp != null)
                 .collect(Collectors.toList())
                 .toArray(new AJoinPoint[0]);
@@ -696,7 +696,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return null;
         }
 
-        return CxxJoinpoints.create(node.getChild(index), this);
+        return CxxJoinpoints.create(node.getChild(index));
     }
 
     @Override
@@ -710,7 +710,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint[] getChildrenArrayImpl() {
         AJoinPoint[] children = getNode().getChildren().stream()
                 .filter(node -> !(node instanceof NullNode))
-                .map(node -> CxxJoinpoints.create(node, this))
+                .map(node -> CxxJoinpoints.create(node))
                 .collect(Collectors.toList())
                 .toArray(new AJoinPoint[0]);
 
@@ -730,7 +730,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .filter(node -> !(node instanceof NullNode))
                 .skip(index)
                 .findFirst()
-                .map(node -> CxxJoinpoints.create(node, this))
+                .map(node -> CxxJoinpoints.create(node))
                 .orElse(null);
 
         // AJoinPoint[] children = getChildrenArrayImpl();
@@ -841,7 +841,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint getParentRegionImpl() {
 
         return CxxAttributes.getParentRegion(getNode())
-                .map(node -> CxxJoinpoints.create(node, this))
+                .map(node -> CxxJoinpoints.create(node))
                 .orElse(null);
         /*
         Optional<? extends ClavaNode> parentRegionTry = CxxAttributes.getParentRegion(getNode());
@@ -885,7 +885,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return null;
         }
 
-        return CxxJoinpoints.create(currentRegionTry.get(), this);
+        return CxxJoinpoints.create(currentRegionTry.get());
     }
 
     @Override
@@ -906,12 +906,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint copyImpl() {
-        return CxxJoinpoints.create(getNode().copy(), null);
+        return CxxJoinpoints.create(getNode().copy());
     }
 
     @Override
     public AJoinPoint deepCopyImpl() {
-        return CxxJoinpoints.create(getNode().deepCopy(), null);
+        return CxxJoinpoints.create(getNode().deepCopy());
     }
 
     @Override
@@ -972,7 +972,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public APragma[] getPragmasArrayImpl() {
         return ClavaNodes.getPragmas(getNode()).stream()
-                .map(pragma -> CxxJoinpoints.create(pragma, this))
+                .map(pragma -> CxxJoinpoints.create(pragma))
                 .toArray(APragma[]::new);
     }
 
@@ -1041,7 +1041,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // Special cases
 
         if (value instanceof ClavaNode) {
-            value = CxxJoinpoints.create((ClavaNode) value, this);
+            value = CxxJoinpoints.create((ClavaNode) value);
         }
 
         return value;
@@ -1069,7 +1069,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         // Returns new join point of the node, using the same parent
-        return CxxJoinpoints.create(getNode().set(datakey, value), getParentImpl());
+        return CxxJoinpoints.create(getNode().set(datakey, value));
     }
 
     @Override
@@ -1087,7 +1087,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint firstJpImpl(String type) {
         AJoinPoint firstJp = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant, null))
+                .map(descendant -> CxxJoinpoints.create(descendant))
                 .filter(jp -> jp != null && jp.getJoinpointTypeImpl().equals(type))
                 .findFirst()
                 .orElse(null);

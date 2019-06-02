@@ -61,12 +61,10 @@ public class CxxFunction extends AFunction {
             .newLazyHelperWithValue(StorageClass.class);
 
     private final FunctionDecl function;
-    private final ACxxWeaverJoinPoint parent;
 
-    public CxxFunction(FunctionDecl function, ACxxWeaverJoinPoint parent) {
-        super(new CxxDeclarator(function, parent));
+    public CxxFunction(FunctionDecl function) {
+        super(new CxxDeclarator(function));
         this.function = function;
-        this.parent = parent;
     }
 
     @Override
@@ -82,11 +80,6 @@ public class CxxFunction extends AFunction {
         // return Arrays.asList(new CxxScope(function.getBody().get(), this));
     }
 
-    // @Override
-    // public ACxxWeaverJoinPoint getParentImpl() {
-    // return parent;
-    // }
-
     @Override
     public FunctionDecl getNode() {
         return function;
@@ -94,12 +87,12 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint getTypeImpl() {
-        return CxxJoinpoints.create(function.getReturnType(), this);
+        return CxxJoinpoints.create(function.getReturnType());
     }
 
     @Override
     public AFunctionType getFunctionTypeImpl() {
-        return (CxxFunctionType) CxxJoinpoints.create(function.getType(), this);
+        return (CxxFunctionType) CxxJoinpoints.create(function.getType());
     }
 
     @Override
@@ -131,7 +124,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), this));
+        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
     }
 
     @Override
@@ -146,7 +139,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertBeforeImpl(String code) {
-        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), this));
+        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
     }
 
     @Override
@@ -180,7 +173,7 @@ public class CxxFunction extends AFunction {
     @Override
     public List<? extends AParam> selectParam() {
         return function.getParameters().stream()
-                .map(param -> CxxJoinpoints.create(param, this, AParam.class))
+                .map(param -> CxxJoinpoints.create(param, AParam.class))
                 .collect(Collectors.toList());
     }
 
@@ -195,7 +188,7 @@ public class CxxFunction extends AFunction {
             return null;
         }
 
-        return (AScope) CxxJoinpoints.create(function.getBody().get(), this);
+        return (AScope) CxxJoinpoints.create(function.getBody().get());
     }
 
     // TODO check if the new name clashes with other symbol?
@@ -234,7 +227,7 @@ public class CxxFunction extends AFunction {
         // change the ids of stuff
         // newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
 
-        return CxxJoinpoints.create(newFunc, null, AFunction.class);
+        return CxxJoinpoints.create(newFunc, AFunction.class);
     }
 
     /**
@@ -245,7 +238,7 @@ public class CxxFunction extends AFunction {
      */
     /*
     private FunctionDecl makeNewFuncDecl(String newName) {
-    
+
         // // Get both declaration and definition (if present)
         // Optional<FunctionDecl> definition2 = function.getDefinition()
         // .map(def -> ((FunctionDecl) def.copy()).setName(newName));
@@ -255,11 +248,11 @@ public class CxxFunction extends AFunction {
         //
         // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
         // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
-    
+
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
         Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
-    
+
         // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
         // .getDescendants();
         //
@@ -271,9 +264,9 @@ public class CxxFunction extends AFunction {
     // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
     // }
     // System.out.println("FINISH");
-    
+
     // make a new function declaration with the new name
-    
+
     // FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
     // function.getParameters(),
     // (FunctionType) function.getFunctionType().copy(),
@@ -281,14 +274,14 @@ public class CxxFunction extends AFunction {
     // function.getDeclData(), // check
     // ClavaNodeInfo.undefinedInfo(), // check
     // definition);
-    
+
     FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
-    
+
     newFunc.setParameters(function.getParameters());if(definition!=null)
     {
             newFunc.setBody(definition);
         }
-    
+
     return newFunc;
     }*/
 
@@ -369,8 +362,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public void insertReturnImpl(String code) {
-        // insertReturnImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), null));
-        insertReturnImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code), null));
+        insertReturnImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
     }
 
     @Override
@@ -405,7 +397,7 @@ public class CxxFunction extends AFunction {
         }
 
         for (ReturnStmt returnStmt : returnStatements) {
-            ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt, null);
+            ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
             returnJp.insertBefore(code);
         }
     }
@@ -421,14 +413,14 @@ public class CxxFunction extends AFunction {
     @Override
     public AJoinPoint getDeclarationJpImpl() {
         return function.getDeclaration()
-                .map(node -> CxxJoinpoints.create(node, null))
+                .map(node -> CxxJoinpoints.create(node))
                 .orElse(null);
     }
 
     @Override
     public AJoinPoint getDefinitionJpImpl() {
         return function.getDefinition()
-                .map(node -> CxxJoinpoints.create(node, null))
+                .map(node -> CxxJoinpoints.create(node))
                 .orElse(null);
     }
 
@@ -509,7 +501,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public List<? extends ADecl> selectDecl() {
-        return CxxSelects.select(ADecl.class, function.getChildren(), true, this, Decl.class);
+        return CxxSelects.select(ADecl.class, function.getChildren(), true, Decl.class);
 
         // return function.getDescendants(Decl.class).stream()
         // .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
@@ -519,7 +511,7 @@ public class CxxFunction extends AFunction {
     @Override
     public ACall[] getCallsArrayImpl() {
         return function.getCalls().stream()
-                .map(call -> CxxJoinpoints.create(call, this, ACall.class))
+                .map(call -> CxxJoinpoints.create(call, ACall.class))
                 .toArray(ACall[]::new);
     }
 
@@ -551,7 +543,7 @@ public class CxxFunction extends AFunction {
 
             ParmVarDecl parmVarDecl = getFactory().parmVarDecl(varName, getFactory().literalType(type));
 
-            params[i] = CxxJoinpoints.create(parmVarDecl, this, AParam.class);
+            params[i] = CxxJoinpoints.create(parmVarDecl, AParam.class);
         }
 
         defParamsImpl(params);
