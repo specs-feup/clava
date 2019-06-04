@@ -282,6 +282,14 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aRecord.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

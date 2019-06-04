@@ -417,6 +417,14 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aCall.removeChildrenImpl();
+    }
+
+    /**
      * Changes the name of the call
      * @param name 
      */

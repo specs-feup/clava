@@ -342,6 +342,14 @@ public abstract class AAdjustedType extends AType {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aType.removeChildrenImpl();
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */

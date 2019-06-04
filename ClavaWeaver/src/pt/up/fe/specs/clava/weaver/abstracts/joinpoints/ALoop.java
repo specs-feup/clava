@@ -1145,6 +1145,14 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aStatement.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

@@ -208,6 +208,14 @@ public abstract class ATypedefDecl extends ANamedDecl {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aNamedDecl.removeChildrenImpl();
+    }
+
+    /**
      * Sets the name of this namedDecl
      * @param name 
      */

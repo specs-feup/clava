@@ -985,6 +985,14 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aDeclarator.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

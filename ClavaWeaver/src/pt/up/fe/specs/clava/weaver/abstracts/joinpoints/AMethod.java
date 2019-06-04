@@ -444,6 +444,14 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aFunction.removeChildrenImpl();
+    }
+
+    /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function
      * @param newName 
      */

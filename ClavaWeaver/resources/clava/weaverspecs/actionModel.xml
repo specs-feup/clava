@@ -69,6 +69,9 @@
 	</action>
 	
 
+	<action name="removeChildren" tooltip="Removes the children of this node"/>
+	
+
 	<!-- PROGRAM -->
 
 	<!-- Internally generates the code for the current program and rebuilds 

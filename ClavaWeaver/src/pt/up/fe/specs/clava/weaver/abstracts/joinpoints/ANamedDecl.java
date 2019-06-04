@@ -352,6 +352,14 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aDecl.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

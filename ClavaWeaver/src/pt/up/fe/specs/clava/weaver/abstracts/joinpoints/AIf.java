@@ -437,6 +437,14 @@ public abstract class AIf extends AStatement {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aStatement.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

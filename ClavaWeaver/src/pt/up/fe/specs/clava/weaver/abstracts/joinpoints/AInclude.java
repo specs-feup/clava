@@ -244,6 +244,14 @@ public abstract class AInclude extends ADecl {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aDecl.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

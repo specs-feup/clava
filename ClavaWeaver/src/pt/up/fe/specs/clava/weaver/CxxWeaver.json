@@ -647,6 +647,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -1619,6 +1628,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -2422,6 +2440,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -3397,6 +3424,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -4246,6 +4282,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -5257,6 +5302,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -6258,6 +6312,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -7064,6 +7127,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -7914,6 +7986,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -8660,6 +8741,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -9394,6 +9484,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -10210,6 +10309,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -10987,6 +11095,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -11721,6 +11838,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -12546,6 +12672,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -13521,6 +13656,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -14333,6 +14477,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -15106,6 +15259,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -15918,6 +16080,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -17007,6 +17178,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -18125,6 +18305,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -19118,6 +19307,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -19999,6 +20197,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -20769,6 +20976,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -21961,6 +22177,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -22776,6 +23001,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -23574,6 +23808,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -24591,6 +24834,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -25718,6 +25970,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -26530,6 +26791,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -27303,6 +27573,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -28521,6 +28800,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -29310,6 +29598,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -30206,6 +30503,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -31169,6 +31475,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -32167,6 +32482,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -32956,6 +33280,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -34020,6 +34353,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -34999,6 +35341,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -35828,6 +36179,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -36874,6 +37234,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -37694,6 +38063,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -38531,6 +38909,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -39330,6 +39717,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -40301,6 +40697,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -41300,6 +41705,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -42263,6 +42677,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -43071,6 +43494,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -43905,6 +44337,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -44715,6 +45156,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -45682,6 +46132,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -46574,6 +47033,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -47571,6 +48039,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces this join point with the given join",
                   "children": [
                            {
@@ -48400,6 +48877,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {
@@ -49240,6 +49726,15 @@
                               "type": "String",
                               "name": "message",
                               "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
                            }]
                },
                {

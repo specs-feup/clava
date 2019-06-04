@@ -375,6 +375,14 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aOp.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

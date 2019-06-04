@@ -275,6 +275,14 @@ public abstract class AUnaryOp extends AOp {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aOp.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

@@ -356,6 +356,14 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aExpression.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

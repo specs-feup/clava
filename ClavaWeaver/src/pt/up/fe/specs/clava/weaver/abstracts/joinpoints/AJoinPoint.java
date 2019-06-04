@@ -83,6 +83,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("setUserField(Map<?, ?> fieldNameAndValue)");
         actions.add("setValue(String key, Object value)");
         actions.add("messageToUser(String message)");
+        actions.add("removeChildren()");
     }
 
     /**
@@ -455,6 +456,30 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "messageToUser", e);
+        }
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    public void removeChildrenImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action removeChildren not implemented ");
+    }
+
+    /**
+     * Removes the children of this node
+     */
+    public final void removeChildren() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "removeChildren", this, Optional.empty());
+        	}
+        	this.removeChildrenImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "removeChildren", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "removeChildren", e);
         }
     }
 

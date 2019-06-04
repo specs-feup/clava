@@ -211,6 +211,14 @@ public abstract class ATag extends APragma {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aPragma.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param name 
      */

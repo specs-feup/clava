@@ -235,6 +235,14 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aRecord.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

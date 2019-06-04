@@ -272,6 +272,14 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Removes the children of this node
+     */
+    @Override
+    public void removeChildrenImpl() {
+        this.aVardecl.removeChildrenImpl();
+    }
+
+    /**
      * 
      * @param init 
      */
