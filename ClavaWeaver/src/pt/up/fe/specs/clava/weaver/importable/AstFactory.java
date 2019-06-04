@@ -48,6 +48,7 @@ import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
@@ -68,6 +69,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
@@ -581,6 +583,12 @@ public class AstFactory {
                 rhs);
 
         return CxxJoinpoints.create(assign, ABinaryOp.class);
+    }
+
+    public static AIf ifStmt(AExpression condition) {
+        CompoundStmt emptyBody = CxxWeaver.getFactory().compoundStmt();
+        IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), emptyBody);
+        return CxxJoinpoints.create(ifStmt, AIf.class);
     }
 
 }
