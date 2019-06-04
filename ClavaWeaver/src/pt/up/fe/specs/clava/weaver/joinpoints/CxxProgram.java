@@ -24,11 +24,14 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
 import pt.up.fe.specs.util.SpecsIo;
@@ -274,5 +277,38 @@ public class CxxProgram extends AProgram {
         }
 
         return new File(filepath.toString());
+    }
+
+    @Override
+    public AFunction getMainImpl() {
+        // Find main function
+        return (AFunction) app.getDescendantsStream()
+                // get functions
+                .filter(FunctionDecl.class::isInstance)
+                .map(FunctionDecl.class::cast)
+                // only definitions
+                .filter(FunctionDecl::isDefinition)
+                // the main function
+                .filter(fdecl -> fdecl.getDeclName().toLowerCase().equals("main"))
+                .map(CxxJoinpoints::create)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void atexitImpl(AFunction function) {
+        AFunction mainFunction = getMainImpl();
+
+        if (mainFunction == null) {
+            ClavaLog.info("atexit: main() function not found, could not register function");
+            return;
+        }
+
+        // Create call
+        Expr atexitCall = getFactory().literalExpr("atexit(" + function.getNameImpl() + ")",
+                getFactory().builtinType("void"));
+
+        // Insert call at the beginning of the main function
+        mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall));
     }
 }

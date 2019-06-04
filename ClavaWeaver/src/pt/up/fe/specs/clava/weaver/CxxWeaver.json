@@ -33462,6 +33462,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "a function join point with the main function of the program, if one is available",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "main"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
@@ -34188,6 +34197,20 @@
                            {
                               "type": "String",
                               "name": "path",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Registers a function to be executed when the program exits",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "atexit"
+                           },
+                           {
+                              "type": "function",
+                              "name": "function",
                               "defaultValue": ""
                            }]
                },

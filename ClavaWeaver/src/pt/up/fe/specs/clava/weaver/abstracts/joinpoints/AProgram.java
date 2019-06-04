@@ -403,6 +403,29 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * a function join point with the main function of the program, if one is available
+     */
+    public abstract AJoinPoint getMainImpl();
+
+    /**
+     * a function join point with the main function of the program, if one is available
+     */
+    public final Object getMain() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
+        	}
+        	AJoinPoint result = this.getMainImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "main", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select files
      * @return 
      */
@@ -781,6 +804,32 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Registers a function to be executed when the program exits
+     * @param function 
+     */
+    public void atexitImpl(AFunction function) {
+        throw new UnsupportedOperationException(get_class()+": Action atexit not implemented ");
+    }
+
+    /**
+     * Registers a function to be executed when the program exits
+     * @param function 
+     */
+    public final void atexit(AFunction function) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "atexit", this, Optional.empty(), function);
+        	}
+        	this.atexitImpl(function);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "atexit", this, Optional.empty(), function);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "atexit", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -833,6 +882,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         attributes.add("extraIncludes");
         attributes.add("extraProjects");
         attributes.add("extraLibs");
+        attributes.add("main");
     }
 
     /**
@@ -864,6 +914,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         actions.add("void addProjectFromGit(String, String[])");
         actions.add("void addProjectFromGit(String, String[], String)");
         actions.add("void addExtraLib(String)");
+        actions.add("void atexit(function)");
     }
 
     /**
@@ -891,6 +942,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         EXTRAINCLUDES("extraIncludes"),
         EXTRAPROJECTS("extraProjects"),
         EXTRALIBS("extraLibs"),
+        MAIN("main"),
         ENDLINE("endLine"),
         PARENT("parent"),
         ENDCOLUMN("endColumn"),

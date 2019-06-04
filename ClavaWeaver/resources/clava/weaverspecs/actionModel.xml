@@ -131,6 +131,10 @@
 		<parameter name="lib" type="String" />
 	</action>
 
+	<action name="atexit" class="program" tooltip="Registers a function to be executed when the program exits">
+		<parameter name="function" type="function" />
+	</action>
+
 	<!-- FILE -->
 
 	<!-- Adds an include to the file -->
