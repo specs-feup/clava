@@ -109,7 +109,7 @@ public class App extends ClavaNode {
     @Deprecated
     public App(Collection<TranslationUnit> children) {
         super(ClavaNodeInfo.undefinedInfo(), children);
-    
+
         // sources = Collections.emptyList();
         sourceFiles = new HashMap<>();
         globalManager = new GlobalManager();
@@ -117,16 +117,16 @@ public class App extends ClavaNode {
         functionDeclarationCache = new HashMap<>();
         functionDefinitionCache = new HashMap<>();
         appData = DataStore.newInstance("Clava App Data");
-    
+
         idNormalizer = new IdNormalizer();
         callInliner = new CallInliner(idNormalizer);
-    
+
         externalDependencies = new ExternalDependencies();
         // this.idsAlias = Collections.emptyMap();
         // this.inlineCache = new HashMap<>();
-    
+
         // System.out.println("SETTING STANDARD:" + appData.get(ClavaOptions.STANDARD));
-    
+
         // CURRENT_STANDARD.set(appData.get(ClavaOptions.STANDARD));
     }
     */
@@ -176,16 +176,16 @@ public class App extends ClavaNode {
     @Override
     protected ClavaNode copyPrivate() {
         App appCopy = new App(Collections.emptyList());
-    
+
         // Copy fields of App DataStore
         appCopy.appData.addAll(appData);
-    
+
         appCopy.externalDependencies = externalDependencies.copy();
         // Fields that might need to be copied:
         // globalManager
         // idNormalizer
         // callInliner
-    
+
         return appCopy;
     }
     */
@@ -313,14 +313,14 @@ public class App extends ClavaNode {
                 .filter(tu -> SpecsIo.getCanonicalPath(tu.getFile()).equals(canonicalPath))
                 .findFirst()
                 .isPresent()) {
-    
+
             SpecsLogs.msgInfo(
                     "Could not find top file '" + topFile + "' in the translation units, returning without writing");
             return;
         }
-    
+
         write(destinationFolder);
-    
+
     }
     */
 
@@ -361,17 +361,17 @@ public class App extends ClavaNode {
     /*
     public void write(File baseInputFolder, File destinationFolder, Set<String> filesToGenerate) {
         Map<File, String> codeMap = getCode(baseInputFolder, destinationFolder);
-    
+
         boolean filterFilesToGenerate = enableModifiedFilesFilter(codeMap, filesToGenerate);
-    
+
         for (Entry<File, String> entry : codeMap.entrySet()) {
             if (filterFilesToGenerate) {
                 if (!filesToGenerate.contains(entry.getKey().getName())) {
-    
+
                     continue;
                 }
             }
-    
+
             SpecsIo.write(entry.getKey(), entry.getValue());
         }
     }
@@ -402,7 +402,7 @@ public class App extends ClavaNode {
 
     /*
     private static List<File> getAllSourcefiles(List<File> sources, boolean includeHeaders) {
-    
+
         if (includeHeaders) {
             // return SpecsIo.getFiles(sources, PERMITTED_EXTENSIONS).stream()
             return SpecsIo.getFiles(sources, SourceType.getPermittedExceptions());
@@ -410,23 +410,23 @@ public class App extends ClavaNode {
             // .map(filename -> new File(filename))
             // .collect(Collectors.toList());
         }
-    
+
         List<File> allFiles = new ArrayList<>();
-    
+
         // List<File> implementationFiles = SpecsIo.getFiles(sources, EXTENSIONS_IMPLEMENTATION).stream()
         List<File> implementationFiles = SpecsIo.getFiles(sources, SourceType.IMPLEMENTATION.getExtensions());
         // List<File> implementationFiles = SpecsIo.getFiles(sources,
         // SourceType.IMPLEMENTATION.getExtensions()).stream()
         // .map(filename -> new File(filename))
         // .collect(Collectors.toList());
-    
+
         allFiles.addAll(implementationFiles);
-    
+
         for (File sourceFolder : sources) {
             // allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, EXTENSIONS_HEADERS));
             allFiles.addAll(SpecsIo.getFilesRecursive(sourceFolder, SourceType.HEADER.getExtensions()));
         }
-    
+
         return allFiles;
     }
     */
@@ -468,10 +468,10 @@ public class App extends ClavaNode {
     public File buildDestinationFile(TranslationUnit tUnit, File destinationFolder, boolean flattenFolders) {
         File actualDestinationFolder = tUnit.getDestinationFolder(destinationFolder, flattenFolders);
                String relativePath = tUnit.getRelativeFolderpath();
-    
+
         // Build destination path
         actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
-    
+
         return new File(actualDestinationFolder, tUnit.getFilename());
     }
     */
@@ -668,8 +668,8 @@ public class App extends ClavaNode {
         return globalManager;
     }
 
-    public void addFile(TranslationUnit tu) {
-        addChild(tu);
+    public TranslationUnit addFile(TranslationUnit tu) {
+        return (TranslationUnit) addChild(tu);
     }
 
     public boolean inline(CallExpr callExpr) {
@@ -829,30 +829,30 @@ public class App extends ClavaNode {
     /*
     @Override
     public App copy(boolean keepId) {
-    
+
         ClavaContext currentContext = getContext();
-    
+
         // Create new context
         ClavaContext newContext = new ClavaContext(currentContext);
-    
+
         // Before copy, temporarily set new context, so that all copied nodes point to the new Context
         // set(CONTEXT, newContext);
-    
+
         // Copy App
         App newApp = (App) super.copy(keepId);
-    
+
         System.out.println("ORIGINAL APP:" + hashCode());
         System.out.println("COPY APP:" + newApp.hashCode());
-    
+
         // Restore current context
         // set(CONTEXT, currentContext);
-    
+
         // Set the new App in the new Context
         newContext.set(ClavaContext.APP, newApp);
-    
+
         // Set the new Context in all new App nodes
         newApp.getDescendantsAndSelfStream().forEach(node -> node.set(CONTEXT, newContext));
-    
+
         return newApp;
     }
     */

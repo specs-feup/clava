@@ -116,30 +116,30 @@ public class TranslationUnit extends ClavaNode {
     // }
 
     @Override
-    public void addChild(ClavaNode child) {
+    public ClavaNode addChild(ClavaNode child) {
         // If IncludeDecl, treat it differently
         if (child instanceof IncludeDecl) {
-            addIncludePrivate((IncludeDecl) child);
-            return;
+            return addIncludePrivate((IncludeDecl) child);
+            // return;
 
         }
 
         // Add child normally
-        super.addChild(child);
+        return super.addChild(child);
     }
 
     @Override
-    public void addChild(int index, ClavaNode child) {
+    public ClavaNode addChild(int index, ClavaNode child) {
         // If IncludeDecl, treat it differently
         if (child instanceof IncludeDecl) {
             ClavaLog.warning(
                     "Using .addChild(int index, ClavaNode chilld) with an IncludeDecl node, the index value will be ignored");
-            addIncludePrivate((IncludeDecl) child);
-            return;
+            return addIncludePrivate((IncludeDecl) child);
+            // return;
         }
 
         // Add child normally
-        super.addChild(index, child);
+        return super.addChild(index, child);
     }
 
     @Override
@@ -164,17 +164,17 @@ public class TranslationUnit extends ClavaNode {
 
     /**
      * Manages adding an include to the translation unit.
-     * 
+     *
      * @param include
      */
-    private void addIncludePrivate(IncludeDecl include) {
+    private IncludeDecl addIncludePrivate(IncludeDecl include) {
         int insertIndex = getIncludes().addInclude(include);
 
         if (insertIndex == -1) {
-            return;
+            return null;
         }
 
-        super.addChild(insertIndex, include);
+        return (IncludeDecl) super.addChild(insertIndex, include);
     }
 
     /*
@@ -395,7 +395,7 @@ public class TranslationUnit extends ClavaNode {
      * <p>
      * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
      * be /folder1, this method returns folder2.
-     * 
+     *
      * @return
      */
     /*
@@ -405,7 +405,7 @@ public class TranslationUnit extends ClavaNode {
     */
 
     /**
-     * 
+     *
      * @param relativePath
      */
     public void setRelativePath(String relativePath) {
@@ -668,17 +668,17 @@ public class TranslationUnit extends ClavaNode {
 
     /**
      * The folder of this file, relative to the include folders of the project.
-     * 
+     *
      * <p>
      * Relative path refers to the last portion of the path of this file that should be considered as not part of the
      * original source folder.
      * <p>
      * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
      * be /folder1, this method returns folder2.
-     * 
+     *
      * *
-     * 
-     * 
+     *
+     *
      * @return
      */
     public Optional<String> getRelativeFolderpath() {
@@ -709,7 +709,7 @@ public class TranslationUnit extends ClavaNode {
 
     /**
      * The path of this file, relative to the include folders of the project.
-     * 
+     *
      * @return
      */
     public String getRelativeFilepath() {
@@ -723,7 +723,7 @@ public class TranslationUnit extends ClavaNode {
     /**
      * The base destination folder of the file. If a sourcePath is defined, it is not taken into account for the
      * destination folder.
-     * 
+     *
      * @param baseFolder
      * @param flattenFolder
      * @return
@@ -761,7 +761,7 @@ public class TranslationUnit extends ClavaNode {
         
         return baseFolder;
         */
-        /*        
+        /*
         File sourcePath = getSourcePath().get();
         File sourceFolder = sourcePath.isDirectory() ? sourcePath : sourcePath.getParentFile();
         
