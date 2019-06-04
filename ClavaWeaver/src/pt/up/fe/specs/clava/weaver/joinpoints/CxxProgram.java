@@ -23,12 +23,15 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxProgram extends AProgram {
@@ -80,9 +83,15 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public void addFileImpl(AFile file) {
+    public AJoinPoint addFileImpl(AFile file) {
         TranslationUnit tu = (TranslationUnit) file.getNode();
-        app.addFile(tu);
+        TranslationUnit trueTu = app.addFile(tu);
+
+        if (tu == trueTu) {
+            return file;
+        }
+
+        return new CxxFile(trueTu);
     }
 
     @Override
@@ -239,5 +248,31 @@ public class CxxProgram extends AProgram {
     @Override
     public void addProjectFromGitImpl(String gitRepo, String[] libs) {
         addProjectFromGitImpl(gitRepo, libs, null);
+    }
+
+    @Override
+    public AJoinPoint addFileFromPathImpl(Object filepath) {
+        File file = getFile(filepath);
+
+        if (!file.isFile()) {
+            ClavaLog.info("Could not add file, given path was not found: '" + filepath + "'");
+            return null;
+        }
+
+        // Load file to a literal declaration
+        Decl code = getFactory().literalDecl(SpecsIo.read(file));
+
+        // Create file join point
+        TranslationUnit newTu = getFactory().translationUnit(file, Arrays.asList(code));
+
+        return addFile(new CxxFile(newTu));
+    }
+
+    private File getFile(Object filepath) {
+        if (filepath instanceof File) {
+            return (File) filepath;
+        }
+
+        return new File(filepath.toString());
     }
 }

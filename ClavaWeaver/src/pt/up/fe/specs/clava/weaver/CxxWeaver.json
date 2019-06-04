@@ -33792,12 +33792,26 @@
                   "tooltip": "Adds a file join point to the current program",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "joinpoint",
                               "name": "addFile"
                            },
                            {
                               "type": "file",
                               "name": "file",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a file join point to the current program, from the given path, which can be either a Java File or a String",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "addFileFromPath"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "filepath",
                               "defaultValue": ""
                            }]
                },

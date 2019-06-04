@@ -438,7 +438,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Adds a file join point to the current program
      * @param file 
      */
-    public void addFileImpl(AFile file) {
+    public AJoinPoint addFileImpl(AFile file) {
         throw new UnsupportedOperationException(get_class()+": Action addFile not implemented ");
     }
 
@@ -446,17 +446,45 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Adds a file join point to the current program
      * @param file 
      */
-    public final void addFile(AFile file) {
+    public final AJoinPoint addFile(AFile file) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addFile", this, Optional.empty(), file);
         	}
-        	this.addFileImpl(file);
+        	AJoinPoint result = this.addFileImpl(file);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.empty(), file);
+        		eventTrigger().triggerAction(Stage.END, "addFile", this, Optional.ofNullable(result), file);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addFile", e);
+        }
+    }
+
+    /**
+     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
+     * @param filepath 
+     */
+    public AJoinPoint addFileFromPathImpl(Object filepath) {
+        throw new UnsupportedOperationException(get_class()+": Action addFileFromPath not implemented ");
+    }
+
+    /**
+     * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
+     * @param filepath 
+     */
+    public final AJoinPoint addFileFromPath(Object filepath) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addFileFromPath", this, Optional.empty(), filepath);
+        	}
+        	AJoinPoint result = this.addFileFromPathImpl(filepath);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addFileFromPath", this, Optional.ofNullable(result), filepath);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addFileFromPath", e);
         }
     }
 
@@ -823,7 +851,8 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void rebuild()");
-        actions.add("void addFile(file)");
+        actions.add("joinpoint addFile(file)");
+        actions.add("joinpoint addFileFromPath(Object)");
         actions.add("void push()");
         actions.add("void pop()");
         actions.add("void addExtraInclude(String)");

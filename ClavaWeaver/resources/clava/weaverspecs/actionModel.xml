@@ -75,8 +75,12 @@
 		the AST -->
 	<action name="rebuild" class="program" tooltip="Recompiles the program currently represented by the AST, transforming literal code into AST nodes"/>
 
-	<action name="addFile" class="program" tooltip="Adds a file join point to the current program">
+	<action name="addFile" class="program" return="joinpoint" tooltip="Adds a file join point to the current program">
 		<parameter name="file" type="file" />
+	</action>
+	
+	<action name="addFileFromPath" class="program" return="joinpoint" tooltip="Adds a file join point to the current program, from the given path, which can be either a Java File or a String">
+		<parameter name="filepath" type="Object" />
 	</action>
 	
 	<action name="push" class="program" tooltip="Creates a copy of the current AST and pushes it to the top of the AST stack"/>
