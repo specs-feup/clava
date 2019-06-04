@@ -275,11 +275,11 @@
 	</action>
 	 -->
 	
-	<action name="insertReturn" class="function" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)">
+	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)">
 		<parameter name="code" type="joinpoint" />
 	</action>
 
-	<action name="insertReturn" class="function" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)">
+	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)">
 		<parameter name="code" type="String" />
 	</action>
 	

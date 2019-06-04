@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -238,7 +239,7 @@ public class CxxFunction extends AFunction {
      */
     /*
     private FunctionDecl makeNewFuncDecl(String newName) {
-
+    
         // // Get both declaration and definition (if present)
         // Optional<FunctionDecl> definition2 = function.getDefinition()
         // .map(def -> ((FunctionDecl) def.copy()).setName(newName));
@@ -248,11 +249,11 @@ public class CxxFunction extends AFunction {
         //
         // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
         // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
-
+    
         // make sure to see if we can just copy
         // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
         Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
-
+    
         // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
         // .getDescendants();
         //
@@ -264,9 +265,9 @@ public class CxxFunction extends AFunction {
     // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
     // }
     // System.out.println("FINISH");
-
+    
     // make a new function declaration with the new name
-
+    
     // FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
     // function.getParameters(),
     // (FunctionType) function.getFunctionType().copy(),
@@ -274,14 +275,14 @@ public class CxxFunction extends AFunction {
     // function.getDeclData(), // check
     // ClavaNodeInfo.undefinedInfo(), // check
     // definition);
-
+    
     FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
-
+    
     newFunc.setParameters(function.getParameters());if(definition!=null)
     {
             newFunc.setBody(definition);
         }
-
+    
     return newFunc;
     }*/
 
@@ -361,24 +362,25 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void insertReturnImpl(String code) {
-        insertReturnImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+    public AJoinPoint insertReturnImpl(String code) {
+        return insertReturnImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
     }
 
     @Override
-    public void insertReturnImpl(AJoinPoint code) {
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
         // Does not take into account situations where functions returns in all paths of an if/else.
         // This means it can lead to dead-code, although for C/C++ that does not seem to be problematic.
 
         // Do not insert if function has no implementation
         if (!function.hasBody()) {
-            return;
+            ClavaLog.info("insertReturn: could not insert in function without body");
+            return null;
         }
 
         List<Stmt> bodyStmts = function.getBody().get().toStatements();
 
         // Check if it has return statement
-        Stmt lastStmt = SpecsCollections.last(bodyStmts);
+        Stmt lastStmt = SpecsCollections.lastTry(bodyStmts).orElse(null);
         ReturnStmt lastReturnStmt = lastStmt instanceof ReturnStmt ? (ReturnStmt) lastStmt : null;
 
         // Get list of all return statements inside children
@@ -388,18 +390,22 @@ public class CxxFunction extends AFunction {
                 .map(ReturnStmt.class::cast)
                 .collect(Collectors.toList());
 
+        AJoinPoint lastInsertPoint = null;
+
         if (lastReturnStmt != null) {
             returnStatements = SpecsCollections.concat(returnStatements, lastReturnStmt);
         }
         // If there is no return in the body, add at the end of the function
         else {
-            getBodyImpl().insertEnd(code);
+            lastInsertPoint = getBodyImpl().insertEnd(code);
         }
 
         for (ReturnStmt returnStmt : returnStatements) {
             ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
-            returnJp.insertBefore(code);
+            lastInsertPoint = returnJp.insertBefore(code);
         }
+
+        return lastInsertPoint;
     }
 
     /**

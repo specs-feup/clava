@@ -484,8 +484,8 @@ public abstract class AMethod extends AFunction {
      * @param code 
      */
     @Override
-    public void insertReturnImpl(AJoinPoint code) {
-        this.aFunction.insertReturnImpl(code);
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+        return this.aFunction.insertReturnImpl(code);
     }
 
     /**
@@ -493,8 +493,8 @@ public abstract class AMethod extends AFunction {
      * @param code 
      */
     @Override
-    public void insertReturnImpl(String code) {
-        this.aFunction.insertReturnImpl(code);
+    public AJoinPoint insertReturnImpl(String code) {
+        return this.aFunction.insertReturnImpl(code);
     }
 
     /**

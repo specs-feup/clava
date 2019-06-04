@@ -623,7 +623,7 @@ public abstract class AFunction extends ADeclarator {
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)
      * @param code 
      */
-    public void insertReturnImpl(AJoinPoint code) {
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
         throw new UnsupportedOperationException(get_class()+": Action insertReturn not implemented ");
     }
 
@@ -631,15 +631,16 @@ public abstract class AFunction extends ADeclarator {
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)
      * @param code 
      */
-    public final void insertReturn(AJoinPoint code) {
+    public final AJoinPoint insertReturn(AJoinPoint code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
         	}
-        	this.insertReturnImpl(code);
+        	AJoinPoint result = this.insertReturnImpl(code);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.empty(), code);
+        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -649,7 +650,7 @@ public abstract class AFunction extends ADeclarator {
      * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)
      * @param code 
      */
-    public void insertReturnImpl(String code) {
+    public AJoinPoint insertReturnImpl(String code) {
         throw new UnsupportedOperationException(get_class()+": Action insertReturn not implemented ");
     }
 
@@ -657,15 +658,16 @@ public abstract class AFunction extends ADeclarator {
      * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)
      * @param code 
      */
-    public final void insertReturn(String code) {
+    public final AJoinPoint insertReturn(String code) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
         	}
-        	this.insertReturnImpl(code);
+        	AJoinPoint result = this.insertReturnImpl(code);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.empty(), code);
+        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "insertReturn", e);
         }
@@ -1149,8 +1151,8 @@ public abstract class AFunction extends ADeclarator {
         actions.add("function clone(String)");
         actions.add("String cloneOnFile(String)");
         actions.add("String cloneOnFile(String, String)");
-        actions.add("void insertReturn(joinpoint)");
-        actions.add("void insertReturn(String)");
+        actions.add("joinpoint insertReturn(joinpoint)");
+        actions.add("joinpoint insertReturn(String)");
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
         actions.add("void setBody(scope)");

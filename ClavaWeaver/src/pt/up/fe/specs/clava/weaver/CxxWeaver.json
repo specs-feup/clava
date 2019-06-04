@@ -18035,7 +18035,7 @@
                   "tooltip": "Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "joinpoint",
                               "name": "insertReturn"
                            },
                            {
@@ -18049,7 +18049,7 @@
                   "tooltip": "Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "joinpoint",
                               "name": "insertReturn"
                            },
                            {
@@ -25700,7 +25700,7 @@
                   "tooltip": "Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "joinpoint",
                               "name": "insertReturn"
                            },
                            {
@@ -25714,7 +25714,7 @@
                   "tooltip": "Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "joinpoint",
                               "name": "insertReturn"
                            },
                            {
