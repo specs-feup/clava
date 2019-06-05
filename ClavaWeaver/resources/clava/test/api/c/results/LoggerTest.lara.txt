@@ -8,7 +8,7 @@ double bar() {
 
 
 double foo() {
-   FILE *log_file_0 = fopen("log.txt", "a+");
+   FILE *log_file_0 = fopen("log.txt", "w+");
    if (log_file_0 == NULL)
    {
        printf("Error opening file log.txt\n");
@@ -36,7 +36,7 @@ void testAppend() {
 
 
 int main() {
-   FILE *log_file_1 = fopen("log.txt", "a+");
+   FILE *log_file_1 = fopen("log.txt", "w+");
    if (log_file_1 == NULL)
    {
        printf("Error opening file log.txt\n");

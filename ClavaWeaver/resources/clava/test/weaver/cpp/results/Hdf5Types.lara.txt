@@ -26,7 +26,6 @@ static H5::CompType GetCompType();
 #endif
 #include "CompType.h"
 #include <H5CompType.h>
-#include "hdf5types.cpp"
 H5::CompType hdf5type::IndexInfoType::GetCompType() {
 H5::CompType itype(sizeof(IndexInfo));
 itype.insertMember("timeCreated",offsetof(IndexInfo, timeCreated), H5::PredType::NATIVE_LLONG);
