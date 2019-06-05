@@ -1,0 +1,118 @@
+import clava.ClavaJoinPoints;
+import clava.Clava;
+import lara.code.Logger;
+
+/**
+ * Instruments code in order to build a runtime call graph.
+ *
+ * Does not take into account execution when functions are called as part of a short-circuit operation
+ * e.g., foo() || foo2(), in this case both calls will be counted.
+ * To avoid this, the code can be transformed prior to applying this aspect.
+ */
+aspectdef DynamicCallGraph
+	input graphFile end
+
+	
+    var obj = new LaraObject();
+
+	var dcgName = "clava_dcg_global";
+
+    /* Instrument function calls and increment the corresponding position */
+    select function.call end
+    apply
+        var id = obj.getId($function.name, $call.name);
+		insertIncrement($call, dcgName + '[ '+id+' ]++;');
+    end
+
+
+    /* Declare the array in each file */
+    var total = obj.getTotal();
+    select file.function end
+    apply
+        if($file.hasMain) {
+            insert before 'int [[dcgName]][ [[total]] ] = {0};';
+        } else {
+            insert before 'extern int [[dcgName]][ [[total]] ];';
+        }
+        break;
+    end
+
+
+	// Build function to print call graph
+	var callgraphFunctionName = "clava_call_graph";
+	var $callgraph = ClavaJoinPoints.functionDecl(callgraphFunctionName, ClavaJoinPoints.builtinType("void"));
+	$callgraph.setBody(ClavaJoinPoints.scope());
+	
+	// Using a comment as a marker for log insertions
+	var $markerStmt = $callgraph.body.insertBegin(ClavaJoinPoints.stmtLiteral("// MARKER"));
+
+    // Insert function before main
+    select program.function{"main"} end
+    apply
+    		// Just before main declaration
+    		if(!$function.hasDefinition) {
+    			continue;
+    		}
+    		
+ 		$function.insertBefore($callgraph);
+
+		// Insert only once
+ 		break;
+    end
+
+	var graphLogger = new Logger(false, graphFile);
+	graphLogger.append("digraph dynamic_call_graph {")
+		.ln().ln().log($markerStmt);
+
+
+	var $lastStmt = graphLogger.getAfterJp();
+
+
+     for (f in obj) {
+         for (c in obj[f]) {
+             var id = obj[f][c];
+             var dcgCount = dcgName+"["+id+"]";
+             $lastStmt = $lastStmt.insertAfter(ClavaJoinPoints.ifStmt(dcgCount + " != 0"));
+             
+             graphLogger.append("\t"+f+" -> "+c+' [label=\\"')
+             		.int(dcgCount)
+             		.append('\\"];').ln()
+             		.logBefore($lastStmt.then);
+         }
+    }
+
+	graphLogger.append("}").ln().log($lastStmt);
+
+	// Remove marker stmt
+	$markerStmt.detach();
+
+	// Register function to be executed when program exits
+    Clava.getProgram().atexit($callgraph);
+
+    //println('\nDynamicCallGraph done!');
+	println(Clava.getProgram().code);
+end
+
+
+function insertIncrement($call, code) {
+	// If call is inside a loop header (e.g., for, while), 
+	// insert increment at the beginning of the loop body
+	if($call.isInsideLoopHeader) {
+		var $loop = $call.ancestor('loop');
+		checkDefined($loop);
+		$loop.body.insertBegin(code);
+		return;
+	}
+
+/*
+	// If inside return stmt, insert increment before
+	var $return = $call.ancestor('return');
+	if($return !== undefined) {
+		$return.insert before code;
+		return;
+	}
+*/
+
+	$call.insert before code;
+}
+		

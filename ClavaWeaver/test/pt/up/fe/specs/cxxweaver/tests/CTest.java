@@ -137,4 +137,8 @@ public class CTest {
                 "remove_include_2.h");
     }
 
+    @Test
+    public void testDynamicCallGraph() {
+        newTester().test("DynamicCallGraph.lara", "dynamic_call_graph.c");
+    }
 }
