@@ -570,6 +570,8 @@ public class App extends ClavaNode {
     private Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType,
             Map<String, FunctionDecl> cache, boolean hasBody) {
 
+        // ClavaLog.debug("Looking for function declaration for " + declName);
+
         // Check if node was already asked
         FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
         if (cachedNode != null) {
