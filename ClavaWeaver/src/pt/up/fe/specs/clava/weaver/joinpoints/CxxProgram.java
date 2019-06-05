@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -282,6 +283,33 @@ public class CxxProgram extends AProgram {
 
     @Override
     public AFunction getMainImpl() {
+        for (TranslationUnit tunit : app.getTranslationUnits()) {
+            for (ClavaNode child : tunit.getChildren()) {
+                // ClavaLog.debug("getMain: checking if child is FunctionDecl");
+                if (!(child instanceof FunctionDecl)) {
+                    continue;
+                }
+
+                FunctionDecl function = (FunctionDecl) child;
+                // ClavaLog.debug("getMain: checking if function is main");
+                if (!function.getDeclName().toLowerCase().equals("main")) {
+                    continue;
+                }
+
+                // ClavaLog.debug("getMain: checking if function '" + function.getDeclName() + "' is definition");
+
+                // Calling isDefinition() can be expensive, specially if there are many functions,
+                // testing name first is faster
+                if (!function.isDefinition()) {
+                    continue;
+                }
+
+                return (AFunction) CxxJoinpoints.create(function);
+            }
+        }
+
+        return null;
+        /*
         // Find main function
         return (AFunction) app.getDescendantsStream()
                 // get functions
@@ -294,10 +322,12 @@ public class CxxProgram extends AProgram {
                 .map(CxxJoinpoints::create)
                 .findFirst()
                 .orElse(null);
+                */
     }
 
     @Override
     public void atexitImpl(AFunction function) {
+        // ClavaLog.debug("Getting main function");
         AFunction mainFunction = getMainImpl();
 
         if (mainFunction == null) {
@@ -310,16 +340,20 @@ public class CxxProgram extends AProgram {
                 getFactory().builtinType("void"));
 
         // Insert call at the beginning of the main function
+        // ClavaLog.debug("Inserting atexit call at beginning of main");
         mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall));
 
         // Add include for atexit
+        // ClavaLog.debug("Getting file ancestor");
         AFile file = (AFile) mainFunction.ancestorImpl("file");
         SpecsCheck.checkNotNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
+        // ClavaLog.debug("Adding stdlib.h include");
         file.addInclude("stdlib.h", true);
 
         // Add include for function
+        // ClavaLog.debug("Adding function include");
         file.addIncludeJpImpl(function);
-        // Make it an action of $file? e.g., $file.addInclude($function);
-        // function.getDeclarationJp()
+
+        // ClavaLog.debug("Finsished");
     }
 }
