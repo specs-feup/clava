@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -58,6 +58,17 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
     // }
 
     public abstract CompoundStmt getBody();
+
+    public CompoundStmt setBody(CompoundStmt newBody) {
+
+        // Replace body statement
+        CompoundStmt oldBody = getBody();
+        int bodyIndex = oldBody.indexOfSelf();
+
+        setChild(bodyIndex, newBody);
+
+        return oldBody;
+    }
 
     public boolean isParallel() {
         return isParallel;
@@ -115,7 +126,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
 
         // Loop ranks start at 1
         return indexOfLoop + 1;
-        /*        
+        /*
         // Calculate own rank
         ClavaNode parentNode = getParent();
         int currentRank = 1;
@@ -185,7 +196,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
 
     /**
      * Uniquely identifies the loop in the code.
-     * 
+     *
      * <p>
      * Currently uses the loop file, function and rank to identify the loop
      */
